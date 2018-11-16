@@ -1,0 +1,14 @@
+.idea/
+venv/
+#*_initial.py
+
+# Python:
+*.py[cod]
+*.cpython-*
+
+#Django:
+#db.sqlite3
+_WHDB.xlsx
+migrations/*
+!__init__.py
+

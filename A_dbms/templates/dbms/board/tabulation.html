@@ -1,0 +1,36 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'dbms/css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'dbms/css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'dbms/css/jquery.bxslider.css' %}">
+    <style>
+        td {align-items: center;}
+    </style>
+    <script src="{% static 'dbms/js/jquery-3.3.1.min.js' %}"></script>
+    <script src="{% static 'dbms/js/bootstrap.min.js' %}"></script>
+    <script src="{% static 'dbms/js/jquery.bxslider.js' %}"></script>
+</head>
+<body>
+
+{#<a href="{% url ajax_link %}">添加</a>#}
+<div class="container">
+    <div>
+        {% block add %}{% endblock %}
+    </div>
+    <div class="table-responsive">
+        {#"table-responsive":表格响应式布局#}
+        <table class="table table-bordered table-hover
+        table-condensed active">
+            {#"table-bordered":表格表格边框#}
+            {#"table-hover":表格悬停变色#}
+            {#"table-condensed":表格紧缩#}
+            {% block table %}{% endblock %}
+        </table>
+    </div>
+</div>
+</body>
+</html>

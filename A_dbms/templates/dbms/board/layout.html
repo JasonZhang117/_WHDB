@@ -1,0 +1,72 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'dbms/css/commons.css' %}">
+    {% block css %}{% endblock %}
+</head>
+<body>
+<div class="pg-header">
+    <div class="logo left">武侯中小担</div>
+    <div class="hl-menu left">
+        <a class="item" href="#">菜单一</a>
+        <a class="item" href="#">菜单二</a>
+        <a class="item" href="#">菜单三</a>
+        <div class="item-set">
+            <a class="item" href="#">菜单四</a>
+            <div class="sets">
+                <a href="#">菜单四-1</a>
+                <a href="#">菜单四-2</a>
+                <a href="#">菜单四-3</a>
+            </div>
+        </div>
+    </div>
+    <div class="hr-menu right">
+        <a class="item" href="#">消息</a>
+        <a class="item" href="#">通知</a>
+        <a class="item" href="#">任务</a>
+        <div class="avater">
+            <a class="item" href="#">
+                <img src="{% static 'dbms/images/touxiang.jpg' %}">
+            </a>
+            <div class="sets">
+                <a href="#">菜单四-1</a>
+                <a href="#">菜单四-2</a>
+                <a href="#">菜单四-3</a>
+                <h3>{{ name }}</h3>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="pg-body">
+    <div class="menus">
+        <div>
+            <p><a target=_blank href="{% url 'dbms:article_all' %}">项目管理</a></p>
+            <p><a target=_blank href="{% url 'dbms:appraisal' %}">评审管理</a></p>
+            <p><a target=_blank href="{% url 'dbms:agree' %}">合同管理</a></p>
+            <p><a target=_blank href="#">风控落实</a></p>
+            <p><a target=_blank href="#">权证管理</a></p>
+            <p><a target=_blank href="#">放款管理</a></p>
+            <p><a target=_blank href="#">档案管理</a></p>
+            <p><a target=_blank href="#">保后管理</a></p>
+            <p><a target=_blank href="#">追偿管理</a></p>
+            <p><a target=_blank href="{% url 'dbms:industry' %}">行业管理</a></p>
+            <p><a target=_blank href="{% url 'dbms:district' %}">区域管理</a></p>
+            <p><a target=_blank href="{% url 'dbms:custome' %}">客户管理</a></p>
+            <p><a target=_blank href="#">房产管理</a></p>
+            <p><a target=_blank href="#">报表系统</a></p>
+        </div>
+    </div>
+    <div class="contents">
+        <div style="height: 2000px"></div>
+        {% block contents %}{% endblock %}
+    </div>
+</div>
+
+<div class="pg-footer"></div>
+
+{% block js %}{% endblock %}
+</body>
+</html>

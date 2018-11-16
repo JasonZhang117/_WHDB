@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Departments Manage</title>
+
+</head>
+<body>
+<a href="{% url 'dbms:department_add' %}">添加</a>
+<table>
+    <caption>Departments Manage</caption>
+    <thead>
+        <tr>
+            <th>序号</th>
+            <th>部门名称</th>
+            <th>编辑</th>
+        </tr>
+    </thead>
+    <tbody>
+    {% for department in department_list %}
+        <tr>
+            <td>{{department.id}}</td>
+            <td>{{ department.name }}</td>
+{#            <td><a href="/dbms/department/edit/{{ department.id }}/">编辑</a>|<a>删除</a></td>#}
+            <td><a href="{% url 'dbms:department_edit' department.id %}">编辑</a>|
+                <a href="{% url 'dbms:department_del' department.id %}">删除</a>
+            </td>
+
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+
+</body>
+</html>

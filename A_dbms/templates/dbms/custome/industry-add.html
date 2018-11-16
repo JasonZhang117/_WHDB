@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>industry_add</title>
+</head>
+<body>
+    <form action="{% url 'dbms:industry_add' %}" method="post" novalidate>
+        {% csrf_token %}
+        <p>{{ form.code.label }}{{ form.code }}{{ form.errors.code.0 }}</p>
+        <p>{{ form.name.label }}{{ form.name }}{{ form.errors.name.0 }}</p>
+        <input type="submit" value="提交">
+    </form>
+</body>
+</html>

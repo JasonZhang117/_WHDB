@@ -1,0 +1,39 @@
+{% extends 'dbms/board/tabulation.html' %}
+
+{% block title %}放款管理{% endblock %}
+
+{% block table %}
+    <caption><h3>放款管理</h3></caption>
+    <thead>
+        <tr>
+            <th>序号</th>
+            <th>委托合同</th>
+            <th>纪要</th>
+            <th>客户</th>
+            <th>银行</th>
+            <th>合同类型</th>
+            <th>合同金额</th>
+            <th>风控落实</th>
+            <th>放款余额</th>
+            <th>编辑</th>
+        </tr>
+    </thead>
+    <tbody>
+    {% for provide in provide_list %}
+        <tr>
+            <td>{{provide.id}}</td>
+            <td><a href="{% url 'dbms:provide_edit' provide.id %}">{{provide.agree_num}}</a></td>
+            <td>{{provide.summary}}</td>
+            <td>{{provide.summary.article.custom}}</td>
+            <td>{{provide.branch}}</td>
+            <td>{{ provide.agree_typ }}</td>
+            <td>{{ provide.agree_money }}</td>
+            <td>{{ provide.implement }}</td>
+            <td>{{ provide.agree_balance }}</td>
+{#            <td><a href="{% url 'dbms:provide_edit' custome.id %}">编辑</a>|#}
+{#                <a href="{% url 'dbms:provide_del' custome.id %}">删除</a>#}
+            </td>
+        </tr>
+    {% endfor %}
+    </tbody>
+{% endblock %}

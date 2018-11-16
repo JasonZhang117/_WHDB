@@ -1,0 +1,133 @@
+{% extends 'index.html' %}
+{% load static %}
+{% block title %}项目管理{% endblock %}
+{% block extra-css %}
+    <link rel="stylesheet"
+          href="{% static 'dbms/css/style.css' %}">
+    <style>
+        th {
+            text-align: center;
+        }
+
+        caption {
+            text-align: center;
+        }
+
+        .condition a {
+            display: inline-block;
+            padding: 5px 8px;
+            border: 1px solid #dddddd;
+        }
+
+        .condition a.active {
+            background-color: coral;
+            color: white;
+        }
+    </style>
+{% endblock %} {#--{% block extra-css %}#}
+
+{% block right-content-container %}
+        <div class="condition">
+            {% if kwargs.article_state == None %}
+                <a class="active" href="{% url 'dbms:article_all' %}">全部</a>
+            {% else %}
+                <a href="{% url 'dbms:article_all' %}">全部</a>
+            {% endif %}
+            {# 方式一：#}
+            {% for item in article_state_list_dic %}
+                {% if item.id == kwargs.article_state %}
+                    <a class="active"
+                       href="{% url 'dbms:article' article_state=item.id %}">
+                        {{ item.name }}
+                    </a>
+                {% else %}
+                    <a href="{% url 'dbms:article' article_state=item.id %}">
+                        {{ item.name }}
+                    </a>
+                {% endif %}
+            {% endfor %}
+            {#方式二：#}
+{#            {% for item in article_state_list %}#}
+{#                {% if item.0 == kwargs.article_state %}#}
+{#                    <a class="active"#}
+{#                       href="{% url 'dbms:article' article_state=item.0 %}">#}
+{#                        {{ item.1 }}#}
+{#                    </a>#}
+{#                {% else %}#}
+{#                    <a href="{% url 'dbms:article' article_state=item.0 %}">#}
+{#                        {{ item.1 }}#}
+{#                    </a>#}
+{#                {% endif %}#}
+{#            {% endfor %}#}
+            <a class="btn btn-primary"
+               href="{% url 'dbms:article_add' %}">添加
+            </a>
+        </div>
+        {#--<div class="condition">#}
+        <div class="table-responsive">
+            {#"table-responsive":表格响应式布局#}
+            <table class="table table-bordered table-hover
+                table-condensed active">
+                {#"table-bordered":表格表格边框#}
+                {#"table-hover":表格悬停变色#}
+                {#"table-condensed":表格紧缩#}
+                {#<caption><h4>项目管理</h4></caption>#}
+                <thead>
+                <tr>
+                    <th>序号</th>
+                    <th>项目编号</th>
+                    <th>客户</th>
+                    <th>金额</th>
+                    <th>期限</th>
+                    <th>项目经理</th>
+                    <th>项目助理</th>
+                    <th>风控专员</th>
+                    <th>提交日期</th>
+                    <th>项目状态</th>
+                    <th>编辑</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for article in article_list %}
+                    <tr>
+                        <td>{{ article.id }}</td>
+                        <td>{{ article.article_num }}</td>
+                        <td>{{ article.custom }}</td>
+                        <td>{{ article.amount }}</td>
+                        <td>{{ article.credit_term }}</td>
+                        <td>{{ article.director }}</td>
+                        <td>{{ article.assistant }}</td>
+                        <td>{{ article.control }}</td>
+                        <td>{{ article.article_date }}</td>
+                        {#方式一：推荐#}
+                        <td>{{ article.get_article_state_display }}</td>
+                        {#                        #方式二：#}
+                        {#                        <td>#}
+                        {#                            {% for item in article_status_list %}#}
+                        {#                                {% if article.article_state == item.0 %}#}
+                        {#                                    {{ item.1 }}#}
+                        {#                                {% endif %}#}
+                        {#                            {% endfor %}#}
+                        {#                        </td>#}
+                        {#                        #方式三：#}
+                        {#                        <td>#}
+                        {#                            {% for item in article_state_list_dic %}#}
+                        {#                                {% if article.article_state == item.id %}#}
+                        {#                                    {{ item.name }}#}
+                        {#                                {% endif %}#}
+                        {#                            {% endfor %}#}
+                        {#                        </td>#}
+                        <td>
+                            <a href="{% url 'dbms:article_edit' id=article.id %}">
+                                编辑
+                            </a>|
+                            <a href="{% url 'dbms:article_del' id=article.id %}">
+                                删除
+                            </a>
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div> {#--<div class="table-responsive">#}
+{% endblock %}{#--{% block body %}#}

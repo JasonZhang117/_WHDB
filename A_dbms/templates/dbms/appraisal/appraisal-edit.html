@@ -1,0 +1,60 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>上会</title>
+    <link rel="stylesheet" href="{% static 'dbms/css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'dbms/css/style.css' %}">
+    <script src="{% static 'dbms/js/jquery-3.3.1.min.js' %}"></script>
+    <script src="{% static 'dbms/js/bootstrap.min.js' %}"></script>
+</head>
+<body>
+<div class="container">
+    {#项目情况#}
+    <form class="form-horizontal" method="post"
+          novalidate enctype="multipart/form-data">
+        {% csrf_token %}
+        {% for field in forma %}
+            <div class="form-group">
+                <div class="col-sm-10">
+                    {{ field.label_tag }}
+                    {{ field }}
+                    {{ field.errors.0 }}
+                    {% if field.help_text %}
+                        <div class="help">
+                            {{ field.help_text|safe }}
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        {% endfor %}
+    </form>
+    {#上会信息#}
+    <form class="form-horizontal"
+          action="{% url 'dbms:appraisal_edit' id %}"
+          method="post" novalidate enctype="multipart/form-data">
+        {% csrf_token %}
+        {% for field in form %}
+            <div class="form-group">
+                <div class="col-sm-10">
+                    {{ field.label_tag }}
+                    {{ field }}
+                    {{ field.errors.0 }}
+                    {% if field.help_text %}
+                        <div class="help">
+                            {{ field.help_text|safe }}
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        {% endfor %}
+        <div class="form-group">
+            <div class="col-sm-offset-2 col-sm-10">
+                <input type="submit" class="btn btn-primary" value="提交"/>
+            </div>
+        </div>
+    </form>
+</div>
+</body>
+</html>

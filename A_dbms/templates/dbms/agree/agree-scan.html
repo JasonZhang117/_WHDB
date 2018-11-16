@@ -1,0 +1,5 @@
+{% if agree_obj.agree_typ == 2 %}
+    {% include 'dbms/board/maximum-ensure.html' %}
+{% elif agree_obj.agree_typ == 1 %}
+    {% include 'dbms/board/single-ensure.html' %}
+{% endif %}

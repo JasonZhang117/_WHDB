@@ -1,0 +1,11 @@
+{#循环渲染,field=custome_edit_form.field#}
+{% for field in form %}
+    <p class="fieldWrapper">
+        {{ field.label_tag }}
+        {{ field }}
+        {{ field.errors.0 }}
+        {% if field.help_text %}
+            <p class="help">{{ field.help_text|safe }}</p>
+        {% endif %}
+    </p>
+{% endfor %}

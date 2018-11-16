@@ -1,0 +1,115 @@
+from django.urls import path
+from . import views
+
+app_name = 'dbms'
+urlpatterns = [
+    # -----------------------主页管理-------------------------#
+    path('', views.index, name='index'),  # /dbms/
+    # path('', views.index, name='index'),  # /dbms/
+    # -----------------------项目管理-------------------------#
+    path('article/<int:article_state>/',
+         views.article,
+         name='article'),  # /dbms/article/(0-9)
+    path('article/',
+         views.article, name='article_all'),
+    path('article/add/',
+         views.article_add, name='article_add'),
+    path('article/edit/<int:id>/',
+         views.article_edit, name='article_edit'),
+    path('article/del/<int:id>/',
+         views.article_del, name='article_del'),
+    # -----------------------评审管理-------------------------#
+    path('appraisal/',
+         views.appraisal,
+         name='appraisal'),
+    path('appraisal/edit/<int:id>/',
+         views.appraisal_edit,
+         name='appraisal_edit'),
+    path('appraisal/del/<int:id>/',
+         views.appraisal_del,
+         name='appraisal_del'),
+    path('appraisal/sign/<int:id>/',
+         views.appraisal_sign,
+         name='appraisal_sign'),
+    # -----------------------合同管理-------------------------#
+    path('agree/',
+         views.agree,
+         name='agree'),
+    path('agree/add/',
+         views.agree_add,
+         name='agree_add'),
+    path('agree/edit/<int:id>/',
+         views.agree_edit,
+         name='agree_edit'),
+    path('agree/scan/<int:id>/',
+         views.agree_scan,
+         name='agree_scan'),
+    # path('agree/del/',
+    #      views.agree_del,
+    #      name='agree_del'),
+    # -----------------------放款管理-------------------------#
+    path('provide/', views.provide, name='provide'),
+    # path('provide/add/',
+    #      views.provide_add,
+    #      name='provide_add'),
+    path('provide/edit/<int:agree_id>/',
+         views.provide_edit,
+         name='provide_edit'),
+    # 部门
+    path('department/', views.department, name='department'),
+    # path('department/', views.Departments.as_view),
+    path('department/add/',
+         views.department_add,
+         name='department_add'),
+    path('department/edit/<int:department_id>/',
+         views.department_edit,
+         name='department_edit'),
+    path('department/del/<int:department_id>/',
+         views.department_del,
+         name='department_del'),
+
+    # 员工
+    path('employee/', views.employee, name='employee'),
+    path('employee/add/',
+         views.employee_add,
+         name='employee_add'),
+    # path('employee/add_ajax/',
+    #      views.employee_add_ajax,
+    #      name='employee_add_ajax'),
+    path('employee/edit/<int:employee_id>/',
+         views.employee_edit,
+         name='employee_edit'),
+    path('employee/del/<int:employee_id>/',
+         views.employee_del,
+         name='employee_del'),
+    path('employee/del/ajax',
+         views.employee_del_ajax,
+         name='employee_del_ajax'),
+
+    # 客户
+    path('custome/', views.custome, name='custome'),
+    path('custome/add/',
+         views.custome_add,
+         name='custome_add'),
+    path('custome/edit/<int:custome_id>/',
+         views.custome_edit,
+         name='custome_edit'),
+    path('custome/del/<int:custome_id>/',
+         views.custome_del,
+         name='custome_del'),
+
+    # 房产
+
+    # 行业
+    path('industry/', views.industry, name='industry'),
+    path('industry/add/',
+         views.industry_add,
+         name='industry_add'),
+    path('industry/edit/<int:industry_id>/',
+         views.industry_edit,
+         name='industry_edit'),
+
+    # 区域
+    path('district/', views.district, name='district'),
+
+]
