@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 
-{% block title %}担保业务管理系统{% endblock %}
+{% block title %}个人首页{% endblock %}
 
 {% block body %}
     <nav class="navbar navbar-inverse navbar-fixed-top">
@@ -15,7 +15,7 @@
                     <span class="icon-bar"></span>
                 </button>
                 <a class="navbar-brand" href="#">
-                    {% block pro_name %}担保业务管理系统{% endblock %}
+                    {% block pro_name %}武侯中小-担保管理系统-首页{% endblock %}
                 </a>
             </div>
             <div id="navbar" class="navbar-collapse collapse">
@@ -23,7 +23,7 @@
                     <li class="dropdown ">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown"
                            role="button">
-                            {{ request.user }} <span class="caret"></span>
+                            {{ request.user.name }} <span class="caret"></span>
                         </a>
                         <ul class="dropdown-menu">
                             <li><a href="#">个人信息</a></li>
@@ -36,17 +36,30 @@
     </nav>
     <div class="container-fluid">
         <div class="row">
-            <div class="col-sm-3 col-md-2 sidebar">
+            <div class="col-sm-2 col-md-2 sidebar">
                 <ul class="nav nav-sidebar">
                     <li><a href="#">个人主页</a></li>
                     <li><a href="#">项目管理</a></li>
                     <li><a href="#">评审管理</a></li>
                     <li><a href="#">合同管理</a></li>
+                    <li><a href="#">权证管理</a></li>
+                    <li><a href="#">放款管理</a></li>
+                    <li><a href="#">档案管理</a></li>
+                    <li><a href="#">保后管理</a></li>
+                    <li><a href="#">追偿管理</a></li>
+                    <li><a href="#">业务报表</a></li>
+                    {% for i in request.user.0.job.all %}
+                        i.name
+                        {% for j in i %}
+                            <li><a href="#">{{ j.name }}</a></li>
+                        {% endfor %}
+                    {% endfor %}
                 </ul>
             </div>
-            <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+            <div class="col-sm-10 col-sm-offset-3 col-md-10 col-md-offset-2 main"
+                 style="padding-left: 1px;padding-right: 1px;">
                 {% block right-content-container %}
-                    <h2 class="page-header">{{ usernum }}的个人首页</h2>
+                    <h2 class="page-header">{{ request.user.name }}的个人首页</h2>
                 {% endblock %}
             </div>
         </div>

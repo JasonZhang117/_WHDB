@@ -51,3 +51,6 @@ admin.site.register(models.Departments, DepartmentsAdmin)
 admin.site.register(models.Jobs)
 # 员工
 admin.site.register(models.Employees, EmployeesAdmin)
+#
+
+admin.site.register(models.Menus)

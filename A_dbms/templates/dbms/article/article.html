@@ -1,52 +1,28 @@
-{% extends 'index.html' %}
+{% extends 'dbms/index.html' %}
 {% load static %}
 {% block title %}项目管理{% endblock %}
-{% block extra-css %}
-    <link rel="stylesheet"
-          href="{% static 'dbms/css/style.css' %}">
-    <style>
-        th {
-            text-align: center;
-        }
-
-        caption {
-            text-align: center;
-        }
-
-        .condition a {
-            display: inline-block;
-            padding: 5px 8px;
-            border: 1px solid #dddddd;
-        }
-
-        .condition a.active {
-            background-color: coral;
-            color: white;
-        }
-    </style>
-{% endblock %} {#--{% block extra-css %}#}
 
 {% block right-content-container %}
-    <div class="condition">
+    <div class="condition ">
         {% if kwargs.article_state == None %}
-            <a class="active" href="{% url 'dbms:article_all' usernum=request.user.num %}">全部</a>
+            <a class="active btn btn-primary btn-sm" href="{% url 'dbms:article_all' usernum=request.user.num %}">全部</a>
         {% else %}
-            <a href="{% url 'dbms:article_all' usernum=request.user.num %}">全部</a>
+            <a class="btn btn btn-primary btn-sm" href="{% url 'dbms:article_all' usernum=request.user.num %}">全部</a>
         {% endif %}
         {# 方式一：#}
         {% for item in article_state_list_dic %}
             {% if item.id == kwargs.article_state %}
-                <a class="active"
+                <a class="active btn btn-primary btn-sm"
                    href="{% url 'dbms:article' usernum=request.user.num article_state=item.id %}">
                     {{ item.name }}
                 </a>
             {% else %}
-                <a href="{% url 'dbms:article' usernum=request.user.num article_state=item.id %}">
+                <a class="btn btn-primary btn-sm" href="{% url 'dbms:article' usernum=request.user.num article_state=item.id %}">
                     {{ item.name }}
                 </a>
             {% endif %}
         {% endfor %}
-        <a class="btn btn-primary"
+        <a class="btn btn-info btn-sm"
            href="{% url 'dbms:article_add' usernum=request.user.num %}">添加
         </a>
     </div>
@@ -59,7 +35,7 @@
             {#"table-condensed":表格紧缩#}
             {#<caption><h4>项目管理</h4></caption>#}
             <thead>
-            <tr>
+            <tr style="text-align: center">
                 <th>序号</th>
                 <th>项目编号</th>
                 <th>客户</th>
@@ -81,9 +57,9 @@
                     <td>{{ article.custom }}</td>
                     <td>{{ article.amount }}</td>
                     <td>{{ article.credit_term }}</td>
-                    <td>{{ article.director }}</td>
-                    <td>{{ article.assistant }}</td>
-                    <td>{{ article.control }}</td>
+                    <td>{{ article.director.name }}</td>
+                    <td>{{ article.assistant.name }}</td>
+                    <td>{{ article.control.name }}</td>
                     <td>{{ article.article_date }}</td>
                     {#方式一：推荐#}
                     <td>{{ article.get_article_state_display }}</td>

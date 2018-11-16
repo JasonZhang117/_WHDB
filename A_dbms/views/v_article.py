@@ -2,6 +2,8 @@ from django.shortcuts import render, redirect
 from .. import models
 from .. import forms
 import datetime, time
+from django.urls import resolve
+
 
 
 # 项目信息管理
@@ -9,8 +11,18 @@ import datetime, time
 # -----------------------------项目管理------------------------------#
 def article(request, usernum, *args, **kwargs):  # 项目列表
     print(__file__, '---->def article')
+    print('article-->request.user:', request.user)
+    print('article_add-->request.user.num:', request.user.num)
     print('article-->usernum:', usernum)
     print('article-->**kwargs:', kwargs)
+    print('article_add-->request.user.job:', request.user.job)
+    print('article_add-->request.path:', request.path)
+    print('article_add-->request.get_host:', request.get_host())
+    print('article_add-->resolve(request.path):', resolve(request.path))
+    ee = models.Employees.objects.filter(id=2)[0]
+    jj = ee.job.all()
+    for j in jj:
+        print('jj:',j)
     ''' 
     condition = {
         # 'article_state' : 0, #查询字段及值的字典，空字典查询所有
@@ -42,8 +54,13 @@ def article(request, usernum, *args, **kwargs):  # 项目列表
 # -----------------------------添加项目------------------------------#
 def article_add(request, usernum):  # 添加项目
     print(__file__, '---->def article_add')
+    print('article_add-->request.user:', request.user)
+    print('article_add-->request.user.num:', request.user.num)
+    print('article-->usernum:', usernum)
+
     if request.method == "GET":
         form = forms.ArticlesAddForm()
+        print('article-->form:', form)
         return render(request,
                       'dbms/article/article-add.html',
                       locals())
@@ -85,7 +102,8 @@ def article_add(request, usernum):  # 添加项目
                 assistant_id=cleaned_data['assistant_id'],
                 control_id=cleaned_data['control_id'],
                 article_date=article_date)
-            return redirect('dbms:article_all', user=request.user)
+            return redirect('dbms:article_all',
+                            usernum=request.user.num)
         else:
             return render(request,
                           'dbms/article/article-add.html',
@@ -155,14 +173,16 @@ def article_edit(request, usernum, id):  # 编辑项目
                     assistant_id=cleaned_data['assistant_id'],
                     control_id=cleaned_data['control_id'],
                     article_date=article_date)
-                return redirect('dbms:article_all', user=request.user)
+                return redirect('dbms:article_all',
+                                usernum=request.user.num)
             else:
                 return render(request,
                               'dbms/article/article-edit.html',
                               locals())
     else:
         print('无法修改！！！')
-        return redirect('dbms:article_all', user=request.user)
+        return redirect('dbms:article_all',
+                        usernum=request.user.num)
 
 
 # -----------------------------删除项目------------------------------#
@@ -173,4 +193,5 @@ def article_del(request, usernum, id):  # 删除项目
         article_obj.delete()
     else:
         print('无法删除！！！')
-    return redirect('dbms:article_all', user=request.user)
+    return redirect('dbms:article_all',
+                    usernum=request.user.num)

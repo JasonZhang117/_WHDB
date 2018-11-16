@@ -22,7 +22,7 @@ from .m_dun import Compensatories
 # ---------------------v_interior内部信息----------------------#
 # 部门、岗位、员工
 from .m_interior import Departments
-from .m_emploee import Jobs, Employees
+from .m_emploee import Jobs, Employees, Menus
 # ---------------------v_external外部信息----------------------#
 # 授信银行、放款机构、评审
 from .m_external import Cooperators, Branches, Experts

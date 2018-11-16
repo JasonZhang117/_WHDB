@@ -1,8 +1,6 @@
 from django.db import models
-from django.contrib.auth.models import Group
-from django.contrib.auth.models import (BaseUserManager,
-                                        AbstractBaseUser,
-                                        PermissionsMixin)
+from django.contrib.auth.models import (
+    BaseUserManager, AbstractBaseUser, PermissionsMixin)
 
 
 # -----------------------------岗位模型------------------------------#
@@ -90,7 +88,7 @@ class Jobs(models.Model):  # 岗位（角色）
         max_length=16, unique=True)
     menus = models.ManyToManyField(
         to="Menus",
-        verbose_name="姓名",
+        verbose_name="菜单",
         blank=True)
 
     class Meta:

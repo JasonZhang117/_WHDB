@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<tr>
+    <th><label for="id_custom_id">客户：</label></th>
+    <td>
+        <select name="custom_id" class="form-control" id="id_custom_id" placeholder="选择客户">
+            <option value="1">四川科思精密模具有限公司</option>
+        </select>
+    </td>
+</tr>
+<tr>
+    <th><label for="id_renewal">续贷金额（元）：</label></th>
+    <td>
+        <input type="number" name="renewal" class="form-control" step="any" id="id_renewal" required
+               placeholder="输入续贷金额">
+    </td>
+</tr>
+<tr>
+    <th><label for="id_augment">新增金额（元）：</label></th>
+    <td><input type="number" name="augment" class="form-control" step="any" id="id_augment" required
+               placeholder="输入新增金额">
+    </td>
+</tr>
+<tr>
+    <th><label for="id_credit_term">授信期限（月）：</label></th>
+    <td>
+        <input type="number" name="credit_term" value="12" class="form-control" id="id_credit_term" required
+               placeholder="输入授信期限（月）">
+    </td>
+</tr>
+<tr>
+    <th><label for="id_director_id">项目经理：</label></th>
+    <td>
+        <select name="director_id" class="form-control" id="id_director_id" placeholder="选择项目经理">
+            <option value="4">严月</option>
+            <option value="3">孙祥</option>
+        </select>
+    </td>
+</tr>
+<tr>
+    <th><label for="id_assistant_id">项目助理：</label></th>
+    <td>
+        <select name="assistant_id" class="form-control" id="id_assistant_id" placeholder="选择项目助理">
+            <option value="4">严月</option>
+            <option value="3">孙祥</option>
+        </select>
+    </td>
+</tr>
+<tr>
+    <th><label for="id_control_id">风控专员：</label></th>
+    <td>
+        <select name="control_id" class="form-control" id="id_control_id" placeholder="选择风控专员">
+            <option value="2">张建</option>
+        </select>
+    </td>
+</tr>
+<tr>
+    <th><label for="id_article_date">提交日期：</label></th>
+    <td>
+        <input type="date" name="article_date" value="2018/11/16" class="form-control" id="id_article_date" required
+               placeholder="项目提交日期">
+    </td>
+</tr>
+</body>
+</html>
