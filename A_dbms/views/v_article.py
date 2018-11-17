@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect
 from .. import models
 from .. import forms
 import datetime, time
+from django.contrib.auth.decorators import login_required
 from django.urls import resolve
 
 
@@ -9,20 +10,17 @@ from django.urls import resolve
 # 项目信息管理
 # --------------------------------70---------------------------------#
 # -----------------------------项目管理------------------------------#
+@login_required
 def article(request, usernum, *args, **kwargs):  # 项目列表
     print(__file__, '---->def article')
-    print('article-->request.user:', request.user)
-    print('article_add-->request.user.num:', request.user.num)
+    # print('article-->request.user:', request.user)
+    # print('article_add-->request.user.num:', request.user.num)
     print('article-->usernum:', usernum)
     print('article-->**kwargs:', kwargs)
-    print('article_add-->request.user.job:', request.user.job)
+    # print('article_add-->request.user.job:', request.user.job)
     print('article_add-->request.path:', request.path)
     print('article_add-->request.get_host:', request.get_host())
     print('article_add-->resolve(request.path):', resolve(request.path))
-    ee = models.Employees.objects.filter(id=2)[0]
-    jj = ee.job.all()
-    for j in jj:
-        print('jj:',j)
     ''' 
     condition = {
         # 'article_state' : 0, #查询字段及值的字典，空字典查询所有
@@ -52,6 +50,7 @@ def article(request, usernum, *args, **kwargs):  # 项目列表
 
 
 # -----------------------------添加项目------------------------------#
+@login_required
 def article_add(request, usernum):  # 添加项目
     print(__file__, '---->def article_add')
     print('article_add-->request.user:', request.user)
@@ -111,6 +110,7 @@ def article_add(request, usernum):  # 添加项目
 
 
 # -----------------------------编辑项目------------------------------#
+@login_required
 def article_edit(request, usernum, id):  # 编辑项目
     print(__file__, '---->def article_edit')
     article_obj = models.Articles.objects.get(id=id)
@@ -186,6 +186,7 @@ def article_edit(request, usernum, id):  # 编辑项目
 
 
 # -----------------------------删除项目------------------------------#
+@login_required
 def article_del(request, usernum, id):  # 删除项目
     print(__file__, '---->def article_del')
     article_obj = models.Articles.objects.get(id=id)

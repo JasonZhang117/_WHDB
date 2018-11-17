@@ -39,9 +39,31 @@
             <div class="col-sm-2 col-md-2 sidebar">
                 <ul class="nav nav-sidebar">
                     {% for mm in request.session.menus %}
-                        <li><a href={% url mm.url_name usernum=request.user.num %}>
-                            {{ mm.name }}
+                        <li><a href={{ mm.url }}>
+                            {{ mm.menu }}
                         </a></li>
+                    {% endfor %}
+
+                    {% for menu in menu_list %}
+                        <li><a href="{% if menu.url_type == 0 %}
+				                            {{ menu.url_name }}
+				                         {% else %}
+				                            {% url menu.url_name usernum=request.user.num %}
+				                         {% endif %}">
+                            {{ menu.name }}
+                        </a></li>
+                    {% endfor %}
+
+                    {% for role in  request.user.job.all %}
+                        {% for menu in role.menu.select_related %}
+                            <li><a href="{% if menu.url_type == 0 %}
+				                            {{ menu.url_name }}
+				                         {% else %}
+				                            {% url menu.url_name usernum=request.user.num %}
+				                         {% endif %}">
+                                {{ menu.name }}
+                            </a></li>
+                        {% endfor %}
                     {% endfor %}
                 </ul>
             </div>

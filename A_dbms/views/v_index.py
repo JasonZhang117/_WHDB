@@ -15,7 +15,8 @@ def index(request, usernum):
     :param request:
     :return:
     '''
+    print('index-->request.user.job.all():', request.user.job.all())
     print(__file__, '-->index')
-    print('usernum:', usernum)
-    print('request.user:', request.user)
+    print("index-->usernum:", usernum)
+    print('index-->request.user:', request.user)
     return render(request, 'dbms/index.html', locals())

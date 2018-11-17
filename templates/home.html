@@ -122,6 +122,8 @@
                  class="tab-pane"
                  id="settings">
                 这是四个页面？
+                {{ request.session.menus }}
+                {{ request.COOKIES.sessionid }}
             </div>
         </div>
     </div>

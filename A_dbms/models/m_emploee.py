@@ -86,7 +86,7 @@ class Jobs(models.Model):  # 岗位（角色）
     name = models.CharField(
         verbose_name='岗位名称',
         max_length=16, unique=True)
-    menus = models.ManyToManyField(
+    menu = models.ManyToManyField(
         to="Menus",
         verbose_name="菜单",
         blank=True)
@@ -103,10 +103,8 @@ class Jobs(models.Model):  # 岗位（角色）
 class Menus(models.Model):
     """动态菜单"""
     name = models.CharField(max_length=64)
-    URL_TYPE_CHOICES = ((0, 'absolute'), (1, 'dynamic'))
-    url_type = models.SmallIntegerField(
-        choices=URL_TYPE_CHOICES, default=0)
     url_name = models.CharField(max_length=128)
+    ordery = models.IntegerField()
 
     class Meta:
         verbose_name_plural = '内部-动态菜单'

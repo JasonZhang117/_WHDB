@@ -21,25 +21,7 @@
                        class="form-control"
                        placeholder="密码" required>
             </div>
-            <div class="form-group">
-                <label for="check_code" class="sr-only">验证码</label>
-                <div class="row">
-                    <div class="col-xs-7">
-                        <input type="text" class="form-control"
-                               name="code" id="check_code"
-                               placeholder="请输入验证码">
-                    </div>
-                    <div class="col-xs-5">
-                        <img id="check_code_img" src="/check_code.html">
-                    </div>
-                </div>
-            </div>
             <span style="color: red">{{ error_msg }}</span>
-            <div class="checkbox">
-                <label>
-                    <input type="checkbox" value="remember-me"> Remember me
-                </label>
-            </div>
             <button class="btn btn-lg btn-primary btn-block" type="submit">
                 登录
             </button>

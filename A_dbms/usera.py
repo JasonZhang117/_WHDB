@@ -53,7 +53,7 @@ class UserChangeForm(forms.ModelForm):
         return self.initial["password"]
 
 
-# ------------------------------自定义-------------------------------#
+# ----------------------------EmployeesAdmin---------------------------#
 class EmployeesAdmin(BaseUserAdmin):
     # The forms to add and change user instances
     form = UserChangeForm

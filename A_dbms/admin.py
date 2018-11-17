@@ -48,9 +48,24 @@ class DepartmentsAdmin(admin.ModelAdmin):
 
 admin.site.register(models.Departments, DepartmentsAdmin)
 # 岗位
-admin.site.register(models.Jobs)
+class JobsAdmin(admin.ModelAdmin):
+    list_display = ('name',)  # 显示字段
+    list_per_page = 30  # 每页显示条目数
+    filter_horizontal = ("menu", )
+
+admin.site.register(models.Jobs,JobsAdmin)
 # 员工
 admin.site.register(models.Employees, EmployeesAdmin)
-#
 
-admin.site.register(models.Menus)
+
+#
+# -----------------------员工-------------------------#
+# 部门
+class MenusAdmin(admin.ModelAdmin):
+    list_display = ('name', 'url_name', 'ordery')  # 显示字段
+    list_per_page = 30  # 每页显示条目数
+    search_fields = ['name']  # 搜索字段
+    ordering = ['ordery', ]  # 排序字段
+
+
+admin.site.register(models.Menus, MenusAdmin)
