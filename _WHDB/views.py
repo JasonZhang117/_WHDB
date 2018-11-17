@@ -11,10 +11,19 @@ def acc_login(request):
     :return:
     '''
     print(__file__, '-->acc_login')
+    print('acc_login-->request.COOKIES:', request.COOKIES)
+    print('acc_login-->request.session:', request.session)
+    print('acc_login-->request.GET:', request.GET)
     error_msg = ''
     if request.method == "POST":
+        print('request.POST.get:', request.POST.get)
         username = request.POST.get('username')
         password = request.POST.get('password')
+        code = request.POST.get('code')
+        print("acc_login-->request.POST.get('username'):", username)
+        print("acc_login-->request.POST.get('password'):", password)
+        print("acc_login-->request.POST.get('code'):", code)
+
         user = authenticate(username=username, password=password)
         if user:
             login(request, user)
