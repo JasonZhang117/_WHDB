@@ -38,20 +38,15 @@
         <div class="row">
             <div class="col-sm-2 col-md-2 sidebar">
                 <ul class="nav nav-sidebar">
-                    <li><a href="#">个人主页</a></li>
-                    <li><a href="#">项目管理</a></li>
-                    <li><a href="#">评审管理</a></li>
-                    <li><a href="#">合同管理</a></li>
-                    <li><a href="#">权证管理</a></li>
-                    <li><a href="#">放款管理</a></li>
-                    <li><a href="#">档案管理</a></li>
-                    <li><a href="#">保后管理</a></li>
-                    <li><a href="#">追偿管理</a></li>
-                    <li><a href="#">业务报表</a></li>
-                    {% for i in request.user.0.job.all %}
-                        i.name
-                        {% for j in i %}
-                            <li><a href="#">{{ j.name }}</a></li>
+                    {% for role in  request.user.job.all %}
+                        {% for menu in role.menus.select_related %}
+                            <li><a href="{% if menu.url_type == 0 %}
+				                            {{ menu.url_name }}
+				                         {% else %}
+				                            {% url menu.url_name usernum=request.user.num %}
+				                         {% endif %}">
+                                {{ menu.name }}
+                            </a></li>
                         {% endfor %}
                     {% endfor %}
                 </ul>
