@@ -4,6 +4,7 @@ from .. import forms
 import datetime, time
 from django.contrib.auth.decorators import login_required
 from django.urls import resolve
+from django.db.models import Q, F
 
 
 
@@ -11,26 +12,34 @@ from django.urls import resolve
 # --------------------------------70---------------------------------#
 # -----------------------------项目管理------------------------------#
 @login_required
-def article(request, usernum, *args, **kwargs):  # 项目列表
+def article(request, *args, **kwargs):  # 项目列表
     print(__file__, '---->def article')
     # print('article-->request.user:', request.user)
     # print('article_add-->request.user.num:', request.user.num)
-    print('article-->usernum:', usernum)
+    # print('article-->usernum:', usernum)
     print('article-->**kwargs:', kwargs)
     # print('article_add-->request.user.job:', request.user.job)
     print('article_add-->request.path:', request.path)
     print('article_add-->request.get_host:', request.get_host())
     print('article_add-->resolve(request.path):', resolve(request.path))
-    ''' 
+    usernum = kwargs['usernum']
+    print('type(usernum):',type(usernum))
+    print('type(request.user):',type(request.user))
+    user = models.Employees.objects.get(num=usernum)
+    print('usernum:',usernum)
+    print('user:',user)
+    print('type(user):',type(user))
+
     condition = {
         # 'article_state' : 0, #查询字段及值的字典，空字典查询所有
     } #建立空的查询字典
     for k, v in kwargs.items():
-        temp = int(v)
+        # temp = int(v)
+        temp = v
         kwargs[k] = temp
         if temp:
             condition[k] = temp #将参数放入查询字典
-    '''
+    print('condition:',condition)
     article_state_list = models.Articles.ARTICLE_STATE_LIST
     article_state_list_dic = list(map(
         lambda x: {'id': x[0], 'name': x[1]},
@@ -38,7 +47,7 @@ def article(request, usernum, *args, **kwargs):  # 项目列表
     print('article-->article_state_list:', article_state_list)
     # 列表或元组转换为字典并添加key
     article_list = models.Articles.objects.filter(
-        **kwargs).select_related(
+        Q(director=request.user) | Q(assistant=request.user)).select_related(
         'custom',
         'director',
         'assistant',

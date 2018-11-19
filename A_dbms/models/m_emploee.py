@@ -53,7 +53,14 @@ class Employees(AbstractBaseUser, PermissionsMixin):
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=True)
     # is_admin = models.BooleanField(default=False)
-    job = models.ManyToManyField("Jobs", blank=True, null=True)
+    job = models.ManyToManyField("Jobs",
+                                 blank=True,
+                                 null=True)
+    department = models.ForeignKey(
+        to="Departments",
+        verbose_name="部门",
+        on_delete=models.PROTECT,
+        related_name='employee_department')
     objects = EmployeesManager()
 
     USERNAME_FIELD = 'email'
