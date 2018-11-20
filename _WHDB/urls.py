@@ -17,12 +17,11 @@ from django.contrib import admin
 from django.urls import path, include
 from _WHDB import views
 
-
 # app_name = 'home'
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('login/', views.acc_login, name="login"),
     path('logout/', views.acc_logout, name="logout"),
-    path('<slug:usernum>/', views.home, name="home"),
-    path('<slug:usernum>/dbms/', include('A_dbms.urls')),
+    path('', views.home, name="home"),
+    path('dbms/', include('A_dbms.urls')),
 ]

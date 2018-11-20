@@ -7,7 +7,7 @@
             欢迎使用武侯中小担业务系统，请选择……
         </div>
         <a class="btn btn-primary"
-           href="{% url 'dbms:index' usernum=request.user.num %}"
+           href="{% url 'dbms:index' %}"
            role="button">
             担保业务管理系统
         </a>
@@ -95,10 +95,10 @@
                                 {#方式一：推荐#}
                                 <td>{{ article.get_article_state_display }}</td>
                                 <td>
-                                    <a href="{% url 'dbms:article_edit' usernum=request.user.num id=article.id %}">
+                                    <a href="{% url 'dbms:article_edit' id=article.id %}">
                                         编辑
                                     </a>|
-                                    <a href="{% url 'dbms:article_del' usernum=request.user.num id=article.id %}">
+                                    <a href="{% url 'dbms:article_del' id=article.id %}">
                                         删除
                                     </a>
                                 </td>

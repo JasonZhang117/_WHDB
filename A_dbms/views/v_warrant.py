@@ -8,7 +8,7 @@ from .. import forms
 # -----------------------房产管理-------------------------#
 # -----------------------房产管理-------------------------#
 # -----------------------房产列表-------------------------#
-def warrant(request, usernum):  # 房产列表
+def warrant(request):  # 房产列表
     warrant_list = models.Warrants.objects.all()
     # print(house_list)
     for warrant in warrant_list:

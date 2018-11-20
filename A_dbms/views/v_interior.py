@@ -25,13 +25,13 @@ class Departments(View):  # 部门列表CBV
 
 
 # -----------------------部门列表-------------------------#
-def department(request, user):  # 部门列表
+def department(request):  # 部门列表
     department_list = models.Departments.objects.all()
     return render(request, 'dbms/department/department.html', locals())
 
 
 # -----------------------部门添加-------------------------#
-def department_add(request, usernum):  # 部门添加
+def department_add(request):  # 部门添加
     if request.method == "GET":
         form = forms.DepartmentForm()
         return render(request,
@@ -51,7 +51,7 @@ def department_add(request, usernum):  # 部门添加
 
 
 # -----------------------部门添加-------------------------#
-def department_edit(request, usernum, department_id):  # 部门添加
+def department_edit(request, department_id):  # 部门添加
     if request.method == "GET":
         form_data = models.Departments.objects.get(id=department_id)
         # form初始化，适合做修改该
@@ -74,7 +74,7 @@ def department_edit(request, usernum, department_id):  # 部门添加
 
 
 # -----------------------部门删除-------------------------#
-def department_del(request, usernum, department_id):  # 部门删除
+def department_del(request, department_id):  # 部门删除
     models.Departments.objects.get(id=department_id).delete()
     return redirect('dbms:department')
 

@@ -8,7 +8,7 @@ from .. import forms
 # -----------------------风控落实-------------------------#
 # -----------------------风控落实-------------------------#
 # -----------------------风控落实-------------------------#
-def provide(request, usernum):  # 项目列表
+def provide(request):  # 项目列表
     print('-------------------article----------------------------')
     provide_list = models.Agrees.objects.filter(implement=0). \
         select_related('article_id', 'branch_id')
@@ -21,7 +21,7 @@ def provide(request, usernum):  # 项目列表
 # def provide_add(request): pass
 
 
-def provide_edit(request, usernum, agree_id):
+def provide_edit(request, agree_id):
     print('-------------------provide_edit----------------------------')
     provide_list1 = models.CountersAssure.objects.filter(agree_id=agree_id)
     provide_list2 = models.CountersHouse.objects.filter(agree_id=agree_id)

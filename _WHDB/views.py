@@ -50,9 +50,8 @@ def acc_logout(request):
 
 
 @login_required
-def home(request, usernum):
+def home(request):
     print(__file__, '---->def home')
-    print("acc_login-->usernum:", usernum)
     print('acc_login-->request.COOKIES:', request.COOKIES)
     print("acc_login-->request.user:", request.user)
     print('acc_login-->request.session:', request.session)

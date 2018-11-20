@@ -1,4 +1,5 @@
 from django.shortcuts import render, redirect
+from .. import permissions
 from .. import models
 from .. import forms
 import datetime, time
@@ -7,39 +8,29 @@ from django.urls import resolve
 from django.db.models import Q, F
 
 
-
 # 项目信息管理
 # --------------------------------70---------------------------------#
 # -----------------------------项目管理------------------------------#
 @login_required
 def article(request, *args, **kwargs):  # 项目列表
     print(__file__, '---->def article')
-    # print('article-->request.user:', request.user)
-    # print('article_add-->request.user.num:', request.user.num)
-    # print('article-->usernum:', usernum)
     print('article-->**kwargs:', kwargs)
-    # print('article_add-->request.user.job:', request.user.job)
     print('article_add-->request.path:', request.path)
     print('article_add-->request.get_host:', request.get_host())
-    print('article_add-->resolve(request.path):', resolve(request.path))
-    usernum = kwargs['usernum']
-    print('type(usernum):',type(usernum))
-    print('type(request.user):',type(request.user))
-    user = models.Employees.objects.get(num=usernum)
-    print('usernum:',usernum)
-    print('user:',user)
-    print('type(user):',type(user))
+    print('article_add-->resolve(request.path):',
+          resolve(request.path))
+    print('type(request.user):', type(request.user))
 
     condition = {
         # 'article_state' : 0, #查询字段及值的字典，空字典查询所有
-    } #建立空的查询字典
+    }  # 建立空的查询字典
     for k, v in kwargs.items():
         # temp = int(v)
         temp = v
         kwargs[k] = temp
         if temp:
-            condition[k] = temp #将参数放入查询字典
-    print('condition:',condition)
+            condition[k] = temp  # 将参数放入查询字典
+    print('condition:', condition)
     article_state_list = models.Articles.ARTICLE_STATE_LIST
     article_state_list_dic = list(map(
         lambda x: {'id': x[0], 'name': x[1]},
@@ -47,7 +38,7 @@ def article(request, *args, **kwargs):  # 项目列表
     print('article-->article_state_list:', article_state_list)
     # 列表或元组转换为字典并添加key
     article_list = models.Articles.objects.filter(
-        Q(director=request.user) | Q(assistant=request.user)).select_related(
+        **kwargs).select_related(
         'custom',
         'director',
         'assistant',
@@ -60,11 +51,10 @@ def article(request, *args, **kwargs):  # 项目列表
 
 # -----------------------------添加项目------------------------------#
 @login_required
-def article_add(request, usernum):  # 添加项目
+def article_add(request):  # 添加项目
     print(__file__, '---->def article_add')
     print('article_add-->request.user:', request.user)
     print('article_add-->request.user.num:', request.user.num)
-    print('article-->usernum:', usernum)
 
     if request.method == "GET":
         form = forms.ArticlesAddForm()
@@ -110,8 +100,7 @@ def article_add(request, usernum):  # 添加项目
                 assistant_id=cleaned_data['assistant_id'],
                 control_id=cleaned_data['control_id'],
                 article_date=article_date)
-            return redirect('dbms:article_all',
-                            usernum=request.user.num)
+            return redirect('dbms:article_all')
         else:
             return render(request,
                           'dbms/article/article-add.html',
@@ -120,7 +109,7 @@ def article_add(request, usernum):  # 添加项目
 
 # -----------------------------编辑项目------------------------------#
 @login_required
-def article_edit(request, usernum, id):  # 编辑项目
+def article_edit(request, id):  # 编辑项目
     print(__file__, '---->def article_edit')
     article_obj = models.Articles.objects.get(id=id)
     if article_obj.article_state == 1:
@@ -182,26 +171,23 @@ def article_edit(request, usernum, id):  # 编辑项目
                     assistant_id=cleaned_data['assistant_id'],
                     control_id=cleaned_data['control_id'],
                     article_date=article_date)
-                return redirect('dbms:article_all',
-                                usernum=request.user.num)
+                return redirect('dbms:article_all')
             else:
                 return render(request,
                               'dbms/article/article-edit.html',
                               locals())
     else:
         print('无法修改！！！')
-        return redirect('dbms:article_all',
-                        usernum=request.user.num)
+        return redirect('dbms:article_all')
 
 
 # -----------------------------删除项目------------------------------#
 @login_required
-def article_del(request, usernum, id):  # 删除项目
+def article_del(request, id):  # 删除项目
     print(__file__, '---->def article_del')
     article_obj = models.Articles.objects.get(id=id)
     if article_obj.article_state == 1:
         article_obj.delete()
     else:
         print('无法删除！！！')
-    return redirect('dbms:article_all',
-                    usernum=request.user.num)
+    return redirect('dbms:article_all')

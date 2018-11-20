@@ -6,14 +6,14 @@ from .. import forms
 # 客户、行业、区域信息管理
 # -----------------------客户管理-------------------------#
 # -----------------------客户列表-------------------------#
-def custome(request, usernum):  # 客户列表
+def custome(request):  # 客户列表
     print('-------------------custome----------------------------')
     custome_list = models.Customes.objects.all()
     return render(request, 'dbms/custome/custome.html', locals())
 
 
 # -----------------------客户添加-------------------------#
-def custome_add(request, usernum):  # 客户添加
+def custome_add(request):  # 客户添加
     print('-------------------custome_add-------------------------')
     if request.method == "GET":
         form = forms.CustomeForm()
@@ -34,7 +34,7 @@ def custome_add(request, usernum):  # 客户添加
 
 
 # -----------------------客户编辑-------------------------#
-def custome_edit(request, usernum, custome_id,
+def custome_edit(request, custome_id,
                  *args, **kwargs):  # 客户编辑
     print('-------------------custome_edit----------------------------')
     print(' **kwargs:', kwargs)
@@ -66,7 +66,7 @@ def custome_edit(request, usernum, custome_id,
 
 
 # -----------------------客户删除-------------------------#
-def custome_del(request, usernum, custome_id):  # 客户删除
+def custome_del(request, custome_id):  # 客户删除
     print('-------------------custome_del----------------------------')
     models.Customes.objects.get(id=custome_id).delete()
     return redirect('/dbms/custome/')
@@ -80,7 +80,7 @@ def industry(request):  # 行业列表
 
 
 # -----------------------添加行业-------------------------#
-def industry_add(request, usernum):  # 添加行业
+def industry_add(request):  # 添加行业
     if request.method == 'GET':
         # 空的form，适合昨添加
         # initial参数可以覆盖field中的initial参数
@@ -107,7 +107,7 @@ def industry_add(request, usernum):  # 添加行业
 
 
 # -----------------------编辑行业-------------------------#
-def industry_edit(request, usernum, industry_id):  # 编辑行业
+def industry_edit(request, industry_id):  # 编辑行业
     if request.method == "GET":
         # nid = request.GET.get('nid')
         form_data = models.Industries.objects.filter(pk=industry_id).first()
@@ -130,6 +130,6 @@ def industry_edit(request, usernum, industry_id):  # 编辑行业
 
 # -----------------------区域管理-------------------------#
 # -----------------------区域列表-------------------------#
-def district(request, usernum):  # 区域列表
+def district(request):  # 区域列表
 
     return render(request, 'dbms/custome/district.html')

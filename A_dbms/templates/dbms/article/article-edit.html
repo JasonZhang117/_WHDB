@@ -1,23 +1,30 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Article_edit-edit</title>
-</head>
-<body>
-    <form action="{% url 'dbms:article_edit' user id %}" method="post" novalidate enctype="multipart/form-data">
-        {% csrf_token %}
-    {% for field in form %}
-        <p class="fieldWrapper">
-            {{ field.label_tag }}
-            {{ field }}
-            {{ field.errors.0 }}
-            {% if field.help_text %}
-                <p class="help">{{ field.help_text|safe }}</p>
-            {% endif %}
-        </p>
-    {% endfor %}
-        <input type="submit" value="提交">
-    </form>
-</body>
-</html>
+{% extends 'dbms/index.html' %}
+{% block title %}编辑项目{% endblock %}
+
+{% block right-content-container %}
+    <div class="container">
+        <h2>编辑项目</h2>
+        <a class="active btn btn-danger btn-sm"
+           href="{% url 'dbms:article_del' id=id %}">
+            删除
+        </a>
+        <form class="form-horizontal"
+              action="{% url 'dbms:article_edit' id=id %}"
+              method="post" novalidate
+              enctype="multipart/form-data">
+            {% csrf_token %}
+            {% for field in form %}
+                <p class="fieldWrapper">
+                    {{ field.label_tag }}
+                    {{ field }}
+                    {{ field.errors.0 }}
+                    {% if field.help_text %}
+                        <p class="help">{{ field.help_text|safe }}</p>
+                    {% endif %}
+                </p>
+            {% endfor %}
+            <input class="active btn btn-primary btn-sm"
+                   type="submit" value="提交">
+        </form>
+    </div>
+{% endblock %}

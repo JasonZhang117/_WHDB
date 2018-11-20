@@ -6,7 +6,7 @@ import datetime
 
 # -----------------------评审管理-------------------------#
 # -----------------------评审管理-------------------------#
-def appraisal(request, usernum):  # 评审管理
+def appraisal(request):  # 评审管理
     print('-------------------appraisal----------------------------')
     article_list = models.Articles.objects.all(). \
         select_related('custom', 'director',
@@ -17,7 +17,7 @@ def appraisal(request, usernum):  # 评审管理
 
 
 # -----------------------评审会-------------------------#
-def appraisal_edit(request, usernum, id):  # 评审会
+def appraisal_edit(request, id):  # 评审会
     print(' -----------------------评审会------------------------')
     article_obj = models.Articles.objects.get(id=id)
     forma_date = {'article_num': article_obj.article_num,
@@ -75,7 +75,7 @@ def appraisal_edit(request, usernum, id):  # 评审会
 
 
 # -----------------------撤销上会------------------------#
-def appraisal_del(request, usernum, id):  # 撤销上会
+def appraisal_del(request, id):  # 撤销上会
     print(' -----------------------撤销上会------------------------')
     article_obj = models.Articles.objects.filter(id=id)
     ARTICLE_STATE_LIST = (2,)
@@ -90,7 +90,7 @@ def appraisal_del(request, usernum, id):  # 撤销上会
 
 
 # -----------------------签批------------------------#
-def appraisal_sign(request, usernum, id):  # 签批
+def appraisal_sign(request, id):  # 签批
     print(' -----------------------签批------------------------')
     ARTICLE_STATE_LIST = ((1, '待反馈'), (2, '待上会'),
                           (3, '无补调'), (4, '需补调'),

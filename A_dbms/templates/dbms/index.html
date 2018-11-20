@@ -15,7 +15,7 @@
                     <span class="icon-bar"></span>
                 </button>
                 <a class="navbar-brand" href="#">
-                    {% block pro_name %}武侯中小-担保管理系统-首页{% endblock %}
+                    {% block pro_name %}成都武侯中小企业融资担保有限责任公司{% endblock %}
                 </a>
             </div>
             <div id="navbar" class="navbar-collapse collapse">
@@ -39,7 +39,7 @@
             <div class="col-sm-2 col-md-2 sidebar">
                 <ul class="nav nav-sidebar">
                     {% for mm in request.session.menus %}
-                        <li><a href={% url mm.url_name usernum=request.user.num %}>
+                        <li><a href={% url mm.url_name %}>
                             {{ mm.name }}
                         </a></li>
                     {% endfor %}

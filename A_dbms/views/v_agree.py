@@ -8,7 +8,7 @@ import datetime
 # -----------------------委托管理-------------------------#
 # -----------------------委托管理-------------------------#
 # -----------------------委托合同列表---------------------#
-def agree(request, usernum):  # 委托合同列表
+def agree(request):  # 委托合同列表
     print(__file__)
     agree_typ_list = models.Agrees.AGREE_TYP_LIST
     agree_list = models.Agrees.objects.all(). \
@@ -18,7 +18,7 @@ def agree(request, usernum):  # 委托合同列表
                   locals())
 
 
-def agree_add(request, usernum):  # 添加合同
+def agree_add(request):  # 添加合同
     print('----------------agree_add------------------------')
     if request.method == "GET":
         form = forms.AgreeAddForm()
@@ -43,7 +43,7 @@ def agree_add(request, usernum):  # 添加合同
                           locals())
 
 
-def agree_edit(request, usernum, id):  # 修改合同
+def agree_edit(request, id):  # 修改合同
     print('----------------agree_edit---------------------')
     agree_obj = models.Agrees.objects.get(id=id)
     if agree_obj.agree_state == 1:
@@ -82,7 +82,7 @@ def agree_edit(request, usernum, id):  # 修改合同
         return redirect('/dbms/article/')
 
 
-def agree_scan(request, usernum, id):  # 查看合同
+def agree_scan(request, id):  # 查看合同
     print('---------------agree_scan------------------------')
     if request.method == "GET":
         agree_obj = models.Agrees.objects.get(id=id)
