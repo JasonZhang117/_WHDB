@@ -1,0 +1,21 @@
+{% if kwargs.article_state == None %}
+    <a class="active btn btn-primary btn-sm"
+       href="{% url 'dbms:article_all' %}">全部</a>
+{% else %}
+    <a class="btn btn btn-primary btn-sm"
+       href="{% url 'dbms:article_all' %}">全部</a>
+{% endif %}
+{# 方式一：#}
+{% for item in article_state_list %}
+    {% if item.0 == kwargs.article_state %}
+        <a class="active btn btn-primary btn-sm"
+           href="{% url 'dbms:article' article_state=item.0 %}">
+            {{ item.1 }}
+        </a>
+    {% else %}
+        <a class="btn btn-primary btn-sm"
+           href="{% url 'dbms:article' article_state=item.0 %}">
+            {{ item.1 }}
+        </a>
+    {% endif %}
+{% endfor %}

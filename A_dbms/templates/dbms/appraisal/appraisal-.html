@@ -1,0 +1,76 @@
+{% extends 'dbms/index.html' %}
+{% load static %}
+{% block title %}评审管理{% endblock %}
+
+{% block right-content-container %}
+    <div class="condition ">
+        {% if kwargs.article_state == None %}
+            <a class="active btn btn-primary btn-sm"
+               href="{% url 'dbms:appraisal_all' %}">全部</a>
+        {% else %}
+            <a class="btn btn btn-primary btn-sm"
+               href="{% url 'dbms:appraisal_all' %}">全部</a>
+        {% endif %}
+        {# 方式二：#}
+        {% for item in article_state_list %}
+            {% if item.0 == kwargs.article_state %}
+                <a class="active btn btn-primary btn-sm"
+                   href="{% url 'dbms:appraisal' article_state=item.0 %}">
+                    {{ item.1 }}
+                </a>
+            {% else %}
+                <a class="btn btn-primary btn-sm"
+                   href="{% url 'dbms:appraisal' article_state=item.0 %}">
+                    {{ item.1 }}
+                </a>
+            {% endif %}
+        {% endfor %}
+    </div>
+    <div class="table-responsive">
+        {#"table-responsive":表格响应式布局#}
+        <table class="table table-bordered table-hover
+                table-condensed active">
+            {#"table-bordered":表格表格边框#}
+            {#"table-hover":表格悬停变色#}
+            {#"table-condensed":表格紧缩#}
+            {#<caption><h4>项目管理</h4></caption>#}
+            <thead>
+            <tr style="text-align: center">
+                <th>项目编号</th>
+                <th>客户</th>
+                <th>金额</th>
+                <th>项目经理</th>
+                <th>风控专员</th>
+                <th>项目状态</th>
+                <th>评审类型</th>
+                <th>评审次序</th>
+                <th>评审日期</th>
+                <th>纪要</th>
+
+            </tr>
+            </thead>
+            <tbody>
+            {% for article in article_list %}
+                <tr>
+                    <td>
+                        <a href="{% url 'dbms:appraisal_edit' id=article.id %}">
+                            {{ article.article_num }}
+                        </a>
+                    </td>
+                    <td>{{ article.custom }}</td>
+                    <td>{{ article.amount }}</td>
+                    <td>{{ article.director.name }}</td>
+                    <td>{{ article.control.name }}</td>
+                    {#方式一：推荐#}
+                    <td>{{ article.get_article_state_display }}</td>
+                    <td>{{ article.review_model }}</td>
+                    <td>{{ article.review_order }}</td>
+                    <td>{{ article.review_date }}</td>
+                    <td>{{ article.summary_num }}</td>
+
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div> {#--<div class="table-responsive">#}
+{% endblock %}{#--{% block body %}#}

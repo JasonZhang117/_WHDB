@@ -1,47 +1,41 @@
-{% extends 'dbms/board/tabulation.html' %}
-
+{% extends 'dbms/index.html' %}
+{% load static %}
 {% block title %}评审管理{% endblock %}
 
-{% block table %}
-    <caption><h3>评审管理</h3></caption>
-    <thead>
-    <tr>
-        <th>序号</th>
-        <th>客户</th>
-        <th>申请金额</th>
-        <th>内/外</th>
-        <th>次序</th>
-        <th>评审委员</th>
-        <th>上会日期</th>
-        <th>项目状态</th>
-        <th>纪要</th>
-        <th>签批日期</th>
-        <th>编辑</th>
-    </tr>
-    </thead>
-    <tbody>
-    {% for article in article_list %}
-        <tr>
-            <td>{{ article.id }}</td>
-            <td>{{ article.custom }}</td>
-            <td>{{ article.amount }}</td>
-            <td>{{ article.get_review_model_display }}</td>
-            <td>{{ article.review_order }}</td>
-            <td>
-                {% for expert in article.expert.all %}
-                    {{ expert.name }}|
+{% block right-content-container %}
+    <div class="condition ">
+        <div class="table-responsive">
+            {#"table-responsive":表格响应式布局#}
+            <table class="table table-bordered table-hover
+                table-condensed active">
+                {#"table-bordered":表格表格边框#}
+                {#"table-hover":表格悬停变色#}
+                {#"table-condensed":表格紧缩#}
+                {#<caption><h4>项目管理</h4></caption>#}
+                <thead>
+                <tr style="text-align: center">
+                    <th>编号</th>
+                    <th>评审类型</th>
+                    <th>评审次序</th>
+                    <th>评审日期</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for appraisal in appraisal_list %}
+                    <tr>
+                        <td>
+                            <a href="{% url 'dbms:appraisal_edit' id=appraisal.id %}">
+                                {{ appraisal.num }}
+                            </a>
+                        </td>
+                        <td>{{ appraisal.get_review_model_display }}</td>
+                        <td>{{ appraisal.review_order }}</td>
+                        <td>{{ appraisal.review_date }}</td>
+                    </tr>
                 {% endfor %}
-            </td>
-            <td>{{ article.review_date }}</td>
-            <td>{{ article.get_article_state_display }}</td>
-            <td>{{ article.summary_num }}</td>
-            <td>{{ article.sign_date }}</td>
-            <td>
-                <a href="{% url 'dbms:appraisal_edit' article.id %}">上会</a>
-                <a href="{% url 'dbms:appraisal_del' article.id %}">撤销</a>
-                <a href="{% url 'dbms:appraisal_sign' article.id %}">签批</a>
-            </td>
-        </tr>
-    {% endfor %}
-    </tbody>
-{% endblock %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+{% endblock %}{#--{% block body %}#}

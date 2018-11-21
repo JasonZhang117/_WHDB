@@ -64,17 +64,6 @@ class Articles(models.Model):  # 项目、纪要
     #     verbose_name="评审",
     #     related_name='article_expert')
     # add,set的方法不能用了。
-    REVIEW_MODEL_LIST = ((1, '内审'), (2, '外审'))
-    review_model = models.IntegerField(
-        verbose_name='评审类型',
-        choices=REVIEW_MODEL_LIST,
-        null=True, blank=True)
-    review_order = models.IntegerField(
-        verbose_name='评审次序',
-        null=True, blank=True)
-    review_date = models.DateField(
-        verbose_name='评审日期',
-        null=True, blank=True)
     summary_num = models.CharField(
         verbose_name='_纪要编号',
         max_length=32,

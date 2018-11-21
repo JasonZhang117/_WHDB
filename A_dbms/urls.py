@@ -19,9 +19,12 @@ urlpatterns = [
     path('article/del/<int:id>/',
          views.article_del, name='article_del'),
     # -----------------------评审管理-------------------------#
-    path('appraisal/',
+    path('appraisal/<int:article_state>',
          views.appraisal,
          name='appraisal'),
+    path('appraisal/',
+         views.appraisal,
+         name='appraisal_all'),
     path('appraisal/edit/<int:id>/',
          views.appraisal_edit,
          name='appraisal_edit'),

@@ -169,7 +169,6 @@ class ArticlesAdForm(dform.Form):  # 项目只读
 
 # -----------------------项目上会-------------------------#
 class AppraisalForm(dform.Form):  # 行业form
-    REVIEW_MODEL_LIST = models.Articles.REVIEW_MODEL_LIST
     expert = fields.TypedMultipleChoiceField(
         label='评审',
         label_suffix="：",
@@ -177,13 +176,6 @@ class AppraisalForm(dform.Form):  # 行业form
         widget=widgets.SelectMultiple(
             attrs={'class': 'form-control',
                    'placeholder': '选择评审'}))
-    review_model = fields.IntegerField(
-        label='评审类型',
-        label_suffix="：",
-        widget=widgets.Select(
-            choices=REVIEW_MODEL_LIST,
-            attrs={'class': 'form-control',
-                   'placeholder': '评审类型'}))
     review_order = fields.IntegerField(
         label="评审次序",
         label_suffix="：",

@@ -4,6 +4,8 @@ from .usera import EmployeesAdmin
 
 # -----------------------项目-------------------------#
 admin.site.register(models.Articles)  # 项目
+admin.site.register(models.Appraisals)  # 评审会
+
 # -----------------------合同-------------------------#
 admin.site.register(models.Agrees)  # 合同
 admin.site.register(models.Counters)  # 反担保合同
@@ -47,13 +49,16 @@ class DepartmentsAdmin(admin.ModelAdmin):
 
 
 admin.site.register(models.Departments, DepartmentsAdmin)
+
+
 # 岗位
 class JobsAdmin(admin.ModelAdmin):
     list_display = ('name',)  # 显示字段
     list_per_page = 30  # 每页显示条目数
-    filter_horizontal = ("menu", )
+    filter_horizontal = ("menu",)
 
-admin.site.register(models.Jobs,JobsAdmin)
+
+admin.site.register(models.Jobs, JobsAdmin)
 # 员工
 admin.site.register(models.Employees, EmployeesAdmin)
 

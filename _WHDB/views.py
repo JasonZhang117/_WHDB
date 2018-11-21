@@ -37,8 +37,7 @@ def acc_login(request):
             print("acc_login-->user:", user)
             print("acc_login-->user.name:", user.name)
             print("acc_login-->user.num:", user.num)
-            return redirect(request.GET.get('next', 'home'),
-                            usernum=user.num)
+            return redirect(request.GET.get('next', 'home'))
         else:
             error_msg = "用户名或密码错误！"
     return render(request, 'login.html', {'error_msg': error_msg})

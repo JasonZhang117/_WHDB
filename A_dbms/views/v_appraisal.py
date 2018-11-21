@@ -6,11 +6,10 @@ import datetime
 
 # -----------------------评审管理-------------------------#
 # -----------------------评审管理-------------------------#
-def appraisal(request):  # 评审管理
-    print('-------------------appraisal----------------------------')
-    article_list = models.Articles.objects.all(). \
-        select_related('custom', 'director',
-                       'assistant', 'control')
+def appraisal(request, *args, **kwargs):  # 评审管理
+    print(__file__, '---->def appraisal')
+    appraisal_list = models.Appraisals.objects.filter(**kwargs)
+    print('appraisal_list:', appraisal_list)
     return render(request,
                   'dbms/appraisal/appraisal.html',
                   locals())
