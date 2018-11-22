@@ -14,6 +14,8 @@ urlpatterns = [
          views.article, name='article_all'),
     path('article/add/',
          views.article_add, name='article_add'),
+    path('article/scan/<int:id>/',
+         views.article_scan, name='article_scan'),
     path('article/edit/<int:id>/',
          views.article_edit, name='article_edit'),
     path('article/del/<int:id>/',

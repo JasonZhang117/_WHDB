@@ -107,6 +107,17 @@ def article_add(request):  # 添加项目
                           locals())
 
 
+# -----------------------------项目预览------------------------------#
+@login_required
+def article_scan(request, id):  # 项目预览
+    print(__file__, '---->def article_scan')
+    article_obj = models.Articles.objects.get(id=id)
+
+    return render(request,
+                  'dbms/article/article-scan.html',
+                  locals())
+
+
 # -----------------------------编辑项目------------------------------#
 @login_required
 def article_edit(request, id):  # 编辑项目

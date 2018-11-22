@@ -1,7 +1,8 @@
 # ----------------------v_index首页管理视图--------------------#
 from .v_index import index
 # ----------------------v_article合项目管理视图--------------------#
-from .v_article import article, article_add, article_edit, article_del
+from .v_article import (article, article_add, article_scan,
+                        article_edit, article_del)
 # ----------------------v_appraisal评审视图--------------------#
 from .v_appraisal import appraisal, appraisal_edit, appraisal_del
 from .v_appraisal import appraisal_sign

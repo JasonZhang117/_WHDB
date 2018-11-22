@@ -10,7 +10,11 @@
     <meta name="description" content="">
     <meta name="author" content="">
     {#<link rel="icon" href="http://v3.bootcss.com/favicon.ico">#}
-    <title>{% block title %}WHDB{% endblock %}</title>
+    <title>
+
+        {% block title %}WHDB{% endblock %}
+
+    </title>
     <!-- Bootstrap core CSS -->
     <link rel="stylesheet" href="{% static 'css/bootstrap.css' %}">
     <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
@@ -21,11 +25,13 @@
     <script src="{% static 'js/ie-emulation-modes-warning.js' %}"></script>
 
     {% block extra-css %}{% endblock %}
+
 </head>
 
 <body>
-{% block  body %}
-{% endblock %}
+
+{% block  body %}{% endblock %}
+
 <!-- Bootstrap core JavaScript
 ================================================== -->
 <!-- Placed at the end of the document so the pages load faster -->

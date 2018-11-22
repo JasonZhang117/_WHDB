@@ -48,6 +48,6 @@ def index(request):
     print('ssss:', type(sss))
     if coo:
         print('name:', name)
-        return render(request, 'dbms/index.html', locals())
+        return render(request, 'dbms/index_dbms.html', locals())
     else:
         return redirect('dbms:login')

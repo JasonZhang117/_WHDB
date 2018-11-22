@@ -1,0 +1,25 @@
+<div class="tab-content">
+    <div role="tabpanel"
+         class="tab-pane active"
+         id="commission">
+        {% include 'dbms/article/scan/tab/content/tab-commission.html' %}
+    </div>
+    <div role="tabpanel"
+         class="tab-pane"
+         id="review">
+        {% include 'dbms/article/scan/tab/content/tab-review.html' %}
+
+    </div>
+    <div role="tabpanel"
+         class="tab-pane"
+         id="messages">
+        这是三个页面？
+    </div>
+    <div role="tabpanel"
+         class="tab-pane"
+         id="settings">
+        这是四个页面？
+        {{ request.session.menus }}
+        {{ request.COOKIES.sessionid }}
+    </div>
+</div>

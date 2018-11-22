@@ -1,0 +1,32 @@
+<div class="table-responsive">
+    {#"table-responsive":表格响应式布局#}
+    <table class="table table-bordered table-hover
+                table-condensed active">
+        {#"table-bordered":表格表格边框#}
+        {#"table-hover":表格悬停变色#}
+        {#"table-condensed":表格紧缩#}
+        {#<caption><h4>项目管理</h4></caption>#}
+        <thead>
+        <tr style="text-align: center">
+            <th>合同编号</th>
+            <th>银行名称</th>
+            <th>合同种类</th>
+            <th>金额</th>
+            <th>合同状态</th>
+            <th>放款余额</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            {% for agree in article_obj.agree_article.all %}
+                <td>{{ agree.agree_num }}</td>
+                <td>{{ agree.branch }}</td>
+                <td>{{ agree.get_agree_typ_display }}</td>
+                <td>{{ agree.agree_amount }}</td>
+                <td>{{ agree.get_agree_state_display }}</td>
+                <td>{{ agree.agree_balance }}</td>
+            {% endfor %}
+        </tr>
+        </tbody>
+    </table>
+</div>

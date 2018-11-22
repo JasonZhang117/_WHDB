@@ -16,4 +16,4 @@ def index(request):
     :return:
     '''
     print(__file__, '-->index')
-    return render(request, 'dbms/index.html', locals())
+    return render(request, 'dbms/index_dbms.html', locals())

@@ -1,0 +1,25 @@
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-sm-2 col-md-2 sidebar">
+            <ul class="nav nav-sidebar">
+                {% for mm in request.session.menus %}
+                    <li><a href={% url mm.url_name %}>
+                        {{ mm.name }}
+                    </a></li>
+                {% endfor %}
+            </ul>
+        </div>
+
+        <div class="col-sm-10 col-sm-offset-3 col-md-10 col-md-offset-2 main"
+             style="padding: 1px;">
+
+            {% block right-content-container %}
+                <h2 class="page-header">
+                    {{ request.user.name }}的个人首页
+                </h2>
+            {% endblock %}
+
+        </div>
+
+    </div>
+</div>
