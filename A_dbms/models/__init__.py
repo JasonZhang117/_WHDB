@@ -1,7 +1,7 @@
 # ----------------------v_article项目模型--------------------#
 # 项目
 from .m_article import Articles
-from .m_appraisal import Appraisals
+from .m_appraisal import Appraisals, SummaryNum
 # -----------------------v_agree合同模型---------------------#
 # 委托合同、反担保合同
 from .m_agree import Agrees, Counters

@@ -69,24 +69,6 @@ class Articles(models.Model):  # 项目、纪要
         max_length=32,
         unique=True,
         null=True, blank=True)
-    flow_credit = models.FloatField(
-        verbose_name='流贷额度（元）',
-        null=True, blank=True)
-    flow_rate = models.FloatField(
-        verbose_name='流贷费率（%）',
-        null=True, blank=True)
-    honour_credit = models.FloatField(
-        verbose_name='承兑额度（元）',
-        null=True, blank=True)
-    honour_rate = models.FloatField(
-        verbose_name='承兑费率（%）',
-        null=True, blank=True)
-    accept_credit = models.FloatField(
-        verbose_name='保函额度（元）',
-        null=True, blank=True)
-    accept_rate = models.FloatField(
-        verbose_name='保函费率（%）',
-        null=True, blank=True)
     sign_date = models.DateField(
         verbose_name='签批日期',
         null=True, blank=True)
