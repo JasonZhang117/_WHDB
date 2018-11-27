@@ -9,7 +9,9 @@ from .. import forms
 def custome(request):  # 客户列表
     print('-------------------custome----------------------------')
     custome_list = models.Customes.objects.all()
-    return render(request, 'dbms/custome/custome.html', locals())
+    return render(request,
+                  'dbms/custome/custome.html',
+                  locals())
 
 
 # -----------------------客户添加-------------------------#
@@ -17,7 +19,9 @@ def custome_add(request):  # 客户添加
     print('-------------------custome_add-------------------------')
     if request.method == "GET":
         form = forms.CustomeForm()
-        return render(request, 'dbms/custome/custome-add.html', locals())
+        return render(request,
+                      'dbms/custome/custome-add.html',
+                      locals())
     else:
         # form验证
         form = forms.CustomeForm(request.POST, request.FILES)
@@ -27,10 +31,14 @@ def custome_add(request):  # 客户添加
             print('idustry_id:', idustry_id)
             print('idustry_id:', type(idustry_id))
             print('cleaned_form_data:', cleaned_form_data)
+
             models.Customes.objects.create(**cleaned_form_data)  # 添加数据库
+
             return redirect('dbms:custome')
         else:
-            return render(request, 'dbms/custome/custome-add.html', locals())
+            return render(request,
+                          'dbms/custome/custome-add.html',
+                          locals())
 
 
 # -----------------------客户编辑-------------------------#
@@ -52,17 +60,24 @@ def custome_edit(request, custome_id,
                 'contact_numb': form_data.contact_numb,
                 }
         form = forms.CustomeForm(data)
-        return render(request, 'dbms/custome/custome-edit.html', locals())
+        return render(request,
+                      'dbms/custome/custome-edit.html',
+                      locals())
     else:
         # form验证
         form = forms.CustomeForm(request.POST, request.FILES)
         if form.is_valid():
             cleaned_form_data = form.cleaned_data
             # 修改数据库
-            models.Customes.objects.filter(id=custome_id).update(**cleaned_form_data)
+
+            models.Customes.objects.filter(
+                id=custome_id).update(**cleaned_form_data)
+
             return redirect('/dbms/custome/')
         else:
-            return render(request, 'dbms/custome/custome-edit.html', locals())
+            return render(request,
+                          'dbms/custome/custome-edit.html',
+                          locals())
 
 
 # -----------------------客户删除-------------------------#
@@ -76,7 +91,9 @@ def custome_del(request, custome_id):  # 客户删除
 # -----------------------行业列表-------------------------#
 def industry(request):  # 行业列表
     industry_list = models.Industries.objects.all()
-    return render(request, 'dbms/custome/industry.html', locals())
+    return render(request,
+                  'dbms/custome/industry.html',
+                  locals())
 
 
 # -----------------------添加行业-------------------------#
@@ -87,7 +104,9 @@ def industry_add(request):  # 添加行业
         # industry_add_form = forms.IndustryForm(initial={'code': 'C',
         #                                                 'name': '其他行业'})
         form = forms.IndustryForm()
-        return render(request, 'dbms/custome/industry-add.html', locals())
+        return render(request,
+                      'dbms/custome/industry-add.html',
+                      locals())
     else:
         # form验证
         print(request.POST)
@@ -100,32 +119,43 @@ def industry_add(request):  # 添加行业
             #     name=industry_add_form.cleaned_data['name']
             # )
             # form字段与modle字段名一致时：
+
             models.Industries.objects.create(**cleaned_form_data)
+
             return redirect('/dbms/industry/')
         else:
-            return render(request, 'dbms/custome/industry-add.html', locals())
+            return render(request,
+                          'dbms/custome/industry-add.html',
+                          locals())
 
 
 # -----------------------编辑行业-------------------------#
 def industry_edit(request, industry_id):  # 编辑行业
     if request.method == "GET":
         # nid = request.GET.get('nid')
-        form_data = models.Industries.objects.filter(pk=industry_id).first()
+        form_data = models.Industries.objects.filter(
+            pk=industry_id).first()
         # industry_edit_form =forms.IndustryForm({'code':'D','name':'制造业'})
         # form初始化，适合做修改该
         form = forms.IndustryForm({'code': form_data.code,
                                    'name': form_data.name})
-        return render(request, 'dbms/custome/industry-edit.html', locals())
+        return render(request,
+                      'dbms/custome/industry-edit.html',
+                      locals())
     else:
         # form验证
         form = forms.IndustryForm(request.POST, request.FILES)
         if form.is_valid():
             cleaned_form_data = form.cleaned_data
-            models.Industries.objects.filter(pk=industry_id).update(
-                **cleaned_form_data)
+
+            models.Industries.objects.filter(
+                pk=industry_id).update(**cleaned_form_data)
+
             return redirect('/dbms/industry/')
         else:
-            return render(request, 'dbms/custome/industry-edit.html', locals())
+            return render(request,
+                          'dbms/custome/industry-edit.html',
+                          locals())
 
 
 # -----------------------区域管理-------------------------#

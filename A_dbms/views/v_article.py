@@ -10,7 +10,7 @@ from django.db.models import Q, F
 
 # 项目信息管理
 # --------------------------------70---------------------------------#
-# -----------------------------项目管理------------------------------#
+# -----------------------------项目管理-------------------------------#
 @login_required
 def article(request, *args, **kwargs):  # 项目列表
     print(__file__, '---->def article')
@@ -53,12 +53,8 @@ def article(request, *args, **kwargs):  # 项目列表
 @login_required
 def article_add(request):  # 添加项目
     print(__file__, '---->def article_add')
-    print('article_add-->request.user:', request.user)
-    print('article_add-->request.user.num:', request.user.num)
-
     if request.method == "GET":
         form = forms.ArticlesAddForm()
-        print('article-->form:', form)
         return render(request,
                       'dbms/article/article-add.html',
                       locals())
@@ -90,6 +86,7 @@ def article_add(request):  # 添加项目
                           year + mon + '_' + \
                           str(int(amount / 10000)) + \
                           '万'
+
             article_obj = models.Articles.objects.create(
                 article_num=article_num,
                 custom_id=custom_id,
@@ -100,6 +97,7 @@ def article_add(request):  # 添加项目
                 assistant_id=cleaned_data['assistant_id'],
                 control_id=cleaned_data['control_id'],
                 article_date=article_date)
+
             return redirect('dbms:article_all')
         else:
             return render(request,
@@ -162,7 +160,9 @@ def article_edit(request, article_id):  # 编辑项目
                               '万'
                 # 修改数据库
                 print('cleaned_data:', cleaned_data)
-                article_obj = models.Articles.objects.filter(id=article_id)
+                article_obj = models.Articles.objects.filter(
+                    id=article_id)
+
                 article_obj.update(
                     article_num=article_num,
                     custom_id=custom_id,
@@ -174,6 +174,7 @@ def article_edit(request, article_id):  # 编辑项目
                     assistant_id=cleaned_data['assistant_id'],
                     control_id=cleaned_data['control_id'],
                     article_date=article_date)
+
                 return redirect('dbms:article_all')
             else:
                 return render(request,

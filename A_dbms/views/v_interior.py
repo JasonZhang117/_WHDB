@@ -11,15 +11,20 @@ from .. import forms
 # -----------------------部门列表-------------------------#
 class Departments(View):  # 部门列表CBV
     def dispatch(self, request, *args, **kwargs):
-        result = super(Departments, self).dispatch(request, *args, **kwargs)
+        result = super(Departments, self).dispatch(
+            request, *args, **kwargs)
         return result
 
     def get(self, request):
         department_list = models.Departments.objects.all()
-        return render(request, 'dbms/department/department.html', locals())
+        return render(request,
+                      'dbms/department/department.html',
+                      locals())
 
     def post(self, request):
-        ret = render(request, 'dbms/department/department.html', locals())
+        ret = render(request,
+                     'dbms/department/department.html',
+                     locals())
         ret['h1'] = 'v1'  # 向响应头添加东东
         return ret
 
@@ -27,7 +32,9 @@ class Departments(View):  # 部门列表CBV
 # -----------------------部门列表-------------------------#
 def department(request):  # 部门列表
     department_list = models.Departments.objects.all()
-    return render(request, 'dbms/department/department.html', locals())
+    return render(request,
+                  'dbms/department/department.html',
+                  locals())
 
 
 # -----------------------部门添加-------------------------#
@@ -39,7 +46,8 @@ def department_add(request):  # 部门添加
                       locals())
     else:
         # form验证
-        request_form_data = forms.DepartmentForm(request.POST, request.FILES)
+        request_form_data = forms.DepartmentForm(
+            request.POST, request.FILES)
         if request_form_data.is_valid():
             cleaned_form_data = request_form_data.cleaned_data
             models.Departments.objects.create(**cleaned_form_data)  # 添加数据库
@@ -85,9 +93,8 @@ def department_del(request, department_id):  # 部门删除
 # -----------------------员工列表-------------------------#
 def employee(request):  # 员工列表
     print('-------------------employee----------------------------')
-
-    employee_list = models.Employees.objects.filter(department__name='风控部',
-                                                    job__name='风控专员')
+    employee_list = models.Employees.objects.filter(
+        department__name='风控部', job__name='风控专员')
     # 一对多关系
     # 员工对应的部门（正向查询）
     department_obj = models.Employees.objects.filter(name='张建')[0].department
@@ -257,14 +264,19 @@ def employee_edit(request, employee_id):  # 员工编辑
                 'status': form_data.status
                 }
         form = forms.EmployeeForm(data)
-        return render(request, 'dbms/employee/employee-edit.html', locals())
+        return render(request,
+                      'dbms/employee/employee-edit.html',
+                      locals())
     else:
         # form验证
         form = forms.EmployeeForm(request.POST, request.FILES)
         if form.is_valid():
             cleaned_form_data = form.cleaned_data
             # 修改数据库
-            models.Employees.objects.filter(id=employee_id).update(**cleaned_form_data)
+
+            models.Employees.objects.filter(
+                id=employee_id).update(**cleaned_form_data)
+
             return redirect('/dbms/employee/')
         else:
             return render(request, 'dbms/employee/employee-edit.html', locals())
