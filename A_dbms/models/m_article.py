@@ -54,7 +54,7 @@ class Articles(models.Model):  # 项目、纪要
     # 自动创建第三张表
     expert = models.ManyToManyField(
         to='Experts',
-        verbose_name="评审",
+        verbose_name="评审委员",
         related_name='article_expert')
     # 手动创建第三张表并关联
     # expert = models.ManyToManyField(

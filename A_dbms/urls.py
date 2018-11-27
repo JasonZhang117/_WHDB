@@ -7,19 +7,31 @@ urlpatterns = [
     path('', views.index, name='index'),  # /dbms/
     # path('', views.index, name='index'),  # /dbms/
     # -----------------------项目管理-------------------------#
+    path('article/',
+         views.article, name='article_all'),
     path('article/<int:article_state>/',
          views.article,
          name='article'),  # /dbms/article/(0-9)
-    path('article/',
-         views.article, name='article_all'),
+
     path('article/add/',
          views.article_add, name='article_add'),
-    path('article/scan/<int:id>/',
-         views.article_scan, name='article_scan'),
-    path('article/edit/<int:id>/',
+    path('article/scan/<int:article_id>/',
+         views.article_scan, name='article_scan_all'),
+    path('article/scan/<int:article_id>/<int:agree_id>',
+         views.article_scan_agree,
+         name='article_scan_agree'),
+    path('article/edit/<int:article_id>/',
          views.article_edit, name='article_edit'),
-    path('article/del/<int:id>/',
+    path('article/del/<int:article_id>/',
          views.article_del, name='article_del'),
+    # -----------------------评审会-------------------------#
+    path('meeting/<int:review_model>',
+         views.meeting, name='meeting'),
+    path('meeting/',
+         views.meeting, name='meeting_all'),
+    path('meeting/add/',
+         views.meeting_add, name='meeting_add'),
+
     # -----------------------评审管理-------------------------#
     path('appraisal/<int:article_state>',
          views.appraisal,
@@ -27,6 +39,7 @@ urlpatterns = [
     path('appraisal/',
          views.appraisal,
          name='appraisal_all'),
+
     path('appraisal/edit/<int:id>/',
          views.appraisal_edit,
          name='appraisal_edit'),

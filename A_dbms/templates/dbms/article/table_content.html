@@ -23,7 +23,7 @@
         {% for article in article_list %}
             <tr>
                 <td>
-                    <a href="{% url 'dbms:article_scan' id=article.id %}">
+                    <a href="{% url 'dbms:article_scan_all' article_id=article.id %}">
                         {{ article.article_num }}
                     </a>
                 </td>

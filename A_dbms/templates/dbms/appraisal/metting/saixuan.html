@@ -1,0 +1,27 @@
+<div>
+    {% if kwargs.review_model == None %}
+        <a class="active btn btn-primary btn-sm"
+           href="{% url 'dbms:meeting_all' %}">全部</a>
+    {% else %}
+        <a class="btn btn btn-primary btn-sm"
+           href="{% url 'dbms:meeting_all' %}">全部</a>
+    {% endif %}
+
+    {# 方式二：#}
+    {% for item in review_mode_list %}
+        {% if item.0 == kwargs.review_model %}
+            <a class="active btn btn-primary btn-sm"
+               href="{% url 'dbms:meeting' review_model=item.0 %}">
+                {{ item.1 }}
+            </a>
+        {% else %}
+            <a class="btn btn-primary btn-sm"
+               href="{% url 'dbms:meeting' review_model=item.0 %}">
+                {{ item.1 }}
+            </a>
+        {% endif %}
+    {% endfor %}
+    <a class="btn btn-success btn-sm navbar-right"
+       href="{% url 'dbms:meeting_add' %}">添加
+    </a>
+</div>

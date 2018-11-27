@@ -4,6 +4,7 @@
          id="commission">
         {% include 'dbms/article/scan/tab/content/tab-commission.html' %}
     </div>
+
     <div role="tabpanel"
          class="tab-pane"
          id="review">
@@ -12,14 +13,13 @@
     </div>
     <div role="tabpanel"
          class="tab-pane"
-         id="messages">
-        这是三个页面？
+         id="comment">
+        {% include 'dbms/article/scan/tab/content/tab-comment.html' %}
+
     </div>
     <div role="tabpanel"
          class="tab-pane"
-         id="settings">
-        这是四个页面？
-        {{ request.session.menus }}
-        {{ request.COOKIES.sessionid }}
+         id="single">
+        {% include 'dbms/article/scan/tab/content/tab-single.html' %}
     </div>
 </div>

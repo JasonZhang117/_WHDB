@@ -107,22 +107,14 @@ def article_add(request):  # 添加项目
                           locals())
 
 
-# -----------------------------项目预览------------------------------#
-@login_required
-def article_scan(request, id):  # 项目预览
-    print(__file__, '---->def article_scan')
-    article_obj = models.Articles.objects.get(id=id)
-
-    return render(request,
-                  'dbms/article/article-scan.html',
-                  locals())
-
-
 # -----------------------------编辑项目------------------------------#
 @login_required
-def article_edit(request, id):  # 编辑项目
+def article_edit(request, article_id):  # 编辑项目
     print(__file__, '---->def article_edit')
-    article_obj = models.Articles.objects.get(id=id)
+    article_obj = models.Articles.objects.get(id=article_id)
+    '''ARTICLE_STATE_LIST = ((1, '待反馈'), (2, '待上会'),
+                          (3, '无补调'), (4, '需补调'),
+                          (5, '已补调'), (6, '已签批'))'''
     if article_obj.article_state == 1:
         if request.method == "GET":
             # form初始化，适合做修改该
@@ -170,7 +162,7 @@ def article_edit(request, id):  # 编辑项目
                               '万'
                 # 修改数据库
                 print('cleaned_data:', cleaned_data)
-                article_obj = models.Articles.objects.filter(id=id)
+                article_obj = models.Articles.objects.filter(id=article_id)
                 article_obj.update(
                     article_num=article_num,
                     custom_id=custom_id,
@@ -188,17 +180,42 @@ def article_edit(request, id):  # 编辑项目
                               'dbms/article/article-edit.html',
                               locals())
     else:
-        print('无法修改！！！')
+        print('状态为：%s，无法修改！！！' % article_obj.article_state)
         return redirect('dbms:article_all')
 
 
 # -----------------------------删除项目------------------------------#
 @login_required
-def article_del(request, id):  # 删除项目
+def article_del(request, article_id):  # 删除项目
     print(__file__, '---->def article_del')
-    article_obj = models.Articles.objects.get(id=id)
+    article_obj = models.Articles.objects.get(id=article_id)
+    '''ARTICLE_STATE_LIST = ((1, '待反馈'), (2, '待上会'),
+                          (3, '无补调'), (4, '需补调'),
+                          (5, '已补调'), (6, '已签批'))'''
     if article_obj.article_state == 1:
         article_obj.delete()
     else:
-        print('无法删除！！！')
+        print('状态为：%s，无法删除！！！' % article_obj.article_state)
     return redirect('dbms:article_all')
+
+
+# -----------------------------项目预览------------------------------#
+@login_required
+def article_scan(request, article_id):  # 项目预览
+    print(__file__, '---->def article_scan')
+    article_obj = models.Articles.objects.get(id=article_id)
+    return render(request,
+                  'dbms/article/article-scan.html',
+                  locals())
+
+
+@login_required
+def article_scan_agree(request, article_id, agree_id):  # 项目预览
+    print(__file__, '---->def article_scan_agree')
+    print('article_id:', article_id)
+    print('agree_id:', agree_id)
+    article_obj = models.Articles.objects.get(id=article_id)
+    agree_obj = models.Agrees.objects.get(id=agree_id)
+    return render(request,
+                  'dbms/article/article-agree.html',
+                  locals())

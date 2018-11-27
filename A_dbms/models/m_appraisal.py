@@ -5,7 +5,7 @@ import datetime
 # ------------------------评审会模型--------------------------#
 class Appraisals(models.Model):  # 评审会
     num = models.CharField(
-        verbose_name='审保会编号',
+        verbose_name='评审会编号',
         max_length=32,
         unique=True)
     REVIEW_MODEL_LIST = ((1, '内审'), (2, '外审'))
@@ -23,7 +23,7 @@ class Appraisals(models.Model):  # 评审会
         related_name='appraisal_expert')
     article = models.ManyToManyField(
         to='Articles',
-        verbose_name="项目",
+        verbose_name="参评项目",
         related_name='appraisal_article')
 
     # Cancellation = models.BooleanField('注销', default=False)
@@ -32,16 +32,16 @@ class Appraisals(models.Model):  # 评审会
         db_table = 'dbms_appraisals'  # 指定数据表的名称
 
     def __str__(self):
-        return "%s-%s" % (self.review_model,
-                          self.review_order)
+        return self.num
 
 
 # ------------------------单项额度--------------------------#
-class SummaryNum(models.Model):  # 单项额度
-    num = models.CharField(
-        verbose_name='单项额度',
-        max_length=32,
-        unique=True)
+class SingleQuota(models.Model):  # 单项额度
+    summary = models.ForeignKey(
+        to='Articles',
+        verbose_name="纪要",
+        on_delete=models.PROTECT,
+        related_name='single_quota_summary')
     CREDIT_MODEL_LIST = ((1, '流贷'), (2, '承兑'),
                          (3, '保函'))
     credit_model = models.IntegerField(
@@ -52,13 +52,52 @@ class SummaryNum(models.Model):  # 单项额度
         verbose_name='授信额度（元）')
     flow_rate = models.FloatField(
         verbose_name='费率（%）')
+    amount = models.FloatField(
+        verbose_name='_放款金额（元）',
+        default=0)
 
     class Meta:
-        verbose_name_plural = '评审-纪要'  # 指定显示名称
-        db_table = 'dbms_summarynum'  # 指定数据表的名称
+        verbose_name_plural = '评审-额度'  # 指定显示名称
+        db_table = 'dbms_single_quota'  # 指定数据表的名称
+        unique_together = ('summary', 'credit_model')
 
     def __str__(self):
-        return self.num
+        return "%s-%s-%s" % (self.summary,
+                             self.credit_model,
+                             self.credit_amount)
+
+
+class Comments(models.Model):  # 评委意见
+    summary = models.ForeignKey(
+        to='Articles',
+        verbose_name="纪要",
+        on_delete=models.PROTECT,
+        related_name='comment_summary')
+    expert = models.ForeignKey(
+        to='Experts',
+        verbose_name="评委",
+        on_delete=models.PROTECT,
+        related_name='comment_expert')
+    COMMENT_TYPE_LIST = ((1, '同意'), (2, '复议'),
+                         (3, '不同意'))
+    comment_type = models.IntegerField(
+        verbose_name='评委意见',
+        choices=COMMENT_TYPE_LIST,
+        default=1)
+    concrete = models.CharField(
+        verbose_name='意见详情',
+        max_length=256,
+        null=True, blank=True)
+
+    class Meta:
+        verbose_name_plural = '评审-意见'  # 指定显示名称
+        db_table = 'dbms_comments'  # 指定数据表的名称
+        unique_together = ('summary', 'expert')
+
+    def __str__(self):
+        return "%s-%s-%s" % (self.summary,
+                             self.expert,
+                             self.comment_type)
 
 
 class Summaries(models.Model):  # 纪要
@@ -78,7 +117,7 @@ class Summaries(models.Model):  # 纪要
         related_name='summary_article')
     expert = models.ManyToManyField(
         to='Experts',
-        verbose_name="评审",
+        verbose_name="评审委员",
         related_name='summary_expert')
 
     class Meta:

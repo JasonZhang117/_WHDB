@@ -5,6 +5,8 @@ from .usera import EmployeesAdmin
 # -----------------------项目-------------------------#
 admin.site.register(models.Articles)  # 项目
 admin.site.register(models.Appraisals)  # 评审会
+admin.site.register(models.SingleQuota)  # 单项额度
+admin.site.register(models.Comments)  # 评审意见
 
 # -----------------------合同-------------------------#
 admin.site.register(models.Agrees)  # 合同
@@ -20,6 +22,7 @@ admin.site.register(models.Grounds)  # 土地
 admin.site.register(models.Evaluate)  # 出入库
 admin.site.register(models.Storages)  # 评估
 # -----------------------放款-------------------------#
+admin.site.register(models.Charges)  # 收费
 admin.site.register(models.Provides)  # 放款
 admin.site.register(models.Repayments)  # 还款
 admin.site.register(models.Pigeonholes)  # 归档

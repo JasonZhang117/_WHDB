@@ -34,7 +34,10 @@ class Agrees(models.Model):  # 委托合同
         choices=AGREE_STATE_LIST,
         default=1)
     agree_balance = models.FloatField(
-        verbose_name='_放款余额',
+        verbose_name='_放款金额（元）',
+        default=0)
+    charge = models.FloatField(
+        verbose_name='应收保费（元）',
         default=0)
 
     # Cancellation = models.BooleanField('注销', default=False)
@@ -122,4 +125,5 @@ class CountersHouse(models.Model):  # 房产抵押反担保合同
         db_table = 'dbms_countershouse'  # 指定数据表的名称
 
     def __str__(self):
-        return self.counter.counter_num
+        return "%s-%s" % (self.counter.counter_num,
+                          self.house)

@@ -2,6 +2,31 @@ from django.db import models
 import datetime
 
 
+# ------------------------收费模型--------------------------#
+class Charges(models.Model):  # 收费
+    agree = models.ForeignKey(
+        to='Agrees',
+        verbose_name="委托合同",
+        on_delete=models.PROTECT,
+        related_name='charge_agree')
+    amount = models.FloatField(
+        verbose_name='收费金额')
+    charge_date = models.DateField(
+        verbose_name='收费日期',
+        default=datetime.date.today)
+    balance = models.FloatField(
+        verbose_name='应收余额')
+
+    # Cancellation = models.BooleanField('注销', default=False)
+    class Meta:
+        verbose_name_plural = '放款-收费'  # 指定显示名称
+        db_table = 'dbms_charges'  # 指定数据表的名称
+
+    def __str__(self):
+        return "%s-%s" % (self.agree.agree_num,
+                          self.amount)
+
+
 # ------------------------放款模型--------------------------#
 class Provides(models.Model):  # 放款
     agree = models.ForeignKey(
@@ -81,7 +106,7 @@ class Pigeonholes(models.Model):  # 归档
         default=datetime.date.today)
 
     class Meta:
-        verbose_name_plural = '项目-归档'   # 指定显示名称
+        verbose_name_plural = '项目-归档'  # 指定显示名称
         db_table = 'dbms_pigeonholes'  # 指定数据表的名称
 
     def __str__(self):

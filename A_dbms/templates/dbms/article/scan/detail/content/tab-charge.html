@@ -1,0 +1,30 @@
+<div class="table-responsive">
+    {#"table-responsive":表格响应式布局#}
+    <table class="table table-bordered table-hover
+                table-condensed active">
+        {#"table-bordered":表格表格边框#}
+        {#"table-hover":表格悬停变色#}
+        {#"table-condensed":表格紧缩#}
+        {#<caption><h4>项目管理</h4></caption>#}
+        <thead>
+        <tr style="text-align: center">
+            <th>委托合同</th>
+            <th>收费金额</th>
+            <th>收费日期</th>
+            <th>应收余额</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for agree in article_obj.agree_article.all %}
+            {% for charge in agree.charge_agree.all %}
+                <tr>
+                    <td>{{ agree.agree_num }}</td>
+                    <td>{{ charge.amount }}</td>
+                    <td>{{ charge.charge_date }}</td>
+                    <td>{{ charge.balance }}</td>
+                </tr>
+            {% endfor %}
+        {% endfor %}
+        </tbody>
+    </table>
+</div>

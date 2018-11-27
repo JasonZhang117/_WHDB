@@ -95,10 +95,10 @@
                                 {#方式一：推荐#}
                                 <td>{{ article.get_article_state_display }}</td>
                                 <td>
-                                    <a href="{% url 'dbms:article_edit' id=article.id %}">
+                                    <a href="{% url 'dbms:article_edit' article_id=article.id %}">
                                         编辑
                                     </a>|
-                                    <a href="{% url 'dbms:article_del' id=article.id %}">
+                                    <a href="{% url 'dbms:article_del' article_id=article.id %}">
                                         删除
                                     </a>
                                 </td>
@@ -127,4 +127,93 @@
             </div>
         </div>
     </div>
+
+
+    <!-- Button trigger modal -->
+    <button type="button"
+            class="btn btn-primary btn-sm"
+            data-toggle="modal"
+            data-target="#article_add">
+        添加
+    </button>
+
+    <!-- Modal -->
+    <div class="modal fade"
+         id="article_add"
+         tabindex="-1" role="dialog"
+         aria-labelledby="myModalLabel">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button"
+                            class="close"
+                            data-dismiss="modal"
+                            aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <h4 class="modal-title"
+                        id="myModalLabel">
+                        添加项目
+                    </h4>
+                </div>
+
+                <div class="modal-body">
+                    ...
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button"
+                            class="btn btn-default"
+                            data-dismiss="modal">
+                        Close
+                    </button>
+                    <button type="button"
+                            class="btn btn-primary">
+                        Save changes
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Large modal -->
+    <button type="button"
+            class="btn btn-primary"
+            data-toggle="modal"
+            data-target=".bs-example-modal-lg">
+        Large modal
+    </button>
+
+    <div class="modal fade bs-example-modal-lg"
+         tabindex="-1" role="dialog"
+         aria-labelledby="myLargeModalLabel">
+        <div class="modal-dialog modal-lg"
+             role="document">
+            <div class="modal-content">
+                ...
+            </div>
+        </div>
+    </div>
+
+    <!-- Small modal -->
+    <button type="button"
+            class="btn btn-primary"
+            data-toggle="modal"
+            data-target=".bs-example-modal-sm">
+        Small modal
+    </button>
+
+    <div class="modal fade bs-example-modal-sm"
+         tabindex="-1" role="dialog"
+         aria-labelledby="mySmallModalLabel">
+        <div class="modal-dialog modal-sm"
+             role="document">
+            <div class="modal-content">
+                ...
+            </div>
+        </div>
+    </div>
+
+
+
 {% endblock %}

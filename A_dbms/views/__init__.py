@@ -2,10 +2,11 @@
 from .v_index import index
 # ----------------------v_article合项目管理视图--------------------#
 from .v_article import (article, article_add, article_scan,
+                        article_scan_agree,
                         article_edit, article_del)
 # ----------------------v_appraisal评审视图--------------------#
-from .v_appraisal import appraisal, appraisal_edit, appraisal_del
-from .v_appraisal import appraisal_sign
+from .v_appraisal import meeting, meeting_add, appraisal
+from .v_appraisal import appraisal_sign, appraisal_del, appraisal_edit
 # ----------------------v_agree合同管理视图--------------------#
 from .v_agree import agree, agree_add, agree_edit, agree_scan
 # ----------------------v_warrant权证管理视图--------------------#

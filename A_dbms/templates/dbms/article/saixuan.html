@@ -1,4 +1,4 @@
-<div>
+<div >
     {% if kwargs.article_state == None %}
         <a class="active btn btn-primary btn-sm"
            href="{% url 'dbms:article_all' %}">全部</a>
@@ -21,7 +21,9 @@
             </a>
         {% endif %}
     {% endfor %}
-    <a class="btn btn-success btn-sm navbar-right"
-       href="{% url 'dbms:article_add' %}">添加
-    </a>
+    <label class="navbar-right">
+        <a class="btn btn-success btn-sm"
+           href="{% url 'dbms:article_add' %}">添加
+        </a>
+    </label>
 </div>
