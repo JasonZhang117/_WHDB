@@ -1,6 +1,7 @@
 from django.db import models
 import datetime
 
+
 # -----------------------授信银行-------------------------#
 class Cooperators(models.Model):  # 授信银行
     name = models.CharField(
@@ -86,7 +87,7 @@ class Experts(models.Model):  # 评审专家
     job = models.CharField(
         verbose_name='职务',
         max_length=16, null=True)
-    LEVEL_LIST = ((1, '一级'), (2, '二级'))
+    LEVEL_LIST = ((1, '一级'), (2, '二级'), (3, '内部'))
     level = models.IntegerField(
         verbose_name='级别',
         choices=LEVEL_LIST,

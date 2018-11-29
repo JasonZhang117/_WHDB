@@ -1,5 +1,5 @@
 <div>
-    {% if kwargs.review_model == None %}
+    {% if kwargs.meeting_state == None %}
         <a class="active btn btn-primary btn-sm"
            href="{% url 'dbms:meeting_all' %}">全部</a>
     {% else %}
@@ -8,15 +8,15 @@
     {% endif %}
 
     {# 方式二：#}
-    {% for item in review_mode_list %}
-        {% if item.0 == kwargs.review_model %}
+    {% for item in meeting_state_list %}
+        {% if item.0 == kwargs.meeting_state %}
             <a class="active btn btn-primary btn-sm"
-               href="{% url 'dbms:meeting' review_model=item.0 %}">
+               href="{% url 'dbms:meeting' meeting_state=item.0 %}">
                 {{ item.1 }}
             </a>
         {% else %}
             <a class="btn btn-primary btn-sm"
-               href="{% url 'dbms:meeting' review_model=item.0 %}">
+               href="{% url 'dbms:meeting' meeting_state=item.0 %}">
                 {{ item.1 }}
             </a>
         {% endif %}

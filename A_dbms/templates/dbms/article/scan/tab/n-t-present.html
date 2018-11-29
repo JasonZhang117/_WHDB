@@ -2,52 +2,44 @@
     role="tablist"
     style="background-color: #f5f5f5">
 
-    {% if article_obj.appraisal_article.all %}
-        <li role="presentation">
-            <a href="#review"
-               style="background-color: #f5f5f5"
-               aria-controls="profile"
-               role="tab"
-               data-toggle="tab">
-                评审会
-            </a>
-        </li>
-    {% endif %}
+    <li role="presentation">
+        <a href="#review"
+           style="background-color: #f5f5f5"
+           aria-controls="profile"
+           role="tab"
+           data-toggle="tab">
+            评审会
+        </a>
+    </li>
 
-    {% if article_obj.comment_summary.all %}
-        <li role="presentation">
-            <a href="#comment"
-               style="background-color: #f5f5f5"
-               aria-controls="messages"
-               role="tab"
-               data-toggle="tab">
-                评委意见
-            </a>
-        </li>
-    {% endif %}
+    <li role="presentation">
+        <a href="#comment"
+           style="background-color: #f5f5f5"
+           aria-controls="messages"
+           role="tab"
+           data-toggle="tab">
+            评委意见
+        </a>
+    </li>
 
-    {% if article_obj.single_quota_summary.all %}
-        <li role="presentation">
-            <a href="#single"
-               style="background-color: #f5f5f5"
-               aria-controls="settings"
-               role="tab"
-               data-toggle="tab">
-                单项额度
-            </a>
-        </li>
-    {% endif %}
+    <li role="presentation">
+        <a href="#single"
+           style="background-color: #f5f5f5"
+           aria-controls="settings"
+           role="tab"
+           data-toggle="tab">
+            单项额度
+        </a>
+    </li>
 
-    {% if article_obj.agree_article.all %}
-        <li role="presentation"
-            class="active">
-            <a href="#commission"
-               style="background-color: #f5f5f5"
-               aria-controls="home"
-               role="tab"
-               data-toggle="tab">
-                委托合同
-            </a>
-        </li>
-    {% endif %}
+    <li role="presentation"
+        class="active">
+        <a href="#commission"
+           style="background-color: #f5f5f5"
+           aria-controls="home"
+           role="tab"
+           data-toggle="tab">
+            委托合同
+        </a>
+    </li>
 </ul>

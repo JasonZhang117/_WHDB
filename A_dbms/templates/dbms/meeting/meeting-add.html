@@ -4,7 +4,7 @@
 
 {% block right-content-container %}
     <div class="container">
-        <h2>添加项目</h2>
+        <h2>添加评审会</h2>
         <form class="form-horizontal"
               action="{% url 'dbms:meeting_add' %}"
               method="post"> {% csrf_token %}
@@ -39,9 +39,9 @@
                 </label>
                 <label class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
                     <div class="form-group">
-                        {{ form.article_id.label_tag }}
-                        {{ form.article_id }}
-                        {{ form.article_id.errors }}
+                        {{ form.article.label_tag }}
+                        {{ form.article }}
+                        {{ form.article.errors }}
                     </div>
                 </label>
             </div>

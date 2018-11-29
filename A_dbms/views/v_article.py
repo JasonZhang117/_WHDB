@@ -42,7 +42,7 @@ def article(request, *args, **kwargs):  # 项目列表
         'custom',
         'director',
         'assistant',
-        'control')
+        'control').order_by('-article_date')
     print('article-->article_list:', article_list)
     return render(request,
                   'dbms/article/article.html',
@@ -62,6 +62,8 @@ def article_add(request):  # 添加项目
         form = forms.ArticlesAddForm(request.POST, request.FILES)
         if form.is_valid():
             cleaned_data = form.cleaned_data
+            print('cleaned_data:', cleaned_data)
+
             custom_id = cleaned_data['custom_id']
             custom = models.Customes.objects.get(id=custom_id)
             if custom.genre == 1:
@@ -134,6 +136,7 @@ def article_edit(request, article_id):  # 编辑项目
             form = forms.ArticlesAddForm(request.POST, request.FILES)
             if form.is_valid():
                 cleaned_data = form.cleaned_data
+
                 custom_id = cleaned_data['custom_id']
                 custom = models.Customes.objects.get(id=custom_id)
                 if custom.genre == 1:

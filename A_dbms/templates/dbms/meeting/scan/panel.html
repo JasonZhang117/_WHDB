@@ -1,0 +1,30 @@
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <label>评审会情况</label>
+        <label class="navbar-right">
+            <a class="btn btn-danger btn-sm"
+               href="{% url 'dbms:meeting_edit' meeting_id=meeting_obj.id %}">
+                修改
+            </a>
+            <a class="btn btn-danger btn-sm "
+               href="{% url 'dbms:meeting_del' meeting_id=meeting_obj.id %}">
+                删除
+            </a>
+        </label>
+    </div>
+
+    <div class="panel-body row" style="padding: 1px;">
+        <label class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
+            评审会编号：{{ meeting_obj.num }}
+        </label>
+        <label class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
+            评审会类型：{{ meeting_obj.get_review_model_display }}
+        </label>
+        <label class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
+            评审会日期：{{ meeting_obj.review_date }}
+        </label>
+        <label class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
+            评审会状态：{{ meeting_obj.get_meeting_state_display }}
+        </label>
+    </div>
+</div>

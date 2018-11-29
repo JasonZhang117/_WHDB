@@ -1,5 +1,5 @@
 from django.db import models
-import datetime
+import time, datetime
 
 
 # ------------------------评审会模型--------------------------#
@@ -8,6 +8,9 @@ class Appraisals(models.Model):  # 评审会
         verbose_name='评审会编号',
         max_length=32,
         unique=True)
+    review_year = models.IntegerField(
+        verbose_name='评审年份',
+        default=datetime.date.today().year)
     REVIEW_MODEL_LIST = ((1, '内审'), (2, '外审'))
     review_model = models.IntegerField(
         verbose_name='评审类型',
@@ -25,6 +28,12 @@ class Appraisals(models.Model):  # 评审会
         to='Articles',
         verbose_name="参评项目",
         related_name='appraisal_article')
+
+    MEETING_STATE_LIST = ((1, '待上会'), (2, '已上会'))
+    meeting_state = models.IntegerField(
+        verbose_name='项目状态',
+        choices=MEETING_STATE_LIST,
+        default=1)
 
     # Cancellation = models.BooleanField('注销', default=False)
     class Meta:

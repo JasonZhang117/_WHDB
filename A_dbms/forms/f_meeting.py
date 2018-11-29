@@ -7,7 +7,7 @@ from .. import models
 
 # -----------------------评审会添加-------------------------#
 class MeetingAddForm(dform.Form):  # 评审会添加
-    REVIEW_MODEL_LIST = ((1, '内审'), (2, '外审'))
+    REVIEW_MODEL_LIST = models.Appraisals.REVIEW_MODEL_LIST
     review_model = fields.IntegerField(
         label='评审类型',
         label_suffix="：",
@@ -39,7 +39,7 @@ class MeetingAddForm(dform.Form):  # 评审会添加
             attrs={'class': 'form-control',
                    'placeholder': '选择评委'}))
 
-    article_id = fields.TypedMultipleChoiceField(
+    article = fields.TypedMultipleChoiceField(
         label="参评项目",
         label_suffix="：",
         coerce=lambda x: int(x),
@@ -52,7 +52,7 @@ class MeetingAddForm(dform.Form):  # 评审会添加
         self.fields['expert'].choices = \
             models.Experts.objects.values_list(
                 'id', 'name').order_by('name')
-        self.fields['article_id'].choices = \
+        self.fields['article'].choices = \
             models.Articles.objects.filter(
                 article_state=1).values_list(
                 'id', 'article_num').order_by('article_num')
