@@ -216,8 +216,6 @@ def article_scan(request, article_id):  # 项目预览
 @login_required
 def article_scan_agree(request, article_id, agree_id):  # 项目预览
     print(__file__, '---->def article_scan_agree')
-    print('article_id:', article_id)
-    print('agree_id:', agree_id)
     article_obj = models.Articles.objects.get(id=article_id)
     agree_obj = models.Agrees.objects.get(id=agree_id)
     return render(request,

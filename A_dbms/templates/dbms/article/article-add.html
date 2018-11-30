@@ -10,54 +10,8 @@
               method="post"> {% csrf_token %}
             {#"form-inline":内联表单#}
             {#"form-horizontal":水平排列的表单#}
-            <div class="row">
-                <div class="col-sm-6">
-                    <div class="form-group">
-                        {{ form.custom_id.label_tag }}
-                        {{ form.custom_id }}
-                        {{ form.custom_id.errors }}
-                    </div>
-                    <div class="form-group">
-                        {{ form.director_id.label_tag }}
-                        {{ form.director_id }}
-                        {{ form.director_id.errors }}
-                    </div>
-                    <div class="form-group">
-                        {{ form.assistant_id.label_tag }}
-                        {{ form.assistant_id }}
-                        {{ form.assistant_id.errors }}
-                    </div>
-                    <div class="form-group">
-                        {{ form.control_id.label_tag }}
-                        {{ form.control_id }}
-                        {{ form.control_id.errors }}
-                    </div>
-                </div>
-                <div class="col-sm-6">
-                    <div class="form-group">
-                        {{ form.renewal.label_tag }}
-                        {{ form.renewal }}
-                        {{ form.renewal.errors }}
-                    </div>
-                    <div class="form-group">
-                        {{ form.augment.label_tag }}
-                        {{ form.augment }}
-                        {{ form.augment.errors }}
-                    </div>
-                    <div class="form-group">
-                        {{ form.credit_term.label_tag }}
-                        {{ form.credit_term }}
-                        {{ form.credit_term.errors }}
-                    </div>
-                    <div class="form-group">
-                        {{ form.article_date.label_tag }}
-                        {{ form.article_date }}
-                        {{ form.article_date.errors }}
-                    </div>
-                </div>
-            </div>
-            <input class="active btn btn-primary btn-sm"
-                   type="submit" value="提交">
+            {% include 'dbms/article/article/from_add_edit.html' %}
+
         </form>
     </div>
 {% endblock %}

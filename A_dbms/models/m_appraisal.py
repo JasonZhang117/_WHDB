@@ -20,14 +20,11 @@ class Appraisals(models.Model):  # 评审会
     review_date = models.DateField(
         verbose_name='评审日期',
         default=datetime.date.today)
-    expert = models.ManyToManyField(
-        to='Experts',
-        verbose_name="评审委员",
-        related_name='appraisal_expert')
     article = models.ManyToManyField(
         to='Articles',
         verbose_name="参评项目",
-        related_name='appraisal_article')
+        related_name='appraisal_article',
+        null=True, blank=True)
 
     MEETING_STATE_LIST = ((1, '待上会'), (2, '已上会'))
     meeting_state = models.IntegerField(
@@ -108,31 +105,4 @@ class Comments(models.Model):  # 评委意见
                              self.expert,
                              self.comment_type)
 
-
-class Summaries(models.Model):  # 纪要
-    num = models.CharField(
-        verbose_name='_纪要编号',
-        max_length=32,
-        unique=True)
-    appraisal = models.ForeignKey(
-        to='Appraisals',
-        verbose_name="审保会",
-        on_delete=models.PROTECT,
-        related_name='summary_appraisal')
-    article = models.OneToOneField(
-        to='Articles',
-        verbose_name="项目",
-        on_delete=models.PROTECT,
-        related_name='summary_article')
-    expert = models.ManyToManyField(
-        to='Experts',
-        verbose_name="评审委员",
-        related_name='summary_expert')
-
-    class Meta:
-        verbose_name_plural = '评审-纪要'  # 指定显示名称
-        db_table = 'dbms_summaries'  # 指定数据表的名称
-
-    def __str__(self):
-        return self.num
 # class Proposes(models.Model):  # 评审结论

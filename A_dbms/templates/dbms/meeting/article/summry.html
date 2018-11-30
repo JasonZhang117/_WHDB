@@ -1,0 +1,62 @@
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <label>项目情况</label>
+        <label class="navbar-right">
+            <a class="btn btn-primary btn-sm"
+               href="#">
+                添加评审
+            </a>
+            <a class="btn btn-primary btn-sm "
+               href="#">
+                评审意见
+            </a>
+            <a class="btn btn-primary btn-sm "
+               href="#">
+                单项额度
+            </a>
+            <a class="btn btn-danger btn-sm "
+               href="#">
+                取消上会
+            </a>
+        </label>
+    </div>
+
+    <div class="panel-body row" style="padding: 1px;">
+        <label class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
+            客户名称：{{ article_obj.custom }}
+        </label>
+        <label class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
+            项目编号：{{ article_obj.article_num }}
+        </label>
+        <label class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
+            评审编号：{{ meeting_obj.num }}
+        </label>
+        <label class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
+            申请金额：{{ article_obj.amount }}
+        </label>
+        <label class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
+            续贷金额：{{ article_obj.renewal }}
+        </label>
+        <label class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
+            新增金额：{{ article_obj.augment }}
+        </label>
+        <label class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
+            项目经理：{{ article_obj.director.name }}
+        </label>
+        <label class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
+            项目助理：{{ article_obj.assistant.name }}
+        </label>
+        <label class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
+            风控专员：{{ article_obj.control.name }}
+        </label>
+        <label class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
+            担保期限：{{ article_obj.credit_term }}个月
+        </label>
+        <label class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
+            提交日期：{{ article_obj.article_date }}
+        </label>
+        <label class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
+            项目状态：{{ article_obj.get_article_state_display }}
+        </label>
+    </div>
+</div>

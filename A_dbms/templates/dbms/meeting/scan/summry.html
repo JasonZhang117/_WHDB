@@ -2,14 +2,16 @@
     <div class="panel-heading">
         <label>评审会情况</label>
         <label class="navbar-right">
-            <a class="btn btn-danger btn-sm"
-               href="{% url 'dbms:meeting_edit' meeting_id=meeting_obj.id %}">
-                修改
-            </a>
-            <a class="btn btn-danger btn-sm "
-               href="{% url 'dbms:meeting_del' meeting_id=meeting_obj.id %}">
-                删除
-            </a>
+            {% if meeting_obj.meeting_state == 1 %}
+                <a class="btn btn-danger btn-sm"
+                   href="{% url 'dbms:meeting_edit' meeting_id=meeting_obj.id %}">
+                    上会
+                </a>
+                <a class="btn btn-danger btn-sm "
+                   href="{% url 'dbms:meeting_del' meeting_id=meeting_obj.id %}">
+                    取消
+                </a>
+            {% endif %}
         </label>
     </div>
 

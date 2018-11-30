@@ -1,0 +1,25 @@
+<div class="tab-content">
+    <div role="tabpanel"
+         class="tab-pane"
+         id="meeting"> <!--评审会-->
+        {% include 'dbms/article/scan/tab/content/meeting.html' %}
+
+    </div>
+    <div role="tabpanel"
+         class="tab-pane"
+         id="comment"> <!--评审意见-->
+        {% include 'dbms/article/scan/tab/content/comment.html' %}
+
+    </div>
+    <div role="tabpanel"
+         class="tab-pane"
+         id="single"> <!--单项额度-->
+        {% include 'dbms/article/scan/tab/content/single.html' %}
+
+    </div>
+    <div role="tabpanel"
+         class="tab-pane active"
+         id="agree"> <!--委托合同-->
+        {% include 'dbms/article/scan/tab/content/agree.html' %}
+    </div>
+</div>

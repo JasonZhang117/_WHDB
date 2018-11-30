@@ -37,6 +37,9 @@ urlpatterns = [
          views.meeting_del, name='meeting_del'),
     path('meeting/scan/<int:meeting_id>/',
          views.meeting_scan, name='meeting_scan'),
+    path('meeting/scan/<int:meeting_id>/<int:article_id>/',
+         views.meeting_scan_article,
+         name='meeting_scan_article'),
     # -----------------------评审管理-------------------------#
     path('appraisal/<int:article_state>',
          views.appraisal,

@@ -9,35 +9,31 @@
               action="{% url 'dbms:meeting_add' %}"
               method="post"> {% csrf_token %}
             <div class="row">
-                <label class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
+                <label class="col-xs-12">
                     <div class="form-group">
                         {{ form.review_model.label_tag }}
                         {{ form.review_model }}
                         {{ form.review_model.errors }}
                     </div>
                 </label>
-                <label class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
-                    <div class="form-group">
-                        {{ form.review_order.label_tag }}
-                        {{ form.review_order }}
-                        {{ form.review_order.errors }}
-                    </div>
-                </label>
-                <label class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
+
+                <label class="col-xs-12">
                     <div class="form-group">
                         {{ form.review_date.label_tag }}
                         {{ form.review_date }}
                         {{ form.review_date.errors }}
                     </div>
                 </label>
-                <label class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
+
+                <label class="col-xs-12">
                     <div class="form-group">
                         {{ form.expert.label_tag }}
                         {{ form.expert }}
                         {{ form.expert.errors }}
                     </div>
                 </label>
-                <label class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
+
+                <label class="col-xs-12">
                     <div class="form-group">
                         {{ form.article.label_tag }}
                         {{ form.article }}

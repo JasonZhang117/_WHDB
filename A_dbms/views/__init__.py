@@ -6,7 +6,7 @@ from .v_article import (article, article_add, article_scan,
                         article_edit, article_del)
 # ----------------------v_appraisal评审视图--------------------#
 from .v_meeting import (meeting, meeting_add, meeting_scan,
-                        meeting_edit, meeting_del)
+                        meeting_edit, meeting_del, meeting_scan_article)
 from .v_appraisal import appraisal
 from .v_appraisal import appraisal_sign, appraisal_del, appraisal_edit
 # ----------------------v_agree合同管理视图--------------------#

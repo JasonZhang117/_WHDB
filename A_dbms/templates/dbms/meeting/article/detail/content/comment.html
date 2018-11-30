@@ -8,22 +8,18 @@
         {#<caption><h4>项目管理</h4></caption>#}
         <thead>
         <tr style="text-align: center">
-            <th>委托合同</th>
-            <th>收费金额</th>
-            <th>收费日期</th>
-            <th>应收余额</th>
+            <th>评委委员</th>
+            <th>评委意见</th>
+            <th>意见详情</th>
         </tr>
         </thead>
         <tbody>
-        {% for agree in article_obj.agree_article.all %}
-            {% for charge in agree.charge_agree.all %}
-                <tr>
-                    <td>{{ agree.agree_num }}</td>
-                    <td>{{ charge.amount }}</td>
-                    <td>{{ charge.charge_date }}</td>
-                    <td>{{ charge.balance }}</td>
-                </tr>
-            {% endfor %}
+        {% for comment in article_obj.comment_summary.all %}
+            <tr>
+                <td>{{ comment.expert }}</td>
+                <td>{{ comment.get_comment_type_display }}</td>
+                <td>{{ comment.concrete }}</td>
+            <tr>
         {% endfor %}
         </tbody>
     </table>
