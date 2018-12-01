@@ -3,8 +3,8 @@
         <label>项目情况</label>
         <label class="navbar-right">
             <a class="btn btn-primary btn-sm"
-               href="#">
-                添加评审
+               href="{% url 'dbms:meeting_allot' meeting_id=meeting_id article_id=article_id %}">
+                分配评委
             </a>
             <a class="btn btn-primary btn-sm "
                href="#">
@@ -15,7 +15,7 @@
                 单项额度
             </a>
             <a class="btn btn-danger btn-sm "
-               href="#">
+               href="{% url 'dbms:meeting_article_del' article_id=article_id %}">
                 取消上会
             </a>
         </label>

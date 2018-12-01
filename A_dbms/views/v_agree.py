@@ -72,7 +72,7 @@ def agree_edit(request, id):  # 修改合同
                     agree_typ=cleaned_data['agree_typ'],
                     agree_amount=cleaned_data['agree_amount'],
                     agree_state=1)
-                return redirect('/dbms/agree/')
+                return redirect('dbms:agree')
             else:
                 return render(request,
                               'dbms/agree/agree-edit.html',

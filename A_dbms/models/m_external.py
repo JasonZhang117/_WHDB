@@ -105,4 +105,4 @@ class Experts(models.Model):  # 评审专家
         db_table = 'dbms_experts'  # 指定数据表的名称
 
     def __str__(self):
-        return '%s-%s' % (self.name, self.level)
+        return self.name

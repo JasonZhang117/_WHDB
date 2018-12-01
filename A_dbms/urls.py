@@ -31,10 +31,16 @@ urlpatterns = [
          views.meeting, name='meeting_all'),
     path('meeting/add/',
          views.meeting_add, name='meeting_add'),
+    path('meeting/add-ajax/',
+         views.meeting_add_ajax, name='meeting_add_ajax'),
+
+    path('meeting/allot/<int:meeting_id>/<int:article_id>/',
+         views.meeting_allot, name='meeting_allot'),
     path('meeting/edit/<int:meeting_id>/',
          views.meeting_edit, name='meeting_edit'),
     path('meeting/del/<int:meeting_id>/',
          views.meeting_del, name='meeting_del'),
+
     path('meeting/scan/<int:meeting_id>/',
          views.meeting_scan, name='meeting_scan'),
     path('meeting/scan/<int:meeting_id>/<int:article_id>/',

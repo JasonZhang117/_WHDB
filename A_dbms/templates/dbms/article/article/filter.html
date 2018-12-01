@@ -22,14 +22,25 @@
         {% endif %}
     {% endfor %}
     <span style="display: inline">
-        <form class="navbar-form" style="display: inline">
+        <form class="navbar-form"
+              style="display: inline">
             <input type="text" class="form-control" placeholder="搜索客户或项目经理">
             <button type="submit" class="btn btn-primary btn-sm">搜索</button>
         </form>
     </span>
     <span>
-        <a class="btn btn-success btn-sm"
+        <a class="btn btn-success btn-sm pull-right"
            href="{% url 'dbms:article_add' %}">添加项目
         </a>
     </span>
+
+    <span class="btn btn-success btn-sm pull-right"
+          data-toggle="modal" data-target="#articleAddModal">
+        添加项目
+    </span>
 </div>
+
+
+<!-- Modal -->
+{% include 'dbms/article/article/filter/mod.html' %}
+

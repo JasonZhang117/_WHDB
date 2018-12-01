@@ -37,3 +37,21 @@ class MeetingAddForm(dform.Form):  # 评审会添加
             models.Articles.objects.filter(
                 article_state=1).values_list(
                 'id', 'article_num').order_by('article_num')
+
+
+# -----------------------分配项目评委-------------------------#
+
+class MeetingAllotForm(dform.Form):  # 分配项目评委
+    expert = fields.TypedMultipleChoiceField(
+        label="评审委员",
+        label_suffix="：",
+        coerce=lambda x: int(x),
+        widget=widgets.SelectMultiple(
+            attrs={'class': 'form-control',
+                   'placeholder': '选择项目'}))
+
+    def __init__(self, *args, **kwargs):
+        super(MeetingAllotForm, self).__init__(*args, **kwargs)
+        self.fields['expert'].choices = \
+            models.Experts.objects.values_list(
+                'id', 'name').order_by('name')

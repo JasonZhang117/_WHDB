@@ -5,11 +5,11 @@
             {% if meeting_obj.meeting_state == 1 %}
                 <a class="btn btn-danger btn-sm"
                    href="{% url 'dbms:meeting_edit' meeting_id=meeting_obj.id %}">
-                    上会
+                    完成评审会
                 </a>
                 <a class="btn btn-danger btn-sm "
                    href="{% url 'dbms:meeting_del' meeting_id=meeting_obj.id %}">
-                    取消
+                    取消评审会
                 </a>
             {% endif %}
         </label>

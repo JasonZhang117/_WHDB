@@ -23,6 +23,7 @@ def article(request, *args, **kwargs):  # 项目列表
     print('type(request.user):', type(request.user))
     print('request.GET.items():', request.GET.items())
     # request.GET.items()获取get传递的参数对
+    form = forms.ArticlesAddForm()
     for k, v in request.GET.items():
         print(k, ' ', v)
 
