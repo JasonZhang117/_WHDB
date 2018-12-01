@@ -50,7 +50,7 @@ def article(request, *args, **kwargs):  # 项目列表
         'control').order_by('-article_date')
 
     # 分页
-    paginator = Paginator(article_list, 3)
+    paginator = Paginator(article_list, 10)
     page = request.GET.get('page')
     try:
         article_list = paginator.page(page)

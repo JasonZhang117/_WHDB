@@ -1,4 +1,4 @@
-<div >
+<div>
     {% if kwargs.article_state == None %}
         <a class="active btn btn-primary btn-sm"
            href="{% url 'dbms:article_all' %}">全部</a>
@@ -21,9 +21,15 @@
             </a>
         {% endif %}
     {% endfor %}
-    <label class="navbar-right">
+    <span style="display: inline">
+        <form class="navbar-form" style="display: inline">
+            <input type="text" class="form-control" placeholder="搜索客户或项目经理">
+            <button type="submit" class="btn btn-primary btn-sm">搜索</button>
+        </form>
+    </span>
+    <span>
         <a class="btn btn-success btn-sm"
-           href="{% url 'dbms:article_add' %}">添加
+           href="{% url 'dbms:article_add' %}">添加项目
         </a>
-    </label>
+    </span>
 </div>
