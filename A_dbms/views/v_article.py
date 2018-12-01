@@ -6,6 +6,7 @@ import datetime, time
 from django.contrib.auth.decorators import login_required
 from django.urls import resolve
 from django.db.models import Q, F
+from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 
 
 # 项目信息管理
@@ -20,6 +21,10 @@ def article(request, *args, **kwargs):  # 项目列表
     print('article_add-->resolve(request.path):',
           resolve(request.path))
     print('type(request.user):', type(request.user))
+    print('request.GET.items():', request.GET.items())
+    # request.GET.items()获取get传递的参数对
+    for k, v in request.GET.items():
+        print(k, ' ', v)
 
     condition = {
         # 'article_state' : 0, #查询字段及值的字典，空字典查询所有
@@ -43,6 +48,17 @@ def article(request, *args, **kwargs):  # 项目列表
         'director',
         'assistant',
         'control').order_by('-article_date')
+
+    # 分页
+    paginator = Paginator(article_list, 3)
+    page = request.GET.get('page')
+    try:
+        article_list = paginator.page(page)
+    except PageNotAnInteger:
+        article_list = paginator.page(1)
+    except EmptyPage:
+        article_list = paginator.page(paginator.num_pages)
+
     print('article-->article_list:', article_list)
     return render(request,
                   'dbms/article/article.html',

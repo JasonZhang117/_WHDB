@@ -87,7 +87,7 @@ class Experts(models.Model):  # 评审专家
     job = models.CharField(
         verbose_name='职务',
         max_length=16, null=True)
-    LEVEL_LIST = ((1, '一级'), (2, '二级'), (3, '内部'))
+    LEVEL_LIST = ((0, '内部'), (1, '一级'), (2, '二级'))
     level = models.IntegerField(
         verbose_name='级别',
         choices=LEVEL_LIST,
@@ -105,4 +105,4 @@ class Experts(models.Model):  # 评审专家
         db_table = 'dbms_experts'  # 指定数据表的名称
 
     def __str__(self):
-        return self.name
+        return '%s-%s' % (self.name, self.level)
