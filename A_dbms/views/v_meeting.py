@@ -93,9 +93,10 @@ def meeting_add_ajax(request):
     review_model = request.POST.get('review_model')
     review_date = request.POST.get('review_date')
     articles = request.POST.get('articles')
-    print('review_model:', type(review_model))
-    print('review_date:', type(review_date))
-    print('articles:', type(articles))
+    post_data = request.POST.get('postData')
+    print('review_model:', review_model)
+    print('review_date:', review_date)
+    print('articles:', articles)
     return HttpResponse('OK')
 
 
