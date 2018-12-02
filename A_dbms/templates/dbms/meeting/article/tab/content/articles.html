@@ -14,7 +14,6 @@
             <th>项目经理</th>
             <th>项目助理</th>
             <th>风控专员</th>
-            <th>评审委员</th>
         </tr>
         </thead>
         <tbody>
@@ -47,11 +46,6 @@
                 <td>{{ article.director.name }}</td>
                 <td>{{ article.assistant.name }}</td>
                 <td>{{ article.control.name }}</td>
-                <td>
-                    {% for expert in article.expert.all %}
-                        {{ expert.name }}/
-                    {% endfor %}
-                </td>
             </tr>
         {% endfor %}
         </tbody>

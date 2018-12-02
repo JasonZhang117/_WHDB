@@ -1,0 +1,29 @@
+<div class="table-responsive">
+    {#"table-responsive":表格响应式布局#}
+    <table class="table table-bordered table-hover
+                table-condensed active">
+        <thead>
+        <tr style="text-align: center">
+            <th>合同编号</th>
+            <th>合同类型</th>
+            <th>签订人</th>
+            <th>签订情况</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for counter in agree_obj.counter_agree.all %}
+            <tr>
+                <td>{{ counter.counter_num }}</td>
+                <td>{{ counter.get_counter_typ_display }}</td>
+                <td>
+                    {% for custome in counter.assure_counter.custome.all %}
+                        {{ custome.name }}/
+                    {% endfor %}
+                </td>
+                <td>{{ counter.get_counter_state_display }}</td>
+
+            <tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>

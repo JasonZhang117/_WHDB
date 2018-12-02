@@ -1,20 +1,43 @@
 from django.shortcuts import render, redirect, HttpResponse
 from .. import models
 from .. import forms
-import datetime
+import time
+from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 
 
 # 项目信息管理
 # -----------------------委托管理-------------------------#
 # -----------------------委托管理-------------------------#
 # -----------------------委托合同列表---------------------#
-def agree(request):  # 委托合同列表
-    print(__file__)
-    agree_typ_list = models.Agrees.AGREE_TYP_LIST
-    agree_list = models.Agrees.objects.all(). \
-        select_related('article', 'branch')
+def agree(request, *args, **kwargs):  # 委托合同列表
+    print(__file__, '---->def agree')
+    agree_state_list = models.Agrees.AGREE_STATE_LIST
+    agree_list = models.Agrees.objects.filter(
+        **kwargs).select_related('article', 'branch')
+
+    ####分页信息###
+    paginator = Paginator(agree_list, 10)
+    page = request.GET.get('page')
+    try:
+        p_list = paginator.page(page)
+    except PageNotAnInteger:
+        p_list = paginator.page(1)
+    except EmptyPage:
+        p_list = paginator.page(paginator.num_pages)
+
     return render(request,
                   'dbms/agree/agree.html',
+
+                  locals())
+
+
+# -----------------------------查看合同------------------------------#
+def agree_scan(request, agree_id):  # 查看合同
+    print(__file__, '---->def agree_scan')
+    agree_obj = models.Agrees.objects.get(id=agree_id)
+
+    return render(request,
+                  'dbms/agree/agree-scan.html',
                   locals())
 
 
@@ -29,18 +52,61 @@ def agree_add(request):  # 添加合同
         form = forms.AgreeAddForm(request.POST, request.FILES)
         if form.is_valid():
             cleaned_data = form.cleaned_data
-            article_obj = models.Agrees.objects.create(
-                agree_num=cleaned_data['agree_num'],
-                article_id=cleaned_data['article_id'],
+            article_id = cleaned_data['article_id']
+            agree_amount = cleaned_data['agree_amount']
+
+            ###判断合同情况：
+            article_obj = models.Articles.objects.get(id=article_id)
+            if agree_amount > article_obj.amount:
+                msg = '该项目审批额度为%s,合同金额超过审批额度！！！' % article_obj.amount
+                print(msg),
+                return render(request,
+                              'dbms/agree/agree-add.html',
+                              locals())
+
+            ###合同年份(agree_year)
+            t = time.gmtime(time.time())  # 时间戳--》元组
+            agree_year = t.tm_year
+
+            ###合同序号(order)
+            order_list = models.Agrees.objects.filter(
+                agree_date__year=agree_year).values_list(
+                'agree_order')
+            if order_list:
+                order_m = list(zip(*order_list))
+                order_max = max(list(zip(*order_list))[0])  #####
+            else:
+                order_max = 0
+            agree_order = order_max + 1
+            if agree_order < 10:
+                order = '00%s' % agree_order
+            elif agree_order < 100:
+                order = '0%s' % agree_order
+            else:
+                order = '%s' % agree_order
+            ###评审会编号拼接
+            agree_num = "成武担[%s]%s-W4-1" % (agree_year, order)
+            print('agree_num:', agree_num)
+            agree_obj = models.Agrees.objects.create(
+                agree_num=agree_num,
+                article_id=article_id,
                 branch_id=cleaned_data['branch_id'],
                 agree_typ=cleaned_data['agree_typ'],
-                agree_amount=cleaned_data['agree_amount'],
-                agree_state=1)
-            return redirect('dbms:agree')
+                agree_order=agree_order,
+                agree_amount=agree_amount)
+            return redirect('dbms:agree_all')
         else:
             return render(request,
-                          'dbms/article/article-add.html',
+                          'dbms/agree/agree-add.html',
                           locals())
+
+
+def agree_preview(request, agree_id):
+    agree_obj = models.Agrees.objects.get(id=agree_id)
+
+    return render(request,
+                  'dbms/agree/agree-preview.html',
+                  locals())
 
 
 def agree_edit(request, id):  # 修改合同
@@ -60,8 +126,7 @@ def agree_edit(request, id):  # 修改合同
                           locals())
         else:
             # form验证
-            form = forms.AgreeAddForm(request.POST,
-                                      request.FILES)
+            form = forms.AgreeAddForm(request.POST, request.FILES)
             if form.is_valid():
                 cleaned_data = form.cleaned_data
                 agree_obj = models.Agrees.objects.filter(id=id)
@@ -80,13 +145,3 @@ def agree_edit(request, id):  # 修改合同
     else:
         print('无法修改！！！')
         return redirect('/dbms/article/')
-
-
-def agree_scan(request, id):  # 查看合同
-    print('---------------agree_scan------------------------')
-    if request.method == "GET":
-        agree_obj = models.Agrees.objects.get(id=id)
-
-        return render(request,
-                      'dbms/agree/agree-scan.html',
-                      locals())

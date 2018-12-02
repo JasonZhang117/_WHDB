@@ -1,4 +1,5 @@
 from django.db import models
+import datetime
 
 
 # -----------------------委托合同模型-------------------------#
@@ -23,8 +24,13 @@ class Agrees(models.Model):  # 委托合同
         verbose_name='合同种类',
         choices=AGREE_TYP_LIST,
         default=1)
+    agree_order = models.IntegerField(
+        verbose_name='合同序号')
     agree_amount = models.FloatField(
         verbose_name='合同金额')
+    agree_date = models.DateField(
+        verbose_name='创建日期',
+        default=datetime.date.today)
     AGREE_STATE_LIST = ((1, '未签订'),
                         (2, '已签订'),
                         (3, '已落实'),
@@ -33,6 +39,7 @@ class Agrees(models.Model):  # 委托合同
         verbose_name='_合同状态',
         choices=AGREE_STATE_LIST,
         default=1)
+
     agree_balance = models.FloatField(
         verbose_name='_放款金额（元）',
         default=0)

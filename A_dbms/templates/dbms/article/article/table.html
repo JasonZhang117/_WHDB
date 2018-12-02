@@ -20,7 +20,7 @@
         </tr>
         </thead>
         <tbody>
-        {% for article in article_list %}
+        {% for article in p_list %}
             <tr>
                 <td>
                     <a href="{% url 'dbms:article_scan_all' article_id=article.id %}">
@@ -41,20 +41,7 @@
         </tbody>
     </table>
 
-    <div class="pagination">
-        <span class="step-links">
-            {% if article_list.has_previous %}
-                <a href="?page={{ article_list.previous_page_number }}">上一页</a>
-            {% endif %}
-            <span class="current">
-                第{{ article_list.number }} 页/共 {{ article_list.paginator.num_pages }}页
-            </span>
-
-            {% if article_list.has_next %}
-                <a href="?page={{ article_list.next_page_number }}">下一页</a>
-            {% endif %}
-        </span>
-    </div>
+    {% include 'dbms/board/page.html' %}
 
 
 </div>

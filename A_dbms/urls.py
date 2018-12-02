@@ -38,8 +38,10 @@ urlpatterns = [
          views.meeting_allot, name='meeting_allot'),
     path('meeting/edit/<int:meeting_id>/',
          views.meeting_edit, name='meeting_edit'),
-    path('meeting/del/<int:meeting_id>/',
+    path('meeting/del/',
          views.meeting_del, name='meeting_del'),
+    path('meeting/article/del/<int:article_id>/',
+         views.meeting_article_del, name='meeting_article_del'),
 
     path('meeting/scan/<int:meeting_id>/',
          views.meeting_scan, name='meeting_scan'),
@@ -65,20 +67,29 @@ urlpatterns = [
          name='appraisal_sign'),
     # -----------------------合同管理-------------------------#
     path('agree/',
-         views.agree,
-         name='agree'),
+         views.agree, name='agree_all'),
+    path('agree/<int:agree_state>/',
+         views.agree, name='agree'),  # /dbms/article/(0-9)
     path('agree/add/',
          views.agree_add,
          name='agree_add'),
     path('agree/edit/<int:id>/',
          views.agree_edit,
          name='agree_edit'),
-    path('agree/scan/<int:id>/',
+    path('agree/scan/<int:agree_id>/',
          views.agree_scan,
          name='agree_scan'),
+    path('agree/preview/<int:agree_id>/',
+         views.agree_preview,
+         name='agree_preview'),
+
+
     # path('agree/del/',
     #      views.agree_del,
     #      name='agree_del'),
+    # -----------------------权证管理-------------------------#
+    path('warrant/',
+         views.warrant, name='warrant_all'),
     # -----------------------放款管理-------------------------#
     path('provide/', views.provide, name='provide'),
     # path('provide/add/',
@@ -87,6 +98,11 @@ urlpatterns = [
     path('provide/edit/<int:agree_id>/',
          views.provide_edit,
          name='provide_edit'),
+
+    # -----------------------保后管理-------------------------#
+    path('review/',
+         views.review, name='review_all'),
+
     # 部门
     path('department/', views.department, name='department'),
     # path('department/', views.Departments.as_view),

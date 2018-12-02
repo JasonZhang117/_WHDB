@@ -54,13 +54,13 @@ def article(request, *args, **kwargs):  # 项目列表
     paginator = Paginator(article_list, 10)
     page = request.GET.get('page')
     try:
-        article_list = paginator.page(page)
+        p_list = paginator.page(page)
     except PageNotAnInteger:
-        article_list = paginator.page(1)
+        p_list = paginator.page(1)
     except EmptyPage:
-        article_list = paginator.page(paginator.num_pages)
+        p_list = paginator.page(paginator.num_pages)
 
-    print('article-->article_list:', article_list)
+    print('article-->article_list:', p_list)
     return render(request,
                   'dbms/article/article.html',
                   locals())

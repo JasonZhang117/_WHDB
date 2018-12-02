@@ -1,0 +1,44 @@
+<div class="modal fade bs-example-modal-sm" id="delMeetingModal"
+     tabindex="-1" role="dialog" aria-labelledby="delMeetingModal">
+    <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="delMeetingModalLabel">
+                    取消评审会
+                </h4>
+            </div>
+            <div class="modal-body">
+                是否确定取消{{ meeting_obj.review_year }}年第{{ meeting_obj.review_order }}次{{ meeting_obj.get_review_model_display }}会!!!!
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default"
+                        data-dismiss="modal">
+                    取消
+                </button>
+                <button type="button" class="btn btn-primary"
+                        onclick="delMeetingForm();">
+                    确定
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- script -->
+<script>
+    function delMeetingForm() {
+        {#alert('hello!')#}
+        console.log(meeting_id)
+        $.ajax({
+            url: 'dbms/meeting/del/',
+            traditional: true,
+            type: 'POST',
+            data: {meeting_id: meeting_id},
+            success: function (arg) {
+                console.log(arg)
+                {#alert(arg)#}
+            }
+        })
+    }
+</script>

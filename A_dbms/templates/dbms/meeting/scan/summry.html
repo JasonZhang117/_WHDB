@@ -7,10 +7,10 @@
                    href="{% url 'dbms:meeting_edit' meeting_id=meeting_obj.id %}">
                     完成评审会
                 </a>
-                <a class="btn btn-danger btn-sm "
-                   href="{% url 'dbms:meeting_del' meeting_id=meeting_obj.id %}">
+                <span class="btn btn-danger btn-sm "
+                      data-toggle="modal" data-target="#delMeetingModal">
                     取消评审会
-                </a>
+                </span>
             {% endif %}
         </label>
     </div>
@@ -30,3 +30,8 @@
         </label>
     </div>
 </div>
+
+
+<!-- #addMeetingModal -->
+{% include 'dbms/meeting/modl/del-meeting-mod.html' %}
+

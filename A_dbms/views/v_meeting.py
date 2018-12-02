@@ -62,7 +62,7 @@ def meeting_add(request):  # 添加评审会
             else:
                 order = '%s' % review_order
 
-            ###时间处理
+            ###评审会编号拼接
             review_num = "(%s)[%s]%s" % (mod, r_year, order)
 
             meeting_obj = models.Appraisals.objects.create(
@@ -141,8 +141,10 @@ def meeting_edit(request, meeting_id):  # 编辑评审会
 
 
 # -----------------------取消评审会-------------------------#
-def meeting_del(request, meeting_id):  # 取消评审会
+def meeting_del(request):  # 取消评审会
     print(__file__, '---->def meeting_del')
+    meeting_id = request.POST.get('meeting_id')
+    print('meeting_id:', meeting_id)
     meeting_obj = models.Appraisals.objects.get(id=meeting_id)
     ''' MEETING_STATE_LIST = ((1, '待上会'), (2, '已上会'))'''
     if meeting_obj.meeting_state == 1:
@@ -156,6 +158,17 @@ def meeting_del(request, meeting_id):  # 取消评审会
     else:
         print('状态为：%s，无法删除！！！' % meeting_obj.meeting_state)
     return redirect('dbms:meeting_all')
+
+
+def meeting_article_del(request, article_id):
+    ''' ARTICLE_STATE_LIST = ((1, '待反馈'), (2, '待上会'),
+                          (3, '无补调'), (4, '需补调'),
+                          (5, '已补调'), (6, '已签批'))'''
+    article_obj = models.Articles.objects.get(id=article_id)
+    if article_obj.article_state in [1, 2]:
+        # article_obj.expert.clear()
+        meeting_list = article_obj.appraisal_article.all()
+        print('meeting_list:', meeting_list)
 
 
 # -----------------------评审会预览-------------------------#
@@ -176,7 +189,17 @@ def meeting_scan_article(request, meeting_id, article_id):
     article_obj = models.Articles.objects.get(id=article_id)
     meeting_obj = models.Appraisals.objects.get(id=meeting_id)
     print(article_obj.expert.all())
+    comment_list = article_obj.comment_summary.all()
+    print('comment_list:', comment_list)
 
+    for expert in article_obj.expert.all():
+        print('expert:', expert.id)
+        comment = comment_list.filter(expert=expert)
+        if comment:
+            print('comment:', comment[0].comment_type)
+            print('comment:', comment[0].concrete)
+    for comment in comment_list:
+        print('article.expert:', comment.expert.id)
     return render(request,
                   'dbms/meeting/meeting-article.html',
                   locals())

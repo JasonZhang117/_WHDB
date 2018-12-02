@@ -8,18 +8,27 @@
         {#<caption><h4>项目管理</h4></caption>#}
         <thead>
         <tr style="text-align: center">
-            <th>评委委员</th>
+            <th>评审委员</th>
             <th>评委意见</th>
             <th>意见详情</th>
+            <th>操作</th>
         </tr>
         </thead>
         <tbody>
-        {% for comment in article_obj.comment_summary.all %}
+        {% for expert in article_obj.expert.all %}
             <tr>
-                <td>{{ comment.expert }}</td>
-                <td>{{ comment.get_comment_type_display }}</td>
-                <td>{{ comment.concrete }}</td>
-            <tr>
+                <td>{{ expert.name }}</td>
+                {#                <td>{{ article_obj.comment_summary.all.filter__expert=expert.0) }}</td>#}
+                {#                <td>{{ comment.concrete }}</td>#}
+                <td>{{ expert.name }}</td>
+                <td>{{ expert.name }}</td>
+                <td>
+                    <span class="btn btn-primary btn-xs">
+                    评审意见
+                    </span>
+                </td>
+
+            </tr>
         {% endfor %}
         </tbody>
     </table>

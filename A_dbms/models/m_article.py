@@ -79,7 +79,7 @@ class Articles(models.Model):  # 项目、纪要
         db_table = 'dbms_articles'  # 指定数据表的名称
 
     def __str__(self):
-        return self.article_num
+        return '%s-%s' % (self.article_num, self.summary_num)
 
 
 '''

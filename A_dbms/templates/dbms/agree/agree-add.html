@@ -1,25 +1,17 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>agree-add</title>
-</head>
-<body>
-    <h1>添加合同</h1>
-<form action="{% url 'dbms:agree_add' %}" method="post">
-    {% csrf_token %}
-    {% for field in form %}
-        <p class="fieldWrapper">
-            {{ field.label_tag }}
-            {{ field }}
-            {{ field.errors.0 }}
-            {% if field.help_text %}
-                <p class="help">{{ field.help_text|safe }}</p>
-            {% endif %}
-        </p>
-    {% endfor %}
-    <input type="submit" value="提交" />
-</form>
+{% extends 'dbms/index_dbms.html' %}
+{% load static %}
+{% block title %}添加委托保证合同{% endblock %}
 
-</body>
-</html>
+{% block right-content-container %}
+    <div class="container" style="padding-right: 15px">
+        <h2>添加委托保证合同</h2>
+        <form class="form-horizontal"
+              action="{% url 'dbms:agree_add' %}"
+              method="post"> {% csrf_token %}
+            {#"form-inline":内联表单#}
+            {#"form-horizontal":水平排列的表单#}
+            {% include 'dbms/agree/agree/from_add_edit.html' %}
+
+        </form>
+    </div>
+{% endblock %}
