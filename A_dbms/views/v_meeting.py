@@ -141,7 +141,7 @@ def meeting_edit(request, meeting_id):  # 编辑评审会
 
 
 # -----------------------取消评审会-------------------------#
-def meeting_del(request):  # 取消评审会
+def meeting_del_ajax(request):  # 取消评审会
     print(__file__, '---->def meeting_del')
     meeting_id = request.POST.get('meeting_id')
     print('meeting_id:', meeting_id)
@@ -153,10 +153,10 @@ def meeting_del(request):  # 取消评审会
         article_list.update(article_state=1)  # 更新项目状态
         for article in article_list:
             article.expert.clear()  # 清除评审委员
-
         meeting_obj.delete()  # 删除评审会
     else:
         print('状态为：%s，无法删除！！！' % meeting_obj.meeting_state)
+    print('删除完成！！！！')
     return redirect('dbms:meeting_all')
 
 

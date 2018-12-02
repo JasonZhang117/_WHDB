@@ -39,7 +39,7 @@ urlpatterns = [
     path('meeting/edit/<int:meeting_id>/',
          views.meeting_edit, name='meeting_edit'),
     path('meeting/del/',
-         views.meeting_del, name='meeting_del'),
+         views.meeting_del_ajax, name='meeting_del_ajax'),
     path('meeting/article/del/<int:article_id>/',
          views.meeting_article_del, name='meeting_article_del'),
 

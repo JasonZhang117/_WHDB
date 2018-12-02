@@ -6,9 +6,12 @@
 
     <div class="container-fluid" style="padding-left: 1px;">
         {% include 'dbms/meeting/scan/summry.html' %}
-
         {% include 'dbms/meeting/scan/nav_tabs.html' %}
-
+        {% include 'dbms/meeting/mod_form/del-meeting-mod.html' %}
     </div>
 
+{% endblock %}
+
+{% block extra-js %}
+    {% include 'dbms/meeting/scan/extra-js.html' %}
 {% endblock %}

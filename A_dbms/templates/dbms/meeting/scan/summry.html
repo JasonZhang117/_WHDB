@@ -1,17 +1,14 @@
 <div class="panel panel-default">
     <div class="panel-heading">
         <label>评审会情况</label>
-        <label class="navbar-right">
-            {% if meeting_obj.meeting_state == 1 %}
-                <a class="btn btn-danger btn-sm"
-                   href="{% url 'dbms:meeting_edit' meeting_id=meeting_obj.id %}">
-                    完成评审会
-                </a>
-                <span class="btn btn-danger btn-sm "
-                      data-toggle="modal" data-target="#delMeetingModal">
-                    取消评审会
-                </span>
-            {% endif %}
+        <label class="pull-right">
+            <a class="btn btn-danger btn-sm"
+               href="{% url 'dbms:meeting_edit' meeting_id=meeting_obj.id %}">
+                完成评审会
+            </a>
+            <a class="btn btn-danger btn-sm " id="delMeeting">
+                取消评审会
+            </a>
         </label>
     </div>
 
@@ -30,8 +27,3 @@
         </label>
     </div>
 </div>
-
-
-<!-- #addMeetingModal -->
-{% include 'dbms/meeting/modl/del-meeting-mod.html' %}
-

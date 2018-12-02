@@ -1,0 +1,56 @@
+<script>
+    $(function () {
+        bindaddMeeting();
+        bindaddMeetingModalOk();
+
+    });
+
+    function bindaddMeeting() {
+        $('#addMeeting').click(function () {
+            console.log("bindaddMeeting")
+            $('#addMeetingModal').modal('show');
+        })
+    }
+
+    function bindaddMeetingModalOk() {
+        $('#addMeetingModalOk').click(function () {
+            var review_model = $('#id_review_model').val();
+            var review_date = $('#id_review_date').val();
+            var articles = $('#id_article').val();
+            console.log(review_model)
+            console.log(review_date)
+            console.log(articles)
+            console.log('bindaddMeetingModalOk')
+        })
+    }
+</script>
+
+
+<!-- script -->
+<script>
+    function submitForm() {
+        {#alert('hello!')#}
+        var review_model = $('#id_review_model').val();
+        var review_date = $('#id_review_date').val();
+        var articles = $('#id_article').val();
+        $.ajax({
+            url: '/dbms/meeting/add-ajax/',
+            traditional: true,
+            type: 'POST',
+            data: {
+                review_model: review_model,
+                review_date: review_date,
+                articles: articles
+            },
+            success: function (arg) {
+                console.log(arg)
+                {#alert(arg)#}
+            }
+        })
+    }
+
+</script>
+
+
+
+

@@ -1,43 +1,42 @@
 <div>
-    {% if kwargs.meeting_state == None %}
-        <a class="active btn btn-primary btn-sm"
-           href="{% url 'dbms:meeting_all' %}">全部</a>
-    {% else %}
-        <a class="btn btn btn-primary btn-sm"
-           href="{% url 'dbms:meeting_all' %}">全部</a>
-    {% endif %}
-
-    {# 方式二：#}
-    {% for item in meeting_state_list %}
-        {% if item.0 == kwargs.meeting_state %}
+    <label>
+        {% if kwargs.meeting_state == None %}
             <a class="active btn btn-primary btn-sm"
-               href="{% url 'dbms:meeting' meeting_state=item.0 %}">
-                {{ item.1 }}
-            </a>
+               href="{% url 'dbms:meeting_all' %}">全部</a>
         {% else %}
             <a class="btn btn-primary btn-sm"
-               href="{% url 'dbms:meeting' meeting_state=item.0 %}">
-                {{ item.1 }}
-            </a>
+               href="{% url 'dbms:meeting_all' %}">全部</a>
         {% endif %}
-    {% endfor %}
+
+        {# 方式二：#}
+        {% for item in meeting_state_list %}
+            {% if item.0 == kwargs.meeting_state %}
+                <a class="active btn btn-primary btn-sm"
+                   href="{% url 'dbms:meeting' meeting_state=item.0 %}">
+                    {{ item.1 }}
+                </a>
+            {% else %}
+                <a class="btn btn-primary btn-sm"
+                   href="{% url 'dbms:meeting' meeting_state=item.0 %}">
+                    {{ item.1 }}
+                </a>
+            {% endif %}
+        {% endfor %}
+    </label>
     {#    <a class="btn btn-success btn-sm navbar-right"#}
     {#       href="{% url 'dbms:meeting_add' %}">增加评审会#}
     {#    </a>#}
     <!-- Button trigger modal -->
-    <span>
-        <a class="btn btn-success btn-sm pull-right"
-           href="{% url 'dbms:meeting_add' %}">添加评审会
+    <label class="pull-right">
+        <a class="btn btn-success btn-sm"
+           href="{% url 'dbms:meeting_add' %}">
+            添加评审会
         </a>
-    </span>
+        <a class="btn btn-success btn-sm" id="addMeeting">
+            添加评审会
+        </a>
+    </label>
 
-    <span class="btn btn-success btn-sm pull-right"
-          data-toggle="modal" data-target="#addMeetingModal">
-        增加评审会
-    </span>
 </div>
 
-
-<!-- #addMeetingModal -->
-{% include 'dbms/meeting/modl/add-meeting-mod.html' %}
 

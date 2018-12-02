@@ -7,14 +7,14 @@
                         data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
-                <h4 class="modal-title" id="myModalLabel">
+                <h4 class="modal-title" id="addMeetingModalLabel">
                     添加评审会
                 </h4>
             </div>
             <div class="modal-body">
 
                 <form class="form-horizontal">
-                    {% include 'dbms/meeting/meeting/filter/form_meeting.html' %}
+                    {% include 'dbms/meeting/mod_form/mod_form/form-meeting-add.html' %}
                 </form>
 
             </div>
@@ -24,36 +24,10 @@
                     取消
                 </button>
                 <button type="button" class="btn btn-primary"
-                        onclick="submitForm();">
+                        id="addMeetingModalOk">
                     添加
                 </button>
             </div>
         </div>
     </div>
 </div>
-
-
-<!-- script -->
-<script>
-    function submitForm() {
-        {#alert('hello!')#}
-        var review_model = $('#id_review_model').val();
-        var review_date = $('#id_review_date').val();
-        var articles = $('#id_article').val();
-        $.ajax({
-            url: '/dbms/meeting/add-ajax/',
-            traditional: true,
-            type: 'POST',
-            data: {
-                review_model: review_model,
-                review_date: review_date,
-                articles: articles
-            },
-            success: function (arg) {
-                console.log(arg)
-                {#alert(arg)#}
-            }
-        })
-    }
-
-</script>

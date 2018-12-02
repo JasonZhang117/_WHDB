@@ -4,7 +4,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h4 class="modal-title" id="delMeetingModalLabel">
-                    取消评审会
+                    取消评审会<input style="display: none" id="meetingId" value="{{ meeting_obj.id }}">
                 </h4>
             </div>
             <div class="modal-body">
@@ -16,29 +16,10 @@
                     取消
                 </button>
                 <button type="button" class="btn btn-primary"
-                        onclick="delMeetingForm();">
+                        id="delMeetingModalOk">
                     确定
                 </button>
             </div>
         </div>
     </div>
 </div>
-
-
-<!-- script -->
-<script>
-    function delMeetingForm() {
-        {#alert('hello!')#}
-        console.log(meeting_id)
-        $.ajax({
-            url: 'dbms/meeting/del/',
-            traditional: true,
-            type: 'POST',
-            data: {meeting_id: meeting_id},
-            success: function (arg) {
-                console.log(arg)
-                {#alert(arg)#}
-            }
-        })
-    }
-</script>

@@ -7,12 +7,12 @@ from .v_article import (article, article_add, article_scan,
 # ----------------------v_appraisal评审视图--------------------#
 from .v_meeting import (meeting, meeting_add, meeting_scan, meeting_allot,
                         meeting_article_del,
-                        meeting_edit, meeting_del, meeting_scan_article,
+                        meeting_edit, meeting_del_ajax, meeting_scan_article,
                         meeting_add_ajax)
 from .v_appraisal import appraisal
 from .v_appraisal import appraisal_sign, appraisal_del, appraisal_edit
 # ----------------------v_agree合同管理视图--------------------#
-from .v_agree import agree, agree_add, agree_edit, agree_scan,agree_preview
+from .v_agree import agree, agree_add, agree_edit, agree_scan, agree_preview
 # ----------------------v_warrant权证管理视图--------------------#
 from .v_warrant import warrant
 # ----------------------v_provide放款管理视图--------------------#
@@ -20,7 +20,6 @@ from .v_provide import provide, provide_edit
 
 # ----------------------v_review保后管理视图--------------------#
 from .v_review import review
-
 
 # 客户、行业、区域
 from .v_custome import custome, custome_add, custome_edit, custome_del
