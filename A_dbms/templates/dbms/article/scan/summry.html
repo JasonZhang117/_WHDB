@@ -4,12 +4,19 @@
         <label class="navbar-right">
             <a class="btn btn-danger btn-sm"
                href="{% url 'dbms:article_edit' article_id=article_obj.id %}">
-                修改
+                /修改项目/
             </a>
-            <a class="btn btn-danger btn-sm "
+            <a class="btn btn-danger btn-sm " id="editArticle">
+                修改项目
+            </a><!--#path('article/del/'-->
+            <!--<a class="btn btn-danger btn-sm "
                href="{% url 'dbms:article_del' article_id=article_obj.id %}">
-                删除
-            </a>
+                删除项目
+            </a> #path('article/del/<int:article_id>/'-->
+
+            <a class="btn btn-danger btn-sm " id="delArticle">
+                删除项目
+            </a><!--#path('article/del/'-->
         </label>
     </div>
 

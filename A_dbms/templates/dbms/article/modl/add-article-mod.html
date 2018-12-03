@@ -1,5 +1,5 @@
-<div class="modal fade" id="addMeetingModal" tabindex="-1"
-     role="dialog" aria-labelledby="addMeetingModal">
+<div class="modal fade" id="articleAddModal" tabindex="-1"
+     role="dialog" aria-labelledby="articleAddModalLabel">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -7,14 +7,14 @@
                         data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
-                <h4 class="modal-title" id="addMeetingModalLabel">
-                    添加评审会
+                <h4 class="modal-title" id="articleAddModalLabel">
+                    添加项目
                 </h4>
             </div>
             <div class="modal-body">
 
                 <form class="form-horizontal">
-                    {% include 'dbms/meeting/mod_form/mod_form/form-meeting-add.html' %}
+                    {% include 'dbms/article/modl/mod_form/article-add-edit.html' %}
                 </form>
 
             </div>
@@ -24,7 +24,7 @@
                     取消
                 </button>
                 <button type="button" class="btn btn-primary"
-                        id="addMeetingModalOk">
+                        id="articleAddModalOk">
                     添加
                 </button>
             </div>

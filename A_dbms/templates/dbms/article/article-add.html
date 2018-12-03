@@ -10,8 +10,11 @@
               method="post"> {% csrf_token %}
             {#"form-inline":内联表单#}
             {#"form-horizontal":水平排列的表单#}
-            {% include 'dbms/article/article/from_add_edit.html' %}
 
+            {% include 'dbms/article/modl/mod_form/article-add-edit.html' %}
+
+            <input class="active btn btn-primary btn-sm"
+                   type="submit" value="提交">
         </form>
     </div>
 {% endblock %}

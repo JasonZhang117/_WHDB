@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, HttpResponse
 from .. import permissions
 from .. import models
 from .. import forms
@@ -15,11 +15,10 @@ from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 @login_required
 def article(request, *args, **kwargs):  # 项目列表
     print(__file__, '---->def article')
-    print('article-->**kwargs:', kwargs)
-    print('article_add-->request.path:', request.path)
-    print('article_add-->request.get_host:', request.get_host())
-    print('article_add-->resolve(request.path):',
-          resolve(request.path))
+    print('**kwargs:', kwargs)
+    print('request.path:', request.path)
+    print('request.get_host:', request.get_host())
+    print('resolve(request.path):', resolve(request.path))
     print('type(request.user):', type(request.user))
     print('request.GET.items():', request.GET.items())
     # request.GET.items()获取get传递的参数对
@@ -79,8 +78,6 @@ def article_add(request):  # 添加项目
         form = forms.ArticlesAddForm(request.POST, request.FILES)
         if form.is_valid():
             cleaned_data = form.cleaned_data
-            print('cleaned_data:', cleaned_data)
-
             custom_id = cleaned_data['custom_id']
             custom = models.Customes.objects.get(id=custom_id)
             if custom.genre == 1:
@@ -220,11 +217,37 @@ def article_del(request, article_id):  # 删除项目
     return redirect('dbms:article_all')
 
 
+@login_required
+def article_del_ajax(request):
+    print(__file__, '---->def article_del_ajax')
+    article_id = request.POST.get('article_id')
+    article_obj = models.Articles.objects.get(id=article_id)
+    '''ARTICLE_STATE_LIST = ((1, '待反馈'), (2, '待上会'),
+                          (3, '无补调'), (4, '需补调'),
+                          (5, '已补调'), (6, '已签批'))'''
+    if article_obj.article_state == 1:
+        article_obj.delete()  # 删除评审会
+        print('删除完成！！！！')
+    else:
+        print('状态为：%s，无法删除！！！' % article_obj.article_state)
+    return redirect('dbms:meeting_all')
+
+
 # -----------------------------项目预览------------------------------#
 @login_required
 def article_scan(request, article_id):  # 项目预览
     print(__file__, '---->def article_scan')
     article_obj = models.Articles.objects.get(id=article_id)
+    form_date = {
+        'custom_id': article_obj.custom.id,
+        'renewal': article_obj.renewal,
+        'augment': article_obj.augment,
+        'credit_term': article_obj.credit_term,
+        'director_id': article_obj.director.id,
+        'assistant_id': article_obj.assistant.id,
+        'control_id': article_obj.control.id,
+        'article_date': str(article_obj.article_date)}
+    form = forms.ArticlesAddForm(form_date)
     return render(request,
                   'dbms/article/article-scan.html',
                   locals())

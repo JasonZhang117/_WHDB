@@ -143,7 +143,7 @@ def meeting_edit(request, meeting_id):  # 编辑评审会
 
 # -----------------------取消评审会-------------------------#
 def meeting_del_ajax(request):  # 取消评审会
-    print(__file__, '---->def meeting_del')
+    print(__file__, '---->def meeting_del_ajax')
     meeting_id = request.POST.get('meeting_id')
     print('meeting_id:', meeting_id)
     meeting_obj = models.Appraisals.objects.get(id=meeting_id)

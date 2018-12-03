@@ -1,0 +1,39 @@
+<script>
+    $(function () {
+        bindDelArticle();
+        bindDelArticleModalOk();
+
+    });
+
+    function bindDelArticle() {
+        $('#delArticle').click(function () {
+            console.log("binddelArticle")
+            $('#delArticleModal').modal('show');
+        })
+    }
+
+    function bindDelArticleModalOk() {
+        $('#delArticleModalOk').click(function () {
+            var article_id = $('#articleId').val()
+            console.log('binddelArticleModalOk')
+            console.log(article_id)
+            console.log('delArticleModalOk')
+            $.ajax({
+                url: '/dbms/article/del/',
+                type: 'POST',
+                data: {'article_id': article_id},
+                success: function (arg) {
+                    alert("项目已成功删除！！！");
+                    $('#delArticleModal').modal('hide');
+                    window.location.href = "/dbms/article/";
+                }
+            })
+        })
+    }
+</script>
+
+
+
+
+
+

@@ -10,14 +10,17 @@ urlpatterns = [
     path('article/',
          views.article, name='article_all'),
     path('article/<int:article_state>/',
-         views.article,
-         name='article'),  # /dbms/article/(0-9)
+         views.article, name='article'),  # /dbms/article/(0-9)
     path('article/add/',
          views.article_add, name='article_add'),
+
     path('article/edit/<int:article_id>/',
          views.article_edit, name='article_edit'),
+
     path('article/del/<int:article_id>/',
          views.article_del, name='article_del'),
+    path('article/del/',
+         views.article_del_ajax, name='article_del_ajax'),
     # -----------------------项目管理-------------------------#
     path('article/scan/<int:article_id>/',
          views.article_scan, name='article_scan_all'),
@@ -82,7 +85,6 @@ urlpatterns = [
     path('agree/preview/<int:agree_id>/',
          views.agree_preview,
          name='agree_preview'),
-
 
     # path('agree/del/',
     #      views.agree_del,
