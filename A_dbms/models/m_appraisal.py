@@ -25,7 +25,11 @@ class Appraisals(models.Model):  # 评审会
         verbose_name="参评项目",
         related_name='appraisal_article',
         null=True, blank=True)
-
+    meeting_buildor = models.ForeignKey(
+        to='Employees',
+        verbose_name="创建人",
+        on_delete=models.PROTECT,
+        related_name='meeting_buildor_employee')
     MEETING_STATE_LIST = ((1, '待上会'), (2, '已上会'))
     meeting_state = models.IntegerField(
         verbose_name='项目状态',

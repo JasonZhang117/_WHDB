@@ -5,6 +5,37 @@ import datetime, time
 import json
 
 
+def creat_review_num(REVIEW_MODEL_LIST, review_model, review_date):
+    ###上会类型(mod)
+    r_mod = "内审"
+    for i in REVIEW_MODEL_LIST:
+        x, y = i
+        if x == review_model:
+            r_mod = y
+    ###上会年份(r_year)
+    t = time.strptime(str(review_date), "%Y-%m-%d")
+    r_year = t.tm_year
+    ###上会次序(order)
+    order_list = models.Appraisals.objects.filter(
+        review_model=review_model,
+        review_year=r_year).values_list('review_order')
+    if order_list:
+        order_m = list(zip(*order_list))
+        order_max = max(list(zip(*order_list))[0])  #####
+    else:
+        order_max = 0
+    review_order = order_max + 1
+    if review_order < 10:
+        order = '00%s' % review_order
+    elif review_order < 100:
+        order = '0%s' % review_order
+    else:
+        order = '%s' % review_order
+    ###评审会编号拼接
+    review_num = "(%s)[%s]%s" % (r_mod, r_year, order)
+    return review_num
+
+
 # -----------------------评审会-------------------------#
 def meeting(request, *args, **kwargs):  # 评审会
     print(__file__, '---->def meeting')
@@ -33,38 +64,11 @@ def meeting_add(request):  # 添加评审会
         if form.is_valid():
             cleaned_data = form.cleaned_data
 
-            ###上会类型(mod)
-            review_model = cleaned_data['review_model']
             REVIEW_MODEL_LIST = models.Appraisals.REVIEW_MODEL_LIST
-            for i in REVIEW_MODEL_LIST:
-                x, y = i
-                if x == review_model:
-                    mod = y
-
-            ###上会年份(r_year)
+            review_model = cleaned_data['review_model']
             review_date = cleaned_data['review_date']
-            t = time.strptime(str(review_date), "%Y-%m-%d")
-            r_year = t.tm_year
-
-            ###上会次序(order)
-            order_list = models.Appraisals.objects.filter(
-                review_model=review_model,
-                review_year=r_year).values_list('review_order')
-            if order_list:
-                order_m = list(zip(*order_list))
-                order_max = max(list(zip(*order_list))[0])  #####
-            else:
-                order_max = 0
-            review_order = order_max + 1
-            if review_order < 10:
-                order = '00%s' % review_order
-            elif review_order < 100:
-                order = '0%s' % review_order
-            else:
-                order = '%s' % review_order
-
-            ###评审会编号拼接
-            review_num = "(%s)[%s]%s" % (mod, r_year, order)
+            review_num = creat_review_num(
+                REVIEW_MODEL_LIST, review_model, review_date)
 
             meeting_obj = models.Appraisals.objects.create(
                 num=review_num,
@@ -91,14 +95,30 @@ def meeting_add(request):  # 添加评审会
 
 # -----------------------添加评审会ajax-------------------------#
 def meeting_add_ajax(request):
-    review_model = request.POST.get('review_model')
-    review_date = request.POST.get('review_date')
-    articles = request.POST.get('articles')
-    post_data = request.POST.get('postData')
-    print('review_model:', review_model)
-    print('review_date:', review_date)
-    print('articles:', articles)
-    print('post_data:', post_data)
+    print(__file__, '---->def meeting_add_ajax')
+    post_data_str = request.POST.get('postDataStr')
+    post_data = json.loads(post_data_str)
+
+    review_model = post_data['review_model']
+    review_date = post_data['review_date']
+    article = post_data['article']
+
+    data = {
+        'review_model': review_model,
+        'review_date': review_date,
+        'article': article}
+
+    form = forms.MeetingAddForm(data, request.FILES)
+
+    if form.is_valid():
+        cleaned_data = form.cleaned_data
+
+        REVIEW_MODEL_LIST = models.Appraisals.REVIEW_MODEL_LIST
+        review_num = creat_review_num(
+            REVIEW_MODEL_LIST, review_model, review_date)
+
+        print('review_num:', review_num)
+
     return HttpResponse('OK')
 
 

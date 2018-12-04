@@ -15,35 +15,25 @@
     function bindAddMeetingModalOk() {
         $('#addMeetingModalOk').click(function () {
             var postData = {};
-            {#var custom_id = $('#id_custom_id').val();#}
-            {#var renewal = $('#id_renewal').val();#}
-            {#var augment = $('#id_augment').val();#}
-            {#var credit_term = $('#id_credit_term').val();#}
-            {#var director_id = $('#id_director_id').val();#}
-            {#var assistant_id = $('#id_assistant_id').val();#}
-            {#var control_id = $('#id_control_id').val();#}
 
             $('#addMeetingModal').find('input,select').each(function () {
                 var v = $(this).val();
                 var n = $(this).attr('name');
                 postData[n] = v;
             });
-            var boxIds = new Array();
-
-            console.log(postData);
+            var postDataStr = JSON.stringify(postData);
+            console.log(postDataStr)
             $.ajax({
                 url: '/dbms/meeting/add-ajax/',
                 type: 'POST',
-                data: postData,
+                data: {'postDataStr': postDataStr},
                 success: function (arg) {
-                    console.log(arg);
-
                     var dict = JSON.parse(arg);
                     console.log(dict);
                     if (dict.status) {
                         alert(dict.message);
                         $('#addMeetingModal').modal('hide');
-                        window.location.href = "/dbms/article/";
+                        window.location.reload();
                     } else {
                         alert(dict.message);
                         $('#e_review_model').text(dict.forme.review_model);

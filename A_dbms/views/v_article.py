@@ -14,7 +14,7 @@ from django.db.utils import IntegrityError
 # 项目信息管理
 # --------------------------------70---------------------------------#
 # -----------------------------项目管理-------------------------------#
-def creatnum(custom_id, renewal, augment):
+def creat_article_num(custom_id, renewal, augment):
     custom = models.Customes.objects.get(id=custom_id)
     if custom.genre == 1:
         short_name = models.CustomesC.objects. \
@@ -109,7 +109,7 @@ def article_add(request):  # 添加项目
             renewal = cleaned_data['renewal']
             augment = cleaned_data['augment']
 
-            article_num = creatnum(custom_id, renewal, augment)
+            article_num = creat_article_num(custom_id, renewal, augment)
 
             amount = renewal + augment
 
@@ -157,7 +157,7 @@ def article_add_ajax(request):  # 添加项目
         custom_id = cleaned_data['custom_id']
         renewal = cleaned_data['renewal']
         augment = cleaned_data['augment']
-        article_num = creatnum(custom_id, renewal, augment)
+        article_num = creat_article_num(custom_id, renewal, augment)
 
         amount = renewal + augment
 
