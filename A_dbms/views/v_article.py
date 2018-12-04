@@ -7,20 +7,47 @@ from django.contrib.auth.decorators import login_required
 from django.urls import resolve
 from django.db.models import Q, F
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
+import json
+from django.db.utils import IntegrityError
 
 
 # 项目信息管理
 # --------------------------------70---------------------------------#
 # -----------------------------项目管理-------------------------------#
+def creatnum(custom_id, renewal, augment):
+    custom = models.Customes.objects.get(id=custom_id)
+    if custom.genre == 1:
+        short_name = models.CustomesC.objects. \
+            get(custome__id=custom_id).short_name
+    else:
+        short_name = custom.name
+
+        ###时间处理
+    article_date = time.gmtime()
+    n_year = str(article_date.tm_year)
+    if article_date.tm_mon < 10:
+        n_mon = '0' + str(article_date.tm_mon)
+    else:
+        n_mon = str(article_date.tm_mon)
+
+    amount = renewal + augment
+    amount_w = str(int(amount / 10000))
+
+    article_num = '%s_%s%s_%s万' % (short_name, n_year, n_mon, amount_w)
+
+    return article_num
+
+
 @login_required
 def article(request, *args, **kwargs):  # 项目列表
     print(__file__, '---->def article')
-    print('**kwargs:', kwargs)
-    print('request.path:', request.path)
-    print('request.get_host:', request.get_host())
-    print('resolve(request.path):', resolve(request.path))
-    print('type(request.user):', type(request.user))
-    print('request.GET.items():', request.GET.items())
+    # print('**kwargs:', kwargs)
+    # print('request.path:', request.path)
+    # print('request.get_host:', request.get_host())
+    # print('resolve(request.path):', resolve(request.path))
+    # print('type(request.user):', type(request.user))
+    # print('request.user:', request.user)
+    # print('request.GET.items():', request.GET.items())
     # request.GET.items()获取get传递的参数对
     form = forms.ArticlesAddForm()
     for k, v in request.GET.items():
@@ -35,19 +62,19 @@ def article(request, *args, **kwargs):  # 项目列表
         kwargs[k] = temp
         if temp:
             condition[k] = temp  # 将参数放入查询字典
-    print('condition:', condition)
+
     article_state_list = models.Articles.ARTICLE_STATE_LIST
     article_state_list_dic = list(map(
         lambda x: {'id': x[0], 'name': x[1]},
         article_state_list))
-    print('article-->article_state_list:', article_state_list)
     # 列表或元组转换为字典并添加key
+
     article_list = models.Articles.objects.filter(
         **kwargs).select_related(
         'custom',
         'director',
         'assistant',
-        'control').order_by('-article_date')
+        'control', ).order_by('-article_date')
 
     # 分页
     paginator = Paginator(article_list, 10)
@@ -59,7 +86,6 @@ def article(request, *args, **kwargs):  # 项目列表
     except EmptyPage:
         p_list = paginator.page(paginator.num_pages)
 
-    print('article-->article_list:', p_list)
     return render(request,
                   'dbms/article/article.html',
                   locals())
@@ -69,6 +95,7 @@ def article(request, *args, **kwargs):  # 项目列表
 @login_required
 def article_add(request):  # 添加项目
     print(__file__, '---->def article_add')
+
     if request.method == "GET":
         form = forms.ArticlesAddForm()
         return render(request,
@@ -79,29 +106,12 @@ def article_add(request):  # 添加项目
         if form.is_valid():
             cleaned_data = form.cleaned_data
             custom_id = cleaned_data['custom_id']
-            custom = models.Customes.objects.get(id=custom_id)
-            if custom.genre == 1:
-                short_name = models.CustomesC.objects. \
-                    get(custome__id=custom_id).short_name
-            else:
-                short_name = custom.name
-            ###时间处理
-            article_date = cleaned_data['article_date']
-            date_array = time.strptime(str(article_date),
-                                       "%Y-%m-%d")
-            year = str(date_array.tm_year)
-            if date_array.tm_mon < 10:
-                mon = '0' + str(date_array.tm_mon)
-            else:
-                mon = str(date_array.tm_mon)
-            ###时间处理
             renewal = cleaned_data['renewal']
             augment = cleaned_data['augment']
+
+            article_num = creatnum(custom_id, renewal, augment)
+
             amount = renewal + augment
-            article_num = short_name + '_' + \
-                          year + mon + '_' + \
-                          str(int(amount / 10000)) + \
-                          '万'
 
             article_obj = models.Articles.objects.create(
                 article_num=article_num,
@@ -109,16 +119,75 @@ def article_add(request):  # 添加项目
                 renewal=renewal,
                 augment=augment,
                 amount=amount,
+                credit_term=cleaned_data['credit_term'],
                 director_id=cleaned_data['director_id'],
                 assistant_id=cleaned_data['assistant_id'],
                 control_id=cleaned_data['control_id'],
-                article_date=article_date)
+                buildor=request.user)
 
             return redirect('dbms:article_all')
         else:
             return render(request,
                           'dbms/article/article-add.html',
                           locals())
+
+
+# -----------------------------添加项目ajax------------------------------#
+@login_required
+def article_add_ajax(request):  # 添加项目
+    print(__file__, '---->def article_add_ajax')
+
+    response = {'status': True, 'message': None,
+                'article_num': None, 'forme': None, }
+
+    data = {
+        'custom_id': request.POST.get('custom_id'),
+        'renewal': request.POST.get('renewal'),
+        'augment': request.POST.get('augment'),
+        'credit_term': request.POST.get('credit_term'),
+        'director_id': request.POST.get('director_id'),
+        'assistant_id': request.POST.get('assistant_id'),
+        'control_id': request.POST.get('control_id')}
+
+    form = forms.ArticlesAddForm(data, request.FILES)
+
+    if form.is_valid():
+        cleaned_data = form.cleaned_data
+
+        custom_id = cleaned_data['custom_id']
+        renewal = cleaned_data['renewal']
+        augment = cleaned_data['augment']
+        article_num = creatnum(custom_id, renewal, augment)
+
+        amount = renewal + augment
+
+        try:
+            article_obj = models.Articles.objects.create(
+                article_num=article_num,
+                custom_id=custom_id,
+                renewal=renewal,
+                augment=augment,
+                amount=amount,
+                credit_term=cleaned_data['credit_term'],
+                director_id=cleaned_data['director_id'],
+                assistant_id=cleaned_data['assistant_id'],
+                control_id=cleaned_data['control_id'],
+                buildor=request.user)
+            response['article_num'] = article_obj.article_num
+            response['message'] = '成功创建项目：%s！' % article_obj.article_num
+
+        except IntegrityError as e:
+            response['status'] = False
+            response['message'] = '请不要重复创建项目！'
+
+    else:
+        response['status'] = False
+        response['message'] = '表单信息有误！！！'
+        response['forme'] = form.errors
+
+    result = json.dumps(response, ensure_ascii=False)
+
+    return HttpResponse(result)
 
 
 # -----------------------------编辑项目------------------------------#
@@ -152,31 +221,12 @@ def article_edit(request, article_id):  # 编辑项目
                 cleaned_data = form.cleaned_data
 
                 custom_id = cleaned_data['custom_id']
-                custom = models.Customes.objects.get(id=custom_id)
-                if custom.genre == 1:
-                    short_name = models.CustomesC.objects. \
-                        get(custome__id=custom_id).short_name
-                else:
-                    short_name = custom.name
-                ###时间处理
-                article_date = cleaned_data['article_date']
-                date_array = time.strptime(str(article_date),
-                                           "%Y-%m-%d")
-                year = str(date_array.tm_year)
-                if date_array.tm_mon < 10:
-                    mon = '0' + str(date_array.tm_mon)
-                else:
-                    mon = str(date_array.tm_mon)
-                ###时间处理
                 renewal = cleaned_data['renewal']
                 augment = cleaned_data['augment']
+                article_num = creatnum(custom_id, renewal, augment)
+
                 amount = renewal + augment
-                article_num = short_name + '_' + \
-                              year + mon + '_' + \
-                              str(int(amount / 10000)) + \
-                              '万'
-                # 修改数据库
-                print('cleaned_data:', cleaned_data)
+
                 article_obj = models.Articles.objects.filter(
                     id=article_id)
 
@@ -189,8 +239,7 @@ def article_edit(request, article_id):  # 编辑项目
                     credit_term=cleaned_data['credit_term'],
                     director_id=cleaned_data['director_id'],
                     assistant_id=cleaned_data['assistant_id'],
-                    control_id=cleaned_data['control_id'],
-                    article_date=article_date)
+                    control_id=cleaned_data['control_id'])
 
                 return redirect('dbms:article_all')
             else:
@@ -200,6 +249,76 @@ def article_edit(request, article_id):  # 编辑项目
     else:
         print('状态为：%s，无法修改！！！' % article_obj.article_state)
         return redirect('dbms:article_all')
+
+
+# -----------------------------修改项目ajax------------------------------#
+@login_required
+def article_edit_ajax(request):  # 修改项目ajax
+    print(__file__, '---->def article_edit_ajax')
+
+    response = {'status': True, 'message': None,
+                'article_num': None, 'forme': None, }
+    article_id = request.POST.get('article_id')
+
+    article_obj = models.Articles.objects.get(id=article_id)
+    '''ARTICLE_STATE_LIST = ((1, '待反馈'), (2, '待上会'),
+                          (3, '无补调'), (4, '需补调'),
+                          (5, '已补调'), (6, '已签批'))'''
+    if article_obj.article_state == 1:
+        data = {
+            'custom_id': request.POST.get('custom_id'),
+            'renewal': request.POST.get('renewal'),
+            'augment': request.POST.get('augment'),
+            'credit_term': request.POST.get('credit_term'),
+            'director_id': request.POST.get('director_id'),
+            'assistant_id': request.POST.get('assistant_id'),
+            'control_id': request.POST.get('control_id')}
+
+        form = forms.ArticlesAddForm(data, request.FILES)
+
+        if form.is_valid():
+            cleaned_data = form.cleaned_data
+
+            custom_id = cleaned_data['custom_id']
+            renewal = cleaned_data['renewal']
+            augment = cleaned_data['augment']
+            article_num = creatnum(custom_id, renewal, augment)
+
+            amount = renewal + augment
+
+            try:
+                article_list = models.Articles.objects.filter(
+                    id=article_id)
+                article_list.update(
+                    article_num=article_num,
+                    custom_id=custom_id,
+                    renewal=renewal,
+                    augment=augment,
+                    amount=amount,
+                    credit_term=cleaned_data['credit_term'],
+                    director_id=cleaned_data['director_id'],
+                    assistant_id=cleaned_data['assistant_id'],
+                    control_id=cleaned_data['control_id'])
+
+                response['article_num'] = article_obj.article_num
+                response['message'] = '成功修改项目：%s！' % article_obj.article_num
+
+            except IntegrityError as e:
+                response['status'] = False
+                response['message'] = '项目未修改成功！'
+
+        else:
+            response['status'] = False
+            response['message'] = '表单信息有误！！！'
+            response['forme'] = form.errors
+    else:
+        arg = '状态为：%s，无法修改！！！' % article_obj.article_state
+        response['status'] = False
+        response['message'] = arg
+
+    result = json.dumps(response, ensure_ascii=False)
+
+    return HttpResponse(result)
 
 
 # -----------------------------删除项目------------------------------#
@@ -217,9 +336,11 @@ def article_del(request, article_id):  # 删除项目
     return redirect('dbms:article_all')
 
 
+# -----------------------------删除项目ajax------------------------------#
 @login_required
 def article_del_ajax(request):
     print(__file__, '---->def article_del_ajax')
+    response = {'status': True, 'message': None, 'data': None}
     article_id = request.POST.get('article_id')
     article_obj = models.Articles.objects.get(id=article_id)
     '''ARTICLE_STATE_LIST = ((1, '待反馈'), (2, '待上会'),
@@ -227,10 +348,17 @@ def article_del_ajax(request):
                           (5, '已补调'), (6, '已签批'))'''
     if article_obj.article_state == 1:
         article_obj.delete()  # 删除评审会
-        print('删除完成！！！！')
+        msg = '%s，删除成功！' % article_obj.article_num
+        response['message'] = msg
+        response['data'] = article_obj.id
+
     else:
-        print('状态为：%s，无法删除！！！' % article_obj.article_state)
-    return redirect('dbms:meeting_all')
+        msg = '状态为：%s，删除失败！！！' % article_obj.article_state
+        response['status'] = False
+        response['message'] = msg
+    result = json.dumps(response, ensure_ascii=False)
+    # return redirect('dbms:article_all')
+    return HttpResponse(result)
 
 
 # -----------------------------项目预览------------------------------#

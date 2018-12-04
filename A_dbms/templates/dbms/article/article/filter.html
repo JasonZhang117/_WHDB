@@ -24,18 +24,20 @@
         {% endfor %}
     </label>
     <label>
-        <form class="navbar-form"
-              style="display: inline">
-            <input type="text" class="form-control" placeholder="搜索客户或项目经理">
-            <button type="submit" class="btn btn-primary btn-sm">搜索</button>
+        <form class="navbar-form" style="display: inline">
+            <input type="text" class="form-control"
+                   placeholder="搜索客户或项目经理">
+            <button type="submit" class="btn btn-primary btn-sm">
+                搜索
+            </button>
         </form>
     </label>
     <label class="pull-right">
-        <a class="btn btn-success btn-sm"
+        <!--<a class="btn btn-success btn-sm"
            href="{% url 'dbms:article_add' %}">/添加项目/
-        </a>
+        </a>-->
 
-        <a class="btn btn-success btn-sm" id="articleAdd">
+        <a class="btn btn-success btn-sm" id="addArticle">
             添加项目
         </a>
     </label>

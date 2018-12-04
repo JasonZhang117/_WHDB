@@ -31,6 +31,11 @@ class Agrees(models.Model):  # 委托合同
     agree_date = models.DateField(
         verbose_name='创建日期',
         default=datetime.date.today)
+    agree_buildor = models.ForeignKey(
+        to='Employees',
+        verbose_name="创建人",
+        on_delete=models.PROTECT,
+        related_name='agree_buildor_employee')
     AGREE_STATE_LIST = ((1, '未签订'),
                         (2, '已签订'),
                         (3, '已落实'),

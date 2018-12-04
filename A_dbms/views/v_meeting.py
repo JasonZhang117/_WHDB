@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect, HttpResponse
 from .. import models
 from .. import forms
 import datetime, time
+import json
 
 
 # -----------------------评审会-------------------------#
@@ -88,7 +89,7 @@ def meeting_add(request):  # 添加评审会
                           locals())
 
 
-# -----------------------添加评审会-------------------------#
+# -----------------------添加评审会ajax-------------------------#
 def meeting_add_ajax(request):
     review_model = request.POST.get('review_model')
     review_date = request.POST.get('review_date')
@@ -97,6 +98,7 @@ def meeting_add_ajax(request):
     print('review_model:', review_model)
     print('review_date:', review_date)
     print('articles:', articles)
+    print('post_data:', post_data)
     return HttpResponse('OK')
 
 
@@ -141,11 +143,12 @@ def meeting_edit(request, meeting_id):  # 编辑评审会
     return redirect('dbms:meeting_all')
 
 
-# -----------------------取消评审会-------------------------#
+# -----------------------取消评审会ajax-------------------------#
 def meeting_del_ajax(request):  # 取消评审会
     print(__file__, '---->def meeting_del_ajax')
+    response = {'status': True, 'message': None, 'data': None}
+
     meeting_id = request.POST.get('meeting_id')
-    print('meeting_id:', meeting_id)
     meeting_obj = models.Appraisals.objects.get(id=meeting_id)
     ''' MEETING_STATE_LIST = ((1, '待上会'), (2, '已上会'))'''
     if meeting_obj.meeting_state == 1:
@@ -155,10 +158,19 @@ def meeting_del_ajax(request):  # 取消评审会
         for article in article_list:
             article.expert.clear()  # 清除评审委员
         meeting_obj.delete()  # 删除评审会
+
+        msg = '%s，删除成功！' % meeting_obj.num
+        response['message'] = msg
+        response['data'] = meeting_obj.id
+        print('删除成功')
+
     else:
-        print('状态为：%s，无法删除！！！' % meeting_obj.meeting_state)
-    print('删除完成！！！！')
-    return redirect('dbms:meeting_all')
+        msg = '状态为：%s，无法删除！！！' % meeting_obj.meeting_state
+        response['status'] = False
+        response['message'] = msg
+    result = json.dumps(response, ensure_ascii=False)
+
+    return HttpResponse(result)
 
 
 def meeting_article_del(request, article_id):

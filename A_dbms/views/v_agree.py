@@ -3,6 +3,8 @@ from .. import models
 from .. import forms
 import time
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
+import json
+from django.db.utils import IntegrityError
 
 
 # 项目信息管理
@@ -11,6 +13,8 @@ from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 # -----------------------委托合同列表---------------------#
 def agree(request, *args, **kwargs):  # 委托合同列表
     print(__file__, '---->def agree')
+    form = forms.AgreeAddForm()
+
     agree_state_list = models.Agrees.AGREE_STATE_LIST
     agree_list = models.Agrees.objects.filter(
         **kwargs).select_related('article', 'branch')
@@ -41,6 +45,7 @@ def agree_scan(request, agree_id):  # 查看合同
                   locals())
 
 
+# -----------------------------添加合同------------------------------#
 def agree_add(request):  # 添加合同
     print('----------------agree_add------------------------')
     if request.method == "GET":
@@ -99,6 +104,78 @@ def agree_add(request):  # 添加合同
             return render(request,
                           'dbms/agree/agree-add.html',
                           locals())
+
+
+# -----------------------------添加合同ajax------------------------------#
+def agree_add_ajax(request):  # 添加合同
+    print(__file__, '---->def agree_add_ajax')
+    response = {'status': True, 'message': None,
+                'agree_num': None, 'forme': None, }
+    data = {
+        'article_id': request.POST.get('article_id'),
+        'branch_id': request.POST.get('branch_id'),
+        'agree_typ': request.POST.get('agree_typ'),
+        'agree_amount': request.POST.get('agree_amount')}
+    form = forms.AgreeAddForm(data, request.FILES)
+    if form.is_valid():
+        cleaned_data = form.cleaned_data
+
+        article_id = cleaned_data['article_id']
+        agree_amount = cleaned_data['agree_amount']
+
+        ###判断合同情况：
+        article_obj = models.Articles.objects.get(id=article_id)
+        if agree_amount > article_obj.amount:
+            response['status'] = False
+            msg = '该项目审批额度为%s,合同金额超过审批额度！！！' % article_obj.amount
+            response['message'] = msg
+            result = json.dumps(response, ensure_ascii=False)
+            return HttpResponse(result)
+
+        ###合同年份(agree_year)
+        t = time.gmtime(time.time())  # 时间戳--》元组
+        agree_year = t.tm_year
+        ###合同序号(order)
+        order_list = models.Agrees.objects.filter(
+            agree_date__year=agree_year).values_list(
+            'agree_order')
+        if order_list:
+            order_m = list(zip(*order_list))
+            order_max = max(list(zip(*order_list))[0])  #####
+        else:
+            order_max = 0
+        agree_order = order_max + 1
+        if agree_order < 10:
+            order = '00%s' % agree_order
+        elif agree_order < 100:
+            order = '0%s' % agree_order
+        else:
+            order = '%s' % agree_order
+        ###评审会编号拼接
+        agree_num = "成武担[%s]%s-W4-1" % (agree_year, order)
+
+        try:
+            agree_obj = models.Agrees.objects.create(
+                agree_num=agree_num,
+                article_id=article_id,
+                branch_id=cleaned_data['branch_id'],
+                agree_typ=cleaned_data['agree_typ'],
+                agree_order=agree_order,
+                agree_amount=agree_amount,
+                agree_buildor=request.user)
+
+            response['agree_num'] = agree_obj.agree_num
+            response['message'] = '成功创建合同：%s！' % agree_obj.agree_num
+
+        except IntegrityError as e:
+            response['status'] = False
+            response['message'] = e
+    else:
+        response['status'] = False
+        response['message'] = '表单信息有误！！！'
+        response['forme'] = form.errors
+    result = json.dumps(response, ensure_ascii=False)
+    return HttpResponse(result)
 
 
 def agree_preview(request, agree_id):

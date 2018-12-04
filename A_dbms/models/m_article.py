@@ -72,6 +72,11 @@ class Articles(models.Model):  # 项目、纪要
     sign_date = models.DateField(
         verbose_name='签批日期',
         null=True, blank=True)
+    buildor = models.ForeignKey(
+        to='Employees',
+        verbose_name="创建人",
+        on_delete=models.PROTECT,
+        related_name='buildor_employee')
 
     # Cancellation = models.BooleanField('注销', default=False)
     class Meta:

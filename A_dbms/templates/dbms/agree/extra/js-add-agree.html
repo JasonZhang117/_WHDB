@@ -1,48 +1,47 @@
 <script>
     $(function () {
-        bindEditArticle();
-        bindEditArticleModalOk();
+        bindAddAgree();
+        bindAddAgreeModalOk();
 
     });
 
-    function bindEditArticle() {
-        $('#editArticle').click(function () {
-            console.log("bindEditArticle")
-            $('#editArticleModal').modal('show');
+    function bindAddAgree() {
+        $('#addAgree').click(function () {
+            console.log("bindAddAgree")
+            $('#addAgreeModal').modal('show');
         })
     }
 
-    function bindEditArticleModalOk() {
-        $('#editArticleModalOk').click(function () {
+    function bindAddAgreeModalOk() {
+        $('#addAgreeModalOk').click(function () {
             var postData = {};
-
-            $('#editArticleModal').find('input,select').each(function () {
+            $('#addAgreeModal').find('input,select').each(function () {
                 var v = $(this).val();
                 var n = $(this).attr('name');
                 postData[n] = v;
             });
-            console.log(postData);
+            console.log(postData)
+
             $.ajax({
-                url: '/dbms/article/edit-ajax/',
+                url: '/dbms/agree/add-ajax/',
                 type: 'POST',
+                traditional: true,
                 data: postData,
                 success: function (arg) {
                     var dict = JSON.parse(arg);
                     console.log(dict);
                     if (dict.status) {
+                        $('#addAgreeModal').modal('hide');
                         alert(dict.message);
-                        $('#editArticleModal').modal('hide');
                         window.location.reload();
                     } else {
                         alert(dict.message);
-                        $('#e_renewal').text(dict.forme.renewal);
-                        $('#e_augment').text(dict.forme.augment);
+                        $('#e_agree_amount').text(dict.forme.agree_amount);
                     }
                 }
             })
         })
     }
-
 </script>
 
 

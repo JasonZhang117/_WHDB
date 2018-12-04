@@ -14,8 +14,14 @@ urlpatterns = [
     path('article/add/',
          views.article_add, name='article_add'),
 
+    path('article/add-ajax/',
+         views.article_add_ajax, name='article_add_ajax'),
+
     path('article/edit/<int:article_id>/',
          views.article_edit, name='article_edit'),
+
+    path('article/edit-ajax/',
+         views.article_edit_ajax, name='article_edit_ajax'),
 
     path('article/del/<int:article_id>/',
          views.article_del, name='article_del'),
@@ -74,8 +80,9 @@ urlpatterns = [
     path('agree/<int:agree_state>/',
          views.agree, name='agree'),  # /dbms/article/(0-9)
     path('agree/add/',
-         views.agree_add,
-         name='agree_add'),
+         views.agree_add, name='agree_add'),
+    path('agree/add-ajax/',
+         views.agree_add_ajax, name='agree_add_ajax'),
     path('agree/edit/<int:id>/',
          views.agree_edit,
          name='agree_edit'),

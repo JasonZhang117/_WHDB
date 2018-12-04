@@ -1,36 +1,43 @@
 <div>
-    {% if kwargs.agree_state == None %}
-        <a class="active btn btn-primary btn-sm"
-           href="{% url 'dbms:agree_all' %}">全部</a>
-    {% else %}
-        <a class="btn btn btn-primary btn-sm"
-           href="{% url 'dbms:agree_all' %}">全部</a>
-    {% endif %}
-
-    {# 方式一：#}
-    {% for agree_state in agree_state_list %}
-        {% if agree_state.0 == kwargs.agree_state %}
+    <label>
+        {% if kwargs.agree_state == None %}
             <a class="active btn btn-primary btn-sm"
-               href="{% url 'dbms:agree' agree_state=agree_state.0 %}">
-                {{ agree_state.1 }}
-            </a>
+               href="{% url 'dbms:agree_all' %}">全部</a>
         {% else %}
-            <a class="btn btn-primary btn-sm"
-               href="{% url 'dbms:agree' agree_state=agree_state.0 %}">
-                {{ agree_state.1 }}
-            </a>
+            <a class="btn btn btn-primary btn-sm"
+               href="{% url 'dbms:agree_all' %}">全部</a>
         {% endif %}
-    {% endfor %}
-    <span style="display: inline">
-        <form class="navbar-form"
-              style="display: inline">
+
+        {# 方式一：#}
+        {% for agree_state in agree_state_list %}
+            {% if agree_state.0 == kwargs.agree_state %}
+                <a class="active btn btn-primary btn-sm"
+                   href="{% url 'dbms:agree' agree_state=agree_state.0 %}">
+                    {{ agree_state.1 }}
+                </a>
+            {% else %}
+                <a class="btn btn-primary btn-sm"
+                   href="{% url 'dbms:agree' agree_state=agree_state.0 %}">
+                    {{ agree_state.1 }}
+                </a>
+            {% endif %}
+        {% endfor %}
+    </label>
+
+    <label>
+        <form class="navbar-form" style="display: inline">
             <input type="text" class="form-control" placeholder="搜索客户或银行">
             <button type="submit" class="btn btn-primary btn-sm">搜索</button>
         </form>
-    </span>
-    <span>
-        <a class="btn btn-success btn-sm pull-right"
+    </label>
+
+    <label class="pull-right">
+        <!--<a class="btn btn-success btn-sm pull-right"
            href="{% url 'dbms:agree_add' %}">添加合同
+        </a></a>-->
+
+        <a class="btn btn-success btn-sm" id="addAgree">
+            添加合同
         </a>
-    </span>
+    </label>
 </div>

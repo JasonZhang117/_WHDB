@@ -51,14 +51,6 @@ class ArticlesAddForm(dform.Form):  # 项目添加
         widget=widgets.Select(
             attrs={'class': 'form-control',
                    'placeholder': '选择风控专员'}))
-    article_date = fields.DateField(
-        label='提交日期',
-        label_suffix="：",
-        widget=widgets.DateInput(
-            attrs={'class': 'form-control',
-                   'type': 'date',
-                   'placeholder': '项目提交日期'}),
-        initial=datetime.date.today)
 
     def __init__(self, *args, **kwargs):
         super(ArticlesAddForm, self).__init__(*args, **kwargs)

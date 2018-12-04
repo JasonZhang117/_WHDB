@@ -1,19 +1,19 @@
 <script>
     $(function () {
-        bindAddArticle();
-        bindAddArticleModalOk();
+        bindAddMeeting();
+        bindAddMeetingModalOk();
 
     });
 
-    function bindAddArticle() {
-        $('#addArticle').click(function () {
-            console.log("binddelArticle")
-            $('#addArticleModal').modal('show');
+    function bindAddMeeting() {
+        $('#addMeeting').click(function () {
+            console.log("bindAddMeeting")
+            $('#addMeetingModal').modal('show');
         })
     }
 
-    function bindAddArticleModalOk() {
-        $('#addArticleModalOk').click(function () {
+    function bindAddMeetingModalOk() {
+        $('#addMeetingModalOk').click(function () {
             var postData = {};
             {#var custom_id = $('#id_custom_id').val();#}
             {#var renewal = $('#id_renewal').val();#}
@@ -23,28 +23,32 @@
             {#var assistant_id = $('#id_assistant_id').val();#}
             {#var control_id = $('#id_control_id').val();#}
 
-            $('#addArticleModal').find('input,select').each(function () {
+            $('#addMeetingModal').find('input,select').each(function () {
                 var v = $(this).val();
                 var n = $(this).attr('name');
                 postData[n] = v;
             });
-            {#console.log(postData);#}
+            var boxIds = new Array();
+
+            console.log(postData);
             $.ajax({
-                url: '/dbms/article/add-ajax/',
+                url: '/dbms/meeting/add-ajax/',
                 type: 'POST',
-                traditional: true,
                 data: postData,
                 success: function (arg) {
+                    console.log(arg);
+
                     var dict = JSON.parse(arg);
                     console.log(dict);
                     if (dict.status) {
-                        $('#addArticleModal').modal('hide');
                         alert(dict.message);
-                        window.location.reload();
+                        $('#addMeetingModal').modal('hide');
+                        window.location.href = "/dbms/article/";
                     } else {
                         alert(dict.message);
-                        $('#e_renewal').text(dict.forme.renewal);
-                        $('#e_augment').text(dict.forme.augment);
+                        $('#e_review_model').text(dict.forme.review_model);
+                        $('#e_review_date').text(dict.forme.review_date);
+                        $('#e_article').text(dict.forme.article);
                     }
                 }
             })

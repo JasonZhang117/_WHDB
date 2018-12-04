@@ -1,0 +1,46 @@
+<script>
+    $(function () {
+        bindDelMeeting();
+        bindDelMeetingModalOk();
+    });
+
+    function bindDelMeeting() {
+        $('#delMeeting').click(function () {
+            console.log("binddelMeeting")
+            $('#delMeetingModal').modal('show');
+        })
+    }
+
+    function bindDelMeetingModalOk() {
+        $('#delMeetingModalOk').click(function () {
+            var meeting_id = $('#meetingDelId').val()
+            console.log(meeting_id)
+            $.ajax({
+                url: '/dbms/meeting/del/',
+                type: 'POST',
+                data: {'meeting_id': meeting_id},
+                success: function (arg) {
+                    var dict = JSON.parse(arg);
+                    if (dict.status) {
+                        $('#delMeetingModal').modal('hide');
+                        alert(dict.message);
+                        window.location.href = "/dbms/meeting/";
+                    } else {
+                        $('#delMeetingModal').modal('hide');
+                        alert(dict.message);
+
+
+                        {#window.location.reload();#}
+                    }
+                }
+            })
+
+        })
+    }
+</script>
+
+
+
+
+
+

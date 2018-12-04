@@ -4,12 +4,11 @@
 
 
 {% block right-content-container %}
-    {#    <div class="container-fluid" style="padding-left: 1px;">#}
-    {#        <div class="panel panel-default">#}
-    {#            <div class="panel-body row">#}
     {% include 'dbms/agree/agree/filter.html' %}
     {% include 'dbms/agree/agree/table.html' %}
-    {#            </div>#}
-    {#        </div>#}
-    {#    </div>#}
+    {% include 'dbms/agree/modl/add-agree-mod.html' %}
+{% endblock %}
+
+{% block extra-js %}
+    {% include 'dbms/agree/extra/js-add-agree.html' %}
 {% endblock %}
