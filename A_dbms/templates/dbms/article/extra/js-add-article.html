@@ -28,12 +28,13 @@
                 var n = $(this).attr('name');
                 postData[n] = v;
             });
-            {#console.log(postData);#}
+            var postDataStr = JSON.stringify(postData);
+            console.log(postDataStr)
             $.ajax({
                 url: '/dbms/article/add-ajax/',
                 type: 'POST',
                 traditional: true,
-                data: postData,
+                data: {'postDataStr': postDataStr},
                 success: function (arg) {
                     var dict = JSON.parse(arg);
                     console.log(dict);

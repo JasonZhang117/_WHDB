@@ -48,10 +48,10 @@ class MeetingAllotForm(dform.Form):  # 分配项目评委
         coerce=lambda x: int(x),
         widget=widgets.SelectMultiple(
             attrs={'class': 'form-control',
-                   'placeholder': '选择项目'}))
+                   'placeholder': '选择评委'}))
 
     def __init__(self, *args, **kwargs):
         super(MeetingAllotForm, self).__init__(*args, **kwargs)
         self.fields['expert'].choices = \
-            models.Experts.objects.values_list(
-                'id', 'name').order_by('name')
+            models.Experts.objects.order_by(
+                'ordery').values_list('id', 'name')

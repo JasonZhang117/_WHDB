@@ -6,11 +6,11 @@ from .v_article import (article, article_add, article_add_ajax,
                         article_scan_agree,
                         article_edit, article_del, article_del_ajax)
 # ----------------------v_appraisal评审视图--------------------#
-from .v_meeting import (meeting, meeting_add, meeting_scan, meeting_allot,
-                        meeting_article_del,
+from .v_meeting import (meeting, meeting_scan,
+                        meeting_article_del_ajax,
                         meeting_edit, meeting_del_ajax, meeting_scan_article,
-                        meeting_add_ajax)
-from .v_appraisal import appraisal
+                        meeting_add_ajax, meeting_allot_ajax)
+from .v_appraisal import comment_edit_ajax, appraisal
 from .v_appraisal import appraisal_sign, appraisal_del, appraisal_edit
 # ----------------------v_agree合同管理视图--------------------#
 from .v_agree import (agree, agree_add, agree_add_ajax,

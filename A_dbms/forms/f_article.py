@@ -98,7 +98,8 @@ class AppraisalForm(dform.Form):  # 行业form
     def __init__(self, *args, **kwargs):
         super(AppraisalForm, self).__init__(*args, **kwargs)
         self.fields['expert'].choices = \
-            models.Experts.objects.values_list('id', 'name')
+            models.Experts.objects.order_by(
+                'ordery').values_list('id', 'name')
 
 
 # -----------------------项目签批-------------------------#

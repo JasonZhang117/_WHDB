@@ -2,9 +2,15 @@
     <div class="panel-heading">
         <label>评审会情况</label>
         <label class="pull-right">
-            <a class="btn btn-danger btn-sm"
+            <a class="btn btn-success btn-sm " id="meetingNotice">
+                评审会通知
+            </a>
+            <!--<a class="btn btn-danger btn-sm"
                href="{% url 'dbms:meeting_edit' meeting_id=meeting_obj.id %}">
                 完成评审会
+            </a>-->
+            <a class="btn btn-danger btn-sm " id="editMeeting">
+                修改评审会
             </a>
             <a class="btn btn-danger btn-sm " id="delMeeting">
                 取消评审会

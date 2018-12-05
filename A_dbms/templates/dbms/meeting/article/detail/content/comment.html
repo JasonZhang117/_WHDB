@@ -16,18 +16,27 @@
         </thead>
         <tbody>
         {% for expert in article_obj.expert.all %}
-            <tr>
+            <tr expert_nid="{{ expert.id }}">
                 <td>{{ expert.name }}</td>
-                {#                <td>{{ article_obj.comment_summary.all.filter__expert=expert.0) }}</td>#}
-                {#                <td>{{ comment.concrete }}</td>#}
-                <td>{{ expert.name }}</td>
-                <td>{{ expert.name }}</td>
+                {% if article_obj.comment_expert.all %}
+                    {% for comment in article_obj.comment_expert.all %}
+                        {% if comment.expert.id == expert.id %}
+                            <td>{{ comment.get_comment_type_display }}</td>
+                            <td>{{ comment.concrete }}</td>
+                        {% else %}
+                            <td></td>
+                            <td></td>
+                        {% endif %}
+                    {% endfor %}
+                {% else %}
+                    <td></td>
+                    <td></td>
+                {% endif %}
                 <td>
-                    <span class="btn btn-primary btn-xs">
-                    评审意见
-                    </span>
+                    <a class="btn btn-primary btn-xs expert-comment">
+                        评审意见
+                    </a>
                 </td>
-
             </tr>
         {% endfor %}
         </tbody>

@@ -38,19 +38,19 @@ urlpatterns = [
          views.meeting, name='meeting'),
     path('meeting/',
          views.meeting, name='meeting_all'),
-    path('meeting/add/',
-         views.meeting_add, name='meeting_add'),
-    path('meeting/add-ajax/',
-         views.meeting_add_ajax, name='meeting_add_ajax'),
 
-    path('meeting/allot/<int:meeting_id>/<int:article_id>/',
-         views.meeting_allot, name='meeting_allot'),
+    path('meeting/add/',
+         views.meeting_add_ajax, name='meeting_add_ajax'),
+    path('meeting/allot/',
+         views.meeting_allot_ajax, name='meeting_allot_ajax'),
+
     path('meeting/edit/<int:meeting_id>/',
          views.meeting_edit, name='meeting_edit'),
+
     path('meeting/del/',
          views.meeting_del_ajax, name='meeting_del_ajax'),
-    path('meeting/article/del/<int:article_id>/',
-         views.meeting_article_del, name='meeting_article_del'),
+    path('meeting/article/del/',
+         views.meeting_article_del_ajax, name='meeting_article_del_ajax'),
 
     path('meeting/scan/<int:meeting_id>/',
          views.meeting_scan, name='meeting_scan'),
@@ -58,6 +58,9 @@ urlpatterns = [
          views.meeting_scan_article,
          name='meeting_scan_article'),
     # -----------------------评审管理-------------------------#
+    path('appraisal/comment/',
+         views.comment_edit_ajax, name='comment_edit_ajax'),
+
     path('appraisal/<int:article_state>',
          views.appraisal,
          name='appraisal'),

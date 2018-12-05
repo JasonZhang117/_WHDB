@@ -9,7 +9,7 @@ from django.core.exceptions import NON_FIELD_ERRORS, ValidationError
 # -----------------------委托合同添加-------------------------#
 class AgreeAddForm(dform.Form):  # 委托合同添加
     article_id = fields.IntegerField(
-        label="纪要",
+        label="评委意见",
         label_suffix="：",
         widget=widgets.Select(
             attrs={'class': 'form-control',

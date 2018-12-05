@@ -1,5 +1,5 @@
-<div class="modal fade" id="articleAddModal" tabindex="-1"
-     role="dialog" aria-labelledby="articleAddModalLabel">
+<div class="modal fade" id="addCommentModal" tabindex="-1"
+     role="dialog" aria-labelledby="addCommentModal">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -7,14 +7,18 @@
                         data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
-                <h4 class="modal-title" id="myModalLabel">
-                    添加项目
+                <h4 class="modal-title" id="addCommentModalLabel">
+                    分配评委：{{ article_obj.article_num }}
+                    <input style="display: none" name="article_id"
+                           value="{{ article_obj.id }}">
+                    <input style="display: none" name="expert_id"
+                           id="commentExpertId">
                 </h4>
             </div>
             <div class="modal-body">
 
                 <form class="form-horizontal">
-                    {% include 'dbms/article/article/filter/form_article.html' %}
+                    {% include 'dbms/meeting/modl/mod_form/add-comment.html' %}
                 </form>
 
             </div>
@@ -24,7 +28,7 @@
                     取消
                 </button>
                 <button type="button" class="btn btn-primary"
-                        onclick="submitForm();">
+                        id="addCommentModalOk">
                     添加
                 </button>
             </div>

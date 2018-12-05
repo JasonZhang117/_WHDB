@@ -138,16 +138,27 @@ def article_add_ajax(request):  # 添加项目
     print(__file__, '---->def article_add_ajax')
 
     response = {'status': True, 'message': None,
-                'article_num': None, 'forme': None, }
+                'obj_num': None, 'forme': None, }
+
+    post_data_str = request.POST.get('postDataStr')
+    post_data = json.loads(post_data_str)
+
+    custom_id = post_data['custom_id']
+    renewal = post_data['renewal']
+    augment = post_data['augment']
+    credit_term = post_data['credit_term']
+    director_id = post_data['director_id']
+    assistant_id = post_data['assistant_id']
+    control_id = post_data['control_id']
 
     data = {
-        'custom_id': request.POST.get('custom_id'),
-        'renewal': request.POST.get('renewal'),
-        'augment': request.POST.get('augment'),
-        'credit_term': request.POST.get('credit_term'),
-        'director_id': request.POST.get('director_id'),
-        'assistant_id': request.POST.get('assistant_id'),
-        'control_id': request.POST.get('control_id')}
+        'custom_id': custom_id,
+        'renewal': renewal,
+        'augment': augment,
+        'credit_term': credit_term,
+        'director_id': director_id,
+        'assistant_id': assistant_id,
+        'control_id': control_id}
 
     form = forms.ArticlesAddForm(data, request.FILES)
 
@@ -173,7 +184,7 @@ def article_add_ajax(request):  # 添加项目
                 assistant_id=cleaned_data['assistant_id'],
                 control_id=cleaned_data['control_id'],
                 buildor=request.user)
-            response['article_num'] = article_obj.article_num
+            response['obj_num'] = article_obj.article_num
             response['message'] = '成功创建项目：%s！' % article_obj.article_num
 
         except IntegrityError as e:
@@ -223,7 +234,7 @@ def article_edit(request, article_id):  # 编辑项目
                 custom_id = cleaned_data['custom_id']
                 renewal = cleaned_data['renewal']
                 augment = cleaned_data['augment']
-                article_num = creatnum(custom_id, renewal, augment)
+                article_num = creat_article_num(custom_id, renewal, augment)
 
                 amount = renewal + augment
 
@@ -257,8 +268,18 @@ def article_edit_ajax(request):  # 修改项目ajax
     print(__file__, '---->def article_edit_ajax')
 
     response = {'status': True, 'message': None,
-                'article_num': None, 'forme': None, }
-    article_id = request.POST.get('article_id')
+                'obj_num': None, 'forme': None, }
+
+    post_data_str = request.POST.get('postDataStr')
+    post_data = json.loads(post_data_str)
+    article_id = post_data['article_id']
+    custom_id = post_data['custom_id']
+    renewal = post_data['renewal']
+    augment = post_data['augment']
+    credit_term = post_data['credit_term']
+    director_id = post_data['director_id']
+    assistant_id = post_data['assistant_id']
+    control_id = post_data['control_id']
 
     article_obj = models.Articles.objects.get(id=article_id)
     '''ARTICLE_STATE_LIST = ((1, '待反馈'), (2, '待上会'),
@@ -266,13 +287,13 @@ def article_edit_ajax(request):  # 修改项目ajax
                           (5, '已补调'), (6, '已签批'))'''
     if article_obj.article_state == 1:
         data = {
-            'custom_id': request.POST.get('custom_id'),
-            'renewal': request.POST.get('renewal'),
-            'augment': request.POST.get('augment'),
-            'credit_term': request.POST.get('credit_term'),
-            'director_id': request.POST.get('director_id'),
-            'assistant_id': request.POST.get('assistant_id'),
-            'control_id': request.POST.get('control_id')}
+            'custom_id': custom_id,
+            'renewal': renewal,
+            'augment': augment,
+            'credit_term': credit_term,
+            'director_id': director_id,
+            'assistant_id': assistant_id,
+            'control_id': control_id}
 
         form = forms.ArticlesAddForm(data, request.FILES)
 
@@ -282,7 +303,7 @@ def article_edit_ajax(request):  # 修改项目ajax
             custom_id = cleaned_data['custom_id']
             renewal = cleaned_data['renewal']
             augment = cleaned_data['augment']
-            article_num = creatnum(custom_id, renewal, augment)
+            article_num = creat_article_num(custom_id, renewal, augment)
 
             amount = renewal + augment
 
@@ -300,7 +321,7 @@ def article_edit_ajax(request):  # 修改项目ajax
                     assistant_id=cleaned_data['assistant_id'],
                     control_id=cleaned_data['control_id'])
 
-                response['article_num'] = article_obj.article_num
+                response['obj_num'] = article_obj.article_num
                 response['message'] = '成功修改项目：%s！' % article_obj.article_num
 
             except IntegrityError as e:
@@ -340,8 +361,12 @@ def article_del(request, article_id):  # 删除项目
 @login_required
 def article_del_ajax(request):
     print(__file__, '---->def article_del_ajax')
-    response = {'status': True, 'message': None, 'data': None}
-    article_id = request.POST.get('article_id')
+    response = {'status': True, 'message': None,
+                'obj_num': None, 'forme': None, }
+    post_data_str = request.POST.get('postDataStr')
+    post_data = json.loads(post_data_str)
+    article_id = post_data['article_id']
+
     article_obj = models.Articles.objects.get(id=article_id)
     '''ARTICLE_STATE_LIST = ((1, '待反馈'), (2, '待上会'),
                           (3, '无补调'), (4, '需补调'),

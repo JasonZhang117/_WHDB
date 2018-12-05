@@ -1,16 +1,22 @@
 {% extends 'dbms/index_dbms.html' %}
 
-{% block title %}评审项目{% endblock %}
+{% block title %}参评项目{% endblock %}
 
 {% block right-content-container %}
 
     <div class="container-fluid" style="padding-left: 1px;">
         {% include 'dbms/meeting/article/summry.html' %}
-
         {% include 'dbms/meeting/article/nav_tabs.html' %}
-
         {% include 'dbms/meeting/article/nav_detail.html' %}
-
+        {% include 'dbms/meeting/modl/allot-expert-mod.html' %}
+        {% include 'dbms/meeting/modl/del-meeting-article-mod.html' %}
+        {% include 'dbms/meeting/modl/add-comment-mod.html' %}
     </div>
 
+{% endblock %}
+
+{% block extra-js %}
+    {% include 'dbms/meeting/extra/js-allot-expert.html' %}
+    {% include 'dbms/meeting/extra/js-del-meeting-article.html' %}
+    {% include 'dbms/meeting/extra/js-add-comment.html' %}
 {% endblock %}

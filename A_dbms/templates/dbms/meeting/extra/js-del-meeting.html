@@ -13,12 +13,19 @@
 
     function bindDelMeetingModalOk() {
         $('#delMeetingModalOk').click(function () {
-            var meeting_id = $('#meetingDelId').val()
-            console.log(meeting_id)
+            var postData = {};
+            $('#delMeetingModal').find('input,select').each(function () {
+                var v = $(this).val();
+                var n = $(this).attr('name');
+                postData[n] = v;
+            });
+            var postDataStr = JSON.stringify(postData);
+            console.log(postDataStr)
+
             $.ajax({
                 url: '/dbms/meeting/del/',
                 type: 'POST',
-                data: {'meeting_id': meeting_id},
+                data: {'postDataStr': postDataStr},
                 success: function (arg) {
                     var dict = JSON.parse(arg);
                     if (dict.status) {

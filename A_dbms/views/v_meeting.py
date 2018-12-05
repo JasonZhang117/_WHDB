@@ -5,37 +5,6 @@ import datetime, time
 import json
 
 
-def creat_review_num(REVIEW_MODEL_LIST, review_model, review_date):
-    ###上会类型(mod)
-    r_mod = "内审"
-    for i in REVIEW_MODEL_LIST:
-        x, y = i
-        if x == review_model:
-            r_mod = y
-    ###上会年份(r_year)
-    t = time.strptime(str(review_date), "%Y-%m-%d")
-    r_year = t.tm_year
-    ###上会次序(order)
-    order_list = models.Appraisals.objects.filter(
-        review_model=review_model,
-        review_year=r_year).values_list('review_order')
-    if order_list:
-        order_m = list(zip(*order_list))
-        order_max = max(list(zip(*order_list))[0])  #####
-    else:
-        order_max = 0
-    review_order = order_max + 1
-    if review_order < 10:
-        order = '00%s' % review_order
-    elif review_order < 100:
-        order = '0%s' % review_order
-    else:
-        order = '%s' % review_order
-    ###评审会编号拼接
-    review_num = "(%s)[%s]%s" % (r_mod, r_year, order)
-    return review_num
-
-
 # -----------------------评审会-------------------------#
 def meeting(request, *args, **kwargs):  # 评审会
     print(__file__, '---->def meeting')
@@ -50,52 +19,11 @@ def meeting(request, *args, **kwargs):  # 评审会
                   locals())
 
 
-# -----------------------添加评审会-------------------------#
-def meeting_add(request):  # 添加评审会
-    print(__file__, '---->def meeting_add')
-
-    if request.method == "GET":
-        form = forms.MeetingAddForm()
-        return render(request,
-                      'dbms/meeting/meeting-add.html',
-                      locals())
-    else:
-        form = forms.MeetingAddForm(request.POST, request.FILES)
-        if form.is_valid():
-            cleaned_data = form.cleaned_data
-
-            REVIEW_MODEL_LIST = models.Appraisals.REVIEW_MODEL_LIST
-            review_model = cleaned_data['review_model']
-            review_date = cleaned_data['review_date']
-            review_num = creat_review_num(
-                REVIEW_MODEL_LIST, review_model, review_date)
-
-            meeting_obj = models.Appraisals.objects.create(
-                num=review_num,
-                review_year=r_year,
-                review_model=review_model,
-                review_order=order,
-                review_date=review_date)
-
-            meeting_obj.article.set(cleaned_data['article'])
-
-            '''((1, '待反馈'), (2, '待上会'),
-             (3, '无补调'), (4, '需补调'),
-             (5, '已补调'), (6, '已签批'))'''
-            for i in cleaned_data['article']:
-                models.Articles.objects.filter(
-                    id=i).update(article_state=2)
-
-            return redirect('dbms:meeting_all')
-        else:
-            return render(request,
-                          'dbms/meeting/meeting-add.html',
-                          locals())
-
-
 # -----------------------添加评审会ajax-------------------------#
 def meeting_add_ajax(request):
     print(__file__, '---->def meeting_add_ajax')
+    response = {'status': True, 'message': None,
+                'obj_num': None, 'forme': None, }
     post_data_str = request.POST.get('postDataStr')
     post_data = json.loads(post_data_str)
 
@@ -114,39 +42,104 @@ def meeting_add_ajax(request):
         cleaned_data = form.cleaned_data
 
         REVIEW_MODEL_LIST = models.Appraisals.REVIEW_MODEL_LIST
-        review_num = creat_review_num(
-            REVIEW_MODEL_LIST, review_model, review_date)
+        review_model = cleaned_data['review_model']
+        review_date = cleaned_data['review_date']
 
+        ###上会类型(r_mod)
+        r_mod = "内审"
+        for i in REVIEW_MODEL_LIST:
+            x, y = i
+            if x == review_model:
+                r_mod = y
+
+        ###上会年份(r_year)
+        today_str = time.strptime(str(review_date), "%Y-%m-%d")
+        r_year = today_str.tm_year
+
+        ###上会次序(r_order)
+        order_list = models.Appraisals.objects.filter(
+            review_model=review_model,
+            review_year=r_year).values_list('review_order')
+        if order_list:
+            order_m = list(zip(*order_list))
+            order_max = max(list(zip(*order_list))[0])  #####
+        else:
+            order_max = 0
+        order_max_x = order_max + 1
+        if order_max_x < 10:
+            r_order = '00%s' % order_max_x
+        elif order_max_x < 100:
+            r_order = '0%s' % order_max_x
+        else:
+            r_order = '%s' % order_max_x
+        ###评审会编号拼接
+        review_num = "(%s)[%s]%s" % (r_mod, r_year, r_order)
         print('review_num:', review_num)
 
-    return HttpResponse('OK')
+        meeting_obj = models.Appraisals.objects.create(
+            num=review_num,
+            review_year=r_year,
+            review_model=review_model,
+            review_order=order_max_x,
+            review_date=review_date,
+            meeting_buildor=request.user)
+        article_list_l = cleaned_data['article']
+        meeting_obj.article.set(article_list_l)
+        '''((1, '待反馈'), (2, '待上会'),
+         (3, '无补调'), (4, '需补调'),
+         (5, '已补调'), (6, '已签批'))'''
+        models.Articles.objects.filter(
+            id__in=article_list_l).update(article_state=2)
 
+        response['obj_num'] = meeting_obj.num
+        response['message'] = '成功添加评审会：%s！' % meeting_obj.num
 
-# -----------------------分配评审委员-------------------------#
-def meeting_allot(request, meeting_id, article_id):  # 分配评审委员
-    article_obj = models.Articles.objects.get(id=article_id)
-    if request.method == "GET":
-        expert_list = article_obj.expert.all()
-        print('expert_list:', expert_list)
-        form = forms.MeetingAllotForm()
-        return render(request,
-                      'dbms/meeting/meeting-allot.html',
-                      locals())
     else:
-        form = forms.MeetingAllotForm(request.POST, request.FILES)
+        response['status'] = False
+        response['message'] = '表单信息有误！！！'
+        response['forme'] = form.errors
+
+    result = json.dumps(response, ensure_ascii=False)
+    return HttpResponse(result)
+
+
+# -----------------------分配评审委员ajax-------------------------#
+def meeting_allot_ajax(request):  # 分配评审委员
+    print(__file__, '---->def meeting_allot_ajax')
+    response = {'status': True, 'message': None,
+                'obj_num': None, 'forme': None, }
+
+    post_data_str = request.POST.get('postDataStr')
+    post_data = json.loads(post_data_str)
+    article_id = post_data['article_id']
+    '''ARTICLE_STATE_LIST = ((1, '待反馈'), (2, '待上会'),
+                          (3, '无补调'), (4, '需补调'),
+                          (5, '已补调'), (6, '已签批'))'''
+    article_obj = models.Articles.objects.get(id=article_id)
+    if article_obj.article_state in [1, 2]:
+        expert = post_data['expert']
+        data = {
+            'article_id': article_id,
+            'expert': expert}
+
+        form = forms.MeetingAllotForm(data, request.FILES)
+
         if form.is_valid():
             cleaned_data = form.cleaned_data
-            print('cleaned_data:', cleaned_data)
-
             article_obj.expert.set(cleaned_data['expert'])
+            response['obj_num'] = article_obj.article_num
+            response['message'] = '成功为项目：%s分配评委！' % article_obj.article_num
 
-            return redirect('dbms:meeting_scan_article',
-                            meeting_id=meeting_id,
-                            article_id=article_id)
         else:
-            return render(request,
-                          'dbms/meeting/meeting-allot.html',
-                          locals())
+            response['status'] = False
+            response['message'] = '表单信息有误！！！'
+            response['forme'] = form.errors
+    else:
+        msg = '项目状态为：%s，无法变更评委！！！' % article_obj.article_state
+        response['status'] = False
+        response['message'] = msg
+    result = json.dumps(response, ensure_ascii=False)
+    return HttpResponse(result)
 
 
 # -----------------------编辑评审会-------------------------#
@@ -166,14 +159,17 @@ def meeting_edit(request, meeting_id):  # 编辑评审会
 # -----------------------取消评审会ajax-------------------------#
 def meeting_del_ajax(request):  # 取消评审会
     print(__file__, '---->def meeting_del_ajax')
-    response = {'status': True, 'message': None, 'data': None}
+    response = {'status': True, 'message': None,
+                'obj_num': None, 'forme': None, }
+    post_data_str = request.POST.get('postDataStr')
+    post_data = json.loads(post_data_str)
 
-    meeting_id = request.POST.get('meeting_id')
+    meeting_id = post_data['meeting_id']
     meeting_obj = models.Appraisals.objects.get(id=meeting_id)
     ''' MEETING_STATE_LIST = ((1, '待上会'), (2, '已上会'))'''
     if meeting_obj.meeting_state == 1:
         article_list = meeting_obj.article.all()
-        print('article_list:', article_list)
+
         article_list.update(article_state=1)  # 更新项目状态
         for article in article_list:
             article.expert.clear()  # 清除评审委员
@@ -182,26 +178,47 @@ def meeting_del_ajax(request):  # 取消评审会
         msg = '%s，删除成功！' % meeting_obj.num
         response['message'] = msg
         response['data'] = meeting_obj.id
-        print('删除成功')
+    else:
+        msg = '状态为：%s，无法删除！！！' % meeting_obj.meeting_state
+        response['status'] = False
+        response['message'] = msg
+    result = json.dumps(response, ensure_ascii=False)
+    return HttpResponse(result)
+
+
+# -----------------------取消项目上会ajax-------------------------#
+def meeting_article_del_ajax(request):  # 取消项目上会ajax
+    print(__file__, '---->def meeting_article_del')
+    response = {'status': True, 'message': None,
+                'obj_num': None, 'forme': None, }
+    post_data_str = request.POST.get('postDataStr')
+    post_data = json.loads(post_data_str)
+
+    meeting_id = post_data['meeting_id']
+    article_id = post_data['article_id']
+
+    meeting_obj = models.Appraisals.objects.get(id=meeting_id)
+    article_lis = models.Articles.objects.filter(id=article_id)
+
+    ''' ARTICLE_STATE_LIST = ((1, '待反馈'), (2, '待上会'),
+                          (3, '无补调'), (4, '需补调'),
+                          (5, '已补调'), (6, '已签批'))'''
+    if article_lis[0].article_state in [1, 2]:
+
+        article_lis[0].expert.clear()  # 清除评审委员
+        article_lis.update(article_state=1)  # 更新项目状态
+        meeting_obj.article.remove(article_lis[0])
+
+        msg = '%s，取消成功！' % article_lis[0].article_num
+        response['message'] = msg
+        response['data'] = meeting_obj.id
 
     else:
         msg = '状态为：%s，无法删除！！！' % meeting_obj.meeting_state
         response['status'] = False
         response['message'] = msg
     result = json.dumps(response, ensure_ascii=False)
-
     return HttpResponse(result)
-
-
-def meeting_article_del(request, article_id):
-    ''' ARTICLE_STATE_LIST = ((1, '待反馈'), (2, '待上会'),
-                          (3, '无补调'), (4, '需补调'),
-                          (5, '已补调'), (6, '已签批'))'''
-    article_obj = models.Articles.objects.get(id=article_id)
-    if article_obj.article_state in [1, 2]:
-        # article_obj.expert.clear()
-        meeting_list = article_obj.appraisal_article.all()
-        print('meeting_list:', meeting_list)
 
 
 # -----------------------评审会预览-------------------------#
@@ -221,18 +238,11 @@ def meeting_scan_article(request, meeting_id, article_id):
     print(__file__, '---->def article_scan_agree')
     article_obj = models.Articles.objects.get(id=article_id)
     meeting_obj = models.Appraisals.objects.get(id=meeting_id)
-    print(article_obj.expert.all())
-    comment_list = article_obj.comment_summary.all()
-    print('comment_list:', comment_list)
 
-    for expert in article_obj.expert.all():
-        print('expert:', expert.id)
-        comment = comment_list.filter(expert=expert)
-        if comment:
-            print('comment:', comment[0].comment_type)
-            print('comment:', comment[0].concrete)
-    for comment in comment_list:
-        print('article.expert:', comment.expert.id)
+    form = forms.MeetingAllotForm()
+
+    form_comment = forms.CommentsAddForm()
+
     return render(request,
                   'dbms/meeting/meeting-article.html',
                   locals())

@@ -11,12 +11,12 @@ class Appraisals(models.Model):  # 评审会
     review_year = models.IntegerField(
         verbose_name='评审年份',
         default=datetime.date.today().year)
+    review_order = models.IntegerField(
+        verbose_name='评审次序')
     REVIEW_MODEL_LIST = ((1, '内审'), (2, '外审'))
     review_model = models.IntegerField(
         verbose_name='评审类型',
         choices=REVIEW_MODEL_LIST)
-    review_order = models.IntegerField(
-        verbose_name='评审次序')
     review_date = models.DateField(
         verbose_name='评审日期',
         default=datetime.date.today)
@@ -65,6 +65,11 @@ class SingleQuota(models.Model):  # 单项额度
     amount = models.FloatField(
         verbose_name='_放款金额（元）',
         default=0)
+    single_buildor = models.ForeignKey(
+        to='Employees',
+        verbose_name="创建人",
+        on_delete=models.PROTECT,
+        related_name='single_buildor_employee')
 
     class Meta:
         verbose_name_plural = '评审-额度'  # 指定显示名称
@@ -98,6 +103,11 @@ class Comments(models.Model):  # 评委意见
         verbose_name='意见详情',
         max_length=256,
         null=True, blank=True)
+    comment_buildor = models.ForeignKey(
+        to='Employees',
+        verbose_name="创建人",
+        on_delete=models.PROTECT,
+        related_name='comment_buildor_employee')
 
     class Meta:
         verbose_name_plural = '评审-意见'  # 指定显示名称

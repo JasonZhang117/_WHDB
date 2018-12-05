@@ -98,6 +98,13 @@ class Experts(models.Model):  # 评审专家
     email = models.CharField(
         verbose_name='邮箱',
         max_length=32, unique=True)
+    ordery = models.IntegerField(
+        verbose_name='优先级')
+    EXPERT_STATE_LIST = ((1, '正常'), (2, '注销'))
+    expert_state = models.IntegerField(
+        verbose_name='评审状态',
+        choices=EXPERT_STATE_LIST,
+        default=1)
 
     # Cancellation = models.BooleanField('注销', default=False)
     class Meta:

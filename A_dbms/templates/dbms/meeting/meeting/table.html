@@ -11,6 +11,7 @@
             <th>编号</th>
             <th>评审类型</th>
             <th>评审次序</th>
+            <th>项目数量</th>
             <th>评审日期</th>
             <th>状态</th>
         </tr>
@@ -25,6 +26,7 @@
                 </td>
                 <td>{{ meeting.get_review_model_display }}</td>
                 <td>{{ meeting.review_order }}</td>
+                <td>{{ meeting.article.all.count }}</td>
                 <td>{{ meeting.review_date }}</td>
                 <td>{{ meeting.get_meeting_state_display }}</td>
             </tr>
