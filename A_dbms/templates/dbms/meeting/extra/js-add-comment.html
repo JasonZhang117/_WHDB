@@ -7,10 +7,11 @@
 
     function bindAddComment() {
         $('.expert-comment').click(function () {
-            console.log("bindAddComment")
-            var commenExpertId = $(this).parent().parent().attr('expert_nid')
-            console.log(commenExpertId)
-            $('#commentExpertId').val(commenExpertId)
+            console.log("bindAddComment");
+            var commenExpertId = $(this).parent().parent().attr('expert_nid');
+            console.log(commenExpertId);
+            ttt = $('#commentExpertId').text;
+            console.log(ttt);
             $('#addCommentModal').modal('show');
         })
     }
