@@ -44,8 +44,14 @@ urlpatterns = [
     path('meeting/allot/',
          views.meeting_allot_ajax, name='meeting_allot_ajax'),
 
-    path('meeting/edit/<int:meeting_id>/',
-         views.meeting_edit, name='meeting_edit'),
+    path('meeting/comment/',
+         views.comment_edit_ajax, name='comment_edit_ajax'),
+
+    path('meeting/single/',
+         views.single_quota_ajax, name='single_quota_ajax'),
+
+    path('meeting/edit/',
+         views.meeting_edit_ajax, name='meeting_edit_ajax'),
 
     path('meeting/del/',
          views.meeting_del_ajax, name='meeting_del_ajax'),
@@ -58,8 +64,6 @@ urlpatterns = [
          views.meeting_scan_article,
          name='meeting_scan_article'),
     # -----------------------评审管理-------------------------#
-    path('appraisal/comment/',
-         views.comment_edit_ajax, name='comment_edit_ajax'),
 
     path('appraisal/<int:article_state>',
          views.appraisal,

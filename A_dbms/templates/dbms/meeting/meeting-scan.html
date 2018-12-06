@@ -7,6 +7,7 @@
     <div class="container-fluid" style="padding-left: 1px;">
         {% include 'dbms/meeting/scan/summry.html' %}
         {% include 'dbms/meeting/scan/nav_tabs.html' %}
+        {% include 'dbms/meeting/modl/edit-meeting-mod.html' %}
         {% include 'dbms/meeting/modl/del-meeting-mod.html' %}
     </div>
 
@@ -14,4 +15,5 @@
 
 {% block extra-js %}
     {% include 'dbms/meeting/extra/js-del-meeting.html' %}
+    {% include 'dbms/meeting/extra/js-edit-meeting.html' %}
 {% endblock %}

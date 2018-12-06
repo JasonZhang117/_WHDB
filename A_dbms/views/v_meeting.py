@@ -86,9 +86,10 @@ def meeting_add_ajax(request):
             meeting_buildor=request.user)
         article_list_l = cleaned_data['article']
         meeting_obj.article.set(article_list_l)
-        '''((1, '待反馈'), (2, '待上会'),
-         (3, '无补调'), (4, '需补调'),
-         (5, '已补调'), (6, '已签批'))'''
+        '''ARTICLE_STATE_LIST = ((1, '待反馈'), (2, '待上会'),
+                          (3, '无补调'),
+                          (4, '无补调'), (5, '需补调'),
+                          (6, '已补调'), (7, '已签批'))'''
         models.Articles.objects.filter(
             id__in=article_list_l).update(article_state=2)
 
@@ -114,8 +115,9 @@ def meeting_allot_ajax(request):  # 分配评审委员
     post_data = json.loads(post_data_str)
     article_id = post_data['article_id']
     '''ARTICLE_STATE_LIST = ((1, '待反馈'), (2, '待上会'),
-                          (3, '无补调'), (4, '需补调'),
-                          (5, '已补调'), (6, '已签批'))'''
+                          (3, '已上会'),
+                          (4, '无补调'), (5, '需补调'),
+                          (6, '已补调'), (7, '已签批'))'''
     article_obj = models.Articles.objects.get(id=article_id)
     if article_obj.article_state in [1, 2]:
         expert = post_data['expert']
@@ -143,9 +145,9 @@ def meeting_allot_ajax(request):  # 分配评审委员
     return HttpResponse(result)
 
 
-# -----------------------编辑评审会-------------------------#
-def meeting_edit(request, meeting_id):  # 编辑评审会
-    print(__file__, '---->def meeting_edit')
+# -----------------------编辑评审会ajax-------------------------#
+def meeting_edit_ajax(request):  # 编辑评审会ajax
+    print(__file__, '---->def meeting_edit_ajax')
     meeting_list = models.Appraisals.objects.filter(id=meeting_id)
     meeting_obj = meeting_list.first()
     '''MEETING_STATE_LIST = ((1, '待上会'), (2, '已上会'))'''
@@ -202,8 +204,9 @@ def meeting_article_del_ajax(request):  # 取消项目上会ajax
     article_lis = models.Articles.objects.filter(id=article_id)
 
     ''' ARTICLE_STATE_LIST = ((1, '待反馈'), (2, '待上会'),
-                          (3, '无补调'), (4, '需补调'),
-                          (5, '已补调'), (6, '已签批'))'''
+                          (3, '已上会'),
+                          (4, '无补调'), (5, '需补调'),
+                          (6, '已补调'), (7, '已签批'))'''
     if article_lis[0].article_state in [1, 2]:
 
         article_lis[0].expert.clear()  # 清除评审委员
@@ -215,14 +218,14 @@ def meeting_article_del_ajax(request):  # 取消项目上会ajax
         response['data'] = meeting_obj.id
 
     else:
-        msg = '状态为：%s，无法删除！！！' % meeting_obj.meeting_state
+        msg = '状态为：%s，无法删除！！！' % article_lis[0].article_state
         response['status'] = False
         response['message'] = msg
     result = json.dumps(response, ensure_ascii=False)
     return HttpResponse(result)
 
 
-# -----------------------------评审意见ajax------------------------------#
+# -----------------------------评审意见ajax------------------------#
 @login_required
 def comment_edit_ajax(request):  # 修改项目ajax
     print(__file__, '---->def article_edit_ajax')
@@ -234,60 +237,46 @@ def comment_edit_ajax(request):  # 修改项目ajax
     post_data = json.loads(post_data_str)
 
     article_id = post_data['article_id']
-    custom_id = post_data['custom_id']
-    renewal = post_data['renewal']
-    augment = post_data['augment']
-    credit_term = post_data['credit_term']
-    director_id = post_data['director_id']
-    assistant_id = post_data['assistant_id']
-    control_id = post_data['control_id']
 
     article_obj = models.Articles.objects.get(id=article_id)
     '''ARTICLE_STATE_LIST = ((1, '待反馈'), (2, '待上会'),
-                          (3, '无补调'), (4, '需补调'),
-                          (5, '已补调'), (6, '已签批'))'''
-    if article_obj.article_state == 1:
-        data = {
-            'custom_id': custom_id,
-            'renewal': renewal,
-            'augment': augment,
-            'credit_term': credit_term,
-            'director_id': director_id,
-            'assistant_id': assistant_id,
-            'control_id': control_id}
+                          (3, '已上会'),
+                          (4, '无补调'), (5, '需补调'),
+                          (6, '已补调'), (7, '已签批'))'''
+    if article_obj.article_state in [3, 4, 5, 6]:
+        comment_type = post_data['comment_type']
+        concrete = post_data['concrete']
 
-        form = forms.ArticlesAddForm(data, request.FILES)
+        data = {
+            'comment_type': comment_type,
+            'concrete': concrete}
+
+        form = forms.CommentsAddForm(data)
 
         if form.is_valid():
             cleaned_data = form.cleaned_data
-
-            custom_id = cleaned_data['custom_id']
-            renewal = cleaned_data['renewal']
-            augment = cleaned_data['augment']
-            article_num = creat_article_num(custom_id, renewal, augment)
-
-            amount = renewal + augment
-
+            expert_id = post_data['expert_id']
             try:
-                article_list = models.Articles.objects.filter(
-                    id=article_id)
-                article_list.update(
-                    article_num=article_num,
-                    custom_id=custom_id,
-                    renewal=renewal,
-                    augment=augment,
-                    amount=amount,
-                    credit_term=cleaned_data['credit_term'],
-                    director_id=cleaned_data['director_id'],
-                    assistant_id=cleaned_data['assistant_id'],
-                    control_id=cleaned_data['control_id'])
+                default = {
+                    'summary_id': article_id,
+                    'expert_id': expert_id,
+                    'comment_type': cleaned_data['comment_type'],
+                    'concrete': cleaned_data['concrete'],
+                    'comment_buildor': request.user}
 
-                response['obj_num'] = article_obj.article_num
-                response['message'] = '成功修改项目：%s！' % article_obj.article_num
-
-            except IntegrityError as e:
+                comment, created = models.Comments.objects.update_or_create(
+                    summary_id=article_id,
+                    expert_id=expert_id,
+                    defaults=default)
+                print('comment:', comment)
+                response['obj_id'] = comment.id
+                if created:
+                    response['message'] = '成功创建评审意见！'
+                else:
+                    response['message'] = '成功更新评审意见！'
+            except:
                 response['status'] = False
-                response['message'] = '项目未修改成功！'
+                response['message'] = '评审意见未修改成功！'
 
         else:
             response['status'] = False
@@ -303,12 +292,68 @@ def comment_edit_ajax(request):  # 修改项目ajax
     return HttpResponse(result)
 
 
+# -----------------------单项额度ajax-------------------------#
+def single_quota_ajax(request):  # 取消项目上会ajax
+    print(__file__, '---->def meeting_article_del')
+    response = {'status': True, 'message': None,
+                'obj_num': None, 'forme': None, }
+    post_data_str = request.POST.get('postDataStr')
+    post_data = json.loads(post_data_str)
+
+    article_id = post_data['article_id']
+    credit_model = post_data['credit_model']
+    credit_amount = post_data['credit_amount']
+    flow_rate = post_data['flow_rate']
+
+    article_obj = models.Articles.objects.get(id=article_id)
+    '''ARTICLE_STATE_LIST = ((1, '待反馈'), (2, '待上会'),
+                          (3, '已上会'),
+                          (4, '无补调'), (5, '需补调'),
+                          (6, '已补调'), (7, '已签批'))'''
+    if article_obj.article_state in [3, 4, 5, 6]:
+
+        data = {
+            'credit_model': credit_model,
+            'credit_amount': credit_amount,
+            'flow_rate': flow_rate}
+
+        form = forms.SingleQuotaForm(data)
+
+        if form.is_valid():
+            cleaned_data = form.cleaned_data
+
+        default = {
+            'summary_id': article_id,
+            'credit_model': credit_model,
+            'credit_amount': credit_amount,
+            'flow_rate': flow_rate,
+            'single_buildor': request.user}
+
+        single, created = models.SingleQuota.objects.update_or_create(
+            summary_id=article_id, credit_model=credit_model,
+            defaults=default)
+        print('single:', single)
+        response['obj_id'] = single.id
+
+        msg = '单项额度设置成功！'
+        response['message'] = msg
+
+    else:
+        msg = '状态为：%s，无法设置单项额度！！！' % article_obj.article_state
+        response['status'] = False
+        response['message'] = msg
+    result = json.dumps(response, ensure_ascii=False)
+    return HttpResponse(result)
+
+
 # -----------------------评审会预览-------------------------#
 def meeting_scan(request, meeting_id):  # 评审会预览
     print(__file__, '---->def meeting_scan')
     meeting_obj = models.Appraisals.objects.get(id=meeting_id)
     expert_list = models.Experts.objects.filter(
         article_expert__appraisal_article=meeting_obj).distinct()
+
+    form = forms.MeetingAddForm()
 
     return render(request,
                   'dbms/meeting/meeting-scan.html',
@@ -321,9 +366,20 @@ def meeting_scan_article(request, meeting_id, article_id):
     article_obj = models.Articles.objects.get(id=article_id)
     meeting_obj = models.Appraisals.objects.get(id=meeting_id)
 
-    form = forms.MeetingAllotForm()
+    expert_list = article_obj.expert.values_list('id')
+    if expert_list:
+        expert_id_list = list(zip(*expert_list))[0]
+
+        form_date = {
+            'expert': expert_id_list}
+
+        form = forms.MeetingAllotForm(initial=form_date)
+    else:
+        form = forms.MeetingAllotForm()
 
     form_comment = forms.CommentsAddForm()
+
+    form_single = forms.SingleQuotaForm()
 
     return render(request,
                   'dbms/meeting/meeting-article.html',

@@ -40,7 +40,6 @@ class MeetingAddForm(dform.Form):  # 评审会添加
 
 
 # -----------------------分配项目评委-------------------------#
-
 class MeetingAllotForm(dform.Form):  # 分配项目评委
     expert = fields.TypedMultipleChoiceField(
         label="评审委员",
@@ -55,3 +54,27 @@ class MeetingAllotForm(dform.Form):  # 分配项目评委
         self.fields['expert'].choices = \
             models.Experts.objects.order_by(
                 'ordery').values_list('id', 'name')
+
+
+# -----------------------单项额度-------------------------#
+class SingleQuotaForm(dform.Form):  # 分配项目评委
+    CREDIT_MODEL_LIST = models.SingleQuota.CREDIT_MODEL_LIST
+    credit_model = fields.IntegerField(
+        label='授信类型',
+        label_suffix="：",
+        widget=widgets.Select(
+            choices=CREDIT_MODEL_LIST,
+            attrs={'class': 'form-control',
+                   'placeholder': '授信类型'}))
+    credit_amount = fields.FloatField(
+        label='授信额度（元）',
+        label_suffix="：",
+        widget=widgets.NumberInput(
+            attrs={'class': 'form-control',
+                   'placeholder': '授信额度（元）'}))
+    flow_rate = fields.FloatField(
+        label='费率（%）',
+        label_suffix="：",
+        widget=widgets.NumberInput(
+            attrs={'class': 'form-control',
+                   'placeholder': '费率（%）'}))

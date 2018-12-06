@@ -7,11 +7,12 @@
 
     function bindAddComment() {
         $('.expert-comment').click(function () {
-            console.log("bindAddComment");
+            {#console.log("bindAddComment");#}
             var commenExpertId = $(this).parent().parent().attr('expert_nid');
+
             console.log(commenExpertId);
-            ttt = $('#commentExpertId').text;
-            console.log(ttt);
+
+            $('#commentExpertId').val(commenExpertId);
             $('#addCommentModal').modal('show');
         })
     }
@@ -19,16 +20,17 @@
     function bindAddCommentModalOk() {
         $('#addCommentModalOk').click(function () {
             var postData = {};
-
             $('#addCommentModal').find('input,select').each(function () {
                 var v = $(this).val();
                 var n = $(this).attr('name');
                 postData[n] = v;
             });
+            var ttt = $('#id_concrete').val()
+            postData['concrete'] = ttt;
             var postDataStr = JSON.stringify(postData);
             console.log(postDataStr)
             $.ajax({
-                url: '/dbms/meeting/add/',
+                url: '/dbms/meeting/comment/',
                 type: 'POST',
                 data: {'postDataStr': postDataStr},
                 success: function (arg) {
@@ -40,8 +42,8 @@
                         window.location.reload();
                     } else {
                         alert(dict.message);
-                        $('#e_comment_type').text(dict.forme.e_comment_type);
-                        $('#e_concrete').text(dict.forme.e_concrete);
+                        $('#e_comment_type').text(dict.forme.comment_type);
+                        $('#e_concrete').text(dict.forme.concrete);
                     }
                 }
             })

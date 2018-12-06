@@ -8,7 +8,9 @@ from .v_article import (article, article_add, article_add_ajax,
 # ----------------------v_appraisal评审视图--------------------#
 from .v_meeting import (meeting, meeting_scan,
                         meeting_article_del_ajax, comment_edit_ajax,
-                        meeting_edit, meeting_del_ajax, meeting_scan_article,
+                        single_quota_ajax,
+                        meeting_edit_ajax, meeting_del_ajax,
+                        meeting_scan_article,
                         meeting_add_ajax, meeting_allot_ajax)
 from .v_appraisal import appraisal
 from .v_appraisal import appraisal_sign, appraisal_del, appraisal_edit

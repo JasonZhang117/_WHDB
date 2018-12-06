@@ -18,20 +18,20 @@
         {% for expert in article_obj.expert.all %}
             <tr expert_nid="{{ expert.id }}">
                 <td>{{ expert.name }}</td>
-                {% if article_obj.comment_expert.all %}
-                    {% for comment in article_obj.comment_expert.all %}
+                <td>
+                    {% for  comment in article_obj.comment_summary.all %}
                         {% if comment.expert.id == expert.id %}
-                            <td>{{ comment.get_comment_type_display }}</td>
-                            <td>{{ comment.concrete }}</td>
-                        {% else %}
-                            <td></td>
-                            <td></td>
+                            {{ comment.get_comment_type_display }}
                         {% endif %}
                     {% endfor %}
-                {% else %}
-                    <td></td>
-                    <td></td>
-                {% endif %}
+                </td>
+                <td>
+                    {% for  comment in article_obj.comment_summary.all %}
+                        {% if comment.expert.id == expert.id %}
+                            {{ comment.concrete }}
+                        {% endif %}
+                    {% endfor %}
+                </td>
                 <td>
                     <a class="btn btn-primary btn-xs expert-comment">
                         评审意见

@@ -207,8 +207,9 @@ def article_edit(request, article_id):  # 编辑项目
     print(__file__, '---->def article_edit')
     article_obj = models.Articles.objects.get(id=article_id)
     '''ARTICLE_STATE_LIST = ((1, '待反馈'), (2, '待上会'),
-                          (3, '无补调'), (4, '需补调'),
-                          (5, '已补调'), (6, '已签批'))'''
+                          (3, '已上会'),
+                          (4, '无补调'), (5, '需补调'),
+                          (6, '已补调'), (7, '已签批'))'''
     if article_obj.article_state == 1:
         if request.method == "GET":
             # form初始化，适合做修改该
@@ -283,8 +284,9 @@ def article_edit_ajax(request):  # 修改项目ajax
 
     article_obj = models.Articles.objects.get(id=article_id)
     '''ARTICLE_STATE_LIST = ((1, '待反馈'), (2, '待上会'),
-                          (3, '无补调'), (4, '需补调'),
-                          (5, '已补调'), (6, '已签批'))'''
+                          (3, '已上会'),
+                          (4, '无补调'), (5, '需补调'),
+                          (6, '已补调'), (7, '已签批'))'''
     if article_obj.article_state == 1:
         data = {
             'custom_id': custom_id,
@@ -348,8 +350,9 @@ def article_del(request, article_id):  # 删除项目
     print(__file__, '---->def article_del')
     article_obj = models.Articles.objects.get(id=article_id)
     '''ARTICLE_STATE_LIST = ((1, '待反馈'), (2, '待上会'),
-                          (3, '无补调'), (4, '需补调'),
-                          (5, '已补调'), (6, '已签批'))'''
+                          (3, '已上会'),
+                          (4, '无补调'), (5, '需补调'),
+                          (6, '已补调'), (7, '已签批'))'''
     if article_obj.article_state == 1:
         article_obj.delete()
     else:
@@ -369,8 +372,9 @@ def article_del_ajax(request):
 
     article_obj = models.Articles.objects.get(id=article_id)
     '''ARTICLE_STATE_LIST = ((1, '待反馈'), (2, '待上会'),
-                          (3, '无补调'), (4, '需补调'),
-                          (5, '已补调'), (6, '已签批'))'''
+                          (3, '已上会'),
+                          (4, '无补调'), (5, '需补调'),
+                          (6, '已补调'), (7, '已签批'))'''
     if article_obj.article_state == 1:
         article_obj.delete()  # 删除评审会
         msg = '%s，删除成功！' % article_obj.article_num
