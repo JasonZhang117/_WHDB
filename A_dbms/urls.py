@@ -11,20 +11,10 @@ urlpatterns = [
          views.article, name='article_all'),
     path('article/<int:article_state>/',
          views.article, name='article'),  # /dbms/article/(0-9)
-    path('article/add/',
-         views.article_add, name='article_add'),
-
     path('article/add-ajax/',
          views.article_add_ajax, name='article_add_ajax'),
-
-    path('article/edit/<int:article_id>/',
-         views.article_edit, name='article_edit'),
-
     path('article/edit-ajax/',
          views.article_edit_ajax, name='article_edit_ajax'),
-
-    path('article/del/<int:article_id>/',
-         views.article_del, name='article_del'),
     path('article/del/',
          views.article_del_ajax, name='article_del_ajax'),
     # -----------------------项目管理-------------------------#

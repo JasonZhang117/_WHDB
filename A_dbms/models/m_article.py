@@ -44,10 +44,8 @@ class Articles(models.Model):  # 项目、纪要
     article_date = models.DateField(
         verbose_name='提交日期',
         default=datetime.date.today)
-    ARTICLE_STATE_LIST = ((1, '待反馈'), (2, '待上会'),
-                          (3, '已上会'),
-                          (4, '无补调'), (5, '需补调'),
-                          (6, '已补调'), (7, '已签批'))
+    ARTICLE_STATE_LIST = ((1, '待反馈'), (2, '已反馈'), (3, '待上会'),
+                          (4, '已上会'), (5, '已签批'), (6, '已注销'))
     article_state = models.IntegerField(
         verbose_name='项目状态',
         choices=ARTICLE_STATE_LIST,

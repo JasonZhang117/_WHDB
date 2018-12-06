@@ -1,10 +1,9 @@
 # ----------------------v_index首页管理视图--------------------#
 from .v_index import index
 # ----------------------v_article合项目管理视图--------------------#
-from .v_article import (article, article_add, article_add_ajax,
+from .v_article import (article, article_add_ajax,
                         article_scan, article_edit_ajax,
-                        article_scan_agree,
-                        article_edit, article_del, article_del_ajax)
+                        article_scan_agree, article_del_ajax)
 # ----------------------v_appraisal评审视图--------------------#
 from .v_meeting import (meeting, meeting_scan,
                         meeting_article_del_ajax, comment_edit_ajax,

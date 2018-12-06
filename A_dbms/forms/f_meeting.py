@@ -33,9 +33,12 @@ class MeetingAddForm(dform.Form):  # 评审会添加
 
     def __init__(self, *args, **kwargs):
         super(MeetingAddForm, self).__init__(*args, **kwargs)
+        '''ARTICLE_STATE_LIST = ((1, '待反馈'), (2, '已反馈'), (3, '待上会'),
+                                  (4, '已上会'), (5, '已签批'), (6, '已注销'))
+                                  (5, '已签批')-->才能出合同'''
         self.fields['article'].choices = \
             models.Articles.objects.filter(
-                article_state=1).values_list(
+                article_state=2).values_list(
                 'id', 'article_num').order_by('article_num')
 
 

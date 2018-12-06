@@ -2,18 +2,9 @@
     <div class="panel-heading">
         <label>项目情况</label>
         <label class="navbar-right">
-            <!--<a class="btn btn-danger btn-sm"
-               href="{% url 'dbms:article_edit' article_id=article_obj.id %}">
-                /修改项目/
-            </a>-->
             <a class="btn btn-danger btn-sm " id="editArticle">
                 修改项目
             </a><!--#path('article/del/'-->
-            <!--<a class="btn btn-danger btn-sm "
-               href="{% url 'dbms:article_del' article_id=article_obj.id %}">
-                删除项目
-            </a> #path('article/del/<int:article_id>/'-->
-
             <a class="btn btn-danger btn-sm " id="delArticle">
                 删除项目
             </a><!--#path('article/del/'-->
@@ -52,7 +43,7 @@
             担保期限：{{ article_obj.credit_term }}个月
         </label>
         <label class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
-            提交日期：{{ article_obj.article_date }}
+            签批日期：{{ article_obj.sign_date }}
         </label>
         <label class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
             项目状态：{{ article_obj.get_article_state_display }}

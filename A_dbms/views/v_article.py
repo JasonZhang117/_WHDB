@@ -91,47 +91,6 @@ def article(request, *args, **kwargs):  # 项目列表
                   locals())
 
 
-# -----------------------------添加项目------------------------------#
-@login_required
-def article_add(request):  # 添加项目
-    print(__file__, '---->def article_add')
-
-    if request.method == "GET":
-        form = forms.ArticlesAddForm()
-        return render(request,
-                      'dbms/article/article-add.html',
-                      locals())
-    else:
-        form = forms.ArticlesAddForm(request.POST, request.FILES)
-        if form.is_valid():
-            cleaned_data = form.cleaned_data
-            custom_id = cleaned_data['custom_id']
-            renewal = cleaned_data['renewal']
-            augment = cleaned_data['augment']
-
-            article_num = creat_article_num(custom_id, renewal, augment)
-
-            amount = renewal + augment
-
-            article_obj = models.Articles.objects.create(
-                article_num=article_num,
-                custom_id=custom_id,
-                renewal=renewal,
-                augment=augment,
-                amount=amount,
-                credit_term=cleaned_data['credit_term'],
-                director_id=cleaned_data['director_id'],
-                assistant_id=cleaned_data['assistant_id'],
-                control_id=cleaned_data['control_id'],
-                buildor=request.user)
-
-            return redirect('dbms:article_all')
-        else:
-            return render(request,
-                          'dbms/article/article-add.html',
-                          locals())
-
-
 # -----------------------------添加项目ajax------------------------------#
 @login_required
 def article_add_ajax(request):  # 添加项目
@@ -201,68 +160,6 @@ def article_add_ajax(request):  # 添加项目
     return HttpResponse(result)
 
 
-# -----------------------------编辑项目------------------------------#
-@login_required
-def article_edit(request, article_id):  # 编辑项目
-    print(__file__, '---->def article_edit')
-    article_obj = models.Articles.objects.get(id=article_id)
-    '''ARTICLE_STATE_LIST = ((1, '待反馈'), (2, '待上会'),
-                          (3, '已上会'),
-                          (4, '无补调'), (5, '需补调'),
-                          (6, '已补调'), (7, '已签批'))'''
-    if article_obj.article_state == 1:
-        if request.method == "GET":
-            # form初始化，适合做修改该
-            form_date = {
-                'custom_id': article_obj.custom.id,
-                'renewal': article_obj.renewal,
-                'augment': article_obj.augment,
-                'credit_term': article_obj.credit_term,
-                'director_id': article_obj.director.id,
-                'assistant_id': article_obj.assistant.id,
-                'control_id': article_obj.control.id,
-                'article_date': str(article_obj.article_date)}
-            form = forms.ArticlesAddForm(form_date)
-            return render(request,
-                          'dbms/article/article-edit.html',
-                          locals())
-        else:
-            # form验证
-            form = forms.ArticlesAddForm(request.POST, request.FILES)
-            if form.is_valid():
-                cleaned_data = form.cleaned_data
-
-                custom_id = cleaned_data['custom_id']
-                renewal = cleaned_data['renewal']
-                augment = cleaned_data['augment']
-                article_num = creat_article_num(custom_id, renewal, augment)
-
-                amount = renewal + augment
-
-                article_obj = models.Articles.objects.filter(
-                    id=article_id)
-
-                article_obj.update(
-                    article_num=article_num,
-                    custom_id=custom_id,
-                    renewal=renewal,
-                    augment=augment,
-                    amount=amount,
-                    credit_term=cleaned_data['credit_term'],
-                    director_id=cleaned_data['director_id'],
-                    assistant_id=cleaned_data['assistant_id'],
-                    control_id=cleaned_data['control_id'])
-
-                return redirect('dbms:article_all')
-            else:
-                return render(request,
-                              'dbms/article/article-edit.html',
-                              locals())
-    else:
-        print('状态为：%s，无法修改！！！' % article_obj.article_state)
-        return redirect('dbms:article_all')
-
-
 # -----------------------------修改项目ajax------------------------------#
 @login_required
 def article_edit_ajax(request):  # 修改项目ajax
@@ -283,10 +180,9 @@ def article_edit_ajax(request):  # 修改项目ajax
     control_id = post_data['control_id']
 
     article_obj = models.Articles.objects.get(id=article_id)
-    '''ARTICLE_STATE_LIST = ((1, '待反馈'), (2, '待上会'),
-                          (3, '已上会'),
-                          (4, '无补调'), (5, '需补调'),
-                          (6, '已补调'), (7, '已签批'))'''
+    '''ARTICLE_STATE_LIST = ((1, '待反馈'), (2, '已反馈'), (3, '待上会'),
+                          (4, '已上会'), (5, '已签批'), (6, '已注销'))
+                          (5, '已签批')-->才能出合同'''
     if article_obj.article_state == 1:
         data = {
             'custom_id': custom_id,
@@ -344,22 +240,6 @@ def article_edit_ajax(request):  # 修改项目ajax
     return HttpResponse(result)
 
 
-# -----------------------------删除项目------------------------------#
-@login_required
-def article_del(request, article_id):  # 删除项目
-    print(__file__, '---->def article_del')
-    article_obj = models.Articles.objects.get(id=article_id)
-    '''ARTICLE_STATE_LIST = ((1, '待反馈'), (2, '待上会'),
-                          (3, '已上会'),
-                          (4, '无补调'), (5, '需补调'),
-                          (6, '已补调'), (7, '已签批'))'''
-    if article_obj.article_state == 1:
-        article_obj.delete()
-    else:
-        print('状态为：%s，无法删除！！！' % article_obj.article_state)
-    return redirect('dbms:article_all')
-
-
 # -----------------------------删除项目ajax------------------------------#
 @login_required
 def article_del_ajax(request):
@@ -371,10 +251,9 @@ def article_del_ajax(request):
     article_id = post_data['article_id']
 
     article_obj = models.Articles.objects.get(id=article_id)
-    '''ARTICLE_STATE_LIST = ((1, '待反馈'), (2, '待上会'),
-                          (3, '已上会'),
-                          (4, '无补调'), (5, '需补调'),
-                          (6, '已补调'), (7, '已签批'))'''
+    '''ARTICLE_STATE_LIST = ((1, '待反馈'), (2, '已反馈'), (3, '待上会'),
+                          (4, '已上会'), (5, '已签批'), (6, '已注销'))
+                          (5, '已签批')-->才能出合同'''
     if article_obj.article_state == 1:
         article_obj.delete()  # 删除评审会
         msg = '%s，删除成功！' % article_obj.article_num

@@ -86,12 +86,9 @@ def meeting_add_ajax(request):
             meeting_buildor=request.user)
         article_list_l = cleaned_data['article']
         meeting_obj.article.set(article_list_l)
-        '''ARTICLE_STATE_LIST = ((1, '待反馈'), (2, '待上会'),
-                          (3, '无补调'),
-                          (4, '无补调'), (5, '需补调'),
-                          (6, '已补调'), (7, '已签批'))'''
+
         models.Articles.objects.filter(
-            id__in=article_list_l).update(article_state=2)
+            id__in=article_list_l).update(article_state=3)
 
         response['obj_num'] = meeting_obj.num
         response['message'] = '成功添加评审会：%s！' % meeting_obj.num
@@ -114,12 +111,11 @@ def meeting_allot_ajax(request):  # 分配评审委员
     post_data_str = request.POST.get('postDataStr')
     post_data = json.loads(post_data_str)
     article_id = post_data['article_id']
-    '''ARTICLE_STATE_LIST = ((1, '待反馈'), (2, '待上会'),
-                          (3, '已上会'),
-                          (4, '无补调'), (5, '需补调'),
-                          (6, '已补调'), (7, '已签批'))'''
+    '''ARTICLE_STATE_LIST = ((1, '待反馈'), (2, '已反馈'), (3, '待上会'),
+                          (4, '已上会'), (5, '已签批'), (6, '已注销'))
+                          (5, '已签批')-->才能出合同'''
     article_obj = models.Articles.objects.get(id=article_id)
-    if article_obj.article_state in [1, 2]:
+    if article_obj.article_state == 3:
         expert = post_data['expert']
         data = {
             'article_id': article_id,
@@ -169,22 +165,20 @@ def meeting_del_ajax(request):  # 取消评审会
 
     meeting_id = post_data['meeting_id']
     meeting_obj = models.Appraisals.objects.get(id=meeting_id)
-    ''' MEETING_STATE_LIST = ((1, '待上会'), (2, '已上会'))'''
-    if meeting_obj.meeting_state == 1:
-        article_list = meeting_obj.article.all()
-
-        article_list.update(article_state=1)  # 更新项目状态
-        for article in article_list:
-            article.expert.clear()  # 清除评审委员
-        meeting_obj.delete()  # 删除评审会
-
-        msg = '%s，删除成功！' % meeting_obj.num
-        response['message'] = msg
-        response['data'] = meeting_obj.id
-    else:
-        msg = '状态为：%s，无法删除！！！' % meeting_obj.meeting_state
+    article_list = meeting_obj.article.all()
+    if article_list.exists():
+        msg = '请删除所有参会项目后再取消评审会！！！'
         response['status'] = False
         response['message'] = msg
+    else:
+        ''' ARTICLE_STATE_LIST = ((1, '待反馈'), (2, '已反馈'), (3, '待上会'),
+                                          (4, '已上会'), (5, '已签批'), (6, '已注销'))
+                                          (5, '已签批')-->才能出合同'''
+        article_list.update(article_state=2)  # 更新项目状态
+        meeting_obj.delete()  # 删除评审会
+        msg = '评审会取消成功！'
+        response['message'] = msg
+
     result = json.dumps(response, ensure_ascii=False)
     return HttpResponse(result)
 
@@ -203,22 +197,21 @@ def meeting_article_del_ajax(request):  # 取消项目上会ajax
     meeting_obj = models.Appraisals.objects.get(id=meeting_id)
     article_lis = models.Articles.objects.filter(id=article_id)
 
-    ''' ARTICLE_STATE_LIST = ((1, '待反馈'), (2, '待上会'),
-                          (3, '已上会'),
-                          (4, '无补调'), (5, '需补调'),
-                          (6, '已补调'), (7, '已签批'))'''
-    if article_lis[0].article_state in [1, 2]:
+    ''' ARTICLE_STATE_LIST = ((1, '待反馈'), (2, '已反馈'), (3, '待上会'),
+                          (4, '已上会'), (5, '已签批'), (6, '已注销'))
+                          (5, '已签批')-->才能出合同'''
+    if article_lis[0].article_state in [1, 2, 3]:
 
         article_lis[0].expert.clear()  # 清除评审委员
-        article_lis.update(article_state=1)  # 更新项目状态
-        meeting_obj.article.remove(article_lis[0])
+        article_lis.update(article_state=2)  # 更新项目状态
+        meeting_obj.article.remove(article_lis[0])  # 取消项目上会
 
         msg = '%s，取消成功！' % article_lis[0].article_num
         response['message'] = msg
         response['data'] = meeting_obj.id
 
     else:
-        msg = '状态为：%s，无法删除！！！' % article_lis[0].article_state
+        msg = '项目状态为：%s，无法删除！！！' % article_lis[0].article_state
         response['status'] = False
         response['message'] = msg
     result = json.dumps(response, ensure_ascii=False)
@@ -339,7 +332,7 @@ def single_quota_ajax(request):  # 取消项目上会ajax
         response['message'] = msg
 
     else:
-        msg = '状态为：%s，无法设置单项额度！！！' % article_obj.article_state
+        msg = '项目状态为：%s，无法设置单项额度！！！' % article_obj.article_state
         response['status'] = False
         response['message'] = msg
     result = json.dumps(response, ensure_ascii=False)

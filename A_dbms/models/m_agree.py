@@ -36,10 +36,8 @@ class Agrees(models.Model):  # 委托合同
         verbose_name="创建人",
         on_delete=models.PROTECT,
         related_name='agree_buildor_employee')
-    AGREE_STATE_LIST = ((1, '未签订'),
-                        (2, '已签订'),
-                        (3, '已落实'),
-                        (4, '已作废'))
+    AGREE_STATE_LIST = ((1, '待签批'), (2, '已签批'),
+                        (3, '已落实'), (4, '已注销'))
     agree_state = models.IntegerField(
         verbose_name='_合同状态',
         choices=AGREE_STATE_LIST,
@@ -58,8 +56,7 @@ class Agrees(models.Model):  # 委托合同
         db_table = 'dbms_agrees'  # 指定数据表的名称
 
     def __str__(self):
-        return "%s-%s" % (self.article.article_num,
-                          self.agree_num)
+        return "%s-%s" % (self.agree_num, self.article.article_num)
 
 
 # -----------------------反担保合同模型-------------------------#
@@ -73,12 +70,9 @@ class Counters(models.Model):  # 反担保合同
         verbose_name="委托保证合同",
         on_delete=models.PROTECT,
         related_name='counter_agree')
-    COUNTER_TYP_LIST = ((1, '企业担保'),
-                        (2, '个人担保'),
-                        (3, '房产抵押'),
-                        (4, '土地抵押'),
-                        (5, '应收质押'),
-                        (6, '动产抵押'),
+    COUNTER_TYP_LIST = ((1, '企业担保'), (2, '个人担保'),
+                        (3, '房产抵押'), (4, '土地抵押'),
+                        (5, '应收质押'), (6, '动产抵押'),
                         (7, '车辆抵押'))
     counter_typ = models.IntegerField(
         verbose_name='合同类型',

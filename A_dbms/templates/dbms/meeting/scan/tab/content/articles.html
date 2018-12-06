@@ -15,12 +15,13 @@
             <th>项目助理</th>
             <th>风控专员</th>
             <th>评审委员</th>
+            <th>删除</th>
         </tr>
         </thead>
         <tbody>
 
         {% for article in meeting_obj.article.all %}
-            <tr>
+            <tr article-nid="{{ article.id }}">
                 {% if article_id %}
                     {% if article.id == article_id %}
                         <td>
@@ -52,6 +53,12 @@
                         {{ expert.name }}/
                     {% endfor %}
                 </td>
+                <td>
+                    <a class="btn btn-danger btn-xs del-meeting-article">
+                        取消
+                    </a>
+                </td>
+
             </tr>
         {% endfor %}
         </tbody>
