@@ -1,19 +1,25 @@
 {% extends 'dbms/index_dbms.html' %}
 
-{% block title %}项目评审{% endblock %}
+{% block title %}评审会{% endblock %}
 
 {% block right-content-container %}
 
     <div class="container-fluid" style="padding-left: 1px;">
         {% include 'dbms/meeting/scan/summry.html' %}
         {% include 'dbms/meeting/scan/nav_tabs.html' %}
-        {% include 'dbms/meeting/modl/edit-meeting-mod.html' %}
-        {% include 'dbms/meeting/modl/del-meeting-mod.html' %}
+        {% include 'dbms/meeting/modl/meeting-edit-mod.html' %}
+        {% include 'dbms/meeting/modl/meeting-del-mod.html' %}
+        {% include 'dbms/meeting/modl/meeting-article-del-mod.html' %}
+        {% include 'dbms/meeting/modl/meeting-article-add-mod.html' %}
+        {% include 'dbms/meeting/modl/meeting-close-mod.html' %}
     </div>
 
 {% endblock %}
 
 {% block extra-js %}
-    {% include 'dbms/meeting/extra/js-del-meeting.html' %}
-    {% include 'dbms/meeting/extra/js-edit-meeting.html' %}
+    {% include 'dbms/meeting/extra/js-meeting-del.html' %}
+    {% include 'dbms/meeting/extra/js-meeting-edit.html' %}
+    {% include 'dbms/meeting/extra/js-meeting-article-del.html' %}
+    {% include 'dbms/meeting/extra/js-meeting-article-add.html' %}
+    {% include 'dbms/meeting/extra/js-meeting-close.html' %}
 {% endblock %}

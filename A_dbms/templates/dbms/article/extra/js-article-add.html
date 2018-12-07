@@ -31,7 +31,7 @@
             var postDataStr = JSON.stringify(postData);
             console.log(postDataStr)
             $.ajax({
-                url: '/dbms/article/add-ajax/',
+                url: '/dbms/article/add/',
                 type: 'POST',
                 traditional: true,
                 data: {'postDataStr': postDataStr},

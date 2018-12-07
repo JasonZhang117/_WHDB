@@ -1,22 +1,22 @@
 <script>
     $(function () {
-        bindEditArticle();
-        bindEditArticleModalOk();
+        bindAddMeetingArticle();
+        bindAddMeetingArticleModalOk();
 
     });
 
-    function bindEditArticle() {
-        $('#editArticle').click(function () {
-            console.log("bindEditArticle")
-            $('#editArticleModal').modal('show');
+    function bindAddMeetingArticle() {
+        $('#addMeetingArticle').click(function () {
+            console.log("bindAddMeetingArticle")
+            $('#addMeetingArticleModal').modal('show');
         })
     }
 
-    function bindEditArticleModalOk() {
-        $('#editArticleModalOk').click(function () {
+    function bindAddMeetingArticleModalOk() {
+        $('#addMeetingArticleModalOk').click(function () {
             var postData = {};
 
-            $('#editArticleModal').find('input,select').each(function () {
+            $('#addMeetingArticleModal').find('input,select').each(function () {
                 var v = $(this).val();
                 var n = $(this).attr('name');
                 postData[n] = v;
@@ -24,7 +24,7 @@
             var postDataStr = JSON.stringify(postData);
             console.log(postDataStr)
             $.ajax({
-                url: '/dbms/article/edit-ajax/',
+                url: '/dbms/meeting/article/add/',
                 type: 'POST',
                 data: {'postDataStr': postDataStr},
                 success: function (arg) {
@@ -32,18 +32,18 @@
                     console.log(dict);
                     if (dict.status) {
                         alert(dict.message);
-                        $('#editArticleModal').modal('hide');
+                        $('#addMeetingModal').modal('hide');
                         window.location.reload();
                     } else {
                         alert(dict.message);
-                        $('#e_renewal').text(dict.forme.renewal);
-                        $('#e_augment').text(dict.forme.augment);
+                        $('#e_review_model').text(dict.forme.review_model);
+                        $('#e_review_date').text(dict.forme.review_date);
+                        $('#e_article').text(dict.forme.article);
                     }
                 }
             })
         })
     }
-
 </script>
 
 

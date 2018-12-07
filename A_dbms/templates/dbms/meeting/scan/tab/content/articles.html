@@ -18,8 +18,7 @@
             <th>删除</th>
         </tr>
         </thead>
-        <tbody>
-
+        <tbody id="meeting-article-tb">
         {% for article in meeting_obj.article.all %}
             <tr article-nid="{{ article.id }}">
                 {% if article_id %}
@@ -54,7 +53,7 @@
                     {% endfor %}
                 </td>
                 <td>
-                    <a class="btn btn-danger btn-xs del-meeting-article">
+                    <a class="btn btn-danger btn-xs delMeetingArticleB">
                         取消
                     </a>
                 </td>

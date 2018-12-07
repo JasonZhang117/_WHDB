@@ -8,17 +8,15 @@
         {% include 'dbms/meeting/article/summry.html' %}
         {% include 'dbms/meeting/article/nav_tabs.html' %}
         {% include 'dbms/meeting/article/nav_detail.html' %}
-        {% include 'dbms/meeting/modl/allot-expert-mod.html' %}
-        {% include 'dbms/meeting/modl/del-meeting-article-mod.html' %}
-        {% include 'dbms/meeting/modl/add-comment-mod.html' %}
-        {% include 'dbms/meeting/modl/add-single-mod.html' %}
+        {% include 'dbms/meeting/modl/expert-allot-mod.html' %}
+        {% include 'dbms/meeting/modl/comment-add-mod.html' %}
+        {% include 'dbms/meeting/modl/single-add-mod.html' %}
     </div>
 
 {% endblock %}
 
 {% block extra-js %}
-    {% include 'dbms/meeting/extra/js-allot-expert.html' %}
-    {% include 'dbms/meeting/extra/js-del-meeting-article.html' %}
-    {% include 'dbms/meeting/extra/js-add-comment.html' %}
-    {% include 'dbms/meeting/extra/js-add-single.html' %}
+    {% include 'dbms/meeting/extra/js-expert-allot.html' %}
+    {% include 'dbms/meeting/extra/js-comment-add.html' %}
+    {% include 'dbms/meeting/extra/js-single-add.html' %}
 {% endblock %}

@@ -8,13 +8,15 @@
                     <span aria-hidden="true">&times;</span>
                 </button>
                 <h4 class="modal-title" id="editMeetingModalLabel">
-                    添加评审会
+                    变更评审会
+                    <input style="display: none" name="meeting_id"
+                           value="{{ meeting_obj.id }}">
                 </h4>
             </div>
             <div class="modal-body">
 
                 <form class="form-horizontal">
-                    {% include 'dbms/meeting/modl/mod_form/meeting-add-edit.html' %}
+                    {% include 'dbms/meeting/modl/mod_form/meeting-edit.html' %}
                 </form>
 
             </div>

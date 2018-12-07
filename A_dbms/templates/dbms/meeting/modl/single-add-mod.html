@@ -1,5 +1,5 @@
-<div class="modal fade" id="addMeetingModal" tabindex="-1"
-     role="dialog" aria-labelledby="addMeetingModal">
+<div class="modal fade" id="singleQuotaModal" tabindex="-1"
+     role="dialog" aria-labelledby="singleQuotaModal">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -7,14 +7,16 @@
                         data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
-                <h4 class="modal-title" id="addMeetingModalLabel">
-                    添加评审会
+                <h4 class="modal-title" id="singleQuotaModalLabel">
+                    单项额度：{{ article_obj.article_num }}
+                    <input style="display: none" name="article_id"
+                           value="{{ article_obj.id }}">
                 </h4>
             </div>
             <div class="modal-body">
 
                 <form class="form-horizontal">
-                    {% include 'dbms/meeting/modl/mod_form/meeting-add-edit.html' %}
+                    {% include 'dbms/meeting/modl/mod_form/single-add.html' %}
                 </form>
 
             </div>
@@ -24,7 +26,7 @@
                     取消
                 </button>
                 <button type="button" class="btn btn-primary"
-                        id="addMeetingModalOk">
+                        id="singleQuotaModalOk">
                     添加
                 </button>
             </div>

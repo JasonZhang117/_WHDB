@@ -4,6 +4,7 @@ from .usera import EmployeesAdmin
 
 # -----------------------项目-------------------------#
 admin.site.register(models.Articles)  # 项目
+admin.site.register(models.Feedback)  # 风控反馈
 admin.site.register(models.Appraisals)  # 评审会
 admin.site.register(models.SingleQuota)  # 单项额度
 admin.site.register(models.Comments)  # 评审意见

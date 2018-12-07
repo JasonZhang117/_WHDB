@@ -3,10 +3,6 @@ from django.db import models
 
 # -----------------------代偿模型-------------------------#
 class Compensatories(models.Model):  # 代偿
-    compensatory_num = models.CharField(
-        verbose_name='代偿编号',
-        max_length=32,
-        unique=True)
     provide = models.OneToOneField(
         to='Provides',
         verbose_name="放款",
@@ -36,4 +32,4 @@ class Compensatories(models.Model):  # 代偿
         db_table = 'dbms_compensatories'  # 指定数据表的名称
 
     def __str__(self):
-        return self.compensatory_num
+        return self.provide.agree.agree_num

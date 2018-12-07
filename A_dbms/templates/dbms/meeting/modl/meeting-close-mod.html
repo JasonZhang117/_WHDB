@@ -1,0 +1,27 @@
+<div class="modal fade bs-example-modal-sm" id="closeMeetingModal"
+     tabindex="-1" role="dialog" aria-labelledby="closeMeetingModal">
+    <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="closeMeetingModalLabel">
+                    完成上会
+                    <input style="display: none" name="meeting_id"
+                           value="{{ meeting_obj.id }}">
+                </h4>
+            </div>
+            <div class="modal-body">
+                是否确定完成{{ meeting_obj.review_year }}年第{{ meeting_obj.review_order }}次{{ meeting_obj.get_review_model_display }}会上会？完成上会后参会项目、评审会信息等将无法变更！！！
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default"
+                        data-dismiss="modal">
+                    取消
+                </button>
+                <button type="button" class="btn btn-primary"
+                        id="closeMeetingModalOk">
+                    确定
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

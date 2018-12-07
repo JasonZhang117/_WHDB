@@ -60,11 +60,13 @@ class Employees(AbstractBaseUser, PermissionsMixin):
         to="Departments",
         verbose_name="部门",
         on_delete=models.PROTECT,
-        related_name='employee_department')
+        related_name='employee_department',
+        blank=True, null=True)
+
     objects = EmployeesManager()
 
     USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = ['name', 'num']
+    REQUIRED_FIELDS = ['name', 'num', 'department']
 
     def get_full_name(self):
         # The user is identified by their email address

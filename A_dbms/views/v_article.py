@@ -41,7 +41,7 @@ def creat_article_num(custom_id, renewal, augment):
 @login_required
 def article(request, *args, **kwargs):  # 项目列表
     print(__file__, '---->def article')
-    # print('**kwargs:', kwargs)
+    print('**kwargs:', kwargs)
     # print('request.path:', request.path)
     # print('request.get_host:', request.get_host())
     # print('resolve(request.path):', resolve(request.path))
@@ -254,7 +254,7 @@ def article_del_ajax(request):
     '''ARTICLE_STATE_LIST = ((1, '待反馈'), (2, '已反馈'), (3, '待上会'),
                           (4, '已上会'), (5, '已签批'), (6, '已注销'))
                           (5, '已签批')-->才能出合同'''
-    if article_obj.article_state == 1:
+    if article_obj.article_state in [1, 2]:
         article_obj.delete()  # 删除评审会
         msg = '%s，删除成功！' % article_obj.article_num
         response['message'] = msg
@@ -266,6 +266,68 @@ def article_del_ajax(request):
         response['message'] = msg
     result = json.dumps(response, ensure_ascii=False)
     # return redirect('dbms:article_all')
+    return HttpResponse(result)
+
+
+# -----------------------------反馈项目ajax------------------------------#
+@login_required
+def article_feedback_ajax(request):
+    print(__file__, '---->def article_feedback_ajax')
+
+    response = {'status': True, 'message': None,
+                'obj_num': None, 'forme': None, }
+
+    post_data_str = request.POST.get('postDataStr')
+    post_data = json.loads(post_data_str)
+
+    article_id = post_data['article_id']
+    article_list = models.Articles.objects.filter(id=article_id)
+    article_obj = article_list[0]
+
+    '''((1, '待反馈'), (2, '已反馈'), (3, '待上会'),
+       (4, '已上会'), (5, '已签批'), (6, '已注销'))'''
+    if article_obj.article_state == 1:
+        propose = post_data['propose']
+        suggestion = post_data['suggestion']
+
+        data = {
+            'propose': propose,
+            'suggestion': suggestion}
+
+        form = forms.FeedbackAddForm(data)
+        if form.is_valid():
+            cleaned_data = form.cleaned_data
+
+            try:
+                default = {
+                    'article_id': article_id,
+                    'propose': cleaned_data['propose'],
+                    'suggestion': cleaned_data['suggestion'],
+                    'feedback_buildor': request.user}
+
+                article, created = models.Feedback.objects.update_or_create(
+                    article_id=article_id, defaults=default)
+                article_list.update(article_state=2)  # 更新项目状态
+                response['obj_id'] = article.id
+                if created:
+                    response['message'] = '成功成功反馈项目%s！' % article_obj.article_num
+                else:
+                    response['message'] = '成功更新反馈信息！'
+            except:
+                response['status'] = False
+                response['message'] = '项目反馈未提交成功！'
+
+        else:
+            response['status'] = False
+            response['message'] = '表单信息有误！！！'
+            response['forme'] = form.errors
+    else:
+        arg = '项目状态为：%s，无法反馈！！！' % article_obj.article_state
+        response['status'] = False
+        response['message'] = arg
+
+    result = json.dumps(response, ensure_ascii=False)
+
     return HttpResponse(result)
 
 
@@ -283,7 +345,19 @@ def article_scan(request, article_id):  # 项目预览
         'assistant_id': article_obj.assistant.id,
         'control_id': article_obj.control.id,
         'article_date': str(article_obj.article_date)}
-    form = forms.ArticlesAddForm(form_date)
+    form_article = forms.ArticlesAddForm(form_date)
+    expert_list = article_obj.expert.values_list('id')
+    feedbac_list = article_obj.feedback_article.all()
+    if feedbac_list:
+
+        form_date = {
+            'propose': feedbac_list[0].propose,
+            'suggestion': feedbac_list[0].suggestion}
+
+        form_feedback = forms.FeedbackAddForm(initial=form_date)
+    else:
+        form_feedback = forms.FeedbackAddForm()
+
     return render(request,
                   'dbms/article/article-scan.html',
                   locals())

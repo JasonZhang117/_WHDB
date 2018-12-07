@@ -11,10 +11,12 @@ urlpatterns = [
          views.article, name='article_all'),
     path('article/<int:article_state>/',
          views.article, name='article'),  # /dbms/article/(0-9)
-    path('article/add-ajax/',
+    path('article/add/',
          views.article_add_ajax, name='article_add_ajax'),
-    path('article/edit-ajax/',
+    path('article/edit/',
          views.article_edit_ajax, name='article_edit_ajax'),
+    path('article/feedback/',
+         views.article_feedback_ajax, name='article_feedback_ajax'),
     path('article/del/',
          views.article_del_ajax, name='article_del_ajax'),
     # -----------------------项目管理-------------------------#
@@ -42,9 +44,12 @@ urlpatterns = [
 
     path('meeting/edit/',
          views.meeting_edit_ajax, name='meeting_edit_ajax'),
-
+    path('meeting/close/',
+         views.meeting_close_ajax, name='meeting_close_ajax'),
     path('meeting/del/',
          views.meeting_del_ajax, name='meeting_del_ajax'),
+    path('meeting/article/add/',
+         views.meeting_article_add_ajax, name='meeting_article_add_ajax'),
     path('meeting/article/del/',
          views.meeting_article_del_ajax, name='meeting_article_del_ajax'),
 

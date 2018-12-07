@@ -1,47 +1,52 @@
 <script>
     $(function () {
-        bindDelMeetingArticle();
-        bindDelMeetingArticleModalOk();
+        bindFeedbackArticle();
+        bindFeedbackArticleOk();
+
     });
 
-    function bindDelMeetingArticle() {
-        $('#delMeetingArticle').click(function () {
-            console.log("bindDelMeetingArticle")
-            $('#delMeetingArticleModal').modal('show');
+    function bindFeedbackArticle() {
+        $('#feedbackArticle').click(function () {
+            console.log("bindFeedbackArticle")
+            $('#addFeedbackModal').modal('show');
         })
     }
 
-    function bindDelMeetingArticleModalOk() {
-        $('#delMeetingArticleModalOk').click(function () {
+    function bindFeedbackArticleOk() {
+        $('#addFeedbackModalOk').click(function () {
             var postData = {};
 
-            $('#delMeetingArticleModal').find('input,select').each(function () {
+            $('#addFeedbackModal').find('input,select').each(function () {
                 var v = $(this).val();
                 var n = $(this).attr('name');
                 postData[n] = v;
             });
+            var ttt = $('#id_suggestion').val()
+            postData['suggestion'] = ttt;
+
             var postDataStr = JSON.stringify(postData);
             console.log(postDataStr)
             $.ajax({
-                url: '/dbms/meeting/article/del/',
+                url: '/dbms/article/feedback/',
                 type: 'POST',
                 data: {'postDataStr': postDataStr},
                 success: function (arg) {
                     var dict = JSON.parse(arg);
+                    console.log(dict);
                     if (dict.status) {
-                        $('#delMeetingArticleModal').modal('hide');
                         alert(dict.message);
+                        $('#addFeedbackModal').modal('hide');
                         window.location.reload();
                     } else {
-                        $('#delMeetingArticleModal').modal('hide');
                         alert(dict.message);
-                        {#window.location.reload();#}
+                        $('#e_propose').text(dict.forme.propose);
+                        $('#e_suggestion').text(dict.forme.suggestion);
                     }
                 }
             })
-
         })
     }
+
 </script>
 
 

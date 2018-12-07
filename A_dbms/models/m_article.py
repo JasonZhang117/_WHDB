@@ -86,6 +86,35 @@ class Articles(models.Model):  # 项目、纪要
         return '%s-%s' % (self.article_num, self.summary_num)
 
 
+# -----------------------------风控反馈------------------------------#
+class Feedback(models.Model):
+    article = models.ForeignKey(
+        to='Articles',
+        verbose_name="项目",
+        on_delete=models.PROTECT,
+        related_name='feedback_article')
+    PROPOSE_LIST = ((1, '符合上会条件'), (2, '暂不符合上会条件'),
+                    (3, '建议终止项目'))
+    propose = models.IntegerField(
+        verbose_name='上会建议',
+        choices=PROPOSE_LIST,
+        default=1)
+    suggestion = models.TextField(
+        verbose_name='风控意见')
+    feedback_buildor = models.ForeignKey(
+        to='Employees',
+        verbose_name="创建人",
+        on_delete=models.PROTECT,
+        related_name='feedback_buildor_employee')
+
+    class Meta:
+        verbose_name_plural = '项目-反馈'  # 指定显示名称
+        db_table = 'dbms_feedback'  # 指定数据表的名称
+
+    def __str__(self):
+        return '%s-%s' % (self.article.article_num, self.propose)
+
+
 '''
 class Articles2Expert(models.Model):  # 手动创建第三张表
     article = models.ForeignKey(

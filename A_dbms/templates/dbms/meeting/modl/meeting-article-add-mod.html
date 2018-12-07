@@ -1,5 +1,5 @@
-<div class="modal fade" id="allotExpertModal" tabindex="-1"
-     role="dialog" aria-labelledby="allotExpertModal">
+<div class="modal fade" id="addMeetingArticleModal" tabindex="-1"
+     role="dialog" aria-labelledby="addMeetingArticleModal">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -7,16 +7,16 @@
                         data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
-                <h4 class="modal-title" id="allotExpertModalLabel">
-                    分配评委：{{ article_obj.article_num }}
-                    <input style="display: none" name="article_id"
-                           value="{{ article_obj.id }}">
+                <h4 class="modal-title" id="addMeetingArticleModalLabel">
+                    添加参评项目
+                    <input style="display: none" name="meeting_id"
+                           value="{{ meeting_obj.id }}">
                 </h4>
             </div>
             <div class="modal-body">
 
                 <form class="form-horizontal">
-                    {% include 'dbms/meeting/modl/mod_form/allot-expert.html' %}
+                    {% include 'dbms/meeting/modl/mod_form/meeting-ariticle-add.html' %}
                 </form>
 
             </div>
@@ -26,8 +26,8 @@
                     取消
                 </button>
                 <button type="button" class="btn btn-primary"
-                        id="allotExpertModalOk">
-                    分配
+                        id="addMeetingArticleModalOk">
+                    添加
                 </button>
             </div>
         </div>

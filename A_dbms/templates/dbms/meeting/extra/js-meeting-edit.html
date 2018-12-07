@@ -12,7 +12,7 @@
         })
     }
 
-    function bindAddMeetingModalOk() {
+    function bindEditMeetingModalOk() {
         $('#editMeetingModalOk').click(function () {
             var postData = {};
 
@@ -38,7 +38,6 @@
                         alert(arg.message);
                         $('#e_review_model').text(arg.forme.review_model);
                         $('#e_review_date').text(arg.forme.review_date);
-                        $('#e_article').text(arg.forme.article);
                     }
                 }
             })
