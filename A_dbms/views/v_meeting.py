@@ -7,6 +7,7 @@ from django.contrib.auth.decorators import login_required
 
 
 # -----------------------评审会-------------------------#
+@login_required
 def meeting(request, *args, **kwargs):  # 评审会
     print(__file__, '---->def meeting')
     # print('kwargs:', kwargs)
@@ -21,6 +22,7 @@ def meeting(request, *args, **kwargs):  # 评审会
 
 
 # -----------------------添加评审会ajax-------------------------#
+@login_required
 def meeting_add_ajax(request):
     print(__file__, '---->def meeting_add_ajax')
     response = {'status': True, 'message': None,
@@ -102,6 +104,7 @@ def meeting_add_ajax(request):
 
 
 # -----------------------添加参评项目ajax-------------------------#
+@login_required
 def meeting_article_add_ajax(request):  # 添加参评项目ajax
     print(__file__, '---->def meeting_article_add_ajax')
     response = {'status': True, 'message': None,
@@ -148,6 +151,7 @@ def meeting_article_add_ajax(request):  # 添加参评项目ajax
 
 
 # -----------------------分配评审委员ajax-------------------------#
+@login_required
 def meeting_allot_ajax(request):  # 分配评审委员
     print(__file__, '---->def meeting_allot_ajax')
     response = {'status': True, 'message': None,
@@ -189,6 +193,7 @@ def meeting_allot_ajax(request):  # 分配评审委员
 
 
 # -----------------------编辑评审会ajax-------------------------#
+@login_required
 def meeting_edit_ajax(request):  # 编辑评审会ajax
     print(__file__, '---->def meeting_edit_ajax')
     response = {'status': True, 'message': None,
@@ -228,6 +233,7 @@ def meeting_edit_ajax(request):  # 编辑评审会ajax
 
 
 # -----------------------完成上会ajax-------------------------#
+@login_required
 def meeting_close_ajax(request):  # 完成上会ajax
     print(__file__, '---->def meeting_del_ajax')
     response = {'status': True, 'message': None,
@@ -258,6 +264,7 @@ def meeting_close_ajax(request):  # 完成上会ajax
 
 
 # -----------------------取消评审会ajax-------------------------#
+@login_required
 def meeting_del_ajax(request):  # 取消评审会
     print(__file__, '---->def meeting_del_ajax')
     response = {'status': True, 'message': None,
@@ -285,6 +292,7 @@ def meeting_del_ajax(request):  # 取消评审会
 
 
 # -----------------------取消项目上会ajax-------------------------#
+@login_required
 def meeting_article_del_ajax(request):  # 取消项目上会ajax
     print(__file__, '---->def meeting_article_del')
     response = {'status': True, 'message': None,
@@ -384,8 +392,9 @@ def comment_edit_ajax(request):  # 修改项目ajax
 
 
 # -----------------------单项额度ajax-------------------------#
-def single_quota_ajax(request):  # 取消项目上会ajax
-    print(__file__, '---->def meeting_article_del')
+@login_required
+def single_quota_ajax(request):  # 单项额度ajax
+    print(__file__, '---->def single_quota_ajax')
     response = {'status': True, 'message': None,
                 'obj_num': None, 'forme': None, }
     post_data_str = request.POST.get('postDataStr')
@@ -397,11 +406,9 @@ def single_quota_ajax(request):  # 取消项目上会ajax
     flow_rate = post_data['flow_rate']
 
     article_obj = models.Articles.objects.get(id=article_id)
-    '''ARTICLE_STATE_LIST = ((1, '待反馈'), (2, '待上会'),
-                          (3, '已上会'),
-                          (4, '无补调'), (5, '需补调'),
-                          (6, '已补调'), (7, '已签批'))'''
-    if article_obj.article_state == 3:
+    '''((1, '待反馈'), (2, '已反馈'), (3, '待上会'),
+        (4, '已上会'), (5, '已签批'), (6, '已注销'))'''
+    if article_obj.article_state == 4:
 
         data = {
             'credit_model': credit_model,
@@ -437,7 +444,39 @@ def single_quota_ajax(request):  # 取消项目上会ajax
     return HttpResponse(result)
 
 
+# -----------------------单项额度删除ajax-------------------------#
+@login_required
+def single_del_ajax(request):  # 单项额度删除ajax
+    print(__file__, '---->def single_del_ajax')
+    response = {'status': True, 'message': None,
+                'obj_num': None, 'forme': None, }
+    post_data_str = request.POST.get('postDataStr')
+    post_data = json.loads(post_data_str)
+
+    single_id = post_data['single_id']
+    article_id = post_data['article_id']
+
+    single_obj = models.SingleQuota.objects.get(id=single_id)
+    article_obj = models.Articles.objects.get(id=article_id)
+    print('single_obj:', single_obj)
+    '''((1, '待反馈'), (2, '已反馈'), (3, '待上会'),
+       (4, '已上会'), (5, '已签批'), (6, '已注销'))'''
+    if article_obj.article_state in [1, 2, 3, 4]:
+        single_obj.delete()  # 删除单项额度
+        response['obj_id'] = single_obj.id
+        msg = '单项额度删除成功！'
+        response['message'] = msg
+
+    else:
+        msg = '项目状态为：%s，无法删除单项额度！！！' % article_obj.article_state
+        response['status'] = False
+        response['message'] = msg
+    result = json.dumps(response, ensure_ascii=False)
+    return HttpResponse(result)
+
+
 # -----------------------评审会预览-------------------------#
+@login_required
 def meeting_scan(request, meeting_id):  # 评审会预览
     print(__file__, '---->def meeting_scan')
     meeting_obj = models.Appraisals.objects.get(id=meeting_id)
@@ -457,8 +496,9 @@ def meeting_scan(request, meeting_id):  # 评审会预览
 
 
 # -----------------------参评项目预览-------------------------#
+@login_required
 def meeting_scan_article(request, meeting_id, article_id):
-    print(__file__, '---->def article_scan_agree')
+    print(__file__, '---->def meeting_scan_article')
     article_obj = models.Articles.objects.get(id=article_id)
     meeting_obj = models.Appraisals.objects.get(id=meeting_id)
 

@@ -5,7 +5,7 @@ from .v_article import (article, article_add_ajax, article_feedback_ajax,
                         article_scan, article_edit_ajax,
                         article_scan_agree, article_del_ajax)
 # ----------------------v_appraisal评审视图--------------------#
-from .v_meeting import (meeting, meeting_scan,
+from .v_meeting import (meeting, meeting_scan,single_del_ajax,
                         meeting_article_del_ajax, comment_edit_ajax,
                         single_quota_ajax, meeting_article_add_ajax,
                         meeting_edit_ajax, meeting_del_ajax,

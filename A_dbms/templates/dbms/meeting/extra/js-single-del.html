@@ -1,0 +1,54 @@
+<script>
+    $(function () {
+        bindDelSingleQuotaB();
+        bindDelSingleQuotaModalOk();
+    });
+
+    function bindDelSingleQuotaB() {
+        $('#single-quota-tb').on('click', '.delSingleQuotaB', function () {
+            console.log("bindDelMeetingArticleB")
+            delSingleNid = $(this).parent().parent().attr('single-nid');
+            console.log(delSingleNid)
+            $('#delSingleQuotaModalId').val(delSingleNid);
+            $('#delSingleQuotaModal').modal('show');
+        })
+    }
+
+    function bindDelSingleQuotaModalOk() {
+        $('#delSingleQuotaModalOk').click(function () {
+            var postData = {};
+
+            $('#delSingleQuotaModal').find('input,select').each(function () {
+                var v = $(this).val();
+                var n = $(this).attr('name');
+                postData[n] = v;
+            });
+            var postDataStr = JSON.stringify(postData);
+            console.log(postDataStr)
+            $.ajax({
+                url: '/dbms/meeting/single/del/',
+                type: 'POST',
+                data: {'postDataStr': postDataStr},
+                success: function (arg) {
+                    var dict = JSON.parse(arg);
+                    if (dict.status) {
+                        $('#delSingleQuotaModal').modal('hide');
+                        alert(dict.message);
+                        window.location.reload();
+                    } else {
+                        $('#delSingleQuotaModal').modal('hide');
+                        alert(dict.message);
+                        {#window.location.reload();#}
+                    }
+                }
+            })
+
+        })
+    }
+</script>
+
+
+
+
+
+

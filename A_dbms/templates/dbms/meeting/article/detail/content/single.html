@@ -15,15 +15,15 @@
             <th>操作</th>
         </tr>
         </thead>
-        <tbody>
+        <tbody id="single-quota-tb">
         {% for single in article_obj.single_quota_summary.all %}
-            <tr>
+            <tr single-nid={{ single.id }}>
                 <td>{{ single.get_credit_model_display }}</td>
                 <td>{{ single.credit_amount }}</td>
                 <td>{{ single.flow_rate }}</td>
                 <td>{{ single.amount }}</td>
                 <td>
-                    <a class="btn btn-primary btn-xs">
+                    <a class="btn btn-primary btn-xs delSingleQuotaB">
                         删除
                     </a>
                 </td>

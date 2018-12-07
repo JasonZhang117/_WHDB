@@ -41,6 +41,8 @@ urlpatterns = [
 
     path('meeting/single/',
          views.single_quota_ajax, name='single_quota_ajax'),
+    path('meeting/single/del/',
+         views.single_del_ajax, name='single_del_ajax'),
 
     path('meeting/edit/',
          views.meeting_edit_ajax, name='meeting_edit_ajax'),

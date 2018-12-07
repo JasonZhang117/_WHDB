@@ -9,7 +9,7 @@ from django.core.exceptions import NON_FIELD_ERRORS, ValidationError
 # -----------------------委托合同添加-------------------------#
 class AgreeAddForm(dform.Form):  # 委托合同添加
     article_id = fields.IntegerField(
-        label="评委意见",
+        label="项目纪要",
         label_suffix="：",
         widget=widgets.Select(
             attrs={'class': 'form-control',
@@ -37,11 +37,10 @@ class AgreeAddForm(dform.Form):  # 委托合同添加
 
     def __init__(self, *args, **kwargs):
         super(AgreeAddForm, self).__init__(*args, **kwargs)
-        ARTICLE_STATE_LIST = ((1, '待反馈'), (2, '待上会'),
-                              (3, '无补调'), (4, '需补调'),
-                              (5, '已补调'), (6, '已签批'))
+        '''((1, '待反馈'), (2, '已反馈'), (3, '待上会'),
+           (4, '已上会'), (5, '已签批'), (6, '已注销'))'''
         self.fields['article_id'].widget.choices = \
-            models.Articles.objects.filter(article_state=6). \
+            models.Articles.objects.filter(article_state=5). \
                 values_list('id', 'summary_num'). \
                 order_by('summary_num')
         self.fields['branch_id'].widget.choices = \
