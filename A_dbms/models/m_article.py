@@ -42,7 +42,7 @@ class Articles(models.Model):  # 项目、纪要
         on_delete=models.PROTECT,
         related_name='control_employee')
     article_date = models.DateField(
-        verbose_name='提交日期',
+        verbose_name='反馈日期',
         default=datetime.date.today)
     ARTICLE_STATE_LIST = ((1, '待反馈'), (2, '已反馈'), (3, '待上会'),
                           (4, '已上会'), (5, '已签批'), (6, '已注销'))
@@ -70,11 +70,11 @@ class Articles(models.Model):  # 项目、纪要
         null=True, blank=True)
     SIGN_TYPE_LIST = ((1, '同意'), (2, '不同意'))
     sign_type = models.IntegerField(
-        verbose_name='签批意见',
+        verbose_name='签批结论',
         choices=SIGN_TYPE_LIST,
         null=True, blank=True)
     sign_detail = models.TextField(
-        verbose_name='签批详情',
+        verbose_name='签批意见',
         null=True, blank=True)
     sign_date = models.DateField(
         verbose_name='签批日期',
@@ -101,14 +101,19 @@ class Feedback(models.Model):
         verbose_name="项目",
         on_delete=models.PROTECT,
         related_name='feedback_article')
-    PROPOSE_LIST = ((1, '符合上会条件'), (2, '暂不符合上会条件'),
-                    (3, '建议终止项目'))
+    PROPOSE_LIST = ((0, '--------------'), (1, '符合上会条件'),
+                    (2, '暂不符合上会条件'), (3, '建议终止项目'))
     propose = models.IntegerField(
         verbose_name='上会建议',
         choices=PROPOSE_LIST,
-        default=1)
+        default=0)
+    analysis = models.TextField(
+        verbose_name='风险分析')
     suggestion = models.TextField(
         verbose_name='风控意见')
+    feedback_date = models.DateField(
+        verbose_name='提交日期',
+        default=datetime.date.today)
     feedback_buildor = models.ForeignKey(
         to='Employees',
         verbose_name="创建人",

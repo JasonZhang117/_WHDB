@@ -18,8 +18,7 @@ class Agrees(models.Model):  # 委托合同
         verbose_name="放款银行",
         on_delete=models.PROTECT,
         related_name='agree_branch')
-    AGREE_TYP_LIST = ((1, '单笔'),
-                      (2, '最高额'))
+    AGREE_TYP_LIST = ((1, '单笔'), (2, '最高额'), (3, '保函'))
     agree_typ = models.IntegerField(
         verbose_name='合同种类',
         choices=AGREE_TYP_LIST,

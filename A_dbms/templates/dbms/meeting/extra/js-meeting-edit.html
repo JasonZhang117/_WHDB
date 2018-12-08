@@ -31,8 +31,8 @@
                 success: function (arg) {
                     console.log(arg);
                     if (arg.status) {
-                        alert(arg.message);
                         $('#editMeetingModal').modal('hide');
+                        alert(arg.message);
                         window.location.reload();
                     } else {
                         alert(arg.message);

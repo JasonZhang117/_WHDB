@@ -2,7 +2,9 @@
     <div class="panel-heading">
         <label>评审会情况</label>
         <label class="pull-right">
-            <a class="btn btn-primary btn-sm " id="meetingNotice">
+            <a class="btn btn-primary btn-sm"
+               target="_blank"
+               href="{% url 'dbms:meeting_notice' meeting_id=meeting_obj.id %}">
                 会议通知
             </a>
             <a class="btn btn-primary btn-sm " id="addMeetingArticle">

@@ -21,20 +21,17 @@ class Customes(models.Model):  # 客户
     contact_num = models.CharField(
         verbose_name='联系电话',
         max_length=13)
-    flow_credit = models.FloatField(
-        verbose_name='流贷额度（元）',
-        default=0)
-    back_credit = models.FloatField(
-        verbose_name='保函额度（元）',
+    credit_amount = models.FloatField(
+        verbose_name='授信总额（元）',
         default=0)
     flow_loan = models.FloatField(
-        verbose_name='流贷放款（元）',
+        verbose_name='流贷余额（元）',
         default=0)
     accept_loan = models.FloatField(
-        verbose_name='承兑放款（元）',
+        verbose_name='承兑余额（元）',
         default=0)
     back_loan = models.FloatField(
-        verbose_name='保函放款（元）',
+        verbose_name='保函余额（元）',
         default=0)
 
     # Cancellation = models.BooleanField('注销', default=False)
@@ -100,7 +97,7 @@ class CustomesP(models.Model):  # 个人客户
         max_length=64)
 
     class Meta:
-        verbose_name_plural = '客户-个人' # 指定显示名称
+        verbose_name_plural = '客户-个人'  # 指定显示名称
         db_table = 'dbms_customesp'  # 指定数据表的名称
 
     def __str__(self):
@@ -133,7 +130,7 @@ class Industries(models.Model):  # 行业
 
     # Cancellation = models.BooleanField('注销', default=False)
     class Meta:
-        verbose_name_plural = '客户-行业' # 指定显示名称
+        verbose_name_plural = '客户-行业'  # 指定显示名称
         db_table = 'dbms_industriess'  # 指定数据表的名称
 
     def __str__(self):

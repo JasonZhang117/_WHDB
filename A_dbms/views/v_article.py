@@ -14,7 +14,7 @@ from django.db.utils import IntegrityError
 # 项目信息管理
 # --------------------------------70---------------------------------#
 # -----------------------------项目管理-------------------------------#
-def creat_article_num(custom_id, renewal, augment):
+def creat_article_num(custom_id):
     custom = models.Customes.objects.get(id=custom_id)
     if custom.genre == 1:
         short_name = models.CustomesC.objects. \
@@ -24,16 +24,17 @@ def creat_article_num(custom_id, renewal, augment):
 
         ###时间处理
     article_date = time.gmtime()
-    n_year = str(article_date.tm_year)
+    n_year = article_date.tm_year
+
     if article_date.tm_mon < 10:
         n_mon = '0' + str(article_date.tm_mon)
     else:
         n_mon = str(article_date.tm_mon)
 
-    amount = renewal + augment
-    amount_w = str(int(amount / 10000))
+    r_order = models.Articles.objects.filter(
+        custom=custom_id, article_date__year=n_year).count() + 1
 
-    article_num = '%s_%s%s_%s万' % (short_name, n_year, n_mon, amount_w)
+    article_num = '%s-%s%s-%s' % (short_name, str(n_year), n_mon, r_order)
 
     return article_num
 
@@ -49,6 +50,7 @@ def article(request, *args, **kwargs):  # 项目列表
     # print('request.user:', request.user)
     # print('request.GET.items():', request.GET.items())
     # request.GET.items()获取get传递的参数对
+
     form_article = forms.ArticlesAddForm()
     for k, v in request.GET.items():
         print(k, ' ', v)
@@ -74,7 +76,7 @@ def article(request, *args, **kwargs):  # 项目列表
         'custom',
         'director',
         'assistant',
-        'control', ).order_by('-article_date')
+        'control', ).order_by('-article_date', 'article_state')
 
     # 分页
     paginator = Paginator(article_list, 10)
@@ -127,8 +129,8 @@ def article_add_ajax(request):  # 添加项目
         custom_id = cleaned_data['custom_id']
         renewal = cleaned_data['renewal']
         augment = cleaned_data['augment']
-        article_num = creat_article_num(custom_id, renewal, augment)
-
+        article_num = creat_article_num(custom_id)
+        print('article_num:', article_num)
         amount = renewal + augment
 
         try:
@@ -145,10 +147,6 @@ def article_add_ajax(request):  # 添加项目
                 buildor=request.user)
             response['obj_num'] = article_obj.article_num
             response['message'] = '成功创建项目：%s！' % article_obj.article_num
-
-        except IntegrityError:
-            response['status'] = False
-            response['message'] = '请不要重复创建项目！'
         except Exception as e:
             response['status'] = False
             response['message'] = e
@@ -204,7 +202,6 @@ def article_edit_ajax(request):  # 修改项目ajax
             custom_id = cleaned_data['custom_id']
             renewal = cleaned_data['renewal']
             augment = cleaned_data['augment']
-            article_num = creat_article_num(custom_id, renewal, augment)
 
             amount = renewal + augment
 
@@ -212,7 +209,6 @@ def article_edit_ajax(request):  # 修改项目ajax
                 article_list = models.Articles.objects.filter(
                     id=article_id)
                 article_list.update(
-                    article_num=article_num,
                     custom_id=custom_id,
                     renewal=renewal,
                     augment=augment,
@@ -289,23 +285,28 @@ def article_feedback_ajax(request):
 
     '''((1, '待反馈'), (2, '已反馈'), (3, '待上会'),
        (4, '已上会'), (5, '已签批'), (6, '已注销'))'''
-    if article_obj.article_state == 1:
+    if article_obj.article_state in [1, 2]:
         propose = post_data['propose']
+        analysis = post_data['analysis']
         suggestion = post_data['suggestion']
 
         data = {
             'propose': propose,
+            'analysis': analysis,
             'suggestion': suggestion}
 
         form = forms.FeedbackAddForm(data)
         if form.is_valid():
             cleaned_data = form.cleaned_data
-
             try:
+                today_str = time.strftime("%Y-%m-%d", time.gmtime())
+
                 default = {
                     'article_id': article_id,
                     'propose': cleaned_data['propose'],
+                    'analysis': cleaned_data['analysis'],
                     'suggestion': cleaned_data['suggestion'],
+                    'feedback_date': today_str,
                     'feedback_buildor': request.user}
 
                 article, created = models.Feedback.objects.update_or_create(
@@ -316,9 +317,9 @@ def article_feedback_ajax(request):
                     response['message'] = '成功成功反馈项目%s！' % article_obj.article_num
                 else:
                     response['message'] = '成功更新反馈信息！'
-            except:
+            except Exception as e:
                 response['status'] = False
-                response['message'] = '项目反馈未提交成功！'
+                response['message'] = e
 
         else:
             response['status'] = False
@@ -339,6 +340,7 @@ def article_feedback_ajax(request):
 def article_scan(request, article_id):  # 项目预览
     print(__file__, '---->def article_scan')
     article_obj = models.Articles.objects.get(id=article_id)
+
     form_date = {
         'custom_id': article_obj.custom.id,
         'renewal': article_obj.renewal,
@@ -352,9 +354,9 @@ def article_scan(request, article_id):  # 项目预览
     expert_list = article_obj.expert.values_list('id')
     feedbac_list = article_obj.feedback_article.all()
     if feedbac_list:
-
         form_date = {
             'propose': feedbac_list[0].propose,
+            'analysis': feedbac_list[0].analysis,
             'suggestion': feedbac_list[0].suggestion}
 
         form_feedback = forms.FeedbackAddForm(initial=form_date)

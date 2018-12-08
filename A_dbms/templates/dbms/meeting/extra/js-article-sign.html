@@ -21,7 +21,7 @@
                 postData[n] = v;
             });
             var ttt = $('#id_sign_detail').val()
-            postData['suggestion'] = ttt;
+            postData['sign_detail'] = ttt;
             var postDataStr = JSON.stringify(postData);
             console.log(postDataStr)
             $.ajax({
@@ -32,11 +32,12 @@
                     var dict = JSON.parse(arg);
                     console.log(dict);
                     if (dict.status) {
-                        alert(dict.message);
                         $('#singleQuotaModal').modal('hide');
+                        alert(dict.message);
                         window.location.reload();
                     } else {
                         alert(dict.message);
+                        $('#e_summary_num').text(dict.forme.summary_num);
                         $('#e_sign_type').text(dict.forme.sign_type);
                         $('#e_renewal').text(dict.forme.renewal);
                         $('#e_augment').text(dict.forme.augment);

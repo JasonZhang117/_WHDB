@@ -31,8 +31,8 @@
                     var dict = JSON.parse(arg);
                     console.log(dict);
                     if (dict.status) {
-                        alert(dict.message);
                         $('#editArticleModal').modal('hide');
+                        alert(dict.message);
                         window.location.reload();
                     } else {
                         alert(dict.message);

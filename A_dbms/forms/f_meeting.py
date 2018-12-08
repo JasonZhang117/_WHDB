@@ -15,7 +15,7 @@ class MeetingAddForm(dform.Form):  # 评审会添加
             choices=REVIEW_MODEL_LIST,
             attrs={'class': 'form-control',
                    'placeholder': '评审类型'}),
-        initial=2)
+        initial=1)
     review_date = fields.DateField(
         label='评审日期',
         label_suffix="：",
@@ -34,12 +34,13 @@ class MeetingAddForm(dform.Form):  # 评审会添加
 
     def __init__(self, *args, **kwargs):
         super(MeetingAddForm, self).__init__(*args, **kwargs)
-        '''ARTICLE_STATE_LIST = ((1, '待反馈'), (2, '已反馈'), (3, '待上会'),
-                                  (4, '已上会'), (5, '已签批'), (6, '已注销'))
-                                  (5, '已签批')-->才能出合同'''
+        '''((1, '待反馈'), (2, '已反馈'), (3, '待上会'),
+            (4, '已上会'), (5, '已签批'), (6, '已注销'))
+            ((0, '--------------'), (1, '符合上会条件'),
+            (2, '暂不符合上会条件'), (3, '建议终止项目'))'''
         self.fields['article'].choices = \
             models.Articles.objects.filter(
-                article_state=2).values_list(
+                article_state=2, feedback_article__propose=1).values_list(
                 'id', 'article_num').order_by('article_num')
 
 
@@ -56,12 +57,13 @@ class MeetingArticleAddForm(dform.Form):  # 添加评审项目
 
     def __init__(self, *args, **kwargs):
         super(MeetingArticleAddForm, self).__init__(*args, **kwargs)
-        '''ARTICLE_STATE_LIST = ((1, '待反馈'), (2, '已反馈'), (3, '待上会'),
-                                  (4, '已上会'), (5, '已签批'), (6, '已注销'))
-                                  (5, '已签批')-->才能出合同'''
+        '''((1, '待反馈'), (2, '已反馈'), (3, '待上会'),
+            (4, '已上会'), (5, '已签批'), (6, '已注销'))
+            ((0, '--------------'), (1, '符合上会条件'),
+            (2, '暂不符合上会条件'), (3, '建议终止项目'))'''
         self.fields['article'].choices = \
             models.Articles.objects.filter(
-                article_state=2).values_list(
+                article_state=2, feedback_article__propose=1).values_list(
                 'id', 'article_num').order_by('article_num')
 
 

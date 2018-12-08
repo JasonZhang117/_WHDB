@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ meeting_obj.num }}</title>
+</head>
+<body>
+<p>成都武侯中小企业融资担保有限责任公司</p>
+<p>{{ meeting_obj.review_year }}年度第{{ meeting_obj.review_order }}次{{ meeting_obj.get_review_model_display }}会通知</p>
+<p>计划上会时间：{{ meeting_obj.review_date }}</p>
+<p>评审项目基本情况：
+<div class="table-responsive">
+    <table class="table table-bordered table-hover
+                table-condensed active">
+        <thead>
+        <tr style="text-align: center">
+            <th>单位</th>
+            <th>申请金额</th>
+            <th>项目经理</th>
+            <th>评委</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for article in meeting_obj.article.all %}
+            <tr>
+                <td>{{ article.custom }}</td>
+                <td>{{ article.amount }}</td>
+                <td>{{ article.director.name }}</td>
+                <td>
+                    {% for expert in article.expert.all %}
+                        {{ expert.name }}/
+                    {% endfor %}
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+
+</body>
+</html>

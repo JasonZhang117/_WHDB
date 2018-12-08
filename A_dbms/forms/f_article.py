@@ -81,17 +81,23 @@ class FeedbackAddForm(dform.Form):  # 风控反馈添加
             choices=PROPOSE_LIST,
             attrs={'class': 'form-control',
                    'placeholder': '上会建议'}))
-
-    suggestion = fields.CharField(
-        label='风控意见',
+    analysis = fields.CharField(
+        label='风险分析',
         label_suffix="：",
         widget=widgets.Textarea(
             attrs={'class': 'form-control',
-                   'placeholder': '风控意见'}))
+                   'placeholder': '分析项目主要风险(行业风险、流动性风险、经营风险、法律风险等)'}))
+
+    suggestion = fields.CharField(
+        label='风控建议',
+        label_suffix="：",
+        widget=widgets.Textarea(
+            attrs={'class': 'form-control',
+                   'placeholder': '提出项目风控措施建议（额度、担保措施、过程控制、保后要求等）'}))
 
 
 # -----------------------项目签批-------------------------#
-class ArticlesSingForm(dform.Form):  # 项目签批
+class ArticlesSignForm(dform.Form):  # 项目签批
     summary_num = fields.CharField(
         label='纪要编号',
         label_suffix="：",
@@ -125,7 +131,7 @@ class ArticlesSingForm(dform.Form):  # 项目签批
         label_suffix="：",
         widget=widgets.Textarea(
             attrs={'class': 'form-control',
-                   'type': 'date',
+                   'style': 'height:100xp ',
                    'placeholder': '签批详情'}))
     sign_date = fields.DateField(
         label='签批日期',

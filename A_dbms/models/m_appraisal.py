@@ -82,6 +82,7 @@ class SingleQuota(models.Model):  # 单项额度
                              self.credit_amount)
 
 
+# ------------------------评审意见--------------------------#
 class Comments(models.Model):  # 评委意见
     summary = models.ForeignKey(
         to='Articles',
@@ -93,8 +94,8 @@ class Comments(models.Model):  # 评委意见
         verbose_name="评委",
         on_delete=models.PROTECT,
         related_name='comment_expert')
-    COMMENT_TYPE_LIST = ((1, '同意'), (2, '复议'),
-                         (3, '不同意'))
+    COMMENT_TYPE_LIST = ((0, '------'), (1, '同意'),
+                         (2, '复议'), (3, '不同意'))
     comment_type = models.IntegerField(
         verbose_name='评委意见',
         choices=COMMENT_TYPE_LIST,

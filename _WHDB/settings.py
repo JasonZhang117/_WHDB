@@ -107,7 +107,6 @@ AUTH_USER_MODEL = 'A_dbms.Employees'
 LANGUAGE_CODE = 'zh-hans'  # admin显示为中文
 
 # TIME_ZONE = 'UTC'
-
 TIME_ZONE = 'Asia/Shanghai'
 
 USE_I18N = True

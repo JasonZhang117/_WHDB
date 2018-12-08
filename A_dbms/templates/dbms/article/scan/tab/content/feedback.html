@@ -1,0 +1,26 @@
+<div class="table-responsive">
+    {#"table-responsive":表格响应式布局#}
+    <table class="table table-bordered table-hover
+                table-condensed active">
+        {#"table-bordered":表格表格边框#}
+        {#"table-hover":表格悬停变色#}
+        {#"table-condensed":表格紧缩#}
+        {#<caption><h4>项目管理</h4></caption>#}
+        <thead>
+        <tr style="text-align: center">
+            <th>上会建议</th>
+            <th>风险分析</th>
+            <th>风控建议</th>
+            <th>反馈日期</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td>{{ article_obj.feedback_article.all.0.get_propose_display }}</td>
+            <td>{{ article_obj.feedback_article.all.0.analysis }}</td>
+            <td>{{ article_obj.feedback_article.all.0.suggestion }}</td>
+            <td>{{ article_obj.feedback_article.all.0.feedback_date }}</td>
+        <tr>
+        </tbody>
+    </table>
+</div>
