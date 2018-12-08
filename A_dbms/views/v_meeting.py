@@ -11,6 +11,8 @@ from django.contrib.auth.decorators import login_required
 def meeting(request, *args, **kwargs):  # 评审会
     print(__file__, '---->def meeting')
     # print('kwargs:', kwargs)
+    print('datetime.date.today:', str(datetime.date.today))
+    print(time.ctime(time.time()))
     meeting_add_form = forms.MeetingAddForm()
     meeting_list = models.Appraisals.objects.filter(
         **kwargs).order_by('-review_date', '-review_order')
@@ -47,7 +49,7 @@ def meeting_add_ajax(request):
         REVIEW_MODEL_LIST = models.Appraisals.REVIEW_MODEL_LIST
         review_model = cleaned_data['review_model']
         review_date = cleaned_data['review_date']
-
+        print('type(review_date):', type(review_date))
         ###上会类型(r_mod)
         r_mod = "内审"
         for i in REVIEW_MODEL_LIST:
@@ -475,6 +477,25 @@ def single_del_ajax(request):  # 单项额度删除ajax
     return HttpResponse(result)
 
 
+# -----------------------签批ajax-------------------------#
+@login_required
+def article_sign_ajax(request):
+    print(__file__, '---->def article_sign_ajax')
+    response = {'status': True, 'message': None,
+                'obj_num': None, 'forme': None, }
+    post_data_str = request.POST.get('postDataStr')
+    post_data = json.loads(post_data_str)
+    article_id = post_data['article_id']
+
+    print('post_data:', post_data)
+    article_single_quota = models.SingleQuota.objects.filter(
+        summary__id=article_id)
+    print('article_single_quota:', article_single_quota)
+
+    result = json.dumps(response, ensure_ascii=False)
+    return HttpResponse(result)
+
+
 # -----------------------评审会预览-------------------------#
 @login_required
 def meeting_scan(request, meeting_id):  # 评审会预览
@@ -488,6 +509,8 @@ def meeting_scan(request, meeting_id):  # 评审会预览
     meeting_edit_form_data = {
         'review_model': meeting_obj.review_model,
         'review_date': str(meeting_obj.review_date)}
+    print('meeting_obj.review_date:', meeting_obj.review_date)
+    print('type(meeting_obj.review_date):', type(meeting_obj.review_date))
     meeting_edit_form = forms.MeetingEditForm(meeting_edit_form_data)
 
     return render(request,
@@ -505,13 +528,27 @@ def meeting_scan_article(request, meeting_id, article_id):
     expert_list = article_obj.expert.values_list('id')
     if expert_list:
         expert_id_list = list(zip(*expert_list))[0]
-
         form_date = {
             'expert': expert_id_list}
-
         form_allot_expert = forms.MeetingAllotForm(initial=form_date)
     else:
         form_allot_expert = forms.MeetingAllotForm()
+    '''((1, '待反馈'), (2, '已反馈'), (3, '待上会'),
+       (4, '已上会'), (5, '已签批'), (6, '已注销'))'''
+    if article_obj.article_state:
+        form_date = {
+            'summary_num': article_obj.summary_num,
+            'sign_type': article_obj.sign_type,
+            'renewal': article_obj.renewal,
+            'augment': article_obj.augment,
+            'sign_detail': article_obj.sign_detail,
+            'sign_date': article_obj.sign_date}
+        form_article_sign = forms.ArticlesSingForm(form_date)
+    else:
+        form_date = {
+            'renewal': article_obj.renewal,
+            'augment': article_obj.augment}
+        form_article_sign = forms.ArticlesSingForm(form_date)
 
     form_comment = forms.CommentsAddForm()
 

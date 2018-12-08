@@ -1,7 +1,7 @@
 from django import forms as dform
 from django.forms import fields
 from django.forms import widgets
-import datetime
+import datetime, time
 from .. import models
 
 
@@ -14,7 +14,8 @@ class MeetingAddForm(dform.Form):  # 评审会添加
         widget=widgets.Select(
             choices=REVIEW_MODEL_LIST,
             attrs={'class': 'form-control',
-                   'placeholder': '评审类型'}))
+                   'placeholder': '评审类型'}),
+        initial=2)
     review_date = fields.DateField(
         label='评审日期',
         label_suffix="：",
@@ -22,7 +23,7 @@ class MeetingAddForm(dform.Form):  # 评审会添加
             attrs={'class': 'form-control',
                    'type': 'date',
                    'placeholder': '评审日期'}),
-        initial=str(datetime.date.today))
+        initial=str(datetime.date.today()))
     article = fields.TypedMultipleChoiceField(
         label="参评项目",
         label_suffix="：",

@@ -53,7 +53,7 @@ class SingleQuota(models.Model):  # 单项额度
         on_delete=models.PROTECT,
         related_name='single_quota_summary')
     CREDIT_MODEL_LIST = ((1, '流贷'), (2, '承兑'),
-                         (3, '保函'))
+                         (3, '保函'), (4, '综合'))
     credit_model = models.IntegerField(
         verbose_name='授信类型',
         choices=CREDIT_MODEL_LIST,
@@ -99,9 +99,8 @@ class Comments(models.Model):  # 评委意见
         verbose_name='评委意见',
         choices=COMMENT_TYPE_LIST,
         default=1)
-    concrete = models.CharField(
+    concrete = models.TextField(
         verbose_name='意见详情',
-        max_length=256,
         null=True, blank=True)
     comment_buildor = models.ForeignKey(
         to='Employees',

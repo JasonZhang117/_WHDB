@@ -88,3 +88,50 @@ class FeedbackAddForm(dform.Form):  # 风控反馈添加
         widget=widgets.Textarea(
             attrs={'class': 'form-control',
                    'placeholder': '风控意见'}))
+
+
+# -----------------------项目签批-------------------------#
+class ArticlesSingForm(dform.Form):  # 项目签批
+    summary_num = fields.CharField(
+        label='纪要编号',
+        label_suffix="：",
+        widget=widgets.TextInput(
+            attrs={'class': 'form-control',
+                   'placeholder': '纪要编号'}))
+
+    SIGN_TYPE_LIST = models.Articles.SIGN_TYPE_LIST
+    sign_type = fields.IntegerField(
+        label='签批结论',
+        label_suffix="：",
+        widget=widgets.Select(
+            choices=SIGN_TYPE_LIST,
+            attrs={'class': 'form-control',
+                   'placeholder': '签批结论'}),
+        initial=1)
+    renewal = fields.FloatField(
+        label='续贷金额（元）',
+        label_suffix="：",
+        widget=widgets.NumberInput(
+            attrs={'class': 'form-control',
+                   'placeholder': '续贷金额（元）'}))
+    augment = fields.FloatField(
+        label='新增金额（元）',
+        label_suffix="：",
+        widget=widgets.NumberInput(
+            attrs={'class': 'form-control',
+                   'placeholder': '新增金额（元）'}))
+    sign_detail = fields.CharField(
+        label='签批详情',
+        label_suffix="：",
+        widget=widgets.Textarea(
+            attrs={'class': 'form-control',
+                   'type': 'date',
+                   'placeholder': '签批详情'}))
+    sign_date = fields.DateField(
+        label='签批日期',
+        label_suffix="：",
+        widget=widgets.DateInput(
+            attrs={'class': 'form-control',
+                   'type': 'date',
+                   'placeholder': '签批日期'}),
+        initial=str(datetime.date.today()))

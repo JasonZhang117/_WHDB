@@ -1,0 +1,56 @@
+<script>
+    $(function () {
+        bindArticleSignB();
+        bindArticleSignModalOk();
+
+    });
+
+    function bindArticleSignB() {
+        $('#articleSignB').click(function () {
+            console.log("bindArticleSignB");
+            $('#articleSignModal').modal('show');
+        })
+    }
+
+    function bindArticleSignModalOk() {
+        $('#articleSignModalOk').click(function () {
+            var postData = {};
+            $('#articleSignModal').find('input,select').each(function () {
+                var v = $(this).val();
+                var n = $(this).attr('name');
+                postData[n] = v;
+            });
+            var ttt = $('#id_sign_detail').val()
+            postData['suggestion'] = ttt;
+            var postDataStr = JSON.stringify(postData);
+            console.log(postDataStr)
+            $.ajax({
+                url: '/dbms/meeting/article/sign/',
+                type: 'POST',
+                data: {'postDataStr': postDataStr},
+                success: function (arg) {
+                    var dict = JSON.parse(arg);
+                    console.log(dict);
+                    if (dict.status) {
+                        alert(dict.message);
+                        $('#singleQuotaModal').modal('hide');
+                        window.location.reload();
+                    } else {
+                        alert(dict.message);
+                        $('#e_sign_type').text(dict.forme.sign_type);
+                        $('#e_renewal').text(dict.forme.renewal);
+                        $('#e_augment').text(dict.forme.augment);
+                        $('#e_sign_detail').text(dict.forme.sign_detail);
+                        $('#e_sign_date').text(dict.forme.sign_date);
+                    }
+                }
+            })
+        })
+    }
+</script>
+
+
+
+
+
+

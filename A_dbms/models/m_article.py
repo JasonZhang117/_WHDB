@@ -68,6 +68,14 @@ class Articles(models.Model):  # 项目、纪要
         max_length=32,
         unique=True,
         null=True, blank=True)
+    SIGN_TYPE_LIST = ((1, '同意'), (2, '不同意'))
+    sign_type = models.IntegerField(
+        verbose_name='签批意见',
+        choices=SIGN_TYPE_LIST,
+        null=True, blank=True)
+    sign_detail = models.TextField(
+        verbose_name='签批详情',
+        null=True, blank=True)
     sign_date = models.DateField(
         verbose_name='签批日期',
         null=True, blank=True)

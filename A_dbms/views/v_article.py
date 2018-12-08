@@ -49,7 +49,7 @@ def article(request, *args, **kwargs):  # 项目列表
     # print('request.user:', request.user)
     # print('request.GET.items():', request.GET.items())
     # request.GET.items()获取get传递的参数对
-    form = forms.ArticlesAddForm()
+    form_article = forms.ArticlesAddForm()
     for k, v in request.GET.items():
         print(k, ' ', v)
 
@@ -146,9 +146,12 @@ def article_add_ajax(request):  # 添加项目
             response['obj_num'] = article_obj.article_num
             response['message'] = '成功创建项目：%s！' % article_obj.article_num
 
-        except IntegrityError as e:
+        except IntegrityError:
             response['status'] = False
             response['message'] = '请不要重复创建项目！'
+        except Exception as e:
+            response['status'] = False
+            response['message'] = e
 
     else:
         response['status'] = False
@@ -222,7 +225,7 @@ def article_edit_ajax(request):  # 修改项目ajax
                 response['obj_num'] = article_obj.article_num
                 response['message'] = '成功修改项目：%s！' % article_obj.article_num
 
-            except IntegrityError as e:
+            except Exception as e:
                 response['status'] = False
                 response['message'] = '项目未修改成功！'
 
