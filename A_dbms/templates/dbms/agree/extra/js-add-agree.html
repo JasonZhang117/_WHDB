@@ -20,22 +20,24 @@
                 var n = $(this).attr('name');
                 postData[n] = v;
             });
-            console.log(postData)
+            var postDataStr = JSON.stringify(postData);
+
+            console.log(postDataStr)
 
             $.ajax({
-                url: '/dbms/agree/add-ajax/',
+                url: '/dbms/agree/add/',
                 type: 'POST',
                 traditional: true,
-                data: postData,
+                data: {'postDataStr': postDataStr},
+                dataType: 'JSON',
                 success: function (arg) {
-                    var dict = JSON.parse(arg);
-                    console.log(dict);
-                    if (dict.status) {
+                    console.log(arg);
+                    if (arg.status) {
                         $('#addAgreeModal').modal('hide');
-                        alert(dict.message);
+                        alert(arg.message);
                         window.location.reload();
                     } else {
-                        alert(dict.message);
+                        alert(arg.message);
                         $('#e_agree_amount').text(dict.forme.agree_amount);
                     }
                 }

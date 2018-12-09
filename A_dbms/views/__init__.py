@@ -13,7 +13,7 @@ from .v_meeting import (meeting, meeting_scan, single_del_ajax,
                         meeting_close_ajax, meeting_scan_article,
                         meeting_add_ajax, meeting_allot_ajax)
 # ----------------------v_agree合同管理视图--------------------#
-from .v_agree import (agree, agree_add, agree_add_ajax,
+from .v_agree import (agree, agree_add_ajax,
                       agree_edit, agree_scan, agree_preview)
 # ----------------------v_warrant权证管理视图--------------------#
 from .v_warrant import warrant

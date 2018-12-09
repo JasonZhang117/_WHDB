@@ -54,10 +54,9 @@ urlpatterns = [
          views.agree, name='agree_all'),
     path('agree/<int:agree_state>/',
          views.agree, name='agree'),  # /dbms/article/(0-9)
-    path('agree/add/',
-         views.agree_add, name='agree_add'),
-    path('agree/add-ajax/',
-         views.agree_add_ajax, name='agree_add_ajax'),
+
+    path('agree/add/', views.agree_add_ajax),
+
     path('agree/edit/<int:id>/',
          views.agree_edit,
          name='agree_edit'),

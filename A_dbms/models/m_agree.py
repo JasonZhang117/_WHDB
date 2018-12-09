@@ -1,5 +1,6 @@
-from django.db import models
 import datetime
+
+from django.db import models
 
 
 # -----------------------委托合同模型-------------------------#
@@ -21,10 +22,15 @@ class Agrees(models.Model):  # 委托合同
     AGREE_TYP_LIST = ((1, '单笔'), (2, '最高额'), (3, '保函'))
     agree_typ = models.IntegerField(
         verbose_name='合同种类',
-        choices=AGREE_TYP_LIST,
-        default=1)
-    agree_order = models.IntegerField(
-        verbose_name='合同序号')
+        choices=AGREE_TYP_LIST)
+    GUARANTEE_TYP_LIST = (('②', '②'), ('③', '③'), ('④', '④'),
+                          ('⑤', '⑤'), ('⑥', '⑥'), ('⑦', '⑦'),)
+    guarantee_typ = models.CharField(
+        verbose_name='反担保种类数',
+        max_length=4,
+        choices=GUARANTEE_TYP_LIST)
+    agree_copies = models.IntegerField(
+        verbose_name='合同份数')
     agree_amount = models.FloatField(
         verbose_name='合同金额')
     agree_date = models.DateField(
@@ -35,8 +41,8 @@ class Agrees(models.Model):  # 委托合同
         verbose_name="创建人",
         on_delete=models.PROTECT,
         related_name='agree_buildor_employee')
-    AGREE_STATE_LIST = ((1, '待签批'), (2, '已签批'),
-                        (3, '已落实'), (4, '已注销'))
+    AGREE_STATE_LIST = ((1, '待签批'), (2, '已签批'), (3, '已落实'),
+                        (4, '已放款'), (5, '已解保'), (6, '已作废'))
     agree_state = models.IntegerField(
         verbose_name='_合同状态',
         choices=AGREE_STATE_LIST,
@@ -55,7 +61,7 @@ class Agrees(models.Model):  # 委托合同
         db_table = 'dbms_agrees'  # 指定数据表的名称
 
     def __str__(self):
-        return "%s-%s" % (self.agree_num, self.article.article_num)
+        return "%s-%s" % (self.agree_num, self.article.summary_num)
 
 
 # -----------------------反担保合同模型-------------------------#

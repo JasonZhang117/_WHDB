@@ -34,6 +34,23 @@ class AgreeAddForm(dform.Form):  # 委托合同添加
         widget=widgets.NumberInput(
             attrs={'class': 'form-control',
                    'placeholder': '合同金额（元）'}))
+    GUARANTEE_TYP_LIST = models.Agrees.GUARANTEE_TYP_LIST
+    guarantee_typ = fields.CharField(
+        label='类型数量',
+        label_suffix="：",
+        widget=widgets.Select(
+            choices=GUARANTEE_TYP_LIST,
+            attrs={'class': 'form-control',
+                   'placeholder': '类型数量'}),
+        initial='④')
+
+    agree_copies = fields.IntegerField(
+        label='合同份数',
+        label_suffix="：",
+        widget=widgets.NumberInput(
+            attrs={'class': 'form-control',
+                   'placeholder': '合同份数'}),
+        initial=4)
 
     def __init__(self, *args, **kwargs):
         super(AgreeAddForm, self).__init__(*args, **kwargs)
@@ -42,7 +59,7 @@ class AgreeAddForm(dform.Form):  # 委托合同添加
         self.fields['article_id'].widget.choices = \
             models.Articles.objects.filter(article_state=5). \
                 values_list('id', 'summary_num'). \
-                order_by('summary_num')
+                order_by('-summary_num')
         self.fields['branch_id'].widget.choices = \
             models.Branches.objects.filter(branch_state=1). \
                 values_list('id', 'name').order_by('name')

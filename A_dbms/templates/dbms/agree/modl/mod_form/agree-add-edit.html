@@ -46,3 +46,25 @@
         {{ forme.agree_amount.errors }}
     </label>
 </div>
+<div class="form-group"><!--类型数量-->
+    <label for="id_guarantee_typ" class="col-sm-3 control-label">
+        {{ form.guarantee_typ.label }}：
+    </label>
+    <div class="col-sm-9">
+        {{ form.guarantee_typ }}
+    </div>
+    <label id="e_guarantee_typ" class="pull-right">
+        {{ forme.guarantee_typ.errors }}
+    </label>
+</div>
+<div class="form-group"><!--合同份数-->
+    <label for="id_agree_copies" class="col-sm-3 control-label">
+        {{ form.agree_copies.label }}：
+    </label>
+    <div class="col-sm-9">
+        {{ form.agree_copies }}
+    </div>
+    <label id="e_agree_copies" class="pull-right">
+        {{ forme.agree_copies.errors }}
+    </label>
+</div>
