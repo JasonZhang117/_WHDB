@@ -6,9 +6,11 @@
 
     <div class="container-fluid" style="padding-left: 1px;">
         {% include 'dbms/agree/scan/summry.html' %}
-
         {% include 'dbms/agree/scan/nav_tab.html' %}
-
+        {% include 'dbms/agree/modl/counter-add-mod.html' %}
     </div>
+{% endblock %}
 
+{% block extra-js %}
+    {% include 'dbms/agree/extra/js-counter-add.html' %}
 {% endblock %}

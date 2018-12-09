@@ -1,5 +1,5 @@
-<div class="modal fade" id="addArticleModal" tabindex="-1"
-     role="dialog" aria-labelledby="addArticleModal">
+<div class="modal fade" id="addCounterModal" tabindex="-1"
+     role="dialog" aria-labelledby="addCounterModal">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -7,14 +7,14 @@
                         data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
-                <h4 class="modal-title" id="addArticleModalLabel">
-                    添加项目
+                <h4 class="modal-title" id="addCounterModalLabel">
+                    添加委托合同
                 </h4>
             </div>
             <div class="modal-body">
 
                 <form class="form-horizontal">
-                    {% include 'dbms/article/modl/mod_form/article-add-edit.html' %}
+                    {% include 'dbms/agree/modl/mod_form/counter-add-edit.html' %}
                 </form>
             </div>
 
@@ -26,8 +26,8 @@
                     取消
                 </button>
                 <button type="button" class="btn btn-primary"
-                        id="addArticleModalOk">
-                    添加
+                        id="addCounterModalOk">
+                    确定
                 </button>
             </div>
         </div>

@@ -4,7 +4,7 @@ from .m_article import Articles, Feedback
 from .m_appraisal import Appraisals, SingleQuota, Comments
 # -----------------------v_agree合同模型---------------------#
 # 委托合同、反担保合同
-from .m_agree import Agrees, Counters
+from .m_agree import Agrees, AgreeesExtend, Counters
 # 保证反担保合同、房产抵押合同
 from .m_agree import CountersAssure, CountersHouse
 # -------------------v_warrant担保物模型---------------------#

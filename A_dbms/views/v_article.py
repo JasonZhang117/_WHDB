@@ -149,7 +149,7 @@ def article_add_ajax(request):  # 添加项目
             response['message'] = '成功创建项目：%s！' % article_obj.article_num
         except Exception as e:
             response['status'] = False
-            response['message'] = e
+            response['message'] = '项目未创建成功：%s' % str(e)
 
     else:
         response['status'] = False
@@ -223,7 +223,7 @@ def article_edit_ajax(request):  # 修改项目ajax
 
             except Exception as e:
                 response['status'] = False
-                response['message'] = '项目未修改成功！'
+                response['message'] = '项目未修改成功:%s！' % str(e)
 
         else:
             response['status'] = False
@@ -319,7 +319,7 @@ def article_feedback_ajax(request):
                     response['message'] = '成功更新反馈信息！'
             except Exception as e:
                 response['status'] = False
-                response['message'] = e
+                response['message'] = "项目未反馈成功：%s" % str(e)
 
         else:
             response['status'] = False

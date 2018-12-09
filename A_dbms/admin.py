@@ -11,6 +11,7 @@ admin.site.register(models.Comments)  # 评审意见
 
 # -----------------------合同-------------------------#
 admin.site.register(models.Agrees)  # 合同
+admin.site.register(models.AgreeesExtend)  # 合同扩展
 admin.site.register(models.Counters)  # 反担保合同
 admin.site.register(models.CountersAssure)  # 保证反担保合同
 admin.site.register(models.CountersHouse)  # 房产抵押反担保合同

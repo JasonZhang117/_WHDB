@@ -7,9 +7,17 @@
                href="{% url 'dbms:agree_preview' agree_id=agree_obj.id %}">
                 预览
             </a>
-            <a class="btn btn-danger btn-sm "
-               href="{% url 'dbms:agree_preview' agree_id=agree_obj.id %}">
-                删除
+            <a class="btn btn-primary btn-sm " id="addCounterB">
+                添加反担保
+            </a>
+            <a class="btn btn-danger btn-sm " id="editAgreeB">
+               修改
+            </a>
+            <a class="btn btn-danger btn-sm " id="delAgreeB">
+               删除
+            </a>
+            <a class="btn btn-danger btn-sm " id="signAgreeB">
+               签批
             </a>
         </label>
     </div>

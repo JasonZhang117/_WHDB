@@ -1,6 +1,5 @@
 from django import forms as dform
-from django.forms import fields
-from django.forms import widgets
+from django.forms import fields, widgets
 import datetime
 from .. import models
 from django.core.exceptions import NON_FIELD_ERRORS, ValidationError
@@ -63,3 +62,30 @@ class AgreeAddForm(dform.Form):  # 委托合同添加
         self.fields['branch_id'].widget.choices = \
             models.Branches.objects.filter(branch_state=1). \
                 values_list('id', 'name').order_by('name')
+
+
+# -----------------------反担保合同添加-------------------------#
+class AddCounterForm(dform.Form):  # 反担保合同添加
+    agree_id = fields.IntegerField(
+        label="委托合同",
+        label_suffix="：",
+        widget=widgets.Select(
+            attrs={'class': 'form-control',
+                   'placeholder': '委托合同'}))
+    COUNTER_TYP_LIST = models.Counters.COUNTER_TYP_LIST
+    counter_typ = fields.IntegerField(
+        label='反担保类型',
+        label_suffix="：",
+        widget=widgets.Select(
+            choices=COUNTER_TYP_LIST,
+            attrs={'class': 'form-control',
+                   'placeholder': '反担保类型'}))
+
+    def __init__(self, *args, **kwargs):
+        super(AddCounterForm, self).__init__(*args, **kwargs)
+        '''((1, '待签批'), (2, '已签批'), (3, '已落实'),
+           (4, '已放款'), (5, '已解保'), (6, '已作废'))'''
+        self.fields['agree_id'].widget.choices = \
+            models.Agrees.objects.filter(agree_state=1). \
+                values_list('id', 'agree_num'). \
+                order_by('-id')

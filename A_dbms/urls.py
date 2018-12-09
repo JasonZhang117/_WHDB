@@ -57,9 +57,6 @@ urlpatterns = [
 
     path('agree/add/', views.agree_add_ajax),
 
-    path('agree/edit/<int:id>/',
-         views.agree_edit,
-         name='agree_edit'),
     path('agree/scan/<int:agree_id>/',
          views.agree_scan,
          name='agree_scan'),
@@ -67,9 +64,6 @@ urlpatterns = [
          views.agree_preview,
          name='agree_preview'),
 
-    # path('agree/del/',
-    #      views.agree_del,
-    #      name='agree_del'),
     # -----------------------权证管理-------------------------#
     path('warrant/',
          views.warrant, name='warrant_all'),
