@@ -103,25 +103,9 @@ def article_add_ajax(request):  # 添加项目
 
     post_data_str = request.POST.get('postDataStr')
     post_data = json.loads(post_data_str)
+    print('post_data:', post_data)
 
-    custom_id = post_data['custom_id']
-    renewal = post_data['renewal']
-    augment = post_data['augment']
-    credit_term = post_data['credit_term']
-    director_id = post_data['director_id']
-    assistant_id = post_data['assistant_id']
-    control_id = post_data['control_id']
-
-    data = {
-        'custom_id': custom_id,
-        'renewal': renewal,
-        'augment': augment,
-        'credit_term': credit_term,
-        'director_id': director_id,
-        'assistant_id': assistant_id,
-        'control_id': control_id}
-
-    form = forms.ArticlesAddForm(data, request.FILES)
+    form = forms.ArticlesAddForm(post_data, request.FILES)  #####
 
     if form.is_valid():
         cleaned_data = form.cleaned_data
@@ -165,51 +149,34 @@ def article_add_ajax(request):  # 添加项目
 @login_required
 def article_edit_ajax(request):  # 修改项目ajax
     print(__file__, '---->def article_edit_ajax')
-
     response = {'status': True, 'message': None,
                 'obj_num': None, 'forme': None, }
-
     post_data_str = request.POST.get('postDataStr')
     post_data = json.loads(post_data_str)
+    print('post_data:', post_data)
+
     article_id = post_data['article_id']
-    custom_id = post_data['custom_id']
-    renewal = post_data['renewal']
-    augment = post_data['augment']
-    credit_term = post_data['credit_term']
-    director_id = post_data['director_id']
-    assistant_id = post_data['assistant_id']
-    control_id = post_data['control_id']
-
     article_obj = models.Articles.objects.get(id=article_id)
-    '''ARTICLE_STATE_LIST = ((1, '待反馈'), (2, '已反馈'), (3, '待上会'),
-                          (4, '已上会'), (5, '已签批'), (6, '已注销'))
-                          (5, '已签批')-->才能出合同'''
+    '''((1, '待反馈'), (2, '已反馈'), (3, '待上会'),
+        (4, '已上会'), (5, '已签批'), (6, '已注销'))
+        (5, '已签批')-->才能出合同'''
     if article_obj.article_state == 1:
-        data = {
-            'custom_id': custom_id,
-            'renewal': renewal,
-            'augment': augment,
-            'credit_term': credit_term,
-            'director_id': director_id,
-            'assistant_id': assistant_id,
-            'control_id': control_id}
 
-        form = forms.ArticlesAddForm(data, request.FILES)
+        form = forms.ArticlesAddForm(post_data, request.FILES)
 
         if form.is_valid():
             cleaned_data = form.cleaned_data
+            print('cleaned_data:', cleaned_data)
 
-            custom_id = cleaned_data['custom_id']
             renewal = cleaned_data['renewal']
             augment = cleaned_data['augment']
-
             amount = renewal + augment
 
             try:
                 article_list = models.Articles.objects.filter(
                     id=article_id)
                 article_list.update(
-                    custom_id=custom_id,
+                    custom_id=cleaned_data['custom_id'],
                     renewal=renewal,
                     augment=augment,
                     amount=amount,
@@ -247,24 +214,23 @@ def article_del_ajax(request):
                 'obj_num': None, 'forme': None, }
     post_data_str = request.POST.get('postDataStr')
     post_data = json.loads(post_data_str)
-    article_id = post_data['article_id']
+    print('post_data:', post_data)
 
+    article_id = post_data['article_id']
     article_obj = models.Articles.objects.get(id=article_id)
-    '''ARTICLE_STATE_LIST = ((1, '待反馈'), (2, '已反馈'), (3, '待上会'),
-                          (4, '已上会'), (5, '已签批'), (6, '已注销'))
-                          (5, '已签批')-->才能出合同'''
-    if article_obj.article_state in [1, 2]:
+    '''((1, '待反馈'), (2, '已反馈'), (3, '待上会'),
+        (4, '已上会'), (5, '已签批'), (6, '已注销'))
+        (5, '已签批')-->才能出合同'''
+    if article_obj.article_state == 1:
         article_obj.delete()  # 删除评审会
         msg = '%s，删除成功！' % article_obj.article_num
         response['message'] = msg
         response['data'] = article_obj.id
-
     else:
         msg = '状态为：%s，删除失败！！！' % article_obj.article_state
         response['status'] = False
         response['message'] = msg
     result = json.dumps(response, ensure_ascii=False)
-    # return redirect('dbms:article_all')
     return HttpResponse(result)
 
 
@@ -272,12 +238,11 @@ def article_del_ajax(request):
 @login_required
 def article_feedback_ajax(request):
     print(__file__, '---->def article_feedback_ajax')
-
     response = {'status': True, 'message': None,
                 'obj_num': None, 'forme': None, }
-
     post_data_str = request.POST.get('postDataStr')
     post_data = json.loads(post_data_str)
+    print('post_data:', post_data)
 
     article_id = post_data['article_id']
     article_list = models.Articles.objects.filter(id=article_id)
@@ -286,18 +251,11 @@ def article_feedback_ajax(request):
     '''((1, '待反馈'), (2, '已反馈'), (3, '待上会'),
        (4, '已上会'), (5, '已签批'), (6, '已注销'))'''
     if article_obj.article_state in [1, 2]:
-        propose = post_data['propose']
-        analysis = post_data['analysis']
-        suggestion = post_data['suggestion']
+        form = forms.FeedbackAddForm(post_data)
 
-        data = {
-            'propose': propose,
-            'analysis': analysis,
-            'suggestion': suggestion}
-
-        form = forms.FeedbackAddForm(data)
         if form.is_valid():
             cleaned_data = form.cleaned_data
+            print('cleaned_data:', cleaned_data)
             try:
                 today_str = time.strftime("%Y-%m-%d", time.gmtime())
 
@@ -308,11 +266,10 @@ def article_feedback_ajax(request):
                     'suggestion': cleaned_data['suggestion'],
                     'feedback_date': today_str,
                     'feedback_buildor': request.user}
-
                 article, created = models.Feedback.objects.update_or_create(
                     article_id=article_id, defaults=default)
                 article_list.update(article_state=2)  # 更新项目状态
-                response['obj_id'] = article.id
+
                 if created:
                     response['message'] = '成功成功反馈项目%s！' % article_obj.article_num
                 else:

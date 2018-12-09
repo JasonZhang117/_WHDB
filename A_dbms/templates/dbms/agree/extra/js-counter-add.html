@@ -1,7 +1,8 @@
 <script>
     $(function () {
         bindAddCounterB();
-        bindAddAgreeModalOk();
+        bind_id_counter_typ();
+        bindAddCounterModalOk();
 
     });
 
@@ -12,22 +13,30 @@
         })
     }
 
-    function bindAddAgreeModalOk() {
-        $('#addAgreeModalOk').click(function () {
+    function bind_id_counter_typ() {
+        $('#id_counter_typ').change(function () {
+            console.log("bind_id_counter_typ")
+            var selected_counter_typ = $('#id_counter_typ').val();
+            console.log(selected_counter_typ)
+
+        })
+    }
+
+    function bindAddCounterModalOk() {
+        $('#addCounterModalOk').click(function () {
             var postData = {};
-            $('#addAgreeModal').find('input,select').each(function () {
+            $('#addCounterModal').find('input,select').each(function () {
                 var v = $(this).val();
                 var n = $(this).attr('name');
                 postData[n] = v;
             });
             var postDataStr = JSON.stringify(postData);
 
-            console.log(postDataStr)
+            console.log(postDataStr);
 
             $.ajax({
-                url: '/dbms/agree/add/',
+                url: '/dbms/counter/add/',
                 type: 'POST',
-                traditional: true,
                 data: {'postDataStr': postDataStr},
                 dataType: 'JSON',
                 success: function (arg) {
