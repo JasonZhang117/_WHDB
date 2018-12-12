@@ -19,15 +19,15 @@ class Warrants(models.Model):  # 担保物
         default=1)
     evaluate_value = models.FloatField(
         verbose_name='评估价值',
-        null=True)
+        null=True, blank=True)
     evaluate_date = models.DateField(
         verbose_name='评估日期',
-        null=True)
+        null=True, blank=True)
     WARRANT_STATE_LIST = ((1, '未入库'), (2, '已入库'),
                           (3, '已出库'), (4, '已借出'),
                           (5, '已归还'), (6, '已注销'))
     warrant_state = models.IntegerField(
-        verbose_name='_签订情况',
+        verbose_name='_权证状态',
         choices=WARRANT_STATE_LIST,
         default=1)
 

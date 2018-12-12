@@ -1,10 +1,14 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>warrant</title>
-</head>
-<body>
+{% extends 'dbms/index_dbms.html' %}
 
-</body>
-</html>
+{% block title %}权证管理{% endblock %}
+
+
+{% block right-content-container %}
+    {% include 'dbms/warrant/warrant/filter.html' %}
+    {% include 'dbms/warrant/warrant/table.html' %}
+{% endblock %}
+
+{% block extra-js %}
+
+
+{% endblock %}

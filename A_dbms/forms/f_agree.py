@@ -89,3 +89,41 @@ class AddCounterForm(dform.Form):  # 反担保合同添加
             models.Agrees.objects.filter(agree_state=1). \
                 values_list('id', 'agree_num'). \
                 order_by('-id')
+
+
+# -----------------------企业反担保合同添加-------------------------#
+class CountersAssureC(dform.Form):
+    custome = fields.TypedMultipleChoiceField(
+        label="保证人",
+        label_suffix="：",
+        coerce=lambda x: int(x),
+        widget=widgets.SelectMultiple(
+            attrs={'class': 'form-control',
+                   'placeholder': '保证人'}))
+
+    def __init__(self, *args, **kwargs):
+        super(CountersAssureC, self).__init__(*args, **kwargs)
+        '''((1, '企业'), (2, '个人'))'''
+        self.fields['custome'].choices = \
+            models.Customes.objects.filter(
+                genre=1).values_list(
+                'id', 'name').order_by('name')
+
+
+# -----------------------个人反担保合同添加-------------------------#
+class CountersAssureP(dform.Form):
+    custome = fields.TypedMultipleChoiceField(
+        label="保证人",
+        label_suffix="：",
+        coerce=lambda x: int(x),
+        widget=widgets.SelectMultiple(
+            attrs={'class': 'form-control',
+                   'placeholder': '保证人'}))
+
+    def __init__(self, *args, **kwargs):
+        super(CountersAssureP, self).__init__(*args, **kwargs)
+        '''((1, '企业'), (2, '个人'))'''
+        self.fields['custome'].choices = \
+            models.Customes.objects.filter(
+                genre=2).values_list(
+                'id', 'name').order_by('name')

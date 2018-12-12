@@ -1,24 +1,26 @@
-<div class="form-group"><!--委托合同id-->
-    <label for="id_agree_id" class="col-sm-3 control-label">
-        {{ from_counter.agree_id.label }}：
-    </label>
-    <div class="col-sm-9">
-        {{ from_counter.agree_id }}
+<div>
+    <div class="form-group"><!--委托合同id-->
+        <label for="id_agree_id" class="col-sm-3 control-label">
+            {{ from_counter.agree_id.label }}：
+        </label>
+        <div class="col-sm-9">
+            {{ from_counter.agree_id }}
+        </div>
+        <label id="e_agree_id" class="pull-right">
+            {{ from_counter.agree_id.errors }}
+        </label>
     </div>
-    <label id="e_agree_id" class="pull-right">
-        {{ from_counter.agree_id.errors }}
-    </label>
-</div>
 
-<div class="form-group"><!--反担保类型-->
-    <label for="id_counter_typ" class="col-sm-3 control-label">
-        {{ from_counter.counter_typ.label }}：
-    </label>
-    <div class="col-sm-9">
-        {{ from_counter.counter_typ }}
+    <div class="form-group"><!--反担保类型-->
+        <label for="id_counter_typ" class="col-sm-3 control-label">
+            {{ from_counter.counter_typ.label }}：
+        </label>
+        <div class="col-sm-9">
+            {{ from_counter.counter_typ }}
+        </div>
+        <label id="e_counter_typ" class="pull-right">
+            {{ from_counter.counter_typ.errors }}
+        </label>
     </div>
-    <label id="e_counter_typ" class="pull-right">
-        {{ from_counter.counter_typ.errors }}
-    </label>
 </div>
 

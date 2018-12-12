@@ -17,7 +17,15 @@
         $('#id_counter_typ').change(function () {
             console.log("bind_id_counter_typ")
             var selected_counter_typ = $('#id_counter_typ').val();
+            selected_counter_typ_p = selected_counter_typ;
             console.log(selected_counter_typ)
+            if (selected_counter_typ == 1) {
+                $('#counter-assure-c').show()
+            }
+            else {
+                $('#counter-assure-p').show()
+
+            }
 
         })
     }

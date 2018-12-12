@@ -114,10 +114,12 @@ class Counters(models.Model):  # 反担保合同
         verbose_name="委托保证合同",
         on_delete=models.PROTECT,
         related_name='counter_agree')
-    COUNTER_TYP_LIST = ((1, '企业担保'), (2, '个人担保'),
-                        (3, '房产抵押'), (4, '土地抵押'),
-                        (5, '应收质押'), (6, '动产抵押'),
-                        (7, '车辆抵押'))
+    COUNTER_TYP_LIST = (
+        (0, '--------'),
+        (1, '企业担保'), (2, '个人担保'),
+        (3, '房产抵押'), (4, '土地抵押'),
+        (5, '应收质押'), (6, '动产抵押'),
+        (7, '车辆抵押'))
     counter_typ = models.IntegerField(
         verbose_name='合同类型',
         choices=COUNTER_TYP_LIST)

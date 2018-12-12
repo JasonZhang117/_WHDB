@@ -68,6 +68,9 @@ urlpatterns = [
     # -----------------------权证管理-------------------------#
     path('warrant/',
          views.warrant, name='warrant_all'),
+
+    path('warrant/<int:warrant_typ>/',
+         views.warrant, name='warrant'),  # /dbms/article/(0-9)
     # -----------------------放款管理-------------------------#
     path('provide/', views.provide, name='provide'),
     # path('provide/add/',

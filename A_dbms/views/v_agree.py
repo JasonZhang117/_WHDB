@@ -39,6 +39,9 @@ def agree_scan(request, agree_id):  # 查看合同
     print(__file__, '---->def agree_scan')
     agree_obj = models.Agrees.objects.get(id=agree_id)
     from_counter = forms.AddCounterForm()
+    form_counter_assure_c = forms.CountersAssureC()
+    form_counter_assure_p = forms.CountersAssureP()
+
     return render(request,
                   'dbms/agree/agree-scan.html',
                   locals())

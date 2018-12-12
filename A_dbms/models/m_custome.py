@@ -50,12 +50,11 @@ class CustomesC(models.Model):
         verbose_name="企业客户",
         on_delete=models.PROTECT,
         related_name='company_custome')
-    license_num = models.CharField(
-        verbose_name='信用编码',
-        max_length=18, unique=True)
     short_name = models.CharField(
         verbose_name='简称',
         max_length=8, unique=True)
+    capital = models.FloatField(
+        verbose_name='注册资本（股本）')
     registered_addr = models.CharField(
         verbose_name='注册地址',
         max_length=64)
