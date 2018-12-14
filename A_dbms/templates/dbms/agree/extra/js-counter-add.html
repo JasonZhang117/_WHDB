@@ -3,12 +3,11 @@
         bindAddCounterB();
         bind_id_counter_typ();
         bindAddCounterModalOk();
-
     });
 
     function bindAddCounterB() {
         $('#addCounterB').click(function () {
-            console.log("bindAddCounterB")
+            {#console.log("bindAddCounterB")#}
             $('#addCounterModal').modal('show');
         })
     }
@@ -16,17 +15,27 @@
     function bind_id_counter_typ() {
         $('#id_counter_typ').change(function () {
             console.log("bind_id_counter_typ")
+            $('.extned').hide()
             var selected_counter_typ = $('#id_counter_typ').val();
-            selected_counter_typ_p = selected_counter_typ;
-            console.log(selected_counter_typ)
-            if (selected_counter_typ == 1) {
-                $('#counter-assure-c').show()
-            }
-            else {
-                $('#counter-assure-p').show()
 
-            }
+            console.log(selected_counter_typ);
 
+            switch (selected_counter_typ) {
+                case ('1'):
+                    $('#counter-assure-c').show();
+                    break;
+                case ('2'):
+                    $('#counter-assure-p').show();
+                    break;
+                case ('3'):
+                    $('#counter-house').show();
+                    break;
+                case ('4'):
+                    $('#counter-ground').show();
+                    break;
+                default:
+                    $('.extned').hide()
+            }
         })
     }
 

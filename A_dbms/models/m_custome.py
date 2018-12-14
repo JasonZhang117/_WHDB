@@ -103,7 +103,7 @@ class CustomesP(models.Model):  # 个人客户
         return self.custome.name
 
 
-# -------------------区域（街道）----------------------#
+# -------------------区域（街道）-------------------------#
 class Districtes(models.Model):  # 区域（街道）
     name = models.CharField(
         verbose_name='街道名称',

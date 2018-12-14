@@ -6,13 +6,13 @@ import datetime
 # ------------------------担保物--------------------------#
 class Warrants(models.Model):  # 担保物
     warrant_num = models.CharField(
-        verbose_name='担保物',
+        verbose_name='编号',
         max_length=32,
         unique=True)
     WARRANT_TYP_LIST = [(1, '房产'), (2, '土地'),
                         (3, '车辆'), (4, '设备'),
-                        (5, '存货'), (6, '权利'),
-                        (7, '他权')]
+                        (5, '存货'), (6, '权利'), (7, '应收'),
+                        (8, '股权'), (9, '他权')]
     warrant_typ = models.IntegerField(
         verbose_name='权证类型',
         choices=WARRANT_TYP_LIST,
@@ -62,7 +62,9 @@ class Ownership(models.Model):  # 产权证
         unique_together = [('warrant', 'owner'), ]
 
     def __str__(self):
-        return self.ownership_num
+        return '%s-%s-%s' % (self.ownership_num,
+                             self.owner.name,
+                             self.warrant.warrant_num)
 
 
 # ------------------------房产--------------------------#
@@ -91,7 +93,9 @@ class Houses(models.Model):  # 房产
         db_table = 'dbms_houses'  # 指定数据表的名称
 
     def __str__(self):
-        return self.warrant.warrant_num
+        return '%s-%s-%s-%s' % (self.warrant.warrant_num,
+                                self.house_locate, self.area_structure,
+                                self.application)
 
 
 # ------------------------土地--------------------------#
@@ -118,7 +122,39 @@ class Grounds(models.Model):  # 土地
         db_table = 'dbms_grounds'  # 指定数据表的名称
 
     def __str__(self):
-        return self.warrant.warrant_num
+        return '%s-%s-%s-%s' % (self.warrant.warrant_num,
+                                self.ground_locate, self.area_structure,
+                                self.application)
+
+
+# ------------------------股权--------------------------#
+class Stock(models.Model):  # 土地
+    warrant = models.OneToOneField(
+        to='Warrants',
+        verbose_name="权证",
+        on_delete=models.PROTECT,
+        related_name='stock_warrant')
+    GROUND_APP_LIST = ((1, '有限公司股权'),
+                       (2, '股份公司股份'))
+    owner = models.ForeignKey(
+        to='Customes',
+        verbose_name="所有权人",
+        on_delete=models.PROTECT,
+        related_name='stock_owner_custome')
+    target = models.CharField(
+        verbose_name='标的公司',
+        max_length=64)
+    share = models.FloatField(
+        verbose_name='数量（万元/万股）')
+
+    class Meta:
+        verbose_name_plural = '反担保-股权'  # 指定显示名称
+        db_table = 'dbms_stock'  # 指定数据表的名称
+
+    def __str__(self):
+        return '%s-%s-%s-%s' % (self.warrant.warrant_num,
+                                self.owner, self.target,
+                                self.share)
 
 
 # ------------------------他权模型--------------------------#

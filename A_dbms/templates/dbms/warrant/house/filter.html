@@ -1,0 +1,42 @@
+<div>
+    <label>
+        {% if kwargs.application == None %}
+            <a class="active btn btn-primary btn-sm"
+               href="{% url 'dbms:house_all' %}">全部</a>
+        {% else %}
+            <a class="btn btn btn-primary btn-sm"
+               href="{% url 'dbms:house_all' %}">全部</a>
+        {% endif %}
+
+        {# 方式一：#}
+        {% for item in house_app_list %}
+            {% if item.0 == kwargs.warrant_typ %}
+                <a class="active btn btn-primary btn-sm"
+                   href="{% url 'dbms:house' application=item.0 %}">
+                    {{ item.1 }}
+                </a>
+            {% else %}
+                <a class="btn btn-primary btn-sm"
+                   href="{% url 'dbms:house' application=item.0 %}">
+                    {{ item.1 }}
+                </a>
+            {% endif %}
+        {% endfor %}
+    </label>
+    <label>
+        <form class="navbar-form" style="display: inline">
+            <input type="text" class="form-control"
+                   placeholder="搜索地址">
+            <button type="submit" class="btn btn-primary btn-sm">
+                搜索
+            </button>
+        </form>
+    </label>
+    <label class="pull-right">
+        <a class="btn btn-primary btn-sm" id="addHouse">
+            添加房产
+        </a>
+    </label>
+</div>
+
+

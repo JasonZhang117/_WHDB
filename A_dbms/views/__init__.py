@@ -16,7 +16,7 @@ from .v_meeting import (meeting, meeting_scan, single_del_ajax,
 from .v_agree import (agree, agree_add_ajax, counter_add_ajax,
                       agree_scan, agree_preview)
 # ----------------------v_warrant权证管理视图--------------------#
-from .v_warrant import warrant
+from .v_warrant import warrant, house,ground
 # ----------------------v_provide放款管理视图--------------------#
 from .v_provide import provide, provide_edit
 

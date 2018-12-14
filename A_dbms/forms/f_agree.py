@@ -93,7 +93,7 @@ class AddCounterForm(dform.Form):  # 反担保合同添加
 
 # -----------------------企业反担保合同添加-------------------------#
 class CountersAssureC(dform.Form):
-    custome = fields.TypedMultipleChoiceField(
+    custome_c = fields.TypedMultipleChoiceField(
         label="保证人",
         label_suffix="：",
         coerce=lambda x: int(x),
@@ -104,7 +104,7 @@ class CountersAssureC(dform.Form):
     def __init__(self, *args, **kwargs):
         super(CountersAssureC, self).__init__(*args, **kwargs)
         '''((1, '企业'), (2, '个人'))'''
-        self.fields['custome'].choices = \
+        self.fields['custome_c'].choices = \
             models.Customes.objects.filter(
                 genre=1).values_list(
                 'id', 'name').order_by('name')
@@ -112,7 +112,7 @@ class CountersAssureC(dform.Form):
 
 # -----------------------个人反担保合同添加-------------------------#
 class CountersAssureP(dform.Form):
-    custome = fields.TypedMultipleChoiceField(
+    custome_p = fields.TypedMultipleChoiceField(
         label="保证人",
         label_suffix="：",
         coerce=lambda x: int(x),
@@ -123,7 +123,41 @@ class CountersAssureP(dform.Form):
     def __init__(self, *args, **kwargs):
         super(CountersAssureP, self).__init__(*args, **kwargs)
         '''((1, '企业'), (2, '个人'))'''
-        self.fields['custome'].choices = \
+        self.fields['custome_p'].choices = \
             models.Customes.objects.filter(
                 genre=2).values_list(
                 'id', 'name').order_by('name')
+
+
+# -----------------------房产抵押反担保合同添加-------------------------#
+class CountersHouse(dform.Form):
+    house = fields.TypedMultipleChoiceField(
+        label="房产",
+        label_suffix="：",
+        coerce=lambda x: int(x),
+        widget=widgets.SelectMultiple(
+            attrs={'class': 'form-control',
+                   'placeholder': '保证人'}))
+
+    def __init__(self, *args, **kwargs):
+        super(CountersHouse, self).__init__(*args, **kwargs)
+        self.fields['house'].choices = \
+            models.Houses.objects.values_list(
+                'id', 'house_locate').order_by('id')
+
+
+# -----------------------土地反担保合同添加-------------------------#
+class CountersGround(dform.Form):
+    ground = fields.TypedMultipleChoiceField(
+        label="土地",
+        label_suffix="：",
+        coerce=lambda x: int(x),
+        widget=widgets.SelectMultiple(
+            attrs={'class': 'form-control',
+                   'placeholder': '土地'}))
+
+    def __init__(self, *args, **kwargs):
+        super(CountersGround, self).__init__(*args, **kwargs)
+        self.fields['ground'].choices = \
+            models.Grounds.objects.values_list(
+                'id', 'ground_locate').order_by('id')

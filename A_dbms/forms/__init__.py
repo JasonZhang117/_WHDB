@@ -1,6 +1,6 @@
 from .f_article import (ArticlesAddForm, FeedbackAddForm, ArticlesSignForm)
 from .f_agree import (AgreeAddForm, AddCounterForm, CountersAssureC,
-                      CountersAssureP)
+                      CountersAssureP, CountersHouse, CountersGround, )
 
 from .f_meeting import (
     MeetingAddForm, MeetingEditForm, MeetingAllotForm,

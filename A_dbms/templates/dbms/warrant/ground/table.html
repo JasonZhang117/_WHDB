@@ -8,32 +8,35 @@
         {#<caption><h4>项目管理</h4></caption>#}
         <thead>
         <tr style="text-align: center">
-            <th>权证编号</th>
-            <th>类型</th>
+            <th>编号</th>
             <th>坐落</th>
-            <th>状态</th>
+            <th>类型</th>
+            <th>建筑面积</th>
+            <th>产权证</th>
         </tr>
         </thead>
         <tbody>
-        {% for warrant in warrant_list %}
+        {% for ground in ground_list %}
             <tr>
                 <td>
                     <a href="#">
-                        {{ warrant.warrant_num }}
+                        {{ ground.warrant.warrant_num }}
                     </a>
                 </td>
-                <td>{{ warrant.get_warrant_typ_display }}</td>
+                <td>{{ ground.ground_locate }}</td>
+                <td>{{ ground.get_application_display }}</td>
+                <td>{{ ground.area_structure }}</td>
                 <td>
-                    {% if warrant.warrant_typ == 1 %}
-                        {{ warrant.house_warrant.house_locate }}
-                    {% elif warrant.warrant_typ == 2 %}
-                        {{ warrant.ground_warrant.ground_locate }}
-                    {% endif %}
+                    {% for ownership in ground.warrant.ownership_warrant.all %}
+                        {{ ownership.ownership_num }}、
+                    {% endfor %}
                 </td>
-                <td>{{ warrant.get_warrant_state_display }}</td>
             </tr>
         {% endfor %}
         </tbody>
     </table>
+
     {% include 'dbms/board/page.html' %}
+
+
 </div>

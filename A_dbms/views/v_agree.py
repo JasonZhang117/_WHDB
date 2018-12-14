@@ -41,13 +41,15 @@ def agree_scan(request, agree_id):  # 查看合同
     from_counter = forms.AddCounterForm()
     form_counter_assure_c = forms.CountersAssureC()
     form_counter_assure_p = forms.CountersAssureP()
+    form_counter_house = forms.CountersHouse()
+    form_counter_ground = forms.CountersGround()
 
     return render(request,
                   'dbms/agree/agree-scan.html',
                   locals())
 
 
-# -----------------------------添加合同ajax------------------------------#
+# ---------------------------添加合同ajax----------------------------#
 def agree_add_ajax(request):  # 添加合同
     print(__file__, '---->def agree_add_ajax')
     response = {'status': True, 'message': None,
@@ -127,7 +129,7 @@ def agree_add_ajax(request):  # 添加合同
     return HttpResponse(result)
 
 
-# -----------------------------添加反担保合同ajax------------------------------#
+# -------------------------添加反担保合同ajax-------------------------#
 def counter_add_ajax(request):
     print(__file__, '---->def counter_add_ajax')
     response = {'status': True, 'message': None,
