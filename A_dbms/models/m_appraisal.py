@@ -83,11 +83,16 @@ class SingleQuota(models.Model):  # 单项额度
 
 
 # ------------------------放款次序--------------------------#
+def limit_lending_choices():
+    return {'article_state__in': [1, 2, 3, 4]}
+
+
 class LendingOrder(models.Model):
     summary = models.ForeignKey(
         to='Articles',
         verbose_name="纪要",
         on_delete=models.PROTECT,
+        limit_choices_to=limit_lending_choices,
         related_name='lending_summary')
     ORDER_LIST = ((1, '第一次'), (2, '第二次'),
                   (3, '第三次'), (4, '第四次'))

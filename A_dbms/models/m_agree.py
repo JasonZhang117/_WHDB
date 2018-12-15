@@ -16,6 +16,7 @@ class Agrees(models.Model):  # 委托合同
         to='LendingOrder',
         verbose_name="放款纪要",
         on_delete=models.PROTECT,
+        limit_choices_to={'summary__article_state': 5},
         related_name='agree_lending')
     branch = models.ForeignKey(
         to='Branches',
