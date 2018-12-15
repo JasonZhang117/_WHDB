@@ -67,7 +67,7 @@ class Ownership(models.Model):  # 产权证
                              self.warrant.warrant_num)
 
 
-# ------------------------房产--------------------------#
+# -------------------------房产---------------------------#
 class Houses(models.Model):  # 房产
     warrant = models.OneToOneField(
         to='Warrants',
@@ -134,8 +134,13 @@ class Stock(models.Model):  # 土地
         verbose_name="权证",
         on_delete=models.PROTECT,
         related_name='stock_warrant')
-    GROUND_APP_LIST = ((1, '有限公司股权'),
-                       (2, '股份公司股份'))
+    STOCK_TYP_LIST = ((1, '有限公司股权'),
+                      (2, '股份公司股份'),
+                      (3, '举办者权益'))
+    stock_typ = models.IntegerField(
+        verbose_name='股权性质',
+        choices=STOCK_TYP_LIST,
+        default=1)
     owner = models.ForeignKey(
         to='Customes',
         verbose_name="所有权人",
@@ -155,6 +160,29 @@ class Stock(models.Model):  # 土地
         return '%s-%s-%s-%s' % (self.warrant.warrant_num,
                                 self.owner, self.target,
                                 self.share)
+
+
+# ------------------------应收帐款--------------------------#
+class Receivable(models.Model):  # 应收帐款
+    warrant = models.OneToOneField(
+        to='Warrants',
+        verbose_name="权证",
+        on_delete=models.PROTECT,
+        related_name='receive_warrant')
+    owner = models.ForeignKey(
+        to='Customes',
+        verbose_name="所有权人",
+        on_delete=models.PROTECT,
+        related_name='receive_custome')
+    detail = models.TextField(
+        verbose_name="应收账款描述")
+
+    class Meta:
+        verbose_name_plural = '反担保-应收账款'  # 指定显示名称
+        db_table = 'dbms_stock'  # 指定数据表的名称
+
+    def __str__(self):
+        return '%s' % (self.warrant.warrant_num)
 
 
 # ------------------------他权模型--------------------------#

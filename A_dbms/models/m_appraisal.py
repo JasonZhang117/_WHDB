@@ -82,6 +82,32 @@ class SingleQuota(models.Model):  # 单项额度
                              self.credit_amount)
 
 
+# ------------------------放款次序--------------------------#
+class LendingOrder(models.Model):
+    summary = models.ForeignKey(
+        to='Articles',
+        verbose_name="纪要",
+        on_delete=models.PROTECT,
+        related_name='lending_summary')
+    ORDER_LIST = ((1, '第一次'), (2, '第二次'),
+                  (3, '第三次'), (4, '第四次'))
+    order = models.IntegerField(
+        verbose_name='发放次序',
+        choices=ORDER_LIST,
+        default=1)
+    order_amount = models.FloatField(
+        verbose_name='拟放金额')
+    amount = models.FloatField(
+        verbose_name='已放金额', default=0)
+
+    class Meta:
+        verbose_name_plural = '评审-发放次序'  # 指定显示名称
+        db_table = 'dbms_lending'  # 指定数据表的名称
+
+    def __str__(self):
+        return "%s-%s-%s" % (self.summary, self.order, self.order_amount)
+
+
 # ------------------------评审意见--------------------------#
 class Comments(models.Model):  # 评委意见
     summary = models.ForeignKey(

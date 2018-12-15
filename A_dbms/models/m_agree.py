@@ -12,11 +12,11 @@ class Agrees(models.Model):  # 委托合同
     num_prefix = models.CharField(
         verbose_name='_编号前缀',
         max_length=32)
-    article = models.ForeignKey(
-        to='Articles',
-        verbose_name="纪要",
+    lending = models.ForeignKey(
+        to='LendingOrder',
+        verbose_name="放款纪要",
         on_delete=models.PROTECT,
-        related_name='agree_article')
+        related_name='agree_lending')
     branch = models.ForeignKey(
         to='Branches',
         verbose_name="放款银行",
@@ -30,7 +30,7 @@ class Agrees(models.Model):  # 委托合同
                           ('⑤', '⑤'), ('⑥', '⑥'), ('⑦', '⑦'),)
     guarantee_typ = models.CharField(
         verbose_name='反担保种类数',
-        max_length=4,
+        max_length=6,
         choices=GUARANTEE_TYP_LIST)
     agree_copies = models.IntegerField(
         verbose_name='合同份数')
@@ -64,7 +64,7 @@ class Agrees(models.Model):  # 委托合同
         db_table = 'dbms_agrees'  # 指定数据表的名称
 
     def __str__(self):
-        return "%s-%s" % (self.agree_num, self.article.summary_num)
+        return "%s-%s" % (self.agree_num, self.lending.summary)
 
 
 class AgreeesExtend(models.Model):

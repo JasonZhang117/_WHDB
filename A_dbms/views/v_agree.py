@@ -11,12 +11,12 @@ from django.db.utils import IntegrityError
 # -----------------------委托合同列表---------------------#
 def agree(request, *args, **kwargs):  # 委托合同列表
     print(__file__, '---->def agree')
-    form = forms.AgreeAddForm()
+    form_agree_add = forms.AgreeAddForm()
 
     agree_state_list = models.Agrees.AGREE_STATE_LIST
     agree_list = models.Agrees.objects.filter(
         **kwargs).select_related(
-        'article', 'branch').order_by('-agree_num')
+        'lending', 'branch').order_by('-agree_num')
 
     ####分页信息###
     paginator = Paginator(agree_list, 10)
@@ -58,27 +58,17 @@ def agree_add_ajax(request):  # 添加合同
     post_data = json.loads(post_data_str)
     print('post_data:', post_data)
 
-    data = {
-        'article_id': post_data['article_id'],
-        'branch_id': post_data['branch_id'],
-        'agree_typ': post_data['agree_typ'],
-        'agree_amount': post_data['agree_amount'],
-        'guarantee_typ': post_data['guarantee_typ'],
-        'agree_copies': post_data['agree_copies']}
-    form = forms.AgreeAddForm(data, request.FILES)
+    form = forms.AgreeAddForm(post_data, request.FILES)
     if form.is_valid():
         cleaned_data = form.cleaned_data
-        print('cleaned_data:', cleaned_data)
-        article_id = cleaned_data['article_id']
+        lending_obj = cleaned_data['lending']
         agree_amount = cleaned_data['agree_amount']
         guarantee_typ = cleaned_data['guarantee_typ']
         agree_copies = cleaned_data['agree_copies']
-
         ###判断合同情况：
-        article_obj = models.Articles.objects.get(id=article_id)
-        if agree_amount > article_obj.amount:
+        if agree_amount > lending_obj.order_amount:
             response['status'] = False
-            msg = '该项目审批额度为%s,合同金额超过审批额度！！！' % article_obj.amount
+            msg = '该项目本次发放额度最高为%s,合同金额超过审批额度！！！' % lending_obj.amount
             response['message'] = msg
             result = json.dumps(response, ensure_ascii=False)
             return HttpResponse(result)
@@ -107,8 +97,8 @@ def agree_add_ajax(request):  # 添加合同
             agree_obj = models.Agrees.objects.create(
                 agree_num=agree_num,
                 num_prefix=agree_num_prefix,
-                article_id=article_id,
-                branch_id=cleaned_data['branch_id'],
+                lending=lending_obj,
+                branch=cleaned_data['branch'],
                 agree_typ=cleaned_data['agree_typ'],
                 agree_amount=agree_amount,
                 guarantee_typ=guarantee_typ,

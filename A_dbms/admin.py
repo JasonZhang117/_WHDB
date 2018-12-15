@@ -8,6 +8,7 @@ admin.site.register(models.Feedback)  # 风控反馈
 admin.site.register(models.Appraisals)  # 评审会
 admin.site.register(models.SingleQuota)  # 单项额度
 admin.site.register(models.Comments)  # 评审意见
+admin.site.register(models.LendingOrder)  # 发放次序
 
 # -----------------------合同-------------------------#
 admin.site.register(models.Agrees)  # 合同
