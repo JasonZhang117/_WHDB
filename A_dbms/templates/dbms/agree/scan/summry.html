@@ -11,13 +11,13 @@
                 添加反担保
             </a>
             <a class="btn btn-danger btn-sm " id="editAgreeB">
-               修改
+                修改
             </a>
             <a class="btn btn-danger btn-sm " id="delAgreeB">
-               删除
+                删除
             </a>
             <a class="btn btn-danger btn-sm " id="signAgreeB">
-               签批
+                签批
             </a>
         </label>
     </div>
@@ -27,7 +27,7 @@
             合同编号：{{ agree_obj.agree_num }}
         </label>
         <label class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
-            客户名称：{{ agree_obj.article.custom.name }}
+            客户名称：{{ agree_obj.lending.summary.custom.name }}
         </label>
         <label class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
             放款银行：{{ agree_obj.branch.name }}
@@ -42,23 +42,23 @@
             合同状态：{{ agree_obj.get_agree_state_display }}
         </label>
         <label class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
-            纪要编号：{{ agree_obj.article.summary_num }}
+            纪要编号：{{ agree_obj.lending.summary.summary_num }}
         </label>
         <label class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
-            项目编号：{{ agree_obj.article.article_num }}
+            项目编号：{{ agree_obj.lending.summary.article_num }}
         </label>
         <label class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
-            项目金额：{{ agree_obj.article.amount }}
+            项目金额：{{ agree_obj.lending.summary.amount }}
         </label>
         <label class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
-            担保期限(月)：{{ agree_obj.article.credit_term }}
+            担保期限(月)：{{ agree_obj.lending.summary.credit_term }}
         </label>
         <label class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
-            项目经理：{{ agree_obj.article.director.name }}
+            项目经理：{{ agree_obj.lending.summary.director.name }}
         </label>
         </label>
         <label class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
-            签批日期：{{ agree_obj.article.sign_date }}
+            签批日期：{{ agree_obj.lending.summary.sign_date }}
         </label>
 
     </div>

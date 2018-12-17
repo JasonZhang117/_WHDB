@@ -6,9 +6,12 @@
 {% block right-content-container %}
     {% include 'dbms/warrant/house/filter.html' %}
     {% include 'dbms/warrant/house/table.html' %}
+    {% include 'dbms/warrant/house/modl/house-add-mod.html' %}
+
 {% endblock %}
 
 {% block extra-js %}
+    {% include 'dbms/warrant/house/extra/js-house-add.html' %}
 
 
 {% endblock %}

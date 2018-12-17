@@ -81,11 +81,11 @@ class Houses(models.Model):  # 房产
                       (3, '办公'), (4, '公寓'),
                       (5, '厂房'),
                       (6, '非生产性工业科研用房'))
-    application = models.IntegerField(
+    house_app = models.IntegerField(
         verbose_name='用途',
         choices=HOUSE_APP_LIST,
         default=1)
-    area_structure = models.FloatField(
+    house_area = models.FloatField(
         verbose_name='建筑面积')
 
     class Meta:
@@ -94,8 +94,8 @@ class Houses(models.Model):  # 房产
 
     def __str__(self):
         return '%s-%s-%s-%s' % (self.warrant.warrant_num,
-                                self.house_locate, self.area_structure,
-                                self.application)
+                                self.house_locate, self.house_area,
+                                self.house_app)
 
 
 # ------------------------土地--------------------------#
@@ -110,11 +110,11 @@ class Grounds(models.Model):  # 土地
     GROUND_APP_LIST = ((1, '住宅用地'),
                        (2, '商服用地'),
                        (3, '工业用地'))
-    application = models.IntegerField(
+    ground_app = models.IntegerField(
         verbose_name='用途',
         choices=GROUND_APP_LIST,
         default=1)
-    area_structure = models.FloatField(
+    ground_area = models.FloatField(
         verbose_name='面积')
 
     class Meta:
@@ -123,8 +123,8 @@ class Grounds(models.Model):  # 土地
 
     def __str__(self):
         return '%s-%s-%s-%s' % (self.warrant.warrant_num,
-                                self.ground_locate, self.area_structure,
-                                self.application)
+                                self.ground_locate, self.ground_area,
+                                self.ground_app)
 
 
 # ------------------------股权--------------------------#
@@ -160,6 +160,12 @@ class Stock(models.Model):  # 土地
         return '%s-%s-%s-%s' % (self.warrant.warrant_num,
                                 self.owner, self.target,
                                 self.share)
+
+
+# ------------------------应收票据--------------------------#
+
+
+# ------------------------机器设备、存货--------------------------#
 
 
 # ------------------------应收帐款--------------------------#

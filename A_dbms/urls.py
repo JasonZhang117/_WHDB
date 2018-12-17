@@ -93,18 +93,11 @@ urlpatterns = [
     path('review/',
          views.review, name='review_all'),
 
-    # 部门
-    path('department/', views.department, name='department'),
-    # path('department/', views.Departments.as_view),
-    path('department/add/',
-         views.department_add,
-         name='department_add'),
-    path('department/edit/<int:department_id>/',
-         views.department_edit,
-         name='department_edit'),
-    path('department/del/<int:department_id>/',
-         views.department_del,
-         name='department_del'),
+    # -----------------------客户管理-------------------------#
+    path('custom/',
+         views.custom, name='custom_all'),
+    path('custom/<int:genre>/',
+         views.custom, name='custom'),  # /dbms/warrant/(0-9)
 
     # 员工
     path('employee/', views.employee, name='employee'),
@@ -123,31 +116,17 @@ urlpatterns = [
     path('employee/del/ajax',
          views.employee_del_ajax,
          name='employee_del_ajax'),
-
-    # 客户
-    path('custome/', views.custome, name='custome'),
-    path('custome/add/',
-         views.custome_add,
-         name='custome_add'),
-    path('custome/edit/<int:custome_id>/',
-         views.custome_edit,
-         name='custome_edit'),
-    path('custome/del/<int:custome_id>/',
-         views.custome_del,
-         name='custome_del'),
-
-    # 房产
-
-    # 行业
-    path('industry/', views.industry, name='industry'),
-    path('industry/add/',
-         views.industry_add,
-         name='industry_add'),
-    path('industry/edit/<int:industry_id>/',
-         views.industry_edit,
-         name='industry_edit'),
-
-    # 区域
-    path('district/', views.district, name='district'),
+    # 部门
+    path('department/', views.department, name='department'),
+    # path('department/', views.Departments.as_view),
+    path('department/add/',
+         views.department_add,
+         name='department_add'),
+    path('department/edit/<int:department_id>/',
+         views.department_edit,
+         name='department_edit'),
+    path('department/del/<int:department_id>/',
+         views.department_del,
+         name='department_del'),
 
 ]

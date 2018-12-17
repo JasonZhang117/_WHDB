@@ -16,7 +16,7 @@ from .v_meeting import (meeting, meeting_scan, single_del_ajax,
 from .v_agree import (agree, agree_add_ajax, counter_add_ajax,
                       agree_scan, agree_preview)
 # ----------------------v_warrant权证管理视图--------------------#
-from .v_warrant import warrant, house,ground
+from .v_warrant import warrant, house, ground
 # ----------------------v_provide放款管理视图--------------------#
 from .v_provide import provide, provide_edit
 
@@ -24,9 +24,7 @@ from .v_provide import provide, provide_edit
 from .v_review import review
 
 # 客户、行业、区域
-from .v_custome import custome, custome_add, custome_edit, custome_del
-from .v_custome import industry, industry_add, industry_edit
-from .v_custome import district
+from .v_custome import custom
 # 部门、员工
 from .v_interior import department, department_add, department_edit
 from .v_interior import department_del

@@ -24,8 +24,8 @@
                     </a>
                 </td>
                 <td>{{ house.house_locate }}</td>
-                <td>{{ house.get_application_display }}</td>
-                <td>{{ house.area_structure }}</td>
+                <td>{{ house.get_house_app_display }}</td>
+                <td>{{ house.house_area }}</td>
                 <td>
                     {% for ownership in house.warrant.ownership_warrant.all %}
                         {{ ownership.ownership_num }}、

@@ -24,8 +24,8 @@
                     </a>
                 </td>
                 <td>{{ ground.ground_locate }}</td>
-                <td>{{ ground.get_application_display }}</td>
-                <td>{{ ground.area_structure }}</td>
+                <td>{{ ground.get_ground_app_display }}</td>
+                <td>{{ ground.ground_area }}</td>
                 <td>
                     {% for ownership in ground.warrant.ownership_warrant.all %}
                         {{ ownership.ownership_num }}、
