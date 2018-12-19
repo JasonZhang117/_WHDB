@@ -24,7 +24,7 @@ from .v_provide import provide, provide_edit
 from .v_review import review
 
 # 客户、行业、区域
-from .v_custome import custom
+from .v_custom import custom, custom_scan, custom_add_ajax, custom_del_ajax
 # 部门、员工
 from .v_interior import department, department_add, department_edit
 from .v_interior import department_del

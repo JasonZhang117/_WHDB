@@ -1,11 +1,15 @@
-<div class="form-group"><!--参会项目-->
-    <label for="id_article" class="col-sm-3 control-label">
-        {{ meeting_article_add_form.article.label }}：
-    </label>
-    <div class="col-sm-9">
-        {{ meeting_article_add_form.article }}
+<div id="form_meeting_article_add">
+
+    <div class="form-group"><!--参会项目-->
+        <label for="id_article" class="col-sm-3 control-label">
+            {{ form_meeting_article_add.article.label }}：
+        </label>
+        <div class="col-sm-9">
+            {{ form_meeting_article_add.article }}
+        </div>
+        <label id="e_article" class="pull-right">
+            {{ form_meeting_article_add.article.errors }}
+        </label>
     </div>
-    <label id="e_article" class="pull-right">
-        {{ meeting_article_add_form.article.errors }}
-    </label>
+
 </div>

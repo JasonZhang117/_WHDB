@@ -1,0 +1,52 @@
+<div id="form_custom_c_add" class="extend">
+
+    <div class="form-group"><!--简称-->
+        <label for="id_short_name" class="col-sm-3 control-label">
+            {{ form_custom_c_add.short_name.label }}：
+        </label>
+        <div class="col-sm-9">
+            {{ form_custom_c_add.short_name }}
+        </div>
+        <label id="e_short_name" class="pull-right">
+            {{ form_custom_c_add.short_name.errors }}
+        </label>
+    </div>
+
+    <div class="form-group"><!--注册资本-->
+        <label for="id_capital" class="col-sm-3 control-label">
+            {{ form_custom_c_add.capital.label }}：
+        </label>
+        <div class="col-sm-9">
+            {{ form_custom_c_add.capital }}
+        </div>
+        <label id="e_capital" class="pull-right">
+            {{ form_custom_c_add.capital.errors }}
+        </label>
+    </div>
+
+    <div class="form-group"><!--注册地址-->
+        <label for="id_registered_addr" class="col-sm-3 control-label">
+            {{ form_custom_c_add.registered_addr.label }}：
+        </label>
+        <div class="col-sm-9">
+            {{ form_custom_c_add.registered_addr }}
+        </div>
+        <label id="e_registered_addr" class="pull-right">
+            {{ form_custom_c_add.registered_addr.errors }}
+        </label>
+    </div>
+
+    <div class="form-group"><!--法人代表-->
+        <label for="id_representative" class="col-sm-3 control-label">
+            {{ form_custom_c_add.representative.label }}：
+        </label>
+        <div class="col-sm-9">
+            {{ form_custom_c_add.representative }}
+        </div>
+        <label id="e_representative" class="pull-right">
+            {{ form_custom_c_add.representative.errors }}
+        </label>
+    </div>
+
+</div>
+

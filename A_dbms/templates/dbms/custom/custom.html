@@ -1,0 +1,17 @@
+{% extends 'dbms/index_dbms.html' %}
+
+{% block title %}客户管理{% endblock %}
+
+
+{% block right-content-container %}
+    {% include 'dbms/custom/custom/filter.html' %}
+    {% include 'dbms/custom/custom/table.html' %}
+    {% include 'dbms/custom/modl/custom-add-mod.html' %}
+
+{% endblock %}
+
+{% block extra-js %}
+    {% include 'dbms/custom/extra/js-custom-add.html' %}
+
+
+{% endblock %}

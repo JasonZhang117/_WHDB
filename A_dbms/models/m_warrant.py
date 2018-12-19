@@ -128,7 +128,7 @@ class Grounds(models.Model):  # 土地
 
 
 # ------------------------股权--------------------------#
-class Stock(models.Model):  # 土地
+class Stockes(models.Model):  # 土地
     warrant = models.OneToOneField(
         to='Warrants',
         verbose_name="权证",
@@ -141,7 +141,7 @@ class Stock(models.Model):  # 土地
         verbose_name='股权性质',
         choices=STOCK_TYP_LIST,
         default=1)
-    owner = models.ForeignKey(
+    stock_owner = models.ForeignKey(
         to='Customes',
         verbose_name="所有权人",
         on_delete=models.PROTECT,
@@ -154,7 +154,7 @@ class Stock(models.Model):  # 土地
 
     class Meta:
         verbose_name_plural = '反担保-股权'  # 指定显示名称
-        db_table = 'dbms_stock'  # 指定数据表的名称
+        db_table = 'dbms_stockes'  # 指定数据表的名称
 
     def __str__(self):
         return '%s-%s-%s-%s' % (self.warrant.warrant_num,

@@ -14,27 +14,27 @@
 
     function bind_id_counter_typ() {
         $('#id_counter_typ').change(function () {
-            console.log("bind_id_counter_typ")
-            $('.extned').hide()
+            console.log("bind_id_counter_typ");
+            $('.extend').hide();
             var selected_counter_typ = $('#id_counter_typ').val();
 
             console.log(selected_counter_typ);
 
             switch (selected_counter_typ) {
                 case ('1'):
-                    $('#counter-assure-c').show();
+                    $('#form_counter_assure_c').show();
                     break;
                 case ('2'):
-                    $('#counter-assure-p').show();
+                    $('#form_counter_assure_p').show();
                     break;
                 case ('3'):
-                    $('#counter-house').show();
+                    $('#form_counter_house').show();
                     break;
                 case ('4'):
-                    $('#counter-ground').show();
+                    $('#form_counter_ground').show();
                     break;
                 default:
-                    $('.extned').hide()
+                    $('.extend').hide()
             }
         })
     }

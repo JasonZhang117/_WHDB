@@ -1,0 +1,26 @@
+<div class="table-responsive">
+    {#"table-responsive":表格响应式布局#}
+    <table class="table table-bordered table-hover
+                table-condensed active">
+        {#"table-bordered":表格表格边框#}
+        {#"table-hover":表格悬停变色#}
+        {#"table-condensed":表格紧缩#}
+        {#<caption><h4>项目管理</h4></caption>#}
+        <thead>
+        <tr style="text-align: center">
+            <th>评委委员</th>
+            <th>评委意见</th>
+            <th>意见详情</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for comment in article_obj.comment_summary.all %}
+            <tr>
+                <td>{{ comment.expert }}</td>
+                <td>{{ comment.get_comment_type_display }}</td>
+                <td>{{ comment.concrete }}</td>
+            <tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>

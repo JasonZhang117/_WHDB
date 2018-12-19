@@ -13,7 +13,7 @@ from django.db.models import Q, F
 def meeting(request, *args, **kwargs):  # 评审会
     print(__file__, '---->def meeting')
     # print('kwargs:', kwargs)
-    meeting_add_form = forms.MeetingAddForm()
+    form_meeting_add = forms.MeetingAddForm()
 
     meeting_list = models.Appraisals.objects.filter(
         **kwargs).order_by('-review_date', '-review_order')
@@ -549,7 +549,7 @@ def article_sign_ajax(request):
                             sign_detail=cleaned_data['sign_detail'],
                             sign_date=cleaned_data['sign_date'],
                             article_state=5)
-                        #更新客户授信总额
+                        # 更新客户授信总额
                         custom_id = aritcle_obj.custom.id
                         models.Customes.objects.filter(id=custom_id).update(
                             credit_amount=F('credit_amount') + augment)
@@ -595,13 +595,13 @@ def meeting_scan(request, meeting_id):  # 评审会预览
     expert_list = models.Experts.objects.filter(
         article_expert__appraisal_article=meeting_obj).distinct()
 
-    meeting_article_add_form = forms.MeetingArticleAddForm()
+    form_meeting_article_add = forms.MeetingArticleAddForm()
 
     meeting_edit_form_data = {
         'review_model': meeting_obj.review_model,
         'review_date': str(meeting_obj.review_date)}
 
-    meeting_edit_form = forms.MeetingEditForm(meeting_edit_form_data)
+    form_meeting_edit = forms.MeetingEditForm(meeting_edit_form_data)
 
     return render(request,
                   'dbms/meeting/meeting-scan.html',
@@ -626,20 +626,20 @@ def meeting_scan_article(request, meeting_id, article_id):
     '''((1, '待反馈'), (2, '已反馈'), (3, '待上会'),
        (4, '已上会'), (5, '已签批'), (6, '已注销'))'''
     if article_obj.article_state:
-        today_str = time.strftime("%Y-%m-%d", time.gmtime())
         form_date = {
             'summary_num': article_obj.summary_num,
             'sign_type': article_obj.sign_type,
             'renewal': article_obj.renewal,
             'augment': article_obj.augment,
             'sign_detail': article_obj.sign_detail,
-            'sign_date': today_str}
+            'sign_date': str(article_obj.sign_date)}
         form_article_sign = forms.ArticlesSignForm(initial=form_date)
     else:
+        today_str = time.strftime("%Y-%m-%d", time.gmtime())
         form_date = {
             'renewal': article_obj.renewal,
             'augment': article_obj.augment,
-            'sign_date': sign_date}
+            'sign_date': today_str}
         form_article_sign = forms.ArticlesSignForm(initial=form_date)
 
     form_comment = forms.CommentsAddForm()

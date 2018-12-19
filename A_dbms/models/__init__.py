@@ -9,7 +9,7 @@ from .m_agree import (
     Agrees, AgreeesExtend, Counters, CountersAssure, CountersHouse)
 # -------------------v_warrant担保物模型---------------------#
 from .m_warrant import (
-    Warrants, Ownership, Houses, Grounds, Stock, Receivable,
+    Warrants, Ownership, Houses, Grounds, Stockes, Receivable,
     Hypothecs, Evaluate, Storages)
 # -----------------------v_provide放款模型-------------------#
 # 放款、还款、归档
@@ -25,7 +25,8 @@ from .m_emploee import Jobs, Employees, Menus
 # 授信银行、放款机构、评审
 from .m_external import Cooperators, Branches, Experts
 # ---------------------v_custome客户信息-----------------------#
-# 区域、行业
-from .m_custome import Districtes, Industries
 # 客户、企业客户、个人客户
-from .m_custome import Customes, CustomesC, CustomesP
+from .m_custom import Customes, CustomesC, CustomesP
+
+# 区域、行业
+from .m_custom import Districtes, Industries

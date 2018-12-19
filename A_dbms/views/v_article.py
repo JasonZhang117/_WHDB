@@ -51,7 +51,7 @@ def article(request, *args, **kwargs):  # 项目列表
     # print('request.GET.items():', request.GET.items())
     # request.GET.items()获取get传递的参数对
 
-    form_article = forms.ArticlesAddForm()
+    form_article_add_edit = forms.ArticlesAddForm()
     for k, v in request.GET.items():
         print(k, ' ', v)
 
@@ -307,7 +307,7 @@ def article_scan(request, article_id):  # 项目预览
         'assistant_id': article_obj.assistant.id,
         'control_id': article_obj.control.id,
         'article_date': str(article_obj.article_date)}
-    form_article = forms.ArticlesAddForm(form_date)
+    form_article_add_edit = forms.ArticlesAddForm(form_date)
     expert_list = article_obj.expert.values_list('id')
     feedbac_list = article_obj.feedback_article.all()
     if feedbac_list:

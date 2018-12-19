@@ -1,0 +1,28 @@
+<div id="form_custom_p_add" class="extend" style="display: none">
+
+    <div class="form-group"><!--身份证号码-->
+        <label for="id_license_num" class="col-sm-3 control-label">
+            {{ form_custom_p_add.license_num.label }}：
+        </label>
+        <div class="col-sm-9">
+            {{ form_custom_p_add.license_num }}
+        </div>
+        <label id="e_license_num" class="pull-right">
+            {{ form_custom_p_add.license_num.errors }}
+        </label>
+    </div>
+
+    <div class="form-group"><!--身份证地址-->
+        <label for="id_license_addrr" class="col-sm-3 control-label">
+            {{ form_custom_p_add.license_addr.label }}：
+        </label>
+        <div class="col-sm-9">
+            {{ form_custom_p_add.license_addr }}
+        </div>
+        <label id="e_license_addr" class="pull-right">
+            {{ form_custom_p_add.license_addr.errors }}
+        </label>
+    </div>
+
+</div>
+

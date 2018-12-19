@@ -9,7 +9,7 @@ from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 def house(request, *args, **kwargs):  # 房产列表
     print(__file__, '---->def warrant')
     print('**kwargs:', kwargs)
-    form_house_add = forms.HouseAddForm()
+    form_house_add_edit = forms.HouseAddForm()
 
     house_app_list = models.Houses.HOUSE_APP_LIST
     house_list = models.Houses.objects.filter(**kwargs)

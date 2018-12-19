@@ -1,0 +1,52 @@
+<script>
+    $(function () {
+        bindDelCustom();
+        bindDelCustomModalOk();
+
+    });
+
+    function bindDelCustom() {
+        $('#delCustom').click(function () {
+            console.log("bindDelArticle")
+            $('#delCustomModal').modal('show');
+        })
+    }
+
+    function bindDelCustomModalOk() {
+        $('#delCustomModalOk').click(function () {
+            var postData = {};
+
+            $('#delCustomModal').find('input,select').each(function () {
+                var v = $(this).val();
+                var n = $(this).attr('name');
+                postData[n] = v;
+            });
+            var postDataStr = JSON.stringify(postData);
+            console.log(postDataStr)
+
+            $.ajax({
+                url: '/dbms/custom/del/',
+                type: 'POST',
+                data: {'postDataStr': postDataStr},
+                dataType: 'JSON',
+                success: function (arg) {
+                    if (arg.status) {
+                        $('#delCustomModal').modal('hide');
+                        alert(arg.message);
+                        window.location.href = "/dbms/custom/";
+                    } else {
+                        $('#delCustomModal').modal('hide');
+                        alert(arg.message);
+                        {#window.location.reload();#}
+                    }
+                }
+            })
+        })
+    }
+</script>
+
+
+
+
+
+

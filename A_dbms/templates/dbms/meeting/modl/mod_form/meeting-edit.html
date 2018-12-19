@@ -1,23 +1,27 @@
-<div class="form-group"> <!--评审类型-->
-    <label for="id_review_model" class="col-sm-3 control-label">
-        {{ meeting_edit_form.review_model.label }}：
-    </label>
-    <div class="col-sm-9">
-        {{ meeting_edit_form.review_model }}
-    </div>
-    <label id="e_review_model" class="pull-right">
-        {{ meeting_edit_form.review_model.errors }}
-    </label>
-</div>
+<div id="form_meeting_edit">
 
-<div class="form-group"><!--评审日期-->
-    <label for="id_review_date" class="col-sm-3 control-label">
-        {{ meeting_edit_form.review_date.label }}：
-    </label>
-    <div class="col-sm-9">
-        {{ meeting_edit_form.review_date }}
+    <div class="form-group"> <!--评审类型-->
+        <label for="id_review_model" class="col-sm-3 control-label">
+            {{ form_meeting_edit.review_model.label }}：
+        </label>
+        <div class="col-sm-9">
+            {{ form_meeting_edit.review_model }}
+        </div>
+        <label id="e_review_model" class="pull-right">
+            {{ form_meeting_edit.review_model.errors }}
+        </label>
     </div>
-    <label id="e_review_date" class="pull-right">
-        {{ meeting_edit_form.review_date.errors }}
-    </label>
+
+    <div class="form-group"><!--评审日期-->
+        <label for="id_review_date" class="col-sm-3 control-label">
+            {{ form_meeting_edit.review_date.label }}：
+        </label>
+        <div class="col-sm-9">
+            {{ form_meeting_edit.review_date }}
+        </div>
+        <label id="e_review_date" class="pull-right">
+            {{ form_meeting_edit.review_date.errors }}
+        </label>
+    </div>
+
 </div>

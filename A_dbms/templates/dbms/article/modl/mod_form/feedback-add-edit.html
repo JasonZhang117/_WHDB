@@ -1,36 +1,40 @@
-<div class="form-group"><!--上会建议-->
-    <label for="id_propose" class="col-sm-3 control-label">
-        {{ form_feedback.propose.label }}：
-    </label>
-    <div class="col-sm-9">
-        {{ form_feedback.propose }}
-    </div>
-    <label id="e_propose" class="pull-right">
-        {{ form_feedback.propose.errors }}
-    </label>
-</div>
+<div id="form_feedback">
 
-<div class="form-group"><!--风险分析-->
-    <label for="id_analysis" class="col-sm-3 control-label">
-        {{ form_feedback.analysis.label }}：
-    </label>
-    <div class="col-sm-9">
-        {{ form_feedback.analysis }}
+    <div class="form-group"><!--上会建议-->
+        <label for="id_propose" class="col-sm-3 control-label">
+            {{ form_feedback.propose.label }}：
+        </label>
+        <div class="col-sm-9">
+            {{ form_feedback.propose }}
+        </div>
+        <label id="e_propose" class="pull-right">
+            {{ form_feedback.propose.errors }}
+        </label>
     </div>
-    <label id="e_analysis" class="pull-right">
-        {{ form_feedback.analysis.errors }}
-    </label>
-</div>
 
-<div class="form-group"><!--风控建议-->
-    <label for="id_suggestion" class="col-sm-3 control-label">
-        {{ form_feedback.suggestion.label }}：
-    </label>
-    <div class="col-sm-9">
-        {{ form_feedback.suggestion }}
+    <div class="form-group"><!--风险分析-->
+        <label for="id_analysis" class="col-sm-3 control-label">
+            {{ form_feedback.analysis.label }}：
+        </label>
+        <div class="col-sm-9">
+            {{ form_feedback.analysis }}
+        </div>
+        <label id="e_analysis" class="pull-right">
+            {{ form_feedback.analysis.errors }}
+        </label>
     </div>
-    <label id="e_suggestion" class="pull-right">
-        {{ form_feedback.suggestion.errors }}
-    </label>
+
+    <div class="form-group"><!--风控建议-->
+        <label for="id_suggestion" class="col-sm-3 control-label">
+            {{ form_feedback.suggestion.label }}：
+        </label>
+        <div class="col-sm-9">
+            {{ form_feedback.suggestion }}
+        </div>
+        <label id="e_suggestion" class="pull-right">
+            {{ form_feedback.suggestion.errors }}
+        </label>
+    </div>
+
 </div>
 

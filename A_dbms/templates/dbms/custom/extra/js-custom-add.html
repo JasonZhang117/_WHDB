@@ -1,0 +1,85 @@
+<script>
+    $(function () {
+        bindAddCustom();
+        bind_id_genre();
+        bindAddCounterModalOk();
+    });
+
+    function bindAddCustom() {
+        $('#addCustom').click(function () {
+            {#console.log("bindAddCounterB")#}
+            $('#addCustomModal').modal('show');
+        })
+    }
+
+    function bind_id_genre() {
+        $('#id_genre').change(function () {
+            console.log("bind_id_genre");
+            $('.extend').hide();
+            var selected_genre = $('#id_genre').val();
+
+            console.log(selected_genre);
+
+            switch (selected_genre) {
+                case ('1'):
+                    $('#form_custom_c_add').show();
+                    break;
+                case ('2'):
+                    $('#form_custom_p_add').show();
+                    break;
+                default:
+                    $('.extend').hide()
+            }
+        })
+    }
+
+    function bindAddCounterModalOk() {
+        $('#addCustomModalOk').click(function () {
+            var postData = {};
+            $('#addCustomModal').find('input,select').each(function () {
+                var v = $(this).val();
+                var n = $(this).attr('name');
+                postData[n] = v;
+            });
+            var postDataStr = JSON.stringify(postData);
+
+            console.log(postDataStr);
+
+            $.ajax({
+                url: '/dbms/custom/add/',
+                type: 'POST',
+                data: {'postDataStr': postDataStr},
+                dataType: 'JSON',
+                success: function (arg) {
+                    console.log(arg);
+                    if (arg.status) {
+                        $('#addCustomModal').modal('hide');
+                        alert(arg.message);
+                        window.location.reload();
+                    } else {
+                        alert(arg.message);
+                        $('#e_name').text(arg.forme.name);
+                        $('#e_contact_addr').text(arg.forme.contact_addr);
+                        $('#e_linkman').text(arg.forme.linkman);
+                        $('#e_contact_num').text(arg.forme.contact_num);
+                        $('#e_idustry').text(arg.forme.idustry);
+                        $('#e_district').text(arg.forme.district);
+                        $('#e_short_name').text(arg.forme.short_name);
+                        $('#e_short_name').text(arg.forme.short_name);
+                        $('#e_capital').text(arg.forme.capital);
+                        $('#e_registered_addr').text(arg.forme.registered_addr);
+                        $('#e_representative').text(arg.forme.representative);
+                        $('#e_license_num').text(arg.forme.license_num);
+                        $('#e_license_addr').text(arg.forme.license_addr);
+                    }
+                }
+            })
+        })
+    }
+</script>
+
+
+
+
+
+
