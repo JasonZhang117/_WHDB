@@ -1,5 +1,5 @@
-<div class="modal fade" id="addCustomModal" tabindex="-1"
-     role="dialog" aria-labelledby="addCustomModal">
+<div class="modal fade" id="lendingOrderModal" tabindex="-1"
+     role="dialog" aria-labelledby="lendingOrderModal">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -7,29 +7,27 @@
                         data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
-                <h4 class="modal-title" id="addCustomModalLabel">
-                    添加客户
+                <h4 class="modal-title" id="lendingOrderModalLabel">
+                    放款次序：{{ article_obj.article_num }}
+                    <input style="display: none" name="article_id"
+                           value="{{ article_obj.id }}">
                 </h4>
             </div>
             <div class="modal-body">
 
                 <form class="form-horizontal">
-                    {% include 'dbms/custom/modl/mod_form/custom-add.html' %}
-                    {% include 'dbms/custom/modl/mod_form/custom-c-add.html' %}
-                    {% include 'dbms/custom/modl/mod_form/custom-p-add.html' %}
+                    {% include 'dbms/meeting/modl/mod_form/lending-add.html' %}
                 </form>
+
             </div>
-
-            <label id="formErrors"></label>
-
             <div class="modal-footer">
                 <button type="button" class="btn btn-default"
                         data-dismiss="modal">
                     取消
                 </button>
                 <button type="button" class="btn btn-primary"
-                        id="addCustomModalOk">
-                    确定
+                        id="lendingOrderModalOk">
+                    添加
                 </button>
             </div>
         </div>

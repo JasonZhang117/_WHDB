@@ -90,7 +90,7 @@ def limit_lending_choices():
 class LendingOrder(models.Model):
     summary = models.ForeignKey(
         to='Articles',
-        verbose_name="纪要",
+        verbose_name="项目纪要",
         on_delete=models.PROTECT,
         limit_choices_to=limit_lending_choices,
         related_name='lending_summary')

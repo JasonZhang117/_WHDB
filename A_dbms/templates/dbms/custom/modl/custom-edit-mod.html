@@ -1,5 +1,5 @@
-<div class="modal fade" id="addCustomModal" tabindex="-1"
-     role="dialog" aria-labelledby="addCustomModal">
+<div class="modal fade" id="editCustomModal" tabindex="-1"
+     role="dialog" aria-labelledby="editCustomModal">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -7,29 +7,32 @@
                         data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
-                <h4 class="modal-title" id="addCustomModalLabel">
-                    添加客户
+                <h4 class="modal-title" id="editArticleModalLabel">
+                    修改客户
+                    <input style="display: none" name="custom_id"
+                           id="customEditId" value="{{ custom_obj.id }}">
                 </h4>
             </div>
             <div class="modal-body">
 
                 <form class="form-horizontal">
-                    {% include 'dbms/custom/modl/mod_form/custom-add.html' %}
-                    {% include 'dbms/custom/modl/mod_form/custom-c-add.html' %}
-                    {% include 'dbms/custom/modl/mod_form/custom-p-add.html' %}
+                    {% include 'dbms/custom/modl/mod_form/custom-edit.html' %}
+                    {% if custom_obj.genre == 1 %}
+                        {% include 'dbms/custom/modl/mod_form/custom-c-add.html' %}
+                    {% else %}
+                        {% include 'dbms/custom/modl/mod_form/custom-p-edit.html' %}
+                    {% endif %}
                 </form>
+
             </div>
-
-            <label id="formErrors"></label>
-
             <div class="modal-footer">
                 <button type="button" class="btn btn-default"
                         data-dismiss="modal">
                     取消
                 </button>
                 <button type="button" class="btn btn-primary"
-                        id="addCustomModalOk">
-                    确定
+                        id="editCustomModalOk">
+                    修改
                 </button>
             </div>
         </div>

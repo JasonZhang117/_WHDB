@@ -58,7 +58,7 @@ class CustomesC(models.Model):
     custome = models.OneToOneField(
         to='Customes',
         verbose_name="企业客户",
-        on_delete=models.PROTECT,
+        on_delete=models.CASCADE,
         related_name='company_custome')
     short_name = models.CharField(
         verbose_name='简称',
@@ -85,7 +85,7 @@ class CustomesP(models.Model):  # 个人客户
     custome = models.OneToOneField(
         to='Customes',
         verbose_name="个人客户",
-        on_delete=models.PROTECT,
+        on_delete=models.CASCADE,
         related_name='person_custome')
     license_num = models.CharField(
         verbose_name='身份证号码',

@@ -8,19 +8,19 @@
         {#<caption><h4>项目管理</h4></caption>#}
         <thead>
         <tr style="text-align: center">
-            <th>上会建议</th>
-            <th>风险分析</th>
-            <th>风控建议</th>
-            <th>反馈日期</th>
+            <th>授信总额（元）</th>
+            <th>流贷余额（元）</th>
+            <th>承兑余额（元）</th>
+            <th>保函余额（元）</th>
         </tr>
         </thead>
         <tbody>
         <tr>
-            <td>{{ article_obj.feedback_article.all.0.get_propose_display }}</td>
-            <td>{{ article_obj.feedback_article.all.0.analysis }}</td>
-            <td>{{ article_obj.feedback_article.all.0.suggestion }}</td>
-            <td>{{ article_obj.feedback_article.all.0.feedback_date }}</td>
-        <tr>
+            <td>{{ custom_obj.credit_amount }}</td>
+            <td>{{ custom_obj.flow_loan }}</td>
+            <td>{{ custom_obj.accept_loan }}</td>
+            <td>{{ custom_obj.back_loan }}</td>
+        </tr>
         </tbody>
     </table>
 </div>

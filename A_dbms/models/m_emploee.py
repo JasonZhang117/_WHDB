@@ -66,7 +66,7 @@ class Employees(AbstractBaseUser, PermissionsMixin):
     objects = EmployeesManager()
 
     USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = ['name', 'num', 'department']
+    REQUIRED_FIELDS = ['name', 'num']
 
     def get_full_name(self):
         # The user is identified by their email address

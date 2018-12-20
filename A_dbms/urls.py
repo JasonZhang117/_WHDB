@@ -37,6 +37,8 @@ urlpatterns = [
     path('meeting/comment/', views.comment_edit_ajax),
     path('meeting/single/', views.single_quota_ajax),
     path('meeting/single/del/', views.single_del_ajax),
+    path('meeting/lending/', views.lending_order_ajax),
+
     path('meeting/article/sign/', views.article_sign_ajax),
     path('meeting/edit/', views.meeting_edit_ajax),
     path('meeting/close/', views.meeting_close_ajax),
@@ -91,11 +93,7 @@ urlpatterns = [
 
     path('custom/add/', views.custom_add_ajax),
     path('custom/del/', views.custom_del_ajax),
-
-
-
-
-
+    path('custom/edit/', views.custom_edit_ajax),
 
     # 员工
     path('employee/', views.employee, name='employee'),

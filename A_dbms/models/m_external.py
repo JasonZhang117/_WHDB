@@ -87,7 +87,7 @@ class Experts(models.Model):  # 评审专家
     job = models.CharField(
         verbose_name='职务',
         max_length=16, null=True)
-    LEVEL_LIST = ((0, '内部'), (1, '一级'), (2, '二级'))
+    LEVEL_LIST = ((1, '内部'), (2, '顾问'), (3, '一级'), (4, '二级'))
     level = models.IntegerField(
         verbose_name='级别',
         choices=LEVEL_LIST,

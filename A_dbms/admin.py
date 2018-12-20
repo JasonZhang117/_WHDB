@@ -42,7 +42,17 @@ admin.site.register(models.Industries)  # 行业
 # -----------------------外部信息-------------------------#
 admin.site.register(models.Cooperators)  # 授信机构
 admin.site.register(models.Branches)  # 放款银行
-admin.site.register(models.Experts)  # 评审专家
+
+
+class ExpertsAdmin(admin.ModelAdmin):
+    list_display = ('name', 'organization', 'job', 'level',
+                    'contact_numb', 'email', 'ordery', 'expert_state',)  # 显示字段
+    list_per_page = 30  # 每页显示条目数
+    search_fields = ['name']  # 搜索字段
+    ordering = ['name']  # 排序字段
+
+
+admin.site.register(models.Experts, ExpertsAdmin)  # 评审专家
 
 
 # -----------------------员工-------------------------#

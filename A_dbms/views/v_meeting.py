@@ -460,6 +460,50 @@ def single_quota_ajax(request):  # 单项额度ajax
     return HttpResponse(result)
 
 
+# -----------------------放款次序ajax-------------------------#
+@login_required
+def lending_order_ajax(request):  # 放款次序ajax
+    print(__file__, '---->def single_quota_ajax')
+    response = {'status': True, 'message': None, 'forme': None, }
+    post_data_str = request.POST.get('postDataStr')
+    post_data = json.loads(post_data_str)
+
+    article_id = post_data['article_id']
+    order = post_data['order']
+    order_amount = post_data['order_amount']
+
+    article_obj = models.Articles.objects.get(id=article_id)
+    '''((1, '待反馈'), (2, '已反馈'), (3, '待上会'),
+        (4, '已上会'), (5, '已签批'), (6, '已注销'))'''
+    if article_obj.article_state == 4:
+        data = {
+            'order': order,
+            'order_amount': order_amount}
+
+        form = forms.LendingOrder(data)
+
+        if form.is_valid():
+            cleaned_data = form.cleaned_data
+            default = {
+                'summary_id': article_id,
+                'order': cleaned_data['order'],
+                'order_amount': cleaned_data['order_amount']}
+
+            lending, created = models.LendingOrder.objects.update_or_create(
+                summary_id=article_id,
+                defaults=default)
+            print('single:', lending)
+            msg = '放款次序设置成功！'
+            response['message'] = msg
+
+    else:
+        msg = '项目状态为：%s，无法设置放款次序！！！' % article_obj.article_state
+        response['status'] = False
+        response['message'] = msg
+    result = json.dumps(response, ensure_ascii=False)
+    return HttpResponse(result)
+
+
 # -----------------------单项额度删除ajax-------------------------#
 @login_required
 def single_del_ajax(request):  # 单项额度删除ajax
@@ -639,12 +683,13 @@ def meeting_scan_article(request, meeting_id, article_id):
         form_date = {
             'renewal': article_obj.renewal,
             'augment': article_obj.augment,
-            'sign_date': today_str}
+            'sign_date': str(today_str)}
         form_article_sign = forms.ArticlesSignForm(initial=form_date)
 
     form_comment = forms.CommentsAddForm()
 
     form_single = forms.SingleQuotaForm()
+    form_lending = forms.LendingOrder()
 
     return render(request,
                   'dbms/meeting/meeting-article.html',

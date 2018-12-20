@@ -1,0 +1,51 @@
+<script>
+    $(function () {
+        bindLendingOrder();
+        bindLendingOrderModalOk();
+
+    });
+
+    function bindLendingOrder() {
+        $('#lendingOrder').click(function () {
+            console.log("bindLendingOrder");
+            $('#lendingOrderModal').modal('show');
+        })
+    }
+
+    function bindLendingOrderModalOk() {
+        $('#lendingOrderModalOk').click(function () {
+            var postData = {};
+            $('#lendingOrderModal').find('input,select').each(function () {
+                var v = $(this).val();
+                var n = $(this).attr('name');
+                postData[n] = v;
+            });
+
+            var postDataStr = JSON.stringify(postData);
+            console.log(postDataStr)
+            $.ajax({
+                url: '/dbms/meeting/lending/',
+                type: 'POST',
+                data: {'postDataStr': postDataStr},
+                dataType: 'JSON',
+                success: function (arg) {
+                    if (arg.status) {
+                        $('#singleQuotaModal').modal('hide');
+                        alert(arg.message);
+                        window.location.reload();
+                    } else {
+                        alert(arg.message);
+                        $('#e_order').text(arg.forme.e_order);
+                        $('#e_order_amount').text(arg.forme.e_order_amount);
+                    }
+                }
+            })
+        })
+    }
+</script>
+
+
+
+
+
+

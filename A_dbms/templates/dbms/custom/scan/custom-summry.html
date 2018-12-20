@@ -24,31 +24,18 @@
             </label>
             <label class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
                 客户类型：{{ custom_obj.get_genre_display }}
-{#            </label>#}
-{##}
-{#            <label class="col-lg-3 col-md-4 col-sm-6 col-xs-12">#}
-{#                联系地址：{{ custom_obj.contact_addr }}#}
-{#            </label>#}
-{#            <label class="col-lg-3 col-md-4 col-sm-6 col-xs-12">#}
-{#                联系人：{{ custom_obj.linkman }}#}
-{#            </label>#}
-{#            <label class="col-lg-3 col-md-4 col-sm-6 col-xs-12">#}
-{#                联系电话：{{ custom_obj.contact_num }}#}
-{#            </label>#}
-{##}
-{#            {% if custom_obj.genre == 1 %}#}
-{#                <label class="col-lg-3 col-md-4 col-sm-6 col-xs-12">#}
-{#                    简称：{{ custom_obj.company_custome.short_name }}#}
-{#                </label>#}
-{#                <label class="col-lg-3 col-md-4 col-sm-6 col-xs-12">#}
-{#                    注册资本：{{ custom_obj.company_custome.capital }}#}
-{#                </label>#}
-{#                <label class="col-lg-3 col-md-4 col-sm-6 col-xs-12">#}
-{#                    注册地址：{{ custom_obj.company_custome.registered_addr }}#}
-{#                </label>#}
-{#                <label class="col-lg-3 col-md-4 col-sm-6 col-xs-12">#}
-{#                    法人代表：{{ custom_obj.company_custome.representative }}#}
-{#                </label>#}
-{#            {% endif %}#}
+            </label>
+            <label class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
+                授信总额：{{ custom_obj.credit_amount }}
+            </label>
+            <label class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
+                流贷余额：{{ custom_obj.flow_loan }}
+            </label>
+            <label class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
+                承兑余额：{{ custom_obj.accept_loan }}
+            </label>
+            <label class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
+                保函余额：{{ custom_obj.back_loan }}
+            </label>
         </div>
     </div>

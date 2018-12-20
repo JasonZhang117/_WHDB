@@ -11,7 +11,7 @@ from .v_meeting import (meeting, meeting_scan, single_del_ajax,
                         single_quota_ajax, meeting_article_add_ajax,
                         meeting_edit_ajax, meeting_del_ajax,
                         meeting_close_ajax, meeting_scan_article,
-                        meeting_add_ajax, meeting_allot_ajax)
+                        meeting_add_ajax, meeting_allot_ajax, lending_order_ajax)
 # ----------------------v_agree合同管理视图--------------------#
 from .v_agree import (agree, agree_add_ajax, counter_add_ajax,
                       agree_scan, agree_preview)
@@ -24,7 +24,8 @@ from .v_provide import provide, provide_edit
 from .v_review import review
 
 # 客户、行业、区域
-from .v_custom import custom, custom_scan, custom_add_ajax, custom_del_ajax
+from .v_custom import (custom, custom_scan, custom_add_ajax,
+                       custom_del_ajax, custom_edit_ajax)
 # 部门、员工
 from .v_interior import department, department_add, department_edit
 from .v_interior import department_del
