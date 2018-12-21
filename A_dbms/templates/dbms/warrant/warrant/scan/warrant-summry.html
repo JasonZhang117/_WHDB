@@ -1,0 +1,30 @@
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <label>房产情况</label>
+        <label class="navbar-right">
+            <a class="btn btn-primary btn-sm " id="editWarrant">
+                修改
+            </a><!--#path('custom/edit/'-->
+            <a class="btn btn-danger btn-sm " id="delWarrant">
+                删除
+            </a><!--#path('custom/del/'-->
+        </label>
+    </div>
+
+    <div class="panel-body row" style="padding: 1px;">
+        <div class="panel-body row">
+            <label class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
+                权证编号：{{ house_obj.warrant }}
+            </label>
+            <label class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
+                坐落：{{ house_obj.house_locate }}
+            </label>
+            <label class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
+                用途：{{ house_obj.get_house_app_display }}
+            </label>
+            <label class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
+                建筑面积：{{ house_obj.house_area }}
+            </label>
+        </div>
+    </div>
+</div>

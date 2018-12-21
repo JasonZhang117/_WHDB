@@ -1,0 +1,54 @@
+<script>
+    $(function () {
+        bindDelLendingB();
+        bindDelLendingModalOk();
+    });
+
+    function bindDelLendingB() {
+        $('#lending-tb').on('click', '.delLendingB', function () {
+            console.log("bindDelLendingB")
+            delLendingNid = $(this).parent().parent().attr('lending-nid');
+            console.log(delLendingNid)
+            $('#delLendingModalId').val(delLendingNid);
+            $('#delLendingModal').modal('show');
+        })
+    }
+
+    function bindDelLendingModalOk() {
+        $('#delLendingModalOk').click(function () {
+            var postData = {};
+
+            $('#delLendingModal').find('input,select').each(function () {
+                var v = $(this).val();
+                var n = $(this).attr('name');
+                postData[n] = v;
+            });
+            var postDataStr = JSON.stringify(postData);
+            console.log(postDataStr)
+            $.ajax({
+                url: '/dbms/meeting/lending/del/',
+                type: 'POST',
+                dataType: 'JSON',
+                data: {'postDataStr': postDataStr},
+                success: function (arg) {
+                    if (arg.status) {
+                        $('#delLendingModal').modal('hide');
+                        alert(arg.message);
+                        window.location.reload();
+                    } else {
+                        $('#delLendingModal').modal('hide');
+                        alert(arg.message);
+                        {#window.location.reload();#}
+                    }
+                }
+            })
+
+        })
+    }
+</script>
+
+
+
+
+
+

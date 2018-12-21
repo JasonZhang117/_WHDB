@@ -233,8 +233,7 @@ def meeting_edit_ajax(request):  # 编辑评审会ajax
 @login_required
 def meeting_close_ajax(request):  # 完成上会ajax
     print(__file__, '---->def meeting_del_ajax')
-    response = {'status': True, 'message': None,
-                'obj_num': None, 'forme': None, }
+    response = {'status': True, 'message': None, 'forme': None, }
     post_data_str = request.POST.get('postDataStr')
     post_data = json.loads(post_data_str)
 
@@ -484,15 +483,11 @@ def lending_order_ajax(request):  # 放款次序ajax
 
         if form.is_valid():
             cleaned_data = form.cleaned_data
-            default = {
-                'summary_id': article_id,
-                'order': cleaned_data['order'],
-                'order_amount': cleaned_data['order_amount']}
 
-            lending, created = models.LendingOrder.objects.update_or_create(
+            models.LendingOrder.objects.create(
                 summary_id=article_id,
-                defaults=default)
-            print('single:', lending)
+                order=cleaned_data['order'],
+                order_amount=cleaned_data['order_amount'])
             msg = '放款次序设置成功！'
             response['message'] = msg
 
@@ -504,12 +499,40 @@ def lending_order_ajax(request):  # 放款次序ajax
     return HttpResponse(result)
 
 
+# -----------------------放款次序删除ajax-------------------------#
+@login_required
+def lending_del_ajax(request):  # 单项额度删除ajax
+    print(__file__, '---->def single_del_ajax')
+    response = {'status': True, 'message': None, 'forme': None, }
+    post_data_str = request.POST.get('postDataStr')
+    post_data = json.loads(post_data_str)
+
+    lending_id = post_data['lending_id']
+    article_id = post_data['article_id']
+
+    lending_obj = models.LendingOrder.objects.get(id=lending_id)
+    article_obj = models.Articles.objects.get(id=article_id)
+    print('lending_obj:', lending_obj)
+    '''((1, '待反馈'), (2, '已反馈'), (3, '待上会'),
+       (4, '已上会'), (5, '已签批'), (6, '已注销'))'''
+    if article_obj.article_state in [1, 2, 3, 4]:
+        lending_obj.delete()  # 删除单项额度
+        msg = '放款次序删除成功！'
+        response['message'] = msg
+
+    else:
+        msg = '项目状态为：%s，无法删除放款次序！！！' % article_obj.article_state
+        response['status'] = False
+        response['message'] = msg
+    result = json.dumps(response, ensure_ascii=False)
+    return HttpResponse(result)
+
+
 # -----------------------单项额度删除ajax-------------------------#
 @login_required
 def single_del_ajax(request):  # 单项额度删除ajax
     print(__file__, '---->def single_del_ajax')
-    response = {'status': True, 'message': None,
-                'obj_num': None, 'forme': None, }
+    response = {'status': True, 'message': None, 'forme': None, }
     post_data_str = request.POST.get('postDataStr')
     post_data = json.loads(post_data_str)
 
@@ -582,7 +605,13 @@ def article_sign_ajax(request):
                         summary__id=article_id).aggregate(Sum('credit_amount'))
                     single_quota_amount = single_quota_amount['credit_amount__sum']
 
-                    if single_quota_amount == article_amount:
+                    lending_amount = models.LendingOrder.objects.filter(
+                        summary__id=article_id).aggregate(Sum('order_amount'))
+                    lending_amount = lending_amount['order_amount__sum']
+
+                    print('lending_amount:', lending_amount)
+
+                    if single_quota_amount == article_amount and lending_amount == article_amount:
 
                         models.Articles.objects.filter(id=article_id).update(
                             summary_num=cleaned_data['summary_num'],
@@ -601,7 +630,7 @@ def article_sign_ajax(request):
                         response['obj_num'] = aritcle_obj.article_num
                         response['message'] = '成功签批项目：%s！' % aritcle_obj.article_num
                     else:
-                        msg = '单项额度合计与签批总额不相等，项目签批不成功！！！'
+                        msg = '单项额度，放款次序金额合计与签批总额不相等，项目签批不成功！！！'
                         response['status'] = False
                         response['message'] = msg
                 else:

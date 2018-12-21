@@ -1,5 +1,5 @@
-<div class="modal fade" id="addHouseModal" tabindex="-1"
-     role="dialog" aria-labelledby="addHouseModal">
+<div class="modal fade" id="addWarrantModal" tabindex="-1"
+     role="dialog" aria-labelledby="addWarrantModal">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -7,14 +7,17 @@
                         data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
-                <h4 class="modal-title" id="addHouseModalLabel">
-                    添加房产
+                <h4 class="modal-title" id="addWarrantModalLabel">
+                    {{ add_warrant }}
+
+                    <input style="display: none" name="warrant_typ"
+                           id="id_warrant_typ" value={{ warrant_typ }}>
                 </h4>
             </div>
             <div class="modal-body">
 
                 <form class="form-horizontal">
-                    {% include 'dbms/warrant/house/modl/mod_form/house-add-edit.html' %}
+                    {% include 'dbms/warrant/modl/mod_form/house-add-edit.html' %}
                 </form>
             </div>
 
@@ -26,7 +29,7 @@
                     取消
                 </button>
                 <button type="button" class="btn btn-primary"
-                        id="addHouseModalOk">
+                        id="addWarrantModalOk">
                     确定
                 </button>
             </div>

@@ -12,6 +12,8 @@ class Agrees(models.Model):  # 委托合同
     num_prefix = models.CharField(
         verbose_name='_编号前缀',
         max_length=32)
+    '''((1, '待反馈'), (2, '已反馈'), (3, '待上会'),
+     (4, '已上会'), (5, '已签批'), (6, '已注销'))'''
     lending = models.ForeignKey(
         to='LendingOrder',
         verbose_name="放款纪要",

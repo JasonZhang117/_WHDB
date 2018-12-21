@@ -76,7 +76,7 @@ class Houses(models.Model):  # 房产
         related_name='house_warrant')
     house_locate = models.CharField(
         verbose_name='坐落',
-        max_length=64)
+        max_length=64, unique=True)
     HOUSE_APP_LIST = ((1, '住宅'), (2, '商业'),
                       (3, '办公'), (4, '公寓'),
                       (5, '厂房'),

@@ -1,0 +1,19 @@
+{% extends 'dbms/index_dbms.html' %}
+
+{% block title %}房产查看{% endblock %}
+
+{% block right-content-container %}
+    <div class="container-fluid" style="padding-left: 1px;">
+        {% include 'dbms/warrant/house/scan/house-summry.html' %}
+        {% include 'dbms/warrant/house/scan/house-tab.html' %}
+        {% include 'dbms/warrant/modl/warrant-edit-mod.html' %}
+        {% include 'dbms/warrant/modl/warrant-del-mod.html' %}
+
+    </div>
+{% endblock %}
+
+{% block extra-js %}
+    {% include 'dbms/warrant/extra/js-warrant-edit.html' %}
+    {% include 'dbms/warrant/extra/js-warrant-del.html' %}
+
+{% endblock %}

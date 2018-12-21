@@ -1,0 +1,37 @@
+<div class="modal fade" id="addWarrantModal" tabindex="-1"
+     role="dialog" aria-labelledby="addWarrantModal">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close"
+                        data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title" id="addWarrantModalLabel">
+                    添加房产
+                    <input style="display: none" name="warrant_typ"
+                           id="id_warrant_typ" value=1>
+                </h4>
+            </div>
+            <div class="modal-body">
+
+                <form class="form-horizontal">
+                    {% include 'dbms/warrant/house/modl/mod_form/house-add-edit.html' %}
+                </form>
+            </div>
+
+            <label id="formErrors"></label>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default"
+                        data-dismiss="modal">
+                    取消
+                </button>
+                <button type="button" class="btn btn-primary"
+                        id="addWarrantModalOk">
+                    确定
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

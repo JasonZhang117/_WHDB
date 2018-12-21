@@ -1,0 +1,52 @@
+<div id="form_house_add_edit">
+
+    <div class="form-group"><!--房产编号-->
+        <label for="id_warrant_num" class="col-sm-3 control-label">
+            {{ form_house_add_edit.warrant_num.label }}：
+        </label>
+        <div class="col-sm-9">
+            {{ form_house_add_edit.warrant_num }}
+        </div>
+        <label id="e_warrant_num" class="pull-right">
+            {{ form_house_add_edit.warrant_num.errors }}
+        </label>
+    </div>
+
+    <div class="form-group"><!--坐落-->
+        <label for="id_house_locate" class="col-sm-3 control-label">
+            {{ form_house_add_edit.house_locate.label }}：
+        </label>
+        <div class="col-sm-9">
+            {{ form_house_add_edit.house_locate }}
+        </div>
+        <label id="e_house_locate" class="pull-right">
+            {{ form_house_add_edit.house_locate.errors }}
+        </label>
+    </div>
+
+
+    <div class="form-group"><!--用途-->
+        <label for="id_house_app" class="col-sm-3 control-label">
+            {{ form_house_add_edit.house_app.label }}：
+        </label>
+        <div class="col-sm-9">
+            {{ form_house_add_edit.house_app }}
+        </div>
+        <label id="e_house_app" class="pull-right">
+            {{ form_house_add_edit.house_app.errors }}
+        </label>
+    </div>
+
+    <div class="form-group"><!--建筑面积（平方米)-->
+        <label for="id_house_area" class="col-sm-3 control-label">
+            {{ form_house_add_edit.house_area.label }}：
+        </label>
+        <div class="col-sm-9">
+            {{ form_house_add_edit.house_area }}
+        </div>
+        <label id="e_house_area" class="pull-right">
+            {{ form_house_add_edit.house_area.errors }}
+        </label>
+    </div>
+
+</div>

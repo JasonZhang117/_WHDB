@@ -2,22 +2,22 @@
     <label>
         {% if kwargs.application == None %}
             <a class="active btn btn-primary btn-sm"
-               href="{% url 'dbms:ground_all' %}">全部</a>
+               href="{% url 'dbms:house_all' %}">全部</a>
         {% else %}
             <a class="btn btn btn-primary btn-sm"
-               href="{% url 'dbms:ground_all' %}">全部</a>
+               href="{% url 'dbms:house_all' %}">全部</a>
         {% endif %}
 
         {# 方式一：#}
-        {% for item in ground_app_list %}
+        {% for item in house_app_list %}
             {% if item.0 == kwargs.warrant_typ %}
                 <a class="active btn btn-primary btn-sm"
-                   href="{% url 'dbms:ground' application=item.0 %}">
+                   href="{% url 'dbms:house' house_app=item.0 %}">
                     {{ item.1 }}
                 </a>
             {% else %}
                 <a class="btn btn-primary btn-sm"
-                   href="{% url 'dbms:ground' application=item.0 %}">
+                   href="{% url 'dbms:house' house_app=item.0 %}">
                     {{ item.1 }}
                 </a>
             {% endif %}
@@ -33,8 +33,8 @@
         </form>
     </label>
     <label class="pull-right">
-        <a class="btn btn-primary btn-sm" id="addGround">
-            添加土地
+        <a class="btn btn-primary btn-sm" id="addWarrant">
+            添加房产
         </a>
     </label>
 </div>

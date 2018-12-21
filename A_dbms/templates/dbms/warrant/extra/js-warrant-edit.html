@@ -1,0 +1,65 @@
+<script>
+    $(function () {
+        bindEditWarrant();
+        bindEditWarrantModalOk();
+    });
+
+    function bindEditWarrant() {
+        $('#editWarrant').click(function () {
+            console.log("bindEditWarrant")
+            $('#editWarrantModal').modal('show');
+        })
+    }
+
+    function bindEditWarrantModalOk() {
+        $('#editWarrantModalOk').click(function () {
+            var postData = {};
+            $('#editWarrantModal').find('input,select').each(function () {
+                var v = $(this).val();
+                var n = $(this).attr('name');
+                postData[n] = v;
+            });
+            var postDataStr = JSON.stringify(postData);
+
+            console.log(postDataStr)
+
+            $.ajax({
+                url: '/dbms/warrant/edit/',
+                type: 'POST',
+                traditional: true,
+                data: {'postDataStr': postDataStr},
+                dataType: 'JSON',
+                success: function (arg) {
+                    console.log(arg);
+                    if (arg.status) {
+                        $('#addWarrantModal').modal('hide');
+                        alert(arg.message);
+                        window.location.reload();
+                    } else {
+                        alert(arg.message);
+                        console.log(arg.forme.house_locate);
+                        console.log(arg.forme.house_app);
+                        console.log(arg.forme.house_area);
+                        console.log(arg.forme.house_locate);
+
+                        $('#e_warrant_num').text(arg.forme.warrant_num);
+
+                        $('#e_house_locate').text(arg.forme.house_locate);
+                        $('#e_house_app').text(arg.forme.house_app);
+                        $('#e_house_area').text(arg.forme.house_area);
+
+                        $('#e_ground_locate').text(arg.forme.ground_locate);
+                        $('#e_ground_app').text(arg.forme.ground_app);
+                        $('#e_ground_area').text(arg.forme.ground_area);
+                    }
+                }
+            })
+        })
+    }
+</script>
+
+
+
+
+
+

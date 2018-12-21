@@ -6,6 +6,6 @@ from .f_meeting import (
     MeetingAddForm, MeetingEditForm, MeetingAllotForm,
     SingleQuotaForm, MeetingArticleAddForm, SingleQuotaForm, LendingOrder)
 from .f_appraisal import CommentsAddForm
-from .f_warrant import HouseAddForm
+from .f_warrant import HouseAddForm, GroundAddForm
 from .f_custom import (CustomAddForm, CustomCAddForm, CustomPAddForm, CustomEditForm)
 from .f_interior import DepartmentForm, EmployeeForm

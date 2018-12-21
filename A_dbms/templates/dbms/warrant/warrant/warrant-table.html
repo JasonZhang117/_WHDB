@@ -18,7 +18,7 @@
         {% for warrant in warrant_list %}
             <tr>
                 <td>
-                    <a href="#">
+                    <a href="{% url 'dbms:warrant_scan' warrant_id=warrant.id %}">
                         {{ warrant.warrant_num }}
                     </a>
                 </td>

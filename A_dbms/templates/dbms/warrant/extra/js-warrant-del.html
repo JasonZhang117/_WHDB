@@ -1,44 +1,44 @@
 <script>
     $(function () {
-        bindAddHouse();
-        bindAddAgreeModalOk();
+        bindDelWarrant();
+        bindDelWarrantModalOk();
 
     });
 
-    function bindAddHouse() {
-        $('#addHouse').click(function () {
-            console.log("bindAddWarrant")
-            $('#addHouseModal').modal('show');
+    function bindDelWarrant() {
+        $('#delWarrant').click(function () {
+            console.log("bindDelArticle")
+            $('#delWarrantModal').modal('show');
         })
     }
 
-    function bindAddAgreeModalOk() {
-        $('#addAgreeModalOk').click(function () {
+    function bindDelWarrantModalOk() {
+        $('#delWarrantModalOk').click(function () {
             var postData = {};
-            $('#addAgreeModal').find('input,select').each(function () {
+
+            $('#delWarrantModal').find('input,select').each(function () {
                 var v = $(this).val();
                 var n = $(this).attr('name');
                 postData[n] = v;
             });
             var postDataStr = JSON.stringify(postData);
-
             console.log(postDataStr)
 
             $.ajax({
-                url: '/dbms/agree/add/',
+                url: '/dbms/warrant/del/',
                 type: 'POST',
-                traditional: true,
                 data: {'postDataStr': postDataStr},
                 dataType: 'JSON',
                 success: function (arg) {
-                    console.log(arg);
+                    console.log(arg.return_path)
                     if (arg.status) {
-                        $('#addAgreeModal').modal('hide');
+                        $('#delWarrantModal').modal('hide');
                         alert(arg.message);
-                        window.location.reload();
+                        window.location.href = arg.return_path;
                     } else {
+                        $('#delWarrantModal').modal('hide');
                         alert(arg.message);
-                        $('#e_agree_amount').text(dict.forme.agree_amount);
+                        {#window.location.reload();#}
                     }
                 }
             })

@@ -6,7 +6,7 @@ urlpatterns = [
     # -----------------------主页管理-------------------------#
     path('', views.index, name='index'),  # /dbms/
     # path('', views.index, name='index'),  # /dbms/
-    # -----------------------项目管理-------------------------#
+    # -----------------------article项目管理-------------------------#
     path('article/',
          views.article, name='article_all'),
     path('article/<int:article_state>/',
@@ -17,36 +17,38 @@ urlpatterns = [
          views.article_scan_agree, name='article_scan_agree'),
 
     path('article/add/', views.article_add_ajax),
+    path('article/del/', views.article_del_ajax),
     path('article/edit/', views.article_edit_ajax),
     path('article/feedback/', views.article_feedback_ajax),
-    path('article/del/', views.article_del_ajax),
 
-    # -----------------------评审会-------------------------#
+    # -----------------------meeting评审会-------------------------#
     path('meeting/<int:meeting_state>',
          views.meeting, name='meeting'),
     path('meeting/',
          views.meeting, name='meeting_all'),
     path('meeting/scan/<int:meeting_id>/',
          views.meeting_scan, name='meeting_scan'),
-    path('meeting/notice/<int:meeting_id>/',
-         views.meeting_notice, name='meeting_notice'),
     path('meeting/scan/<int:meeting_id>/<int:article_id>/',
          views.meeting_scan_article, name='meeting_scan_article'),
+    path('meeting/notice/<int:meeting_id>/',
+         views.meeting_notice, name='meeting_notice'),
+
     path('meeting/add/', views.meeting_add_ajax),
     path('meeting/allot/', views.meeting_allot_ajax),
     path('meeting/comment/', views.comment_edit_ajax),
     path('meeting/single/', views.single_quota_ajax),
     path('meeting/single/del/', views.single_del_ajax),
     path('meeting/lending/', views.lending_order_ajax),
-
-    path('meeting/article/sign/', views.article_sign_ajax),
+    path('meeting/lending/del/', views.lending_del_ajax),
     path('meeting/edit/', views.meeting_edit_ajax),
     path('meeting/close/', views.meeting_close_ajax),
     path('meeting/del/', views.meeting_del_ajax),
+
+    path('meeting/article/sign/', views.article_sign_ajax),
     path('meeting/article/add/', views.meeting_article_add_ajax),
     path('meeting/article/del/', views.meeting_article_del_ajax),
 
-    # -----------------------合同管理-------------------------#
+    # -----------------------agree合同管理-------------------------#
     path('agree/',
          views.agree, name='agree_all'),
     path('agree/<int:agree_state>/',
@@ -59,16 +61,27 @@ urlpatterns = [
     path('agree/add/', views.agree_add_ajax),
     path('counter/add/', views.counter_add_ajax),
 
-    # -----------------------权证管理-------------------------#
+    # -----------------------warrant权证管理-------------------------#
     path('warrant/',
          views.warrant, name='warrant_all'),
     path('warrant/<int:warrant_typ>/',
          views.warrant, name='warrant'),  # /dbms/warrant/(0-9)
+    path('warrant/scan/<int:warrant_id>/',
+         views.warrant_scan, name='warrant_scan'),
+
+    path('warrant/add/', views.warrant_add_ajax),
+    path('warrant/del/', views.warrant_del_ajax),
+    path('warrant/edit/', views.warrant_edit_ajax),
+
+    # -----------------------house房产管理-------------------------#
     path('house/',
          views.house, name='house_all'),
-    path('house/<int:application>/',
+    path('house/<int:house_app>/',
          views.house, name='house'),  # /dbms/house/(0-9)
+    path('house/scan/<int:house_id>/',
+         views.house_scan, name='house_scan'),
 
+    # -----------------------ground土地管理-------------------------#
     path('ground/',
          views.ground, name='ground_all'),
     path('ground/<int:application>/',
@@ -98,8 +111,7 @@ urlpatterns = [
     # 员工
     path('employee/', views.employee, name='employee'),
     path('employee/add/',
-         views.employee_add,
-         name='employee_add'),
+         views.employee_add, name='employee_add'),
     # path('employee/add_ajax/',
     #      views.employee_add_ajax,
     #      name='employee_add_ajax'),
