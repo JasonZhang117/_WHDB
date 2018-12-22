@@ -14,57 +14,69 @@ def warrant_add_ajax(request):
     post_data_str = request.POST.get('postDataStr')
     post_data = json.loads(post_data_str)
     print('post_data:', post_data)
-    warrant_typ = int(post_data['warrant_typ'])
+    warrant_typ_n = int(post_data['warrant_typ_n'])
+    if warrant_typ_n == 0:
+        warrant_typ = int(post_data['warrant_typ'])
+    else:
+        warrant_typ = warrant_typ_n
+
     print('warrant_typ:', warrant_typ)
     print('type(warrant_typ):', type(warrant_typ))
-    if warrant_typ == 1:
-        print('warrant_typ == 1')
-        form_warrant_add_edit = forms.HouseAddForm(post_data)
-        if form_warrant_add_edit.is_valid():
-            warrant_add_data = form_warrant_add_edit.cleaned_data
-            try:
-                with transaction.atomic():
-                    warrant_obj = models.Warrants.objects.create(
-                        warrant_num=warrant_add_data['warrant_num'],
-                        warrant_typ=warrant_typ)
-                    house_obj = models.Houses.objects.create(
-                        warrant=warrant_obj,
-                        house_locate=warrant_add_data['house_locate'],
-                        house_app=warrant_add_data['house_app'],
-                        house_area=warrant_add_data['house_area'])
-                response['message'] = '房产创建成功！！！，请继续创建产权证信息。'
-            except Exception as e:
+    form_warrant_add = forms.WarrantAddForm(post_data)
+    if form_warrant_add.is_valid():
+        warrant_add_clean = form_warrant_add.cleaned_data
+        if warrant_typ == 1:
+            print('warrant_typ == 1')
+            form_house_add_edit = forms.HouseAddEidtForm(post_data)
+            if form_house_add_edit.is_valid():
+                house_add_edit_clean = form_house_add_edit.cleaned_data
+                try:
+                    with transaction.atomic():
+                        warrant_obj = models.Warrants.objects.create(
+                            warrant_num=warrant_add_clean['warrant_num'],
+                            warrant_typ=warrant_typ)
+                        house_obj = models.Houses.objects.create(
+                            warrant=warrant_obj,
+                            house_locate=house_add_edit_clean['house_locate'],
+                            house_app=house_add_edit_clean['house_app'],
+                            house_area=house_add_edit_clean['house_area'])
+                    response['message'] = '房产创建成功！！！，请继续创建产权证信息。'
+                except Exception as e:
+                    response['status'] = False
+                    response['message'] = '房产创建失败：%s' % str(e)
+            else:
                 response['status'] = False
-                response['message'] = '房产创建失败：%s' % str(e)
-        else:
-            response['status'] = False
-            response['message'] = '表单信息有误！！！'
-            response['forme'] = form_warrant_add_edit.errors
+                response['message'] = '表单信息有误！！！'
+                response['forme'] = form_house_add_edit.errors
 
-    elif warrant_typ == 2:
-        print('warrant_typ == 2')
-        form_warrant_add_edit = forms.GroundAddForm(post_data)
-        if form_warrant_add_edit.is_valid():
-            warrant_add_data = form_warrant_add_edit.cleaned_data
-            print('warrant_add_data:', warrant_add_data)
-            try:
-                with transaction.atomic():
-                    warrant_obj = models.Warrants.objects.create(
-                        warrant_num=warrant_add_data['warrant_num'],
-                        warrant_typ=warrant_typ)
-                    ground_obj = models.Grounds.objects.create(
-                        warrant=warrant_obj,
-                        ground_locate=warrant_add_data['ground_locate'],
-                        ground_app=warrant_add_data['ground_app'],
-                        ground_area=warrant_add_data['ground_area'])
-                response['message'] = '土地创建成功！！！，请继续创建产权证信息。'
-            except Exception as e:
+        elif warrant_typ == 2:
+            print('warrant_typ == 2')
+            form_ground_add_edit = forms.GroundAddEidtForm(post_data)
+            if form_ground_add_edit.is_valid():
+                ground_add_edit_clean = form_ground_add_edit.cleaned_data
+                print('ground_add_edit_clean:', ground_add_edit_clean)
+                try:
+                    with transaction.atomic():
+                        warrant_obj = models.Warrants.objects.create(
+                            warrant_num=warrant_add_clean['warrant_num'],
+                            warrant_typ=warrant_typ)
+                        ground_obj = models.Grounds.objects.create(
+                            warrant=warrant_obj,
+                            ground_locate=ground_add_edit_clean['ground_locate'],
+                            ground_app=ground_add_edit_clean['ground_app'],
+                            ground_area=ground_add_edit_clean['ground_area'])
+                    response['message'] = '土地创建成功！！！，请继续创建产权证信息。'
+                except Exception as e:
+                    response['status'] = False
+                    response['message'] = '土地创建失败：%s' % str(e)
+            else:
                 response['status'] = False
-                response['message'] = '土地创建失败：%s' % str(e)
-        else:
-            response['status'] = False
-            response['message'] = '表单信息有误！！！'
-            response['forme'] = form_warrant_add_edit.errors
+                response['message'] = '表单信息有误！！！'
+                response['forme'] = form_ground_add_edit.errors
+    else:
+        response['status'] = False
+        response['message'] = '表单信息有误！！！'
+        response['forme'] = form_warrant_add.errors
     result = json.dumps(response, ensure_ascii=False)
     return HttpResponse(result)
 
@@ -168,9 +180,9 @@ def house(request, *args, **kwargs):  # 房产列表
     print('**kwargs:', kwargs)
 
     add_warrant = '添加房产'
-    warrant_typ = 1
-
-    form_house_add_edit = forms.HouseAddForm()
+    warrant_typ_n = 1
+    form_warrant_edit = forms.WarrantEditForm()
+    form_house_add_edit = forms.HouseAddEidtForm()
 
     house_app_list = models.Houses.HOUSE_APP_LIST
     house_list = models.Houses.objects.filter(**kwargs)
@@ -196,13 +208,15 @@ def house_scan(request, house_id):  # house_scan房产预览
     warrant_obj = models.Houses.objects.get(id=house_id)
     edit_warrant = '修改房产'
     del_warrant = '删除房产'
+    warrant_typ_n = warrant_obj.warrant.warrant_typ
     form_date = {
         'warrant_num': warrant_obj.warrant,
         'house_locate': warrant_obj.house_locate,
         'house_app': warrant_obj.house_app,
         'house_area': warrant_obj.house_area}
 
-    form_house_add_edit = forms.HouseAddForm(form_date)
+    form_warrant_edit = forms.WarrantEditForm(form_date)
+    form_house_add_edit = forms.HouseAddEidtForm(form_date)
 
     return render(request,
                   'dbms/warrant/house-scan.html',
@@ -214,7 +228,7 @@ def ground(request, *args, **kwargs):  # 房产列表
     print(__file__, '---->def warrant')
     print('**kwargs:', kwargs)
 
-    form_ground_add_edit = forms.GroundAddForm()
+    form_ground_add_edit = forms.GroundAddEidtForm()
 
     ground_app_list = models.Grounds.GROUND_APP_LIST
     ground_list = models.Grounds.objects.filter(**kwargs)
@@ -237,6 +251,12 @@ def ground(request, *args, **kwargs):  # 房产列表
 # -----------------------权证列表-------------------------#
 def warrant(request, *args, **kwargs):  # 房产列表
     print(__file__, '---->def warrant')
+
+    add_warrant = '添加权证'
+    warrant_typ_n = 0
+    form_warrant_add = forms.WarrantAddForm()
+    form_house_add_edit = forms.HouseAddEidtForm()
+    form_ground_add_edit = forms.GroundAddEidtForm()
 
     warrant_typ_list = models.Warrants.WARRANT_TYP_LIST
     warrant_list = models.Warrants.objects.filter(**kwargs)

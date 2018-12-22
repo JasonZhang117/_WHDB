@@ -88,7 +88,7 @@ urlpatterns = [
          views.ground, name='ground'),  # /dbms/ground/(0-9)
 
     # -----------------------放款管理-------------------------#
-    path('provide/', views.provide, name='provide'),
+    path('provide/', views.provide, name='provide_all'),
     path('provide/edit/<int:agree_id>/',
          views.provide_edit, name='provide_edit'),
 

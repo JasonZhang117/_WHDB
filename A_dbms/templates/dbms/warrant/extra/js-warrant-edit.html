@@ -1,6 +1,7 @@
 <script>
     $(function () {
         bindEditWarrant();
+        bind_id_warrant_typ_n();
         bindEditWarrantModalOk();
     });
 
@@ -10,6 +11,28 @@
             $('#editWarrantModal').modal('show');
         })
     }
+
+    function bind_id_warrant_typ_n() {
+        console.log("bind_id_warrant_typ_n");
+        var selected_warrant_typ_n = $('#id_warrant_typ_n').val();
+        $('.warrant-extend').hide();
+        console.log(selected_warrant_typ_n);
+
+        switch (selected_warrant_typ_n) {
+            case ('0'):
+                $('#form_house_add_edit').show();
+                break;
+            case ('1'):
+                $('#form_house_add_edit').show();
+                break;
+            case ('2'):
+                $('#form_ground_add_edit').show();
+                break;
+            default:
+                $('.warrant-extend').hide()
+        }
+    }
+
 
     function bindEditWarrantModalOk() {
         $('#editWarrantModalOk').click(function () {

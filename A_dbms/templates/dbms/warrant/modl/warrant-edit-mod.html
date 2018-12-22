@@ -11,14 +11,17 @@
                     {{ edit_warrant }}
                     <input style="display: none" name="warrant_id"
                            id="id_warrant_id" value={{ warrant_obj.warrant.id }}>
+                    <input style="display: none" name="warrant_typ_n"
+                           id="id_warrant_typ_n" value={{ warrant_typ_n }}>
                 </h4>
             </div>
             <div class="modal-body">
                 <form class="form-horizontal">
-                    {% if warrant_obj.warrant.warrant_typ == 1 %}
+                    {% include 'dbms/warrant/modl/mod_form/warrant-edit.html' %}
+                    {% if warrant_typ_n == 1 %}
                         {% include 'dbms/warrant/modl/mod_form/house-add-edit.html' %}
-                    {% elif warrant_obj.warrant.warrant_typ == 2 %}
-                        {% include 'dbms/warrant/modl/mod_form/house-add-edit.html' %}
+                    {% elif warrant_typ_n == 2 %}
+                        {% include 'dbms/warrant/modl/mod_form/ground-add-edit.html' %}
                     {% endif %}
                 </form>
             </div>

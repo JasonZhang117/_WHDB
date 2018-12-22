@@ -10,14 +10,24 @@
                 <h4 class="modal-title" id="addWarrantModalLabel">
                     {{ add_warrant }}
 
-                    <input style="display: none" name="warrant_typ"
-                           id="id_warrant_typ" value={{ warrant_typ }}>
+                    <input style="display: none" name="warrant_typ_n"
+                           id="id_warrant_typ_n" value={{ warrant_typ_n }}>
                 </h4>
             </div>
             <div class="modal-body">
 
                 <form class="form-horizontal">
-                    {% include 'dbms/warrant/modl/mod_form/house-add-edit.html' %}
+                    {% if warrant_typ_n == 0 %}
+                        {% include 'dbms/warrant/modl/mod_form/warrant-add.html' %}
+                        {% include 'dbms/warrant/modl/mod_form/house-add-edit.html' %}
+                        {% include 'dbms/warrant/modl/mod_form/ground-add-edit.html' %}
+                    {% elif warrant_typ_n == 1 %}
+                        {% include 'dbms/warrant/modl/mod_form/warrant-edit.html' %}
+                        {% include 'dbms/warrant/modl/mod_form/house-add-edit.html' %}
+                    {% elif warrant_typ_n == 2 %}
+                        {% include 'dbms/warrant/modl/mod_form/warrant-edit.html' %}
+                        {% include 'dbms/warrant/modl/mod_form/ground-add-edit.html' %}
+                    {% endif %}
                 </form>
             </div>
 

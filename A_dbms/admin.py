@@ -22,6 +22,8 @@ admin.site.register(models.Ownership)  # 产权证
 admin.site.register(models.Hypothecs)  # 他权
 admin.site.register(models.Houses)  # 房产
 admin.site.register(models.Grounds)  # 土地
+admin.site.register(models.Stockes)  # 股权
+admin.site.register(models.Receivable)  # 应收账款
 admin.site.register(models.Evaluate)  # 出入库
 admin.site.register(models.Storages)  # 评估
 # -----------------------放款-------------------------#

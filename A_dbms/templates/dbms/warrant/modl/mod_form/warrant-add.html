@@ -1,0 +1,27 @@
+<div id="form_warrant_add">
+
+    <div class="form-group"><!--权证编号-->
+        <label for="id_warrant_num" class="col-sm-3 control-label">
+            {{ form_warrant_add.warrant_num.label }}：
+        </label>
+        <div class="col-sm-9">
+            {{ form_warrant_add.warrant_num }}
+        </div>
+        <label id="e_warrant_num" class="pull-right">
+            {{ form_warrant_add.warrant_num.errors }}
+        </label>
+    </div>
+
+    <div class="form-group"><!--权证类型-->
+        <label for="id_warrant_typ" class="col-sm-3 control-label">
+            {{ form_warrant_add.warrant_typ.label }}：
+        </label>
+        <div class="col-sm-9">
+            {{ form_warrant_add.warrant_typ }}
+        </div>
+        <label id="e_warrant_typ" class="pull-right">
+            {{ form_warrant_add.warrant_typ.errors }}
+        </label>
+    </div>
+
+</div>

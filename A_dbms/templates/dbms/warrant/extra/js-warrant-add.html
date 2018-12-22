@@ -1,6 +1,9 @@
 <script>
     $(function () {
+
         bindAddWarrant();
+        bind_id_warrant_typ();
+        bind_id_warrant_typ_n();
         bindAddWarrantModalOk();
 
     });
@@ -11,6 +14,50 @@
             $('#addWarrantModal').modal('show');
         })
     }
+
+    function bind_id_warrant_typ_n() {
+        console.log("bind_id_warrant_typ_n");
+        var selected_warrant_typ_n = $('#id_warrant_typ_n').val();
+        $('.warrant-extend').hide();
+        console.log(selected_warrant_typ_n);
+
+        switch (selected_warrant_typ_n) {
+            case ('0'):
+                $('#form_house_add_edit').show();
+                break;
+            case ('1'):
+                $('#form_house_add_edit').show();
+                break;
+            case ('2'):
+                $('#form_ground_add_edit').show();
+                break;
+            default:
+                $('.warrant-extend').hide()
+        }
+    }
+
+
+    function bind_id_warrant_typ() {
+        $('#id_warrant_typ').change(function () {
+            console.log("bind_id_warrant_typ");
+            $('.warrant-extend').hide();
+            var selected_warrant_typ = $('#id_warrant_typ').val();
+
+            console.log(selected_warrant_typ);
+
+            switch (selected_warrant_typ) {
+                case ('1'):
+                    $('#form_house_add_edit').show();
+                    break;
+                case ('2'):
+                    $('#form_ground_add_edit').show();
+                    break;
+                default:
+                    $('.warrant-extend').hide()
+            }
+        })
+    }
+
 
     function bindAddWarrantModalOk() {
         $('#addWarrantModalOk').click(function () {

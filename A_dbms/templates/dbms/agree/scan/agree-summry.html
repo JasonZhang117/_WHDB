@@ -45,7 +45,7 @@
             纪要编号：{{ agree_obj.lending.summary.summary_num }}
         </label>
         <label class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
-            项目编号：{{ agree_obj.lending.summary.article_num }}
+            放款次序：{{ agree_obj.lending.get_order_display }}
         </label>
         <label class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
             项目金额：{{ agree_obj.lending.summary.amount }}

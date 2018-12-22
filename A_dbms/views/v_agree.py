@@ -120,11 +120,11 @@ def agree_add_ajax(request):  # 添加合同
 # -------------------------添加反担保合同ajax-------------------------#
 def counter_add_ajax(request):
     print(__file__, '---->def counter_add_ajax')
-    response = {'status': True, 'message': None,
-                'agree_num': None, 'forme': None, }
+    response = {'status': True, 'message': None, 'forme': None, }
     post_data_str = request.POST.get('postDataStr')
     post_data = json.loads(post_data_str)
     print('post_data:', post_data)
+
 
     result = json.dumps(response, ensure_ascii=False)
     return HttpResponse(result)

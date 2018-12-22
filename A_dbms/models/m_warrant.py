@@ -6,13 +6,14 @@ import datetime
 # ------------------------担保物--------------------------#
 class Warrants(models.Model):  # 担保物
     warrant_num = models.CharField(
-        verbose_name='编号',
+        verbose_name='权证编码',
         max_length=32,
         unique=True)
     WARRANT_TYP_LIST = [(1, '房产'), (2, '土地'),
-                        (3, '车辆'), (4, '设备'),
-                        (5, '存货'), (6, '权利'), (7, '应收'),
-                        (8, '股权'), (9, '他权')]
+                        (3, '应收'), (4, '股权'),
+                        (5, '票据'), (6, '车辆'),
+                        (7, '其他'), (8, '他权')]
+    '''其他-存货、设备、合格证、'''
     warrant_typ = models.IntegerField(
         verbose_name='权证类型',
         choices=WARRANT_TYP_LIST,
@@ -75,14 +76,13 @@ class Houses(models.Model):  # 房产
         on_delete=models.CASCADE,
         related_name='house_warrant')
     house_locate = models.CharField(
-        verbose_name='坐落',
+        verbose_name='房产坐落',
         max_length=64, unique=True)
     HOUSE_APP_LIST = ((1, '住宅'), (2, '商业'),
                       (3, '办公'), (4, '公寓'),
-                      (5, '厂房'),
-                      (6, '非生产性工业科研用房'))
+                      (5, '厂房'), (6, '科研'))
     house_app = models.IntegerField(
-        verbose_name='用途',
+        verbose_name='房产用途',
         choices=HOUSE_APP_LIST,
         default=1)
     house_area = models.FloatField(
@@ -106,16 +106,17 @@ class Grounds(models.Model):  # 土地
         on_delete=models.CASCADE,
         related_name='ground_warrant')
     ground_locate = models.CharField(
-        verbose_name='坐落', max_length=64)
-    GROUND_APP_LIST = ((1, '住宅用地'),
-                       (2, '商服用地'),
-                       (3, '工业用地'))
+        verbose_name='土地坐落', max_length=64)
+    GROUND_APP_LIST = ((1, '住宅'),
+                       (2, '商住'),
+                       (3, '商服'),
+                       (4, '工业'))
     ground_app = models.IntegerField(
-        verbose_name='用途',
+        verbose_name='土地用途',
         choices=GROUND_APP_LIST,
         default=1)
     ground_area = models.FloatField(
-        verbose_name='面积')
+        verbose_name='土地面积')
 
     class Meta:
         verbose_name_plural = '反担保-土地'  # 指定显示名称
@@ -188,7 +189,7 @@ class Receivable(models.Model):  # 应收帐款
         db_table = 'dbms_receivable'  # 指定数据表的名称
 
     def __str__(self):
-        return '%s' % (self.warrant.warrant_num)
+        return self.warrant.warrant_num
 
 
 # ------------------------他权模型--------------------------#
