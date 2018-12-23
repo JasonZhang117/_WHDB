@@ -22,3 +22,39 @@ class CommentsAddForm(dform.Form):  # 评审会添加
             attrs={'class': 'form-control',
                    'type': 'date',
                    'placeholder': '意见详情'}))
+
+
+# -----------------------企业保证担保form-------------------------#
+class WarrandiceCustomForm(dform.Form):
+    sure = fields.TypedMultipleChoiceField(
+        label="保证人",
+        label_suffix="：",
+        coerce=lambda x: int(x),
+        widget=widgets.SelectMultiple(
+            attrs={'class': 'form-control',
+                   'placeholder': '保证人'}))
+
+    def __init__(self, *args, **kwargs):
+        super(WarrandiceCustomForm, self).__init__(*args, **kwargs)
+        self.fields['sure'].choices = \
+            models.Customes.objects.filter(
+                genre=1).values_list(
+                'id', 'name').order_by('name')
+
+
+# -----------------------个人保证担保form-------------------------#
+class WarrandicePersonForm(dform.Form):
+    sure = fields.TypedMultipleChoiceField(
+        label="保证人",
+        label_suffix="：",
+        coerce=lambda x: int(x),
+        widget=widgets.SelectMultiple(
+            attrs={'class': 'form-control',
+                   'placeholder': '保证人'}))
+
+    def __init__(self, *args, **kwargs):
+        super(WarrandicePersonForm, self).__init__(*args, **kwargs)
+        self.fields['sure'].choices = \
+            models.Customes.objects.filter(
+                genre=2).values_list(
+                'id', 'name').order_by('name')

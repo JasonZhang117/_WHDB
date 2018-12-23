@@ -137,9 +137,7 @@ class LendingSures(models.Model):
         db_table = 'dbms_lendingsure'  # 指定数据表的名称
 
     def __str__(self):
-        return "%s-%s-%s" % (self.lending.summary,
-                             self.lending.order,
-                             self.lending.order_amount)
+        return "%s-%s" % (self.lending, self.sure_typ)
 
 
 class SureExtends(models.Model):
@@ -151,14 +149,14 @@ class SureExtends(models.Model):
     custome = models.ManyToManyField(
         to='Customes',
         verbose_name="反担保人",
-        related_name='assure_custome')
+        related_name='sure_custome')
 
     class Meta:
         verbose_name_plural = '反担保-保证反担保'  # 指定显示名称
         db_table = 'dbms_sure_extend'  # 指定数据表的名称
 
     def __str__(self):
-        return self.sure
+        return '%s' % self.sure
 
 
 class MortgageExtends(models.Model):
@@ -170,14 +168,14 @@ class MortgageExtends(models.Model):
     warrant = models.ManyToManyField(
         to='Warrants',
         verbose_name="抵质押物",
-        related_name='assure_custome')
+        related_name='mortgage_warrant')
 
     class Meta:
         verbose_name_plural = '反担保-抵质押'  # 指定显示名称
         db_table = 'dbms_mortgage_extend'  # 指定数据表的名称
 
     def __str__(self):
-        return self.sure
+        return '%s' % self.sure
 
 
 # ------------------------评审意见--------------------------#

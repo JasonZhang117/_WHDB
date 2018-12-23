@@ -9,6 +9,9 @@ admin.site.register(models.Appraisals)  # 评审会
 admin.site.register(models.SingleQuota)  # 单项额度
 admin.site.register(models.Comments)  # 评审意见
 admin.site.register(models.LendingOrder)  # 发放次序
+admin.site.register(models.LendingSures)  # 反担保
+admin.site.register(models.SureExtends)  # 保证反担保
+admin.site.register(models.MortgageExtends)  # 抵质押反担保
 
 # -----------------------合同-------------------------#
 admin.site.register(models.Agrees)  # 合同

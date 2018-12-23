@@ -33,7 +33,7 @@ class Warrants(models.Model):  # 担保物
         default=1)
 
     class Meta:
-        verbose_name_plural = '反担保-权证'  # 指定显示名称
+        verbose_name_plural = '权证-权证'  # 指定显示名称
         db_table = 'dbms_warrants'  # 指定数据表的名称
 
     def __str__(self):
@@ -58,7 +58,7 @@ class Ownership(models.Model):  # 产权证
         related_name='owner_custome')
 
     class Meta:
-        verbose_name_plural = '反担保-产权证'  # 指定显示名称
+        verbose_name_plural = '权证-产权证'  # 指定显示名称
         db_table = 'dbms_ownership'  # 指定数据表的名称
         unique_together = [('warrant', 'owner'), ]
 
@@ -89,7 +89,7 @@ class Houses(models.Model):  # 房产
         verbose_name='建筑面积')
 
     class Meta:
-        verbose_name_plural = '反担保-房产'  # 指定显示名称
+        verbose_name_plural = '权证-房产'  # 指定显示名称
         db_table = 'dbms_houses'  # 指定数据表的名称
 
     def __str__(self):
@@ -119,7 +119,7 @@ class Grounds(models.Model):  # 土地
         verbose_name='土地面积')
 
     class Meta:
-        verbose_name_plural = '反担保-土地'  # 指定显示名称
+        verbose_name_plural = '权证-土地'  # 指定显示名称
         db_table = 'dbms_grounds'  # 指定数据表的名称
 
     def __str__(self):
@@ -154,7 +154,7 @@ class Stockes(models.Model):  # 股权
         verbose_name='数量（万元/万股）')
 
     class Meta:
-        verbose_name_plural = '反担保-股权'  # 指定显示名称
+        verbose_name_plural = '权证-股权'  # 指定显示名称
         db_table = 'dbms_stockes'  # 指定数据表的名称
 
     def __str__(self):
@@ -185,7 +185,7 @@ class Receivable(models.Model):  # 应收帐款
         verbose_name="应收账款描述")
 
     class Meta:
-        verbose_name_plural = '反担保-应收账款'  # 指定显示名称
+        verbose_name_plural = '权证-应收账款'  # 指定显示名称
         db_table = 'dbms_receivable'  # 指定数据表的名称
 
     def __str__(self):
@@ -210,7 +210,7 @@ class Hypothecs(models.Model):  # 他权
         related_name='ypothec_m_agree')
 
     class Meta:
-        verbose_name_plural = '反担保-他权'  # 指定显示名称
+        verbose_name_plural = '权证-他权'  # 指定显示名称
         db_table = 'dbms_hypothecs'  # 指定数据表的名称
 
     def __str__(self):
@@ -235,7 +235,7 @@ class Storages(models.Model):  # 出入库
         default=datetime.date.today)
 
     class Meta:
-        verbose_name_plural = '反担保-出入库'  # 指定显示名称
+        verbose_name_plural = '权证-出入库'  # 指定显示名称
         db_table = 'dbms_storages'  # 指定数据表的名称
 
     def __str__(self):
@@ -256,7 +256,7 @@ class Evaluate(models.Model):  # 评估
         default=datetime.date.today)
 
     class Meta:
-        verbose_name_plural = '反担保-评估'  # 指定显示名称
+        verbose_name_plural = '权证-评估'  # 指定显示名称
         db_table = 'dbms_evaluate'  # 指定数据表的名称
 
     def __str__(self):
