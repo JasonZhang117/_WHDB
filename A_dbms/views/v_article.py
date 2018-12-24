@@ -88,9 +88,7 @@ def article(request, *args, **kwargs):  # 项目列表
     except EmptyPage:
         p_list = paginator.page(paginator.num_pages)
 
-    return render(request,
-                  'dbms/article/article.html',
-                  locals())
+    return render(request, 'dbms/article/article.html', locals())
 
 
 # -----------------------------添加项目ajax------------------------------#
@@ -128,7 +126,7 @@ def article_add_ajax(request):  # 添加项目
                 director_id=cleaned_data['director_id'],
                 assistant_id=cleaned_data['assistant_id'],
                 control_id=cleaned_data['control_id'],
-                buildor=request.user)
+                article_buildor=request.user)
             response['obj_num'] = article_obj.article_num
             response['message'] = '成功创建项目：%s！' % article_obj.article_num
         except Exception as e:
@@ -210,8 +208,7 @@ def article_edit_ajax(request):  # 修改项目ajax
 @login_required
 def article_del_ajax(request):
     print(__file__, '---->def article_del_ajax')
-    response = {'status': True, 'message': None,
-                'obj_num': None, 'forme': None, }
+    response = {'status': True, 'message': None, 'forme': None, }
     post_data_str = request.POST.get('postDataStr')
     post_data = json.loads(post_data_str)
     print('post_data:', post_data)
@@ -238,8 +235,7 @@ def article_del_ajax(request):
 @login_required
 def article_feedback_ajax(request):
     print(__file__, '---->def article_feedback_ajax')
-    response = {'status': True, 'message': None,
-                'obj_num': None, 'forme': None, }
+    response = {'status': True, 'message': None, 'forme': None, }
     post_data_str = request.POST.get('postDataStr')
     post_data = json.loads(post_data_str)
     print('post_data:', post_data)
@@ -321,8 +317,7 @@ def article_scan(request, article_id):  # 项目预览
         form_feedback = forms.FeedbackAddForm()
 
     return render(request,
-                  'dbms/article/article-scan.html',
-                  locals())
+                  'dbms/article/article-scan.html', locals())
 
 
 @login_required
@@ -330,6 +325,4 @@ def article_scan_agree(request, article_id, agree_id):  # 项目预览
     print(__file__, '---->def article_scan_agree')
     article_obj = models.Articles.objects.get(id=article_id)
     agree_obj = models.Agrees.objects.get(id=agree_id)
-    return render(request,
-                  'dbms/article/article-scan-agree.html',
-                  locals())
+    return render(request, 'dbms/article/article-scan-agree.html', locals())

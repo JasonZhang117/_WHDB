@@ -18,7 +18,7 @@
         <tbody>
         {% for lending_sure in lending_obj.sure_lending.all %}
             {% if lending_sure.sure_typ in house_list %}
-                {% for warrant in lending_sure.mortgage_sure.warrant.all %}
+                {% for warrant in lending_sure.warrant_sure.warrant.all %}
                     <tr>
                         <td>{{ lending_sure.get_sure_typ_display }}</td>
                         <td>{{ warrant.warrant_num }}</td>

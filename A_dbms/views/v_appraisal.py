@@ -95,9 +95,10 @@ def appraisal_scan_lending(request, article_id, lending_id):  # 评审项目预�
     for sure in lending_sure:
         # print(type(i))
         print('sure.sure_typ:', sure.sure_typ)
-        if sure.sure_typ in house_list:
-            for warrant in sure.mortgage_sure.warrant.all():
-                print(warrant)
+        if sure.sure_typ in sure_list:
+            print('sure.sure_typ:', sure.sure_typ)
+            for custome in sure.custome_sure.custome.all():
+                print(custome)
 
     return render(request,
                   'dbms/appraisal/appraisal-scan-lending.html',

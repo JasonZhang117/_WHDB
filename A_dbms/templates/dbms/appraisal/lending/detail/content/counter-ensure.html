@@ -19,7 +19,7 @@
         <tbody>
         {% for lending_sure in lending_obj.sure_lending.all %}
             {% if lending_sure.sure_typ in sure_list %}
-                {% for custome in lending_sure.sure_sure.custome.all %}
+                {% for custome in lending_sure.custome_sure.custome.all %}
                     <tr>
                         <td>{{ lending_sure.get_sure_typ_display }}</td>
                         <td>{{ custome.name }}</td>
