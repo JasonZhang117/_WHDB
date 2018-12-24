@@ -17,7 +17,27 @@
         <tbody id="lending-tb">
         {% for lending in article_obj.lending_summary.all %}
             <tr lending-nid={{ lending.id }}>
-                <td>{{ lending.get_order_display }}</td>
+                {% if lending_id %}
+                    {% if lending.id == lending_id %}
+                        <td>
+                            <a href="{% url 'dbms:appraisal_scan_lending' article_id=article_obj.id lending_id=lending.id %}">
+                                {{ lending.get_order_display }}*
+                            </a>
+                        </td>
+                    {% else %}
+                        <td>
+                            <a href="{% url 'dbms:appraisal_scan_lending' article_id=article_obj.id lending_id=lending.id %}">
+                                {{ lending.get_order_display }}
+                            </a>
+                        </td>
+                    {% endif %}
+                {% else %}
+                    <td>
+                        <a href="{% url 'dbms:appraisal_scan_lending' article_id=article_obj.id lending_id=lending.id %}">
+                            {{ lending.get_order_display }}
+                        </a>
+                    </td>
+                {% endif %}
                 <td>{{ lending.order_amount }}</td>
                 <td>{{ lending.amount }}</td>
                 <td>

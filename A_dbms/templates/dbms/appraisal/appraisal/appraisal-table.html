@@ -1,0 +1,44 @@
+<div class="table-responsive">
+    {#"table-responsive":表格响应式布局#}
+    <table class="table table-bordered table-hover
+                table-condensed active">
+        {#"table-bordered":表格表格边框#}
+        {#"table-hover":表格悬停变色#}
+        {#"table-condensed":表格紧缩#}
+        {#<caption><h4>项目管理</h4></caption>#}
+        <thead>
+        <tr style="text-align: center">
+            <th>项目编号</th>
+            <th>客户</th>
+            <th>金额</th>
+            <th>期限</th>
+            <th>项目经理</th>
+            <th>项目助理</th>
+            <th>风控专员</th>
+            <th>上会日期</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for article in p_list %}
+            <tr>
+                <td>
+                    <a href="{% url 'dbms:appraisal_scan' article_id=article.id %}">
+                        {{ article.article_num }}
+                    </a>
+                </td>
+                <td>{{ article.custom }}</td>
+                <td>{{ article.amount }}</td>
+                <td>{{ article.credit_term }}</td>
+                <td>{{ article.director.name }}</td>
+                <td>{{ article.assistant.name }}</td>
+                <td>{{ article.control.name }}</td>
+                <td>{{ article.review_date }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    {% include 'dbms/board/page.html' %}
+
+
+</div>

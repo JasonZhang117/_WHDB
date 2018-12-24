@@ -331,5 +331,5 @@ def article_scan_agree(request, article_id, agree_id):  # 项目预览
     article_obj = models.Articles.objects.get(id=article_id)
     agree_obj = models.Agrees.objects.get(id=agree_id)
     return render(request,
-                  'dbms/article/article-agree.html',
+                  'dbms/article/article-scan-agree.html',
                   locals())

@@ -25,7 +25,7 @@
             var postDataStr = JSON.stringify(postData);
             console.log(postDataStr)
             $.ajax({
-                url: '/dbms/meeting/article/sign/',
+                url: '/dbms/appraisal/sign/',
                 type: 'POST',
                 data: {'postDataStr': postDataStr},
                 success: function (arg) {

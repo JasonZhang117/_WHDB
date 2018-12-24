@@ -1,12 +1,7 @@
 <div class="panel panel-default">
     <div class="panel-heading">
-        <label>
-            项目情况
-        </label>
+        <label>项目情况</label>
         <label class="navbar-right">
-            <a class="btn btn-primary btn-sm " id="allotExpert">
-                分配评委
-            </a><!--#path('meeting/allot_ajax/'-->
             <a class="btn btn-primary btn-sm " id="singleQuota">
                 单项额度
             </a> <!--#path('meeting/lending/'-->
@@ -27,7 +22,7 @@
             项目编号：{{ article_obj.article_num }}
         </label>
         <label class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
-            评审编号：{{ meeting_obj.num }}
+            纪要编号：{{ article_obj.summary_num }}
         </label>
         <label class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
             金额合计：{{ article_obj.amount }}
@@ -58,4 +53,3 @@
         </label>
     </div>
 </div>
-

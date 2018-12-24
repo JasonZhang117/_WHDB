@@ -22,9 +22,12 @@ def warrant_add_ajax(request):
 
     print('warrant_typ:', warrant_typ)
     print('type(warrant_typ):', type(warrant_typ))
-    form_warrant_add = forms.WarrantAddForm(post_data)
+    form_warrant_data = {'warrant_typ': warrant_typ,
+                         'warrant_num': post_data['warrant_num']}
+    form_warrant_add = forms.WarrantAddForm(form_warrant_data)
     if form_warrant_add.is_valid():
         warrant_add_clean = form_warrant_add.cleaned_data
+        print('warrant_add_clean:', warrant_add_clean)
         if warrant_typ == 1:
             print('warrant_typ == 1')
             form_house_add_edit = forms.HouseAddEidtForm(post_data)

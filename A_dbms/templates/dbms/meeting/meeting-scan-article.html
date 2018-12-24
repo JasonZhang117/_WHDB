@@ -1,0 +1,20 @@
+{% extends 'dbms/index_dbms.html' %}
+
+{% block title %}参评项目{% endblock %}
+
+{% block right-content-container %}
+
+    <div class="container-fluid" style="padding-left: 1px;">
+        {% include 'dbms/meeting/article/meeting-article-summry.html' %}
+        {% include 'dbms/meeting/article/meeting-article-tabs.html' %}
+        {% include 'dbms/meeting/article/meeting-article-detail.html' %}
+        {% include 'dbms/meeting/modl/expert-allot-mod.html' %}
+
+    </div>
+
+{% endblock %}
+
+{% block extra-js %}
+    {% include 'dbms/meeting/extra/js-expert-allot.html' %}
+
+{% endblock %}

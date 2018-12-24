@@ -1,0 +1,27 @@
+<div class="tab-content">
+
+    <div role="tabpanel"
+         class="tab-pane"
+         id="comment"><!--评审意见-->
+        {% include 'dbms/appraisal/scan/tab/content/comment.html' %}
+    </div>
+
+    <div role="tabpanel"
+         class="tab-pane"
+         id="single"><!--单项额度-->
+        {% include 'dbms/appraisal/scan/tab/content/single.html' %}
+    </div>
+
+    <div role="tabpanel"
+         class="tab-pane active"
+         id="lending_order"><!--放款次序-->
+        {% include 'dbms/appraisal/scan/tab/content/lending_order.html' %}
+    </div>
+
+    <div role="tabpanel"
+         class="tab-pane"
+         id="sign"><!--签批详情-->
+        {% include 'dbms/appraisal/scan/tab/content/sign.html' %}
+    </div>
+
+</div>

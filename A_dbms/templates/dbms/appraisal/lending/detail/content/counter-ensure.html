@@ -1,0 +1,36 @@
+<div class="table-responsive">
+    {#"table-responsive":表格响应式布局#}
+    <table class="table table-bordered table-hover
+                table-condensed active">
+        {#"table-bordered":表格表格边框#}
+        {#"table-hover":表格悬停变色#}
+        {#"table-condensed":表格紧缩#}
+        {#<caption><h4>项目管理</h4></caption>#}
+        <thead>
+        <tr style="text-align: center">
+            <th>担保方式</th>
+            <th>保证人</th>
+            <th>保证人类型</th>
+            <th>联系地址</th>
+            <th>联系人</th>
+            <th>联系电话</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for lending_sure in lending_obj.sure_lending.all %}
+            {% if lending_sure.sure_typ in sure_list %}
+                {% for custome in lending_sure.sure_sure.custome.all %}
+                    <tr>
+                        <td>{{ lending_sure.get_sure_typ_display }}</td>
+                        <td>{{ custome.name }}</td>
+                        <td>{{ custome.get_genre_display }}</td>
+                        <td>{{ custome.contact_addr }}</td>
+                        <td>{{ custome.linkman }}</td>
+                        <td>{{ custome.contact_num }}</td>
+                    </tr>
+                {% endfor %}
+            {% endif %}
+        {% endfor %}
+        </tbody>
+    </table>
+</div>

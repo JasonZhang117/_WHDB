@@ -1,0 +1,19 @@
+{% extends 'dbms/index_dbms.html' %}
+
+{% block title %}参评项目{% endblock %}
+
+{% block right-content-container %}
+
+    <div class="container-fluid" style="padding-left: 1px;">
+        {% include 'dbms/appraisal/lending/appraisal-lending-summry.html' %}
+        {% include 'dbms/appraisal/scan/appraisal-tab.html' %}
+        {% include 'dbms/appraisal/lending/detail-lending.html' %}
+
+
+    </div>
+
+{% endblock %}
+
+{% block extra-js %}
+
+{% endblock %}

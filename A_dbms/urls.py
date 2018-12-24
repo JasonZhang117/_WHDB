@@ -13,7 +13,7 @@ urlpatterns = [
          views.article, name='article'),  # /dbms/article/(0-9)
     path('article/scan/<int:article_id>/',
          views.article_scan, name='article_scan_all'),
-    path('article/scan/<int:article_id>/<int:agree_id>',
+    path('article/scan/<int:article_id>/<int:agree_id>/',
          views.article_scan_agree, name='article_scan_agree'),
 
     path('article/add/', views.article_add_ajax),
@@ -35,18 +35,25 @@ urlpatterns = [
 
     path('meeting/add/', views.meeting_add_ajax),
     path('meeting/allot/', views.meeting_allot_ajax),
-    path('meeting/comment/', views.comment_edit_ajax),
-    path('meeting/single/', views.single_quota_ajax),
-    path('meeting/single/del/', views.single_del_ajax),
-    path('meeting/lending/', views.lending_order_ajax),
-    path('meeting/lending/del/', views.lending_del_ajax),
     path('meeting/edit/', views.meeting_edit_ajax),
     path('meeting/close/', views.meeting_close_ajax),
     path('meeting/del/', views.meeting_del_ajax),
-
-    path('meeting/article/sign/', views.article_sign_ajax),
     path('meeting/article/add/', views.meeting_article_add_ajax),
     path('meeting/article/del/', views.meeting_article_del_ajax),
+
+    # -----------------------appraisal评审管理-------------------------#
+    path('appraisal/',
+         views.appraisal, name='appraisal'),
+    path('appraisal/scan/<int:article_id>/',
+         views.appraisal_scan, name='appraisal_scan'),
+    path('appraisal/scan/<int:article_id>/<int:lending_id>/',
+         views.appraisal_scan_lending, name='appraisal_scan_lending'),
+    path('appraisal/comment/', views.comment_edit_ajax),
+    path('appraisal/single/add/', views.single_quota_ajax),
+    path('appraisal/single/del/', views.single_del_ajax),
+    path('appraisal/lending/add/', views.lending_order_ajax),
+    path('appraisal/lending/del/', views.lending_del_ajax),
+    path('appraisal/sign/', views.article_sign_ajax),
 
     # -----------------------agree合同管理-------------------------#
     path('agree/',

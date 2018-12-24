@@ -5,13 +5,17 @@ from .v_article import (article, article_add_ajax, article_feedback_ajax,
                         article_scan, article_edit_ajax,
                         article_scan_agree, article_del_ajax)
 # ----------------------v_appraisal评审视图--------------------#
-from .v_meeting import (meeting, meeting_scan, single_del_ajax,
-                        article_sign_ajax, meeting_notice,
-                        meeting_article_del_ajax, comment_edit_ajax,
-                        single_quota_ajax, meeting_article_add_ajax,
+from .v_meeting import (meeting, meeting_scan, meeting_notice,
+                        meeting_article_del_ajax, meeting_article_add_ajax,
                         meeting_edit_ajax, meeting_del_ajax,
-                        meeting_close_ajax, meeting_scan_article, lending_del_ajax,
-                        meeting_add_ajax, meeting_allot_ajax, lending_order_ajax)
+                        meeting_close_ajax, meeting_scan_article,
+                        meeting_add_ajax, meeting_allot_ajax)
+
+from .v_appraisal import (appraisal, appraisal_scan, appraisal_scan_lending,
+                          article_sign_ajax,
+                          single_del_ajax, comment_edit_ajax,
+                          single_quota_ajax, lending_del_ajax, lending_order_ajax)
+
 # ----------------------v_agree合同管理视图--------------------#
 from .v_agree import (agree, agree_add_ajax, counter_add_ajax,
                       agree_scan, agree_preview)

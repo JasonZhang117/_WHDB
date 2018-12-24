@@ -1,0 +1,9 @@
+{% extends 'dbms/index_dbms.html' %}
+
+{% block title %}评审管理{% endblock %}
+
+
+{% block right-content-container %}
+    {% include 'dbms/appraisal/appraisal/appraisal-filter.html' %}
+    {% include 'dbms/appraisal/appraisal/appraisal-table.html' %}
+{% endblock %}

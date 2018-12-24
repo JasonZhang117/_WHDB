@@ -63,6 +63,10 @@ class Articles(models.Model):  # 项目、纪要
     #     verbose_name="评审",
     #     related_name='article_expert')
     # add,set的方法不能用了。
+    review_date = models.DateField(
+        verbose_name='上会日期',
+        null=True, blank=True)
+
     summary_num = models.CharField(
         verbose_name='_纪要编号',
         max_length=32,

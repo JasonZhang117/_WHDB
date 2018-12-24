@@ -32,7 +32,7 @@ class Appraisals(models.Model):  # 评审会
         related_name='meeting_buildor_employee')
     MEETING_STATE_LIST = ((1, '待上会'), (2, '已上会'))
     meeting_state = models.IntegerField(
-        verbose_name='项目状态',
+        verbose_name='会议状态',
         choices=MEETING_STATE_LIST,
         default=1)
 

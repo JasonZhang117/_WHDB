@@ -1,0 +1,26 @@
+<div class="table-responsive">
+    {#"table-responsive":表格响应式布局#}
+    <table class="table table-bordered table-hover
+                table-condensed active">
+        {#"table-bordered":表格表格边框#}
+        {#"table-hover":表格悬停变色#}
+        {#"table-condensed":表格紧缩#}
+        {#<caption><h4>项目管理</h4></caption>#}
+        <thead>
+        <tr style="text-align: center">
+            <th>还款日期</th>
+            <th>还款金额</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for provid in agree_obj.provide_agree.all %}
+            {% for repayment in provid.repayment_provide.all %}
+                <tr>
+                    <td>{{ repayment.repayment_date }}</td>
+                    <td>{{ repayment.repayment_money }}</td>
+                <tr>
+            {% endfor %}
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
