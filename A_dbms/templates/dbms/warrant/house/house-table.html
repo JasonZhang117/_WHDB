@@ -19,7 +19,7 @@
         {% for house in house_list %}
             <tr>
                 <td>
-                    <a href="{% url 'dbms:house_scan' house_id=house.id %}">
+                    <a href="{% url 'dbms:warrant_scan' warrant_id=house.warrant.id %}">
                         {{ house.warrant.warrant_num }}
                     </a>
                 </td>

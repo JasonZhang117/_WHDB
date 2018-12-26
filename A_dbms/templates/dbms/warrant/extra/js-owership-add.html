@@ -1,0 +1,54 @@
+<script>
+    $(function () {
+        bindAddOwerShip();
+        bindAddOwerShipModalOk();
+    });
+
+    function bindAddOwerShip() {
+        $('#addOwerShip').click(function () {
+            console.log("bindAddOwerShip")
+            $('#addOwerShipModal').modal('show');
+        })
+    }
+
+    function bindAddOwerShipModalOk() {
+        $('#addOwerShipModalOk').click(function () {
+            var postData = {};
+            $('#addOwerShipModal').find('input,select').each(function () {
+                var v = $(this).val();
+                var n = $(this).attr('name');
+                postData[n] = v;
+            });
+            var postDataStr = JSON.stringify(postData);
+
+            console.log(postDataStr)
+
+            $.ajax({
+                url: '/dbms/warrant/owership/add/',
+                type: 'POST',
+                traditional: true,
+                data: {'postDataStr': postDataStr},
+                dataType: 'JSON',
+                success: function (arg) {
+                    console.log(arg);
+                    if (arg.status) {
+                        $('#addOwerShipModal').modal('hide');
+                        alert(arg.message);
+                        window.location.reload();
+                    } else {
+                        alert(arg.message);
+
+                        $('#e_ownership_num').text(arg.forme.ownership_num);
+                        $('#e_owner').text(arg.forme.owner);
+                    }
+                }
+            })
+        })
+    }
+</script>
+
+
+
+
+
+

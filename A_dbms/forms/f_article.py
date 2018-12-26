@@ -9,66 +9,43 @@ from django.core.exceptions import NON_FIELD_ERRORS, ValidationError
 # -----------------------项目添加-------------------------#
 class ArticlesAddForm(dform.Form):  # 项目添加
     custom_id = fields.IntegerField(
-        label='客户',
-        label_suffix="：",
-        widget=widgets.Select(
-            attrs={'class': 'form-control',
-                   'placeholder': '选择客户'}))
+        label='客户', label_suffix="：", widget=widgets.Select(
+            attrs={'class': 'form-control'}))
     renewal = fields.FloatField(
-        label='续贷金额（元）',
-        label_suffix="：",
+        label='续贷金额（元）', label_suffix="：",
         widget=widgets.NumberInput(
-            attrs={'class': 'form-control',
-                   'placeholder': '输入续贷金额'}))
+            attrs={'class': 'form-control', 'placeholder': '输入续贷金额'}))
     augment = fields.FloatField(
-        label='新增金额（元）',
-        label_suffix="：",
+        label='新增金额（元）', label_suffix="：",
         widget=widgets.NumberInput(
-            attrs={'class': 'form-control',
-                   'placeholder': '输入新增金额'}))
+            attrs={'class': 'form-control', 'placeholder': '输入新增金额'}))
     credit_term = fields.IntegerField(
-        label='授信期限（月）',
-        label_suffix="：",
-        initial=12,
+        label='授信期限（月）', label_suffix="：", initial=12,
         widget=widgets.NumberInput(
-            attrs={'class': 'form-control',
-                   'placeholder': '输入授信期限（月）'}))
+            attrs={'class': 'form-control', 'placeholder': '输入授信期限（月）'}))
     director_id = fields.IntegerField(
-        label="项目经理",
-        label_suffix="：",
-        widget=widgets.Select(
-            attrs={'class': 'form-control',
-                   'placeholder': '选择项目经理'}))
+        label="项目经理", label_suffix="：", widget=widgets.Select(
+            attrs={'class': 'form-control'}))
     assistant_id = fields.IntegerField(
-        label="项目助理",
-        label_suffix="：",
-        widget=widgets.Select(
-            attrs={'class': 'form-control',
-                   'placeholder': '选择项目助理'}))
+        label="项目助理", label_suffix="：", widget=widgets.Select(
+            attrs={'class': 'form-control'}))
     control_id = fields.IntegerField(
-        label="风控专员",
-        label_suffix="：",
-        widget=widgets.Select(
-            attrs={'class': 'form-control',
-                   'placeholder': '选择风控专员'}))
+        label="风控专员", label_suffix="：", widget=widgets.Select(
+            attrs={'class': 'form-control', }))
 
     def __init__(self, *args, **kwargs):
         super(ArticlesAddForm, self).__init__(*args, **kwargs)
         self.fields['custom_id'].widget.choices = \
-            models.Customes.objects.values_list(
-                'id', 'name').order_by('name')
+            models.Customes.objects.values_list('id', 'name').order_by('name')
         self.fields['director_id'].widget.choices = \
             models.Employees.objects.filter(
-                job__name='项目经理').values_list(
-                'id', 'name').order_by('name')
+                job__name='项目经理').values_list('id', 'name').order_by('name')
         self.fields['assistant_id'].widget.choices = \
             models.Employees.objects.filter(
-                job__name='项目经理').values_list(
-                'id', 'name').order_by('name')
+                job__name='项目经理').values_list('id', 'name').order_by('name')
         self.fields['control_id'].widget.choices = \
             models.Employees.objects.filter(
-                job__name='风控专员').values_list(
-                'id', 'name').order_by('name')
+                job__name='风控专员').values_list('id', 'name').order_by('name')
 
 
 # -----------------------风控反馈添加-------------------------#
@@ -95,49 +72,3 @@ class FeedbackAddForm(dform.Form):  # 风控反馈添加
             attrs={'class': 'form-control',
                    'placeholder': '提出项目风控措施建议（额度、担保措施、过程控制、保后要求等）'}))
 
-
-# -----------------------项目签批-------------------------#
-class ArticlesSignForm(dform.Form):  # 项目签批
-    summary_num = fields.CharField(
-        label='纪要编号',
-        label_suffix="：",
-        widget=widgets.TextInput(
-            attrs={'class': 'form-control',
-                   'placeholder': '纪要编号'}))
-
-    SIGN_TYPE_LIST = models.Articles.SIGN_TYPE_LIST
-    sign_type = fields.IntegerField(
-        label='签批结论',
-        label_suffix="：",
-        widget=widgets.Select(
-            choices=SIGN_TYPE_LIST,
-            attrs={'class': 'form-control',
-                   'placeholder': '签批结论'}),
-        initial=1)
-    renewal = fields.FloatField(
-        label='续贷金额（元）',
-        label_suffix="：",
-        widget=widgets.NumberInput(
-            attrs={'class': 'form-control',
-                   'placeholder': '续贷金额（元）'}))
-    augment = fields.FloatField(
-        label='新增金额（元）',
-        label_suffix="：",
-        widget=widgets.NumberInput(
-            attrs={'class': 'form-control',
-                   'placeholder': '新增金额（元）'}))
-    sign_detail = fields.CharField(
-        label='签批详情',
-        label_suffix="：",
-        widget=widgets.Textarea(
-            attrs={'class': 'form-control',
-                   'style': 'height:100xp ',
-                   'placeholder': '签批详情'}))
-    sign_date = fields.DateField(
-        label='签批日期',
-        label_suffix="：",
-        widget=widgets.DateInput(
-            attrs={'class': 'form-control',
-                   'type': 'date',
-                   'placeholder': '签批日期'}),
-        initial=str(datetime.date.today()))

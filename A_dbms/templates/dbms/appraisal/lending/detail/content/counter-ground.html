@@ -10,21 +10,27 @@
         <tr style="text-align: center">
             <th>担保方式</th>
             <th>土地编号</th>
-            <th>土地坐落</th>
+            <th>土地地址</th>
             <th>土地用途</th>
             <th>土地面积</th>
+            <th>操作</th>
         </tr>
         </thead>
-        <tbody>
+        <tbody class="guarantee-tb">
         {% for lending_sure in lending_obj.sure_lending.all %}
             {% if lending_sure.sure_typ in ground_list %}
-                {% for warrant in lending_sure.mortgage_sure.warrant.all %}
-                    <tr>
+                {% for warrant in lending_sure.warrant_sure.warrant.all %}
+                    <tr guarantee-nid={{ warrant.id }} sure-typ-nid={{ lending_sure.sure_typ }}>
                         <td>{{ lending_sure.get_sure_typ_display }}</td>
                         <td>{{ warrant.warrant_num }}</td>
                         <td>{{ warrant.ground_warrant.ground_locate }}</td>
                         <td>{{ warrant.ground_warrant.get_ground_app_display }}</td>
                         <td>{{ warrant.ground_warrant.ground_area }}</td>
+                        <td>
+                            <a class="btn btn-danger btn-xs delGuaranteeB">
+                                删除
+                            </a>
+                        </td>
                     </tr>
                 {% endfor %}
             {% endif %}

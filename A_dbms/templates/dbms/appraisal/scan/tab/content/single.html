@@ -12,7 +12,9 @@
             <th>授信额度（元）</th>
             <th>费率（%）</th>
             <th>放款金额</th>
-            <th>操作</th>
+            {% if not lending_obj %}
+                <th>操作</th>
+            {% endif %}
         </tr>
         </thead>
         <tbody id="single-quota-tb">
@@ -22,11 +24,13 @@
                 <td>{{ single.credit_amount }}</td>
                 <td>{{ single.flow_rate }}</td>
                 <td>{{ single.amount }}</td>
-                <td>
-                    <a class="btn btn-danger btn-xs delSingleQuotaB">
-                        删除
-                    </a>
-                </td>
+                {% if not lending_obj %}
+                    <td>
+                        <a class="btn btn-danger btn-xs delSingleQuotaB">
+                            删除
+                        </a>
+                    </td>
+                {% endif %}
             <tr>
         {% endfor %}
         </tbody>

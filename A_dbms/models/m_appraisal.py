@@ -85,6 +85,7 @@ class LendingOrder(models.Model):
     class Meta:
         verbose_name_plural = '评审-发放次序'  # 指定显示名称
         db_table = 'dbms_lending'  # 指定数据表的名称
+        unique_together = ('summary', 'order')
 
     def __str__(self):
         return "%s-%s-%s" % (self.summary, self.order, self.order_amount)
@@ -96,8 +97,7 @@ class LendingSures(models.Model):
                                 on_delete=models.PROTECT,
                                 related_name='sure_lending')
     SURE_TYP_LIST = (
-        (0, '--------'),
-        (1, '个人保证'), (2, '企业保证'),
+        (1, '企业保证'), (2, '个人保证'),
         (11, '房产抵押'), (12, '土地抵押'), (13, '设备抵押'), (14, '存货抵押'),
         (15, '车辆抵押'),
         (21, '房产顺位'), (22, '土地顺位'),
@@ -118,36 +118,37 @@ class LendingCustoms(models.Model):
     sure = models.OneToOneField(to='LendingSures',
                                 verbose_name="反担保措施",
                                 on_delete=models.PROTECT,
-                                related_name='custome_sure')
+                                related_name='custom_sure')
     custome = models.ManyToManyField(to='Customes',
                                      verbose_name="反担保人",
-                                     related_name='lending_custome')
+                                     related_name='lending_custome',
+                                     db_constraint=True)
 
     class Meta:
         verbose_name_plural = '反担保-保证反担保'  # 指定显示名称
         db_table = 'dbms_lendingcustom'  # 指定数据表的名称
+        # unique_together = ('sure', 'custome')
 
     def __str__(self):
-        return '%s' % self.sure
+        return "%s-%s" % (self.sure, self.custome)
 
 
 class LendingWarrants(models.Model):
-    sure = models.OneToOneField(
-        to='LendingSures',
-        verbose_name="反担保措施",
-        on_delete=models.PROTECT,
-        related_name='warrant_sure')
-    warrant = models.ManyToManyField(
-        to='Warrants',
-        verbose_name="抵质押物",
-        related_name='lending_warrant')
+    sure = models.OneToOneField(to='LendingSures',
+                                verbose_name="反担保措施",
+                                on_delete=models.PROTECT,
+                                related_name='warrant_sure')
+    warrant = models.ManyToManyField(to='Warrants',
+                                     verbose_name="抵质押物",
+                                     related_name='lending_warrant',
+                                     db_constraint=True)
 
     class Meta:
         verbose_name_plural = '反担保-抵质押'  # 指定显示名称
         db_table = 'dbms_lendingwarrant'  # 指定数据表的名称
 
     def __str__(self):
-        return '%s' % self.sure
+        return "%s-%s" % (self.sure, self.warrant)
 
 
 # ------------------------评审意见--------------------------#

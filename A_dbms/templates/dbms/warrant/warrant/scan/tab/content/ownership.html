@@ -1,0 +1,30 @@
+<div class="table-responsive">
+    {#"table-responsive":表格响应式布局#}
+    <table class="table table-bordered table-hover
+                table-condensed active">
+        {#"table-bordered":表格表格边框#}
+        {#"table-hover":表格悬停变色#}
+        {#"table-condensed":表格紧缩#}
+        {#<caption><h4>项目管理</h4></caption>#}
+        <thead>
+        <tr style="text-align: center">
+            <th>产权证</th>
+            <th>权利人</th>
+            <th>删除</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for ownership in warrant_obj.ownership_warrant.all %}
+            <tr ownership-nid="{{ ownership.id }}">
+                <td>{{ ownership.ownership_num }}</td>
+                <td>{{ ownership.owner }}</td>
+                <td>
+                    <a class="btn btn-danger btn-xs delOwershipB">
+                        删除
+                    </a>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>

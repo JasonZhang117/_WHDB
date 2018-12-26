@@ -26,6 +26,21 @@ class WarrantEditForm(dform.Form):
                    'placeholder': '权证编号'}))
 
 
+# ------------------OwerShipEditForm产权证编辑-------------------#
+class OwerShipEditForm(dform.ModelForm):  # OwerShipEditForm产权证编辑
+    ownership_num = fields.CharField(
+        label="产权证编号",
+        label_suffix="：",
+        max_length=32,
+        widget=widgets.TextInput(
+            attrs={'class': 'form-control',
+                   'placeholder': '产权证编号'}))
+
+    class Meta:
+        model = models.Ownership
+        fields = ['owner']
+
+
 # -----------------------房产modelform-------------------------#
 class HouseAddEidtForm(dform.ModelForm):
     house_locate = fields.CharField(

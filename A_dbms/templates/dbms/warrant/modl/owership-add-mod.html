@@ -1,5 +1,5 @@
-<div class="modal fade" id="addWarrantModal" tabindex="-1"
-     role="dialog" aria-labelledby="addWarrantModal">
+<div class="modal fade" id="addOwerShipModal" tabindex="-1"
+     role="dialog" aria-labelledby="addOwerShipModal">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -7,19 +7,17 @@
                         data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
-                <h4 class="modal-title" id="addWarrantModalLabel">
-                    添加土地
-                    <input style="display: none" name="warrant_typ"
-                           id="id_warrant_typ" value=2>
+                <h4 class="modal-title" id="addOwerShipModalLabel">
+                    添加产权证
+                    <input style="display: none" name="warrant_id"
+                           id="id_warrant_id" value={{ warrant_obj.id }}>
                 </h4>
             </div>
             <div class="modal-body">
-
                 <form class="form-horizontal">
-                    {% include 'dbms/warrant/ground/modl/mod_form/ground-add-edit.html' %}
+                    {% include 'dbms/warrant/modl/mod_form/owership-add-edit.html' %}
                 </form>
             </div>
-
             <label id="formErrors"></label>
 
             <div class="modal-footer">
@@ -28,8 +26,8 @@
                     取消
                 </button>
                 <button type="button" class="btn btn-primary"
-                        id="addWarrantModalOk">
-                    确定
+                        id="addOwerShipModalOk">
+                    添加
                 </button>
             </div>
         </div>

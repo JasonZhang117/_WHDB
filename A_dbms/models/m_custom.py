@@ -4,45 +4,27 @@ from django.db import models
 # 客户、企业客户、个人客户区域、行业
 # -----------------------客户模型-------------------------#
 class Customes(models.Model):  # 客户
-    name = models.CharField(
-        verbose_name='名称',
-        max_length=32, unique=True)
-    idustry = models.ForeignKey(
-        to='Industries',
-        verbose_name="所属行业",
-        on_delete=models.PROTECT,
-        related_name='custome_idustry')
-    district = models.ForeignKey(
-        to='Districtes',
-        verbose_name="所属区域",
-        on_delete=models.CASCADE,
-        related_name='custome_district')
+    name = models.CharField(verbose_name='名称', max_length=32, unique=True)
+    idustry = models.ForeignKey(to='Industries',
+                                verbose_name="所属行业",
+                                on_delete=models.PROTECT,
+                                related_name='custome_idustry',
+                                blank=True, null=True)
+    district = models.ForeignKey(to='Districtes',
+                                 verbose_name="所属区域",
+                                 on_delete=models.PROTECT,
+                                 related_name='custome_district',
+                                 blank=True, null=True)
     GENRE_LIST = ((1, '企业'), (2, '个人'))
     genre = models.IntegerField(
-        verbose_name='客户类型',
-        choices=GENRE_LIST,
-        default=1)
-    contact_addr = models.CharField(
-        verbose_name='联系地址',
-        max_length=64)
-    linkman = models.CharField(
-        verbose_name='联系人',
-        max_length=16)
-    contact_num = models.CharField(
-        verbose_name='联系电话',
-        max_length=13)
-    credit_amount = models.FloatField(
-        verbose_name='授信总额（元）',
-        default=0)
-    flow_loan = models.FloatField(
-        verbose_name='流贷余额（元）',
-        default=0)
-    accept_loan = models.FloatField(
-        verbose_name='承兑余额（元）',
-        default=0)
-    back_loan = models.FloatField(
-        verbose_name='保函余额（元）',
-        default=0)
+        verbose_name='客户类型', choices=GENRE_LIST, default=1)
+    contact_addr = models.CharField(verbose_name='联系地址', max_length=64)
+    linkman = models.CharField(verbose_name='联系人', max_length=16)
+    contact_num = models.CharField(verbose_name='联系电话', max_length=13)
+    credit_amount = models.FloatField(verbose_name='授信总额（元）', default=0)
+    flow_loan = models.FloatField(verbose_name='流贷余额（元）', default=0)
+    accept_loan = models.FloatField(verbose_name='承兑余额（元）', default=0)
+    back_loan = models.FloatField(verbose_name='保函余额（元）', default=0)
 
     # Cancellation = models.BooleanField('注销', default=False)
     class Meta:

@@ -6,31 +6,20 @@ import datetime
 # ------------------------担保物--------------------------#
 class Warrants(models.Model):  # 担保物
     warrant_num = models.CharField(
-        verbose_name='权证编码',
-        max_length=32,
-        unique=True)
-    WARRANT_TYP_LIST = [(1, '房产'), (2, '土地'),
-                        (3, '应收'), (4, '股权'),
-                        (5, '票据'), (6, '车辆'),
-                        (7, '其他'), (8, '他权')]
+        verbose_name='权证编码', max_length=32, unique=True)
+    WARRANT_TYP_LIST = [
+        (1, '房产'), (2, '土地'), (3, '应收'), (4, '股权'),
+        (5, '票据'), (6, '车辆'), (7, '其他'), (8, '他权')]
     '''其他-存货、设备、合格证、'''
     warrant_typ = models.IntegerField(
-        verbose_name='权证类型',
-        choices=WARRANT_TYP_LIST,
-        default=1)
-    evaluate_value = models.FloatField(
-        verbose_name='评估价值',
-        null=True, blank=True)
-    evaluate_date = models.DateField(
-        verbose_name='评估日期',
-        null=True, blank=True)
-    WARRANT_STATE_LIST = ((1, '未入库'), (2, '已入库'),
-                          (3, '已出库'), (4, '已借出'),
-                          (5, '已归还'), (6, '已注销'))
+        verbose_name='权证类型', choices=WARRANT_TYP_LIST, default=1)
+    evaluate_value = models.FloatField(verbose_name='评估价值', null=True, blank=True)
+    evaluate_date = models.DateField(verbose_name='评估日期', null=True, blank=True)
+    WARRANT_STATE_LIST = (
+        (1, '未入库'), (2, '已入库'), (3, '已出库'),
+        (4, '已借出'), (5, '已归还'), (6, '已注销'))
     warrant_state = models.IntegerField(
-        verbose_name='_权证状态',
-        choices=WARRANT_STATE_LIST,
-        default=1)
+        verbose_name='_权证状态', choices=WARRANT_STATE_LIST, default=1)
 
     class Meta:
         verbose_name_plural = '权证-权证'  # 指定显示名称
@@ -43,19 +32,15 @@ class Warrants(models.Model):  # 担保物
 # ------------------------产权证--------------------------#
 class Ownership(models.Model):  # 产权证
     ownership_num = models.CharField(
-        verbose_name='产权证编号',
-        max_length=32,
-        unique=True)
-    warrant = models.ForeignKey(
-        to='Warrants',
-        verbose_name="权证",
-        on_delete=models.CASCADE,
-        related_name='ownership_warrant')
-    owner = models.ForeignKey(
-        to='Customes',
-        verbose_name="所有权人",
-        on_delete=models.PROTECT,
-        related_name='owner_custome')
+        verbose_name='产权证编号', max_length=32, unique=True)
+    warrant = models.ForeignKey(to='Warrants',
+                                verbose_name="权证",
+                                on_delete=models.CASCADE,
+                                related_name='ownership_warrant')
+    owner = models.ForeignKey(to='Customes',
+                              verbose_name="所有权人",
+                              on_delete=models.PROTECT,
+                              related_name='owner_custome')
 
     class Meta:
         verbose_name_plural = '权证-产权证'  # 指定显示名称
@@ -63,30 +48,23 @@ class Ownership(models.Model):  # 产权证
         unique_together = [('warrant', 'owner'), ]
 
     def __str__(self):
-        return '%s-%s-%s' % (self.ownership_num,
-                             self.owner.name,
+        return '%s-%s-%s' % (self.ownership_num, self.owner.name,
                              self.warrant.warrant_num)
 
 
 # -------------------------房产---------------------------#
 class Houses(models.Model):  # 房产
-    warrant = models.OneToOneField(
-        to='Warrants',
-        verbose_name="权证",
-        on_delete=models.CASCADE,
-        related_name='house_warrant')
+    warrant = models.OneToOneField(to='Warrants',
+                                   verbose_name="权证",
+                                   on_delete=models.CASCADE,
+                                   related_name='house_warrant')
     house_locate = models.CharField(
-        verbose_name='房产坐落',
-        max_length=64, unique=True)
-    HOUSE_APP_LIST = ((1, '住宅'), (2, '商业'),
-                      (3, '办公'), (4, '公寓'),
-                      (5, '厂房'), (6, '科研'))
+        verbose_name='房产坐落', max_length=64, unique=True)
+    HOUSE_APP_LIST = ((1, '住宅'), (2, '商业'), (3, '办公'),
+                      (4, '公寓'), (5, '厂房'), (6, '科研'))
     house_app = models.IntegerField(
-        verbose_name='房产用途',
-        choices=HOUSE_APP_LIST,
-        default=1)
-    house_area = models.FloatField(
-        verbose_name='建筑面积')
+        verbose_name='房产用途', choices=HOUSE_APP_LIST, default=1)
+    house_area = models.FloatField(verbose_name='建筑面积')
 
     class Meta:
         verbose_name_plural = '权证-房产'  # 指定显示名称
@@ -100,23 +78,19 @@ class Houses(models.Model):  # 房产
 
 # ------------------------土地--------------------------#
 class Grounds(models.Model):  # 土地
-    warrant = models.OneToOneField(
-        to='Warrants',
-        verbose_name="权证",
-        on_delete=models.CASCADE,
-        related_name='ground_warrant')
+    warrant = models.OneToOneField(to='Warrants',
+                                   verbose_name="权证",
+                                   on_delete=models.CASCADE,
+                                   related_name='ground_warrant')
     ground_locate = models.CharField(
         verbose_name='土地坐落', max_length=64)
-    GROUND_APP_LIST = ((1, '住宅'),
-                       (2, '商住'),
-                       (3, '商服'),
-                       (4, '工业'))
+    GROUND_APP_LIST = ((1, '住宅'), (2, '商住'),
+                       (3, '商服'), (4, '工业'))
     ground_app = models.IntegerField(
         verbose_name='土地用途',
         choices=GROUND_APP_LIST,
         default=1)
-    ground_area = models.FloatField(
-        verbose_name='土地面积')
+    ground_area = models.FloatField(verbose_name='土地面积')
 
     class Meta:
         verbose_name_plural = '权证-土地'  # 指定显示名称

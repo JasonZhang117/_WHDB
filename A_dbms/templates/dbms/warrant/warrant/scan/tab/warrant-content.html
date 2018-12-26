@@ -1,0 +1,27 @@
+<div class="tab-content">
+
+    <div role="tabpanel"
+         class="tab-pane"
+         id="storages"> <!--出入库-->
+        {% include 'dbms/warrant/warrant/scan/tab/content/storages.html' %}
+    </div>
+
+    <div role="tabpanel"
+         class="tab-pane"
+         id="valuate"> <!--评估情况-->
+        {% include 'dbms/warrant/warrant/scan/tab/content/valuate.html' %}
+    </div>
+
+    <div role="tabpanel"
+         class="tab-pane"
+         id="mortgage"> <!--抵押情况-->
+        {% include 'dbms/warrant/warrant/scan/tab/content/storages.html' %}
+    </div>
+
+    <div role="tabpanel"
+         class="tab-pane active"
+         id="ownership"> <!--产权人-->
+        {% include 'dbms/warrant/warrant/scan/tab/content/ownership.html' %}
+    </div>
+
+</div>

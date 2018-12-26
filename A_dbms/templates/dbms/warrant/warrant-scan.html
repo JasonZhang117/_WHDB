@@ -6,10 +6,15 @@
     <div class="container-fluid" style="padding-left: 1px;">
         {% include 'dbms/warrant/warrant/scan/warrant-summry.html' %}
         {% include 'dbms/warrant/warrant/scan/warrant-tab.html' %}
-        {% include 'dbms/warrant/warrant/modl/warrant-edit-mod.html' %}
+
+        {% include 'dbms/warrant/modl/warrant-edit-mod.html' %}
+        {% include 'dbms/warrant/modl/warrant-del-mod.html' %}
+        {% include 'dbms/warrant/modl/owership-add-mod.html' %}
     </div>
 {% endblock %}
 
 {% block extra-js %}
     {% include 'dbms/warrant/extra/js-warrant-edit.html' %}
+    {% include 'dbms/warrant/extra/js-warrant-del.html' %}
+    {% include 'dbms/warrant/extra/js-owership-add.html' %}
 {% endblock %}

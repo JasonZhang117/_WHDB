@@ -54,6 +54,8 @@ urlpatterns = [
     path('appraisal/lending/add/', views.lending_order_ajax),
     path('appraisal/lending/del/', views.lending_del_ajax),
     path('appraisal/sign/', views.article_sign_ajax),
+    path('appraisal/guarantee/add/', views.guarantee_add_ajax),
+    path('appraisal/guarantee/del/', views.guarantee_del_ajax),
 
     # -----------------------agree合同管理-------------------------#
     path('agree/',
@@ -79,21 +81,19 @@ urlpatterns = [
     path('warrant/add/', views.warrant_add_ajax),
     path('warrant/del/', views.warrant_del_ajax),
     path('warrant/edit/', views.warrant_edit_ajax),
+    path('warrant/owership/add/', views.owership_add_ajax),
 
     # -----------------------house房产管理-------------------------#
     path('house/',
          views.house, name='house_all'),
     path('house/<int:house_app>/',
          views.house, name='house'),  # /dbms/house/(0-9)
-    path('house/scan/<int:house_id>/',
-         views.house_scan, name='house_scan'),
 
     # -----------------------ground土地管理-------------------------#
     path('ground/',
          views.ground, name='ground_all'),
     path('ground/<int:application>/',
          views.ground, name='ground'),  # /dbms/ground/(0-9)
-
     # -----------------------放款管理-------------------------#
     path('provide/', views.provide, name='provide_all'),
     path('provide/edit/<int:agree_id>/',

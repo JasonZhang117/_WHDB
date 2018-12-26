@@ -1,0 +1,27 @@
+<div id="form_owership_add_edit">
+
+    <div class="form-group"><!--产权证编号-->
+        <label for="id_ownership_nume" class="col-sm-3 control-label">
+            {{ form_owership_add_edit.ownership_num.label }}：
+        </label>
+        <div class="col-sm-9">
+            {{ form_owership_add_edit.ownership_num }}
+        </div>
+        <label id="e_ownership_num" class="pull-right">
+            {{ form_owership_add_edit.ownership_num.errors }}
+        </label>
+    </div>
+
+    <div class="form-group"><!--产权人-->
+        <label for="id_owner" class="col-sm-3 control-label">
+            {{ form_owership_add_edit.owner.label }}：
+        </label>
+        <div class="col-sm-9">
+            {{ form_owership_add_edit.owner }}
+        </div>
+        <label id="e_owner" class="pull-right">
+            {{ form_owership_add_edit.owner.errors }}
+        </label>
+    </div>
+
+</div>

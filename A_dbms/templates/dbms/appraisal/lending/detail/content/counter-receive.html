@@ -12,10 +12,10 @@
             <th>还款金额</th>
         </tr>
         </thead>
-        <tbody>
+        <tbody class="guarantee-tb">
         {% for provid in agree_obj.provide_agree.all %}
-            {% for repayment in provid.repayment_provide.all %}
-                <tr>
+            {% for warrant in provid.repayment_provide.all %}
+                <tr >
                     <td>{{ repayment.repayment_date }}</td>
                     <td>{{ repayment.repayment_money }}</td>
                 <tr>

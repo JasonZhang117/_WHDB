@@ -1,27 +1,4 @@
-<div class="panel panel-default">
-    <div class="panel-heading">
-        <label>项目情况</label>
-        <label class="navbar-right">
-            {% if not lending_obj %}
-                <a class="btn btn-primary btn-sm " id="singleQuota">
-                    单项额度
-                </a> <!--#path('meeting/lending/'-->
-                <a class="btn btn-primary btn-sm " id="lendingOrder">
-                    放款次序
-                </a> <!--#path('meeting/lending/'-->
-                <a class="btn btn-primary btn-sm " id="articleSignB">
-                    项目签批
-                </a> <!--#path('meeting/article/sign/'-->
-            {% else %}
-                <a class="btn btn-primary btn-sm " id="guaranteeB">
-                    反担保
-                </a> <!--#path('meeting/lending/'-->
-            {% endif %}
-        </label>
-    </div>
-
-    <div class="panel-body row" style="padding: 1px;">
-        <label class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
+<label class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
             客户名称：{{ article_obj.custom }}
         </label>
         <label class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
@@ -57,5 +34,3 @@
         <label class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
             项目状态：{{ article_obj.get_article_state_display }}
         </label>
-    </div>
-</div>

@@ -7,6 +7,7 @@ from django.contrib.auth.decorators import login_required
 from django.db.models import Sum, Max, Count
 from django.db.models import Q, F
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
+from django.db import transaction
 
 
 # -----------------------appraisal评审情况-------------------------#
@@ -77,32 +78,189 @@ def appraisal_scan_lending(request, article_id, lending_id):  # 评审项目预�
     '''((1, '待反馈'), (2, '已反馈'), (3, '待上会'),
        (4, '已上会'), (5, '已签批'), (6, '已注销'))'''
     '''(0, '--------'),
-        (1, '个人保证'), (2, '企业保证'),
+        (1, '企业保证'), (2, '个人保证'),
         (11, '房产抵押'), (12, '土地抵押'), (13, '设备抵押'), (14, '存货抵押'),
         (15, '车辆抵押'),
         (21, '房产顺位'), (22, '土地顺位'),
         (31, '应收质押'), (32, '股权质押'), (33, '票据质押'),
         (41, '合格证监管'), (42, '房产监管'), (43, '土地监管'),
         (51, '股权预售'), (52, '房产预售'), (53, '土地预售'))'''
-
     sure_list = [1, 2]
-    house_list = [11, 21, 42]
-    ground_list = [12, 22, 43]
+    house_list = [11, 21, 42, 52]
+    ground_list = [12, 22, 43, 53]
 
-    lending_sure = lending_obj.sure_lending.all()
-    # lending_warrant = lending_obj.
-    print('lending_sure:', lending_sure)
-    for sure in lending_sure:
-        # print(type(i))
-        print('sure.sure_typ:', sure.sure_typ)
-        if sure.sure_typ in sure_list:
-            print('sure.sure_typ:', sure.sure_typ)
-            for custome in sure.custome_sure.custome.all():
-                print(custome)
+    form_lendingsures = forms.LendingSuresForm()
+
+    form_lendingcustoms_c_add = forms.LendingCustomsCForm()
+    form_lendingcustoms_p_add = forms.LendingCustomsPForm()
+    form_lendinghouse_add = forms.LendingHouseForm()
+    form_lendingground_add = forms.LendingGroundForm()
 
     return render(request,
                   'dbms/appraisal/appraisal-scan-lending.html',
                   locals())
+
+
+# -----------------------------反担保措施添加ajax------------------------#
+@login_required
+def guarantee_add_ajax(request):  # 反担保措施添加ajax
+    print(__file__, '---->def guarantee_add_ajax')
+    response = {'status': True, 'message': None, 'forme': None, }
+    post_data_str = request.POST.get('postDataStr')
+    post_data = json.loads(post_data_str)
+    print('post_data:', post_data)
+
+    lending_id = int(post_data['lending_id'])
+    lending_obj = models.LendingOrder.objects.get(id=lending_id)
+
+    form_lendingsures = forms.LendingSuresForm(post_data)
+    article_state = lending_obj.summary.article_state
+    if article_state in [1, 2, 3, 4]:
+        if form_lendingsures.is_valid():
+            lendingsures_clean = form_lendingsures.cleaned_data
+            sure_typ = lendingsures_clean['sure_typ']
+
+            default_sure = {'lending': lending_obj, 'sure_typ': sure_typ}
+
+            if sure_typ == 1:
+                form_lendingcustoms_c_add = forms.LendingCustomsCForm(post_data)
+                if form_lendingcustoms_c_add.is_valid():
+                    lendingcustoms_c_clean = form_lendingcustoms_c_add.cleaned_data
+                    print('lendingcustoms_c_clean:', lendingcustoms_c_clean)
+                    try:
+                        with transaction.atomic():
+                            lendingsure_obj, created = models.LendingSures.objects.update_or_create(
+                                lending=lending_obj, sure_typ=sure_typ, defaults=default_sure)
+                            default = {'sure': lendingsure_obj}
+                            lendingcustom_obj, created = models.LendingCustoms.objects.update_or_create(
+                                sure=lendingsure_obj, defaults=default)
+                            for custom in lendingcustoms_c_clean['sure_c']:
+                                lendingcustom_obj.custome.add(custom)
+                        response['message'] = '反担保设置成功！'
+                    except Exception as e:
+                        response['status'] = False
+                        response['message'] = '反担保设置失败：%s' % str(e)
+
+            elif sure_typ == 2:
+                form_lendingcustoms_p_add = forms.LendingCustomsPForm(post_data)
+                if form_lendingcustoms_p_add.is_valid():
+                    lendingcustoms_p_clean = form_lendingcustoms_p_add.cleaned_data
+                    try:
+                        with transaction.atomic():
+                            lendingsure_obj, created = models.LendingSures.objects.update_or_create(
+                                lending=lending_obj, sure_typ=sure_typ, defaults=default_sure)
+                            default = {'sure': lendingsure_obj}
+                            lendingcustom_obj, created = models.LendingCustoms.objects.update_or_create(
+                                sure=lendingsure_obj, defaults=default)
+                            for custom in lendingcustoms_p_clean['sure_p']:
+                                lendingcustom_obj.custome.add(custom)
+                        response['message'] = '反担保设置成功！'
+                    except Exception as e:
+                        response['status'] = False
+                        response['message'] = '反担保设置失败：%s' % str(e)
+            elif sure_typ in [11, 21, 42, 52]:
+                form_lendinghouse_add = forms.LendingHouseForm(post_data)
+                if form_lendinghouse_add.is_valid():
+                    lendingwarrant_clean = form_lendinghouse_add.cleaned_data
+                try:
+                    with transaction.atomic():
+                        lendingsure_obj, created = models.LendingSures.objects.update_or_create(
+                            lending=lending_obj, sure_typ=sure_typ, defaults=default_sure)
+                        default = {'sure': lendingsure_obj}
+                        lendingwarrant_obj, created = models.LendingWarrants.objects.update_or_create(
+                            sure=lendingsure_obj, defaults=default)
+                        for warrant in lendingwarrant_clean['sure_house']:
+                            lendingwarrant_obj.warrant.add(warrant)
+                    response['message'] = '反担保设置成功！'
+                except Exception as e:
+                    response['status'] = False
+                    response['message'] = '反担保设置失败：%s' % str(e)
+            elif sure_typ in [12, 22, 43, 53]:
+                form_lendingground_add = forms.LendingGroundForm(post_data)
+                if form_lendingground_add.is_valid():
+                    lendingwarrant_clean = form_lendingground_add.cleaned_data
+                try:
+                    with transaction.atomic():
+                        lendingsure_obj, created = models.LendingSures.objects.update_or_create(
+                            lending=lending_obj, sure_typ=sure_typ, defaults=default_sure)
+                        default = {'sure': lendingsure_obj}
+                        lendingwarrant_obj, created = models.LendingWarrants.objects.update_or_create(
+                            sure=lendingsure_obj, defaults=default)
+                        for warrant in lendingwarrant_clean['sure_ground']:
+                            lendingwarrant_obj.warrant.add(warrant)
+
+                    response['message'] = '反担保设置成功！'
+                except Exception as e:
+                    response['status'] = False
+                    response['message'] = '反担保设置失败：%s' % str(e)
+
+        else:
+            response['status'] = False
+            response['message'] = '表单信息有误！！！'
+            response['forme'] = form_lendingsures.errors
+    else:
+        arg = '项目状态为：%s，无法设置反担保措施！！！' % article_state
+        response['status'] = False
+        response['message'] = arg
+    result = json.dumps(response, ensure_ascii=False)
+    return HttpResponse(result)
+
+
+# -----------------------反担保人删除ajax-------------------------#
+@login_required
+def guarantee_del_ajax(request):  # 反担保人删除ajax
+    print(__file__, '---->def guarantee_del_ajax')
+    response = {'status': True, 'message': None, 'forme': None, }
+    post_data_str = request.POST.get('postDataStr')
+    post_data = json.loads(post_data_str)
+    print('post_data:', post_data)
+    lending_id = post_data['lending_id']
+    sure_typ = int(post_data['sure_typ'])
+
+    lending_obj = models.LendingOrder.objects.get(id=lending_id)
+    '''((1, '待反馈'), (2, '已反馈'), (3, '待上会'),
+       (4, '已上会'), (5, '已签批'), (6, '已注销'))'''
+    article_state = lending_obj.summary.article_state
+    if article_state in [1, 2, 3, 4]:
+        lendingsure_obj = lending_obj.sure_lending.get(sure_typ=sure_typ)
+        if sure_typ in [1, 2]:
+            custom_id = post_data['del_guarantee_id']
+            custom_obj = models.Customes.objects.get(id=custom_id)
+            print('custom_obj:', custom_obj)
+            try:
+                with transaction.atomic():
+                    lendingsure_obj.custom_sure.custome.remove(custom_obj)
+                    lendingcustom_list = lendingsure_obj.custom_sure.custome.all()
+                    if not lendingcustom_list:
+                        lendingsure_obj.custom_sure.delete()
+                        lendingsure_obj.delete()
+                    msg = '反担保人删除成功！'
+                    response['message'] = msg
+            except Exception as e:
+                response['status'] = False
+                response['message'] = '反担保人删除失败：%s' % str(e)
+        else:
+            warrant_id = post_data['del_guarantee_id']
+            warrant_obj = models.Warrants.objects.get(id=warrant_id)
+            try:
+                with transaction.atomic():
+                    lendingsure_obj.warrant_sure.warrant.remove(warrant_obj)
+
+                    lendingwarrant_list = lendingsure_obj.warrant_sure.warrant.all()
+                    if not lendingwarrant_list:
+                        lendingsure_obj.warrant_sure.delete()
+                        lendingsure_obj.delete()
+                    msg = '放担保物删除成功！'
+                    response['message'] = msg
+            except Exception as e:
+                response['status'] = False
+                response['message'] = '放担保物删除失败：%s' % str(e)
+    else:
+        msg = '项目状态为：%s，无法删除放款次序！！！' % article_state
+        response['status'] = False
+        response['message'] = msg
+    result = json.dumps(response, ensure_ascii=False)
+    return HttpResponse(result)
 
 
 # -----------------------------评审意见ajax------------------------#
@@ -242,18 +400,23 @@ def lending_order_ajax(request):  # 放款次序ajax
         data = {
             'order': order,
             'order_amount': order_amount}
-
         form = forms.LendingOrder(data)
-
         if form.is_valid():
             cleaned_data = form.cleaned_data
-
-            models.LendingOrder.objects.create(
-                summary_id=article_id,
-                order=cleaned_data['order'],
-                order_amount=cleaned_data['order_amount'])
-            msg = '放款次序设置成功！'
-            response['message'] = msg
+            try:
+                models.LendingOrder.objects.create(
+                    summary_id=article_id,
+                    order=cleaned_data['order'],
+                    order_amount=cleaned_data['order_amount'])
+                msg = '放款次序设置成功！'
+                response['message'] = msg
+            except Exception as e:
+                response['status'] = False
+                response['message'] = '放款次序设置失败：%s' % str(e)
+        else:
+            response['status'] = False
+            response['message'] = '表单信息有误！！！'
+            response['forme'] = form.errors
 
     else:
         msg = '项目状态为：%s，无法设置放款次序！！！' % article_obj.article_state
@@ -280,10 +443,15 @@ def lending_del_ajax(request):  # 单项额度删除ajax
     '''((1, '待反馈'), (2, '已反馈'), (3, '待上会'),
        (4, '已上会'), (5, '已签批'), (6, '已注销'))'''
     if article_obj.article_state in [1, 2, 3, 4]:
-        lending_obj.delete()  # 删除单项额度
-        msg = '放款次序删除成功！'
-        response['message'] = msg
-
+        try:
+            lending_obj.delete()  # 删除单项额度
+            msg = '放款次序删除成功！'
+            response['message'] = msg
+            msg = '放款次序删除成功！'
+            response['message'] = msg
+        except Exception as e:
+            response['status'] = False
+            response['message'] = '放款次序删除失败：%s' % str(e)
     else:
         msg = '项目状态为：%s，无法删除放款次序！！！' % article_obj.article_state
         response['status'] = False
@@ -347,15 +515,7 @@ def article_sign_ajax(request):
             response['obj_num'] = aritcle_obj.article_num
             response['message'] = '%s项目被否决，更新为注销状态！' % aritcle_obj.article_num
         else:
-            data = {
-                'summary_num': post_data['summary_num'],
-                'sign_type': sign_type,
-                'renewal': post_data['renewal'],
-                'augment': post_data['augment'],
-                'sign_detail': post_data['sign_detail'],
-                'sign_date': post_data['sign_date']}
-
-            form = forms.ArticlesSignForm(data)
+            form = forms.ArticlesSignForm(post_data)
             if form.is_valid():
                 cleaned_data = form.cleaned_data
 
@@ -379,17 +539,15 @@ def article_sign_ajax(request):
 
                         models.Articles.objects.filter(id=article_id).update(
                             summary_num=cleaned_data['summary_num'],
-                            sign_type=sign_type,
-                            renewal=renewal,
-                            augment=augment,
-                            amount=article_amount,
+                            sign_type=sign_type, renewal=renewal,
+                            augment=augment, amount=article_amount,
                             sign_detail=cleaned_data['sign_detail'],
                             sign_date=cleaned_data['sign_date'],
                             article_state=5)
                         # 更新客户授信总额
                         custom_id = aritcle_obj.custom.id
                         models.Customes.objects.filter(id=custom_id).update(
-                            credit_amount=F('credit_amount') + augment)
+                            credit_amount=cleaned_data['credit_amount'])
 
                         response['obj_num'] = aritcle_obj.article_num
                         response['message'] = '成功签批项目：%s！' % aritcle_obj.article_num

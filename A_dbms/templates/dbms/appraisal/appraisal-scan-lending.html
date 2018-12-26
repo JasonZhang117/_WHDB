@@ -5,9 +5,11 @@
 {% block right-content-container %}
 
     <div class="container-fluid" style="padding-left: 1px;">
-        {% include 'dbms/appraisal/lending/appraisal-lending-summry.html' %}
+        {% include 'dbms/appraisal/scan/appraisal-summry.html' %}
         {% include 'dbms/appraisal/scan/appraisal-tab.html' %}
         {% include 'dbms/appraisal/lending/detail-lending.html' %}
+        {% include 'dbms/appraisal/modl/guarantee-add-mod.html' %}
+        {% include 'dbms/appraisal/modl/guarantee-del-mod.html' %}
 
 
     </div>
@@ -15,5 +17,7 @@
 {% endblock %}
 
 {% block extra-js %}
+    {% include 'dbms/appraisal/extra/js-guarantee-add.html' %}
+    {% include 'dbms/appraisal/extra/js-guarantee-del.html' %}
 
 {% endblock %}

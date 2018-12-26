@@ -13,18 +13,25 @@
             <th>房产地址</th>
             <th>房产用途</th>
             <th>房产面积</th>
+            <th>操作</th>
+
         </tr>
         </thead>
-        <tbody>
+        <tbody class="guarantee-tb">
         {% for lending_sure in lending_obj.sure_lending.all %}
             {% if lending_sure.sure_typ in house_list %}
                 {% for warrant in lending_sure.warrant_sure.warrant.all %}
-                    <tr>
+                    <tr guarantee-nid={{ warrant.id }} sure-typ-nid={{ lending_sure.sure_typ }}>
                         <td>{{ lending_sure.get_sure_typ_display }}</td>
                         <td>{{ warrant.warrant_num }}</td>
                         <td>{{ warrant.house_warrant.house_locate }}</td>
                         <td>{{ warrant.house_warrant.get_house_app_display }}</td>
                         <td>{{ warrant.house_warrant.house_area }}</td>
+                        <td>
+                            <a class="btn btn-danger btn-xs delGuaranteeB">
+                                删除
+                            </a>
+                        </td>
                     </tr>
                 {% endfor %}
             {% endif %}

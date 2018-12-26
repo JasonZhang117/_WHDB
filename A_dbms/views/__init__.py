@@ -12,7 +12,7 @@ from .v_meeting import (meeting, meeting_scan, meeting_notice,
                         meeting_add_ajax, meeting_allot_ajax)
 
 from .v_appraisal import (appraisal, appraisal_scan, appraisal_scan_lending,
-                          article_sign_ajax,
+                          article_sign_ajax, guarantee_add_ajax, guarantee_del_ajax,
                           single_del_ajax, comment_edit_ajax,
                           single_quota_ajax, lending_del_ajax, lending_order_ajax)
 
@@ -20,8 +20,9 @@ from .v_appraisal import (appraisal, appraisal_scan, appraisal_scan_lending,
 from .v_agree import (agree, agree_add_ajax, counter_add_ajax,
                       agree_scan, agree_preview)
 # ----------------------v_warrant权证管理视图--------------------#
-from .v_warrant import (warrant, house, ground, house_scan, warrant_add_ajax,
-                        warrant_del_ajax, warrant_edit_ajax, warrant_scan)
+from .v_warrant import (warrant, house, ground, warrant_add_ajax,
+                        warrant_del_ajax, warrant_edit_ajax, owership_add_ajax,
+                        warrant_scan)
 # ----------------------v_provide放款管理视图--------------------#
 from .v_provide import provide, provide_edit
 

@@ -14,19 +14,26 @@
             <th>联系地址</th>
             <th>联系人</th>
             <th>联系电话</th>
+            <th>操作</th>
+
         </tr>
         </thead>
-        <tbody>
+        <tbody class="guarantee-tb">
         {% for lending_sure in lending_obj.sure_lending.all %}
             {% if lending_sure.sure_typ in sure_list %}
-                {% for custome in lending_sure.custome_sure.custome.all %}
-                    <tr>
+                {% for custom in lending_sure.custom_sure.custome.all %}
+                    <tr guarantee-nid={{ custom.id }} sure-typ-nid={{ lending_sure.sure_typ }}>
                         <td>{{ lending_sure.get_sure_typ_display }}</td>
-                        <td>{{ custome.name }}</td>
-                        <td>{{ custome.get_genre_display }}</td>
-                        <td>{{ custome.contact_addr }}</td>
-                        <td>{{ custome.linkman }}</td>
-                        <td>{{ custome.contact_num }}</td>
+                        <td>{{ custom.name }}</td>
+                        <td>{{ custom.get_genre_display }}</td>
+                        <td>{{ custom.contact_addr }}</td>
+                        <td>{{ custom.linkman }}</td>
+                        <td>{{ custom.contact_num }}</td>
+                        <td>
+                            <a class="btn btn-danger btn-xs delGuaranteeB">
+                                删除
+                            </a>
+                        </td>
                     </tr>
                 {% endfor %}
             {% endif %}

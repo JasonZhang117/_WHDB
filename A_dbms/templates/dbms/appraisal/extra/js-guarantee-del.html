@@ -1,0 +1,58 @@
+<script>
+    $(function () {
+        bindDelGuaranteeB();
+        bindDelGuaranteeModalOk();
+    });
+
+    function bindDelGuaranteeB() {
+        $('.guarantee-tb').on('click', '.delGuaranteeB', function () {
+            console.log("bindDelGuaranteeB")
+            delSureTypNid = $(this).parent().parent().attr('sure-typ-nid');
+            delGuaranteeNid = $(this).parent().parent().attr('guarantee-nid');
+
+            console.log(delSureTypNid, delGuaranteeNid)
+
+            $('#delSureTypId').val(delSureTypNid);
+            $('#delGuaranteeId').val(delGuaranteeNid);
+            $('#delGuaranteeModal').modal('show');
+        })
+    }
+
+    function bindDelGuaranteeModalOk() {
+        $('#delGuaranteeModalOk').click(function () {
+            var postData = {};
+
+            $('#delGuaranteeModal').find('input,select').each(function () {
+                var v = $(this).val();
+                var n = $(this).attr('name');
+                postData[n] = v;
+            });
+            var postDataStr = JSON.stringify(postData);
+            console.log(postDataStr)
+            $.ajax({
+                url: '/dbms/appraisal/guarantee/del/',
+                type: 'POST',
+                dataType: 'JSON',
+                data: {'postDataStr': postDataStr},
+                success: function (arg) {
+                    if (arg.status) {
+                        $('#delGuaranteeModal').modal('hide');
+                        alert(arg.message);
+                        window.location.reload();
+                    } else {
+                        $('#delGuaranteeModal').modal('hide');
+                        alert(arg.message);
+                        {#window.location.reload();#}
+                    }
+                }
+            })
+
+        })
+    }
+</script>
+
+
+
+
+
+
