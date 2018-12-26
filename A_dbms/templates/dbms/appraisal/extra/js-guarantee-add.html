@@ -17,9 +17,8 @@
         $('#id_sure_typ').change(function () {
             console.log("bind_id_sure_typ");
             var selected_sure_typ = $('#id_sure_typ').val();
-
             console.log(selected_sure_typ);
-
+            $('.guarantee-extend').hide()
             switch (selected_sure_typ) {
                 case ('1'):
                     $('#form_lendingcustoms_c_add').show();

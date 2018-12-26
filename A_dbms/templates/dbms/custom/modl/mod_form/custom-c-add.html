@@ -12,6 +12,30 @@
         </label>
     </div>
 
+    <div class="form-group"><!--所属行业-->
+        <label for="id_idustry" class="col-sm-3 control-label">
+            {{ form_custom_c_add.idustry.label }}：
+        </label>
+        <div class="col-sm-9">
+            {{ form_custom_c_add.idustry }}
+        </div>
+        <label id="e_idustry" class="pull-right">
+            {{ form_custom_c_add.idustry.errors }}
+        </label>
+    </div>
+
+    <div class="form-group"><!--所属区域-->
+        <label for="id_district" class="col-sm-3 control-label">
+            {{ form_custom_c_add.district.label }}：
+        </label>
+        <div class="col-sm-9">
+            {{ form_custom_c_add.district }}
+        </div>
+        <label id="e_district" class="pull-right">
+            {{ form_custom_c_add.district.errors }}
+        </label>
+    </div>
+
     <div class="form-group"><!--注册资本-->
         <label for="id_capital" class="col-sm-3 control-label">
             {{ form_custom_c_add.capital.label }}：

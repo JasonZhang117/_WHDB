@@ -4,13 +4,13 @@
          id="contact_way"> <!--联系方式-->
         {% include 'dbms/custom/scan/tab/content/contact_way.html' %}
     </div>
-
-    <div role="tabpanel"
-         class="tab-pane"
-         id="business_information"> <!--工商信息-->
-        {% include 'dbms/custom/scan/tab/content/business_information.html' %}
-    </div>
-
+    {% if custom_obj.genre == 1 %}
+        <div role="tabpanel"
+             class="tab-pane"
+             id="business_information"> <!--工商信息-->
+            {% include 'dbms/custom/scan/tab/content/business_information.html' %}
+        </div>
+    {% endif %}
 
     <div role="tabpanel"
          class="tab-pane active"

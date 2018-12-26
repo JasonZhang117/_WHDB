@@ -10,25 +10,26 @@
         </a>
     </li>
 
-    <li role="presentation">
-        <a href="#business_information"
-           style="background-color: #f5f5f5"
-           aria-controls="profile"
-           role="tab"
-           data-toggle="tab">
-            工商信息
-        </a>
-    </li>
-
-{#    <li role="presentation">#}
-{#        <a href="#credit_situation"#}
-{#           style="background-color: #f5f5f5"#}
-{#           aria-controls="settings"#}
-{#           role="tab"#}
-{#           data-toggle="tab">#}
-{#            授信情况#}
-{#        </a>#}
-{#    </li>#}
+    {% if custom_obj.genre == 1 %}
+        <li role="presentation">
+            <a href="#business_information"
+               style="background-color: #f5f5f5"
+               aria-controls="profile"
+               role="tab"
+               data-toggle="tab">
+                工商信息
+            </a>
+        </li>
+    {% endif %}
+    {#    <li role="presentation">#}
+    {#        <a href="#credit_situation"#}
+    {#           style="background-color: #f5f5f5"#}
+    {#           aria-controls="settings"#}
+    {#           role="tab"#}
+    {#           data-toggle="tab">#}
+    {#            授信情况#}
+    {#        </a>#}
+    {#    </li>#}
 
     <li role="presentation" class="active">
         <a href="#project_status"

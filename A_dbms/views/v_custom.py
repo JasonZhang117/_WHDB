@@ -10,6 +10,7 @@ from django.db import transaction
 # -----------------------客户管理-------------------------#
 def custom(request, *args, **kwargs):  # 委托合同列表
     print(__file__, '---->def agree')
+
     form_custom_add = forms.CustomAddForm()
     form_custom_c_add = forms.CustomCAddForm()
     form_custom_p_add = forms.CustomPAddForm()
@@ -52,8 +53,6 @@ def custom_add_ajax(request):
                     with transaction.atomic():
                         custom_obj = models.Customes.objects.create(
                             name=custom_add_data['name'],
-                            idustry=custom_add_data['idustry'],
-                            district=custom_add_data['district'],
                             genre=custom_add_data['genre'],
                             contact_addr=custom_add_data['contact_addr'],
                             linkman=custom_add_data['linkman'],
@@ -62,6 +61,8 @@ def custom_add_ajax(request):
                         custom_c_obj = models.CustomesC.objects.create(
                             custome=custom_obj,
                             short_name=custom_c_data['short_name'],
+                            idustry=custom_c_data['idustry'],
+                            district=custom_c_data['district'],
                             capital=custom_c_data['capital'],
                             registered_addr=custom_c_data['registered_addr'],
                             representative=custom_c_data['representative'])
@@ -83,8 +84,6 @@ def custom_add_ajax(request):
                     with transaction.atomic():
                         custom_obj = models.Customes.objects.create(
                             name=custom_add_data['name'],
-                            idustry=custom_add_data['idustry'],
-                            district=custom_add_data['district'],
                             genre=custom_add_data['genre'],
                             contact_addr=custom_add_data['contact_addr'],
                             linkman=custom_add_data['linkman'],
@@ -165,14 +164,14 @@ def custom_edit_ajax(request):
                     with transaction.atomic():
                         custom_lsit.update(
                             name=custom_edit_data['name'],
-                            idustry=custom_edit_data['idustry'],
-                            district=custom_edit_data['district'],
                             contact_addr=custom_edit_data['contact_addr'],
                             linkman=custom_edit_data['linkman'],
                             contact_num=custom_edit_data['contact_num'])
 
                         models.CustomesC.objects.filter(custome=custom_obj).update(
                             short_name=custom_c_data['short_name'],
+                            idustry=custom_c_data['idustry'],
+                            district=custom_c_data['district'],
                             capital=custom_c_data['capital'],
                             registered_addr=custom_c_data['registered_addr'],
                             representative=custom_c_data['representative'])
@@ -195,8 +194,6 @@ def custom_edit_ajax(request):
                     with transaction.atomic():
                         custom_lsit.update(
                             name=custom_edit_data['name'],
-                            idustry=custom_edit_data['idustry'],
-                            district=custom_edit_data['district'],
                             contact_addr=custom_edit_data['contact_addr'],
                             linkman=custom_edit_data['linkman'],
                             contact_num=custom_edit_data['contact_num'])
@@ -208,13 +205,10 @@ def custom_edit_ajax(request):
                 except Exception as e:
                     response['status'] = False
                     response['message'] = '客户修改失败：%s' % str(e)
-
-
             else:
                 response['status'] = False
                 response['message'] = '表单信息有误！！！'
                 response['forme'] = form_custom_p_add.errors
-
     else:
         response['status'] = False
         response['message'] = '表单信息有误！！！'
@@ -230,17 +224,16 @@ def custom_scan(request, custom_id):  # 项目预览
 
     form_date = {
         'name': custom_obj.name,
-        'idustry': custom_obj.idustry,
-        'district': custom_obj.district,
         'contact_addr': custom_obj.contact_addr,
         'linkman': custom_obj.linkman,
         'contact_num': custom_obj.contact_num}
-    print('type(custom_obj.idustry)', type(custom_obj.idustry))
     form_custom_edit = forms.CustomEditForm(initial=form_date)
 
     if custom_obj.genre == 1:
         form_date = {
             'short_name': custom_obj.company_custome.short_name,
+            'idustry': custom_obj.company_custome.idustry,
+            'district': custom_obj.company_custome.district,
             'capital': custom_obj.company_custome.capital,
             'registered_addr': custom_obj.company_custome.registered_addr,
             'representative': custom_obj.company_custome.representative}
