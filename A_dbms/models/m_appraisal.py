@@ -59,7 +59,7 @@ class SingleQuota(models.Model):  # 单项额度
         unique_together = ('summary', 'credit_model')
 
     def __str__(self):
-        return "%s-%s-%s" % (self.summary,
+        return "%s_%s_%s" % (self.summary,
                              self.credit_model,
                              self.credit_amount)
 
@@ -75,8 +75,7 @@ class LendingOrder(models.Model):
                                 on_delete=models.PROTECT,
                                 limit_choices_to=limit_lending_choices,
                                 related_name='lending_summary')
-    ORDER_LIST = ((1, '第一次'), (2, '第二次'),
-                  (3, '第三次'), (4, '第四次'))
+    ORDER_LIST = ((1, '第一次'), (2, '第二次'), (3, '第三次'), (4, '第四次'))
     order = models.IntegerField(
         verbose_name='发放次序', choices=ORDER_LIST, default=1)
     order_amount = models.FloatField(verbose_name='拟放金额')
@@ -88,7 +87,7 @@ class LendingOrder(models.Model):
         unique_together = ('summary', 'order')
 
     def __str__(self):
-        return "%s-%s-%s" % (self.summary, self.order, self.order_amount)
+        return "%s_%s_%s" % (self.summary, self.order, self.order_amount)
 
 
 class LendingSures(models.Model):
@@ -111,7 +110,7 @@ class LendingSures(models.Model):
         db_table = 'dbms_lendingsure'  # 指定数据表的名称
 
     def __str__(self):
-        return "%s-%s" % (self.lending, self.sure_typ)
+        return "%s_%s" % (self.lending, self.sure_typ)
 
 
 class LendingCustoms(models.Model):
@@ -130,7 +129,7 @@ class LendingCustoms(models.Model):
         # unique_together = ('sure', 'custome')
 
     def __str__(self):
-        return "%s-%s" % (self.sure, self.custome)
+        return "%s_%s" % (self.sure, self.custome)
 
 
 class LendingWarrants(models.Model):
@@ -148,35 +147,27 @@ class LendingWarrants(models.Model):
         db_table = 'dbms_lendingwarrant'  # 指定数据表的名称
 
     def __str__(self):
-        return "%s-%s" % (self.sure, self.warrant)
+        return "%s_%s" % (self.sure, self.warrant)
 
 
 # ------------------------评审意见--------------------------#
 class Comments(models.Model):  # 评委意见
-    summary = models.ForeignKey(
-        to='Articles',
-        verbose_name="纪要",
-        on_delete=models.PROTECT,
-        related_name='comment_summary')
-    expert = models.ForeignKey(
-        to='Experts',
-        verbose_name="评委",
-        on_delete=models.PROTECT,
-        related_name='comment_expert')
-    COMMENT_TYPE_LIST = ((0, '------'), (1, '同意'),
-                         (2, '复议'), (3, '不同意'))
+    summary = models.ForeignKey(to='Articles',
+                                verbose_name="纪要",
+                                on_delete=models.PROTECT,
+                                related_name='comment_summary')
+    expert = models.ForeignKey(to='Experts',
+                               verbose_name="评委",
+                               on_delete=models.PROTECT,
+                               related_name='comment_expert')
+    COMMENT_TYPE_LIST = ((0, '------'), (1, '同意'), (2, '复议'), (3, '不同意'))
     comment_type = models.IntegerField(
-        verbose_name='评委意见',
-        choices=COMMENT_TYPE_LIST,
-        default=1)
-    concrete = models.TextField(
-        verbose_name='意见详情',
-        null=True, blank=True)
-    comment_buildor = models.ForeignKey(
-        to='Employees',
-        verbose_name="创建人",
-        on_delete=models.PROTECT,
-        related_name='comment_buildor_employee')
+        verbose_name='评委意见', choices=COMMENT_TYPE_LIST, default=1)
+    concrete = models.TextField(verbose_name='意见详情', null=True, blank=True)
+    comment_buildor = models.ForeignKey(to='Employees',
+                                        verbose_name="创建人",
+                                        on_delete=models.PROTECT,
+                                        related_name='comment_buildor_employee')
 
     class Meta:
         verbose_name_plural = '评审-意见'  # 指定显示名称
@@ -184,8 +175,6 @@ class Comments(models.Model):  # 评委意见
         unique_together = ('summary', 'expert')
 
     def __str__(self):
-        return "%s-%s-%s" % (self.summary,
-                             self.expert,
-                             self.comment_type)
+        return "%s_%s_%s" % (self.summary, self.expert, self.comment_type)
 
 # class Proposes(models.Model):  # 评审结论

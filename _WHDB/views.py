@@ -37,7 +37,7 @@ def acc_login(request):
             print("acc_login-->user:", user)
             print("acc_login-->user.name:", user.name)
             print("acc_login-->user.num:", user.num)
-            return redirect(request.GET.get('next', 'home'))
+            return redirect(request.GET.get('next', 'dbms:index'))
         else:
             error_msg = "用户名或密码错误！"
     return render(request, 'login.html', {'error_msg': error_msg})
@@ -70,4 +70,4 @@ def home(request):
         'assistant',
         'control')
     print('acc_login-->article_list:', article_list)
-    return render(request, 'home.html', locals())
+    return render(request, 'dbms/index_dbms.html', locals())

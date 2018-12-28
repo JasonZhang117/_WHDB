@@ -1,0 +1,52 @@
+<div id="form_storage_add_edit">
+
+    <div class="form-group"><!--出入库类型-->
+        <label for="id_storage_typ" class="col-sm-3 control-label">
+            {{ form_storage_add_edit.storage_typ.label }}：
+        </label>
+        <div class="col-sm-9">
+            {{ form_storage_add_edit.storage_typ }}
+        </div>
+        <label id="e_storage_typ" class="pull-right">
+            {{ form_storage_add_edit.storage_typ.errors }}
+        </label>
+    </div>
+
+    <div class="form-group"><!--出入库日期-->
+        <label for="id_storage_date" class="col-sm-3 control-label">
+            {{ form_storage_add_edit.storage_date.label }}：
+        </label>
+        <div class="col-sm-9">
+            {{ form_storage_add_edit.storage_date }}
+        </div>
+        <label id="e_storage_date" class="pull-right">
+            {{ form_storage_add_edit.storage_date.errors }}
+        </label>
+    </div>
+
+    <div class="form-group"><!--移交/接收者-->
+        <label for="id_transfer" class="col-sm-3 control-label">
+            {{ form_storage_add_edit.transfer.label }}：
+        </label>
+        <div class="col-sm-9">
+            {{ form_storage_add_edit.transfer }}
+        </div>
+        <label id="e_transfer" class="pull-right">
+            {{ form_storage_add_edit.transfer.errors }}
+        </label>
+    </div>
+
+    {#    <div class="form-group"><!--移交/接收者-->#}
+    {#        <label for="id_conservator" class="col-sm-3 control-label">#}
+    {#            {{ form_storage_add_edit.conservator.label }}：#}
+    {#        </label>#}
+    {#        <div class="col-sm-9">#}
+    {#            {{ form_storage_add_edit.conservator }}#}
+    {#        </div>#}
+    {#        <label id="e_conservator" class="pull-right">#}
+    {#            {{ form_storage_add_edit.conservator.errors }}#}
+    {#        </label>#}
+    {#    </div>#}
+
+
+</div>

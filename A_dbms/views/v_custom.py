@@ -16,7 +16,7 @@ def custom(request, *args, **kwargs):  # 委托合同列表
     form_custom_p_add = forms.CustomPAddForm()
 
     genre_list = models.Customes.GENRE_LIST
-    custom_list = models.Customes.objects.filter(**kwargs)
+    custom_list = models.Customes.objects.filter(**kwargs).order_by('-credit_amount')
 
     ####分页信息###
     paginator = Paginator(custom_list, 10)

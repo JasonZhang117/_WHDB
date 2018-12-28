@@ -6,6 +6,7 @@ import json
 from django.contrib.auth.decorators import login_required
 from django.db.models import Sum, Max, Count
 from django.db.models import Q, F
+from django.db import transaction
 
 
 # -----------------------评审会-------------------------#
@@ -76,11 +77,8 @@ def meeting_add_ajax(request):
         review_num = "(%s)[%s]%s" % (r_mod, r_year, r_order)
 
         meeting_obj = models.Appraisals.objects.create(
-            num=review_num,
-            review_year=r_year,
-            review_model=review_model,
-            review_order=order_max_x,
-            review_date=review_date,
+            num=review_num, review_year=r_year, review_model=review_model,
+            review_order=order_max_x, review_date=review_date,
             meeting_buildor=request.user)
         article_list_l = cleaned_data['article']
         meeting_obj.article.set(article_list_l)
@@ -104,8 +102,7 @@ def meeting_add_ajax(request):
 @login_required
 def meeting_article_add_ajax(request):  # 添加参评项目ajax
     print(__file__, '---->def meeting_article_add_ajax')
-    response = {'status': True, 'message': None,
-                'obj_num': None, 'forme': None, }
+    response = {'status': True, 'message': None, 'forme': None, }
     post_data_str = request.POST.get('postDataStr')
     post_data = json.loads(post_data_str)
 
@@ -120,20 +117,21 @@ def meeting_article_add_ajax(request):  # 添加参评项目ajax
             cleaned_data = form.cleaned_data
             article_add_list = models.Articles.objects.filter(
                 id__in=cleaned_data['article'])
-
             print('article_add_list:', article_add_list)
-            for article_obj in article_add_list:
-                meeting_obj.article.add(article_obj)
-            '''ARTICLE_STATE_LIST = 
-            ((1, '待反馈'), (2, '已反馈'), (3, '待上会'),
-             (4, '已上会'), (5, '已签批'), (6, '已注销'))
-             (5, '已签批')-->才能出合同'''
-            models.Articles.objects.filter(
-                id__in=article_add_list).update(article_state=3)
-
-            response['obj_num'] = meeting_obj.num
-            response['message'] = '成功追加评审项目！'
-
+            try:
+                with transaction.atomic():
+                    for article_obj in article_add_list:
+                        meeting_obj.article.add(article_obj)
+                    '''ARTICLE_STATE_LIST = 
+                    ((1, '待反馈'), (2, '已反馈'), (3, '待上会'),
+                     (4, '已上会'), (5, '已签批'), (6, '已注销'))
+                     (5, '已签批')-->才能出合同'''
+                    models.Articles.objects.filter(
+                        id__in=article_add_list).update(article_state=3)
+                response['message'] = '成功追加评审项目！'
+            except Exception as e:
+                response['status'] = False
+                response['message'] = '追加评审项目失败：%s' % str(e)
         else:
             response['status'] = False
             response['message'] = '表单信息有误！！！'
@@ -151,8 +149,7 @@ def meeting_article_add_ajax(request):  # 添加参评项目ajax
 @login_required
 def meeting_allot_ajax(request):  # 分配评审委员
     print(__file__, '---->def meeting_allot_ajax')
-    response = {'status': True, 'message': None,
-                'obj_num': None, 'forme': None, }
+    response = {'status': True, 'message': None, 'forme': None, }
 
     post_data_str = request.POST.get('postDataStr')
     post_data = json.loads(post_data_str)
@@ -193,8 +190,7 @@ def meeting_allot_ajax(request):  # 分配评审委员
 @login_required
 def meeting_edit_ajax(request):  # 编辑评审会ajax
     print(__file__, '---->def meeting_edit_ajax')
-    response = {'status': True, 'message': None,
-                'obj_num': None, 'forme': None, }
+    response = {'status': True, 'message': None, 'forme': None, }
     post_data_str = request.POST.get('postDataStr')
     post_data = json.loads(post_data_str)
     meeting_id = post_data['meeting_id']
@@ -283,8 +279,7 @@ def meeting_close_ajax(request):  # 完成上会ajax
 @login_required
 def meeting_del_ajax(request):  # 取消评审会
     print(__file__, '---->def meeting_del_ajax')
-    response = {'status': True, 'message': None,
-                'obj_num': None, 'forme': None, }
+    response = {'status': True, 'message': None, 'forme': None, }
     post_data_str = request.POST.get('postDataStr')
     post_data = json.loads(post_data_str)
 
@@ -311,8 +306,7 @@ def meeting_del_ajax(request):  # 取消评审会
 @login_required
 def meeting_article_del_ajax(request):  # 取消项目上会ajax
     print(__file__, '---->def meeting_article_del')
-    response = {'status': True, 'message': None,
-                'obj_num': None, 'forme': None, }
+    response = {'status': True, 'message': None, 'forme': None, }
     post_data_str = request.POST.get('postDataStr')
     post_data = json.loads(post_data_str)
 
@@ -340,6 +334,7 @@ def meeting_article_del_ajax(request):  # 取消项目上会ajax
         response['message'] = msg
     result = json.dumps(response, ensure_ascii=False)
     return HttpResponse(result)
+
 
 # -----------------------评审会通知-------------------------#
 @login_required

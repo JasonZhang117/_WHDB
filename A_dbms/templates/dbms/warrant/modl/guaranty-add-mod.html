@@ -1,5 +1,5 @@
-<div class="modal fade" id="editWarrantModal" tabindex="-1"
-     role="dialog" aria-labelledby="editWarrantModal">
+<div class="modal fade" id="addGuarantyModal" tabindex="-1"
+     role="dialog" aria-labelledby="addGuarantyModal">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -7,19 +7,17 @@
                         data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
-                <h4 class="modal-title" id="editWarrantModalLabel">
-                    修改房产
+                <h4 class="modal-title" id="addGuarantyModalLabel">
+                    添加抵押物
                     <input style="display: none" name="warrant_id"
                            id="id_warrant_id" value={{ warrant_obj.id }}>
                 </h4>
             </div>
             <div class="modal-body">
-
                 <form class="form-horizontal">
-                    {% include 'dbms/warrant/warrant/modl/mod_form/warrant-add-edit.html' %}
+                    {% include 'dbms/warrant/modl/mod_form/guaranty-add-edit.html' %}
                 </form>
             </div>
-
             <label id="formErrors"></label>
 
             <div class="modal-footer">
@@ -28,8 +26,8 @@
                     取消
                 </button>
                 <button type="button" class="btn btn-primary"
-                        id="editWarrantModalOk">
-                    确定
+                        id="addGuarantyModalOk">
+                    添加
                 </button>
             </div>
         </div>

@@ -72,14 +72,11 @@ def article(request, *args, **kwargs):  # 项目列表
     # 列表或元组转换为字典并添加key
 
     article_list = models.Articles.objects.filter(
-        **kwargs).select_related(
-        'custom',
-        'director',
-        'assistant',
-        'control', ).order_by('-article_date', 'article_state')
+        **kwargs).select_related('custom', 'director', 'assistant', 'control').order_by(
+        '-article_date', 'article_state')
 
     # 分页
-    paginator = Paginator(article_list, 10)
+    paginator = Paginator(article_list, 2)
     page = request.GET.get('page')
     try:
         p_list = paginator.page(page)
@@ -96,8 +93,7 @@ def article(request, *args, **kwargs):  # 项目列表
 def article_add_ajax(request):  # 添加项目
     print(__file__, '---->def article_add_ajax')
 
-    response = {'status': True, 'message': None,
-                'obj_num': None, 'forme': None, }
+    response = {'status': True, 'message': None, 'forme': None, }
 
     post_data_str = request.POST.get('postDataStr')
     post_data = json.loads(post_data_str)
@@ -117,16 +113,11 @@ def article_add_ajax(request):  # 添加项目
 
         try:
             article_obj = models.Articles.objects.create(
-                article_num=article_num,
-                custom_id=custom_id,
-                renewal=renewal,
-                augment=augment,
-                amount=amount,
-                credit_term=cleaned_data['credit_term'],
+                article_num=article_num, custom_id=custom_id, renewal=renewal,
+                augment=augment, amount=amount, credit_term=cleaned_data['credit_term'],
                 director_id=cleaned_data['director_id'],
                 assistant_id=cleaned_data['assistant_id'],
-                control_id=cleaned_data['control_id'],
-                article_buildor=request.user)
+                control_id=cleaned_data['control_id'], article_buildor=request.user)
             response['obj_num'] = article_obj.article_num
             response['message'] = '成功创建项目：%s！' % article_obj.article_num
         except Exception as e:
@@ -147,8 +138,7 @@ def article_add_ajax(request):  # 添加项目
 @login_required
 def article_edit_ajax(request):  # 修改项目ajax
     print(__file__, '---->def article_edit_ajax')
-    response = {'status': True, 'message': None,
-                'obj_num': None, 'forme': None, }
+    response = {'status': True, 'message': None, 'forme': None, }
     post_data_str = request.POST.get('postDataStr')
     post_data = json.loads(post_data_str)
     print('post_data:', post_data)
@@ -174,10 +164,8 @@ def article_edit_ajax(request):  # 修改项目ajax
                 article_list = models.Articles.objects.filter(
                     id=article_id)
                 article_list.update(
-                    custom_id=cleaned_data['custom_id'],
-                    renewal=renewal,
-                    augment=augment,
-                    amount=amount,
+                    custom_id=cleaned_data['custom_id'], renewal=renewal,
+                    augment=augment, amount=amount,
                     credit_term=cleaned_data['credit_term'],
                     director_id=cleaned_data['director_id'],
                     assistant_id=cleaned_data['assistant_id'],
@@ -295,21 +283,17 @@ def article_scan(request, article_id):  # 项目预览
     article_obj = models.Articles.objects.get(id=article_id)
 
     form_date = {
-        'custom_id': article_obj.custom.id,
-        'renewal': article_obj.renewal,
-        'augment': article_obj.augment,
-        'credit_term': article_obj.credit_term,
+        'custom_id': article_obj.custom.id, 'renewal': article_obj.renewal,
+        'augment': article_obj.augment, 'credit_term': article_obj.credit_term,
         'director_id': article_obj.director.id,
-        'assistant_id': article_obj.assistant.id,
-        'control_id': article_obj.control.id,
+        'assistant_id': article_obj.assistant.id, 'control_id': article_obj.control.id,
         'article_date': str(article_obj.article_date)}
     form_article_add_edit = forms.ArticlesAddForm(form_date)
     expert_list = article_obj.expert.values_list('id')
     feedbac_list = article_obj.feedback_article.all()
     if feedbac_list:
         form_date = {
-            'propose': feedbac_list[0].propose,
-            'analysis': feedbac_list[0].analysis,
+            'propose': feedbac_list[0].propose, 'analysis': feedbac_list[0].analysis,
             'suggestion': feedbac_list[0].suggestion}
 
         form_feedback = forms.FeedbackAddForm(initial=form_date)

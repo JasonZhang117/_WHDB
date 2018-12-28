@@ -1,0 +1,32 @@
+<div class="table-responsive">
+    {#"table-responsive":表格响应式布局#}
+    <table class="table table-bordered table-hover
+                table-condensed active">
+        {#"table-bordered":表格表格边框#}
+        {#"table-hover":表格悬停变色#}
+        {#"table-condensed":表格紧缩#}
+        {#<caption><h4>项目管理</h4></caption>#}
+        <thead>
+        <tr style="text-align: center">
+            <th>权证编号</th>
+            <th>类型</th>
+            <th>状态</th>
+            <th>删除</th>
+        </tr>
+        </thead>
+        <tbody id="guaranty-tb">
+        {% for warrant in warrant_obj.ypothec_warrant.warrant_m.all %}
+            <tr guaranty-nid="{{ warrant.id }}">
+                <td>{{ warrant.warrant_num }}</td>
+                <td>{{ warrant.get_warrant_typ_display }}</td>
+                <td>{{ warrant.get_warrant_state_display }}</td>
+                <td>
+                    <a class="btn btn-danger btn-xs delGuarantyB">
+                        删除
+                    </a>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>

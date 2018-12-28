@@ -11,8 +11,7 @@ from .. import forms
 # -----------------------部门列表-------------------------#
 class Departments(View):  # 部门列表CBV
     def dispatch(self, request, *args, **kwargs):
-        result = super(Departments, self).dispatch(
-            request, *args, **kwargs)
+        result = super(Departments, self).dispatch(request, *args, **kwargs)
         return result
 
     def get(self, request):

@@ -4,12 +4,18 @@
 
 {% block right-content-container %}
     <div class="container-fluid" style="padding-left: 1px;">
-        {% include 'dbms/warrant/warrant/scan/warrant-summry.html' %}
-        {% include 'dbms/warrant/warrant/scan/warrant-tab.html' %}
+        {% include 'dbms/warrant/scan/warrant-summry.html' %}
+        {% include 'dbms/warrant/scan/warrant-tab.html' %}
 
         {% include 'dbms/warrant/modl/warrant-edit-mod.html' %}
         {% include 'dbms/warrant/modl/warrant-del-mod.html' %}
         {% include 'dbms/warrant/modl/owership-add-mod.html' %}
+        {% include 'dbms/warrant/modl/owership-del-mod.html' %}
+        {% include 'dbms/warrant/modl/guaranty-add-mod.html' %}
+        {% include 'dbms/warrant/modl/guaranty-del-mod.html' %}
+        {% include 'dbms/warrant/modl/storages-add-mod.html' %}
+
+
     </div>
 {% endblock %}
 
@@ -17,4 +23,8 @@
     {% include 'dbms/warrant/extra/js-warrant-edit.html' %}
     {% include 'dbms/warrant/extra/js-warrant-del.html' %}
     {% include 'dbms/warrant/extra/js-owership-add.html' %}
+    {% include 'dbms/warrant/extra/js-owership-del.html' %}
+    {% include 'dbms/warrant/extra/js-guaranty-add.html' %}
+    {% include 'dbms/warrant/extra/js-guaranty-del.html' %}
+    {% include 'dbms/warrant/extra/js-storages-add.html' %}
 {% endblock %}

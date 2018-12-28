@@ -1,0 +1,54 @@
+<script>
+    $(function () {
+        bindDelGuarantyB();
+        bindDelGuarantyModalOk();
+    });
+
+    function bindDelGuarantyB() {
+        $('#guaranty-tb').on('click', '.delGuarantyB', function () {
+            console.log("bindDelGuarantyB")
+            delDuarantyNid = $(this).parent().parent().attr('guaranty-nid');
+            console.log(delDuarantyNid)
+            $('#delGuarantyId').val(delDuarantyNid);
+            $('#delGuarantyModal').modal('show');
+        })
+    }
+
+    function bindDelGuarantyModalOk() {
+        $('#delGuarantyModalOk').click(function () {
+            var postData = {};
+
+            $('#delGuarantyModal').find('input,select').each(function () {
+                var v = $(this).val();
+                var n = $(this).attr('name');
+                postData[n] = v;
+            });
+            var postDataStr = JSON.stringify(postData);
+            console.log(postDataStr)
+            $.ajax({
+                url: '/dbms/warrant/guaranty/del/',
+                type: 'POST',
+                dataType: 'JSON',
+                data: {'postDataStr': postDataStr},
+                success: function (arg) {
+                    if (arg.status) {
+                        $('#delGuarantyModal').modal('hide');
+                        alert(arg.message);
+                        window.location.reload();
+                    } else {
+                        $('#delGuarantyModal').modal('hide');
+                        alert(arg.message);
+                        {#window.location.reload();#}
+                    }
+                }
+            })
+
+        })
+    }
+</script>
+
+
+
+
+
+

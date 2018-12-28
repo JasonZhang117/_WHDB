@@ -9,8 +9,8 @@ from .f_appraisal import (CommentsAddForm, LendingSuresForm, LendingCustomsCForm
                           LendingCustomsPForm, LendingHouseForm, LendingGroundForm,
                           ArticlesSignForm)
 
-from .f_warrant import (WarrantAddForm, WarrantEditForm, OwerShipEditForm,
-                        HouseAddEidtForm, GroundAddEidtForm,
-                        )
+from .f_warrant import (WarrantAddForm, WarrantEditForm, OwerShipAddForm,
+                        HouseAddEidtForm, GroundAddEidtForm, HypothecsAddEidtForm,
+                        HypothecGuarantyAddEidtForm, StoragesAddEidtForm)
 from .f_custom import (CustomAddForm, CustomCAddForm, CustomPAddForm, CustomEditForm)
 from .f_interior import DepartmentForm, EmployeeForm

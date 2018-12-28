@@ -31,6 +31,9 @@
             case ('2'):
                 $('#form_ground_add_edit').show();
                 break;
+            case ('9'):
+                $('#form_hypothecs_add_eidt').show();
+                break;
             default:
                 $('.warrant-extend').hide()
         }
@@ -51,6 +54,9 @@
                     break;
                 case ('2'):
                     $('#form_ground_add_edit').show();
+                    break;
+                case ('9'):
+                    $('#form_hypothecs_add_eidt').show();
                     break;
                 default:
                     $('.warrant-extend').hide()
@@ -99,6 +105,8 @@
                         $('#e_ground_locate').text(arg.forme.ground_locate);
                         $('#e_ground_app').text(arg.forme.ground_app);
                         $('#e_ground_area').text(arg.forme.ground_area);
+
+                        $('#e_agree').text(arg.forme.agree);
                     }
                 }
             })

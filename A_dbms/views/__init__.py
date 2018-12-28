@@ -22,7 +22,8 @@ from .v_agree import (agree, agree_add_ajax, counter_add_ajax,
 # ----------------------v_warrant权证管理视图--------------------#
 from .v_warrant import (warrant, house, ground, warrant_add_ajax,
                         warrant_del_ajax, warrant_edit_ajax, owership_add_ajax,
-                        warrant_scan)
+                        owership_del_ajax, guaranty_add_ajax, guaranty_del_ajax,
+                        storages_add_ajax, warrant_scan)
 # ----------------------v_provide放款管理视图--------------------#
 from .v_provide import provide, provide_edit
 

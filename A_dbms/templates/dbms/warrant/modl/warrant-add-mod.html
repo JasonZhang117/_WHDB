@@ -21,12 +21,17 @@
                         {% include 'dbms/warrant/modl/mod_form/warrant-add.html' %}
                         {% include 'dbms/warrant/modl/mod_form/house-add-edit.html' %}
                         {% include 'dbms/warrant/modl/mod_form/ground-add-edit.html' %}
+                        {% include 'dbms/warrant/modl/mod_form/hypothec-add-edit.html' %}
+
                     {% elif warrant_typ_n == 1 %}
                         {% include 'dbms/warrant/modl/mod_form/warrant-edit.html' %}
                         {% include 'dbms/warrant/modl/mod_form/house-add-edit.html' %}
                     {% elif warrant_typ_n == 2 %}
                         {% include 'dbms/warrant/modl/mod_form/warrant-edit.html' %}
                         {% include 'dbms/warrant/modl/mod_form/ground-add-edit.html' %}
+                    {% elif warrant_typ_n == 9 %}
+                        {% include 'dbms/warrant/modl/mod_form/warrant-edit.html' %}
+                        {% include 'dbms/warrant/modl/mod_form/hypothec-add-edit.html' %}
                     {% endif %}
                 </form>
             </div>

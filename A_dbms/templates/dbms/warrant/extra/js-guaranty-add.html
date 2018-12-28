@@ -1,44 +1,44 @@
 <script>
     $(function () {
-        bindDelWarrant();
-        bindDelWarrantModalOk();
-
+        bindAddGuarantyB();
+        bindAddGuarantyModalOk();
     });
 
-    function bindDelWarrant() {
-        $('#delWarrant').click(function () {
-            console.log("bindDelWarrant")
-            $('#delWarrantModal').modal('show');
+    function bindAddGuarantyB() {
+        $('#addGuarantyB').click(function () {
+            console.log("bindAddGuarantyB")
+            $('#addGuarantyModal').modal('show');
         })
     }
 
-    function bindDelWarrantModalOk() {
-        $('#delWarrantModalOk').click(function () {
+    function bindAddGuarantyModalOk() {
+        $('#addGuarantyModalOk').click(function () {
             var postData = {};
-
-            $('#delWarrantModal').find('input,select').each(function () {
+            $('#addGuarantyModal').find('input,select').each(function () {
                 var v = $(this).val();
                 var n = $(this).attr('name');
                 postData[n] = v;
             });
             var postDataStr = JSON.stringify(postData);
+
             console.log(postDataStr)
 
             $.ajax({
-                url: '/dbms/warrant/del/',
+                url: '/dbms/warrant/guaranty/add/',
                 type: 'POST',
+                traditional: true,
                 data: {'postDataStr': postDataStr},
                 dataType: 'JSON',
                 success: function (arg) {
-                    console.log(arg.return_path)
+                    console.log(arg);
                     if (arg.status) {
-                        $('#delWarrantModal').modal('hide');
+                        $('#addGuarantyModal').modal('hide');
                         alert(arg.message);
-                        window.location.href = "/dbms/warrant/";
+                        window.location.reload();
                     } else {
-                        $('#delWarrantModal').modal('hide');
                         alert(arg.message);
-                        {#window.location.reload();#}
+
+                        $('#e_warrant').text(arg.forme.warrant);
                     }
                 }
             })

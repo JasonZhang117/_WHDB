@@ -1,0 +1,54 @@
+<script>
+    $(function () {
+        bindDelOwershipB();
+        bindDelOwershipModalOk();
+    });
+
+    function bindDelOwershipB() {
+        $('#ownership-tb').on('click', '.delOwershipB', function () {
+            console.log("bindDelOwershipB")
+            delOwershipNid = $(this).parent().parent().attr('ownership-nid');
+            console.log(delOwershipNid)
+            $('#delOwershipModalId').val(delOwershipNid);
+            $('#delOwershipModal').modal('show');
+        })
+    }
+
+    function bindDelOwershipModalOk() {
+        $('#delOwershipModalOk').click(function () {
+            var postData = {};
+
+            $('#delOwershipModal').find('input,select').each(function () {
+                var v = $(this).val();
+                var n = $(this).attr('name');
+                postData[n] = v;
+            });
+            var postDataStr = JSON.stringify(postData);
+            console.log(postDataStr)
+            $.ajax({
+                url: '/dbms/warrant/owership/del/',
+                type: 'POST',
+                dataType: 'JSON',
+                data: {'postDataStr': postDataStr},
+                success: function (arg) {
+                    if (arg.status) {
+                        $('#delOwershipModal').modal('hide');
+                        alert(arg.message);
+                        window.location.reload();
+                    } else {
+                        $('#delOwershipModal').modal('hide');
+                        alert(arg.message);
+                        {#window.location.reload();#}
+                    }
+                }
+            })
+
+        })
+    }
+</script>
+
+
+
+
+
+

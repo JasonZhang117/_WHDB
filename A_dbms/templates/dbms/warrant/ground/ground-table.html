@@ -19,7 +19,7 @@
         {% for ground in ground_list %}
             <tr>
                 <td>
-                    <a href="#">
+                    <a href="{% url 'dbms:warrant_scan' warrant_id=ground.warrant.id %}">
                         {{ ground.warrant.warrant_num }}
                     </a>
                 </td>

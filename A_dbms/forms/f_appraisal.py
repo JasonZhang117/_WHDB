@@ -9,18 +9,14 @@ from .. import models
 class CommentsAddForm(dform.Form):  # 评审会添加
     COMMENT_TYPE_LIST = models.Comments.COMMENT_TYPE_LIST
     comment_type = fields.IntegerField(
-        label='评委意见',
-        label_suffix="：",
+        label='评委意见', label_suffix="：",
         widget=widgets.Select(
-            choices=COMMENT_TYPE_LIST,
-            attrs={'class': 'form-control',
-                   'placeholder': '评委意见'}))
+            choices=COMMENT_TYPE_LIST, attrs={'class': 'form-control',
+                                              'placeholder': '评委意见'}))
     concrete = fields.CharField(
-        label='意见详情',
-        label_suffix="：",
+        label='意见详情', label_suffix="：",
         widget=widgets.Textarea(
-            attrs={'class': 'form-control',
-                   'type': 'date',
+            attrs={'class': 'form-control', 'type': 'date',
                    'placeholder': '意见详情'}))
 
 
@@ -34,73 +30,53 @@ class LendingSuresForm(dform.ModelForm):
 # -----------------------企业保证担保form-------------------------#
 class LendingCustomsCForm(dform.Form):
     sure_c = fields.TypedMultipleChoiceField(
-        label="保证人",
-        label_suffix="：",
-        coerce=lambda x: int(x),
+        label="保证人", label_suffix="：", coerce=lambda x: int(x),
         widget=widgets.SelectMultiple(
-            attrs={'class': 'form-control',
-                   'placeholder': '保证人'}))
+            attrs={'class': 'form-control', 'placeholder': '保证人'}))
 
     def __init__(self, *args, **kwargs):
         super(LendingCustomsCForm, self).__init__(*args, **kwargs)
-        self.fields['sure_c'].choices = \
-            models.Customes.objects.filter(
-                genre=1).values_list(
-                'id', 'name').order_by('name')
+        self.fields['sure_c'].choices = models.Customes.objects.filter(
+            genre=1).values_list('id', 'name').order_by('name')
 
 
 # -----------------------个人保证担保form-------------------------#
 class LendingCustomsPForm(dform.Form):
     sure_p = fields.TypedMultipleChoiceField(
-        label="保证人",
-        label_suffix="：",
-        coerce=lambda x: int(x),
+        label="保证人", label_suffix="：", coerce=lambda x: int(x),
         widget=widgets.SelectMultiple(
-            attrs={'class': 'form-control',
-                   'placeholder': '保证人'}))
+            attrs={'class': 'form-control', 'placeholder': '保证人'}))
 
     def __init__(self, *args, **kwargs):
         super(LendingCustomsPForm, self).__init__(*args, **kwargs)
-        self.fields['sure_p'].choices = \
-            models.Customes.objects.filter(
-                genre=2).values_list(
-                'id', 'name').order_by('name')
+        self.fields['sure_p'].choices = models.Customes.objects.filter(
+            genre=2).values_list('id', 'name').order_by('name')
 
 
 # -----------------------房产担保form-------------------------#
 class LendingHouseForm(dform.Form):
     sure_house = fields.TypedMultipleChoiceField(
-        label="房产",
-        label_suffix="：",
-        coerce=lambda x: int(x),
+        label="房产", label_suffix="：", coerce=lambda x: int(x),
         widget=widgets.SelectMultiple(
-            attrs={'class': 'form-control',
-                   'placeholder': '房产'}))
+            attrs={'class': 'form-control', 'placeholder': '房产'}))
 
     def __init__(self, *args, **kwargs):
         super(LendingHouseForm, self).__init__(*args, **kwargs)
-        self.fields['sure_house'].choices = \
-            models.Warrants.objects.filter(
-                warrant_typ=1).values_list(
-                'id', 'warrant_num').order_by('warrant_num')
+        self.fields['sure_house'].choices = models.Warrants.objects.filter(
+            warrant_typ=1).values_list('id', 'warrant_num').order_by('warrant_num')
 
 
 # -----------------------土地担保form-------------------------#
 class LendingGroundForm(dform.Form):
     sure_ground = fields.TypedMultipleChoiceField(
-        label="房产",
-        label_suffix="：",
-        coerce=lambda x: int(x),
+        label="房产", label_suffix="：", coerce=lambda x: int(x),
         widget=widgets.SelectMultiple(
-            attrs={'class': 'form-control',
-                   'placeholder': '房产'}))
+            attrs={'class': 'form-control', 'placeholder': '房产'}))
 
     def __init__(self, *args, **kwargs):
         super(LendingGroundForm, self).__init__(*args, **kwargs)
-        self.fields['sure_ground'].choices = \
-            models.Warrants.objects.filter(
-                warrant_typ=2).values_list(
-                'id', 'warrant_num').order_by('warrant_num')
+        self.fields['sure_ground'].choices = models.Warrants.objects.filter(
+            warrant_typ=2).values_list('id', 'warrant_num').order_by('warrant_num')
 
 
 # -----------------------项目签批-------------------------#

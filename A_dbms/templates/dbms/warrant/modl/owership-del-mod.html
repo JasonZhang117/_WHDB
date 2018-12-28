@@ -1,16 +1,18 @@
-<div class="modal fade bs-example-modal-sm" id="delWarrantModal"
-     tabindex="-1" role="dialog" aria-labelledby="delWarrantModal">
+<div class="modal fade bs-example-modal-sm" id="delOwershipModal"
+     tabindex="-1" role="dialog" aria-labelledby="delOwershipModal">
     <div class="modal-dialog modal-sm" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h4 class="modal-title" id="delWarrantModalLabel">
-                    删除产权
+                <h4 class="modal-title" id="delOwershipModalLabel">
+                    删除产权证
                     <input style="display: none" name="warrant_id"
                            id="id_warrant_id" value={{ warrant_obj.id }}>
+                    <input style="display: none" name="owership_id"
+                           id="delOwershipModalId">
                 </h4>
             </div>
             <div class="modal-body">
-                是否确定删除权证!!!!
+                是否确定删除权证信息!!!!
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default"
@@ -18,8 +20,8 @@
                     取消
                 </button>
                 <button type="button" class="btn btn-primary"
-                        id="delWarrantModalOk">
-                    确定
+                        id="delOwershipModalOk">
+                    删除
                 </button>
             </div>
         </div>

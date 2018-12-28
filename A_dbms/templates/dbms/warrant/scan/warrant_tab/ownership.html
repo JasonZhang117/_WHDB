@@ -13,7 +13,7 @@
             <th>删除</th>
         </tr>
         </thead>
-        <tbody>
+        <tbody id="ownership-tb">
         {% for ownership in warrant_obj.ownership_warrant.all %}
             <tr ownership-nid="{{ ownership.id }}">
                 <td>{{ ownership.ownership_num }}</td>

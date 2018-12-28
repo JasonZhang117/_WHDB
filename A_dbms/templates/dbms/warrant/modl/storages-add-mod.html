@@ -1,5 +1,5 @@
-<div class="modal fade" id="addWarrantModal" tabindex="-1"
-     role="dialog" aria-labelledby="addWarrantModal">
+<div class="modal fade" id="addStoragesModal" tabindex="-1"
+     role="dialog" aria-labelledby="addStoragesModal">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -7,20 +7,17 @@
                         data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
-                <h4 class="modal-title" id="addWarrantModalLabel">
-                    添加房产
-                    <input style="display: none" name="warrant_typ"
-                           id="id_warrant_typ" value=1>
+                <h4 class="modal-title" id="addStoragesModalLabel">
+                    出入库
+                    <input style="display: none" name="warrant_id"
+                           id="id_warrant_id" value={{ warrant_obj.id }}>
                 </h4>
             </div>
             <div class="modal-body">
-
                 <form class="form-horizontal">
-
-
+                    {% include 'dbms/warrant/modl/mod_form/storage-add-edit.html' %}
                 </form>
             </div>
-
             <label id="formErrors"></label>
 
             <div class="modal-footer">
@@ -29,8 +26,8 @@
                     取消
                 </button>
                 <button type="button" class="btn btn-primary"
-                        id="addWarrantModalOk">
-                    确定
+                        id="addStoragesModalOk">
+                    添加
                 </button>
             </div>
         </div>

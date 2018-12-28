@@ -23,9 +23,10 @@ class Articles(models.Model):  # 项目、纪要
                                  verbose_name="项目经理",
                                  on_delete=models.PROTECT,
                                  related_name='director_employee')
-    assistant = models.ForeignKey(
-        to='Employees', verbose_name="项目助理",
-        on_delete=models.PROTECT, related_name='assistant_employee')
+    assistant = models.ForeignKey(to='Employees',
+                                  verbose_name="项目助理",
+                                  on_delete=models.PROTECT,
+                                  related_name='assistant_employee')
     control = models.ForeignKey(
         to='Employees', verbose_name="风控专员",
         on_delete=models.PROTECT, related_name='control_employee')
@@ -34,9 +35,7 @@ class Articles(models.Model):  # 项目、纪要
     ARTICLE_STATE_LIST = ((1, '待反馈'), (2, '已反馈'), (3, '待上会'),
                           (4, '已上会'), (5, '已签批'), (6, '已注销'))
     article_state = models.IntegerField(
-        verbose_name='项目状态',
-        choices=ARTICLE_STATE_LIST,
-        default=1)
+        verbose_name='项目状态', choices=ARTICLE_STATE_LIST, default=1)
     # 自动创建第三张表
     expert = models.ManyToManyField(to='Experts',
                                     verbose_name="评审委员",
@@ -44,12 +43,10 @@ class Articles(models.Model):  # 项目、纪要
     review_date = models.DateField(
         verbose_name='上会日期', null=True, blank=True)
     summary_num = models.CharField(
-        verbose_name='_纪要编号', max_length=32,
-        unique=True, null=True, blank=True)
+        verbose_name='_纪要编号', max_length=32, unique=True, null=True, blank=True)
     SIGN_TYPE_LIST = ((1, '同意'), (2, '不同意'))
     sign_type = models.IntegerField(
-        verbose_name='签批结论', choices=SIGN_TYPE_LIST,
-        null=True, blank=True)
+        verbose_name='签批结论', choices=SIGN_TYPE_LIST, null=True, blank=True)
     sign_detail = models.TextField(
         verbose_name='签批意见', null=True, blank=True)
     sign_date = models.DateField(
@@ -64,7 +61,7 @@ class Articles(models.Model):  # 项目、纪要
         db_table = 'dbms_articles'  # 指定数据表的名称
 
     def __str__(self):
-        return '%s-%s' % (self.article_num, self.summary_num)
+        return '%s_%s' % (self.article_num, self.summary_num)
 
 
 # -----------------------------风控反馈------------------------------#
@@ -91,7 +88,7 @@ class Feedback(models.Model):
         db_table = 'dbms_feedback'  # 指定数据表的名称
 
     def __str__(self):
-        return '%s-%s' % (self.article.article_num, self.propose)
+        return '%s_%s' % (self.article, self.propose)
 
 
 '''

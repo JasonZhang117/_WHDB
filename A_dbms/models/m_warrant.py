@@ -9,7 +9,7 @@ class Warrants(models.Model):  # 担保物
         verbose_name='权证编码', max_length=32, unique=True)
     WARRANT_TYP_LIST = [
         (1, '房产'), (2, '土地'), (3, '应收'), (4, '股权'),
-        (5, '票据'), (6, '车辆'), (7, '其他'), (8, '他权')]
+        (5, '票据'), (6, '车辆'), (7, '其他'), (9, '他权')]
     '''其他-存货、设备、合格证、'''
     warrant_typ = models.IntegerField(
         verbose_name='权证类型', choices=WARRANT_TYP_LIST, default=1)
@@ -17,7 +17,7 @@ class Warrants(models.Model):  # 担保物
     evaluate_date = models.DateField(verbose_name='评估日期', null=True, blank=True)
     WARRANT_STATE_LIST = (
         (1, '未入库'), (2, '已入库'), (3, '已出库'),
-        (4, '已借出'), (5, '已归还'), (6, '已注销'))
+        (4, '已借出'), (5, '已注销'))
     warrant_state = models.IntegerField(
         verbose_name='_权证状态', choices=WARRANT_STATE_LIST, default=1)
 
@@ -49,7 +49,7 @@ class Ownership(models.Model):  # 产权证
 
     def __str__(self):
         return '%s-%s-%s' % (self.ownership_num, self.owner.name,
-                             self.warrant.warrant_num)
+                             self.warrant)
 
 
 # -------------------------房产---------------------------#
@@ -145,18 +145,15 @@ class Stockes(models.Model):  # 股权
 
 # ------------------------应收帐款--------------------------#
 class Receivable(models.Model):  # 应收帐款
-    warrant = models.OneToOneField(
-        to='Warrants',
-        verbose_name="权证",
-        on_delete=models.CASCADE,
-        related_name='receive_warrant')
-    owner = models.ForeignKey(
-        to='Customes',
-        verbose_name="所有权人",
-        on_delete=models.PROTECT,
-        related_name='receive_custome')
-    detail = models.TextField(
-        verbose_name="应收账款描述")
+    warrant = models.OneToOneField(to='Warrants',
+                                   verbose_name="权证",
+                                   on_delete=models.CASCADE,
+                                   related_name='receive_warrant')
+    owner = models.ForeignKey(to='Customes',
+                              verbose_name="所有权人",
+                              on_delete=models.PROTECT,
+                              related_name='receive_custome')
+    detail = models.TextField(verbose_name="应收账款描述")
 
     class Meta:
         verbose_name_plural = '权证-应收账款'  # 指定显示名称
@@ -168,20 +165,16 @@ class Receivable(models.Model):  # 应收帐款
 
 # ------------------------他权模型--------------------------#
 class Hypothecs(models.Model):  # 他权
-    warrant = models.OneToOneField(
-        to='Warrants',
-        verbose_name="他权证",
-        on_delete=models.CASCADE,
-        related_name='ypothec_warrant')
-    agree = models.ForeignKey(
-        to='Agrees',
-        verbose_name="合同",
-        on_delete=models.PROTECT,
-        related_name='ypothec_agree')
+    warrant = models.OneToOneField(to='Warrants',
+                                   verbose_name="他权证",
+                                   on_delete=models.CASCADE,
+                                   related_name='ypothec_warrant')
+    agree = models.ForeignKey(to='Agrees',
+                              verbose_name="委托合同",
+                              on_delete=models.PROTECT,
+                              related_name='ypothec_agree')
     warrant_m = models.ManyToManyField(
-        to='Warrants',
-        verbose_name="权证",
-        related_name='ypothec_m_agree')
+        to='Warrants', verbose_name="权证", related_name='ypothec_m_agree')
 
     class Meta:
         verbose_name_plural = '权证-他权'  # 指定显示名称
@@ -193,27 +186,29 @@ class Hypothecs(models.Model):  # 他权
 
 # ------------------------出入库模型---------------------------#
 class Storages(models.Model):  # 出入库
-    warrant = models.ForeignKey(
-        to='Warrants',
-        verbose_name="权证",
-        on_delete=models.PROTECT,
-        related_name='storage_warrant')
-    STORAGE_TYP_LIST = ((1, '入库'), (2, '出库'),
-                        (3, '借出'), (4, '归还'))
+    warrant = models.ForeignKey(to='Warrants',
+                                verbose_name="权证",
+                                on_delete=models.PROTECT,
+                                related_name='storage_warrant')
+    STORAGE_TYP_LIST = ((1, '入库'), (2, '出库'), (3, '借出'), (4, '归还'), (5, '解保'))
     storage_typ = models.IntegerField(
-        verbose_name='出入库',
-        choices=STORAGE_TYP_LIST,
-        default=1)
-    storage_date = models.DateField(
-        verbose_name='日期',
-        default=datetime.date.today)
+        verbose_name='出入库', choices=STORAGE_TYP_LIST, default=1)
+    storage_date = models.DateField(verbose_name='日期', default=datetime.date.today)
+    transfer = models.ForeignKey(to='Employees',
+                                 verbose_name="移交/接收者",
+                                 on_delete=models.PROTECT,
+                                 related_name='transfer_employee')
+    conservator = models.ForeignKey(to='Employees',
+                                    verbose_name="权证管理岗",
+                                    on_delete=models.PROTECT,
+                                    related_name='conservator_employee')
 
     class Meta:
         verbose_name_plural = '权证-出入库'  # 指定显示名称
         db_table = 'dbms_storages'  # 指定数据表的名称
 
     def __str__(self):
-        return self.warrant.warrant_num
+        return '%s-%s-%s' % (self.warrant, self.storage_date, self.storage_typ)
 
 
 # ------------------------评估模型---------------------------#

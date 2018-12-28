@@ -193,7 +193,6 @@ def guarantee_add_ajax(request):  # 反担保措施添加ajax
                 except Exception as e:
                     response['status'] = False
                     response['message'] = '反担保设置失败：%s' % str(e)
-
         else:
             response['status'] = False
             response['message'] = '表单信息有误！！！'
@@ -385,7 +384,7 @@ def single_quota_ajax(request):  # 单项额度ajax
 @login_required
 def lending_order_ajax(request):  # 放款次序ajax
     print(__file__, '---->def single_quota_ajax')
-    response = {'status': True, 'message': None, 'forme': None, }
+    response = {'status': True, 'message': None, 'forme': None}
     post_data_str = request.POST.get('postDataStr')
     post_data = json.loads(post_data_str)
 

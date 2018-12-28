@@ -82,6 +82,10 @@ urlpatterns = [
     path('warrant/del/', views.warrant_del_ajax),
     path('warrant/edit/', views.warrant_edit_ajax),
     path('warrant/owership/add/', views.owership_add_ajax),
+    path('warrant/owership/del/', views.owership_del_ajax),
+    path('warrant/guaranty/add/', views.guaranty_add_ajax),
+    path('warrant/guaranty/del/', views.guaranty_del_ajax),
+    path('warrant/storages/add/', views.storages_add_ajax),
 
     # -----------------------house房产管理-------------------------#
     path('house/',
