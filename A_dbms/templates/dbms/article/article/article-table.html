@@ -15,7 +15,6 @@
             <th>项目经理</th>
             <th>项目助理</th>
             <th>风控专员</th>
-            <th>提交日期</th>
             <th>项目状态</th>
         </tr>
         </thead>
@@ -33,7 +32,6 @@
                 <td>{{ article.director.name }}</td>
                 <td>{{ article.assistant.name }}</td>
                 <td>{{ article.control.name }}</td>
-                <td>{{ article.article_date }}</td>
                 {#方式一：推荐#}
                 <td>{{ article.get_article_state_display }}</td>
             </tr>

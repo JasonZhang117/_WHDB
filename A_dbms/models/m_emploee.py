@@ -77,7 +77,7 @@ class Employees(AbstractBaseUser, PermissionsMixin):
         return self.email
 
     def __str__(self):  # __unicode__ on Python 2
-        return self.email
+        return '%s(%s)' % (self.name, self.email)
 
     class Meta:
         verbose_name_plural = '内部-员工'  # 指定显示名称

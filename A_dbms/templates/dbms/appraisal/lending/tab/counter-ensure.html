@@ -14,7 +14,9 @@
             <th>联系地址</th>
             <th>联系人</th>
             <th>联系电话</th>
-            <th>操作</th>
+            {% if lending_operate %}
+                <th>操作</th>
+            {% endif %}
 
         </tr>
         </thead>
@@ -29,11 +31,9 @@
                         <td>{{ custom.contact_addr }}</td>
                         <td>{{ custom.linkman }}</td>
                         <td>{{ custom.contact_num }}</td>
-                        <td>
-                            <a class="btn btn-danger btn-xs delGuaranteeB">
-                                删除
-                            </a>
-                        </td>
+                        {% if lending_operate %}
+                            <td><a class="btn btn-danger btn-xs delGuaranteeB">删除</a></td>
+                        {% endif %}
                     </tr>
                 {% endfor %}
             {% endif %}

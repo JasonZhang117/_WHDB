@@ -1,0 +1,47 @@
+<div class="table-responsive">
+    {#"table-responsive":表格响应式布局#}
+    <table class="table table-bordered table-hover
+                table-condensed active">
+        {#"table-bordered":表格表格边框#}
+        {#"table-hover":表格悬停变色#}
+        {#"table-condensed":表格紧缩#}
+        {#<caption><h4>项目管理</h4></caption>#}
+        <thead>
+        <tr style="text-align: center">
+            <th>发放次序</th>
+            <th>拟放款金额（元）</th>
+            <th>已放款金额（元）</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for lending in article_obj.lending_summary.all %}
+            <tr>
+                {% if lending_id %}
+                    {% if lending.id == lending_id %}
+                        <td>
+                            <a href="{% url 'dbms:article_scan_lending' article_id=article_obj.id lending_id=lending.id %}">
+                                {{ lending.get_order_display }}*
+                            </a>
+                        </td>
+                    {% else %}
+                        <td>
+                            <a href="{% url 'dbms:article_scan_lending' article_id=article_obj.id lending_id=lending.id %}">
+                                {{ lending.get_order_display }}
+                            </a>
+                        </td>
+                    {% endif %}
+                {% else %}
+                    <td>
+                        <a href="{% url 'dbms:article_scan_lending' article_id=article_obj.id lending_id=lending.id %}">
+                            {{ lending.get_order_display }}
+                        </a>
+                    </td>
+                {% endif %}
+
+                <td>{{ lending.order_amount }}</td>
+                <td>{{ lending.amount }}</td>
+            <tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>

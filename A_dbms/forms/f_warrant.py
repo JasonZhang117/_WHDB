@@ -10,17 +10,15 @@ class WarrantAddForm(dform.ModelForm):
         fields = ['warrant_num', 'warrant_typ']
         widgets = {
             'warrant_num': dform.TextInput(
-                attrs={'class': 'form-control', 'placeholder': '权证编号'})}
+                attrs={'class': 'form-control', 'placeholder': '权证编码'})}
 
 
 # -----------------------权证编辑-------------------------#
-class WarrantEditForm(dform.ModelForm):
-    class Meta:
-        model = models.Warrants
-        fields = ['warrant_num']
-        widgets = {
-            'warrant_num': dform.TextInput(
-                attrs={'class': 'form-control', 'placeholder': '权证编号'})}
+class WarrantEditForm(dform.Form):
+    warrant_num = fields.CharField(
+        label='权证编码', label_suffix="：",
+        widget=widgets.TextInput(
+            attrs={'class': 'form-control', 'placeholder': '权证编码'}))
 
 
 # ------------------OwerShipEditForm产权证编辑-------------------#
@@ -82,17 +80,11 @@ class HypothecGuarantyAddEidtForm(dform.Form):
 
 # -----------------------StoragesAddEidtForm出入库-------------------------#
 class StoragesAddEidtForm(dform.ModelForm):
-    # transfer_builder = fields.IntegerField(
-    #     label="移交/出库/借出人", label_suffix="：", widget=widgets.Select(
-    #         attrs={'class': 'form-control'}))
-
     class Meta:
         model = models.Storages
         fields = ['storage_typ', 'storage_date', 'transfer']
 
-    # def __init__(self, *args, **kwargs):
-    #     super(StoragesAddEidtForm, self).__init__(*args, **kwargs)
-    #
-    #     self.fields['transfer_builder'].widget.choices = \
-    #         models.Employees.objects.filter(
-    #             job__name='项目经理').values_list('id', 'name').order_by('name')
+    widgets = {
+        'storage_date': widgets.DateInput(
+            attrs={'class': 'form-control', 'type': 'date',
+                   'placeholder': '权证编码'})}

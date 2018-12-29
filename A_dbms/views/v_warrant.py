@@ -381,21 +381,48 @@ def storages_add_ajax(request):  # 出入库添加ajax
                 print('storage_typ in [2, 3, 5]')
                 print("storage_add_clean['transfer_builder']:",
                       type(storage_add_clean['transfer']))
-                try:
-                    with transaction.atomic():
-                        storage_obj = models.Storages.objects.create(
-                            warrant=warrant_obj, storage_typ=storage_typ,
-                            storage_date=storage_add_clean['storage_date'],
-                            transfer=storage_add_clean['transfer'],
-                            conservator=request.user)
-                        if storage_typ == 3:
-                            warrant_list.update(warrant_state=4)
-                        else:
-                            warrant_list.update(warrant_state=3)
-                    response['message'] = '权证出库信息创建成功！！！'
-                except Exception as e:
-                    response['status'] = False
-                    response['message'] = '权证出库信息创建失败：%s' % str(e)
+                '''WARRANT_TYP_LIST = [
+                    (1, '房产'), (2, '土地'), (3, '应收'), (4, '股权'),
+                    (5, '票据'), (6, '车辆'), (7, '其他'), (9, '他权')]'''
+                if warrant_obj.warrant_typ == 9 and storage_typ == 5:  # 他权解保
+                    ypothec_obj = warrant_obj.ypothec_warrant  # 他权
+                    agree_list = models.Agrees.objects.filter(ypothec_agree=ypothec_obj)
+                    agree_obj = agree_list[0]
+                    if agree_obj.agree_state == 5:
+                        # ypothec_obj.agree  # 他权对应委托合同
+                        # 判断合同项下有无余额******
+                        try:
+                            with transaction.atomic():
+                                storage_obj = models.Storages.objects.create(
+                                    warrant=warrant_obj, storage_typ=storage_typ,
+                                    storage_date=storage_add_clean['storage_date'],
+                                    transfer=storage_add_clean['transfer'],
+                                    conservator=request.user)
+                                warrant_list.update(warrant_state=5)
+                            response['message'] = '他权解保出库并注销！！！'
+                        except Exception as e:
+                            response['status'] = False
+                            response['message'] = '他权解保失败：%s' % str(e)
+                    else:
+                        response['status'] = False
+                        response['message'] = '%s合同状态为：%s，无法解保他权' % (agree_obj.agree_num,
+                                                                     agree_obj.agree_state)
+                else:
+                    try:
+                        with transaction.atomic():
+                            storage_obj = models.Storages.objects.create(
+                                warrant=warrant_obj, storage_typ=storage_typ,
+                                storage_date=storage_add_clean['storage_date'],
+                                transfer=storage_add_clean['transfer'],
+                                conservator=request.user)
+                            if storage_typ == 3:
+                                warrant_list.update(warrant_state=4)
+                            else:
+                                warrant_list.update(warrant_state=3)
+                        response['message'] = '权证出库信息创建成功！！！'
+                    except Exception as e:
+                        response['status'] = False
+                        response['message'] = '权证出库信息创建失败：%s' % str(e)
             else:
                 response['status'] = False
                 response['message'] = '该权证已在库中，无法办理入库操作！！！'

@@ -25,17 +25,17 @@
                     {% if agree_id %}
                         {% if agree_id == agree.id %}
                             <td><a class="active"
-                                   href="{% url 'dbms:article_scan_agree' article_id=article_obj.id agree_id=agree.id %}">
+                                   href="{% url 'dbms:agree_scan' agree_id=agree.id %}">
                                 {{ agree.agree_num }}*
                             </a></td>
                         {% else %}
                             <td>
-                                <a href="{% url 'dbms:article_scan_agree' article_id=article_obj.id agree_id=agree.id %}">
+                                <a href="{% url 'dbms:agree_scan' agree_id=agree.id %}">
                                     {{ agree.agree_num }}
                                 </a></td>
                         {% endif %}
                     {% else %}
-                        <td><a href="{% url 'dbms:article_scan_agree' article_id=article_obj.id agree_id=agree.id %}">
+                        <td><a href="{% url 'dbms:agree_scan' agree_id=agree.id %}">
                             {{ agree.agree_num }}
                         </a></td>
                     {% endif %}

@@ -87,7 +87,7 @@ class LendingOrder(models.Model):
         unique_together = ('summary', 'order')
 
     def __str__(self):
-        return "%s_%s_%s" % (self.summary, self.order, self.order_amount)
+        return "%s_%s_%s" % (self.summary.article_num, self.order, self.order_amount)
 
 
 class LendingSures(models.Model):

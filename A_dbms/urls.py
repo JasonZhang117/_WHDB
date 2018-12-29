@@ -13,8 +13,8 @@ urlpatterns = [
          views.article, name='article'),  # /dbms/article/(0-9)
     path('article/scan/<int:article_id>/',
          views.article_scan, name='article_scan_all'),
-    path('article/scan/<int:article_id>/<int:agree_id>/',
-         views.article_scan_agree, name='article_scan_agree'),
+    path('article/scan/<int:article_id>/<int:lending_id>/',
+         views.article_scan_lending, name='article_scan_lending'),
 
     path('article/add/', views.article_add_ajax),
     path('article/del/', views.article_del_ajax),

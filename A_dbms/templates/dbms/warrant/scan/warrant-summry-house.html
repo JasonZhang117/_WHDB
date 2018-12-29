@@ -1,6 +1,6 @@
 <div class="panel-body row">
     <label class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
-        权证编号：{{ warrant_obj.warrant_num }}
+        权证编码：{{ warrant_obj.warrant_num }}
     </label>
     <label class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
         坐落：{{ warrant_obj.house_warrant.house_locate }}
@@ -10,5 +10,8 @@
     </label>
     <label class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
         建筑面积：{{ warrant_obj.house_warrant.house_area }}
+    </label>
+    <label class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+        库存状态：{{ warrant_obj.get_warrant_state_display }}
     </label>
 </div>

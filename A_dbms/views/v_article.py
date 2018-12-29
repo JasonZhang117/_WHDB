@@ -76,7 +76,7 @@ def article(request, *args, **kwargs):  # 项目列表
         '-article_date', 'article_state')
 
     # 分页
-    paginator = Paginator(article_list, 2)
+    paginator = Paginator(article_list, 20)
     page = request.GET.get('page')
     try:
         p_list = paginator.page(page)
@@ -310,3 +310,19 @@ def article_scan_agree(request, article_id, agree_id):  # 项目预览
     article_obj = models.Articles.objects.get(id=article_id)
     agree_obj = models.Agrees.objects.get(id=agree_id)
     return render(request, 'dbms/article/article-scan-agree.html', locals())
+
+
+@login_required
+def article_scan_lending(request, article_id, lending_id):  # 项目预览
+    print(__file__, '---->def article_scan_lending')
+    print('request.path:', request.path)
+
+    sure_list = [1, 2]
+    house_list = [11, 21, 42, 52]
+    ground_list = [12, 22, 43, 53]
+    lending_operate = False
+
+    article_obj = models.Articles.objects.get(id=article_id)
+    lending_obj = models.LendingOrder.objects.get(id=lending_id)
+    print(article_obj, lending_obj)
+    return render(request, 'dbms/article/article-scan-lending.html', locals())

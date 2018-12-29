@@ -32,6 +32,7 @@ admin.site.register(models.Storages)  # 评估
 # -----------------------放款-------------------------#
 admin.site.register(models.Charges)  # 收费
 admin.site.register(models.Provides)  # 放款
+admin.site.register(models.Notify)  # 放款
 admin.site.register(models.Repayments)  # 还款
 admin.site.register(models.Pigeonholes)  # 归档
 # -----------------------追偿-------------------------#

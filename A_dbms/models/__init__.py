@@ -14,7 +14,7 @@ from .m_warrant import (
     Hypothecs, Evaluate, Storages)
 # -----------------------v_provide放款模型-------------------#
 # 放款、还款、归档
-from .m_provide import (Provides, Repayments, Pigeonholes, Charges)
+from .m_provide import (Notify, Provides, Repayments, Pigeonholes, Charges)
 # 代偿、追偿
 from .m_dun import Compensatories
 

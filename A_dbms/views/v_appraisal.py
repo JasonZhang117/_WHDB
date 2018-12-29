@@ -88,6 +88,7 @@ def appraisal_scan_lending(request, article_id, lending_id):  # 评审项目预�
     sure_list = [1, 2]
     house_list = [11, 21, 42, 52]
     ground_list = [12, 22, 43, 53]
+    lending_operate = True
 
     form_lendingsures = forms.LendingSuresForm()
 
