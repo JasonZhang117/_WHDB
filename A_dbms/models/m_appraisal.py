@@ -4,16 +4,12 @@ import time, datetime
 
 # ------------------------评审会模型--------------------------#
 class Appraisals(models.Model):  # 评审会
-    num = models.CharField(
-        verbose_name='评审会编号', max_length=32, unique=True)
-    review_year = models.IntegerField(
-        verbose_name='评审年份', default=datetime.date.today().year)
+    num = models.CharField(verbose_name='评审会编号', max_length=32, unique=True)
+    review_year = models.IntegerField(verbose_name='评审年份', default=datetime.date.today().year)
     review_order = models.IntegerField(verbose_name='评审次序')
     REVIEW_MODEL_LIST = ((1, '内审'), (2, '外审'))
-    review_model = models.IntegerField(
-        verbose_name='评审类型', choices=REVIEW_MODEL_LIST)
-    review_date = models.DateField(
-        verbose_name='评审日期', default=datetime.date.today)
+    review_model = models.IntegerField(verbose_name='评审类型', choices=REVIEW_MODEL_LIST)
+    review_date = models.DateField(verbose_name='评审日期', default=datetime.date.today)
     article = models.ManyToManyField(to='Articles',
                                      verbose_name="参评项目",
                                      related_name='appraisal_article',
@@ -23,8 +19,7 @@ class Appraisals(models.Model):  # 评审会
                                         on_delete=models.PROTECT,
                                         related_name='meeting_buildor_employee')
     MEETING_STATE_LIST = ((1, '待上会'), (2, '已上会'))
-    meeting_state = models.IntegerField(
-        verbose_name='会议状态', choices=MEETING_STATE_LIST, default=1)
+    meeting_state = models.IntegerField(verbose_name='会议状态', choices=MEETING_STATE_LIST, default=1)
 
     # Cancellation = models.BooleanField('注销', default=False)
     class Meta:
@@ -41,10 +36,8 @@ class SingleQuota(models.Model):  # 单项额度
                                 verbose_name="纪要",
                                 on_delete=models.PROTECT,
                                 related_name='single_quota_summary')
-    CREDIT_MODEL_LIST = ((1, '流贷'), (2, '承兑'),
-                         (3, '保函'), (4, '综合'))
-    credit_model = models.IntegerField(
-        verbose_name='授信类型', choices=CREDIT_MODEL_LIST, default=1)
+    CREDIT_MODEL_LIST = ((1, '流贷'), (2, '承兑'), (3, '保函'), (4, '综合'))
+    credit_model = models.IntegerField(verbose_name='授信类型', choices=CREDIT_MODEL_LIST, default=1)
     credit_amount = models.FloatField(verbose_name='授信额度（元）')
     flow_rate = models.FloatField(verbose_name='费率（%）')
     amount = models.FloatField(verbose_name='_放款金额（元）', default=0)
@@ -69,6 +62,7 @@ def limit_lending_choices():
     return {'article_state__in': [1, 2, 3, 4]}
 
 
+# ------------------------放款次序--------------------------#
 class LendingOrder(models.Model):
     summary = models.ForeignKey(to='Articles',
                                 verbose_name="项目纪要",
@@ -76,8 +70,7 @@ class LendingOrder(models.Model):
                                 limit_choices_to=limit_lending_choices,
                                 related_name='lending_summary')
     ORDER_LIST = ((1, '第一次'), (2, '第二次'), (3, '第三次'), (4, '第四次'))
-    order = models.IntegerField(
-        verbose_name='发放次序', choices=ORDER_LIST, default=1)
+    order = models.IntegerField(verbose_name='发放次序', choices=ORDER_LIST, default=1)
     order_amount = models.FloatField(verbose_name='拟放金额')
     amount = models.FloatField(verbose_name='已放金额', default=0)
 
@@ -90,6 +83,7 @@ class LendingOrder(models.Model):
         return "%s_%s_%s" % (self.summary.article_num, self.order, self.order_amount)
 
 
+# ------------------------反担保措施--------------------------#
 class LendingSures(models.Model):
     lending = models.ForeignKey(to='LendingOrder',
                                 verbose_name="放款次序",
@@ -97,8 +91,7 @@ class LendingSures(models.Model):
                                 related_name='sure_lending')
     SURE_TYP_LIST = (
         (1, '企业保证'), (2, '个人保证'),
-        (11, '房产抵押'), (12, '土地抵押'), (13, '设备抵押'), (14, '存货抵押'),
-        (15, '车辆抵押'),
+        (11, '房产抵押'), (12, '土地抵押'), (13, '设备抵押'), (14, '存货抵押'), (15, '车辆抵押'),
         (21, '房产顺位'), (22, '土地顺位'),
         (31, '应收质押'), (32, '股权质押'), (33, '票据质押'),
         (41, '合格证监管'), (42, '房产监管'), (43, '土地监管'),
@@ -113,6 +106,7 @@ class LendingSures(models.Model):
         return "%s_%s" % (self.lending, self.sure_typ)
 
 
+# ------------------------反担保-保证--------------------------#
 class LendingCustoms(models.Model):
     sure = models.OneToOneField(to='LendingSures',
                                 verbose_name="反担保措施",
@@ -120,7 +114,7 @@ class LendingCustoms(models.Model):
                                 related_name='custom_sure')
     custome = models.ManyToManyField(to='Customes',
                                      verbose_name="反担保人",
-                                     related_name='lending_custome',
+                                     related_name='lending_custom',
                                      db_constraint=True)
 
     class Meta:
@@ -132,6 +126,7 @@ class LendingCustoms(models.Model):
         return "%s_%s" % (self.sure, self.custome)
 
 
+# ------------------------反担保-抵质押--------------------------#
 class LendingWarrants(models.Model):
     sure = models.OneToOneField(to='LendingSures',
                                 verbose_name="反担保措施",
@@ -160,9 +155,8 @@ class Comments(models.Model):  # 评委意见
                                verbose_name="评委",
                                on_delete=models.PROTECT,
                                related_name='comment_expert')
-    COMMENT_TYPE_LIST = ((0, '------'), (1, '同意'), (2, '复议'), (3, '不同意'))
-    comment_type = models.IntegerField(
-        verbose_name='评委意见', choices=COMMENT_TYPE_LIST, default=1)
+    COMMENT_TYPE_LIST = ((1, '同意'), (2, '复议'), (3, '不同意'))
+    comment_type = models.IntegerField(verbose_name='评委意见', choices=COMMENT_TYPE_LIST, default=1)
     concrete = models.TextField(verbose_name='意见详情', null=True, blank=True)
     comment_buildor = models.ForeignKey(to='Employees',
                                         verbose_name="创建人",
@@ -176,5 +170,3 @@ class Comments(models.Model):  # 评委意见
 
     def __str__(self):
         return "%s_%s_%s" % (self.summary, self.expert, self.comment_type)
-
-# class Proposes(models.Model):  # 评审结论

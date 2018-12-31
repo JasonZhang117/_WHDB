@@ -62,7 +62,7 @@ def appraisal_scan(request, article_id):  # 评审项目预览
 
     form_comment = forms.CommentsAddForm()
     form_single = forms.SingleQuotaForm()
-    form_lending = forms.LendingOrder()
+    form_lending = forms.FormLendingOrder()
 
     return render(request,
                   'dbms/appraisal/appraisal-scan.html',
@@ -400,7 +400,7 @@ def lending_order_ajax(request):  # 放款次序ajax
         data = {
             'order': order,
             'order_amount': order_amount}
-        form = forms.LendingOrder(data)
+        form = forms.FormLendingOrder(data)
         if form.is_valid():
             cleaned_data = form.cleaned_data
             try:
@@ -501,13 +501,13 @@ def article_sign_ajax(request):
     print('post_data:', post_data)
 
     '''((1, '同意'), (2, '不同意'))'''
-    sign_type = post_data['sign_type']
+    sign_type = int(post_data['sign_type'])
     article_id = post_data['article_id']
     aritcle_obj = models.Articles.objects.get(id=article_id)
     '''((1, '待反馈'), (2, '已反馈'), (3, '待上会'),
         (4, '已上会'), (5, '已签批'), (6, '已注销'))'''
     if aritcle_obj.article_state == 4:
-        if int(sign_type) == 2:
+        if sign_type == 2:
             models.Articles.objects.filter(id=article_id).update(
                 sign_type=sign_type,
                 sign_date=post_data['sign_date'],
@@ -518,7 +518,6 @@ def article_sign_ajax(request):
             form = forms.ArticlesSignForm(post_data)
             if form.is_valid():
                 cleaned_data = form.cleaned_data
-
                 article_expert_amount = aritcle_obj.expert.all().count()
                 article_comment_amount = aritcle_obj.comment_summary.all().count()
                 if article_expert_amount == article_comment_amount:
@@ -528,15 +527,11 @@ def article_sign_ajax(request):
                     single_quota_amount = models.SingleQuota.objects.filter(
                         summary__id=article_id).aggregate(Sum('credit_amount'))
                     single_quota_amount = single_quota_amount['credit_amount__sum']
-
                     lending_amount = models.LendingOrder.objects.filter(
                         summary__id=article_id).aggregate(Sum('order_amount'))
                     lending_amount = lending_amount['order_amount__sum']
-
                     print('lending_amount:', lending_amount)
-
                     if single_quota_amount == article_amount and lending_amount == article_amount:
-
                         models.Articles.objects.filter(id=article_id).update(
                             summary_num=cleaned_data['summary_num'],
                             sign_type=sign_type, renewal=renewal,

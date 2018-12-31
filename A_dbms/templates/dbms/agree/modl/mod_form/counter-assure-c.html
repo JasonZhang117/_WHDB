@@ -1,14 +1,13 @@
 <div id="form_counter_assure_c" class="extend" style="display: none">
     <div class="form-group"><!--企业保证人-->
-        <label for="id_custome_c" class="col-sm-3 control-label">
-            {{ form_counter_assure_c.custome_c.label }}：
-        </label>
+        <label for="id_custome_c" class="col-sm-3 control-label">反担保企业：</label>
         <div class="col-sm-9">
-            {{ form_counter_assure_c.custome_c }}
-        </div>
-        <label id="e_custome_c" class="pull-right">
-            {{ form_counter_assure_c.custome_c.errors }}
-        </label>
+            <select name="custom_c" class="form-control" multiple="" id="id_custom_c" required="">
+                {% for custom_c in custom_c_lending_list %}
+                    <option value="{{ custom_c.0 }}">{{ custom_c.1 }}</option>
+                {% endfor %}
+            </select></div>
+        <label id="e_custome_c" class="pull-right"></label>
     </div>
 </div>
 

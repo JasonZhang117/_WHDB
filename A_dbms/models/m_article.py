@@ -5,54 +5,37 @@ import datetime
 # 项目、纪要
 # -----------------------------项目模型------------------------------#
 class Articles(models.Model):  # 项目、纪要
-    article_num = models.CharField(
-        verbose_name='_项目编号', max_length=32, unique=True)
-    custom = models.ForeignKey(to='Customes',
-                               verbose_name="客户",
+    article_num = models.CharField(verbose_name='_项目编号', max_length=32, unique=True)
+    custom = models.ForeignKey(to='Customes', verbose_name="客户",
                                on_delete=models.PROTECT,
                                related_name='article_custom')
-    renewal = models.FloatField(
-        verbose_name='续贷金额（元）', null=True, blank=True)
-    augment = models.FloatField(
-        verbose_name='新增金额（元）', null=True, blank=True)
-    amount = models.FloatField(
-        verbose_name='_总额度（元）', null=True, blank=True)
-    credit_term = models.IntegerField(
-        verbose_name='授信期限（月）', default=12)
-    director = models.ForeignKey(to='Employees',
-                                 verbose_name="项目经理",
+    renewal = models.FloatField(verbose_name='续贷金额（元）', null=True, blank=True)
+    augment = models.FloatField(verbose_name='新增金额（元）', null=True, blank=True)
+    amount = models.FloatField(verbose_name='_总额度（元）', null=True, blank=True)
+    credit_term = models.IntegerField(verbose_name='授信期限（月）', default=12)
+    director = models.ForeignKey(to='Employees', verbose_name="项目经理",
                                  on_delete=models.PROTECT,
                                  related_name='director_employee')
-    assistant = models.ForeignKey(to='Employees',
-                                  verbose_name="项目助理",
+    assistant = models.ForeignKey(to='Employees', verbose_name="项目助理",
                                   on_delete=models.PROTECT,
                                   related_name='assistant_employee')
-    control = models.ForeignKey(
-        to='Employees', verbose_name="风控专员",
-        on_delete=models.PROTECT, related_name='control_employee')
-    article_date = models.DateField(
-        verbose_name='反馈日期', default=datetime.date.today)
+    control = models.ForeignKey(to='Employees', verbose_name="风控专员",
+                                on_delete=models.PROTECT,
+                                related_name='control_employee')
+    article_date = models.DateField(verbose_name='反馈日期', default=datetime.date.today)
     ARTICLE_STATE_LIST = ((1, '待反馈'), (2, '已反馈'), (3, '待上会'),
                           (4, '已上会'), (5, '已签批'), (6, '已注销'))
-    article_state = models.IntegerField(
-        verbose_name='项目状态', choices=ARTICLE_STATE_LIST, default=1)
+    article_state = models.IntegerField(verbose_name='项目状态', choices=ARTICLE_STATE_LIST, default=1)
     # 自动创建第三张表
-    expert = models.ManyToManyField(to='Experts',
-                                    verbose_name="评审委员",
+    expert = models.ManyToManyField(to='Experts', verbose_name="评审委员",
                                     related_name='article_expert')
-    review_date = models.DateField(
-        verbose_name='上会日期', null=True, blank=True)
-    summary_num = models.CharField(
-        verbose_name='_纪要编号', max_length=32, unique=True, null=True, blank=True)
+    review_date = models.DateField(verbose_name='上会日期', null=True, blank=True)
+    summary_num = models.CharField(verbose_name='_纪要编号', max_length=32, unique=True, null=True, blank=True)
     SIGN_TYPE_LIST = ((1, '同意'), (2, '不同意'))
-    sign_type = models.IntegerField(
-        verbose_name='签批结论', choices=SIGN_TYPE_LIST, null=True, blank=True)
-    sign_detail = models.TextField(
-        verbose_name='签批意见', null=True, blank=True)
-    sign_date = models.DateField(
-        verbose_name='签批日期', null=True, blank=True)
-    article_buildor = models.ForeignKey(to='Employees',
-                                        verbose_name="创建人",
+    sign_type = models.IntegerField(verbose_name='签批结论', choices=SIGN_TYPE_LIST, null=True, blank=True)
+    sign_detail = models.TextField(verbose_name='签批意见', null=True, blank=True)
+    sign_date = models.DateField(verbose_name='签批日期', null=True, blank=True)
+    article_buildor = models.ForeignKey(to='Employees', verbose_name="创建者",
                                         on_delete=models.PROTECT,
                                         related_name='article_buildor_employee')
 
@@ -70,16 +53,13 @@ class Feedback(models.Model):
                                 verbose_name="项目",
                                 on_delete=models.PROTECT,
                                 related_name='feedback_article')
-    PROPOSE_LIST = ((0, '--------------'), (1, '符合上会条件'),
-                    (2, '暂不符合上会条件'), (3, '建议终止项目'))
-    propose = models.IntegerField(
-        verbose_name='上会建议', choices=PROPOSE_LIST, default=0)
+    PROPOSE_LIST = ((1, '符合上会条件'), (2, '暂不符合上会条件'), (3, '建议终止项目'))
+    propose = models.IntegerField(verbose_name='上会建议', choices=PROPOSE_LIST, default=0)
     analysis = models.TextField(verbose_name='风险分析')
     suggestion = models.TextField(verbose_name='风控意见')
-    feedback_date = models.DateField(
-        verbose_name='提交日期', default=datetime.date.today)
+    feedback_date = models.DateField(verbose_name='提交日期', default=datetime.date.today)
     feedback_buildor = models.ForeignKey(to='Employees',
-                                         verbose_name="创建人",
+                                         verbose_name="创建者",
                                          on_delete=models.PROTECT,
                                          related_name='feedback_buildor_employee')
 

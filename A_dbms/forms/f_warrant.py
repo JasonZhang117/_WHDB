@@ -64,20 +64,6 @@ class HypothecsAddEidtForm(dform.ModelForm):
         fields = ['agree']
 
 
-# -----------------------HypothecsAddEidtForm他权-------------------------#
-class HypothecGuarantyAddEidtForm(dform.Form):
-    warrant = fields.TypedMultipleChoiceField(
-        label="抵押物", label_suffix="：", coerce=lambda x: int(x),
-        widget=widgets.SelectMultiple(
-            attrs={'class': 'form-control'}))
-
-    def __init__(self, *args, **kwargs):
-        super(HypothecGuarantyAddEidtForm, self).__init__(*args, **kwargs)
-        '''((1, '企业'), (2, '个人'))'''
-        self.fields['warrant'].choices = models.Warrants.objects.exclude(
-            warrant_typ__exact=9).values_list('id', 'warrant_num')
-
-
 # -----------------------StoragesAddEidtForm出入库-------------------------#
 class StoragesAddEidtForm(dform.ModelForm):
     class Meta:

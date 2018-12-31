@@ -38,30 +38,20 @@ class EmployeesManager(BaseUserManager):
 # -----------------------------员工模型------------------------------#
 class Employees(AbstractBaseUser, PermissionsMixin):
     email = models.EmailField(
-        max_length=150,
-        verbose_name='电子邮箱',
-        unique=True,
+        max_length=150, verbose_name='电子邮箱', unique=True,
         error_messages={
-            'unique': ("email already exists."),
-        }, )
-    num = models.CharField(
-        max_length=64,
-        verbose_name="代码")
-    name = models.CharField(
-        max_length=64,
-        verbose_name="姓名")
+            'unique': ("email already exists.")}, )
+    num = models.CharField(max_length=64, verbose_name="代码")
+    name = models.CharField(max_length=64, verbose_name="姓名")
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=True)
     # is_admin = models.BooleanField(default=False)
-    job = models.ManyToManyField("Jobs",
-                                 blank=True,
-                                 null=True)
-    department = models.ForeignKey(
-        to="Departments",
-        verbose_name="部门",
-        on_delete=models.PROTECT,
-        related_name='employee_department',
-        blank=True, null=True)
+    job = models.ManyToManyField("Jobs", blank=True, null=True)
+    department = models.ForeignKey(to="Departments",
+                                   verbose_name="部门",
+                                   on_delete=models.PROTECT,
+                                   related_name='employee_department',
+                                   blank=True, null=True)
 
     objects = EmployeesManager()
 
@@ -105,13 +95,10 @@ class Employees(AbstractBaseUser, PermissionsMixin):
 
 # -----------------------------岗位模型------------------------------#
 class Jobs(models.Model):  # 岗位（角色）
-    name = models.CharField(
-        verbose_name='岗位名称',
-        max_length=16, unique=True)
-    menu = models.ManyToManyField(
-        to="Menus",
-        verbose_name="菜单",
-        blank=True)
+    name = models.CharField(verbose_name='岗位名称', max_length=16, unique=True)
+    menu = models.ManyToManyField(to="Menus",
+                                  verbose_name="菜单",
+                                  blank=True)
 
     class Meta:
         verbose_name_plural = '内部-岗位'  # 指定显示名称

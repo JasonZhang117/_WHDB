@@ -27,14 +27,12 @@ class Customes(models.Model):  # 客户
 
 # -----------------------企业客户-------------------------#
 class CustomesC(models.Model):
-    custome = models.OneToOneField(
-        to='Customes',
-        verbose_name="企业客户",
-        on_delete=models.CASCADE,
-        related_name='company_custome')
+    custome = models.OneToOneField(to='Customes',
+                                   verbose_name="企业客户",
+                                   on_delete=models.CASCADE,
+                                   related_name='company_custome')
     short_name = models.CharField(
-        verbose_name='简称',
-        max_length=8, unique=True)
+        verbose_name='简称', max_length=8, unique=True)
     idustry = models.ForeignKey(to='Industries',
                                 verbose_name="所属行业",
                                 on_delete=models.PROTECT,
@@ -45,44 +43,34 @@ class CustomesC(models.Model):
                                  on_delete=models.PROTECT,
                                  related_name='custome_district',
                                  blank=True, null=True)
-    capital = models.FloatField(
-        verbose_name='注册资本')
-    registered_addr = models.CharField(
-        verbose_name='注册地址',
-        max_length=64)
-    representative = models.CharField(
-        verbose_name='法人代表',
-        max_length=16)
+    capital = models.FloatField(verbose_name='注册资本')
+    registered_addr = models.CharField(verbose_name='注册地址', max_length=64)
+    representative = models.CharField(verbose_name='法人代表', max_length=16)
 
     class Meta:
         verbose_name_plural = '客户-企业'  # 指定显示名称
         db_table = 'dbms_customesc'  # 指定数据表的名称
 
     def __str__(self):
-        return self.custome.name
+        return '%s-%s' % (self.custome, self.short_name)
 
 
 # -----------------------个人客户-------------------------#
 class CustomesP(models.Model):  # 个人客户
-    custome = models.OneToOneField(
-        to='Customes',
-        verbose_name="个人客户",
-        on_delete=models.CASCADE,
-        related_name='person_custome')
+    custome = models.OneToOneField(to='Customes',
+                                   verbose_name="个人客户",
+                                   on_delete=models.CASCADE,
+                                   related_name='person_custome')
     license_num = models.CharField(
-        verbose_name='身份证号码',
-        max_length=18,
-        unique=True)
-    license_addr = models.CharField(
-        verbose_name='身份证地址',
-        max_length=64)
+        verbose_name='身份证号码', max_length=18, unique=True)
+    license_addr = models.CharField(verbose_name='身份证地址', max_length=64)
 
     class Meta:
         verbose_name_plural = '客户-个人'  # 指定显示名称
         db_table = 'dbms_customesp'  # 指定数据表的名称
 
     def __str__(self):
-        return self.custome.name
+        return '%s(%s)' % (self.custome, self.license_num)
 
 
 # -------------------区域（街道）-------------------------#

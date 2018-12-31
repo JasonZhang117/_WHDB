@@ -8,12 +8,11 @@ from django.db import transaction
 from django.views import View
 
 
-# 抵质押物信息管理
 # -----------------------权证添加-------------------------#
 @login_required
 def warrant_add_ajax(request):
     print(__file__, '---->def warrant_add_ajax')
-    response = {'status': True, 'message': None, 'forme': None, }
+    response = {'status': True, 'message': None, 'forme': None, ' skip': None, }
     post_data_str = request.POST.get('postDataStr')
     post_data = json.loads(post_data_str)
     print('post_data:', post_data)
@@ -45,6 +44,7 @@ def warrant_add_ajax(request):
                             house_app=house_add_edit_clean['house_app'],
                             house_area=house_add_edit_clean['house_area'])
                     response['message'] = '房产创建成功！！！，请继续创建产权证信息。'
+                    response['skip'] = "/dbms/warrant/scan/%s" % warrant_obj.id
                 except Exception as e:
                     response['status'] = False
                     response['message'] = '房产创建失败：%s' % str(e)
@@ -69,6 +69,7 @@ def warrant_add_ajax(request):
                             ground_app=ground_add_edit_clean['ground_app'],
                             ground_area=ground_add_edit_clean['ground_area'])
                     response['message'] = '土地创建成功！！！，请继续创建产权证信息。'
+                    response['skip'] = "/dbms/warrant/scan/%s" % warrant_obj.id
                 except Exception as e:
                     response['status'] = False
                     response['message'] = '土地创建失败：%s' % str(e)
@@ -91,6 +92,7 @@ def warrant_add_ajax(request):
                             warrant=warrant_obj,
                             agree=hypothecs_add_edit_clean['agree'])
                     response['message'] = '他权创建成功！！！，请继续创建抵押资产信息。'
+                    response['skip'] = "/dbms/warrant/scan/%s" % warrant_obj.id
                 except Exception as e:
                     response['status'] = False
                     response['message'] = '他权创建失败：%s' % str(e)
@@ -98,6 +100,7 @@ def warrant_add_ajax(request):
                 response['status'] = False
                 response['message'] = '表单信息有误！！！'
                 response['forme'] = form_hypothecs_add_eidt.errors
+
     else:
         response['status'] = False
         response['message'] = '表单信息有误！！！'
@@ -242,9 +245,9 @@ def owership_add_ajax(request):  # 产权证添加ajax
     print('post_data:', post_data)
     warrant_id = post_data['warrant_id']
     warrant_obj = models.Warrants.objects.get(id=warrant_id)
-    form_owership_add_edit = forms.OwerShipEditForm(post_data)
-    if form_owership_add_edit.is_valid():
-        owership_add_clean = form_owership_add_edit.cleaned_data
+    form_owership_add = forms.OwerShipAddForm(post_data)
+    if form_owership_add.is_valid():
+        owership_add_clean = form_owership_add.cleaned_data
         print('warrant_add_clean:', owership_add_clean)
         try:
             owership_obj = models.Ownership.objects.create(
@@ -258,7 +261,7 @@ def owership_add_ajax(request):  # 产权证添加ajax
     else:
         response['status'] = False
         response['message'] = '表单信息有误！！！'
-        response['forme'] = form_owership_add_edit.errors
+        response['forme'] = form_owership_add.errors
     result = json.dumps(response, ensure_ascii=False)
     return HttpResponse(result)
 
@@ -309,9 +312,10 @@ def guaranty_add_ajax(request):  # 抵押物添加ajax
     warrant_obj = models.Warrants.objects.get(id=warrant_id)
 
     try:
-        warrant_hypothec_obj = models.Hypothecs.objects.get(warrant=warrant_obj)
-        for warrant in post_data['warrant']:
-            warrant_hypothec_obj.warrant_m.add(warrant)
+        with transaction.atomic():
+            warrant_hypothec_obj = models.Hypothecs.objects.get(warrant=warrant_obj)
+            for warrant in post_data['warrant']:
+                warrant_hypothec_obj.warrant_m.add(warrant)
         response['message'] = '抵押物添加成功！！！'
     except Exception as e:
         response['status'] = False
@@ -549,11 +553,8 @@ def warrant_scan(request, warrant_id):  # house_scan房产预览
     warrant_typ_n = warrant_obj.warrant_typ
     if warrant_typ_n == 9:
         agree_lending_obj = warrant_obj.ypothec_warrant.agree.lending
-
         warrants_lending_list = models.Warrants.objects.filter(
-            lending_warrant__sure__lending=agree_lending_obj).values_list(
-            'id', 'warrant_num')
-
+            lending_warrant__sure__lending=agree_lending_obj).values_list('id', 'warrant_num')
         print('agree_lending_obj:', agree_lending_obj)
         print('warrants_lending_list:', warrants_lending_list)
 
@@ -579,7 +580,6 @@ def warrant_scan(request, warrant_id):  # house_scan房产预览
         form_date = {
             'agree': warrant_obj.ypothec_warrant.agree}
         form_hypothecs_add_eidt = forms.HypothecsAddEidtForm(initial=form_date)
-        form_guaranty_add_edit = forms.HypothecGuarantyAddEidtForm()
 
     form_storage_add_edit = forms.StoragesAddEidtForm()
     form_owership_add_edit = forms.OwerShipAddForm()

@@ -27,10 +27,10 @@
                 case ('2'):
                     $('#form_counter_assure_p').show();
                     break;
-                case ('3'):
+                case ('11'):
                     $('#form_counter_house').show();
                     break;
-                case ('4'):
+                case ('12'):
                     $('#form_counter_ground').show();
                     break;
                 default:
@@ -52,7 +52,7 @@
             console.log(postDataStr);
 
             $.ajax({
-                url: '/dbms/counter/add/',
+                url: '/dbms/agree/counter/add/',
                 type: 'POST',
                 data: {'postDataStr': postDataStr},
                 dataType: 'JSON',

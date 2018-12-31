@@ -1,0 +1,35 @@
+<div class="table-responsive">
+    {#"table-responsive":表格响应式布局#}
+    <table class="table table-bordered table-hover
+                table-condensed active">
+        <thead>
+        <tr style="text-align: center">
+            <th>通知编码</th>
+            <th>放款通知日期</th>
+            <th>放款通知金额</th>
+            <th>已放款金额</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for notify in agree_obj.notify_agree.all %}
+            <tr>
+                {% if notify_id %}
+                    {% if notify.id == notify_id %}
+                        <td><a href="{% url 'dbms:provide_scan_notify' agree_id=agree_obj.id notify_id=notify.id %}">
+                            {{ notify }}*</a></td>
+                    {% else %}
+                        <td><a href="{% url 'dbms:provide_scan_notify' agree_id=agree_obj.id notify_id=notify.id %}">
+                            {{ notify }}</a></td>
+                    {% endif %}
+                {% else %}
+                    <td><a href="{% url 'dbms:provide_scan_notify' agree_id=agree_obj.id notify_id=notify.id %}">
+                        {{ notify }}</a></td>
+                {% endif %}
+                <td>{{ notify.notify_date }}</td>
+                <td>{{ notify.notify_money }}</td>
+                <td></td>
+            <tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>

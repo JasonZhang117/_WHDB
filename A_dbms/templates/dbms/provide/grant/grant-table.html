@@ -1,0 +1,35 @@
+<div class="table-responsive">
+    {#"table-responsive":表格响应式布局#}
+    <table class="table table-bordered table-hover
+                table-condensed active">
+        <thead>
+        <tr style="text-align: center">
+            <th>序号</th>
+            <th>客户名称</th>
+            <th>放款银行</th>
+            <th>放款金额</th>
+            <th>放款种类</th>
+            <th>放款日期</th>
+            <th>到期日</th>
+            <th>归档状态</th>
+            <th>状态</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for provide in p_list %}
+            <tr>
+                <td><a href="{% url 'dbms:grant_scan' grant_id=provide.id %}">
+                    {{ forloop.counter }} </a></td>
+                <td>{{ provide.notify.agree.lending.summary.custom }}</td>
+                <td>{{ provide.notify.agree.branch }}</td>
+                <td>{{ provide.provide_money }}</td>
+                <td>{{ provide.get_provide_typ_display }}</td>
+                <td>{{ provide.provide_date }}</td>
+                <td>{{ provide.due_date }}</td>
+                <td>{{ provide.get_implement_display }}</td>
+                <td>{{ provide.get_provide_status_display }}</td>
+            <tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>

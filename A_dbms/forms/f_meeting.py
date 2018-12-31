@@ -129,13 +129,10 @@ class SingleQuotaForm(dform.Form):  # 分配项目评委
 
 
 # -----------------------放款次序-------------------------#
-class LendingOrder(dform.ModelForm):  # 放款次序
+class FormLendingOrder(dform.ModelForm):  # 放款次序
     class Meta:
         model = models.LendingOrder
         fields = ['order', 'order_amount']
         widgets = {
-            'order': dform.Select(attrs={'class': 'form-control',
-                                         'placeholder': '放款次序'}),
-            'order_amount': dform.NumberInput(attrs={'class': 'form-control',
-                                                     'placeholder': '拟放款金额（元）'})
-        }
+            'order': dform.Select(attrs={'class': 'form-control', 'placeholder': '放款次序'}),
+            'order_amount': dform.NumberInput(attrs={'class': 'form-control', 'placeholder': '拟放款金额（元）'})}

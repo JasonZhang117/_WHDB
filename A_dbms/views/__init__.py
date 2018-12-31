@@ -2,7 +2,7 @@
 from .v_index import index
 # ----------------------v_article合项目管理视图--------------------#
 from .v_article import (article, article_add_ajax, article_feedback_ajax,
-                        article_scan, article_edit_ajax,article_scan_lending,
+                        article_scan, article_edit_ajax, article_scan_lending,
                         article_scan_agree, article_del_ajax)
 # ----------------------v_appraisal评审视图--------------------#
 from .v_meeting import (meeting, meeting_scan, meeting_notice,
@@ -25,7 +25,7 @@ from .v_warrant import (warrant, house, ground, warrant_add_ajax,
                         owership_del_ajax, guaranty_add_ajax, guaranty_del_ajax,
                         storages_add_ajax, warrant_scan)
 # ----------------------v_provide放款管理视图--------------------#
-from .v_provide import provide, provide_edit
+from .v_provide import (provide, provide_scan, provide_scan_notify, grant, grant_scan)
 
 # ----------------------v_review保后管理视图--------------------#
 from .v_review import review

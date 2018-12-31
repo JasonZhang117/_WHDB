@@ -2,12 +2,11 @@
     $(function () {
         bindAddAgree();
         bindAddAgreeModalOk();
-
     });
 
     function bindAddAgree() {
         $('#addAgree').click(function () {
-            console.log("bindAddAgree")
+            console.log("bindAddAgree");
             $('#addAgreeModal').modal('show');
         })
     }
@@ -35,7 +34,8 @@
                     if (arg.status) {
                         $('#addAgreeModal').modal('hide');
                         alert(arg.message);
-                        window.location.reload();
+                        window.location.href = arg.skip;
+                        {#window.location.reload();#}
                     } else {
                         alert(arg.message);
                         $('#e_agree_amount').text(arg.forme.agree_amount);

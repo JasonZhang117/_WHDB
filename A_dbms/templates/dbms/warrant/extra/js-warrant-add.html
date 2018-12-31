@@ -88,7 +88,8 @@
                     if (arg.status) {
                         $('#addWarrantModal').modal('hide');
                         alert(arg.message);
-                        window.location.reload();
+                        window.location.href = arg.skip;
+                        {#window.location.reload();#}
                     } else {
                         alert(arg.message);
                         console.log(arg.forme.house_locate);

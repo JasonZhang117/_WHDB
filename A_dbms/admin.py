@@ -18,7 +18,7 @@ admin.site.register(models.Agrees)  # 合同
 admin.site.register(models.AgreeesExtend)  # 合同扩展
 admin.site.register(models.Counters)  # 反担保合同
 admin.site.register(models.CountersAssure)  # 保证反担保合同
-admin.site.register(models.CountersHouse)  # 房产抵押反担保合同
+admin.site.register(models.CountersWarrants)  # 抵质押押反担保合同
 # ------------------------担保物--------------------------#
 admin.site.register(models.Warrants)  # 担保物
 admin.site.register(models.Ownership)  # 产权证
@@ -32,7 +32,7 @@ admin.site.register(models.Storages)  # 评估
 # -----------------------放款-------------------------#
 admin.site.register(models.Charges)  # 收费
 admin.site.register(models.Provides)  # 放款
-admin.site.register(models.Notify)  # 放款
+admin.site.register(models.Notify)  # 放款通知
 admin.site.register(models.Repayments)  # 还款
 admin.site.register(models.Pigeonholes)  # 归档
 # -----------------------追偿-------------------------#

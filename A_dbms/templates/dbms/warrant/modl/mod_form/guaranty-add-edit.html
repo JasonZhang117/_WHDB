@@ -1,24 +1,14 @@
 <div id="form_guaranty_add_edit">
 
     <div class="form-group"><!--反担保物-->
-        <label for="id_warrant" class="col-sm-3 control-label">
-            {{ form_guaranty_add_edit.warrant.label }}：
-        </label>
+        <label for="id_warrant" class="col-sm-3 control-label">反担保物：</label>
         <div class="col-sm-9">
-            <select name="warrant" multiple="" id="id_warrant" required="">
+            <select name="warrant" class="form-control" multiple="" id="id_warrant" required="">
                 {% for warrant in warrants_lending_list %}
                     <option value="{{ warrant.0 }}">{{ warrant.1 }}</option>
                 {% endfor %}
-            </select>
-        </div>
-
-        {#        <div class="col-sm-9">#}
-        {#            {{ form_guaranty_add_edit.warrant }}#}
-        {#        </div>#}
-
-        <label id="e_warrant" class="pull-right">
-            {{ form_guaranty_add_edit.warrant.errors }}
-        </label>
+            </select></div>
+        <label id="e_warrant" class="pull-right"></label>
     </div>
 
 </div>

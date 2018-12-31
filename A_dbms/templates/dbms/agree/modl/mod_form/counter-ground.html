@@ -1,14 +1,17 @@
 <div id="form_counter_ground" class="extend" style="display: none">
-    <div class="form-group"><!--抵押房产-->
-        <label for="id_ground" class="col-sm-3 control-label">
-            {{ form_counter_ground.ground.label }}：
-        </label>
+
+    <div class="form-group"><!--反担保房产-->
+        <label for="id_ground" class="col-sm-3 control-label">反担保房产：</label>
         <div class="col-sm-9">
-            {{ form_counter_ground.ground }}
-        </div>
-        <label id="e_ground" class="pull-right">
-            {{ form_counter_ground.ground.errors }}
-        </label>
+            <select name="ground" class="form-control" multiple="" id="id_ground" required="">
+                {% for ground in warrants_g_lending_list %}
+                    <option value="{{ ground.0 }}">{{ ground.1 }}</option>
+                {% endfor %}
+            </select></div>
+        <label id="e_ground" class="pull-right"></label>
     </div>
+
 </div>
+
+
 

@@ -15,12 +15,10 @@ urlpatterns = [
          views.article_scan, name='article_scan_all'),
     path('article/scan/<int:article_id>/<int:lending_id>/',
          views.article_scan_lending, name='article_scan_lending'),
-
     path('article/add/', views.article_add_ajax),
     path('article/del/', views.article_del_ajax),
     path('article/edit/', views.article_edit_ajax),
     path('article/feedback/', views.article_feedback_ajax),
-
     # -----------------------meeting评审会-------------------------#
     path('meeting/<int:meeting_state>',
          views.meeting, name='meeting'),
@@ -32,7 +30,6 @@ urlpatterns = [
          views.meeting_scan_article, name='meeting_scan_article'),
     path('meeting/notice/<int:meeting_id>/',
          views.meeting_notice, name='meeting_notice'),
-
     path('meeting/add/', views.meeting_add_ajax),
     path('meeting/allot/', views.meeting_allot_ajax),
     path('meeting/edit/', views.meeting_edit_ajax),
@@ -40,7 +37,6 @@ urlpatterns = [
     path('meeting/del/', views.meeting_del_ajax),
     path('meeting/article/add/', views.meeting_article_add_ajax),
     path('meeting/article/del/', views.meeting_article_del_ajax),
-
     # -----------------------appraisal评审管理-------------------------#
     path('appraisal/',
          views.appraisal, name='appraisal'),
@@ -56,7 +52,6 @@ urlpatterns = [
     path('appraisal/sign/', views.article_sign_ajax),
     path('appraisal/guarantee/add/', views.guarantee_add_ajax),
     path('appraisal/guarantee/del/', views.guarantee_del_ajax),
-
     # -----------------------agree合同管理-------------------------#
     path('agree/',
          views.agree, name='agree_all'),
@@ -66,10 +61,8 @@ urlpatterns = [
          views.agree_scan, name='agree_scan'),
     path('agree/preview/<int:agree_id>/',
          views.agree_preview, name='agree_preview'),
-
     path('agree/add/', views.agree_add_ajax),
-    path('counter/add/', views.counter_add_ajax),
-
+    path('agree/counter/add/', views.counter_add_ajax),
     # -----------------------warrant权证管理-------------------------#
     path('warrant/',
          views.warrant, name='warrant_all'),
@@ -77,7 +70,6 @@ urlpatterns = [
          views.warrant, name='warrant'),  # /dbms/warrant/(0-9)
     path('warrant/scan/<int:warrant_id>/',
          views.warrant_scan, name='warrant_scan'),
-
     path('warrant/add/', views.warrant_add_ajax),
     path('warrant/del/', views.warrant_del_ajax),
     path('warrant/edit/', views.warrant_edit_ajax),
@@ -86,13 +78,11 @@ urlpatterns = [
     path('warrant/guaranty/add/', views.guaranty_add_ajax),
     path('warrant/guaranty/del/', views.guaranty_del_ajax),
     path('warrant/storages/add/', views.storages_add_ajax),
-
     # -----------------------house房产管理-------------------------#
     path('house/',
          views.house, name='house_all'),
     path('house/<int:house_app>/',
          views.house, name='house'),  # /dbms/house/(0-9)
-
     # -----------------------ground土地管理-------------------------#
     path('ground/',
          views.ground, name='ground_all'),
@@ -100,13 +90,17 @@ urlpatterns = [
          views.ground, name='ground'),  # /dbms/ground/(0-9)
     # -----------------------放款管理-------------------------#
     path('provide/', views.provide, name='provide_all'),
-    path('provide/edit/<int:agree_id>/',
-         views.provide_edit, name='provide_edit'),
+    path('provide/<int:agree_state>/', views.provide, name='provide'),  # /dbms/provide/(0-9)
+    path('provide/scan/<int:agree_id>/', views.provide_scan, name='provide_scan'),
+    path('provide/scan/<int:agree_id>/<int:notify_id>/',
+         views.provide_scan_notify, name='provide_scan_notify'),
+    path('grant/', views.grant, name='grant_all'),
+    path('grant/<int:provide_status>/', views.grant, name='grant'),  # /dbms/grant/(0-9)
+    path('grant/scan/<int:grant_id>/', views.grant_scan, name='grant_scan'),
 
     # -----------------------保后管理-------------------------#
     path('review/',
          views.review, name='review_all'),
-
     # -----------------------客户管理-------------------------#
     path('custom/',
          views.custom, name='custom_all'),
@@ -114,7 +108,6 @@ urlpatterns = [
          views.custom, name='custom'),  # /dbms/warrant/(0-9)
     path('custom/scan/<int:custom_id>/',
          views.custom_scan, name='custom_scan'),
-
     path('custom/add/', views.custom_add_ajax),
     path('custom/del/', views.custom_del_ajax),
     path('custom/edit/', views.custom_edit_ajax),
