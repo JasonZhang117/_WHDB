@@ -21,7 +21,7 @@
         {% for agree in p_list %}
             <tr>
                 <td>
-                    <a href="{% url 'dbms:provide_scan' agree_id=agree.id %}">
+                    <a href="{% url 'dbms:agreep_scan' agree_id=agree.id %}">
                         {{ agree.agree_num }}
                     </a>
                 </td>

@@ -1,0 +1,27 @@
+<div class="table-responsive">
+    <table class="table table-bordered table-hover table-condensed active">
+        <thead>
+        <tr style="text-align: center">
+            <th>客户名称</th>
+            <th>授信总额</th>
+            <th>流贷余额</th>
+            <th>承兑余额</th>
+            <th>保函余额</th>
+            <th>上次保后</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for custom in custom_list %}
+            <tr>
+                <td><a href="{% url 'dbms:custom_scan' custom_id=custom.id %}">{{ custom.name }}</a></td>
+                <td>{{ custom.credit_amount }}</td>
+                <td>{{ custom.flow_loan }}</td>
+                <td>{{ custom.accept_loan }}</td>
+                <td>{{ custom.back_loan }}</td>
+                <td></td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    {% include 'dbms/board/page.html' %}
+</div>

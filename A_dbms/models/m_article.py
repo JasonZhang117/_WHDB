@@ -2,7 +2,6 @@ from django.db import models
 import datetime
 
 
-# 项目、纪要
 # -----------------------------项目模型------------------------------#
 class Articles(models.Model):  # 项目、纪要
     article_num = models.CharField(verbose_name='_项目编号', max_length=32, unique=True)

@@ -25,11 +25,12 @@ from .v_warrant import (warrant, house, ground, warrant_add_ajax,
                         owership_del_ajax, guaranty_add_ajax, guaranty_del_ajax,
                         storages_add_ajax, warrant_scan)
 # ----------------------v_provide放款管理视图--------------------#
-from .v_provide import (provide, provide_scan, provide_scan_notify, grant, grant_scan)
+from .v_provide import (agreep, agreep_scan, agreep_scan_notify, provide, provide_scan)
 
 # ----------------------v_review保后管理视图--------------------#
 from .v_review import review
-
+# ----------------------v_review保后管理视图--------------------#
+from .v_dun import compensatory, compensatory_scan
 # 客户、行业、区域
 from .v_custom import (custom, custom_scan, custom_add_ajax,
                        custom_del_ajax, custom_edit_ajax)

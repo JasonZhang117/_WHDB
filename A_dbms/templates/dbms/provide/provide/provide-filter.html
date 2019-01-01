@@ -1,23 +1,24 @@
 <div>
     <label>
-        {% if kwargs.agree_state == None %}
-            <a class="active btn btn-primary btn-sm"
-               href="{% url 'dbms:agree_all' %}">全部</a>
+        {% if kwargs.provide_status == None %}
+            <a class="btn btn-primary btn-sm active"
+               href="{% url 'dbms:provide_all' %}">全部</a>
         {% else %}
-            <a class="btn btn btn-primary btn-sm"
-               href="{% url 'dbms:agree_all' %}">全部</a>
+            <a class="btn btn-primary btn-sm"
+               href="{% url 'dbms:provide_all' %}">全部</a>
         {% endif %}
 
         {# 方式一：#}
-        {% for agree_state in agree_state_list %}
-            {% if agree_state.0 == kwargs.agree_state %}
-                <a class="active btn btn-primary btn-sm"
-                   href="{% url 'dbms:agree' agree_state=agree_state.0 %}">
-                    {{ agree_state.1 }}</a>
+        {% for provide_status in provide_status_list %}
+            {% if provide_status.0 == kwargs.provide_status %}
+                <a class="btn btn-primary btn-sm active"
+                   href="{% url 'dbms:provide' provide_status=provide_status.0 %}">
+                    {{ provide_status.1 }}</a>
             {% else %}
                 <a class="btn btn-primary btn-sm"
-                   href="{% url 'dbms:agree' agree_state=agree_state.0 %}">
-                    {{ agree_state.1 }}</a>
+                   href="{% url 'dbms:provide' provide_status=provide_status.0 %}">
+                    {{ provide_status.1 }} </a>
+
             {% endif %}
         {% endfor %}
     </label>

@@ -28,9 +28,7 @@ def custom(request, *args, **kwargs):  # 委托合同列表
     except EmptyPage:
         p_list = paginator.page(paginator.num_pages)
 
-    return render(request,
-                  'dbms/custom/custom.html',
-                  locals())
+    return render(request, 'dbms/custom/custom.html', locals())
 
 
 # -----------------------客户添加-------------------------#
@@ -244,6 +242,4 @@ def custom_scan(request, custom_id):  # 项目预览
             'license_addr': custom_obj.person_custome.license_addr}
         form_custom_p_add = forms.CustomPAddForm(initial=form_date)
 
-    return render(request,
-                  'dbms/custom/custom-scan.html',
-                  locals())
+    return render(request, 'dbms/custom/custom-scan.html', locals())

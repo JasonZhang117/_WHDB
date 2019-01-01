@@ -15,14 +15,14 @@
             <tr>
                 {% if notify_id %}
                     {% if notify.id == notify_id %}
-                        <td><a href="{% url 'dbms:provide_scan_notify' agree_id=agree_obj.id notify_id=notify.id %}">
+                        <td><a href="{% url 'dbms:agreep_scan_notify' agree_id=agree_obj.id notify_id=notify.id %}">
                             {{ notify }}*</a></td>
                     {% else %}
-                        <td><a href="{% url 'dbms:provide_scan_notify' agree_id=agree_obj.id notify_id=notify.id %}">
+                        <td><a href="{% url 'dbms:agreep_scan_notify' agree_id=agree_obj.id notify_id=notify.id %}">
                             {{ notify }}</a></td>
                     {% endif %}
                 {% else %}
-                    <td><a href="{% url 'dbms:provide_scan_notify' agree_id=agree_obj.id notify_id=notify.id %}">
+                    <td><a href="{% url 'dbms:agreep_scan_notify' agree_id=agree_obj.id notify_id=notify.id %}">
                         {{ notify }}</a></td>
                 {% endif %}
                 <td>{{ notify.notify_date }}</td>

@@ -22,7 +22,7 @@
                 <td>{{ provide.due_date }}</td>
                 <td>{{ provide.get_implement_display }}</td>
                 <td>{{ provide.get_provide_status_display }}</td>
-                <td><a href="{% url 'dbms:grant_scan' grant_id=provide.id %}" target="_blank">查看详情</a></td>
+                <td><a href="{% url 'dbms:provide_scan' provide_id=provide.id %}" target="_blank">查看详情</a></td>
             <tr>
         {% endfor %}
         </tbody>

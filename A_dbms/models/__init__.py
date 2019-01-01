@@ -15,8 +15,10 @@ from .m_warrant import (
 from .m_provide import (Notify, Provides, Repayments, Pigeonholes, Charges)
 # -----------------------m_dun追偿-------------------#
 from .m_dun import Compensatories
-# ---------------------v_custome客户信息-----------------------#
+# ---------------------m_custom客户信息-----------------------#
 from .m_custom import Customes, CustomesC, CustomesP
+# ---------------------m_review保后信息-----------------------#
+from .m_review import Review
 
 # ---------------------v_interior内部信息----------------------#
 # 部门、岗位、员工

@@ -89,18 +89,24 @@ urlpatterns = [
     path('ground/<int:application>/',
          views.ground, name='ground'),  # /dbms/ground/(0-9)
     # -----------------------放款管理-------------------------#
+    path('agreep/', views.agreep, name='agreep_all'),
+    path('agreep/<int:agree_state>/', views.agreep, name='agreep'),  # /dbms/provide/(0-9)
+    path('agreep/scan/<int:agree_id>/', views.agreep_scan, name='agreep_scan'),
+    path('agreep/scan/<int:agree_id>/<int:notify_id>/',
+         views.agreep_scan_notify, name='agreep_scan_notify'),
     path('provide/', views.provide, name='provide_all'),
-    path('provide/<int:agree_state>/', views.provide, name='provide'),  # /dbms/provide/(0-9)
-    path('provide/scan/<int:agree_id>/', views.provide_scan, name='provide_scan'),
-    path('provide/scan/<int:agree_id>/<int:notify_id>/',
-         views.provide_scan_notify, name='provide_scan_notify'),
-    path('grant/', views.grant, name='grant_all'),
-    path('grant/<int:provide_status>/', views.grant, name='grant'),  # /dbms/grant/(0-9)
-    path('grant/scan/<int:grant_id>/', views.grant_scan, name='grant_scan'),
+    path('provide/<int:provide_status>/', views.provide, name='provide'),  # /dbms/grant/(0-9)
+    path('provide/scan/<int:provide_id>/', views.provide_scan, name='provide_scan'),
 
     # -----------------------保后管理-------------------------#
-    path('review/',
-         views.review, name='review_all'),
+    path('review/', views.review, name='review_all'),
+    # -----------------------追偿管理-------------------------#
+    path('compensatory/',
+         views.compensatory, name='compensatory_all'),
+    path('compensatory/<int:dun_state>/',
+         views.compensatory, name='compensatory'),
+    path('compensatory/scan/<int:compensatory_id>/',
+         views.compensatory_scan, name='compensatory_scan'),
     # -----------------------客户管理-------------------------#
     path('custom/',
          views.custom, name='custom_all'),

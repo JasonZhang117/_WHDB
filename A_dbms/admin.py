@@ -44,6 +44,8 @@ admin.site.register(models.CustomesC)  # 企业客户
 admin.site.register(models.CustomesP)  # 个人客户
 admin.site.register(models.Districtes)  # 区域
 admin.site.register(models.Industries)  # 行业
+# -----------------------保后-------------------------#
+admin.site.register(models.Review)  # 行业
 
 # -----------------------外部信息-------------------------#
 admin.site.register(models.Cooperators)  # 授信机构

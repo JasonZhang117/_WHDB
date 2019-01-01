@@ -18,7 +18,7 @@
         <tbody>
         {% for provide in p_list %}
             <tr>
-                <td><a href="{% url 'dbms:grant_scan' grant_id=provide.id %}">
+                <td><a href="{% url 'dbms:provide_scan' provide_id=provide.id %}">
                     {{ forloop.counter }} </a></td>
                 <td>{{ provide.notify.agree.lending.summary.custom }}</td>
                 <td>{{ provide.notify.agree.branch }}</td>
