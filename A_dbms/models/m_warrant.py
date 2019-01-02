@@ -14,8 +14,7 @@ class Warrants(models.Model):  # 担保物
     evaluate_value = models.FloatField(verbose_name='评估价值', null=True, blank=True)
     evaluate_date = models.DateField(verbose_name='评估日期', null=True, blank=True)
     WARRANT_STATE_LIST = (
-        (1, '未入库'), (2, '已入库'), (3, '已出库'),
-        (4, '已借出'), (5, '已注销'))
+        (1, '未入库'), (2, '已入库'), (3, '已出库'), (4, '已借出'), (5, '已注销'))
     warrant_state = models.IntegerField(verbose_name='_权证状态', choices=WARRANT_STATE_LIST, default=1)
 
     class Meta:
@@ -128,7 +127,7 @@ class Draft(models.Model):  # 应收票据
         db_table = 'dbms_draft'  # 指定数据表的名称
 
     def __str__(self):
-        return self.warrant
+        return '%s' % self.warrant
 
 
 # ------------------------应收帐款--------------------------#
@@ -148,7 +147,7 @@ class Receivable(models.Model):  # 应收帐款
         db_table = 'dbms_receivable'  # 指定数据表的名称
 
     def __str__(self):
-        return self.warrant
+        return '%s' % (self.warrant)
 
 
 class ReceiveExtend(models.Model):  # 应收列表
@@ -158,8 +157,16 @@ class ReceiveExtend(models.Model):  # 应收列表
                                    related_name='extend_receiveable')
     receive_unit = models.CharField(verbose_name="应收单位名称", max_length=64)
 
+    class Meta:
+        verbose_name_plural = '权证-应收明细'  # 指定显示名称
+        db_table = 'dbms_receiveextend'  # 指定数据表的名称
 
-# ------------------------动产--------------------------#
+    def __str__(self):
+        return '%s' % self.receivable
+
+    # ------------------------动产--------------------------#
+
+
 class Chattel(models.Model):  # 动产
     warrant = models.OneToOneField(to='Warrants',
                                    verbose_name="权证",
@@ -178,7 +185,7 @@ class Chattel(models.Model):  # 动产
         db_table = 'dbms_rchattel'  # 指定数据表的名称
 
     def __str__(self):
-        return self.warrant
+        return '%s' % self.warrant
 
 
 # ------------------------车辆--------------------------#
@@ -200,7 +207,7 @@ class Vehicle(models.Model):  # 车辆
         db_table = 'dbms_vehicle'  # 指定数据表的名称
 
     def __str__(self):
-        return self.warrant
+        return '%s' % self.warrant
 
 
 # ------------------------他权模型--------------------------#
@@ -220,7 +227,7 @@ class Hypothecs(models.Model):  # 他权
         db_table = 'dbms_hypothecs'  # 指定数据表的名称
 
     def __str__(self):
-        return self.warrant
+        return '%s' % self.warrant
 
 
 # ------------------------出入库模型---------------------------#
@@ -267,4 +274,4 @@ class Evaluate(models.Model):  # 评估
         db_table = 'dbms_evaluate'  # 指定数据表的名称
 
     def __str__(self):
-        return self.warrant
+        return '%s' % self.warrant

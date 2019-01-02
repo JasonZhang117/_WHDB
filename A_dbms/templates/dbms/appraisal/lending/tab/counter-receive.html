@@ -1,25 +1,30 @@
 <div class="table-responsive">
-    {#"table-responsive":表格响应式布局#}
-    <table class="table table-bordered table-hover
-                table-condensed active">
-        {#"table-bordered":表格表格边框#}
-        {#"table-hover":表格悬停变色#}
-        {#"table-condensed":表格紧缩#}
-        {#<caption><h4>项目管理</h4></caption>#}
+    <table class="table table-bordered table-hover table-condensed active">
+
         <thead>
         <tr style="text-align: center">
-            <th>还款日期</th>
-            <th>还款金额</th>
+            <th>担保方式</th>
+            <th>所有人</th>
+            <th>详情</th>
+            {% if lending_operate %}
+                <th>操作</th>
+            {% endif %}
         </tr>
         </thead>
         <tbody class="guarantee-tb">
-        {% for provid in agree_obj.provide_agree.all %}
-            {% for warrant in provid.repayment_provide.all %}
-                <tr >
-                    <td>{{ repayment.repayment_date }}</td>
-                    <td>{{ repayment.repayment_money }}</td>
-                <tr>
-            {% endfor %}
+        {% for lending_sure in lending_obj.sure_lending.all %}
+            {% if lending_sure.sure_typ in receivable_list %}
+                {% for warrant in lending_sure.warrant_sure.warrant.all %}
+                    <tr guarantee-nid={{ warrant.id }} sure-typ-nid={{ lending_sure.sure_typ }}>
+                        <td>{{ lending_sure.get_sure_typ_display }}</td>
+                        <td>{{ warrant.receive_warrant.owner }}</td>
+                        <td>{{ warrant.receive_warrant.detail }}</td>
+                        {% if lending_operate %}
+                            <td><a class="btn btn-danger btn-xs delGuaranteeB">删除</a></td>
+                        {% endif %}
+                    </tr>
+                {% endfor %}
+            {% endif %}
         {% endfor %}
         </tbody>
     </table>

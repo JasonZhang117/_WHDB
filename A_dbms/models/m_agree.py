@@ -118,7 +118,7 @@ class CountersAssure(models.Model):  # 保证反担保合同
         return self.counter.counter_num
 
 
-# -------------------房产抵押反担保合同模型--------------------#
+# -------------------抵质押反担保合同模型--------------------#
 class CountersWarrants(models.Model):  # 房产抵押反担保合同
     counter = models.OneToOneField(to='Counters', verbose_name="反担保合同",
                                    on_delete=models.PROTECT,
@@ -127,8 +127,8 @@ class CountersWarrants(models.Model):  # 房产抵押反担保合同
                                      related_name='counter_warrant')
 
     class Meta:
-        verbose_name_plural = '合同-房产抵押'  # 指定显示名称
+        verbose_name_plural = '合同-抵质押合同'  # 指定显示名称
         db_table = 'dbms_counterwarrants'  # 指定数据表的名称
 
     def __str__(self):
-        return "%s" % (self.counter)
+        return "%s_%s" % (self.counter, self.counter.counter_typ)

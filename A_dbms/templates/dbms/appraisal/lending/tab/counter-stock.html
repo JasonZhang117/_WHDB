@@ -1,10 +1,35 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+<div class="table-responsive">
+    <table class="table table-bordered table-hover table-condensed active">
 
-</body>
-</html>
+        <thead>
+        <tr style="text-align: center">
+            <th>担保方式</th>
+            <th>所有人</th>
+            <th>标的公司</th>
+            <th>质押数量</th>
+            <th>股权性质</th>
+            {% if lending_operate %}
+                <th>操作</th>
+            {% endif %}
+        </tr>
+        </thead>
+        <tbody class="guarantee-tb">
+        {% for lending_sure in lending_obj.sure_lending.all %}
+            {% if lending_sure.sure_typ in stock_list %}
+                {% for warrant in lending_sure.warrant_sure.warrant.all %}
+                    <tr guarantee-nid={{ warrant.id }} sure-typ-nid={{ lending_sure.sure_typ }}>
+                        <td>{{ lending_sure.get_sure_typ_display }}</td>
+                        <td>{{ warrant.stock_warrant.stock_owner }}</td>
+                        <td>{{ warrant.stock_warrant.target }}</td>
+                        <td>{{ warrant.stock_warrant.share }}</td>
+                        <td>{{ warrant.stock_warrant.get_stock_typ_display }}</td>
+                        {% if lending_operate %}
+                            <td><a class="btn btn-danger btn-xs delGuaranteeB">删除</a></td>
+                        {% endif %}
+                    </tr>
+                {% endfor %}
+            {% endif %}
+        {% endfor %}
+        </tbody>
+    </table>
+</div>

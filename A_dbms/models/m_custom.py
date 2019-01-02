@@ -11,6 +11,7 @@ class Customes(models.Model):  # 客户
     contact_addr = models.CharField(verbose_name='联系地址', max_length=64)
     linkman = models.CharField(verbose_name='联系人', max_length=16)
     contact_num = models.CharField(verbose_name='联系电话', max_length=13)
+    counter_only = models.BooleanField(verbose_name='仅反担保', default=1)
     credit_amount = models.FloatField(verbose_name='授信总额（元）', default=0)
     flow_loan = models.FloatField(verbose_name='流贷余额（元）', default=0)
     accept_loan = models.FloatField(verbose_name='承兑余额（元）', default=0)

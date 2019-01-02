@@ -34,11 +34,17 @@ def agree(request, *args, **kwargs):  # 委托合同列表
 @login_required
 def agree_scan(request, agree_id):  # 查看合同
     print(__file__, '---->def agree_scan')
+    '''COUNTER_TYP_LIST = (
+        (1, '企业担保'), (2, '个人保证'),
+        (11, '房产抵押'), (12, '土地抵押'), (13, '设备抵押'), (14, '存货抵押'), (15, '车辆抵押'),
+        (31, '应收质押'), (32, '股权质押'), (33, '票据质押'),
+        (51, '股权预售'), (52, '房产预售'), (53, '土地预售'))'''
     counter_typ_custom = [1, 2]
+    counter_typ_h_g = [11, 12, 52, 53]
 
     agree_obj = models.Agrees.objects.get(id=agree_id)
     agree_lending_obj = agree_obj.lending
-    print('agree_lending_obj:', agree_lending_obj)
+
     custom_c_lending_list = models.Customes.objects.filter(
         lending_custom__sure__lending=agree_lending_obj, genre=1).values_list('id', 'name')
     custom_p_lending_list = models.Customes.objects.filter(
@@ -47,7 +53,10 @@ def agree_scan(request, agree_id):  # 查看合同
         lending_warrant__sure__lending=agree_lending_obj, warrant_typ=1).values_list('id', 'warrant_num')
     warrants_g_lending_list = models.Warrants.objects.filter(
         lending_warrant__sure__lending=agree_lending_obj, warrant_typ=2).values_list('id', 'warrant_num')
-
+    warrants_r_lending_list = models.Warrants.objects.filter(
+        lending_warrant__sure__lending=agree_lending_obj, warrant_typ=3).values_list('id', 'warrant_num')
+    warrants_s_lending_list = models.Warrants.objects.filter(
+        lending_warrant__sure__lending=agree_lending_obj, warrant_typ=4).values_list('id', 'warrant_num')
     from_counter = forms.AddCounterForm()
 
     return render(request, 'dbms/agree/agree-scan.html', locals())
@@ -160,7 +169,7 @@ def counter_add_ajax(request):
         counter_copies = 3
         counter_max = models.Counters.objects.filter(
             agree=agree_obj, counter_typ=counter_typ).count() + 1
-    if counter_typ == 2:
+    elif counter_typ == 2:
         counter_typ_n = 'G'
         counter_copies = 2
         counter_max = models.Counters.objects.filter(
@@ -219,6 +228,10 @@ def counter_add_ajax(request):
                 warrant_list = post_data['house']
             elif counter_typ in [12, 53]:
                 warrant_list = post_data['ground']
+            elif counter_typ == 31:
+                warrant_list = post_data['receivable']
+            elif counter_typ == 32:
+                warrant_list = post_data['stock']
             else:
                 warrant_list = post_data['ground']
             try:

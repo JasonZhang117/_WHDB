@@ -1,0 +1,17 @@
+<div id="form_counter_receivable" class="extend" style="display: none">
+
+    <div class="form-group"><!--反担保应收账款-->
+        <label for="id_receivable" class="col-sm-3 control-label">应收账款：</label>
+        <div class="col-sm-9">
+            <select name="receivable" class="form-control" multiple="" id="id_receivable" required="">
+                {% for receivable in warrants_r_lending_list %}
+                    <option value="{{ receivable.0 }}">{{ receivable.1 }}</option>
+                {% endfor %}
+            </select></div>
+        <label id="e_receivable" class="pull-right"></label>
+    </div>
+
+</div>
+
+
+

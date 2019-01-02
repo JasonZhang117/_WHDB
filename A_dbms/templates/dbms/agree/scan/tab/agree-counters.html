@@ -25,10 +25,18 @@
                 {% else %}
                     <td>
                         {% for warrant in counter.warrant_counter.warrant.all %}
-                            {% for ownership in warrant.ownership_warrant.all %}
-                                {{ ownership.owner.name }}
-                                {% if not forloop.last %}、{% endif %}
-                            {% endfor %}
+                            {% if warrant.warrant_typ == 1 or warrant.warrant_typ == 2 %}
+                                {% for ownership in warrant.ownership_warrant.all %}
+                                    {{ ownership.owner.name }}
+                                    {% if not forloop.last %}、{% endif %}
+                                {% endfor %}
+                            {% elif warrant.warrant_typ == 3 %}
+                                {{ warrant.receive_warrant.owner.name }}
+                            {% elif warrant.warrant_typ == 4 %}
+                                {{ warrant.stock_warrant.stock_owner.name }}
+                            {% else %}
+                                {{ warrant.receive_warrant.owner.name }}
+                            {% endif %}
                         {% endfor %}
                     </td>
                 {% endif %}

@@ -9,7 +9,7 @@ from django.core.exceptions import NON_FIELD_ERRORS, ValidationError
 class CustomAddForm(dform.ModelForm):
     class Meta:
         model = models.Customes
-        fields = ['name', 'contact_addr', 'linkman', 'contact_num', 'genre']
+        fields = ['name', 'contact_addr', 'linkman', 'contact_num', 'genre', 'counter_only']
         widgets = {
             'name': dform.TextInput(
                 attrs={'class': 'form-control', 'placeholder': '客户名称'}),
@@ -30,7 +30,7 @@ class CustomEditForm(dform.ModelForm):
 
     class Meta:
         model = models.Customes
-        fields = ['contact_addr', 'linkman', 'contact_num']
+        fields = ['counter_only', 'contact_addr', 'linkman', 'contact_num']
         widgets = {
             'contact_addr': dform.TextInput(
                 attrs={'class': 'form-control', 'placeholder': '联系地址'}),

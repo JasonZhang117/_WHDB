@@ -4,7 +4,7 @@ from .f_meeting import (
     SingleQuotaForm, FormLendingOrder)
 from .f_appraisal import (
     CommentsAddForm, LendingSuresForm, LendingCustomsCForm, LendingCustomsPForm,
-    LendingHouseForm, LendingGroundForm, ArticlesSignForm)
+    LendingHouseForm, LendingGroundForm, ArticlesSignForm, LendinReceivableForm, LendinStockForm)
 from .f_warrant import (
     WarrantAddForm, WarrantEditForm, OwerShipAddForm, HouseAddEidtForm, GroundAddEidtForm,
     HypothecsAddEidtForm, StoragesAddEidtForm)

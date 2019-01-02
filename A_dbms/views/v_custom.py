@@ -52,6 +52,7 @@ def custom_add_ajax(request):
                         custom_obj = models.Customes.objects.create(
                             name=custom_add_data['name'],
                             genre=custom_add_data['genre'],
+                            counter_only=custom_add_data['counter_only'],
                             contact_addr=custom_add_data['contact_addr'],
                             linkman=custom_add_data['linkman'],
                             contact_num=custom_add_data['contact_num'])
@@ -83,6 +84,7 @@ def custom_add_ajax(request):
                         custom_obj = models.Customes.objects.create(
                             name=custom_add_data['name'],
                             genre=custom_add_data['genre'],
+                            counter_only=custom_add_data['counter_only'],
                             contact_addr=custom_add_data['contact_addr'],
                             linkman=custom_add_data['linkman'],
                             contact_num=custom_add_data['contact_num'])
@@ -162,6 +164,7 @@ def custom_edit_ajax(request):
                     with transaction.atomic():
                         custom_lsit.update(
                             name=custom_edit_data['name'],
+                            counter_only=custom_edit_data['counter_only'],
                             contact_addr=custom_edit_data['contact_addr'],
                             linkman=custom_edit_data['linkman'],
                             contact_num=custom_edit_data['contact_num'])
@@ -192,6 +195,7 @@ def custom_edit_ajax(request):
                     with transaction.atomic():
                         custom_lsit.update(
                             name=custom_edit_data['name'],
+                            counter_only=custom_edit_data['counter_only'],
                             contact_addr=custom_edit_data['contact_addr'],
                             linkman=custom_edit_data['linkman'],
                             contact_num=custom_edit_data['contact_num'])

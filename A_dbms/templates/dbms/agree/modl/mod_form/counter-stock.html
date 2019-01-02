@@ -1,0 +1,17 @@
+<div id="form_counter_stock" class="extend" style="display: none">
+
+    <div class="form-group"><!--质押股权-->
+        <label for="id_stock" class="col-sm-3 control-label">质押股权：</label>
+        <div class="col-sm-9">
+            <select name="stock" class="form-control" multiple="" id="id_stock" required="">
+                {% for stock in warrants_s_lending_list %}
+                    <option value="{{ stock.0 }}">{{ stock.1 }}</option>
+                {% endfor %}
+            </select></div>
+        <label id="e_stock" class="pull-right"></label>
+    </div>
+
+</div>
+
+
+

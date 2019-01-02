@@ -36,7 +36,7 @@ class ArticlesAddForm(dform.Form):  # 项目添加
     def __init__(self, *args, **kwargs):
         super(ArticlesAddForm, self).__init__(*args, **kwargs)
         self.fields['custom_id'].widget.choices = \
-            models.Customes.objects.values_list('id', 'name').order_by('name')
+            models.Customes.objects.filter(counter_only=0).values_list('id', 'name').order_by('name')
         self.fields['director_id'].widget.choices = \
             models.Employees.objects.filter(
                 job__name='项目经理').values_list('id', 'name').order_by('name')
@@ -71,4 +71,3 @@ class FeedbackAddForm(dform.Form):  # 风控反馈添加
         widget=widgets.Textarea(
             attrs={'class': 'form-control',
                    'placeholder': '提出项目风控措施建议（额度、担保措施、过程控制、保后要求等）'}))
-

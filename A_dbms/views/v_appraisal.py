@@ -88,6 +88,8 @@ def appraisal_scan_lending(request, article_id, lending_id):  # 评审项目预�
     sure_list = [1, 2]
     house_list = [11, 21, 42, 52]
     ground_list = [12, 22, 43, 53]
+    receivable_list = [31]
+    stock_list = [32]
     lending_operate = True
 
     form_lendingsures = forms.LendingSuresForm()
@@ -96,10 +98,10 @@ def appraisal_scan_lending(request, article_id, lending_id):  # 评审项目预�
     form_lendingcustoms_p_add = forms.LendingCustomsPForm()
     form_lendinghouse_add = forms.LendingHouseForm()
     form_lendingground_add = forms.LendingGroundForm()
+    form_lendinggreceivable_add = forms.LendinReceivableForm()
+    form_lendingstock_add = forms.LendinStockForm()
 
-    return render(request,
-                  'dbms/appraisal/appraisal-scan-lending.html',
-                  locals())
+    return render(request, 'dbms/appraisal/appraisal-scan-lending.html', locals())
 
 
 # -----------------------------反担保措施添加ajax------------------------#
@@ -194,6 +196,41 @@ def guarantee_add_ajax(request):  # 反担保措施添加ajax
                 except Exception as e:
                     response['status'] = False
                     response['message'] = '反担保设置失败：%s' % str(e)
+            elif sure_typ == 31:
+                form_lendinggreceivable_add = forms.LendinReceivableForm(post_data)
+                if form_lendinggreceivable_add.is_valid():
+                    lendingwarrant_clean = form_lendinggreceivable_add.cleaned_data
+                try:
+                    with transaction.atomic():
+                        lendingsure_obj, created = models.LendingSures.objects.update_or_create(
+                            lending=lending_obj, sure_typ=sure_typ, defaults=default_sure)
+                        default = {'sure': lendingsure_obj}
+                        lendinreceivable_obj, created = models.LendingWarrants.objects.update_or_create(
+                            sure=lendingsure_obj, defaults=default)
+                        for warrant in lendingwarrant_clean['sure_receivable']:
+                            lendinreceivable_obj.warrant.add(warrant)
+                    response['message'] = '反担保设置成功！'
+                except Exception as e:
+                    response['status'] = False
+                    response['message'] = '反担保设置失败：%s' % str(e)
+            elif sure_typ == 32:
+                form_lendingstock_add = forms.LendinStockForm(post_data)
+                if form_lendingstock_add.is_valid():
+                    lendingwarrant_clean = form_lendingstock_add.cleaned_data
+                try:
+                    with transaction.atomic():
+                        lendingsure_obj, created = models.LendingSures.objects.update_or_create(
+                            lending=lending_obj, sure_typ=sure_typ, defaults=default_sure)
+                        default = {'sure': lendingsure_obj}
+                        lendinstock_obj, created = models.LendingWarrants.objects.update_or_create(
+                            sure=lendingsure_obj, defaults=default)
+                        for warrant in lendingwarrant_clean['sure_stock']:
+                            lendinstock_obj.warrant.add(warrant)
+                    response['message'] = '反担保设置成功！'
+                except Exception as e:
+                    response['status'] = False
+                    response['message'] = '反担保设置失败：%s' % str(e)
+
         else:
             response['status'] = False
             response['message'] = '表单信息有误！！！'
