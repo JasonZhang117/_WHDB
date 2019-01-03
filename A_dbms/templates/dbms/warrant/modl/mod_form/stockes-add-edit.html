@@ -1,0 +1,31 @@
+<div id="form_stockes_add_edit" class="warrant-extend" style="display: none">
+
+    <div class="form-group"><!--所有者-->
+        <label for="id_stock_owner" class="col-sm-3 control-label">
+            {{ form_stockes_add_edit.stock_owner.label }}：</label>
+        <div class="col-sm-9">{{ form_stockes_add_edit.stock_owner }}</div>
+        <label id="e_stock_owner" class="pull-right">{{ form_stockes_add_edit.stock_owner.errors }}</label>
+    </div>
+
+    <div class="form-group"><!--标的公司-->
+        <label for="id_target" class="col-sm-3 control-label">
+            {{ form_stockes_add_edit.target.label }}：</label>
+        <div class="col-sm-9">{{ form_stockes_add_edit.target }}</div>
+        <label id="e_target" class="pull-right">{{ form_stockes_add_edit.target.errors }}</label>
+    </div>
+
+    <div class="form-group"><!--股权数量-->
+        <label for="id_share" class="col-sm-3 control-label">
+            {{ form_stockes_add_edit.share.label }}：</label>
+        <div class="col-sm-9">{{ form_stockes_add_edit.share }}</div>
+        <label id="e_share" class="pull-right">{{ form_stockes_add_edit.share.errors }}</label>
+    </div>
+
+    <div class="form-group"><!--股权类型-->
+        <label for="id_stock_typ" class="col-sm-3 control-label">
+            {{ form_stockes_add_edit.stock_typ.label }}：</label>
+        <div class="col-sm-9">{{ form_stockes_add_edit.stock_typ }}</div>
+        <label id="e_stock_typ" class="pull-right">{{ form_stockes_add_edit.stock_typ.errors }}</label>
+    </div>
+
+</div>

@@ -33,7 +33,7 @@ class OwerShipAddForm(dform.ModelForm):  # OwerShipEditForm产权证编辑
         fields = ['owner']
 
 
-# -----------------------房产modelform-------------------------#
+# -----------------------房产modelform1-------------------------#
 class HouseAddEidtForm(dform.ModelForm):
     house_locate = fields.CharField(
         label="房产坐落", label_suffix="：", max_length=64,
@@ -45,7 +45,7 @@ class HouseAddEidtForm(dform.ModelForm):
         fields = ['house_app', 'house_area']
 
 
-# -----------------------土地modelform-------------------------#
+# -----------------------土地modelform2-------------------------#
 class GroundAddEidtForm(dform.ModelForm):
     ground_locate = fields.CharField(
         label="土地坐落", label_suffix="：", max_length=64,
@@ -55,6 +55,40 @@ class GroundAddEidtForm(dform.ModelForm):
     class Meta:
         model = models.Grounds
         fields = ['ground_app', 'ground_area']
+
+
+# ------------------------应收帐款FormReceivable11--------------------------#
+class FormReceivable(dform.ModelForm):  # 应收帐款
+    class Meta:
+        model = models.Receivable
+        fields = ['receive_owner', 'receivable_detail']
+
+
+# ------------------------股权FormStockes21--------------------------#
+class FormStockes(dform.ModelForm):  # 股权
+    class Meta:
+        model = models.Stockes
+        fields = ['stock_owner', 'target', 'share', 'stock_typ']
+
+# ------------------------票据31--------------------------#
+class FormDraft(dform.ModelForm):  # 股权
+    class Meta:
+        model = models.Draft
+        fields = ['draft_owner', 'draft_typ', 'draft_detail']
+
+
+# ------------------------车辆FormVehicle41--------------------------#
+class FormVehicle(dform.ModelForm):  # 股权
+    class Meta:
+        model = models.Vehicle
+        fields = ['vehicle_owner', 'frame_num', 'plate_num']
+
+
+# ------------------------动产FormChattel51--------------------------#
+class FormChattel(dform.ModelForm):  # 股权
+    class Meta:
+        model = models.Chattel
+        fields = ['chattel_owner', 'chattel_typ', 'chattel_detail']
 
 
 # -----------------------HypothecsAddEidtForm他权-------------------------#

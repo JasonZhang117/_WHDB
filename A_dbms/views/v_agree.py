@@ -45,18 +45,31 @@ def agree_scan(request, agree_id):  # 查看合同
     agree_obj = models.Agrees.objects.get(id=agree_id)
     agree_lending_obj = agree_obj.lending
 
+    warrant_agree_list = models.Warrants.objects.filter(counter_warrant__counter__agree=agree_obj)
+    print('warrant_agree_list:', warrant_agree_list)
+    '''WARRANT_TYP_LIST = [
+        (1, '房产'), (2, '土地'), (11, '应收'), (21, '股权'),
+        (31, '票据'), (41, '车辆'), (51, '动产'), (99, '他权')]'''
     custom_c_lending_list = models.Customes.objects.filter(
-        lending_custom__sure__lending=agree_lending_obj, genre=1).values_list('id', 'name')
+        lending_custom__sure__lending=agree_lending_obj, genre=1).exclude(
+        counter_custome__counter__agree=agree_obj).values_list('id', 'name')
     custom_p_lending_list = models.Customes.objects.filter(
-        lending_custom__sure__lending=agree_lending_obj, genre=2).values_list('id', 'name')
+        lending_custom__sure__lending=agree_lending_obj, genre=2).exclude(
+        counter_custome__counter__agree=agree_obj).values_list('id', 'name')
     warrants_h_lending_list = models.Warrants.objects.filter(
-        lending_warrant__sure__lending=agree_lending_obj, warrant_typ=1).values_list('id', 'warrant_num')
+        lending_warrant__sure__lending=agree_lending_obj, warrant_typ=1).exclude(
+        counter_warrant__counter__agree=agree_obj).values_list('id', 'warrant_num')
     warrants_g_lending_list = models.Warrants.objects.filter(
-        lending_warrant__sure__lending=agree_lending_obj, warrant_typ=2).values_list('id', 'warrant_num')
+        lending_warrant__sure__lending=agree_lending_obj, warrant_typ=2).exclude(
+        counter_warrant__counter__agree=agree_obj).values_list('id', 'warrant_num')
     warrants_r_lending_list = models.Warrants.objects.filter(
-        lending_warrant__sure__lending=agree_lending_obj, warrant_typ=3).values_list('id', 'warrant_num')
+        lending_warrant__sure__lending=agree_lending_obj, warrant_typ=11).exclude(
+        counter_warrant__counter__agree=agree_obj).values_list('id', 'warrant_num')
     warrants_s_lending_list = models.Warrants.objects.filter(
-        lending_warrant__sure__lending=agree_lending_obj, warrant_typ=4).values_list('id', 'warrant_num')
+        lending_warrant__sure__lending=agree_lending_obj, warrant_typ=21).exclude(
+        counter_warrant__counter__agree=agree_obj).values_list('id', 'warrant_num')
+    print(custom_c_lending_list, custom_p_lending_list, warrants_h_lending_list, warrants_g_lending_list,
+          warrants_r_lending_list, warrants_s_lending_list)
     from_counter = forms.AddCounterForm()
 
     return render(request, 'dbms/agree/agree-scan.html', locals())

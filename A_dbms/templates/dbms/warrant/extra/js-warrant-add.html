@@ -31,7 +31,22 @@
             case ('2'):
                 $('#form_ground_add_edit').show();
                 break;
-            case ('9'):
+            case ('11'):
+                $('#form_receivable_add_edit').show();
+                break;
+            case ('21'):
+                $('#form_stockes_add_edit').show();
+                break;
+            case ('31'):
+                $('#form_draft_add_eidt').show();
+                break;
+            case ('41'):
+                $('#form_vehicle_add_eidt').show();
+                break;
+            case ('51'):
+                $('#form_chattel_add_eidt').show();
+                break;
+            case ('99'):
                 $('#form_hypothecs_add_eidt').show();
                 break;
             default:
@@ -55,7 +70,22 @@
                 case ('2'):
                     $('#form_ground_add_edit').show();
                     break;
-                case ('9'):
+                case ('11'):
+                    $('#form_receivable_add_edit').show();
+                    break;
+                case ('21'):
+                    $('#form_stockes_add_edit').show();
+                    break;
+                case ('31'):
+                    $('#form_draft_add_eidt').show();
+                    break;
+                case ('41'):
+                    $('#form_vehicle_add_eidt').show();
+                    break;
+                case ('51'):
+                    $('#form_chattel_add_eidt').show();
+                    break;
+                case ('99'):
                     $('#form_hypothecs_add_eidt').show();
                     break;
                 default:
@@ -73,6 +103,13 @@
                 var n = $(this).attr('name');
                 postData[n] = v;
             });
+            var ttt = $('#id_receivable_detail').val()
+            postData['receivable_detail'] = ttt;
+            var ttt = $('#id_draft_detail').val()
+            postData['draft_detail'] = ttt;
+            var ttt = $('#id_chattel_detail').val()
+            postData['chattel_detail'] = ttt;
+
             var postDataStr = JSON.stringify(postData);
 
             console.log(postDataStr)
@@ -106,6 +143,28 @@
                         $('#e_ground_locate').text(arg.forme.ground_locate);
                         $('#e_ground_app').text(arg.forme.ground_app);
                         $('#e_ground_area').text(arg.forme.ground_area);
+
+                        $('#e_receive_owner').text(arg.forme.receive_owner);
+                        $('#e_receivable_detail').text(arg.forme.receivable_detail);
+
+                        $('#e_stock_owner').text(arg.forme.stock_owner);
+                        $('#e_target').text(arg.forme.target);
+                        $('#e_share').text(arg.forme.share);
+                        $('#e_stock_typ').text(arg.forme.stock_typ);
+
+                        $('#e_draft_owner').text(arg.forme.draft_owner);
+                        $('#e_draft_typ').text(arg.forme.draft_typ);
+                        $('#e_draft_detaile').text(arg.forme.draft_detaile);
+
+                        $('#e_vehicle_owner').text(arg.forme.vehicle_owner);
+                        $('#e_frame_num').text(arg.forme.frame_num);
+                        $('#e_plate_num').text(arg.forme.plate_num);
+
+                        $('#e_chattel_owner').text(arg.forme.chattel_owner);
+                        $('#e_chattel_typ').text(arg.forme.chattel_typ);
+                        $('#e_chattel_detail').text(arg.forme.chattel_detail);
+
+
 
                         $('#e_agree').text(arg.forme.agree);
                     }

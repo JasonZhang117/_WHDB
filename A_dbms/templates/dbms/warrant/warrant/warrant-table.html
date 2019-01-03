@@ -10,7 +10,7 @@
         <tr style="text-align: center">
             <th>权证编号</th>
             <th>类型</th>
-            <th>坐落</th>
+            <th>描述</th>
             <th>状态</th>
         </tr>
         </thead>
@@ -28,6 +28,16 @@
                         {{ warrant.house_warrant.house_locate }}
                     {% elif warrant.warrant_typ == 2 %}
                         {{ warrant.ground_warrant.ground_locate }}
+                    {% elif warrant.warrant_typ == 11 %}
+                        {{ warrant.receive_warrant.receivable_detail }}
+                    {% elif warrant.warrant_typ == 21 %}
+                        {{ warrant.stock_warrant.target }}
+                    {% elif warrant.warrant_typ == 31 %}
+                        {{ warrant.draft_warrant.draft_detail }}
+                    {% elif warrant.warrant_typ == 41 %}
+                        {{ warrant.vehicle_warrant.frame_num }}
+                    {% elif warrant.warrant_typ == 51 %}
+                        {{ warrant.chattel_warrant.chattel_detail }}
                     {% endif %}
                 </td>
                 <td>{{ warrant.get_warrant_state_display }}</td>

@@ -77,7 +77,133 @@ def warrant_add_ajax(request):
                 response['status'] = False
                 response['message'] = '表单信息有误！！！'
                 response['forme'] = form_ground_add_edit.errors
-        elif warrant_typ == 9:
+        elif warrant_typ == 11:
+            print('warrant_typ == 11')
+            form_receivable_add_edit = forms.FormReceivable(post_data)
+            if form_receivable_add_edit.is_valid():
+                receivable_clean = form_receivable_add_edit.cleaned_data
+                print('receivable_clean:', receivable_clean)
+                try:
+                    with transaction.atomic():
+                        warrant_obj = models.Warrants.objects.create(
+                            warrant_num=warrant_add_clean['warrant_num'],
+                            warrant_typ=warrant_typ)
+                        receivable_obj = models.Receivable.objects.create(
+                            warrant=warrant_obj,
+                            receive_owner=receivable_clean['receive_owner'],
+                            receivable_detail=receivable_clean['receivable_detail'])
+                    response['message'] = '应收账款创建成功！！！'
+                    response['skip'] = "/dbms/warrant/scan/%s" % warrant_obj.id
+                except Exception as e:
+                    response['status'] = False
+                    response['message'] = '应收账款创建失败：%s' % str(e)
+            else:
+                response['status'] = False
+                response['message'] = '表单信息有误！！！'
+                response['forme'] = form_receivable_add_edit.errors
+        elif warrant_typ == 21:
+            print('warrant_typ == 21')
+            form_stockes_add_edit = forms.FormStockes(post_data)
+            if form_stockes_add_edit.is_valid():
+                stocke_clean = form_stockes_add_edit.cleaned_data
+                print('stocke_clean:', stocke_clean)
+                try:
+                    with transaction.atomic():
+                        warrant_obj = models.Warrants.objects.create(
+                            warrant_num=warrant_add_clean['warrant_num'],
+                            warrant_typ=warrant_typ)
+                        stock_obj = models.Stockes.objects.create(
+                            warrant=warrant_obj,
+                            stock_typ=stocke_clean['stock_typ'],
+                            stock_owner=stocke_clean['stock_owner'],
+                            target=stocke_clean['target'],
+                            share=stocke_clean['share'])
+                    response['message'] = '股权创建成功！！！'
+                    response['skip'] = "/dbms/warrant/scan/%s" % warrant_obj.id
+                except Exception as e:
+                    response['status'] = False
+                    response['message'] = '股权创建失败：%s' % str(e)
+            else:
+                response['status'] = False
+                response['message'] = '表单信息有误！！！'
+                response['forme'] = form_stockes_add_edit.errors
+        elif warrant_typ == 31:
+            print('warrant_typ == 31')
+            form_draft_add_eidt = forms.FormDraft(post_data)
+            if form_draft_add_eidt.is_valid():
+                draft_clean = form_draft_add_eidt.cleaned_data
+                print('draft_clean:', draft_clean)
+                try:
+                    with transaction.atomic():
+                        warrant_obj = models.Warrants.objects.create(
+                            warrant_num=warrant_add_clean['warrant_num'],
+                            warrant_typ=warrant_typ)
+                        draft_obj = models.Draft.objects.create(
+                            warrant=warrant_obj,
+                            draft_owner=draft_clean['draft_owner'],
+                            draft_typ=draft_clean['draft_typ'],
+                            draft_detail=draft_clean['draft_detail'])
+                    response['message'] = '票据包创建成功，请添加票据！！！'
+                    response['skip'] = "/dbms/warrant/scan/%s" % warrant_obj.id
+                except Exception as e:
+                    response['status'] = False
+                    response['message'] = '票据创建失败：%s' % str(e)
+            else:
+                response['status'] = False
+                response['message'] = '表单信息有误！！！'
+                response['forme'] = form_draft_add_eidt.errors
+        elif warrant_typ == 41:
+            print('warrant_typ == 41')
+            form_vehicle_add_eidt = forms.FormVehicle(post_data)
+            if form_vehicle_add_eidt.is_valid():
+                vehicle_clean = form_vehicle_add_eidt.cleaned_data
+                print('vehicle_clean:', vehicle_clean)
+                try:
+                    with transaction.atomic():
+                        warrant_obj = models.Warrants.objects.create(
+                            warrant_num=warrant_add_clean['warrant_num'],
+                            warrant_typ=warrant_typ)
+                        vehicle_obj = models.Vehicle.objects.create(
+                            warrant=warrant_obj,
+                            vehicle_owner=vehicle_clean['vehicle_owner'],
+                            frame_num=vehicle_clean['frame_num'],
+                            plate_num=vehicle_clean['plate_num'])
+                    response['message'] = '车辆创建成功！！！'
+                    response['skip'] = "/dbms/warrant/scan/%s" % warrant_obj.id
+                except Exception as e:
+                    response['status'] = False
+                    response['message'] = '车辆创建失败：%s' % str(e)
+            else:
+                response['status'] = False
+                response['message'] = '表单信息有误！！！'
+                response['forme'] = form_vehicle_add_eidt.errors
+        elif warrant_typ == 51:
+            print('warrant_typ == 51')
+            form_chattel_add_eidt = forms.FormChattel(post_data)
+            if form_chattel_add_eidt.is_valid():
+                chattel_clean = form_chattel_add_eidt.cleaned_data
+                print('chattel_clean:', chattel_clean)
+                try:
+                    with transaction.atomic():
+                        warrant_obj = models.Warrants.objects.create(
+                            warrant_num=warrant_add_clean['warrant_num'],
+                            warrant_typ=warrant_typ)
+                        chattel_obj = models.Chattel.objects.create(
+                            warrant=warrant_obj,
+                            chattel_owner=chattel_clean['chattel_owner'],
+                            chattel_typ=chattel_clean['chattel_typ'],
+                            chattel_detail=chattel_clean['chattel_detail'])
+                    response['message'] = '动产创建成功！！！'
+                    response['skip'] = "/dbms/warrant/scan/%s" % warrant_obj.id
+                except Exception as e:
+                    response['status'] = False
+                    response['message'] = '动产创建失败：%s' % str(e)
+            else:
+                response['status'] = False
+                response['message'] = '表单信息有误！！！'
+                response['forme'] = form_chattel_add_eidt.errors
+
+        elif warrant_typ == 99:
             print('warrant_typ == 9')
             form_hypothecs_add_eidt = forms.HypothecsAddEidtForm(post_data)
             if form_hypothecs_add_eidt.is_valid():
@@ -100,7 +226,6 @@ def warrant_add_ajax(request):
                 response['status'] = False
                 response['message'] = '表单信息有误！！！'
                 response['forme'] = form_hypothecs_add_eidt.errors
-
     else:
         response['status'] = False
         response['message'] = '表单信息有误！！！'
@@ -133,7 +258,6 @@ def warrant_del_ajax(request):
         except Exception as e:
             response['status'] = False
             response['message'] = '删除失败:%s！' % str(e)
-
     result = json.dumps(response, ensure_ascii=False)
     return HttpResponse(result)
 
@@ -181,7 +305,6 @@ def warrant_edit_ajax(request):
                 response['status'] = False
                 response['message'] = '表单信息有误！！！'
                 response['forme'] = form_house_add_edit.errors
-
         elif warrant_typ == 2:
             print('warrant_typ == 2')
             form_ground_add_edit = forms.GroundAddEidtForm(post_data)
@@ -205,7 +328,7 @@ def warrant_edit_ajax(request):
                 response['status'] = False
                 response['message'] = '表单信息有误！！！'
                 response['forme'] = form_ground_add_edit.errors
-        elif warrant_typ == 9:
+        elif warrant_typ == 99:
             print('warrant_typ == 9')
             form_hypothecs_add_eidt = forms.HypothecsAddEidtForm(post_data)
             if form_hypothecs_add_eidt.is_valid():
@@ -226,7 +349,6 @@ def warrant_edit_ajax(request):
                 response['status'] = False
                 response['message'] = '表单信息有误！！！'
                 response['forme'] = form_hypothecs_add_eidt.errors
-
     else:
         response['status'] = False
         response['message'] = '表单信息有误！！！'
@@ -522,11 +644,16 @@ def warrant(request, *args, **kwargs):  # 房产列表
 
     add_warrant = '添加权证'
     warrant_typ_n = 0
-    form_warrant_add = forms.WarrantAddForm()
 
-    form_house_add_edit = forms.HouseAddEidtForm()
-    form_ground_add_edit = forms.GroundAddEidtForm()
-    form_hypothecs_add_eidt = forms.HypothecsAddEidtForm()
+    form_warrant_add = forms.WarrantAddForm()
+    form_house_add_edit = forms.HouseAddEidtForm()  # 1
+    form_ground_add_edit = forms.GroundAddEidtForm()  # 2
+    form_receivable_add_edit = forms.FormReceivable()  # 11
+    form_stockes_add_edit = forms.FormStockes()  # 21
+    form_draft_add_eidt = forms.FormDraft()  # 31
+    form_vehicle_add_eidt = forms.FormVehicle()  # 41
+    form_chattel_add_eidt = forms.FormChattel()  # 51
+    form_hypothecs_add_eidt = forms.HypothecsAddEidtForm()  # 99
 
     warrant_typ_list = models.Warrants.WARRANT_TYP_LIST
     warrant_list = models.Warrants.objects.filter(**kwargs)
@@ -549,20 +676,14 @@ def warrant(request, *args, **kwargs):  # 房产列表
 def warrant_scan(request, warrant_id):  # house_scan房产预览
     print(__file__, '---->def warrant_scan')
     warrant_obj = models.Warrants.objects.get(id=warrant_id)
-
     warrant_typ_n = warrant_obj.warrant_typ
-    if warrant_typ_n == 9:
+    if warrant_typ_n == 99:
         agree_lending_obj = warrant_obj.ypothec_warrant.agree.lending
         warrants_lending_list = models.Warrants.objects.filter(
             lending_warrant__sure__lending=agree_lending_obj).values_list('id', 'warrant_num')
-        print('agree_lending_obj:', agree_lending_obj)
-        print('warrants_lending_list:', warrants_lending_list)
-
     form_warrant_edit_date = {'warrant_num': warrant_obj.warrant_num}
     form_warrant_edit = forms.WarrantEditForm(initial=form_warrant_edit_date)
-
     house_ground_list = [1, 2]
-
     warrant_typ = warrant_obj.warrant_typ
     if warrant_typ == 1:
         form_date = {
@@ -580,10 +701,8 @@ def warrant_scan(request, warrant_id):  # house_scan房产预览
         form_date = {
             'agree': warrant_obj.ypothec_warrant.agree}
         form_hypothecs_add_eidt = forms.HypothecsAddEidtForm(initial=form_date)
-
     form_storage_add_edit = forms.StoragesAddEidtForm()
     form_owership_add_edit = forms.OwerShipAddForm()
-
     ####分页信息###
     storages_list = warrant_obj.storage_warrant.all().order_by('-id')
     paginator = Paginator(storages_list, 5)

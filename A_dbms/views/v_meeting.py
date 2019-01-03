@@ -15,14 +15,49 @@ def meeting(request, *args, **kwargs):  # 评审会
     print(__file__, '---->def meeting')
     # print('kwargs:', kwargs)
     form_meeting_add = forms.MeetingAddForm()
-
-    meeting_list = models.Appraisals.objects.filter(
-        **kwargs).order_by('-review_date', '-review_order')
-
     meeting_state_list = models.Appraisals.MEETING_STATE_LIST
+    meeting_list = models.Appraisals.objects.filter(**kwargs).order_by('-review_date', '-review_order')
+    return render(request, 'dbms/meeting/meeting.html', locals())
+
+
+# -----------------------评审会预览-------------------------#
+@login_required
+def meeting_scan(request, meeting_id):  # 评审会预览
+    print(__file__, '---->def meeting_scan')
+    meeting_obj = models.Appraisals.objects.get(id=meeting_id)
+    expert_list = models.Experts.objects.filter(article_expert__appraisal_article=meeting_obj).distinct()
+    for expert_obj in expert_list:
+        article_count = models.Articles.objects.filter(expert=expert_obj, appraisal_article=meeting_obj).count()
+        print("article_count:", expert_obj.id, article_count)
+    expert_ll = models.Experts.objects.filter(article_expert__appraisal_article=meeting_obj).count()
+    print('expert_ll:', expert_ll)
+    form_meeting_article_add = forms.MeetingArticleAddForm()
+
+    meeting_edit_form_data = {
+        'review_model': meeting_obj.review_model, 'review_date': str(meeting_obj.review_date)}
+    form_meeting_edit = forms.MeetingEditForm(meeting_edit_form_data)
+
+    return render(request, 'dbms/meeting/meeting-scan.html', locals())
+
+
+# -----------------------参评项目预览-------------------------#
+@login_required
+def meeting_scan_article(request, meeting_id, article_id):
+    print(__file__, '---->def meeting_scan_article')
+    article_obj = models.Articles.objects.get(id=article_id)
+    meeting_obj = models.Appraisals.objects.get(id=meeting_id)
+
+    expert_list = article_obj.expert.values_list('id')
+    if expert_list:
+        expert_id_list = list(zip(*expert_list))[0]
+        form_date = {
+            'expert': expert_id_list}
+        form_allot_expert = forms.MeetingAllotForm(initial=form_date)
+    else:
+        form_allot_expert = forms.MeetingAllotForm()
 
     return render(request,
-                  'dbms/meeting/meeting.html',
+                  'dbms/meeting/meeting-scan-article.html',
                   locals())
 
 
@@ -344,46 +379,4 @@ def meeting_notice(request, meeting_id):  # 评审会通知
 
     return render(request,
                   'dbms/meeting/meeting-notice.html',
-                  locals())
-
-
-# -----------------------评审会预览-------------------------#
-@login_required
-def meeting_scan(request, meeting_id):  # 评审会预览
-    print(__file__, '---->def meeting_scan')
-    meeting_obj = models.Appraisals.objects.get(id=meeting_id)
-    expert_list = models.Experts.objects.filter(
-        article_expert__appraisal_article=meeting_obj).distinct()
-
-    form_meeting_article_add = forms.MeetingArticleAddForm()
-
-    meeting_edit_form_data = {
-        'review_model': meeting_obj.review_model,
-        'review_date': str(meeting_obj.review_date)}
-
-    form_meeting_edit = forms.MeetingEditForm(meeting_edit_form_data)
-
-    return render(request,
-                  'dbms/meeting/meeting-scan.html',
-                  locals())
-
-
-# -----------------------参评项目预览-------------------------#
-@login_required
-def meeting_scan_article(request, meeting_id, article_id):
-    print(__file__, '---->def meeting_scan_article')
-    article_obj = models.Articles.objects.get(id=article_id)
-    meeting_obj = models.Appraisals.objects.get(id=meeting_id)
-
-    expert_list = article_obj.expert.values_list('id')
-    if expert_list:
-        expert_id_list = list(zip(*expert_list))[0]
-        form_date = {
-            'expert': expert_id_list}
-        form_allot_expert = forms.MeetingAllotForm(initial=form_date)
-    else:
-        form_allot_expert = forms.MeetingAllotForm()
-
-    return render(request,
-                  'dbms/meeting/meeting-scan-article.html',
                   locals())

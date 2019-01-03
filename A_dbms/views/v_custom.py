@@ -122,13 +122,14 @@ def custom_del_ajax(request):
 
     custom_id = post_data['custom_id']
     custom_obj = models.Customes.objects.get(id=custom_id)
-    lending_custome_list = custom_obj.lending_custome.all()
-    if lending_custome_list:
+    lending_custom_list = custom_obj.lending_custom.all()
+    print('lending_custom_list:',lending_custom_list)
+    if lending_custom_list:
         response['status'] = False
         response['message'] = '客户已作为项目反担保人，无法删除！'
     else:
         try:
-            custom_obj.delete()  # 删除评审会
+            custom_obj.delete()
             msg = '%s，删除成功！' % custom_obj.name
             response['message'] = msg
         except Exception as e:

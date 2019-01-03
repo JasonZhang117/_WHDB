@@ -124,7 +124,7 @@ class LendinReceivableForm(dform.Form):
     def __init__(self, *args, **kwargs):
         super(LendinReceivableForm, self).__init__(*args, **kwargs)
         self.fields['sure_receivable'].choices = models.Warrants.objects.filter(
-            warrant_typ=3).values_list('id', 'warrant_num').order_by('warrant_num')
+            warrant_typ=11).values_list('id', 'warrant_num').order_by('warrant_num')
 
 
 # -----------------------股权质押form-------------------------#
@@ -137,4 +137,4 @@ class LendinStockForm(dform.Form):
     def __init__(self, *args, **kwargs):
         super(LendinStockForm, self).__init__(*args, **kwargs)
         self.fields['sure_stock'].choices = models.Warrants.objects.filter(
-            warrant_typ=4).values_list('id', 'warrant_num').order_by('warrant_num')
+            warrant_typ=21).values_list('id', 'warrant_num').order_by('warrant_num')

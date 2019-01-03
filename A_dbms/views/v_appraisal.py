@@ -122,9 +122,7 @@ def guarantee_add_ajax(request):  # 反担保措施添加ajax
         if form_lendingsures.is_valid():
             lendingsures_clean = form_lendingsures.cleaned_data
             sure_typ = lendingsures_clean['sure_typ']
-
             default_sure = {'lending': lending_obj, 'sure_typ': sure_typ}
-
             if sure_typ == 1:
                 form_lendingcustoms_c_add = forms.LendingCustomsCForm(post_data)
                 if form_lendingcustoms_c_add.is_valid():

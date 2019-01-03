@@ -30,10 +30,10 @@
                                     {{ ownership.owner.name }}
                                     {% if not forloop.last %}、{% endif %}
                                 {% endfor %}
-                            {% elif warrant.warrant_typ == 3 %}
-                                {{ warrant.receive_warrant.owner.name }}
-                            {% elif warrant.warrant_typ == 4 %}
-                                {{ warrant.stock_warrant.stock_owner.name }}
+                            {% elif warrant.warrant_typ == 11 %}
+                                {{ warrant.receive_warrant.receive_owner }}
+                            {% elif warrant.warrant_typ == 21 %}
+                                {{ warrant.stock_warrant.stock_owner }}
                             {% else %}
                                 {{ warrant.receive_warrant.owner.name }}
                             {% endif %}

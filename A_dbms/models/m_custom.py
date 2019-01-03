@@ -31,6 +31,7 @@ class CustomesC(models.Model):
     custome = models.OneToOneField(to='Customes',
                                    verbose_name="企业客户",
                                    on_delete=models.CASCADE,
+                                   limit_choices_to={'genre': 1},
                                    related_name='company_custome')
     short_name = models.CharField(
         verbose_name='简称', max_length=8, unique=True)
@@ -61,6 +62,7 @@ class CustomesP(models.Model):  # 个人客户
     custome = models.OneToOneField(to='Customes',
                                    verbose_name="个人客户",
                                    on_delete=models.CASCADE,
+                                   limit_choices_to={'genre': 2},
                                    related_name='person_custome')
     license_num = models.CharField(
         verbose_name='身份证号码', max_length=18, unique=True)

@@ -9,6 +9,7 @@
         <thead>
         <tr style="text-align: center">
             <th>评审姓名</th>
+            <th>项目数</th>
             <th>单位</th>
             <th>职务</th>
             <th>级别</th>
@@ -19,6 +20,7 @@
         <tbody>
         {% for expert in expert_list %}
             <tr>
+                <td>{{ expert.name }}</td>
                 <td>{{ expert.name }}</td>
                 <td>{{ expert.organization }}</td>
                 <td>{{ expert.job }}</td>

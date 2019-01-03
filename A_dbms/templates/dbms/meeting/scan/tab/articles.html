@@ -1,11 +1,5 @@
 <div class="table-responsive">
-    {#"table-responsive":表格响应式布局#}
-    <table class="table table-bordered table-hover
-                table-condensed active">
-        {#"table-bordered":表格表格边框#}
-        {#"table-hover":表格悬停变色#}
-        {#"table-condensed":表格紧缩#}
-        {#<caption><h4>项目管理</h4></caption>#}
+    <table class="table table-bordered table-hover table-condensed active">
         <thead>
         <tr style="text-align: center">
             <th>项目编号</th>
@@ -25,22 +19,15 @@
                     {% if article.id == article_id %}
                         <td>
                             <a href="{% url 'dbms:meeting_scan_article' meeting_id=meeting_obj.id article_id=article.id %}">
-                                {{ article.article_num }}*
-                            </a>
-                        </td>
+                                {{ article.article_num }}*</a></td>
                     {% else %}
                         <td>
                             <a href="{% url 'dbms:meeting_scan_article' meeting_id=meeting_obj.id article_id=article.id %}">
-                                {{ article.article_num }}
-                            </a>
-                        </td>
+                                {{ article.article_num }}</a></td>
                     {% endif %}
                 {% else %}
-                    <td>
-                        <a href="{% url 'dbms:meeting_scan_article' meeting_id=meeting_obj.id article_id=article.id %}">
-                            {{ article.article_num }}
-                        </a>
-                    </td>
+                    <td><a href="{% url 'dbms:meeting_scan_article' meeting_id=meeting_obj.id article_id=article.id %}">
+                        {{ article.article_num }}</a></td>
                 {% endif %}
                 <td>{{ article.custom }}</td>
                 <td>{{ article.amount }}</td>
@@ -49,15 +36,10 @@
                 <td>{{ article.control.name }}</td>
                 <td>
                     {% for expert in article.expert.all %}
-                        {{ expert.name }}/
+                        {{ expert.name }}{% if not forloop.last %}、{% endif %}
                     {% endfor %}
                 </td>
-                <td>
-                    <a class="btn btn-danger btn-xs delMeetingArticleB">
-                        取消
-                    </a>
-                </td>
-
+                <td><a class="btn btn-danger btn-xs delMeetingArticleB">取消</a></td>
             </tr>
         {% endfor %}
         </tbody>

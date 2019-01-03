@@ -101,6 +101,10 @@ class Counters(models.Model):  # 反担保合同
 
 
 # ---------------------保证反担保合同模型-----------------------#
+def limit_lending_choices():
+    return {'article_state__in': [1, 2, 3, 4]}
+
+
 class CountersAssure(models.Model):  # 保证反担保合同
     counter = models.OneToOneField(to='Counters',
                                    verbose_name="反担保合同",
@@ -115,7 +119,7 @@ class CountersAssure(models.Model):  # 保证反担保合同
         db_table = 'dbms_countersassure'  # 指定数据表的名称
 
     def __str__(self):
-        return self.counter.counter_num
+        return "%s_%s" % (self.counter, self.counter.counter_typ)
 
 
 # -------------------抵质押反担保合同模型--------------------#

@@ -12,7 +12,9 @@ from django.contrib.auth.decorators import login_required
 def agreep(request, *args, **kwargs):  # 委托合同列表
     print(__file__, '---->def agreep')
     agree_state_list = models.Agrees.AGREE_STATE_LIST
-    agree_list = models.Agrees.objects.filter(**kwargs).select_related(
+    '''AGREE_STATE_LIST = ((1, '待签批'), (2, '已签批'), (3, '已落实'), (4, '已放款'),
+                        (7, '待变更'), (8, '已解保'), (9, '已作废'))'''
+    agree_list = models.Agrees.objects.filter(**kwargs).filter(agree_state__in=[1,2,3, 4]).select_related(
         'lending', 'branch').order_by('-agree_num')
 
     ####分页信息###

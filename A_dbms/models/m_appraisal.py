@@ -10,12 +10,10 @@ class Appraisals(models.Model):  # 评审会
     REVIEW_MODEL_LIST = ((1, '内审'), (2, '外审'))
     review_model = models.IntegerField(verbose_name='评审类型', choices=REVIEW_MODEL_LIST)
     review_date = models.DateField(verbose_name='评审日期', default=datetime.date.today)
-    article = models.ManyToManyField(to='Articles',
-                                     verbose_name="参评项目",
+    article = models.ManyToManyField(to='Articles', verbose_name="参评项目",
                                      related_name='appraisal_article',
                                      null=True, blank=True)
-    meeting_buildor = models.ForeignKey(to='Employees',
-                                        verbose_name="创建人",
+    meeting_buildor = models.ForeignKey(to='Employees', verbose_name="创建人",
                                         on_delete=models.PROTECT,
                                         related_name='meeting_buildor_employee')
     MEETING_STATE_LIST = ((1, '待上会'), (2, '已上会'))
@@ -67,7 +65,7 @@ class LendingOrder(models.Model):
     summary = models.ForeignKey(to='Articles',
                                 verbose_name="项目纪要",
                                 on_delete=models.PROTECT,
-                                limit_choices_to=limit_lending_choices,
+                                limit_choices_to={'counter_typ__in': [1, 2]},
                                 related_name='lending_summary')
     ORDER_LIST = ((1, '第一次'), (2, '第二次'), (3, '第三次'), (4, '第四次'))
     order = models.IntegerField(verbose_name='发放次序', choices=ORDER_LIST, default=1)
