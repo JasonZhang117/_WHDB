@@ -111,9 +111,9 @@ class Jobs(models.Model):  # 岗位（角色）
 # -----------------------------菜单模型------------------------------#
 class Menus(models.Model):
     """动态菜单"""
-    name = models.CharField(max_length=64)
-    url_name = models.CharField(max_length=128)
-    ordery = models.IntegerField()
+    name = models.CharField(verbose_name="菜单名称", max_length=64)
+    url_name = models.CharField(verbose_name="URL", max_length=128)
+    ordery = models.IntegerField(verbose_name="优先级")
 
     class Meta:
         verbose_name_plural = '内部-动态菜单'

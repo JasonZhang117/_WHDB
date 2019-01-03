@@ -10,10 +10,7 @@ from .. import forms
 @login_required
 def index(request):
     '''
-    初始化本人权限、菜单，显示本人待处理信息，
-    显示本人业务统计信息
-    :param request:
-    :return:
+    初始化本人权限、菜单，显示本人待处理信息，显示本人业务统计信息
     '''
     print(__file__, '-->index')
     return render(request, 'dbms/index_dbms.html', locals())

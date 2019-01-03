@@ -4,7 +4,6 @@ from django.contrib.auth.decorators import login_required
 from A_dbms import models
 
 
-# Create your views here.
 def acc_login(request):
     '''
     :param request:
@@ -25,8 +24,7 @@ def acc_login(request):
         print("acc_login-->request.POST.get('code'):", code)
         user = authenticate(username=username, password=password)
         if user:
-            menu_list = models.Menus.objects.filter(
-                jobs__employees=user).distinct().order_by(
+            menu_list = models.Menus.objects.filter(jobs__employees=user).distinct().order_by(
                 'ordery').values('name', 'url_name')
             print('menu_list:', menu_list)
             request.session['menus'] = list(menu_list)
@@ -55,19 +53,11 @@ def home(request):
     print("acc_login-->request.user:", request.user)
     print('acc_login-->request.session:', request.session)
     print('acc_login-->request.session.get:', request.session.get('menus'))
-
     article_state_list = models.Articles.ARTICLE_STATE_LIST
-    article_state_list_dic = list(map(
-        lambda x: {'id': x[0], 'name': x[1]},
-        article_state_list))
+    article_state_list_dic = list(map(lambda x: {'id': x[0], 'name': x[1]}, article_state_list))
     print('acc_login-->article_state_list:', article_state_list)
     print('acc_login-->article_state_list_dic:', article_state_list_dic)
     # 列表或元组转换为字典并添加key
-    article_list = models.Articles.objects.all(). \
-        select_related(
-        'custom',
-        'director',
-        'assistant',
-        'control')
+    article_list = models.Articles.objects.all().select_related('custom', 'director', 'assistant', 'control')
     print('acc_login-->article_list:', article_list)
     return render(request, 'dbms/index_dbms.html', locals())
