@@ -41,6 +41,7 @@ def agree_scan(request, agree_id):  # 查看合同
         (51, '股权预售'), (52, '房产预售'), (53, '土地预售'))'''
     counter_typ_custom = [1, 2]
     counter_typ_h_g = [11, 12, 52, 53]
+    agree_counter_operate = False
 
     agree_obj = models.Agrees.objects.get(id=agree_id)
     agree_lending_obj = agree_obj.lending

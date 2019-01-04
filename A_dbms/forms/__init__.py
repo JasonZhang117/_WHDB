@@ -9,5 +9,7 @@ from .f_warrant import (
     WarrantAddForm, WarrantEditForm, OwerShipAddForm, HouseAddEidtForm, GroundAddEidtForm,
     HypothecsAddEidtForm, StoragesAddEidtForm, FormReceivable, FormStockes, FormDraft, FormVehicle, FormChattel)
 from .f_agree import (AgreeAddForm, AddCounterForm, )
+from .f_provide import (FormNotifyAdd, FormProvideAdd)
+
 from .f_custom import (CustomAddForm, CustomCAddForm, CustomPAddForm, CustomEditForm)
 from .f_interior import DepartmentForm, EmployeeForm

@@ -8,11 +8,14 @@
             <th>合同类型</th>
             <th>签订人</th>
             <th>签订情况</th>
+            {% if agree_counter_operate %}
+                <th>操作</th>
+            {% endif %}
         </tr>
         </thead>
-        <tbody>
+        <tbody class="agree-counters-tb">
         {% for counter in agree_obj.counter_agree.all %}
-            <tr>
+            <tr counter-nid={{ counter.id }} counter-typ-nid={{ counter.counter_typ }}>
                 <td>{{ counter.counter_num }}</td>
                 <td>{{ counter.get_counter_typ_display }}</td>
                 {% if counter.counter_typ in counter_typ_custom %}
@@ -41,6 +44,9 @@
                     </td>
                 {% endif %}
                 <td>{{ counter.get_counter_state_display }}</td>
+                {% if agree_counter_operate %}
+                    <td><a class="btn btn-danger btn-xs delCounterB">删除</a></td>
+                {% endif %}
             <tr>
         {% endfor %}
         </tbody>

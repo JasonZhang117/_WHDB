@@ -1,0 +1,54 @@
+<script>
+    $(function () {
+
+        bindAddNotifyB();
+        bindAddNotifyModalOk();
+
+    });
+
+    function bindAddNotifyB() {
+        $('#addNotifyB').click(function () {
+            console.log("bindAddNotifyB")
+            $('#addNotifyModal').modal('show');
+        })
+    }
+
+    function bindAddNotifyModalOk() {
+        $('#addNotifyModalOk').click(function () {
+            var postData = {};
+            $('#addNotifyModal').find('input,select').each(function () {
+                var v = $(this).val();
+                var n = $(this).attr('name');
+                postData[n] = v;
+            });
+            var postDataStr = JSON.stringify(postData);
+            console.log(postDataStr)
+            $.ajax({
+                url: '/dbms/agreep/notify/add/',
+                type: 'POST',
+                traditional: true,
+                data: {'postDataStr': postDataStr},
+                dataType: 'JSON',
+                success: function (arg) {
+                    console.log(arg);
+                    if (arg.status) {
+                        $('#addNotifyModal').modal('hide');
+                        alert(arg.message);
+                        {#window.location.href = arg.skip;#}
+                        window.location.reload();
+                    } else {
+                        alert(arg.message);
+                        $('#e_notify_money').text(arg.forme.notify_money);
+                        $('#e_notify_date').text(arg.forme.notify_date);
+                    }
+                }
+            })
+        })
+    }
+</script>
+
+
+
+
+
+

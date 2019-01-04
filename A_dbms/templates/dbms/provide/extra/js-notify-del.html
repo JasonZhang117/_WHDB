@@ -1,24 +1,24 @@
 <script>
     $(function () {
-        bindDelOwershipB();
-        bindDelOwershipModalOk();
+        bindDelNotifyB();
+        bindDelNotifyModalOk();
     });
 
-    function bindDelOwershipB() {
-        $('#ownership-tb').on('click', '.delOwershipB', function () {
-            console.log("bindDelOwershipB")
-            var delOwershipNid = $(this).parent().parent().attr('ownership-nid');
-            console.log(delOwershipNid)
-            $('#delOwershipModalId').val(delOwershipNid);
-            $('#delOwershipModal').modal('show');
+    function bindDelNotifyB() {
+        $('#agree-notify-tb').on('click', '.delNotifyB', function () {
+            console.log("bindDelNotifyB")
+            var delNotifyNid = $(this).parent().parent().attr('notify-nid');
+            console.log(delNotifyNid)
+            $('#delNotifyModalId').val(delNotifyNid);
+            $('#delNotifyModal').modal('show');
         })
     }
 
-    function bindDelOwershipModalOk() {
-        $('#delOwershipModalOk').click(function () {
+    function bindDelNotifyModalOk() {
+        $('#delNotifyModalOk').click(function () {
             var postData = {};
 
-            $('#delOwershipModal').find('input,select').each(function () {
+            $('#delNotifyModal').find('input,select').each(function () {
                 var v = $(this).val();
                 var n = $(this).attr('name');
                 postData[n] = v;
@@ -26,17 +26,17 @@
             var postDataStr = JSON.stringify(postData);
             console.log(postDataStr)
             $.ajax({
-                url: '/dbms/warrant/owership/del/',
+                url: '/dbms/agreep/notify/del/',
                 type: 'POST',
                 dataType: 'JSON',
                 data: {'postDataStr': postDataStr},
                 success: function (arg) {
                     if (arg.status) {
-                        $('#delOwershipModal').modal('hide');
+                        $('#delNotifyModal').modal('hide');
                         alert(arg.message);
                         window.location.reload();
                     } else {
-                        $('#delOwershipModal').modal('hide');
+                        $('#delNotifyModal').modal('hide');
                         alert(arg.message);
                         {#window.location.reload();#}
                     }

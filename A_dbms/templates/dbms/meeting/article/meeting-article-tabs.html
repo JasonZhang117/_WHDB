@@ -1,7 +1,16 @@
 <div>
     <!-- Nav tabs -->
-    {% include 'dbms/meeting/article/tab/present.html' %}
-
+    <div>
+        <ul class="nav nav-tabs" role="tablist" style="background-color: #f5f5f5">
+            <li role="presentation" class="active">
+                <a href="#articles" style="background-color: #f5f5f5" aria-controls="messages" role="tab"
+                   data-toggle="tab">
+                    参评项目 </a></li>
+        </ul>
+    </div>
     <!-- Tab panes -->
-    {% include 'dbms/meeting/article/tab/content.html' %}
+    <div class="tab-content">
+        <div role="tabpanel" class="tab-pane active" id="articles"> <!--参评项目-->
+            {% include 'dbms/meeting/article/tab/articles.html' %} </div>
+    </div>
 </div>

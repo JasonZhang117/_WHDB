@@ -32,6 +32,7 @@ urlpatterns = [
     path('appraisal/scan/<int:article_id>/', views.appraisal_scan, name='appraisal_scan'),
     path('appraisal/scan/<int:article_id>/<int:lending_id>/', views.appraisal_scan_lending,
          name='appraisal_scan_lending'),
+    path('appraisal/summary/<int:article_id>/', views.summary_scan, name='summary_scan'),
     path('appraisal/comment/', views.comment_edit_ajax),
     path('appraisal/single/add/', views.single_quota_ajax),
     path('appraisal/single/del/', views.single_del_ajax),
@@ -70,6 +71,10 @@ urlpatterns = [
     path('agreep/<int:agree_state>/', views.agreep, name='agreep'),  # /dbms/provide/(0-9)
     path('agreep/scan/<int:agree_id>/', views.agreep_scan, name='agreep_scan'),
     path('agreep/scan/<int:agree_id>/<int:notify_id>/', views.agreep_scan_notify, name='agreep_scan_notify'),
+    path('agreep/notify/add/', views.notify_add_ajax),
+    path('agreep/notify/del/', views.notify_del_ajax),
+    path('agreep/provide/add/', views.provide_add_ajax),
+
     path('provide/', views.provide, name='provide_all'),  # 菜单-放款管理-放款
     path('provide/<int:provide_status>/', views.provide, name='provide'),  # /dbms/grant/(0-9)
     path('provide/scan/<int:provide_id>/', views.provide_scan, name='provide_scan'),

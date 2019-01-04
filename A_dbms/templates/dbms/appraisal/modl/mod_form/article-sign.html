@@ -1,75 +1,33 @@
 <div id="form_article_sign">
 
-    <div class="form-group"><!--纪要编号-->
-        <label for="id_summary_num" class="col-sm-3 control-label">
-            {{ form_article_sign.summary_num.label }}：
-        </label>
-        <div class="col-sm-9">
-            {{ form_article_sign.summary_num }}
-        </div>
-        <label id="e_summary_num" class="pull-right">
-            {{ form_article_sign.summary_num.errors }}
-        </label>
-    </div>
-
     <div class="form-group"><!--签批结论-->
-        <label for="id_sign_type" class="col-sm-3 control-label">
-            {{ form_article_sign.sign_type.label }}：
-        </label>
-        <div class="col-sm-9">
-            {{ form_article_sign.sign_type }}
-        </div>
-        <label id="e_sign_type" class="pull-right">
-            {{ form_article_sign.sign_type.errors }}
-        </label>
+        <label for="id_sign_type" class="col-sm-3 control-label">{{ form_article_sign.sign_type.label }}：</label>
+        <div class="col-sm-9">{{ form_article_sign.sign_type }}</div>
+        <label id="e_sign_type" class="pull-right">{{ form_article_sign.sign_type.errors }}</label>
     </div>
 
     <div class="form-group"><!--续贷金额（元）-->
-        <label for="id_renewal" class="col-sm-3 control-label">
-            {{ form_article_sign.renewal.label }}：
-        </label>
-        <div class="col-sm-9">
-            {{ form_article_sign.renewal }}
-        </div>
-        <label id="e_renewal" class="pull-right">
-            {{ form_article_sign.renewal.errors }}
-        </label>
+        <label for="id_renewal" class="col-sm-3 control-label">{{ form_article_sign.renewal.label }}：</label>
+        <div class="col-sm-9">{{ form_article_sign.renewal }}</div>
+        <label id="e_renewal" class="pull-right">{{ form_article_sign.renewal.errors }}</label>
     </div>
 
     <div class="form-group"><!--新增金额（元）-->
-        <label for="id_augment" class="col-sm-3 control-label">
-            {{ form_article_sign.augment.label }}：
-        </label>
-        <div class="col-sm-9">
-            {{ form_article_sign.augment }}
-        </div>
-        <label id="e_augment" class="pull-right">
-            {{ form_article_sign.augment.errors }}
-        </label>
+        <label for="id_augment" class="col-sm-3 control-label">{{ form_article_sign.augment.label }}：</label>
+        <div class="col-sm-9">{{ form_article_sign.augment }}</div>
+        <label id="e_augment" class="pull-right">{{ form_article_sign.augment.errors }}</label>
     </div>
 
     <div class="form-group"><!--签批详情-->
-        <label for="id_sign_detail" class="col-sm-3 control-label">
-            {{ form_article_sign.sign_detail.label }}：
-        </label>
-        <div class="col-sm-9">
-            {{ form_article_sign.sign_detail }}
-        </div>
-        <label id="e_sign_detail" class="pull-right">
-            {{ form_article_sign.sign_detail.errors }}
-        </label>
+        <label for="id_sign_detail" class="col-sm-3 control-label">{{ form_article_sign.sign_detail.label }}：</label>
+        <div class="col-sm-9">{{ form_article_sign.sign_detail }}</div>
+        <label id="e_sign_detail" class="pull-right">{{ form_article_sign.sign_detail.errors }}</label>
     </div>
 
     <div class="form-group"><!--签批日期-->
-        <label for="id_sign_date" class="col-sm-3 control-label">
-            {{ form_article_sign.sign_date.label }}：
-        </label>
-        <div class="col-sm-9">
-            {{ form_article_sign.sign_date }}
-        </div>
-        <label id="e_sign_date" class="pull-right">
-            {{ form_article_sign.sign_date.errors }}
-        </label>
+        <label for="id_sign_date" class="col-sm-3 control-label">{{ form_article_sign.sign_date.label }}：</label>
+        <div class="col-sm-9">{{ form_article_sign.sign_date }}</div>
+        <label id="e_sign_date" class="pull-right">{{ form_article_sign.sign_date.errors }}</label>
     </div>
 
 </div>

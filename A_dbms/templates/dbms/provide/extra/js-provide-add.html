@@ -1,0 +1,56 @@
+<script>
+    $(function () {
+
+        bindAddProvideB();
+        bindAddProvideModalOk();
+
+    });
+
+    function bindAddProvideB() {
+        $('#addProvideB').click(function () {
+            console.log("bindAddProvideB")
+            $('#addProvideModal').modal('show');
+        })
+    }
+
+    function bindAddProvideModalOk() {
+        $('#addProvideModalOk').click(function () {
+            var postData = {};
+            $('#addProvideModal').find('input,select').each(function () {
+                var v = $(this).val();
+                var n = $(this).attr('name');
+                postData[n] = v;
+            });
+            var postDataStr = JSON.stringify(postData);
+            console.log(postDataStr)
+            $.ajax({
+                url: '/dbms/agreep/provide/add/',
+                type: 'POST',
+                traditional: true,
+                data: {'postDataStr': postDataStr},
+                dataType: 'JSON',
+                success: function (arg) {
+                    console.log(arg);
+                    if (arg.status) {
+                        $('#addProvideModal').modal('hide');
+                        alert(arg.message);
+                        {#window.location.href = arg.skip;#}
+                        window.location.reload();
+                    } else {
+                        alert(arg.message);
+                        $('#e_provide_typ').text(arg.forme.provide_typ);
+                        $('#e_provide_money').text(arg.forme.provide_money);
+                        $('#e_provide_date').text(arg.forme.provide_date);
+                        $('#e_due_date').text(arg.forme.due_date);
+                    }
+                }
+            })
+        })
+    }
+</script>
+
+
+
+
+
+

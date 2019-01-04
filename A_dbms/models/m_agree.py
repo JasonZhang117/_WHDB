@@ -24,14 +24,16 @@ class Agrees(models.Model):  # 委托合同
     agree_copies = models.IntegerField(verbose_name='合同份数')
     agree_amount = models.FloatField(verbose_name='合同金额')
     agree_date = models.DateField(verbose_name='创建日期', default=datetime.date.today)
-    agree_buildor = models.ForeignKey(to='Employees', verbose_name="创建人",
-                                      on_delete=models.PROTECT,
-                                      related_name='agree_buildor_employee')
+
     AGREE_STATE_LIST = ((1, '待签批'), (2, '已签批'), (3, '已落实'), (4, '已放款'),
                         (7, '待变更'), (8, '已解保'), (9, '已作废'))
     agree_state = models.IntegerField(verbose_name='_合同状态', choices=AGREE_STATE_LIST, default=1)
-    agree_balance = models.FloatField(verbose_name='_放款金额（元）', default=0)
     charge = models.FloatField(verbose_name='应收保费（元）', default=0)
+    agree_notify_sum = models.FloatField(verbose_name='_通知金额', default=0)
+    agree_provide_sum = models.FloatField(verbose_name='_放款金额', default=0)
+    agree_buildor = models.ForeignKey(to='Employees', verbose_name="创建人",
+                                      on_delete=models.PROTECT,
+                                      related_name='agree_buildor_employee')
 
     class Meta:
         verbose_name_plural = '合同-委托保证'  # 指定显示名称

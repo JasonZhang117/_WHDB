@@ -30,17 +30,16 @@ class Appraisals(models.Model):  # 评审会
 
 # ------------------------单项额度--------------------------#
 class SingleQuota(models.Model):  # 单项额度
-    summary = models.ForeignKey(to='Articles',
-                                verbose_name="纪要",
+    summary = models.ForeignKey(to='Articles', verbose_name="纪要",
                                 on_delete=models.PROTECT,
                                 related_name='single_quota_summary')
-    CREDIT_MODEL_LIST = ((1, '流贷'), (2, '承兑'), (3, '保函'), (4, '综合'))
+    CREDIT_MODEL_LIST = [(1, '流动资金贷款担保'), (2, '银行承兑汇票担保'), (3, '保函担保'),
+                         (4, '综合授信额度担保（含流贷、银承、保函）')]
     credit_model = models.IntegerField(verbose_name='授信类型', choices=CREDIT_MODEL_LIST, default=1)
     credit_amount = models.FloatField(verbose_name='授信额度（元）')
     flow_rate = models.FloatField(verbose_name='费率（%）')
     amount = models.FloatField(verbose_name='_放款金额（元）', default=0)
-    single_buildor = models.ForeignKey(to='Employees',
-                                       verbose_name="创建人",
+    single_buildor = models.ForeignKey(to='Employees', verbose_name="创建人",
                                        on_delete=models.PROTECT,
                                        related_name='single_buildor_employee')
 
@@ -60,17 +59,15 @@ def limit_lending_choices():
     return {'article_state__in': [1, 2, 3, 4]}
 
 
-# ------------------------放款次序--------------------------#
 class LendingOrder(models.Model):
-    summary = models.ForeignKey(to='Articles',
-                                verbose_name="项目纪要",
+    summary = models.ForeignKey(to='Articles', verbose_name="项目纪要",
                                 on_delete=models.PROTECT,
                                 limit_choices_to={'counter_typ__in': [1, 2]},
                                 related_name='lending_summary')
     ORDER_LIST = ((1, '第一次'), (2, '第二次'), (3, '第三次'), (4, '第四次'))
     order = models.IntegerField(verbose_name='发放次序', choices=ORDER_LIST, default=1)
     order_amount = models.FloatField(verbose_name='拟放金额')
-    amount = models.FloatField(verbose_name='已放金额', default=0)
+    lending_provide_sum = models.FloatField(verbose_name='_放款金额', default=0)
 
     class Meta:
         verbose_name_plural = '评审-发放次序'  # 指定显示名称
@@ -83,8 +80,7 @@ class LendingOrder(models.Model):
 
 # ------------------------反担保措施--------------------------#
 class LendingSures(models.Model):
-    lending = models.ForeignKey(to='LendingOrder',
-                                verbose_name="放款次序",
+    lending = models.ForeignKey(to='LendingOrder', verbose_name="放款次序",
                                 on_delete=models.PROTECT,
                                 related_name='sure_lending')
     SURE_TYP_LIST = (
@@ -106,12 +102,10 @@ class LendingSures(models.Model):
 
 # ------------------------反担保-保证--------------------------#
 class LendingCustoms(models.Model):
-    sure = models.OneToOneField(to='LendingSures',
-                                verbose_name="反担保措施",
+    sure = models.OneToOneField(to='LendingSures', verbose_name="反担保措施",
                                 on_delete=models.PROTECT,
                                 related_name='custom_sure')
-    custome = models.ManyToManyField(to='Customes',
-                                     verbose_name="反担保人",
+    custome = models.ManyToManyField(to='Customes', verbose_name="反担保人",
                                      related_name='lending_custom',
                                      db_constraint=True)
 
@@ -126,12 +120,10 @@ class LendingCustoms(models.Model):
 
 # ------------------------反担保-抵质押--------------------------#
 class LendingWarrants(models.Model):
-    sure = models.OneToOneField(to='LendingSures',
-                                verbose_name="反担保措施",
+    sure = models.OneToOneField(to='LendingSures', verbose_name="反担保措施",
                                 on_delete=models.PROTECT,
                                 related_name='warrant_sure')
-    warrant = models.ManyToManyField(to='Warrants',
-                                     verbose_name="抵质押物",
+    warrant = models.ManyToManyField(to='Warrants', verbose_name="抵质押物",
                                      related_name='lending_warrant',
                                      db_constraint=True)
 
@@ -145,19 +137,16 @@ class LendingWarrants(models.Model):
 
 # ------------------------评审意见--------------------------#
 class Comments(models.Model):  # 评委意见
-    summary = models.ForeignKey(to='Articles',
-                                verbose_name="纪要",
+    summary = models.ForeignKey(to='Articles', verbose_name="纪要",
                                 on_delete=models.PROTECT,
                                 related_name='comment_summary')
-    expert = models.ForeignKey(to='Experts',
-                               verbose_name="评委",
+    expert = models.ForeignKey(to='Experts', verbose_name="评委",
                                on_delete=models.PROTECT,
                                related_name='comment_expert')
     COMMENT_TYPE_LIST = ((1, '同意'), (2, '复议'), (3, '不同意'))
     comment_type = models.IntegerField(verbose_name='评委意见', choices=COMMENT_TYPE_LIST, default=1)
     concrete = models.TextField(verbose_name='意见详情', null=True, blank=True)
-    comment_buildor = models.ForeignKey(to='Employees',
-                                        verbose_name="创建人",
+    comment_buildor = models.ForeignKey(to='Employees', verbose_name="创建人",
                                         on_delete=models.PROTECT,
                                         related_name='comment_buildor_employee')
 

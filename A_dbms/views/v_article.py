@@ -154,8 +154,7 @@ def article_add_ajax(request):  # 添加项目
             article_obj = models.Articles.objects.create(
                 article_num=article_num, custom_id=custom_id, renewal=renewal,
                 augment=augment, amount=amount, credit_term=cleaned_data['credit_term'],
-                director_id=cleaned_data['director_id'],
-                assistant_id=cleaned_data['assistant_id'],
+                director_id=cleaned_data['director_id'], assistant_id=cleaned_data['assistant_id'],
                 control_id=cleaned_data['control_id'], article_buildor=request.user)
             response['obj_num'] = article_obj.article_num
             response['message'] = '成功创建项目：%s！' % article_obj.article_num

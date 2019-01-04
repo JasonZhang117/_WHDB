@@ -16,13 +16,10 @@ def appraisal(request):  # 评审情况
     print(__file__, '---->def appraisal')
     # print('kwargs:', kwargs)
     form_meeting_add = forms.MeetingAddForm()
-
     appraisal_list = models.Articles.objects.filter(
         article_state__in=[4, 5]).order_by('-review_date')
     print('appraisal_list:', appraisal_list)
-
     paginator = Paginator(appraisal_list, 10)
-
     page = request.GET.get('page')
     try:
         p_list = paginator.page(page)
@@ -30,13 +27,10 @@ def appraisal(request):  # 评审情况
         p_list = paginator.page(1)
     except EmptyPage:
         p_list = paginator.page(paginator.num_pages)
-
-    return render(request,
-                  'dbms/appraisal/appraisal.html',
-                  locals())
+    return render(request, 'dbms/appraisal/appraisal.html', locals())
 
 
-# -----------------------appraisal_scan评审项目预览-------------------------#
+# -----------------------appraisal_scan评审项目-------------------------#
 @login_required
 def appraisal_scan(request, article_id):  # 评审项目预览
     print(__file__, '---->def appraisal_scam')
@@ -59,14 +53,19 @@ def appraisal_scan(request, article_id):  # 评审项目预览
             'augment': article_obj.augment,
             'sign_date': str(today_str)}
         form_article_sign = forms.ArticlesSignForm(initial=form_date)
-
     form_comment = forms.CommentsAddForm()
     form_single = forms.SingleQuotaForm()
     form_lending = forms.FormLendingOrder()
+    return render(request, 'dbms/appraisal/appraisal-scan.html', locals())
 
-    return render(request,
-                  'dbms/appraisal/appraisal-scan.html',
-                  locals())
+
+# -----------------------summary_scan纪要预览-------------------------#
+@login_required
+def summary_scan(request, article_id):  # 评审项目预览
+    print(__file__, '---->def summary_scan')
+    article_obj = models.Articles.objects.get(id=article_id)
+
+    return render(request, 'dbms/appraisal/appraisal-summary-scan.html', locals())
 
 
 # -----------------------appraisal_scan_lending评审项目预览-------------------------#
@@ -529,8 +528,7 @@ def single_del_ajax(request):  # 单项额度删除ajax
 @login_required
 def article_sign_ajax(request):
     print(__file__, '---->def article_sign_ajax')
-    response = {'status': True, 'message': None,
-                'obj_num': None, 'forme': None, }
+    response = {'status': True, 'message': None, 'forme': None, }
     post_data_str = request.POST.get('postDataStr')
     post_data = json.loads(post_data_str)
     print('post_data:', post_data)
@@ -544,9 +542,7 @@ def article_sign_ajax(request):
     if aritcle_obj.article_state == 4:
         if sign_type == 2:
             models.Articles.objects.filter(id=article_id).update(
-                sign_type=sign_type,
-                sign_date=post_data['sign_date'],
-                article_state=6)
+                sign_type=sign_type, sign_date=post_data['sign_date'], article_state=6)
             response['obj_num'] = aritcle_obj.article_num
             response['message'] = '%s项目被否决，更新为注销状态！' % aritcle_obj.article_num
         else:
@@ -567,20 +563,20 @@ def article_sign_ajax(request):
                     lending_amount = lending_amount['order_amount__sum']
                     print('lending_amount:', lending_amount)
                     if single_quota_amount == article_amount and lending_amount == article_amount:
-                        models.Articles.objects.filter(id=article_id).update(
-                            summary_num=cleaned_data['summary_num'],
-                            sign_type=sign_type, renewal=renewal,
-                            augment=augment, amount=article_amount,
-                            sign_detail=cleaned_data['sign_detail'],
-                            sign_date=cleaned_data['sign_date'],
-                            article_state=5)
-                        # 更新客户授信总额
-                        custom_id = aritcle_obj.custom.id
-                        models.Customes.objects.filter(id=custom_id).update(
-                            credit_amount=cleaned_data['credit_amount'])
-
-                        response['obj_num'] = aritcle_obj.article_num
-                        response['message'] = '成功签批项目：%s！' % aritcle_obj.article_num
+                        try:
+                            with transaction.atomic():
+                                models.Articles.objects.filter(id=article_id).update(
+                                    sign_type=sign_type, renewal=renewal, augment=augment,
+                                    sign_detail=cleaned_data['sign_detail'], sign_date=cleaned_data['sign_date'],
+                                    article_state=5)
+                                # 更新客户授信总额
+                                custom_id = aritcle_obj.custom.id
+                                models.Customes.objects.filter(id=custom_id).update(
+                                    credit_amount=F('credit_amount') + augment)
+                            response['message'] = '成功签批项目：%s！' % aritcle_obj.article_num
+                        except Exception as e:
+                            response['status'] = False
+                            response['message'] = '项目签批失败失败：%s' % str(e)
                     else:
                         msg = '单项额度或放款次序金额合计与签批总额不相等，项目签批不成功！！！'
                         response['status'] = False

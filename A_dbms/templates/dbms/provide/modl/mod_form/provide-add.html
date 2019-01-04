@@ -1,0 +1,27 @@
+<div id="form_provide_add">
+
+    <div class="form-group"><!--放款类型-->
+        <label for="id_provide_typ" class="col-sm-3 control-label">{{ form_provide_add.provide_typ.label }}：</label>
+        <div class="col-sm-9">{{ form_provide_add.provide_typ }}</div>
+        <label id="e_provide_typ" class="pull-right">{{ form_provide_add.provide_typ.errors }}</label>
+    </div>
+
+    <div class="form-group"><!--放款金额-->
+        <label for="id_provide_money" class="col-sm-3 control-label">{{ form_provide_add.provide_money.label }}：</label>
+        <div class="col-sm-9">{{ form_provide_add.provide_money }}</div>
+        <label id="e_provide_money" class="pull-right">{{ form_provide_add.provide_money.errors }}</label>
+    </div>
+
+    <div class="form-group"><!--放款日期-->
+        <label for="id_provide_date" class="col-sm-3 control-label">{{ form_provide_add.provide_date.label }}：</label>
+        <div class="col-sm-9">{{ form_provide_add.provide_date }}</div>
+        <label id="e_provide_date" class="pull-right">{{ form_provide_add.provide_date.errors }}</label>
+    </div>
+
+    <div class="form-group"><!--到期日-->
+        <label for="id_due_date" class="col-sm-3 control-label">{{ form_provide_add.due_date.label }}：</label>
+        <div class="col-sm-9">{{ form_provide_add.due_date }}</div>
+        <label id="e_due_date" class="pull-right">{{ form_provide_add.due_date.errors }}</label>
+    </div>
+
+</div>

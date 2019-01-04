@@ -25,7 +25,9 @@ def meeting(request, *args, **kwargs):  # 评审会
 def meeting_scan(request, meeting_id):  # 评审会预览
     print(__file__, '---->def meeting_scan')
     meeting_obj = models.Appraisals.objects.get(id=meeting_id)
+
     expert_list = models.Experts.objects.filter(article_expert__appraisal_article=meeting_obj).distinct()
+
     for expert_obj in expert_list:
         article_count = models.Articles.objects.filter(expert=expert_obj, appraisal_article=meeting_obj).count()
         print("article_count:", expert_obj.id, article_count)
@@ -33,8 +35,7 @@ def meeting_scan(request, meeting_id):  # 评审会预览
     print('expert_ll:', expert_ll)
     form_meeting_article_add = forms.MeetingArticleAddForm()
 
-    meeting_edit_form_data = {
-        'review_model': meeting_obj.review_model, 'review_date': str(meeting_obj.review_date)}
+    meeting_edit_form_data = {'review_model': meeting_obj.review_model, 'review_date': str(meeting_obj.review_date)}
     form_meeting_edit = forms.MeetingEditForm(meeting_edit_form_data)
 
     return render(request, 'dbms/meeting/meeting-scan.html', locals())
@@ -50,8 +51,7 @@ def meeting_scan_article(request, meeting_id, article_id):
     expert_list = article_obj.expert.values_list('id')
     if expert_list:
         expert_id_list = list(zip(*expert_list))[0]
-        form_date = {
-            'expert': expert_id_list}
+        form_date = {'expert': expert_id_list}
         form_allot_expert = forms.MeetingAllotForm(initial=form_date)
     else:
         form_allot_expert = forms.MeetingAllotForm()
@@ -65,17 +65,11 @@ def meeting_scan_article(request, meeting_id, article_id):
 @login_required
 def meeting_add_ajax(request):
     print(__file__, '---->def meeting_add_ajax')
-    response = {'status': True, 'message': None,
-                'obj_num': None, 'forme': None, }
+    response = {'status': True, 'message': None, 'forme': None, }
     post_data_str = request.POST.get('postDataStr')
     post_data = json.loads(post_data_str)
 
-    data = {
-        'review_model': post_data['review_model'],
-        'review_date': post_data['review_date'],
-        'article': post_data['article']}
-
-    form = forms.MeetingAddForm(data, request.FILES)
+    form = forms.MeetingAddForm(post_data, request.FILES)
 
     if form.is_valid():
         cleaned_data = form.cleaned_data
@@ -111,19 +105,18 @@ def meeting_add_ajax(request):
         ###评审会编号拼接
         review_num = "(%s)[%s]%s" % (r_mod, r_year, r_order)
 
-        meeting_obj = models.Appraisals.objects.create(
-            num=review_num, review_year=r_year, review_model=review_model,
-            review_order=order_max_x, review_date=review_date,
-            meeting_buildor=request.user)
         article_list_l = cleaned_data['article']
-        meeting_obj.article.set(article_list_l)
-
-        models.Articles.objects.filter(
-            id__in=article_list_l).update(article_state=3)
-
-        response['obj_num'] = meeting_obj.num
-        response['message'] = '成功添加评审会：%s！' % meeting_obj.num
-
+        try:
+            with transaction.atomic():
+                meeting_obj = models.Appraisals.objects.create(
+                    num=review_num, review_year=r_year, review_model=review_model, review_order=order_max_x,
+                    review_date=review_date, meeting_buildor=request.user)
+                meeting_obj.article.set(article_list_l)
+                models.Articles.objects.filter(id__in=article_list_l).update(article_state=3)
+            response['message'] = '成功添加评审会：%s！' % meeting_obj.num
+        except Exception as e:
+            response['status'] = False
+            response['message'] = '添加评审会失败：%s' % str(e)
     else:
         response['status'] = False
         response['message'] = '表单信息有误！！！'
@@ -161,8 +154,7 @@ def meeting_article_add_ajax(request):  # 添加参评项目ajax
                     ((1, '待反馈'), (2, '已反馈'), (3, '待上会'),
                      (4, '已上会'), (5, '已签批'), (6, '已注销'))
                      (5, '已签批')-->才能出合同'''
-                    models.Articles.objects.filter(
-                        id__in=article_add_list).update(article_state=3)
+                    models.Articles.objects.filter(id__in=article_add_list).update(article_state=3)
                 response['message'] = '成功追加评审项目！'
             except Exception as e:
                 response['status'] = False
@@ -267,7 +259,6 @@ def meeting_close_ajax(request):  # 完成上会ajax
     response = {'status': True, 'message': None, 'forme': None, }
     post_data_str = request.POST.get('postDataStr')
     post_data = json.loads(post_data_str)
-
     meeting_id = post_data['meeting_id']
     meeting_list = models.Appraisals.objects.filter(id=meeting_id)
     meeting_obj = meeting_list.first()
@@ -277,7 +268,6 @@ def meeting_close_ajax(request):  # 完成上会ajax
                 ((1, '待反馈'), (2, '已反馈'), (3, '待上会'),
                 (4, '已上会'), (5, '已签批'), (6, '已注销'))
                 (5, '已签批')-->才能出合同'''
-
         for article_obj in article_list:
             aec = article_obj.expert.count()
             rm = meeting_obj.review_model
@@ -295,17 +285,24 @@ def meeting_close_ajax(request):  # 完成上会ajax
                     response['message'] = msg
                     result = json.dumps(response, ensure_ascii=False)
                     return HttpResponse(result)
-
-        article_list.update(article_state=4,
-                            review_date=meeting_obj.review_date)  # 更新项目状态
-        meeting_list.update(meeting_state=2)  # 更新评审会状态
-        msg = '%s,完成上会！' % meeting_obj.num
-        response['message'] = msg
+            try:
+                with transaction.atomic():
+                    article_list.update(article_state=4, review_date=meeting_obj.review_date)  # 更新项目状态
+                    meeting_list.update(meeting_state=2)  # 更新评审会状态
+                    num = 0
+                    for article in article_list:
+                        num = num + 1
+                        summary_num = '%s-%s' % (meeting_obj.num, num)
+                        models.Articles.objects.filter(id=article.id).update(summary_num=summary_num)
+                msg = '%s,完成上会！' % meeting_obj.num
+                response['message'] = msg
+            except Exception as e:
+                response['status'] = False
+                response['message'] = '评审会创建失败：%s' % str(e)
     else:
         msg = '本次评审会无参会项目，你玩我？？？'
         response['status'] = False
         response['message'] = msg
-
     result = json.dumps(response, ensure_ascii=False)
     return HttpResponse(result)
 

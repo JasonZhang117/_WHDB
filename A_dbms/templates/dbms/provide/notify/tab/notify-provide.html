@@ -13,9 +13,9 @@
             <th>查看详情</th>
         </tr>
         </thead>
-        <tbody>
+        <tbody id="notify-provide-tb">
         {% for provide in notify_obj.provide_notify.all %}
-            <tr>
+            <tr provide-nid="{{ provide.id }}">
                 <td>{{ provide.get_provide_typ_display }}</td>
                 <td>{{ provide.provide_money }}</td>
                 <td>{{ provide.provide_date }}</td>
