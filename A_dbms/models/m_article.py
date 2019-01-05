@@ -7,10 +7,11 @@ class Articles(models.Model):  # 项目、纪要
     article_num = models.CharField(verbose_name='_项目编号', max_length=32, unique=True)
     custom = models.ForeignKey(to='Customes', verbose_name="客户",
                                on_delete=models.PROTECT,
+                               limit_choices_to={'counter_only': 0},
                                related_name='article_custom')
-    renewal = models.FloatField(verbose_name='续贷金额（元）', null=True, blank=True)
-    augment = models.FloatField(verbose_name='新增金额（元）', null=True, blank=True)
-    amount = models.FloatField(verbose_name='_总额度（元）', null=True, blank=True)
+    renewal = models.FloatField(verbose_name='续贷金额（元）', default=0)
+    augment = models.FloatField(verbose_name='新增金额（元）', default=0)
+    amount = models.FloatField(verbose_name='_总额度（元）', default=0)
     credit_term = models.IntegerField(verbose_name='授信期限（月）', default=12)
     director = models.ForeignKey(to='Employees', verbose_name="项目经理",
                                  on_delete=models.PROTECT,
@@ -39,7 +40,7 @@ class Articles(models.Model):  # 项目、纪要
                                         related_name='article_buildor_employee')
 
     class Meta:
-        verbose_name_plural = '项目-项目'  # 指定显示名称
+        verbose_name_plural = '项目'  # 指定显示名称
         db_table = 'dbms_articles'  # 指定数据表的名称
 
     def __str__(self):

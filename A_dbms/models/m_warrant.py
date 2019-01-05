@@ -13,7 +13,7 @@ class Warrants(models.Model):  # 担保物
     evaluate_value = models.FloatField(verbose_name='评估价值', null=True, blank=True)
     evaluate_date = models.DateField(verbose_name='评估日期', null=True, blank=True)
     WARRANT_STATE_LIST = (
-        (1, '未入库'), (2, '已入库'), (3, '已出库'), (4, '已借出'), (5, '已注销'))
+        (1, '未入库'), (2, '已入库'), (3, '已出库'), (4, '已借出'), (5, '已注销'), (6, '无需入库'))
     warrant_state = models.IntegerField(verbose_name='_权证状态', choices=WARRANT_STATE_LIST, default=1)
 
     class Meta:
@@ -27,12 +27,10 @@ class Warrants(models.Model):  # 担保物
 # ------------------------产权证--------------------------#
 class Ownership(models.Model):  # 产权证
     ownership_num = models.CharField(verbose_name='产权证编号', max_length=32, unique=True)
-    warrant = models.ForeignKey(to='Warrants',
-                                verbose_name="权证",
+    warrant = models.ForeignKey(to='Warrants', verbose_name="权证",
                                 on_delete=models.CASCADE,
                                 related_name='ownership_warrant')
-    owner = models.ForeignKey(to='Customes',
-                              verbose_name="所有权人",
+    owner = models.ForeignKey(to='Customes', verbose_name="所有权人",
                               on_delete=models.PROTECT,
                               related_name='owner_custome')
 
@@ -47,8 +45,7 @@ class Ownership(models.Model):  # 产权证
 
 # -------------------------房产1---------------------------#
 class Houses(models.Model):  # 房产
-    warrant = models.OneToOneField(to='Warrants',
-                                   verbose_name="权证",
+    warrant = models.OneToOneField(to='Warrants', verbose_name="权证",
                                    on_delete=models.CASCADE,
                                    limit_choices_to={'warrant_typ': 1},
                                    related_name='house_warrant')
@@ -67,8 +64,7 @@ class Houses(models.Model):  # 房产
 
 # ------------------------土地2--------------------------#
 class Grounds(models.Model):  # 土地
-    warrant = models.OneToOneField(to='Warrants',
-                                   verbose_name="权证",
+    warrant = models.OneToOneField(to='Warrants', verbose_name="权证",
                                    on_delete=models.CASCADE,
                                    limit_choices_to={'warrant_typ': 2},
                                    related_name='ground_warrant')
@@ -87,13 +83,11 @@ class Grounds(models.Model):  # 土地
 
 # ------------------------应收帐款11--------------------------#
 class Receivable(models.Model):  # 应收帐款
-    warrant = models.OneToOneField(to='Warrants',
-                                   verbose_name="权证",
+    warrant = models.OneToOneField(to='Warrants', verbose_name="权证",
                                    on_delete=models.CASCADE,
                                    limit_choices_to={'warrant_typ': 11},
                                    related_name='receive_warrant')
-    receive_owner = models.ForeignKey(to='Customes',
-                                      verbose_name="所有权人",
+    receive_owner = models.ForeignKey(to='Customes', verbose_name="所有权人",
                                       on_delete=models.PROTECT,
                                       related_name='receive_custome')
     receivable_detail = models.TextField(verbose_name="应收账款描述")
@@ -107,8 +101,7 @@ class Receivable(models.Model):  # 应收帐款
 
 
 class ReceiveExtend(models.Model):  # 应收列表
-    receivable = models.ForeignKey(to='Receivable',
-                                   verbose_name="应收账款",
+    receivable = models.ForeignKey(to='Receivable', verbose_name="应收账款",
                                    on_delete=models.CASCADE,
                                    related_name='extend_receiveable')
     receive_unit = models.CharField(verbose_name="应收单位名称", max_length=64)
@@ -120,20 +113,16 @@ class ReceiveExtend(models.Model):  # 应收列表
     def __str__(self):
         return '%s' % self.receivable
 
-    # ------------------------动产--------------------------#
-
 
 # ------------------------股权21--------------------------#
 class Stockes(models.Model):  # 股权
-    warrant = models.OneToOneField(to='Warrants',
-                                   verbose_name="权证",
+    warrant = models.OneToOneField(to='Warrants', verbose_name="权证",
                                    on_delete=models.CASCADE,
                                    limit_choices_to={'warrant_typ': 21},
                                    related_name='stock_warrant')
     STOCK_TYP_LIST = ((1, '有限公司股权'), (2, '股份公司股份'), (3, '举办者权益'))
     stock_typ = models.IntegerField(verbose_name='股权性质', choices=STOCK_TYP_LIST, default=1)
-    stock_owner = models.ForeignKey(to='Customes',
-                                    verbose_name="所有权人",
+    stock_owner = models.ForeignKey(to='Customes', verbose_name="所有权人",
                                     on_delete=models.PROTECT,
                                     related_name='stock_owner_custome')
     target = models.CharField(verbose_name='标的公司', max_length=64)
@@ -149,13 +138,11 @@ class Stockes(models.Model):  # 股权
 
 # ------------------------应收票据31--------------------------#
 class Draft(models.Model):  # 应收票据
-    warrant = models.OneToOneField(to='Warrants',
-                                   verbose_name="权证",
+    warrant = models.OneToOneField(to='Warrants', verbose_name="权证",
                                    on_delete=models.CASCADE,
                                    limit_choices_to={'warrant_typ': 31},
                                    related_name='draft_warrant')
-    draft_owner = models.ForeignKey(to='Customes',
-                                    verbose_name="所有权人",
+    draft_owner = models.ForeignKey(to='Customes', verbose_name="所有权人",
                                     on_delete=models.PROTECT,
                                     related_name='draft_custome')
     DRAFT_TYP_LIST = ((1, '银行承兑汇票'), (2, '商业承兑汇票'), (3, '支票'))
@@ -210,13 +197,11 @@ class Vehicle(models.Model):  # 车辆
 
 # ------------------------动产51--------------------------#
 class Chattel(models.Model):  # 动产
-    warrant = models.OneToOneField(to='Warrants',
-                                   verbose_name="权证",
+    warrant = models.OneToOneField(to='Warrants', verbose_name="权证",
                                    on_delete=models.CASCADE,
                                    limit_choices_to={'warrant_typ': 51},
                                    related_name='chattel_warrant')
-    chattel_owner = models.ForeignKey(to='Customes',
-                                      verbose_name="所有权人",
+    chattel_owner = models.ForeignKey(to='Customes', verbose_name="所有权人",
                                       on_delete=models.PROTECT,
                                       related_name='chattel_custome')
     CHATTEL_TYP_LIST = ((1, '存货'), (2, '设备'))
@@ -233,13 +218,11 @@ class Chattel(models.Model):  # 动产
 
 # ------------------------他权模型99--------------------------#
 class Hypothecs(models.Model):  # 他权
-    warrant = models.OneToOneField(to='Warrants',
-                                   verbose_name="他权证",
+    warrant = models.OneToOneField(to='Warrants', verbose_name="他权证",
                                    on_delete=models.CASCADE,
                                    limit_choices_to={'warrant_typ': 99},
                                    related_name='ypothec_warrant')
-    agree = models.ForeignKey(to='Agrees',
-                              verbose_name="委托合同",
+    agree = models.ForeignKey(to='Agrees', verbose_name="委托合同",
                               on_delete=models.PROTECT,
                               related_name='ypothec_agree')
     warrant_m = models.ManyToManyField(to='Warrants', verbose_name="权证", related_name='ypothec_m_agree')
@@ -254,19 +237,16 @@ class Hypothecs(models.Model):  # 他权
 
 # ------------------------出入库模型---------------------------#
 class Storages(models.Model):  # 出入库
-    warrant = models.ForeignKey(to='Warrants',
-                                verbose_name="权证",
+    warrant = models.ForeignKey(to='Warrants', verbose_name="权证",
                                 on_delete=models.PROTECT,
                                 related_name='storage_warrant')
     STORAGE_TYP_LIST = ((1, '入库'), (2, '出库'), (3, '借出'), (4, '归还'), (5, '解保'))
     storage_typ = models.IntegerField(verbose_name='出入库', choices=STORAGE_TYP_LIST, default=1)
     storage_date = models.DateField(verbose_name='日期', default=datetime.date.today)
-    transfer = models.ForeignKey(to='Employees',
-                                 verbose_name="移交/接收者",
+    transfer = models.ForeignKey(to='Employees', verbose_name="移交/接收者",
                                  on_delete=models.PROTECT,
                                  related_name='transfer_employee')
-    conservator = models.ForeignKey(to='Employees',
-                                    verbose_name="权证管理岗",
+    conservator = models.ForeignKey(to='Employees', verbose_name="权证管理岗",
                                     on_delete=models.PROTECT,
                                     related_name='conservator_employee')
 
@@ -280,14 +260,12 @@ class Storages(models.Model):  # 出入库
 
 # ------------------------评估模型---------------------------#
 class Evaluate(models.Model):  # 评估
-    warrant = models.ForeignKey(to='Warrants',
-                                verbose_name="权证",
+    warrant = models.ForeignKey(to='Warrants', verbose_name="权证",
                                 on_delete=models.PROTECT,
                                 related_name='evaluate_warrant')
     evaluate_value = models.FloatField(verbose_name='评估价值')
     evaluate_date = models.DateField(verbose_name='评估日期', default=datetime.date.today)
-    evaluator = models.ForeignKey(to='Employees',
-                                  verbose_name="创建者",
+    evaluator = models.ForeignKey(to='Employees', verbose_name="创建者",
                                   on_delete=models.PROTECT,
                                   related_name='evaluator_employee')
 

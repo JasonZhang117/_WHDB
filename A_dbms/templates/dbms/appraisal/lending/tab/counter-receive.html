@@ -17,7 +17,7 @@
                 {% for warrant in lending_sure.warrant_sure.warrant.all %}
                     <tr guarantee-nid={{ warrant.id }} sure-typ-nid={{ lending_sure.sure_typ }}>
                         <td>{{ lending_sure.get_sure_typ_display }}</td>
-                        <td>{{ warrant.receive_warrant.owner }}</td>
+                        <td>{{ warrant.receive_warrant.receive_owner }}</td>
                         <td>{{ warrant.receive_warrant.receivable_detail }}</td>
                         {% if lending_operate %}
                             <td><a class="btn btn-danger btn-xs delGuaranteeB">删除</a></td>

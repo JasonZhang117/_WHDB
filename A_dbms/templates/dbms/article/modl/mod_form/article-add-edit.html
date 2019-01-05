@@ -1,6 +1,6 @@
 <div id="form_article_add_edit">
 
-    <div class="form-group"><!--项目id-->
+    <div class="form-group"><!--客户-->
         <label for="id_custom_id" class="col-sm-3 control-label">{{ form_article_add_edit.custom_id.label }}：</label>
         <div class="col-sm-9">{{ form_article_add_edit.custom_id }}</div>
         <label id="e_custom_id" class="pull-right">{{ form_article_add_edit.custom_id.errors }}</label>
@@ -42,6 +42,6 @@
     <div class="form-group"><!--风控专员id-->
         <label for="id_control_id" class="col-sm-3 control-label">{{ form_article_add_edit.control_id.label }}：</label>
         <div class="col-sm-9">{{ form_article_add_edit.control_id }}</div>
-        <label id="e_control_id" class="pull-right">{ form_article_add_edit.control_id.errors }}</label>
+        <label id="e_control_id" class="pull-right">{{ form_article_add_edit.control_id.errors }}</label>
     </div>
 </div>

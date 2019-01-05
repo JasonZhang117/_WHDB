@@ -102,7 +102,7 @@ def agree_add_ajax(request):  # 添加合同
             ###判断合同情况：
             if agree_amount > lending_obj.order_amount:
                 response['status'] = False
-                msg = '该项目本次发放额度最高为%s,合同金额超过审批额度！！！' % lending_obj.amount
+                msg = '该项目本次发放额度最高为%s,合同金额超过审批额度！！！' % lending_obj.order_amount
                 response['message'] = msg
                 result = json.dumps(response, ensure_ascii=False)
                 return HttpResponse(result)

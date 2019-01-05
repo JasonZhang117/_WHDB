@@ -4,7 +4,9 @@
             项目情况
         </label>
         <label class="navbar-right">
-            <a class="btn btn-primary btn-sm " id="allotExpert">分配评委</a><!--#path('meeting/allot_ajax/'-->
+            {% if article_obj.article_state in edit_article_state_list %}
+                <a class="btn btn-primary btn-sm " id="allotExpert">添加评委</a>
+            {% endif %}
         </label>
     </div>
 

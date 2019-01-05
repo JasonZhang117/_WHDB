@@ -49,20 +49,18 @@ class SingleQuota(models.Model):  # 单项额度
         unique_together = ('summary', 'credit_model')
 
     def __str__(self):
-        return "%s_%s_%s" % (self.summary,
-                             self.credit_model,
-                             self.credit_amount)
+        return "%s_%s_%s" % (self.summary, self.credit_model, self.credit_amount)
 
 
 # ------------------------放款次序--------------------------#
 def limit_lending_choices():
-    return {'article_state__in': [1, 2, 3, 4]}
+    return {'article_state__in': [1, 2]}
 
 
 class LendingOrder(models.Model):
     summary = models.ForeignKey(to='Articles', verbose_name="项目纪要",
                                 on_delete=models.PROTECT,
-                                limit_choices_to={'counter_typ__in': [1, 2]},
+                                limit_choices_to=limit_lending_choices,
                                 related_name='lending_summary')
     ORDER_LIST = ((1, '第一次'), (2, '第二次'), (3, '第三次'), (4, '第四次'))
     order = models.IntegerField(verbose_name='发放次序', choices=ORDER_LIST, default=1)

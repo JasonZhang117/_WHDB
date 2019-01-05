@@ -7,7 +7,8 @@ from .v_article import (
 # ----------------------v_meeting评审会视图--------------------#
 from .v_meeting import (
     meeting, meeting_scan, meeting_notice, meeting_article_del_ajax, meeting_article_add_ajax, meeting_edit_ajax,
-    meeting_del_ajax, meeting_close_ajax, meeting_scan_article, meeting_add_ajax, meeting_allot_ajax)
+    meeting_del_ajax, meeting_close_ajax, meeting_scan_article, meeting_add_ajax, meeting_allot_add_ajax,
+    meeting_allot_del_ajax)
 # ----------------------v_appraisal评审视图--------------------#
 from .v_appraisal import (
     appraisal, appraisal_scan, appraisal_scan_lending, article_sign_ajax, guarantee_add_ajax, guarantee_del_ajax,

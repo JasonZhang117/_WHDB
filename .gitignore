@@ -9,6 +9,6 @@ venv/
 #Django:
 #db.sqlite3
 #_WHDB.xlsx
-migrations/*
-!__init__.py
+#migrations/*
+#!__init__.py
 

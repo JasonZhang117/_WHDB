@@ -37,21 +37,16 @@ def appraisal_scan(request, article_id):  # 评审项目预览
     article_obj = models.Articles.objects.get(id=article_id)
     '''((1, '待反馈'), (2, '已反馈'), (3, '待上会'),
        (4, '已上会'), (5, '已签批'), (6, '已注销'))'''
-    if article_obj.article_state:
-        form_date = {
-            'summary_num': article_obj.summary_num,
-            'sign_type': article_obj.sign_type,
-            'renewal': article_obj.renewal,
-            'augment': article_obj.augment,
-            'sign_detail': article_obj.sign_detail,
-            'sign_date': str(article_obj.sign_date)}
+    print()
+    if article_obj.article_state in [1, 2, 3, 4]:
+        today_str = time.strftime("%Y-%m-%d", time.gmtime())
+        form_date = {'renewal': article_obj.renewal, 'augment': article_obj.augment, 'sign_date': str(today_str)}
         form_article_sign = forms.ArticlesSignForm(initial=form_date)
     else:
-        today_str = time.strftime("%Y-%m-%d", time.gmtime())
         form_date = {
-            'renewal': article_obj.renewal,
-            'augment': article_obj.augment,
-            'sign_date': str(today_str)}
+            'summary_num': article_obj.summary_num, 'sign_type': article_obj.sign_type, 'renewal': article_obj.renewal,
+            'augment': article_obj.augment, 'sign_detail': article_obj.sign_detail,
+            'sign_date': str(article_obj.sign_date)}
         form_article_sign = forms.ArticlesSignForm(initial=form_date)
     form_comment = forms.CommentsAddForm()
     form_single = forms.SingleQuotaForm()
@@ -89,12 +84,16 @@ def appraisal_scan_lending(request, article_id, lending_id):  # 评审项目预�
     ground_list = [12, 22, 43, 53]
     receivable_list = [31]
     stock_list = [32]
+
     lending_operate = True
 
+    form_lendingcustoms_c_add = models.Customes.objects.exclude(
+        id=article_obj.custom.id).filter(genre=1).values_list('id', 'name')
+    form_lendingcustoms_p_add = models.Customes.objects.exclude(
+        id=article_obj.custom.id).filter(genre=2).values_list('id', 'name')
     form_lendingsures = forms.LendingSuresForm()
-
-    form_lendingcustoms_c_add = forms.LendingCustomsCForm()
-    form_lendingcustoms_p_add = forms.LendingCustomsPForm()
+    # form_lendingcustoms_c_add = forms.LendingCustomsCForm()
+    # form_lendingcustoms_p_add = forms.LendingCustomsPForm()
     form_lendinghouse_add = forms.LendingHouseForm()
     form_lendingground_add = forms.LendingGroundForm()
     form_lendinggreceivable_add = forms.LendinReceivableForm()

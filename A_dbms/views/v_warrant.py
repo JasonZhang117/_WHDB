@@ -373,8 +373,7 @@ def owership_add_ajax(request):  # 产权证添加ajax
         print('warrant_add_clean:', owership_add_clean)
         try:
             owership_obj = models.Ownership.objects.create(
-                warrant=warrant_obj,
-                ownership_num=owership_add_clean['ownership_num'],
+                warrant=warrant_obj, ownership_num=owership_add_clean['ownership_num'],
                 owner=owership_add_clean['owner'])
             response['message'] = '产权证信息创建成功！！！'
         except Exception as e:
@@ -522,8 +521,7 @@ def storages_add_ajax(request):  # 出入库添加ajax
                                 storage_obj = models.Storages.objects.create(
                                     warrant=warrant_obj, storage_typ=storage_typ,
                                     storage_date=storage_add_clean['storage_date'],
-                                    transfer=storage_add_clean['transfer'],
-                                    conservator=request.user)
+                                    transfer=storage_add_clean['transfer'], conservator=request.user)
                                 warrant_list.update(warrant_state=5)
                             response['message'] = '他权解保出库并注销！！！'
                         except Exception as e:
@@ -539,8 +537,7 @@ def storages_add_ajax(request):  # 出入库添加ajax
                             storage_obj = models.Storages.objects.create(
                                 warrant=warrant_obj, storage_typ=storage_typ,
                                 storage_date=storage_add_clean['storage_date'],
-                                transfer=storage_add_clean['transfer'],
-                                conservator=request.user)
+                                transfer=storage_add_clean['transfer'], conservator=request.user)
                             if storage_typ == 3:
                                 warrant_list.update(warrant_state=4)
                             else:
@@ -562,8 +559,7 @@ def storages_add_ajax(request):  # 出入库添加ajax
                         storage_obj = models.Storages.objects.create(
                             warrant=warrant_obj, storage_typ=storage_typ,
                             storage_date=storage_add_clean['storage_date'],
-                            transfer=storage_add_clean['transfer'],
-                            conservator=request.user)
+                            transfer=storage_add_clean['transfer'], conservator=request.user)
                         print('storage_obj:', storage_obj)
                         warrant_list.update(warrant_state=2)
                     response['message'] = '权证入库信息创建成功！！！'

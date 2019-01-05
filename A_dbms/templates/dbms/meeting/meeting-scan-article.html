@@ -8,13 +8,15 @@
         {% include 'dbms/meeting/article/meeting-article-summry.html' %}
         {% include 'dbms/meeting/article/meeting-article-tabs.html' %}
         {% include 'dbms/meeting/article/meeting-article-detail.html' %}
-        {% include 'dbms/meeting/modl/expert-allot-mod.html' %}
+        {% include 'dbms/meeting/modl/expert-allot-add-mod.html' %}
+        {% include 'dbms/meeting/modl/expert-allot-del-mod.html' %}
 
     </div>
 
 {% endblock %}
 
 {% block extra-js %}
-    {% include 'dbms/meeting/extra/js-expert-allot.html' %}
+    {% include 'dbms/meeting/extra/js-expert-allot-add.html' %}
+    {% include 'dbms/meeting/extra/js-expert_allot-del.html' %}
 
 {% endblock %}

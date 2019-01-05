@@ -2,7 +2,6 @@
     $(function () {
         bindAddArticle();
         bindAddArticleModalOk();
-
     });
 
     function bindAddArticle() {
@@ -29,7 +28,7 @@
                 postData[n] = v;
             });
             var postDataStr = JSON.stringify(postData);
-            console.log(postDataStr)
+            console.log(postDataStr);
             $.ajax({
                 url: '/dbms/article/add/',
                 type: 'POST',
@@ -46,6 +45,7 @@
                         alert(dict.message);
                         $('#e_renewal').text(dict.forme.renewal);
                         $('#e_augment').text(dict.forme.augment);
+                        $('#e_credit_term').text(dict.forme.credit_term);
                     }
                 }
             })

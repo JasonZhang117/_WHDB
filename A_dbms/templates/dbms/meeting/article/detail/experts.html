@@ -14,17 +14,23 @@
             <th>级别</th>
             <th>电话</th>
             <th>邮箱</th>
+            {% if article_obj.article_state in edit_article_state_list %}
+                <th>删除</th>
+            {% endif %}
         </tr>
         </thead>
-        <tbody>
+        <tbody id="expert-allot-tb">
         {% for expert in article_obj.expert.all %}
-            <tr>
+            <tr expert-nid="{{ expert.id }}">
                 <td>{{ expert.name }}</td>
                 <td>{{ expert.organization }}</td>
                 <td>{{ expert.job }}</td>
                 <td>{{ expert.get_level_display }}</td>
                 <td>{{ expert.contact_numb }}</td>
                 <td>{{ expert.email }}</td>
+                {% if article_obj.article_state in edit_article_state_list %}
+                    <td><a class="btn btn-danger btn-xs delExpertAllotB">删除</a></td>
+                {% endif %}
             </tr>
         {% endfor %}
         </tbody>

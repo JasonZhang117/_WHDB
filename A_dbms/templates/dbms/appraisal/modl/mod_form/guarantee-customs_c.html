@@ -1,15 +1,15 @@
 <div id="form_lendingcustoms_c_add" class="guarantee-extend" style="display: none">
 
-    <div class="form-group"><!--个人保证人-->
-        <label for="id_sure_c" class="col-sm-3 control-label">
-            {{ form_lendingcustoms_c_add.sure_c.label }}：
-        </label>
+    <div class="form-group"><!--企业保证人-->
+        <label for="id_sure_c" class="col-sm-3 control-label">反担保企业：</label>
         <div class="col-sm-9">
-            {{ form_lendingcustoms_c_add.sure_c }}
+            <select name="sure_c" class="form-control" multiple="" id="id_sure_c" required="">
+                {% for custom_c in form_lendingcustoms_c_add %}
+                    <option value="{{ custom_c.0 }}">{{ custom_c.1 }}</option>
+                {% endfor %}
+            </select>
         </div>
-        <label id="e_sure_c" class="pull-right">
-            {{ form_lendingcustoms_c_add.sure_c.errors }}
-        </label>
+        <label id="e_sure_c" class="pull-right"></label>
     </div>
 
 </div>
