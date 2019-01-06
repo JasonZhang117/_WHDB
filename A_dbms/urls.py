@@ -48,6 +48,7 @@ urlpatterns = [
     path('agree/scan/<int:agree_id>/', views.agree_scan, name='agree_scan'),
     path('agree/preview/<int:agree_id>/', views.agree_preview, name='agree_preview'),
     path('agree/add/', views.agree_add_ajax),
+    path('agree/sign/', views.agree_sign_ajax),
     path('agree/counter/add/', views.counter_add_ajax),
     # -----------------------warrant权证管理-------------------------#
     path('warrant/', views.warrant, name='warrant_all'),  # 菜单-权证管理-所有权证

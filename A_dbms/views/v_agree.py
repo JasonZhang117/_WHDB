@@ -5,6 +5,7 @@ from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.db.utils import IntegrityError
 from django.db import transaction
 from django.contrib.auth.decorators import login_required
+import datetime
 
 
 # -----------------------委托合同列表---------------------#
@@ -72,8 +73,47 @@ def agree_scan(request, agree_id):  # 查看合同
     print(custom_c_lending_list, custom_p_lending_list, warrants_h_lending_list, warrants_g_lending_list,
           warrants_r_lending_list, warrants_s_lending_list)
     from_counter = forms.AddCounterForm()
+    from_counter = forms.AddCounterForm()
 
+    today_str = time.strftime("%Y-%m-%d", time.gmtime())
+    form_agree_sign_data = {'agree_sign_date': str(today_str)}
+    form_agree_sign = forms.FormAgreeSign(initial=form_agree_sign_data)
     return render(request, 'dbms/agree/agree-scan.html', locals())
+
+
+# ---------------------------合同签批ajax----------------------------#
+@login_required
+def agree_sign_ajax(request):  # 添加合同
+    print(__file__, '---->def agree_add_ajax')
+    response = {'status': True, 'message': None, 'forme': None, 'skip': None, }
+    post_data_str = request.POST.get('postDataStr')
+    post_data = json.loads(post_data_str)
+    print('post_data:', post_data)
+
+    agree_id = post_data['agree_id']
+    agree_list = models.Agrees.objects.filter(id=agree_id)
+    agree_obj = agree_list.first()
+    '''AGREE_STATE_LIST = ((11, '待签批'), (21, '已签批'), (31, '已落实，未放款'), (41, '已落实，放款'),
+                        (42, '未落实，放款'), (51, '待变更'), (61, '已解保'), (99, '已作废'))'''
+    if agree_obj.agree_state == 11:
+        form_agree_sign = forms.FormAgreeSign(post_data, request.FILES)
+        if form_agree_sign.is_valid():
+            agree_sign_cleaned = form_agree_sign.cleaned_data
+            try:
+                agree_list.update(agree_state=21, agree_sign_date=agree_sign_cleaned['agree_sign_date'])
+                response['message'] = '合同签批成功：%s！' % agree_obj.agree_num
+            except Exception as e:
+                response['status'] = False
+                response['message'] = '委托合同签批失败：%s' % str(e)
+        else:
+            response['status'] = False
+            response['message'] = '表单信息有误！！！'
+            response['forme'] = form_agree_sign.errors
+    else:
+        response['status'] = False
+        response['message'] = '合同状态为：%s，签批失败！！！' % agree_obj.agree_state
+    result = json.dumps(response, ensure_ascii=False)
+    return HttpResponse(result)
 
 
 # ---------------------------添加合同ajax----------------------------#
@@ -217,8 +257,9 @@ def counter_add_ajax(request):
                 with transaction.atomic():
                     counter_obj = models.Counters.objects.create(
                         counter_num=counter_num, agree=agree_obj, counter_typ=counter_typ,
-                        counter_copies=counter_copies, counter_state=1, counter_buildor=request.user)
-                    counter_assure_obj = models.CountersAssure.objects.create(counter=counter_obj)
+                        counter_copies=counter_copies, counter_buildor=request.user)
+                    counter_assure_obj = models.CountersAssure.objects.create(
+                        counter=counter_obj, counter_assure_buildor=request.user)
                     for custom in custom_list:
                         counter_assure_obj.custome.add(custom)
                 response['message'] = '成功创建反担保合同：%s！' % counter_obj.counter_num
@@ -252,8 +293,9 @@ def counter_add_ajax(request):
                 with transaction.atomic():
                     counter_obj = models.Counters.objects.create(
                         counter_num=counter_num, agree=agree_obj, counter_typ=counter_typ,
-                        counter_copies=counter_copies, counter_state=1, counter_buildor=request.user)
-                    counter_warrant_obj = models.CountersWarrants.objects.create(counter=counter_obj)
+                        counter_copies=counter_copies, counter_buildor=request.user)
+                    counter_warrant_obj = models.CountersWarrants.objects.create(
+                        counter=counter_obj, counter_warrant_buildor=request.user)
                     for warrant in warrant_list:
                         counter_warrant_obj.warrant.add(warrant)
                 response['message'] = '成功创建反担保合同：%s！' % counter_obj.counter_num

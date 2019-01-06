@@ -13,7 +13,7 @@
             <th>土地地址</th>
             <th>土地用途</th>
             <th>土地面积</th>
-            {% if lending_operate %}
+            {% if counter_operate %}
                 <th>操作</th>
             {% endif %}
         </tr>
@@ -28,7 +28,7 @@
                         <td>{{ warrant.ground_warrant.ground_locate }}</td>
                         <td>{{ warrant.ground_warrant.get_ground_app_display }}</td>
                         <td>{{ warrant.ground_warrant.ground_area }}</td>
-                        {% if lending_operate %}
+                        {% if counter_operate %}
                             <td><a class="btn btn-danger btn-xs delGuaranteeB">删除</a></td>
                         {% endif %}
                     </tr>

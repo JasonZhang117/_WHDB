@@ -14,7 +14,7 @@
             <th>联系地址</th>
             <th>联系人</th>
             <th>联系电话</th>
-            {% if lending_operate %}
+            {% if counter_operate %}
                 <th>操作</th>
             {% endif %}
 
@@ -31,7 +31,7 @@
                         <td>{{ custom.contact_addr }}</td>
                         <td>{{ custom.linkman }}</td>
                         <td>{{ custom.contact_num }}</td>
-                        {% if lending_operate %}
+                        {% if counter_operate %}
                             <td><a class="btn btn-danger btn-xs delGuaranteeB">删除</a></td>
                         {% endif %}
                     </tr>

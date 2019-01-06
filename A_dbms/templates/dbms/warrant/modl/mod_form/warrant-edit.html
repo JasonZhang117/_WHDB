@@ -1,15 +1,9 @@
 <div id="form_warrant_edit">
 
     <div class="form-group"><!--权证编号-->
-        <label for="id_warrant_num" class="col-sm-3 control-label">
-            {{ form_warrant_edit.warrant_num.label }}：
-        </label>
-        <div class="col-sm-9">
-            {{ form_warrant_edit.warrant_num }}
-        </div>
-        <label id="e_warrant_num" class="pull-right">
-            {{ form_warrant_edit.warrant_num.errors }}
-        </label>
+        <label for="id_warrant_num" class="col-sm-3 control-label">{{ form_warrant_edit.warrant_num.label }}：</label>
+        <div class="col-sm-9">{{ form_warrant_edit.warrant_num }}</div>
+        <label id="e_warrant_num" class="pull-right">{{ form_warrant_edit.warrant_num.errors }}</label>
     </div>
 
 </div>

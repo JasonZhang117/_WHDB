@@ -36,7 +36,7 @@ class Articles(models.Model):  # 项目、纪要
     sign_date = models.DateField(verbose_name='签批日期', null=True, blank=True)
     article_provide_sum = models.FloatField(verbose_name='_放款金额', default=0)
     article_buildor = models.ForeignKey(to='Employees', verbose_name="创建者",
-                                        on_delete=models.PROTECT,
+                                        on_delete=models.PROTECT, default=1,
                                         related_name='article_buildor_employee')
 
     class Meta:
@@ -56,10 +56,10 @@ class Feedback(models.Model):
     propose = models.IntegerField(verbose_name='上会建议', choices=PROPOSE_LIST, default=0)
     analysis = models.TextField(verbose_name='风险分析')
     suggestion = models.TextField(verbose_name='风控意见')
-    feedback_date = models.DateField(verbose_name='提交日期', default=datetime.date.today)
     feedback_buildor = models.ForeignKey(to='Employees', verbose_name="创建者",
-                                         on_delete=models.PROTECT,
+                                         on_delete=models.PROTECT, default=1,
                                          related_name='feedback_buildor_employee')
+    feedback_date = models.DateField(verbose_name='提交日期', default=datetime.date.today)
 
     class Meta:
         verbose_name_plural = '项目-反馈'  # 指定显示名称

@@ -3,19 +3,14 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <button type="button" class="close"
-                        data-dismiss="modal" aria-label="Close">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
-                <h4 class="modal-title" id="addWarrantModalLabel">
-                    {{ add_warrant }}
-
-                    <input style="display: none" name="warrant_typ_n"
-                           id="id_warrant_typ_n" value={{ warrant_typ_n }}>
+                <h4 class="modal-title" id="addWarrantModalLabel">{{ add_warrant }}
+                    <input style="display: none" name="warrant_typ_n" id="id_warrant_typ_n" value={{ warrant_typ_n }}>
                 </h4>
             </div>
             <div class="modal-body">
-
                 <form class="form-horizontal">
                     {% if warrant_typ_n == 0 %}
                         {% include 'dbms/warrant/modl/mod_form/warrant-add.html' %}
@@ -27,31 +22,22 @@
                         {% include 'dbms/warrant/modl/mod_form/draft-add-edit.html' %}
                         {% include 'dbms/warrant/modl/mod_form/vehicle-add-edit.html' %}
                         {% include 'dbms/warrant/modl/mod_form/chattel-add-edit.html' %}
-
                     {% elif warrant_typ_n == 1 %}
                         {% include 'dbms/warrant/modl/mod_form/warrant-edit.html' %}
                         {% include 'dbms/warrant/modl/mod_form/house-add-edit.html' %}
                     {% elif warrant_typ_n == 2 %}
                         {% include 'dbms/warrant/modl/mod_form/warrant-edit.html' %}
                         {% include 'dbms/warrant/modl/mod_form/ground-add-edit.html' %}
-                    {% elif warrant_typ_n == 9 %}
+                    {% elif warrant_typ_n == 99 %}
                         {% include 'dbms/warrant/modl/mod_form/warrant-edit.html' %}
                         {% include 'dbms/warrant/modl/mod_form/hypothec-add-edit.html' %}
                     {% endif %}
                 </form>
             </div>
-
             <label id="formErrors"></label>
-
             <div class="modal-footer">
-                <button type="button" class="btn btn-default"
-                        data-dismiss="modal">
-                    取消
-                </button>
-                <button type="button" class="btn btn-primary"
-                        id="addWarrantModalOk">
-                    确定
-                </button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                <button type="button" class="btn btn-primary" id="addWarrantModalOk">确定</button>
             </div>
         </div>
     </div>

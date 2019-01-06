@@ -16,8 +16,9 @@ def appraisal(request):  # 评审情况
     print(__file__, '---->def appraisal')
     # print('kwargs:', kwargs)
     form_meeting_add = forms.MeetingAddForm()
-    appraisal_list = models.Articles.objects.filter(
-        article_state__in=[4, 5]).order_by('-review_date')
+    '''ARTICLE_STATE_LIST = ((1, '待反馈'), (2, '已反馈'), (3, '待上会'), (4, '已上会'),
+        (5, '已签批'), (6, '已注销'))'''
+    appraisal_list = models.Articles.objects.filter(article_state__in=[4, 5]).order_by('-review_date')
     print('appraisal_list:', appraisal_list)
     paginator = Paginator(appraisal_list, 10)
     page = request.GET.get('page')
@@ -34,6 +35,9 @@ def appraisal(request):  # 评审情况
 @login_required
 def appraisal_scan(request, article_id):  # 评审项目预览
     print(__file__, '---->def appraisal_scam')
+    single_operate = True
+    comment_operate = True
+    lending_operate = True
     article_obj = models.Articles.objects.get(id=article_id)
     '''((1, '待反馈'), (2, '已反馈'), (3, '待上会'),
        (4, '已上会'), (5, '已签批'), (6, '已注销'))'''
@@ -84,9 +88,7 @@ def appraisal_scan_lending(request, article_id, lending_id):  # 评审项目预�
     ground_list = [12, 22, 43, 53]
     receivable_list = [31]
     stock_list = [32]
-
-    lending_operate = True
-
+    counter_operate = True
     form_lendingcustoms_c_add = models.Customes.objects.exclude(
         id=article_obj.custom.id).filter(genre=1).values_list('id', 'name')
     form_lendingcustoms_p_add = models.Customes.objects.exclude(
@@ -120,7 +122,7 @@ def guarantee_add_ajax(request):  # 反担保措施添加ajax
         if form_lendingsures.is_valid():
             lendingsures_clean = form_lendingsures.cleaned_data
             sure_typ = lendingsures_clean['sure_typ']
-            default_sure = {'lending': lending_obj, 'sure_typ': sure_typ}
+            default_sure = {'lending': lending_obj, 'sure_typ': sure_typ, 'sure_buildor': request.user}
             if sure_typ == 1:
                 form_lendingcustoms_c_add = forms.LendingCustomsCForm(post_data)
                 if form_lendingcustoms_c_add.is_valid():
@@ -130,7 +132,7 @@ def guarantee_add_ajax(request):  # 反担保措施添加ajax
                         with transaction.atomic():
                             lendingsure_obj, created = models.LendingSures.objects.update_or_create(
                                 lending=lending_obj, sure_typ=sure_typ, defaults=default_sure)
-                            default = {'sure': lendingsure_obj}
+                            default = {'sure': lendingsure_obj, 'lending_c_buildor': request.user}
                             lendingcustom_obj, created = models.LendingCustoms.objects.update_or_create(
                                 sure=lendingsure_obj, defaults=default)
                             for custom in lendingcustoms_c_clean['sure_c']:
@@ -148,7 +150,7 @@ def guarantee_add_ajax(request):  # 反担保措施添加ajax
                         with transaction.atomic():
                             lendingsure_obj, created = models.LendingSures.objects.update_or_create(
                                 lending=lending_obj, sure_typ=sure_typ, defaults=default_sure)
-                            default = {'sure': lendingsure_obj}
+                            default = {'sure': lendingsure_obj, 'lending_c_buildor': request.user}
                             lendingcustom_obj, created = models.LendingCustoms.objects.update_or_create(
                                 sure=lendingsure_obj, defaults=default)
                             for custom in lendingcustoms_p_clean['sure_p']:
@@ -165,7 +167,7 @@ def guarantee_add_ajax(request):  # 反担保措施添加ajax
                     with transaction.atomic():
                         lendingsure_obj, created = models.LendingSures.objects.update_or_create(
                             lending=lending_obj, sure_typ=sure_typ, defaults=default_sure)
-                        default = {'sure': lendingsure_obj}
+                        default = {'sure': lendingsure_obj, 'lending_w_buildor': request.user}
                         lendingwarrant_obj, created = models.LendingWarrants.objects.update_or_create(
                             sure=lendingsure_obj, defaults=default)
                         for warrant in lendingwarrant_clean['sure_house']:
@@ -182,7 +184,7 @@ def guarantee_add_ajax(request):  # 反担保措施添加ajax
                     with transaction.atomic():
                         lendingsure_obj, created = models.LendingSures.objects.update_or_create(
                             lending=lending_obj, sure_typ=sure_typ, defaults=default_sure)
-                        default = {'sure': lendingsure_obj}
+                        default = {'sure': lendingsure_obj, 'lending_w_buildor': request.user}
                         lendingwarrant_obj, created = models.LendingWarrants.objects.update_or_create(
                             sure=lendingsure_obj, defaults=default)
                         for warrant in lendingwarrant_clean['sure_ground']:
@@ -200,7 +202,7 @@ def guarantee_add_ajax(request):  # 反担保措施添加ajax
                     with transaction.atomic():
                         lendingsure_obj, created = models.LendingSures.objects.update_or_create(
                             lending=lending_obj, sure_typ=sure_typ, defaults=default_sure)
-                        default = {'sure': lendingsure_obj}
+                        default = {'sure': lendingsure_obj, 'lending_w_buildor': request.user}
                         lendinreceivable_obj, created = models.LendingWarrants.objects.update_or_create(
                             sure=lendingsure_obj, defaults=default)
                         for warrant in lendingwarrant_clean['sure_receivable']:
@@ -217,7 +219,7 @@ def guarantee_add_ajax(request):  # 反担保措施添加ajax
                     with transaction.atomic():
                         lendingsure_obj, created = models.LendingSures.objects.update_or_create(
                             lending=lending_obj, sure_typ=sure_typ, defaults=default_sure)
-                        default = {'sure': lendingsure_obj}
+                        default = {'sure': lendingsure_obj, 'lending_w_buildor': request.user}
                         lendinstock_obj, created = models.LendingWarrants.objects.update_or_create(
                             sure=lendingsure_obj, defaults=default)
                         for warrant in lendingwarrant_clean['sure_stock']:
@@ -327,34 +329,25 @@ def comment_edit_ajax(request):  # 修改项目ajax
             expert_id = post_data['expert_id']
             try:
                 default = {
-                    'summary_id': article_id,
-                    'expert_id': expert_id,
-                    'comment_type': cleaned_data['comment_type'],
-                    'concrete': cleaned_data['concrete'],
-                    'comment_buildor': request.user}
-
+                    'summary_id': article_id, 'expert_id': expert_id, 'comment_type': cleaned_data['comment_type'],
+                    'concrete': cleaned_data['concrete'], 'comment_buildor': request.user}
                 comment, created = models.Comments.objects.update_or_create(
-                    summary_id=article_id,
-                    expert_id=expert_id,
-                    defaults=default)
-                print('comment:', comment)
+                    summary_id=article_id, expert_id=expert_id, defaults=default)
                 response['obj_id'] = comment.id
                 if created:
                     response['message'] = '成功创建评审意见！'
                 else:
                     response['message'] = '成功更新评审意见！'
-            except:
+            except Exception as e:
                 response['status'] = False
-                response['message'] = '评审意见未修改成功！'
-
+                response['message'] = '评审意见修改失败：%s！' % str(e)
         else:
             response['status'] = False
             response['message'] = '表单信息有误！！！'
             response['forme'] = form.errors
     else:
-        arg = '项目状态为：%s，无法修改！！！' % article_obj.article_state
         response['status'] = False
-        response['message'] = arg
+        response['message'] = '项目状态为：%s，无法修改！！！' % article_obj.article_state
 
     result = json.dumps(response, ensure_ascii=False)
 
@@ -380,36 +373,19 @@ def single_quota_ajax(request):  # 单项额度ajax
         (4, '已上会'), (5, '已签批'), (6, '已注销'))'''
     if article_obj.article_state == 4:
 
-        data = {
-            'credit_model': credit_model,
-            'credit_amount': credit_amount,
-            'flow_rate': flow_rate}
-
-        form = forms.SingleQuotaForm(data)
-
+        form = forms.SingleQuotaForm(post_data)
         if form.is_valid():
             cleaned_data = form.cleaned_data
-
         default = {
-            'summary_id': article_id,
-            'credit_model': credit_model,
-            'credit_amount': credit_amount,
-            'flow_rate': flow_rate,
-            'single_buildor': request.user}
-
+            'summary_id': article_id, 'credit_model': credit_model, 'credit_amount': credit_amount,
+            'flow_rate': flow_rate, 'single_buildor': request.user}
         single, created = models.SingleQuota.objects.update_or_create(
-            summary_id=article_id, credit_model=credit_model,
-            defaults=default)
-        print('single:', single)
-        response['obj_id'] = single.id
-
-        msg = '单项额度设置成功！'
-        response['message'] = msg
+            summary_id=article_id, credit_model=credit_model, defaults=default)
+        response['message'] = '单项额度设置成功！'
 
     else:
-        msg = '项目状态为：%s，无法设置单项额度！！！' % article_obj.article_state
         response['status'] = False
-        response['message'] = msg
+        response['message'] = '项目状态为：%s，无法设置单项额度！！！' % article_obj.article_state
     result = json.dumps(response, ensure_ascii=False)
     return HttpResponse(result)
 
@@ -438,11 +414,9 @@ def lending_order_ajax(request):  # 放款次序ajax
             cleaned_data = form.cleaned_data
             try:
                 models.LendingOrder.objects.create(
-                    summary_id=article_id,
-                    order=cleaned_data['order'],
-                    order_amount=cleaned_data['order_amount'])
-                msg = '放款次序设置成功！'
-                response['message'] = msg
+                    summary_id=article_id, order=cleaned_data['order'],
+                    order_amount=cleaned_data['order_amount'], lending_buildor=request.user)
+                response['message'] = '放款次序设置成功！'
             except Exception as e:
                 response['status'] = False
                 response['message'] = '放款次序设置失败：%s' % str(e)
@@ -478,17 +452,13 @@ def lending_del_ajax(request):  # 单项额度删除ajax
     if article_obj.article_state in [1, 2, 3, 4]:
         try:
             lending_obj.delete()  # 删除单项额度
-            msg = '放款次序删除成功！'
-            response['message'] = msg
-            msg = '放款次序删除成功！'
-            response['message'] = msg
+            response['message'] = '放款次序删除成功！'
         except Exception as e:
             response['status'] = False
             response['message'] = '放款次序删除失败：%s' % str(e)
     else:
-        msg = '项目状态为：%s，无法删除放款次序！！！' % article_obj.article_state
         response['status'] = False
-        response['message'] = msg
+        response['message'] = '项目状态为：%s，无法删除放款次序！！！' % article_obj.article_state
     result = json.dumps(response, ensure_ascii=False)
     return HttpResponse(result)
 
@@ -542,7 +512,6 @@ def article_sign_ajax(request):
         if sign_type == 2:
             models.Articles.objects.filter(id=article_id).update(
                 sign_type=sign_type, sign_date=post_data['sign_date'], article_state=6)
-            response['obj_num'] = aritcle_obj.article_num
             response['message'] = '%s项目被否决，更新为注销状态！' % aritcle_obj.article_num
         else:
             form = forms.ArticlesSignForm(post_data)
@@ -581,16 +550,14 @@ def article_sign_ajax(request):
                         response['status'] = False
                         response['message'] = msg
                 else:
-                    msg = '还有评审委员没有发表评审意见，项目签批不成功！！！'
                     response['status'] = False
-                    response['message'] = msg
+                    response['message'] = '还有评审委员没有发表评审意见，项目签批不成功！！！'
             else:
                 response['status'] = False
                 response['message'] = '表单信息有误！！！'
                 response['forme'] = form.errors
     else:
-        msg = '项目状态为：%s，本次签批失败！！！' % aritcle_obj.article_state
         response['status'] = False
-        response['message'] = msg
+        response['message'] = '项目状态为：%s，本次签批失败！！！' % aritcle_obj.article_state
     result = json.dumps(response, ensure_ascii=False)
     return HttpResponse(result)

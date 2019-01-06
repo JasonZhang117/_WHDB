@@ -18,6 +18,15 @@ class AgreeAddForm(dform.ModelForm):
                    'agree_amount': dform.NumberInput(attrs={'class': 'form-control', 'placeholder': '合同金额（元）'})}
 
 
+# -----------------------合同签批-------------------------#
+class FormAgreeSign(dform.ModelForm):
+    class Meta:
+        model = models.Agrees
+        fields = ['agree_sign_date']
+        widgets = {'agree_sign_date': dform.DateInput(attrs={'class': 'form-control', 'type': 'date'})}
+
+
+initial=str(datetime.date.today()),
 # -----------------------反担保合同添加-------------------------#
 class AddCounterForm(dform.ModelForm):  # 反担保合同添加
     class Meta:

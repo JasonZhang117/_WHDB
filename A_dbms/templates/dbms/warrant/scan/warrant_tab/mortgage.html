@@ -14,8 +14,6 @@
         </tr>
         </thead>
         <tbody>
-
-
         {% for lendingwarrant in warrant_obj.lending_warrant.all %}
             {% for agree in lendingwarrant.sure.lending.agree_lending.all %}
                 <tr>
@@ -25,7 +23,6 @@
                 </tr>
             {% endfor %}
         {% endfor %}
-
         </tbody>
     </table>
 </div>

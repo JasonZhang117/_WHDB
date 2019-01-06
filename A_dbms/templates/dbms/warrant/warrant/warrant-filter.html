@@ -1,42 +1,28 @@
 <div>
     <label>
         {% if kwargs.warrant_typ == None %}
-            <a class="active btn btn-primary btn-sm"
-               href="{% url 'dbms:warrant_all' %}">全部</a>
+            <a class="btn btn-primary btn-sm active" href="{% url 'dbms:warrant_all' %}">全部</a>
         {% else %}
-            <a class="btn btn btn-primary btn-sm"
-               href="{% url 'dbms:warrant_all' %}">全部</a>
+            <a class="btn btn-primary btn-sm" href="{% url 'dbms:warrant_all' %}">全部</a>
         {% endif %}
-
         {# 方式一：#}
         {% for item in warrant_typ_list %}
             {% if item.0 == kwargs.warrant_typ %}
-                <a class="active btn btn-primary btn-sm"
-                   href="{% url 'dbms:warrant' warrant_typ=item.0 %}">
-                    {{ item.1 }}
-                </a>
+                <a class="btn btn-primary btn-sm active"
+                   href="{% url 'dbms:warrant' warrant_typ=item.0 %}">{{ item.1 }}</a>
             {% else %}
                 <a class="btn btn-primary btn-sm"
-                   href="{% url 'dbms:warrant' warrant_typ=item.0 %}">
-                    {{ item.1 }}
-                </a>
+                   href="{% url 'dbms:warrant' warrant_typ=item.0 %}">{{ item.1 }}</a>
             {% endif %}
         {% endfor %}
     </label>
     <label>
         <form class="navbar-form" style="display: inline">
-            <input type="text" class="form-control"
-                   placeholder="搜索权证编号">
-            <button type="submit" class="btn btn-primary btn-sm">
-                搜索
-            </button>
+            <input type="text" class="form-control" placeholder="搜索权证编号">
+            <button type="submit" class="btn btn-primary btn-sm">搜索</button>
         </form>
     </label>
-    <label class="pull-right">
-        <a class="btn btn-primary btn-sm" id="addWarrant">
-            添加权证
-        </a>
-    </label>
+    <label class="pull-right"><a class="btn btn-primary btn-sm" id="addWarrant">添加权证</a></label>
 </div>
 
 

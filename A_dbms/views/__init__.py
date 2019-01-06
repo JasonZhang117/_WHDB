@@ -15,7 +15,7 @@ from .v_appraisal import (
     single_del_ajax, comment_edit_ajax, summary_scan, single_quota_ajax, lending_del_ajax, lending_order_ajax)
 # ----------------------v_agree合同管理视图--------------------#
 from .v_agree import (
-    agree, agree_add_ajax, counter_add_ajax, agree_scan, agree_preview)
+    agree, agree_add_ajax, counter_add_ajax, agree_scan, agree_preview,agree_sign_ajax)
 # ----------------------v_warrant权证管理视图--------------------#
 from .v_warrant import (
     warrant, house, ground, warrant_add_ajax, warrant_del_ajax, warrant_edit_ajax, owership_add_ajax, owership_del_ajax,

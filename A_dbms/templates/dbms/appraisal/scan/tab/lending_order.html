@@ -11,7 +11,7 @@
             <th>发放次序</th>
             <th>拟放金额（元）</th>
             <th>已放金额（元）</th>
-            {% if not lending_obj %}
+            {% if lending_operate %}
                 <th>操作</th>
             {% endif %}
 
@@ -43,12 +43,8 @@
                 {% endif %}
                 <td>{{ lending.order_amount }}</td>
                 <td>{{ lending.amount }}</td>
-                {% if not lending_obj %}
-                    <td>
-                        <a class="btn btn-danger btn-xs delLendingOrderB">
-                            删除
-                        </a>
-                    </td>
+                {% if lending_operate %}
+                    <td><a class="btn btn-danger btn-xs delLendingOrderB">删除</a></td>
                 {% endif %}
             <tr>
         {% endfor %}

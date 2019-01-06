@@ -13,11 +13,12 @@ class Appraisals(models.Model):  # 评审会
     article = models.ManyToManyField(to='Articles', verbose_name="参评项目",
                                      related_name='appraisal_article',
                                      null=True, blank=True)
-    meeting_buildor = models.ForeignKey(to='Employees', verbose_name="创建人",
-                                        on_delete=models.PROTECT,
-                                        related_name='meeting_buildor_employee')
     MEETING_STATE_LIST = ((1, '待上会'), (2, '已上会'))
     meeting_state = models.IntegerField(verbose_name='会议状态', choices=MEETING_STATE_LIST, default=1)
+    meeting_buildor = models.ForeignKey(to='Employees', verbose_name="创建人",
+                                        on_delete=models.PROTECT, default=1,
+                                        related_name='meeting_buildor_employee')
+    meeting_date = models.DateField(verbose_name='创建日期', default=datetime.date.today)
 
     # Cancellation = models.BooleanField('注销', default=False)
     class Meta:
@@ -29,9 +30,16 @@ class Appraisals(models.Model):  # 评审会
 
 
 # ------------------------单项额度--------------------------#
+def limit_article_choices():
+    '''ARTICLE_STATE_LIST = ((1, '待反馈'), (2, '已反馈'), (3, '待上会'), (4, '已上会'),
+    (5, '已签批'), (6, '已注销'))'''
+    return {'article_state__in': [4, 5]}
+
+
 class SingleQuota(models.Model):  # 单项额度
     summary = models.ForeignKey(to='Articles', verbose_name="纪要",
                                 on_delete=models.PROTECT,
+                                limit_choices_to=limit_article_choices,
                                 related_name='single_quota_summary')
     CREDIT_MODEL_LIST = [(1, '流动资金贷款担保'), (2, '银行承兑汇票担保'), (3, '保函担保'),
                          (4, '综合授信额度担保（含流贷、银承、保函）')]
@@ -40,8 +48,9 @@ class SingleQuota(models.Model):  # 单项额度
     flow_rate = models.FloatField(verbose_name='费率（%）')
     amount = models.FloatField(verbose_name='_放款金额（元）', default=0)
     single_buildor = models.ForeignKey(to='Employees', verbose_name="创建人",
-                                       on_delete=models.PROTECT,
+                                       on_delete=models.PROTECT, default=1,
                                        related_name='single_buildor_employee')
+    single_date = models.DateField(verbose_name='创建日期', default=datetime.date.today)
 
     class Meta:
         verbose_name_plural = '评审-额度'  # 指定显示名称
@@ -54,6 +63,8 @@ class SingleQuota(models.Model):  # 单项额度
 
 # ------------------------放款次序--------------------------#
 def limit_lending_choices():
+    '''ARTICLE_STATE_LIST = ((1, '待反馈'), (2, '已反馈'), (3, '待上会'), (4, '已上会'),
+    (5, '已签批'), (6, '已注销'))'''
     return {'article_state__in': [1, 2]}
 
 
@@ -66,6 +77,10 @@ class LendingOrder(models.Model):
     order = models.IntegerField(verbose_name='发放次序', choices=ORDER_LIST, default=1)
     order_amount = models.FloatField(verbose_name='拟放金额')
     lending_provide_sum = models.FloatField(verbose_name='_放款金额', default=0)
+    lending_buildor = models.ForeignKey(to='Employees', verbose_name="创建者",
+                                        on_delete=models.PROTECT, default=1,
+                                        related_name='lending_employee')
+    lending_date = models.DateField(verbose_name='创建日期', default=datetime.date.today)
 
     class Meta:
         verbose_name_plural = '评审-发放次序'  # 指定显示名称
@@ -73,7 +88,7 @@ class LendingOrder(models.Model):
         unique_together = ('summary', 'order')
 
     def __str__(self):
-        return "%s_%s_%s" % (self.summary.article_num, self.order, self.order_amount)
+        return "%s_%s_%s" % (self.summary.summary_num, self.order, self.order_amount)
 
 
 # ------------------------反担保措施--------------------------#
@@ -89,6 +104,10 @@ class LendingSures(models.Model):
         (41, '合格证监管'), (42, '房产监管'), (43, '土地监管'),
         (51, '股权预售'), (52, '房产预售'), (53, '土地预售'))
     sure_typ = models.IntegerField(verbose_name='担保类型', choices=SURE_TYP_LIST)
+    sure_buildor = models.ForeignKey(to='Employees', verbose_name="创建人",
+                                     on_delete=models.PROTECT, default=1,
+                                     related_name='sure_buildor_employee')
+    sure_date = models.DateField(verbose_name='创建日期', default=datetime.date.today)
 
     class Meta:
         verbose_name_plural = '反担保-反担保措施'  # 指定显示名称
@@ -106,6 +125,10 @@ class LendingCustoms(models.Model):
     custome = models.ManyToManyField(to='Customes', verbose_name="反担保人",
                                      related_name='lending_custom',
                                      db_constraint=True)
+    lending_c_buildor = models.ForeignKey(to='Employees', verbose_name="创建人",
+                                          on_delete=models.PROTECT, default=1,
+                                          related_name='lending_c_buildor_employee')
+    lending_c_date = models.DateField(verbose_name='创建日期', default=datetime.date.today)
 
     class Meta:
         verbose_name_plural = '反担保-保证反担保'  # 指定显示名称
@@ -124,6 +147,10 @@ class LendingWarrants(models.Model):
     warrant = models.ManyToManyField(to='Warrants', verbose_name="抵质押物",
                                      related_name='lending_warrant',
                                      db_constraint=True)
+    lending_w_buildor = models.ForeignKey(to='Employees', verbose_name="创建人",
+                                          on_delete=models.PROTECT, default=1,
+                                          related_name='lending_w_buildor_employee')
+    lending_w_date = models.DateField(verbose_name='创建日期', default=datetime.date.today)
 
     class Meta:
         verbose_name_plural = '反担保-抵质押'  # 指定显示名称
@@ -145,8 +172,9 @@ class Comments(models.Model):  # 评委意见
     comment_type = models.IntegerField(verbose_name='评委意见', choices=COMMENT_TYPE_LIST, default=1)
     concrete = models.TextField(verbose_name='意见详情', null=True, blank=True)
     comment_buildor = models.ForeignKey(to='Employees', verbose_name="创建人",
-                                        on_delete=models.PROTECT,
+                                        on_delete=models.PROTECT, default=1,
                                         related_name='comment_buildor_employee')
+    comment_date = models.DateField(verbose_name='创建日期', default=datetime.date.today)
 
     class Meta:
         verbose_name_plural = '评审-意见'  # 指定显示名称
@@ -154,4 +182,4 @@ class Comments(models.Model):  # 评委意见
         unique_together = ('summary', 'expert')
 
     def __str__(self):
-        return "%s_%s_%s" % (self.summary, self.expert, self.comment_type)
+        return "%s_%s_%s" % (self.summary.summary_num, self.expert, self.comment_type)

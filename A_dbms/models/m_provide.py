@@ -8,8 +8,11 @@ class Charges(models.Model):  # 收费
                               on_delete=models.PROTECT,
                               related_name='charge_agree')
     amount = models.FloatField(verbose_name='收费金额')
-    charge_date = models.DateField(verbose_name='收费日期', default=datetime.date.today)
     balance = models.FloatField(verbose_name='应收余额')
+    charge_buildor = models.ForeignKey(to='Employees', verbose_name="创建者",
+                                       on_delete=models.PROTECT, default=1,
+                                       related_name='charge_buildor_employee')
+    charge_date = models.DateField(verbose_name='收费日期', default=datetime.date.today)
 
     # Cancellation = models.BooleanField('注销', default=False)
     class Meta:
@@ -26,11 +29,11 @@ class Notify(models.Model):  # Notify放款通知
                               on_delete=models.PROTECT,
                               related_name='notify_agree')
     notify_money = models.FloatField(verbose_name='通知金额')
-    notify_date = models.DateField(verbose_name='日期', default=datetime.date.today)
     notify_provide_sum = models.FloatField(verbose_name='_放款金额', default=0)
     notifyor = models.ForeignKey(to='Employees', verbose_name="_创建者",
-                                 on_delete=models.PROTECT,
+                                 on_delete=models.PROTECT, default=1,
                                  related_name='notifyor_employee')
+    notify_date = models.DateField(verbose_name='日期', default=datetime.date.today)
 
     class Meta:
         verbose_name_plural = '放款-放款通知'  # 指定显示名称
@@ -56,7 +59,7 @@ class Provides(models.Model):  # 放款
     provide_status = models.IntegerField(verbose_name='_放款状态', choices=STATUS_LIST, default=1)
     provide_repay_sum = models.FloatField(verbose_name='_还款金额', default=0)
     providor = models.ForeignKey(to='Employees', verbose_name="_创建者",
-                                 on_delete=models.PROTECT,
+                                 on_delete=models.PROTECT, default=1,
                                  related_name='providor_employee')
 
     # Cancellation = models.BooleanField('注销', default=False)
@@ -74,8 +77,10 @@ class Repayments(models.Model):  # 还款
                                 on_delete=models.PROTECT,
                                 related_name='repayment_provide')
     repayment_money = models.FloatField(verbose_name='还款金额')
-    repayment_date = models.DateField(
-        verbose_name='还款日期', default=datetime.date.today)
+    repaymentor = models.ForeignKey(to='Employees', verbose_name="_创建者",
+                                    on_delete=models.PROTECT, default=1,
+                                    related_name='repaymentor_employee')
+    repayment_date = models.DateField(verbose_name='还款日期', default=datetime.date.today)
 
     class Meta:
         verbose_name_plural = '项目-还款'  # 指定显示名称
@@ -90,6 +95,9 @@ class Pigeonholes(models.Model):  # 归档
     provide = models.OneToOneField(to='Provides', verbose_name="放款",
                                    on_delete=models.PROTECT,
                                    related_name='pigeonhole_provide')
+    pigeonholor = models.ForeignKey(to='Employees', verbose_name="_创建者",
+                                    on_delete=models.PROTECT, default=1,
+                                    related_name='pigeonholor_employee')
     pigeonhole_date = models.DateField(verbose_name='归档日期', default=datetime.date.today)
 
     class Meta:

@@ -36,13 +36,14 @@ def warrant_add_ajax(request):
                 try:
                     with transaction.atomic():
                         warrant_obj = models.Warrants.objects.create(
-                            warrant_num=warrant_add_clean['warrant_num'],
-                            warrant_typ=warrant_typ)
+                            warrant_num=warrant_add_clean['warrant_num'], warrant_typ=warrant_typ,
+                            warrant_buildor=request.user)
                         house_obj = models.Houses.objects.create(
                             warrant=warrant_obj,
                             house_locate=house_add_edit_clean['house_locate'],
                             house_app=house_add_edit_clean['house_app'],
-                            house_area=house_add_edit_clean['house_area'])
+                            house_area=house_add_edit_clean['house_area'],
+                            house_buildor=request.user)
                     response['message'] = '房产创建成功！！！，请继续创建产权证信息。'
                     response['skip'] = "/dbms/warrant/scan/%s" % warrant_obj.id
                 except Exception as e:
@@ -62,12 +63,12 @@ def warrant_add_ajax(request):
                     with transaction.atomic():
                         warrant_obj = models.Warrants.objects.create(
                             warrant_num=warrant_add_clean['warrant_num'],
-                            warrant_typ=warrant_typ)
+                            warrant_typ=warrant_typ, warrant_buildor=request.user)
                         ground_obj = models.Grounds.objects.create(
                             warrant=warrant_obj,
                             ground_locate=ground_add_edit_clean['ground_locate'],
                             ground_app=ground_add_edit_clean['ground_app'],
-                            ground_area=ground_add_edit_clean['ground_area'])
+                            ground_area=ground_add_edit_clean['ground_area'], ground_buildor=request.user)
                     response['message'] = '土地创建成功！！！，请继续创建产权证信息。'
                     response['skip'] = "/dbms/warrant/scan/%s" % warrant_obj.id
                 except Exception as e:
@@ -87,9 +88,9 @@ def warrant_add_ajax(request):
                     with transaction.atomic():
                         warrant_obj = models.Warrants.objects.create(
                             warrant_num=warrant_add_clean['warrant_num'],
-                            warrant_typ=warrant_typ)
+                            warrant_typ=warrant_typ, warrant_buildor=request.user)
                         receivable_obj = models.Receivable.objects.create(
-                            warrant=warrant_obj,
+                            warrant=warrant_obj, receivable_buildor=request.user,
                             receive_owner=receivable_clean['receive_owner'],
                             receivable_detail=receivable_clean['receivable_detail'])
                     response['message'] = '应收账款创建成功！！！'
@@ -111,9 +112,9 @@ def warrant_add_ajax(request):
                     with transaction.atomic():
                         warrant_obj = models.Warrants.objects.create(
                             warrant_num=warrant_add_clean['warrant_num'],
-                            warrant_typ=warrant_typ)
+                            warrant_typ=warrant_typ, warrant_buildor=request.user)
                         stock_obj = models.Stockes.objects.create(
-                            warrant=warrant_obj,
+                            warrant=warrant_obj, stock_buildor=request.user,
                             stock_typ=stocke_clean['stock_typ'],
                             stock_owner=stocke_clean['stock_owner'],
                             target=stocke_clean['target'],
@@ -137,9 +138,9 @@ def warrant_add_ajax(request):
                     with transaction.atomic():
                         warrant_obj = models.Warrants.objects.create(
                             warrant_num=warrant_add_clean['warrant_num'],
-                            warrant_typ=warrant_typ)
+                            warrant_typ=warrant_typ, warrant_buildor=request.user)
                         draft_obj = models.Draft.objects.create(
-                            warrant=warrant_obj,
+                            warrant=warrant_obj, draft_buildor=request.user,
                             draft_owner=draft_clean['draft_owner'],
                             draft_typ=draft_clean['draft_typ'],
                             draft_detail=draft_clean['draft_detail'])
@@ -162,9 +163,9 @@ def warrant_add_ajax(request):
                     with transaction.atomic():
                         warrant_obj = models.Warrants.objects.create(
                             warrant_num=warrant_add_clean['warrant_num'],
-                            warrant_typ=warrant_typ)
+                            warrant_typ=warrant_typ, warrant_buildor=request.user)
                         vehicle_obj = models.Vehicle.objects.create(
-                            warrant=warrant_obj,
+                            warrant=warrant_obj, vehicle_buildor=request.user,
                             vehicle_owner=vehicle_clean['vehicle_owner'],
                             frame_num=vehicle_clean['frame_num'],
                             plate_num=vehicle_clean['plate_num'])
@@ -187,9 +188,9 @@ def warrant_add_ajax(request):
                     with transaction.atomic():
                         warrant_obj = models.Warrants.objects.create(
                             warrant_num=warrant_add_clean['warrant_num'],
-                            warrant_typ=warrant_typ)
+                            warrant_typ=warrant_typ, warrant_buildor=request.user)
                         chattel_obj = models.Chattel.objects.create(
-                            warrant=warrant_obj,
+                            warrant=warrant_obj, chattel_buildor=request.user,
                             chattel_owner=chattel_clean['chattel_owner'],
                             chattel_typ=chattel_clean['chattel_typ'],
                             chattel_detail=chattel_clean['chattel_detail'])
@@ -459,14 +460,18 @@ def guaranty_del_ajax(request):  # 抵押物
     guaranty_id = post_data['guaranty_id']
     guaranty_obj = models.Warrants.objects.get(id=guaranty_id)
     hypothec_obj = models.Hypothecs.objects.get(warrant=warrant_obj)
-
-    try:
-        hypothec_obj.warrant_m.remove(guaranty_obj)
-        msg = '产权证删除成功！'
-        response['message'] = msg
-    except Exception as e:
+    '''WARRANT_STATE_LIST = (
+        (1, '未入库'), (2, '已入库'), (3, '已出库'), (4, '已借出'), (5, '已注销'), (6, '无需入库'))'''
+    if warrant_obj.warrant_state == 1:
+        try:
+            hypothec_obj.warrant_m.remove(guaranty_obj)
+            response['message'] = '产权证删除成功！'
+        except Exception as e:
+            response['status'] = False
+            response['message'] = '删除失败:%s！' % str(e)
+    else:
         response['status'] = False
-        response['message'] = '删除失败:%s！' % str(e)
+        response['message'] = '他权状态为：%s，无法删除抵押权证' % warrant_obj.warrant_state
 
     result = json.dumps(response, ensure_ascii=False)
     return HttpResponse(result)
@@ -673,6 +678,9 @@ def warrant_scan(request, warrant_id):  # house_scan房产预览
     print(__file__, '---->def warrant_scan')
     warrant_obj = models.Warrants.objects.get(id=warrant_id)
     warrant_typ_n = warrant_obj.warrant_typ
+    '''WARRANT_TYP_LIST = [
+        (1, '房产'), (2, '土地'), (11, '应收'), (21, '股权'),
+        (31, '票据'), (41, '车辆'), (51, '动产'), (99, '他权')]'''
     if warrant_typ_n == 99:
         agree_lending_obj = warrant_obj.ypothec_warrant.agree.lending
         warrants_lending_list = models.Warrants.objects.filter(
@@ -693,7 +701,7 @@ def warrant_scan(request, warrant_id):  # house_scan房产预览
             'ground_app': warrant_obj.ground_warrant.ground_app,
             'ground_area': warrant_obj.ground_warrant.ground_area}
         form_ground_add_edit = forms.GroundAddEidtForm(form_date)
-    elif warrant_typ == 9:
+    elif warrant_typ == 99:
         form_date = {
             'agree': warrant_obj.ypothec_warrant.agree}
         form_hypothecs_add_eidt = forms.HypothecsAddEidtForm(initial=form_date)

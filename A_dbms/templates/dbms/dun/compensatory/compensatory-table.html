@@ -1,11 +1,5 @@
 <div class="table-responsive">
-    {#"table-responsive":表格响应式布局#}
-    <table class="table table-bordered table-hover
-                table-condensed active">
-        {#"table-bordered":表格表格边框#}
-        {#"table-hover":表格悬停变色#}
-        {#"table-condensed":表格紧缩#}
-        {#<caption><h4>项目管理</h4></caption>#}
+    <table class="table table-bordered table-hover table-condensed active">
         <thead>
         <tr style="text-align: center">
             <th>客户名称</th>
@@ -22,8 +16,7 @@
             <tr>
                 <td>
                     <a href="{% url 'dbms:compensatory_scan' compensatory_id=compensatory.id %}">
-                        {{ compensatory.provide.notify.agree.lending.summary.custom }}
-                    </a>
+                        {{ compensatory.provide.notify.agree.lending.summary.custom }}</a>
                 </td>
                 <td>{{ compensatory.provide.notify.agree.branch }}</td>
                 <td>{{ compensatory.compensatory_date }}</td>

@@ -23,17 +23,17 @@ class Agrees(models.Model):  # 委托合同
         verbose_name='反担保种类数', max_length=6, choices=GUARANTEE_TYP_LIST)
     agree_copies = models.IntegerField(verbose_name='合同份数')
     agree_amount = models.FloatField(verbose_name='合同金额')
-    agree_date = models.DateField(verbose_name='创建日期', default=datetime.date.today)
-
-    AGREE_STATE_LIST = ((1, '待签批'), (2, '已签批'), (3, '已落实'), (4, '已放款'),
-                        (7, '待变更'), (8, '已解保'), (9, '已作废'))
-    agree_state = models.IntegerField(verbose_name='_合同状态', choices=AGREE_STATE_LIST, default=1)
+    AGREE_STATE_LIST = ((11, '待签批'), (21, '已签批'), (31, '已落实，未放款'), (41, '已落实，放款'),
+                        (42, '未落实，放款'), (51, '待变更'), (61, '已解保'), (99, '已作废'))
+    agree_state = models.IntegerField(verbose_name='_合同状态', choices=AGREE_STATE_LIST, default=11)
+    agree_sign_date = models.DateField(verbose_name='签批日期', null=True, blank=True)
     charge = models.FloatField(verbose_name='应收保费（元）', default=0)
     agree_notify_sum = models.FloatField(verbose_name='_通知金额', default=0)
     agree_provide_sum = models.FloatField(verbose_name='_放款金额', default=0)
-    agree_buildor = models.ForeignKey(to='Employees', verbose_name="创建人",
+    agree_buildor = models.ForeignKey(to='Employees', verbose_name="创建人", default=1,
                                       on_delete=models.PROTECT,
                                       related_name='agree_buildor_employee')
+    agree_date = models.DateField(verbose_name='创建日期', default=datetime.date.today)
 
     class Meta:
         verbose_name_plural = '合同-委托保证'  # 指定显示名称
@@ -88,11 +88,12 @@ class Counters(models.Model):  # 反担保合同
         (51, '股权预售'), (52, '房产预售'), (53, '土地预售'))
     counter_typ = models.IntegerField(verbose_name='合同类型', choices=COUNTER_TYP_LIST)
     counter_copies = models.IntegerField(verbose_name='合同份数')
-    COUNTER_STATE_LIST = ((1, '未签订'), (2, '已签订'), (3, '已注销'))
-    counter_state = models.IntegerField(verbose_name='_签订情况', choices=COUNTER_STATE_LIST, default=1)
-    counter_buildor = models.ForeignKey(to='Employees', verbose_name="创建者",
+    COUNTER_STATE_LIST = ((11, '未签订'), (21, '已签订'), (31, '已注销'))
+    counter_state = models.IntegerField(verbose_name='_签订情况', choices=COUNTER_STATE_LIST, default=11)
+    counter_buildor = models.ForeignKey(to='Employees', verbose_name="创建者", default=1,
                                         on_delete=models.PROTECT,
-                                        related_name='counter_employee')
+                                        related_name='counteror_employee')
+    counter_date = models.DateField(verbose_name='创建日期', default=datetime.date.today)
 
     class Meta:
         verbose_name_plural = '合同-反担保'  # 指定显示名称
@@ -115,6 +116,10 @@ class CountersAssure(models.Model):  # 保证反担保合同
     custome = models.ManyToManyField(to='Customes',
                                      verbose_name="反担保人",
                                      related_name='counter_custome')
+    counter_assure_buildor = models.ForeignKey(to='Employees', verbose_name="创建者", default=1,
+                                               on_delete=models.PROTECT,
+                                               related_name='counter_assureor_employee')
+    counter_assure_date = models.DateField(verbose_name='创建日期', default=datetime.date.today)
 
     class Meta:
         verbose_name_plural = '合同-保证反担保'  # 指定显示名称
@@ -131,6 +136,10 @@ class CountersWarrants(models.Model):  # 房产抵押反担保合同
                                    related_name='warrant_counter')
     warrant = models.ManyToManyField(to='Warrants', verbose_name="抵质押物",
                                      related_name='counter_warrant')
+    counter_warrant_buildor = models.ForeignKey(to='Employees', verbose_name="创建者", default=1,
+                                                on_delete=models.PROTECT,
+                                                related_name='counter_warrantor_employee')
+    counter_warrant_date = models.DateField(verbose_name='创建日期', default=datetime.date.today)
 
     class Meta:
         verbose_name_plural = '合同-抵质押合同'  # 指定显示名称

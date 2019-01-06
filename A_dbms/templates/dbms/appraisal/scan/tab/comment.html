@@ -11,7 +11,7 @@
             <th>评审委员</th>
             <th>评委意见</th>
             <th>意见详情</th>
-            {% if not lending_obj %}
+            {% if comment_operate %}
                 <th>操作</th>
             {% endif %}
         </tr>
@@ -34,12 +34,8 @@
                         {% endif %}
                     {% endfor %}
                 </td>
-                {% if not lending_obj%}
-                    <td>
-                        <a class="btn btn-primary btn-xs expert-comment">
-                            评审意见
-                        </a>
-                    </td>
+                {% if comment_operate %}
+                    <td><a class="btn btn-primary btn-xs expert-comment">评审意见</a></td>
                 {% endif %}
             </tr>
         {% endfor %}

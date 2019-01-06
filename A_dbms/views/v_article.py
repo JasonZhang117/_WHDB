@@ -64,8 +64,7 @@ def article(request, *args, **kwargs):  # 项目列表
         article_state_list))
     # 列表或元组转换为字典并添加key
     article_list = models.Articles.objects.filter(
-        **kwargs).select_related('custom', 'director', 'assistant', 'control').order_by(
-        '-article_date', 'article_state')
+        **kwargs).select_related('custom', 'director', 'assistant', 'control').order_by('-article_date')
 
     # 分页
     paginator = Paginator(article_list, 20)
@@ -156,7 +155,6 @@ def article_add_ajax(request):  # 添加项目
                 augment=augment, amount=amount, credit_term=cleaned_data['credit_term'],
                 director_id=cleaned_data['director_id'], assistant_id=cleaned_data['assistant_id'],
                 control_id=cleaned_data['control_id'], article_buildor=request.user)
-            response['obj_num'] = article_obj.article_num
             response['message'] = '成功创建项目：%s！' % article_obj.article_num
         except Exception as e:
             response['status'] = False
@@ -200,7 +198,6 @@ def article_edit_ajax(request):  # 修改项目ajax
                     director_id=cleaned_data['director_id'],
                     assistant_id=cleaned_data['assistant_id'],
                     control_id=cleaned_data['control_id'])
-                response['obj_num'] = article_obj.article_num
                 response['message'] = '成功修改项目：%s！' % article_obj.article_num
             except Exception as e:
                 response['status'] = False
@@ -210,9 +207,8 @@ def article_edit_ajax(request):  # 修改项目ajax
             response['message'] = '表单信息有误！！！'
             response['forme'] = form.errors
     else:
-        arg = '状态为：%s，无法修改！！！' % article_obj.article_state
         response['status'] = False
-        response['message'] = arg
+        response['message'] = '状态为：%s，无法修改！！！' % article_obj.article_state
 
     result = json.dumps(response, ensure_ascii=False)
 
@@ -234,13 +230,10 @@ def article_del_ajax(request):
         (5, '已签批')-->才能出合同'''
     if article_obj.article_state == 1:
         article_obj.delete()  # 删除评审会
-        msg = '%s，删除成功！' % article_obj.article_num
-        response['message'] = msg
-        response['data'] = article_obj.id
+        response['message'] = '%s，删除成功！' % article_obj.article_num
     else:
-        msg = '状态为：%s，删除失败！！！' % article_obj.article_state
         response['status'] = False
-        response['message'] = msg
+        response['message'] = '状态为：%s，删除失败！！！' % article_obj.article_state
     result = json.dumps(response, ensure_ascii=False)
     return HttpResponse(result)
 
@@ -288,8 +281,7 @@ def article_feedback_ajax(request):
             response['message'] = '表单信息有误！！！'
             response['forme'] = form.errors
     else:
-        arg = '项目状态为：%s，无法反馈！！！' % article_obj.article_state
         response['status'] = False
-        response['message'] = arg
+        response['message'] = '项目状态为：%s，无法反馈！！！' % article_obj.article_state
     result = json.dumps(response, ensure_ascii=False)
     return HttpResponse(result)

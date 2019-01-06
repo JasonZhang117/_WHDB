@@ -1,37 +1,25 @@
 <div>
     <label>
         {% if kwargs.dun_state == None %}
-            <a class="active btn btn-primary btn-sm"
-               href="{% url 'dbms:compensatory_all' %}">全部</a>
+            <a class="active btn btn-primary btn-sm" href="{% url 'dbms:compensatory_all' %}">全部</a>
         {% else %}
-            <a class="btn btn btn-primary btn-sm"
-               href="{% url 'dbms:compensatory_all' %}">全部</a>
+            <a class="btn btn btn-primary btn-sm" href="{% url 'dbms:compensatory_all' %}">全部</a>
         {% endif %}
-
         {# 方式一：#}
         {% for dun_state in dun_state_list %}
             {% if dun_state.0 == kwargs.dun_state %}
                 <a class="active btn btn-primary btn-sm"
-                   href="{% url 'dbms:compensatory' dun_state=dun_state.0 %}">
-                    {{ dun_state.1 }}
-                </a>
+                   href="{% url 'dbms:compensatory' dun_state=dun_state.0 %}">{{ dun_state.1 }} </a>
             {% else %}
                 <a class="btn btn-primary btn-sm"
-                   href="{% url 'dbms:compensatory' dun_state=dun_state.0 %}">
-                    {{ dun_state.1 }}
-                </a>
+                   href="{% url 'dbms:compensatory' dun_state=dun_state.0 %}">{{ dun_state.1 }}</a>
             {% endif %}
         {% endfor %}
     </label>
     <label>
         <form class="navbar-form" style="display: inline">
-            <input type="text" class="form-control"
-                   placeholder="搜索客户">
-            <button type="submit" class="btn btn-primary btn-sm">
-                搜索
-            </button>
+            <input type="text" class="form-control" placeholder="搜索客户">
+            <button type="submit" class="btn btn-primary btn-sm">搜索</button>
         </form>
     </label>
 </div>
-
-
