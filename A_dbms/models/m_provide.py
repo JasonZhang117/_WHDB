@@ -30,6 +30,9 @@ class Notify(models.Model):  # Notify放款通知
                               related_name='notify_agree')
     notify_money = models.FloatField(verbose_name='通知金额')
     notify_provide_sum = models.FloatField(verbose_name='_放款金额', default=0)
+    contracts_lease = models.CharField(verbose_name='借款合同编号', max_length=32, null=True, blank=True)
+    contract_guaranty = models.CharField(verbose_name='保证合同编号', max_length=32, null=True, blank=True)
+    remark = models.CharField(verbose_name='备注', max_length=256, null=True, blank=True)
     notifyor = models.ForeignKey(to='Employees', verbose_name="_创建者",
                                  on_delete=models.PROTECT, default=1,
                                  related_name='notifyor_employee')

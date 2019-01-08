@@ -1,13 +1,14 @@
 <script>
     $(function () {
-        bindEditArticle();
+        bindEditArticleB();
         bindEditArticleModalOk();
 
     });
 
-    function bindEditArticle() {
-        $('#editArticle').click(function () {
-            console.log("bindEditArticle")
+    function bindEditArticleB() {
+        console.log("bindEditArticleB")
+        $('#editAgreeB').click(function () {
+            console.log("bindEditArticleB")
             $('#editArticleModal').modal('show');
         })
     }

@@ -11,5 +11,5 @@ from .f_warrant import (
 from .f_agree import (AgreeAddForm, AddCounterForm, FormAgreeSign)
 from .f_provide import (FormNotifyAdd, FormProvideAdd)
 
-from .f_custom import (CustomAddForm, CustomCAddForm, CustomPAddForm, CustomEditForm)
+from .f_custom import (CustomAddForm, CustomCAddForm, CustomPAddForm, CustomEditForm, FormShareholderAdd)
 from .f_interior import DepartmentForm, EmployeeForm

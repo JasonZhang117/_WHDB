@@ -2,12 +2,14 @@
     <div class="panel-heading">
         <label>客户情况</label>
         <label class="navbar-right">
-            <a class="btn btn-primary btn-sm " id="editCustom">
-                修改 </a><!--#path('custom/edit/'-->
-            <a class="btn btn-danger btn-sm " id="delCustom">
-                删除</a><!--#path('custom/del/'-->
-            <a class="btn btn-danger btn-sm " id="delCustom">
-                保后</a><!--#path('custom/del/'-->
+            {% if custom_obj.genre == 1 %}
+                <a class="btn btn-primary btn-sm " id="addShareholderB">添加股权 </a>
+            {% endif %}
+            <a class="btn btn-primary btn-sm " id="editCustom">修改 </a><!--#path('custom/edit/'-->
+            <a class="btn btn-danger btn-sm " id="delCustom">删除</a><!--#path('custom/del/'-->
+            <a class="btn btn-danger btn-sm " id="delCustom">保后</a><!--#path('custom/del/'-->
+
+
         </label>
     </div>
 
@@ -16,8 +18,6 @@
             {% include 'dbms/custom/scan/custom-summry-c.html' %}
         {% else %}
             {% include 'dbms/custom/scan/custom-summry-p.html' %}
-
         {% endif %}
-
     </div>
 </div>

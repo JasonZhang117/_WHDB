@@ -1,0 +1,33 @@
+<div class="table-responsive">
+    <table class="table table-bordered table-hover table-condensed active">
+
+        <thead>
+        <tr style="text-align: center">
+            <th>担保方式</th>
+            <th>所有人</th>
+            <th>详情</th>
+            <th>入库情况</th>
+            {% if page_title == '权证管理' %}
+                <th>操作</th>
+            {% endif %}
+        </tr>
+        </thead>
+        <tbody class="agree-warrant-tb">
+        {% for lending_sure in lending_obj.sure_lending.all %}
+            {% if lending_sure.sure_typ in receivable_list %}
+                {% for warrant in lending_sure.warrant_sure.warrant.all %}
+                    <tr warrant-nid={{ warrant.id }}>
+                        <td>{{ lending_sure.get_sure_typ_display }}</td>
+                        <td>{{ warrant.receive_warrant.receive_owner }}</td>
+                        <td>{{ warrant.receive_warrant.receivable_detail }}</td>
+                        <td>{{ warrant.get_warrant_state_display }}</td>
+                        {% if page_title == '权证管理' %}
+                            <td><a class="btn btn-danger btn-xs addStoragesAgreeB">出入库</a></td>
+                        {% endif %}
+                    </tr>
+                {% endfor %}
+            {% endif %}
+        {% endfor %}
+        </tbody>
+    </table>
+</div>

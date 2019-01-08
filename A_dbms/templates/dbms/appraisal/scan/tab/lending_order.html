@@ -11,7 +11,7 @@
             <th>发放次序</th>
             <th>拟放金额（元）</th>
             <th>已放金额（元）</th>
-            {% if lending_operate %}
+            {% if page_title == '项目评审' %}
                 <th>操作</th>
             {% endif %}
 
@@ -43,7 +43,7 @@
                 {% endif %}
                 <td>{{ lending.order_amount }}</td>
                 <td>{{ lending.amount }}</td>
-                {% if lending_operate %}
+                {% if page_title == '项目评审' %}
                     <td><a class="btn btn-danger btn-xs delLendingOrderB">删除</a></td>
                 {% endif %}
             <tr>

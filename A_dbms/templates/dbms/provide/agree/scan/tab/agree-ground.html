@@ -1,0 +1,57 @@
+<div class="table-responsive">
+    {#"table-responsive":表格响应式布局#}
+    <table class="table table-bordered table-hover
+                table-condensed active">
+        {#"table-bordered":表格表格边框#}
+        {#"table-hover":表格悬停变色#}
+        {#"table-condensed":表格紧缩#}
+        {#<caption><h4>项目管理</h4></caption>#}
+        <thead>
+        <tr style="text-align: center">
+            <th>序号</th>
+            <th>担保方式</th>
+            <th>所有权人</th>
+            <th>土地地址</th>
+            <th>土地面积</th>
+            <th>土地用途</th>
+            <th>他权情况</th>
+            <th>入库情况</th>
+            {% if page_title == '权证管理' %}
+                <th>操作</th>
+            {% endif %}
+        </tr>
+        </thead>
+        <tbody class="agree-warrant-tb">
+        {% for lending_sure in lending_obj.sure_lending.all %}
+            {% if lending_sure.sure_typ in ground_list %}
+                {% for warrant in lending_sure.warrant_sure.warrant.all %}
+                    <tr warrant-nid={{ warrant.id }}>
+                        <td><a target="_blank"
+                               href="{% url 'dbms:warrant_scan' warrant_id=warrant.id %}">{{ forloop.counter }}</a></td>
+                        <td>{{ lending_sure.get_sure_typ_display }}</td>
+                        <td>
+                            {% for ownership in warrant.ownership_warrant.all %}
+                                {{ ownership.owner }}{% if not forloop.last %}、{% endif %}
+                            {% endfor %}
+                        </td>
+                        <td>{{ warrant.ground_warrant.ground_locate }}</td>
+                        <td>{{ warrant.ground_warrant.ground_area }}</td>
+                        <td>{{ warrant.ground_warrant.get_ground_app_display }}</td>
+                        <td>
+                            {% for ypothec in warrant.ypothec_m_agree.all %}
+                                {% if ypothec.agree.id == agree_obj.id %}
+                                    {{ ypothec.warrant.get_warrant_state_display }}
+                                {% endif %}
+                            {% endfor %}
+                        </td>
+                        <td>{{ warrant.get_warrant_state_display }}</td>
+                        {% if page_title == '权证管理' %}
+                            <td><a class="btn btn-danger btn-xs addStoragesAgreeB">出入库</a></td>
+                        {% endif %}
+                    </tr>
+                {% endfor %}
+            {% endif %}
+        {% endfor %}
+        </tbody>
+    </table>
+</div>

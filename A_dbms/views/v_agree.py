@@ -12,8 +12,10 @@ import datetime
 @login_required
 def agree(request, *args, **kwargs):  # 委托合同列表
     print(__file__, '---->def agree')
-    form_agree_add = forms.AgreeAddForm()
+    PAGE_TITAL = '合同管理'
+    operate_agree_add = True
 
+    form_agree_add = forms.AgreeAddForm()
     agree_state_list = models.Agrees.AGREE_STATE_LIST
     agree_list = models.Agrees.objects.filter(**kwargs).select_related(
         'lending', 'branch').order_by('-agree_num')
@@ -22,11 +24,11 @@ def agree(request, *args, **kwargs):  # 委托合同列表
     paginator = Paginator(agree_list, 10)
     page = request.GET.get('page')
     try:
-        p_list = paginator.page(page)
+        p_agree_list = paginator.page(page)
     except PageNotAnInteger:
-        p_list = paginator.page(1)
+        p_agree_list = paginator.page(1)
     except EmptyPage:
-        p_list = paginator.page(paginator.num_pages)
+        p_agree_list = paginator.page(paginator.num_pages)
 
     return render(request, 'dbms/agree/agree.html', locals())
 
@@ -35,6 +37,8 @@ def agree(request, *args, **kwargs):  # 委托合同列表
 @login_required
 def agree_scan(request, agree_id):  # 查看合同
     print(__file__, '---->def agree_scan')
+    page_title = '合同详情'
+
     '''COUNTER_TYP_LIST = (
         (1, '企业担保'), (2, '个人保证'),
         (11, '房产抵押'), (12, '土地抵押'), (13, '设备抵押'), (14, '存货抵押'), (15, '车辆抵押'),

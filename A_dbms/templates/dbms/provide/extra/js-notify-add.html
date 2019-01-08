@@ -1,14 +1,12 @@
 <script>
     $(function () {
-
         bindAddNotifyB();
         bindAddNotifyModalOk();
-
     });
 
     function bindAddNotifyB() {
         $('#addNotifyB').click(function () {
-            console.log("bindAddNotifyB")
+            console.log("bindAddNotifyB");
             $('#addNotifyModal').modal('show');
         })
     }
@@ -22,9 +20,9 @@
                 postData[n] = v;
             });
             var postDataStr = JSON.stringify(postData);
-            console.log(postDataStr)
+            console.log(postDataStr);
             $.ajax({
-                url: '/dbms/agreep/notify/add/',
+                url: '/dbms/provide/notify/add/',
                 type: 'POST',
                 traditional: true,
                 data: {'postDataStr': postDataStr},

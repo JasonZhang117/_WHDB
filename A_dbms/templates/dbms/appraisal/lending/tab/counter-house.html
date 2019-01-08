@@ -13,7 +13,7 @@
             <th>房产地址</th>
             <th>房产用途</th>
             <th>房产面积</th>
-            {% if counter_operate %}
+            {% if page_title == '放款次序' %}
                 <th>操作</th>
             {% endif %}
 
@@ -29,7 +29,7 @@
                         <td>{{ warrant.house_warrant.house_locate }}</td>
                         <td>{{ warrant.house_warrant.get_house_app_display }}</td>
                         <td>{{ warrant.house_warrant.house_area }}</td>
-                        {% if counter_operate %}
+                        {% if page_title == '放款次序' %}
                             <td><a class="btn btn-danger btn-xs delGuaranteeB">删除</a></td>
                         {% endif %}
                     </tr>

@@ -1,0 +1,12 @@
+{% extends 'dbms/index_dbms.html' %}
+
+{% block title %}{{ PAGE_TITAL }}{% endblock %}
+
+{% block right-content-container %}
+    {% include 'dbms/provide/agree/provide-agree-filter.html' %}
+    {% include 'dbms/provide/agree/provide-agree-table.html' %}
+{% endblock %}
+
+{% block extra-js %}
+
+{% endblock %}

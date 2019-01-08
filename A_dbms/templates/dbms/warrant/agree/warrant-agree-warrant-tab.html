@@ -1,0 +1,39 @@
+<div>
+    <!-- Nav tabs -->
+    <ul class="nav nav-tabs" role="tablist" style="background-color: #f5f5f5">
+        <li role="presentation">
+            <a href="#storages" style="background-color: #f5f5f5"
+               aria-controls="profile" role="tab" data-toggle="tab">出入库 </a></li>
+        {% if warrant_typ == 99 %}
+            <li role="presentation" class="active">
+                <a href="#guaranty" style="background-color: #f5f5f5"
+                   aria-controls="profile" role="tab" data-toggle="tab">抵押物 </a></li>
+        {% elif warrant_typ in house_ground_list %}
+            <li role="presentation">
+                <a href="#valuate" style="background-color: #f5f5f5"
+                   aria-controls="profile" role="tab" data-toggle="tab">评估情况 </a></li>
+            <li role="presentation">
+                <a href="#mortgage" style="background-color: #f5f5f5"
+                   aria-controls="settings" role="tab" data-toggle="tab">抵押情况 </a></li>
+            <li role="presentation" class="active">
+                <a href="#ownership" style="background-color: #f5f5f5"
+                   aria-controls="profile" role="tab" data-toggle="tab">产权人 </a></li>
+        {% endif %}
+    </ul>
+    <!-- Tab panes -->
+    <div class="tab-content">
+        <div role="tabpanel" class="tab-pane" id="storages"> <!--出入库-->
+            {% include 'dbms/warrant/scan/warrant_tab/storages.html' %}</div>
+        {% if warrant_typ == 99 %}
+            <div role="tabpanel" class="tab-pane active" id="guaranty"> <!--抵押物-->
+                {% include 'dbms/warrant/scan/warrant_tab/guaranty.html' %}</div>
+        {% elif warrant_typ in house_ground_list %}
+            <div role="tabpanel" class="tab-pane" id="valuate"> <!--评估情况-->
+                {% include 'dbms/warrant/scan/warrant_tab/valuate.html' %}</div>
+            <div role="tabpanel" class="tab-pane" id="mortgage"> <!--抵押情况-->
+                {% include 'dbms/warrant/scan/warrant_tab/mortgage.html' %}</div>
+            <div role="tabpanel" class="tab-pane active" id="ownership"> <!--产权人-->
+                {% include 'dbms/warrant/scan/warrant_tab/ownership.html' %}</div>
+        {% endif %}
+    </div>
+</div>

@@ -14,6 +14,8 @@ from django.db import transaction
 @login_required
 def appraisal(request):  # 评审情况
     print(__file__, '---->def appraisal')
+    page_title = '评审管理'
+
     # print('kwargs:', kwargs)
     form_meeting_add = forms.MeetingAddForm()
     '''ARTICLE_STATE_LIST = ((1, '待反馈'), (2, '已反馈'), (3, '待上会'), (4, '已上会'),
@@ -34,6 +36,8 @@ def appraisal(request):  # 评审情况
 # -----------------------appraisal_scan评审项目-------------------------#
 @login_required
 def appraisal_scan(request, article_id):  # 评审项目预览
+    page_title = '项目评审'
+
     print(__file__, '---->def appraisal_scam')
     single_operate = True
     comment_operate = True
@@ -62,6 +66,8 @@ def appraisal_scan(request, article_id):  # 评审项目预览
 @login_required
 def summary_scan(request, article_id):  # 评审项目预览
     print(__file__, '---->def summary_scan')
+    page_title = '纪要预览'
+
     article_obj = models.Articles.objects.get(id=article_id)
 
     return render(request, 'dbms/appraisal/appraisal-summary-scan.html', locals())
@@ -71,6 +77,7 @@ def summary_scan(request, article_id):  # 评审项目预览
 @login_required
 def appraisal_scan_lending(request, article_id, lending_id):  # 评审项目预览
     print(__file__, '---->def appraisal_scan_lending')
+    page_title = '放款次序'
     article_obj = models.Articles.objects.get(id=article_id)
     lending_obj = models.LendingOrder.objects.get(id=lending_id)
     '''((1, '待反馈'), (2, '已反馈'), (3, '待上会'),
@@ -88,7 +95,7 @@ def appraisal_scan_lending(request, article_id, lending_id):  # 评审项目预�
     ground_list = [12, 22, 43, 53]
     receivable_list = [31]
     stock_list = [32]
-    counter_operate = True
+
     form_lendingcustoms_c_add = models.Customes.objects.exclude(
         id=article_obj.custom.id).filter(genre=1).values_list('id', 'name')
     form_lendingcustoms_p_add = models.Customes.objects.exclude(

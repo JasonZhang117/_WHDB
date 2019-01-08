@@ -1,6 +1,6 @@
 {% extends 'dbms/index_dbms.html' %}
 
-{% block title %}{{ agree_obj }}{% endblock %}
+{% block title %}{{ page_title }}:{{ agree_obj }}{% endblock %}
 
 {% block right-content-container %}
 
@@ -9,10 +9,13 @@
         {% include 'dbms/agree/scan/agree-tab.html' %}
         {% include 'dbms/agree/modl/counter-add-mod.html' %}
         {% include 'dbms/agree/modl/agree-sign-mod.html' %}
+        {% include 'dbms/agree/modl/agree-del-mod---.html' %}
     </div>
 {% endblock %}
 
 {% block extra-js %}
     {% include 'dbms/agree/extra/js-counter-add.html' %}
     {% include 'dbms/agree/extra/js-agree-sign.html' %}
+    {% include 'dbms/agree/extra/js-agree-edit---.html' %}
+    {% include 'dbms/agree/extra/js-agree-del---.html' %}
 {% endblock %}

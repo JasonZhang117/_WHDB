@@ -1,0 +1,26 @@
+<div id="form_shareholder_add">
+
+    <div class="form-group"><!--股东名称-->
+        <label for="id_shareholder_name"
+               class="col-sm-3 control-label">{{ form_shareholder_add.shareholder_name.label }}：</label>
+        <div class="col-sm-9">{{ form_shareholder_add.shareholder_name }}</div>
+        <label id="e_shareholder_name" class="pull-right">{{ form_shareholder_add.shareholder_name.errors }}</label>
+    </div>
+
+    <div class="form-group"><!--投资额-->
+        <label for="id_invested_amount"
+               class="col-sm-3 control-label">{{ form_shareholder_add.invested_amount.label }}：</label>
+        <div class="col-sm-9">{{ form_shareholder_add.invested_amount }}</div>
+        <label id="e_invested_amount" class="pull-right">{{ form_shareholder_add.invested_amount.errors }}</label>
+    </div>
+
+    <div class="form-group"><!--持股比例-->
+        <label for="id_shareholding_ratio"
+               class="col-sm-3 control-label">{{ form_shareholder_add.shareholding_ratio.label }}：</label>
+        <div class="col-sm-9">{{ form_shareholder_add.shareholding_ratio }}</div>
+        <label id="e_shareholding_ratio" class="pull-right">{{ form_shareholder_add.shareholding_ratio.errors }}</label>
+    </div>
+
+</div>
+
+

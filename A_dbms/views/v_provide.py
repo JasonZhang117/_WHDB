@@ -9,38 +9,63 @@ from django.db.models import Q, F
 from django.db.models import Avg, Min, Sum, Max, Count
 
 
-# -----------------------委托合同列表---------------------#
+# -----------------------放款管理---------------------#
 @login_required
-def agreep(request, *args, **kwargs):  # 委托合同列表
-    print(__file__, '---->def agreep')
+def provide_agree(request, *args, **kwargs):  # 放款管理
+    print(__file__, '---->def provide_agree')
+    PAGE_TITAL = '放款管理'
+
     agree_state_list = models.Agrees.AGREE_STATE_LIST
-    '''AGREE_STATE_LIST = ((11, '待签批'), (21, '已签批'), (31, '已落实'), (41, '已放款'),
-                        (51, '待变更'), (61, '已解保'), (99, '已作废'))'''
-    agree_list = models.Agrees.objects.filter(**kwargs).filter(agree_state__in=[11, 21, 31, 41]).select_related(
+    '''AGREE_STATE_LIST = ((11, '待签批'), (21, '已签批'), (31, '已落实，未放款'), (41, '已落实，放款'),
+                        (42, '未落实，放款'), (51, '待变更'), (61, '已解保'), (99, '已作废'))'''
+    agree_list = models.Agrees.objects.filter(**kwargs).filter(agree_state__in=[21, 31, 41, 42]).select_related(
         'lending', 'branch').order_by('-agree_num')
 
     ####分页信息###
     paginator = Paginator(agree_list, 10)
     page = request.GET.get('page')
     try:
-        p_list = paginator.page(page)
+        p_agree_list = paginator.page(page)
     except PageNotAnInteger:
-        p_list = paginator.page(1)
+        p_agree_list = paginator.page(1)
     except EmptyPage:
-        p_list = paginator.page(paginator.num_pages)
+        p_agree_list = paginator.page(paginator.num_pages)
 
-    return render(request, 'dbms/provide/agreep.html', locals())
+    return render(request, 'dbms/provide/provide-agree.html', locals())
 
 
 # -----------------------------查看放款通知------------------------------#
 @login_required
-def agreep_scan(request, agree_id):  # 查看放款
-    print(__file__, '---->def agreep_scan')
-
+def provide_agree_scan(request, agree_id):  # 查看放款
+    print(__file__, '---->def provide_agree_scan')
+    PAGE_TITAL = '放款管理'
+    '''SURE_TYP_LIST = (
+                (1, '企业保证'), (2, '个人保证'),
+                (11, '房产抵押'), (12, '土地抵押'), (13, '设备抵押'), (14, '存货抵押'), (15, '车辆抵押'),
+                (21, '房产顺位'), (22, '土地顺位'),
+                (31, '应收质押'), (32, '股权质押'), (33, '票据质押'),
+                (41, '合格证监管'), (42, '房产监管'), (43, '土地监管'),
+                (51, '股权预售'), (52, '房产预售'), (53, '土地预售'))'''
+    '''COUNTER_TYP_LIST = (
+        (1, '企业担保'), (2, '个人保证'),
+        (11, '房产抵押'), (12, '土地抵押'), (13, '设备抵押'), (14, '存货抵押'), (15, '车辆抵押'),
+        (31, '应收质押'), (32, '股权质押'), (33, '票据质押'),
+        (51, '股权预售'), (52, '房产预售'), (53, '土地预售'))'''
     agree_obj = models.Agrees.objects.get(id=agree_id)
+    lending_obj = agree_obj.lending
+
+    '''WARRANT_TYP_LIST = [
+        (1, '房产'), (2, '土地'), (11, '应收'), (21, '股权'),
+        (31, '票据'), (41, '车辆'), (51, '动产'), (99, '他权')]'''
+    sure_list = [1, 2]  # 保证反担保类型
+    house_list = [11, 21, 42, 52]
+    ground_list = [12, 22, 43, 53]
+    receivable_list = [31]
+    stock_list = [32]
+
     form_notify_add = forms.FormNotifyAdd()
 
-    return render(request, 'dbms/provide/agreep-scan.html', locals())
+    return render(request, 'dbms/provide/provide-agree-scan.html', locals())
 
 
 # -----------------------------添加放款通知ajax------------------------------#
@@ -117,7 +142,7 @@ def notify_del_ajax(request):  # 反担保人删除ajax
 
 # ------------------------provide_scan_notice查看放款通知-------------------------#
 @login_required
-def agreep_scan_notify(request, agree_id, notify_id):  # 查看放款通知
+def provide_agree_notify(request, agree_id, notify_id):  # 查看放款通知
     print(__file__, '---->def provide_scan_notify')
 
     agree_obj = models.Agrees.objects.get(id=agree_id)

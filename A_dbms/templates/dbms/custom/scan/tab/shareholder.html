@@ -1,0 +1,20 @@
+<div class="table-responsive">
+    <table class="table table-bordered table-hover table-condensed active">
+        <thead>
+        <tr style="text-align: center">
+            <th>股东名称</th>
+            <th>投资额(万)</th>
+            <th>持股比例(%)</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for shareholder in custom_obj.company_custome.shareholder_custom_c.all %}
+            <tr>
+                <td>{{ shareholder.shareholder_name }}</td>
+                <td>{{ shareholder.invested_amount }}</td>
+                <td>{{ shareholder.shareholding_ratio }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>

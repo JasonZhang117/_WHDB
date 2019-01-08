@@ -8,7 +8,7 @@
             <th>标的公司</th>
             <th>质押数量(万元/股)</th>
             <th>股权性质</th>
-            {% if counter_operate %}
+            {% if page_title == '放款次序' %}
                 <th>操作</th>
             {% endif %}
         </tr>
@@ -23,7 +23,7 @@
                         <td>{{ warrant.stock_warrant.target }}</td>
                         <td>{{ warrant.stock_warrant.share }}</td>
                         <td>{{ warrant.stock_warrant.get_stock_typ_display }}</td>
-                        {% if counter_operate %}
+                        {% if page_title == '放款次序' %}
                             <td><a class="btn btn-danger btn-xs delGuaranteeB">删除</a></td>
                         {% endif %}
                     </tr>

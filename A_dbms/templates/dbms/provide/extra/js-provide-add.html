@@ -1,6 +1,5 @@
 <script>
     $(function () {
-
         bindAddProvideB();
         bindAddProvideModalOk();
 
@@ -8,7 +7,7 @@
 
     function bindAddProvideB() {
         $('#addProvideB').click(function () {
-            console.log("bindAddProvideB")
+            console.log("bindAddProvideB");
             $('#addProvideModal').modal('show');
         })
     }
@@ -22,9 +21,9 @@
                 postData[n] = v;
             });
             var postDataStr = JSON.stringify(postData);
-            console.log(postDataStr)
+            console.log(postDataStr);
             $.ajax({
-                url: '/dbms/agreep/provide/add/',
+                url: '/dbms/provide/provide/add/',
                 type: 'POST',
                 traditional: true,
                 data: {'postDataStr': postDataStr},

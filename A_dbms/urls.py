@@ -54,6 +54,10 @@ urlpatterns = [
     path('warrant/', views.warrant, name='warrant_all'),  # 菜单-权证管理-所有权证
     path('warrant/<int:warrant_typ>/', views.warrant, name='warrant'),  # /dbms/warrant/(0-9)
     path('warrant/scan/<int:warrant_id>/', views.warrant_scan, name='warrant_scan'),
+    path('warrant/agree/', views.warrant_agree, name='warrant_agree'),
+    path('warrant/agree/scan/<int:agree_id>/', views.warrant_agree_scan, name='warrant_agree_scan'),
+    path('warrant/agree/warrant/<int:agree_id>/<int:warrant_id>/', views.warrant_agree_warrant,
+         name='warrant_agree_warrant'),
     path('warrant/add/', views.warrant_add_ajax),
     path('warrant/del/', views.warrant_del_ajax),
     path('warrant/edit/', views.warrant_edit_ajax),
@@ -69,13 +73,13 @@ urlpatterns = [
     path('ground/', views.ground, name='ground_all'),  # 菜单-权证管理-土地列表
     path('ground/<int:application>/', views.ground, name='ground'),  # /dbms/ground/(0-9)
     # -----------------------放款管理-------------------------#
-    path('agreep/', views.agreep, name='agreep_all'),  # 菜单-放款管理-放款通知
-    path('agreep/<int:agree_state>/', views.agreep, name='agreep'),  # /dbms/provide/(0-9)
-    path('agreep/scan/<int:agree_id>/', views.agreep_scan, name='agreep_scan'),
-    path('agreep/scan/<int:agree_id>/<int:notify_id>/', views.agreep_scan_notify, name='agreep_scan_notify'),
-    path('agreep/notify/add/', views.notify_add_ajax),
-    path('agreep/notify/del/', views.notify_del_ajax),
-    path('agreep/provide/add/', views.provide_add_ajax),
+    path('provide/agree', views.provide_agree, name='provide_agree_all'),  # 菜单-放款管理-放款通知
+    path('provide/agree/<int:agree_state>/', views.provide_agree, name='provide_agree'),  # /dbms/provide/(0-9)
+    path('provide/scan/<int:agree_id>/', views.provide_agree_scan, name='provide_agree_scan'),
+    path('provide/scan/<int:agree_id>/<int:notify_id>/', views.provide_agree_notify, name='agreep_scan_notify'),
+    path('provide/notify/add/', views.notify_add_ajax),
+    path('provide/notify/del/', views.notify_del_ajax),
+    path('provide/add/', views.provide_add_ajax),
 
     path('provide/', views.provide, name='provide_all'),  # 菜单-放款管理-放款
     path('provide/<int:provide_status>/', views.provide, name='provide'),  # /dbms/grant/(0-9)
@@ -94,6 +98,8 @@ urlpatterns = [
     path('custom/add/', views.custom_add_ajax),
     path('custom/del/', views.custom_del_ajax),
     path('custom/edit/', views.custom_edit_ajax),
+    path('custom/shareholder/add/', views.shareholder_add_ajax),
+
     # ---------------------------------------------------------------------------#
     # 员工
     path('employee/', views.employee, name='employee'),

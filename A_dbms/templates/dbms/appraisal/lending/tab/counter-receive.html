@@ -6,7 +6,7 @@
             <th>担保方式</th>
             <th>所有人</th>
             <th>详情</th>
-            {% if counter_operate %}
+            {% if page_title == '放款次序' %}
                 <th>操作</th>
             {% endif %}
         </tr>
@@ -19,7 +19,7 @@
                         <td>{{ lending_sure.get_sure_typ_display }}</td>
                         <td>{{ warrant.receive_warrant.receive_owner }}</td>
                         <td>{{ warrant.receive_warrant.receivable_detail }}</td>
-                        {% if counter_operate %}
+                        {% if page_title == '放款次序' %}
                             <td><a class="btn btn-danger btn-xs delGuaranteeB">删除</a></td>
                         {% endif %}
                     </tr>

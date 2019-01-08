@@ -1,7 +1,7 @@
 from django.db import models
+import datetime
 
 
-# 客户、企业客户、个人客户区域、行业
 # -----------------------客户模型-------------------------#
 class Customes(models.Model):  # 客户
     name = models.CharField(verbose_name='名称', max_length=32, unique=True)
@@ -48,6 +48,28 @@ class CustomesC(models.Model):
 
     def __str__(self):
         return '%s-%s' % (self.custome, self.short_name)
+
+
+# -----------------------股东信息-------------------------#
+class Shareholders(models.Model):
+    custom = models.ForeignKey(to='CustomesC', verbose_name="企业客户",
+                               on_delete=models.CASCADE,
+                               related_name='shareholder_custom_c')
+    shareholder_name = models.CharField(verbose_name='简称', max_length=32)
+    invested_amount = models.FloatField(verbose_name='投资额')
+    shareholding_ratio = models.FloatField(verbose_name='持股比例（%）')
+    shareholderor = models.ForeignKey(to='Employees', verbose_name="创建者",
+                                      on_delete=models.PROTECT, default=1,
+                                      related_name='shareholderor_employee')
+    shareholder_date = models.DateField(verbose_name='创建时间', default=datetime.date.today)
+
+    class Meta:
+        verbose_name_plural = '客户-股东信息'  # 指定显示名称
+        db_table = 'dbms_shareholders'  # 指定数据表的名称
+        unique_together = ['custom', 'shareholder_name']
+
+    def __str__(self):
+        return '%s-%s' % (self.custom, self.shareholder_name)
 
 
 # -----------------------个人客户-------------------------#

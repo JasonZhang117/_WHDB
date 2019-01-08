@@ -58,10 +58,23 @@ class CustomCAddForm(dform.ModelForm):  # 企业客户
             'representative': dform.TextInput(
                 attrs={'class': 'form-control', 'placeholder': '法人代表'})}
 
-    # -----------------------客户form-------------------------#
+
+# -----------------------股权信息添加-------------------------#
+class FormShareholderAdd(dform.ModelForm):  # 企业客户
+    class Meta:
+        model = models.Shareholders
+        fields = ['shareholder_name', 'invested_amount', 'shareholding_ratio']
+        widgets = {
+            'shareholder_name': dform.TextInput(
+                attrs={'class': 'form-control', 'placeholder': '股东名称'}),
+            'invested_amount': dform.NumberInput(
+                attrs={'class': 'form-control', 'placeholder': '投资额'}),
+            'shareholding_ratio': dform.NumberInput(
+                attrs={'class': 'form-control', 'placeholder': '持股比例（%）'})}
 
 
-class CustomPAddForm(dform.ModelForm):  # 客户form
+# -----------------------个人客户添加-------------------------#
+class CustomPAddForm(dform.ModelForm):  # 个人客户添加
     license_num = fields.CharField(
         label="身份证号",
         label_suffix="：",

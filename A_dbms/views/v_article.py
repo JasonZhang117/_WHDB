@@ -98,7 +98,6 @@ def article_scan(request, article_id):  # 项目预览
         form_date = {
             'propose': feedbac_list[0].propose, 'analysis': feedbac_list[0].analysis,
             'suggestion': feedbac_list[0].suggestion}
-
         form_feedback = forms.FeedbackAddForm(initial=form_date)
     else:
         form_feedback = forms.FeedbackAddForm()
@@ -259,16 +258,12 @@ def article_feedback_ajax(request):
             try:
                 today_str = time.strftime("%Y-%m-%d", time.gmtime())
                 default = {
-                    'article_id': article_id,
-                    'propose': cleaned_data['propose'],
-                    'analysis': cleaned_data['analysis'],
-                    'suggestion': cleaned_data['suggestion'],
-                    'feedback_date': today_str,
-                    'feedback_buildor': request.user}
+                    'article_id': article_id, 'propose': cleaned_data['propose'],
+                    'analysis': cleaned_data['analysis'], 'suggestion': cleaned_data['suggestion'],
+                    'feedback_date': today_str, 'feedback_buildor': request.user}
                 article, created = models.Feedback.objects.update_or_create(
                     article_id=article_id, defaults=default)
                 article_list.update(article_state=2)  # 更新项目状态
-
                 if created:
                     response['message'] = '成功成功反馈项目%s！' % article_obj.article_num
                 else:

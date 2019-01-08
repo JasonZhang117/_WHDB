@@ -16,7 +16,7 @@ from .m_provide import (Notify, Provides, Repayments, Pigeonholes, Charges)
 # -----------------------m_dun追偿-------------------#
 from .m_dun import Compensatories
 # ---------------------m_custom客户信息-----------------------#
-from .m_custom import Customes, CustomesC, CustomesP
+from .m_custom import Customes, CustomesC, CustomesP, Shareholders
 # ---------------------m_review保后信息-----------------------#
 from .m_review import Review
 

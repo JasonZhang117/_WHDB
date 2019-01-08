@@ -15,21 +15,23 @@ from .v_appraisal import (
     single_del_ajax, comment_edit_ajax, summary_scan, single_quota_ajax, lending_del_ajax, lending_order_ajax)
 # ----------------------v_agree合同管理视图--------------------#
 from .v_agree import (
-    agree, agree_add_ajax, counter_add_ajax, agree_scan, agree_preview,agree_sign_ajax)
+    agree, agree_add_ajax, counter_add_ajax, agree_scan, agree_preview, agree_sign_ajax)
 # ----------------------v_warrant权证管理视图--------------------#
 from .v_warrant import (
     warrant, house, ground, warrant_add_ajax, warrant_del_ajax, warrant_edit_ajax, owership_add_ajax, owership_del_ajax,
-    guaranty_add_ajax, guaranty_del_ajax, storages_add_ajax, warrant_scan)
+    guaranty_add_ajax, guaranty_del_ajax, storages_add_ajax, warrant_scan, warrant_agree, warrant_agree_scan,
+    warrant_agree_warrant)
 # ----------------------v_provide放款管理视图--------------------#
 from .v_provide import (
-    agreep, agreep_scan, agreep_scan_notify, provide, provide_scan, notify_add_ajax, notify_del_ajax, provide_add_ajax)
+    provide_agree, provide_agree_scan, provide_agree_notify, provide, provide_scan, notify_add_ajax, notify_del_ajax,
+    provide_add_ajax)
 # ----------------------v_review保后管理视图--------------------#
 from .v_review import review
 # ----------------------v_dun追偿视图--------------------#
 from .v_dun import compensatory, compensatory_scan
 # ----------------------v_custom客户管理视图--------------------#
 from .v_custom import (
-    custom, custom_scan, custom_add_ajax, custom_del_ajax, custom_edit_ajax)
+    custom, custom_scan, custom_add_ajax, custom_del_ajax, custom_edit_ajax, shareholder_add_ajax)
 
 # 部门、员工
 from .v_interior import department, department_add, department_edit

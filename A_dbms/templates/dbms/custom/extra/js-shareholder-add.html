@@ -1,0 +1,51 @@
+<script>
+    $(function () {
+        bindAddShareholderB();
+        bindAddCounterModalOk();
+    });
+
+    function bindAddShareholderB() {
+        $('#addShareholderB').click(function () {
+            {#console.log("bindAddCounterB")#}
+            $('#addShareholderModal').modal('show');
+        })
+    }
+
+    function bindAddCounterModalOk() {
+        $('#addShareholderModalOk').click(function () {
+            var postData = {};
+            $('#addShareholderModal').find('input,select').each(function () {
+                var v = $(this).val();
+                var n = $(this).attr('name');
+                postData[n] = v;
+            });
+            var postDataStr = JSON.stringify(postData);
+            console.log(postDataStr);
+            $.ajax({
+                url: '/dbms/custom/shareholder/add/',
+                type: 'POST',
+                data: {'postDataStr': postDataStr},
+                dataType: 'JSON',
+                success: function (arg) {
+                    console.log(arg);
+                    if (arg.status) {
+                        $('#addShareholderModal').modal('hide');
+                        alert(arg.message);
+                        window.location.reload();
+                    } else {
+                        alert(arg.message);
+                        $('#e_shareholder_name').text(arg.forme.shareholder_name);
+                        $('#e_invested_amount').text(arg.forme.invested_amount);
+                        $('#e_shareholding_ratio').text(arg.forme.shareholding_ratio);
+                    }
+                }
+            })
+        })
+    }
+</script>
+
+
+
+
+
+

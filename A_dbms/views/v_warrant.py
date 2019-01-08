@@ -87,7 +87,7 @@ def warrant_add_ajax(request):
                 try:
                     with transaction.atomic():
                         warrant_obj = models.Warrants.objects.create(
-                            warrant_num=warrant_add_clean['warrant_num'],
+                            warrant_num=warrant_add_clean['warrant_num'], warrant_state=6,
                             warrant_typ=warrant_typ, warrant_buildor=request.user)
                         receivable_obj = models.Receivable.objects.create(
                             warrant=warrant_obj, receivable_buildor=request.user,
@@ -111,7 +111,7 @@ def warrant_add_ajax(request):
                 try:
                     with transaction.atomic():
                         warrant_obj = models.Warrants.objects.create(
-                            warrant_num=warrant_add_clean['warrant_num'],
+                            warrant_num=warrant_add_clean['warrant_num'], warrant_state=6,
                             warrant_typ=warrant_typ, warrant_buildor=request.user)
                         stock_obj = models.Stockes.objects.create(
                             warrant=warrant_obj, stock_buildor=request.user,
@@ -281,8 +281,6 @@ def warrant_edit_ajax(request):
 
     if form_warrant_edit.is_valid():
         warrant_edit_clean = form_warrant_edit.cleaned_data
-        print('warrant_edit_clean:', warrant_edit_clean)
-
         if warrant_typ == 1:
             print('warrant_typ == 1')
             form_house_add_edit = forms.HouseAddEidtForm(post_data)
@@ -293,7 +291,6 @@ def warrant_edit_ajax(request):
                     with transaction.atomic():
                         warrant_list.update(
                             warrant_num=warrant_edit_clean['warrant_num'])
-
                         models.Houses.objects.filter(warrant=warrant_obj).update(
                             house_locate=house_add_edit_clean['house_locate'],
                             house_app=house_add_edit_clean['house_app'],
@@ -316,7 +313,6 @@ def warrant_edit_ajax(request):
                     with transaction.atomic():
                         warrant_list.update(
                             warrant_num=warrant_edit_clean['warrant_num'])
-
                         models.Grounds.objects.filter(warrant=warrant_obj).update(
                             ground_locate=ground_add_edit_clean['ground_locate'],
                             ground_app=ground_add_edit_clean['ground_app'],
@@ -339,7 +335,6 @@ def warrant_edit_ajax(request):
                     with transaction.atomic():
                         warrant_list.update(
                             warrant_num=warrant_edit_clean['warrant_num'])
-
                         models.Hypothecs.objects.filter(warrant=warrant_obj).update(
                             agree=hypothecs_add_edit_clean['agree'])
                         response['message'] = '土地创建成功！！！，请继续创建产权证信息。'
@@ -485,22 +480,15 @@ def storages_add_ajax(request):  # 出入库添加ajax
     post_data_str = request.POST.get('postDataStr')
     post_data = json.loads(post_data_str)
     print('post_data:', post_data)
-    print('request.user:', request.user.id)
-    print('request.user:', type(request.user.id))
-    bbbb = models.Employees.objects.get(id=request.user.id)
-    print('bbbb:', bbbb)
-    print(post_data['transfer'])
-    print(type(post_data['transfer']))
+
     warrant_id = post_data['warrant_id']
     warrant_list = models.Warrants.objects.filter(id=warrant_id)
     warrant_obj = warrant_list[0]
     warrant_state = warrant_obj.warrant_state
     form_storage_add_edit = forms.StoragesAddEidtForm(post_data)
-    '''STORAGE_TYP_LIST = ((1, '入库'), (2, '出库'), (3, '借出'), 
-    (4, '归还'), (5, '解保'))'''
+    '''STORAGE_TYP_LIST = ((1, '入库'), (2, '出库'), (3, '借出'), (4, '归还'), (5, '解保'))'''
     '''WARRANT_STATE_LIST = (
-        (1, '未入库'), (2, '已入库'), (3, '已出库'),
-        (4, '已借出'), (5, '已注销'))'''
+        (1, '未入库'), (2, '已入库'), (3, '已出库'), (4, '已借出'), (5, '已注销'), (6, '无需入库'))'''
     if form_storage_add_edit.is_valid():
         storage_add_clean = form_storage_add_edit.cleaned_data
         print('storage_add_clean:', storage_add_clean)
@@ -509,8 +497,7 @@ def storages_add_ajax(request):  # 出入库添加ajax
         if warrant_state == 2:
             if storage_typ in [2, 3, 5]:
                 print('storage_typ in [2, 3, 5]')
-                print("storage_add_clean['transfer_builder']:",
-                      type(storage_add_clean['transfer']))
+                print("storage_add_clean['transfer_builder']:", type(storage_add_clean['transfer']))
                 '''WARRANT_TYP_LIST = [
                     (1, '房产'), (2, '土地'), (3, '应收'), (4, '股权'),
                     (5, '票据'), (6, '车辆'), (7, '其他'), (9, '他权')]'''
@@ -553,7 +540,7 @@ def storages_add_ajax(request):  # 出入库添加ajax
                         response['message'] = '权证出库信息创建失败：%s' % str(e)
             else:
                 response['status'] = False
-                response['message'] = '该权证已在库中，无法办理入库操作！！！'
+                response['message'] = '该权证已在库中或无需入库，无法办理入库操作！！！'
         else:
             if storage_typ in [1, 4]:
                 print("storage_typ in [1, 4]")
@@ -588,6 +575,7 @@ def house(request, *args, **kwargs):  # 房产列表
     print(__file__, '---->def warrant')
     print('**kwargs:', kwargs)
 
+    PAGE_TITAL = '权证-房产'
     add_warrant = '添加房产'
     warrant_typ_n = 1
 
@@ -616,6 +604,7 @@ def ground(request, *args, **kwargs):  # 房产列表
     print(__file__, '---->def warrant')
     print('**kwargs:', kwargs)
 
+    PAGE_TITAL = '权证-土地'
     add_warrant = '添加土地'
     warrant_typ_n = 2
 
@@ -643,6 +632,7 @@ def ground(request, *args, **kwargs):  # 房产列表
 def warrant(request, *args, **kwargs):  # 房产列表
     print(__file__, '---->def warrant')
 
+    PAGE_TITAL = '权证-所有'
     add_warrant = '添加权证'
     warrant_typ_n = 0
 
@@ -670,6 +660,30 @@ def warrant(request, *args, **kwargs):  # 房产列表
         p_list = paginator.page(paginator.num_pages)
 
     return render(request, 'dbms/warrant/warrant.html', locals())
+
+
+# -----------------------按合同入库---------------------#
+@login_required
+def warrant_agree(request, *args, **kwargs):  # 按合同入库
+    print(__file__, '---->def warrant_agree')
+    PAGE_TITAL = '权证-按合同'
+
+    '''AGREE_STATE_LIST = ((11, '待签批'), (21, '已签批'), (31, '已落实，未放款'), (41, '已落实，放款'),
+                        (42, '未落实，放款'), (51, '待变更'), (61, '已解保'), (99, '已作废'))'''
+    agree_list = models.Agrees.objects.filter(**kwargs).filter(agree_state__in=[21, 42]).select_related(
+        'lending', 'branch').order_by('-agree_num')
+
+    ####分页信息###
+    paginator = Paginator(agree_list, 10)
+    page = request.GET.get('page')
+    try:
+        p_agree_list = paginator.page(page)
+    except PageNotAnInteger:
+        p_agree_list = paginator.page(1)
+    except EmptyPage:
+        p_agree_list = paginator.page(paginator.num_pages)
+
+    return render(request, 'dbms/warrant/warrant-agree.html', locals())
 
 
 # ---------------------warrant_scan权证预览------------------------#
@@ -719,3 +733,73 @@ def warrant_scan(request, warrant_id):  # house_scan房产预览
         storages_p_list = paginator.page(paginator.num_pages)
 
     return render(request, 'dbms/warrant/warrant-scan.html', locals())
+
+
+# --------------------------按合同入库-按合同查看--------------------------#
+@login_required
+def warrant_agree_scan(request, agree_id):  # 查看合同
+    print(__file__, '---->def warrant_agree_scan')
+    page_title = '权证管理'
+    '''SURE_TYP_LIST = (
+            (1, '企业保证'), (2, '个人保证'),
+            (11, '房产抵押'), (12, '土地抵押'), (13, '设备抵押'), (14, '存货抵押'), (15, '车辆抵押'),
+            (21, '房产顺位'), (22, '土地顺位'),
+            (31, '应收质押'), (32, '股权质押'), (33, '票据质押'),
+            (41, '合格证监管'), (42, '房产监管'), (43, '土地监管'),
+            (51, '股权预售'), (52, '房产预售'), (53, '土地预售'))'''
+    '''COUNTER_TYP_LIST = (
+        (1, '企业担保'), (2, '个人保证'),
+        (11, '房产抵押'), (12, '土地抵押'), (13, '设备抵押'), (14, '存货抵押'), (15, '车辆抵押'),
+        (31, '应收质押'), (32, '股权质押'), (33, '票据质押'),
+        (51, '股权预售'), (52, '房产预售'), (53, '土地预售'))'''
+    agree_obj = models.Agrees.objects.get(id=agree_id)
+    lending_obj = agree_obj.lending
+
+    '''WARRANT_TYP_LIST = [
+        (1, '房产'), (2, '土地'), (11, '应收'), (21, '股权'),
+        (31, '票据'), (41, '车辆'), (51, '动产'), (99, '他权')]'''
+    sure_list = [1, 2]  # 保证反担保类型
+    house_list = [11, 21, 42, 52]
+    ground_list = [12, 22, 43, 53]
+    receivable_list = [31]
+    stock_list = [32]
+
+    form_storage_add_edit = forms.StoragesAddEidtForm()
+
+    return render(request, 'dbms/warrant/warrant-agree-scan.html', locals())
+
+
+# --------------------------按合同入库-按合同查看--------------------------#
+@login_required
+def warrant_agree_warrant(request, agree_id, warrant_id):  # 查看合同
+    print(__file__, '---->def warrant_agree_scan')
+    page_title = '权证管理'
+    '''SURE_TYP_LIST = (
+            (1, '企业保证'), (2, '个人保证'),
+            (11, '房产抵押'), (12, '土地抵押'), (13, '设备抵押'), (14, '存货抵押'), (15, '车辆抵押'),
+            (21, '房产顺位'), (22, '土地顺位'),
+            (31, '应收质押'), (32, '股权质押'), (33, '票据质押'),
+            (41, '合格证监管'), (42, '房产监管'), (43, '土地监管'),
+            (51, '股权预售'), (52, '房产预售'), (53, '土地预售'))'''
+    '''COUNTER_TYP_LIST = (
+        (1, '企业担保'), (2, '个人保证'),
+        (11, '房产抵押'), (12, '土地抵押'), (13, '设备抵押'), (14, '存货抵押'), (15, '车辆抵押'),
+        (31, '应收质押'), (32, '股权质押'), (33, '票据质押'),
+        (51, '股权预售'), (52, '房产预售'), (53, '土地预售'))'''
+    agree_obj = models.Agrees.objects.get(id=agree_id)
+    lending_obj = agree_obj.lending
+    warrant_obj = models.Warrants.objects.get(id=warrant_id)
+
+    print('agree_obj.ypothec_agree.all():', agree_obj.ypothec_agree.all())
+    '''WARRANT_TYP_LIST = [
+        (1, '房产'), (2, '土地'), (11, '应收'), (21, '股权'),
+        (31, '票据'), (41, '车辆'), (51, '动产'), (99, '他权')]'''
+    sure_list = [1, 2]  # 保证反担保类型
+    house_list = [11, 21, 42, 52]
+    ground_list = [12, 22, 43, 53]
+    receivable_list = [31]
+    stock_list = [32]
+
+    form_storage_add_edit = forms.StoragesAddEidtForm()
+
+    return render(request, 'dbms/warrant/warrant-agree-warrant.html', locals())

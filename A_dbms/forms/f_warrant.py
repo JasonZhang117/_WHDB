@@ -125,5 +125,5 @@ class StoragesAddEidtForm(dform.ModelForm):
         fields = ['storage_typ', 'storage_date', 'transfer']
 
         widgets = {'storage_typ': dform.Select(attrs={'class': 'form-control'}),
-                   'storage_date': dform.DateInput(attrs={'class': 'form-control', 'type': 'date', }),
+                   'storage_date': dform.DateInput(attrs={'class': 'form-control', 'type': 'date'}),
                    'transfer': dform.Select(attrs={'class': 'form-control'})}

@@ -4,6 +4,7 @@ from .. import forms
 import time, json
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.db import transaction
+from django.db.models import Sum, Max, Count
 
 
 # 客户、行业、区域信息管理
@@ -69,7 +70,6 @@ def custom_add_ajax(request):
                 except Exception as e:
                     response['status'] = False
                     response['message'] = '客户创建失败：%s' % str(e)
-
             else:
                 response['status'] = False
                 response['message'] = '表单信息有误！！！'
@@ -88,7 +88,6 @@ def custom_add_ajax(request):
                             contact_addr=custom_add_data['contact_addr'],
                             linkman=custom_add_data['linkman'],
                             contact_num=custom_add_data['contact_num'])
-
                         custom_p_obj = models.CustomesP.objects.create(
                             custome=custom_obj,
                             license_num=custom_p_data['license_num'],
@@ -97,17 +96,56 @@ def custom_add_ajax(request):
                 except Exception as e:
                     response['status'] = False
                     response['message'] = '客户创建失败：%s' % str(e)
-
-
             else:
                 response['status'] = False
                 response['message'] = '表单信息有误！！！'
                 response['forme'] = form_custom_p_add.errors
-
     else:
         response['status'] = False
         response['message'] = '表单信息有误！！！'
         response['forme'] = form_custom_add.errors
+    result = json.dumps(response, ensure_ascii=False)
+    return HttpResponse(result)
+
+
+# -----------------------股权信息添加-------------------------#
+def shareholder_add_ajax(request):
+    print(__file__, '---->def shareholder_add_ajax')
+    response = {'status': True, 'message': None, 'forme': None, }
+    post_data_str = request.POST.get('postDataStr')
+    post_data = json.loads(post_data_str)
+    print('post_data:', post_data)
+    custom_id = post_data['custom_id']
+    custom_obj = models.Customes.objects.get(id=custom_id)
+
+    form_shareholder_add = forms.FormShareholderAdd(post_data)
+    if form_shareholder_add.is_valid():
+        shareholder_add_data = form_shareholder_add.cleaned_data
+        custom_c_obj = custom_obj.company_custome
+        shareholder_ratio_amount = custom_c_obj.shareholder_custom_c.all().aggregate(Sum('shareholding_ratio'))
+        print('shareholder_ratio_amount:', shareholder_ratio_amount)
+        shareholding_ratio = shareholder_add_data['shareholding_ratio']
+        print('shareholding_ratio:', shareholding_ratio)
+        ratio_amount = shareholder_ratio_amount['shareholding_ratio__sum'] + shareholding_ratio
+        print('ratio_amount:', ratio_amount)
+        if ratio_amount > 100:
+            response['status'] = False
+            response['message'] = '股权比合计操过100%，股权信息创建失败！！！'
+        else:
+            try:
+                shareholder_obj = models.Shareholders.objects.create(
+                    custom=custom_c_obj, shareholder_name=shareholder_add_data['shareholder_name'],
+                    invested_amount=shareholder_add_data['invested_amount'],
+                    shareholding_ratio=shareholding_ratio,
+                    shareholderor=request.user)
+            except Exception as e:
+                response['status'] = False
+                response['message'] = '股东信息创建失败：%s' % str(e)
+            response['message'] = '股东信息创建成功！！！'
+    else:
+        response['status'] = False
+        response['message'] = '表单信息有误！！！'
+        response['forme'] = form_shareholder_add.errors
     result = json.dumps(response, ensure_ascii=False)
     return HttpResponse(result)
 
@@ -123,7 +161,7 @@ def custom_del_ajax(request):
     custom_id = post_data['custom_id']
     custom_obj = models.Customes.objects.get(id=custom_id)
     lending_custom_list = custom_obj.lending_custom.all()
-    print('lending_custom_list:',lending_custom_list)
+    print('lending_custom_list:', lending_custom_list)
     if lending_custom_list:
         response['status'] = False
         response['message'] = '客户已作为项目反担保人，无法删除！'
@@ -147,7 +185,6 @@ def custom_edit_ajax(request):
     post_data_str = request.POST.get('postDataStr')
     post_data = json.loads(post_data_str)
     print('post_data:', post_data)
-    print("type(post_data['name']):", type(post_data['name']))
     custom_id = post_data['custom_id']
     custom_lsit = models.Customes.objects.filter(id=custom_id)
     custom_obj = custom_lsit[0]
@@ -224,7 +261,8 @@ def custom_edit_ajax(request):
 def custom_scan(request, custom_id):  # 项目预览
     print(__file__, '---->def custom_scan')
     custom_obj = models.Customes.objects.get(id=custom_id)
-
+    shareholder_list = custom_obj.company_custome.shareholder_custom_c.all()
+    print('shareholder_list:', shareholder_list)
     form_date = {
         'name': custom_obj.name,
         'contact_addr': custom_obj.contact_addr,
@@ -246,5 +284,6 @@ def custom_scan(request, custom_id):  # 项目预览
             'license_num': custom_obj.person_custome.license_num,
             'license_addr': custom_obj.person_custome.license_addr}
         form_custom_p_add = forms.CustomPAddForm(initial=form_date)
+    form_shareholder_add = forms.FormShareholderAdd()
 
     return render(request, 'dbms/custom/custom-scan.html', locals())
