@@ -1,17 +1,11 @@
 <div class="table-responsive">
-    {#"table-responsive":表格响应式布局#}
-    <table class="table table-bordered table-hover
-                table-condensed active">
-        {#"table-bordered":表格表格边框#}
-        {#"table-hover":表格悬停变色#}
-        {#"table-condensed":表格紧缩#}
-        {#<caption><h4>项目管理</h4></caption>#}
+    <table class="table table-bordered table-hover table-condensed active">
         <thead>
         <tr style="text-align: center">
-            <th>担保方式</th>
+            <th>序号</th>
             <th>他权编号</th>
             <th>入库情况</th>
-            {% if page_title == '权证管理' %}
+            {% if PAGE_TITAL == '权证管理' %}
                 <th>操作</th>
             {% endif %}
         </tr>
@@ -19,10 +13,11 @@
         <tbody class="agree-warrant-tb">
         {% for ypothec in agree_obj.ypothec_agree.all %}
             <tr warrant-nid={{ ypothec.warrant.id }}>
-                <td>{{ ypothec.warrant.warrant_num }}</td>
-                <td>{{ ypothec.warrant.get_warrant_typ_display }}</td>
+                <td>{{ forloop.counter }}</td>
+                <td><a target="_blank" href="{% url 'dbms:warrant_scan' warrant_id=ypothec.warrant.id %}">
+                    {{ ypothec.warrant.warrant_num }}</a></td>
                 <td>{{ ypothec.warrant.get_warrant_state_display }}</td>
-                {% if page_title == '权证管理' %}
+                {% if PAGE_TITAL == '权证管理' %}
                     <td><a class="btn btn-danger btn-xs addStoragesAgreeB">出入库</a></td>
                 {% endif %}
             </tr>

@@ -2,25 +2,28 @@
     <table class="table table-bordered table-hover table-condensed active">
         <thead>
         <tr style="text-align: center">
+            <th>序号</th>
             <th>放款种类</th>
             <th>放款金额</th>
             <th>放款日期</th>
             <th>到期日</th>
             <th>归档状态</th>
             <th>放款状态</th>
-            <th>查看详情</th>
+            <th>操作</th>
         </tr>
         </thead>
         <tbody id="notify-provide-tb">
         {% for provide in notify_obj.provide_notify.all %}
             <tr provide-nid="{{ provide.id }}">
+                <td><a href="{% url 'dbms:provide_scan' provide_id=provide.id %}"
+                       target="_blank">{{ forloop.counter }}</a></td>
                 <td>{{ provide.get_provide_typ_display }}</td>
                 <td>{{ provide.provide_money }}</td>
                 <td>{{ provide.provide_date }}</td>
                 <td>{{ provide.due_date }}</td>
                 <td>{{ provide.get_implement_display }}</td>
                 <td>{{ provide.get_provide_status_display }}</td>
-                <td><a href="{% url 'dbms:provide_scan' provide_id=provide.id %}" target="_blank">查看详情</a></td>
+                <td><a class="btn btn-danger btn-xs delProvideB">删除</a></td>
             <tr>
         {% endfor %}
         </tbody>

@@ -1,0 +1,30 @@
+<div>
+    <label>
+        {% if kwargs.cooperator_state == None %}
+            <a class="active btn btn-primary btn-sm" href="{% url 'dbms:cooperative_all' %}">全部</a>
+        {% else %}
+            <a class="btn btn btn-primary btn-sm" href="{% url 'dbms:cooperative_all' %}">全部</a>
+        {% endif %}
+        {# 方式一：#}
+        {% for item in COOPERATOR_STATE_LIST %}
+            {% if item.0 == kwargs.cooperator_state %}
+                <a class="active btn btn-primary btn-sm"
+                   href="{% url 'dbms:cooperative' cooperator_state=item.0 %}">{{ item.1 }}</a>
+            {% else %}
+                <a class="btn btn-primary btn-sm"
+                   href="{% url 'dbms:cooperative' cooperator_state=item.0 %}">{{ item.1 }}</a>
+            {% endif %}
+        {% endfor %}
+    </label>
+
+    <label>
+        <form class="navbar-form" style="display: inline">
+            <input type="text" class="form-control" placeholder="搜索机构名称">
+            <button type="submit" class="btn btn-primary btn-sm">搜索</button>
+        </form>
+    </label>
+
+    <label class="pull-right">
+        <a class="btn btn-success btn-sm" id="addCooperativeB">添加</a>
+    </label>
+</div>

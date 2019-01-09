@@ -48,14 +48,22 @@ admin.site.register(models.Shareholders)  # 股东
 # -----------------------保后-------------------------#
 admin.site.register(models.Review)  # 行业
 
+
 # -----------------------外部信息-------------------------#
-admin.site.register(models.Cooperators)  # 授信机构
+class CooperatorsAdmin(admin.ModelAdmin):
+    list_display = ('name', 'cooperator_state', 'credit_date', 'due_date', 'flow_credit', 'flow_limit',
+                    'back_credit', 'back_limit')  # 显示字段
+    list_per_page = 30  # 每页显示条目数
+    search_fields = ['name']  # 搜索字段
+    ordering = ['-flow_credit', '-flow_limit']  # 排序字段
+
+
+admin.site.register(models.Cooperators, CooperatorsAdmin)  # 合作机构
 admin.site.register(models.Branches)  # 放款银行
 
 
 class ExpertsAdmin(admin.ModelAdmin):
-    list_display = ('name', 'organization', 'job', 'level',
-                    'contact_numb', 'email', 'ordery', 'expert_state',)  # 显示字段
+    list_display = ('name', 'organization', 'job', 'level', 'contact_numb', 'email', 'ordery', 'expert_state',)  # 显示字段
     list_per_page = 30  # 每页显示条目数
     search_fields = ['name']  # 搜索字段
     ordering = ['name']  # 排序字段

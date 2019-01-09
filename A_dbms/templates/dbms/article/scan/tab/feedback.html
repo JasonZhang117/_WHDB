@@ -12,6 +12,7 @@
             <th>风险分析</th>
             <th>风控建议</th>
             <th>反馈日期</th>
+            <th>反馈人</th>
         </tr>
         </thead>
         <tbody>
@@ -20,6 +21,7 @@
             <td>{{ article_obj.feedback_article.all.0.analysis }}</td>
             <td>{{ article_obj.feedback_article.all.0.suggestion }}</td>
             <td>{{ article_obj.feedback_article.all.0.feedback_date }}</td>
+            <td>{{ article_obj.feedback_article.all.0.feedback_buildor.name }}</td>
         <tr>
         </tbody>
     </table>

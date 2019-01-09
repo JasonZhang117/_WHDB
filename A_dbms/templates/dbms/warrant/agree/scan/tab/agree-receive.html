@@ -6,10 +6,9 @@
             <th>担保方式</th>
             <th>所有人</th>
             <th>详情</th>
+            <th>他权情况</th>
             <th>入库情况</th>
-            {% if page_title == '权证管理' %}
-                <th>操作</th>
-            {% endif %}
+
         </tr>
         </thead>
         <tbody class="agree-warrant-tb">
@@ -20,10 +19,14 @@
                         <td>{{ lending_sure.get_sure_typ_display }}</td>
                         <td>{{ warrant.receive_warrant.receive_owner }}</td>
                         <td>{{ warrant.receive_warrant.receivable_detail }}</td>
+                         <td>
+                            {% for ypothec in warrant.ypothec_m_agree.all %}
+                                {% if ypothec.agree.id == agree_obj.id %}
+                                    {{ ypothec.warrant }}
+                                {% endif %}
+                            {% endfor %}
+                        </td>
                         <td>{{ warrant.get_warrant_state_display }}</td>
-                        {% if page_title == '权证管理' %}
-                            <td><a class="btn btn-danger btn-xs addStoragesAgreeB">出入库</a></td>
-                        {% endif %}
                     </tr>
                 {% endfor %}
             {% endif %}

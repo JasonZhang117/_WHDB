@@ -75,8 +75,9 @@ urlpatterns = [
     # -----------------------放款管理-------------------------#
     path('provide/agree', views.provide_agree, name='provide_agree_all'),  # 菜单-放款管理-放款通知
     path('provide/agree/<int:agree_state>/', views.provide_agree, name='provide_agree'),  # /dbms/provide/(0-9)
-    path('provide/scan/<int:agree_id>/', views.provide_agree_scan, name='provide_agree_scan'),
-    path('provide/scan/<int:agree_id>/<int:notify_id>/', views.provide_agree_notify, name='agreep_scan_notify'),
+    path('provide/agree/scan/<int:agree_id>/', views.provide_agree_scan, name='provide_agree_scan'),
+    path('provide/agree/scan/<int:agree_id>/<int:notify_id>/', views.provide_agree_notify, name='provide_agree_notify'),
+
     path('provide/notify/add/', views.notify_add_ajax),
     path('provide/notify/del/', views.notify_del_ajax),
     path('provide/add/', views.provide_add_ajax),
@@ -100,7 +101,10 @@ urlpatterns = [
     path('custom/edit/', views.custom_edit_ajax),
     path('custom/shareholder/add/', views.shareholder_add_ajax),
 
-    # ---------------------------------------------------------------------------#
+    # ------------------------------合作机构--------------------------------------#
+    path('cooperative/', views.cooperative, name='cooperative_all'),  # 菜单-合作机构
+    path('cooperative/<int:cooperator_state>/', views.cooperative, name='cooperative'),  # /dbms/cstom/(0-9)
+
     # 员工
     path('employee/', views.employee, name='employee'),
     path('employee/add/', views.employee_add, name='employee_add'),

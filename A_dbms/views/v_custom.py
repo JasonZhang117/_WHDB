@@ -7,11 +7,10 @@ from django.db import transaction
 from django.db.models import Sum, Max, Count
 
 
-# 客户、行业、区域信息管理
 # -----------------------客户管理-------------------------#
 def custom(request, *args, **kwargs):  # 委托合同列表
     print(__file__, '---->def agree')
-
+    PAGE_TITLE = '客户管理'
     form_custom_add = forms.CustomAddForm()
     form_custom_c_add = forms.CustomCAddForm()
     form_custom_p_add = forms.CustomPAddForm()

@@ -264,7 +264,7 @@ class Chattel(models.Model):  # 动产
 def limit_agree_choices():
     '''AGREE_STATE_LIST = ((11, '待签批'), (21, '已签批'), (31, '已落实，未放款'), (41, '已落实，放款'),
                         (42, '未落实，放款'), (51, '待变更'), (61, '已解保'), (99, '已作废'))'''
-    return {'agree_state__in': [21, 42, 51]}
+    return {'agree_state__in': [21, 42]}
 
 
 class Hypothecs(models.Model):  # 他权

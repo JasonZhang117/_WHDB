@@ -4,21 +4,24 @@ import datetime
 
 # -----------------------授信银行-------------------------#
 class Cooperators(models.Model):  # 授信银行
-    name = models.CharField(verbose_name='授信银行', max_length=32, unique=True)
-    short_name = models.CharField(verbose_name='银行简称', max_length=32, unique=True)
-    flow_credit = models.FloatField(verbose_name='流贷&承兑额度', default=100000000)
-    flow_limit = models.FloatField(verbose_name='流贷&承兑单笔限额', default=10000000)
+    name = models.CharField(verbose_name='合作机构', max_length=32, unique=True)
+    short_name = models.CharField(verbose_name='机构简称', max_length=32, unique=True)
+    COOPERATOR_STATE_LIST = ((1, '金融机构'), (2, '律师事务所'), (3, '评估事务所'))
+    cooperator_state = models.IntegerField(verbose_name='机构类型', choices=COOPERATOR_STATE_LIST, default=1)
+    flow_credit = models.FloatField(verbose_name='综合额度', default=100000000)
+    flow_limit = models.FloatField(verbose_name='单笔限额（综合）', default=10000000)
     back_credit = models.FloatField(verbose_name='保函额度', default=0)
-    back_limit = models.FloatField(verbose_name='保函单笔限额', default=0)
-    credit_date = models.DateField(verbose_name='授信日期', default=datetime.date.today)
-    flow_used = models.FloatField(verbose_name='流贷&承兑占用额度', default=0)
-    flow_loan = models.FloatField(verbose_name='流贷&承兑放款额度', default=0)
-    back_used = models.FloatField(verbose_name='保函占用额度', default=0)
-    back_loan = models.FloatField(verbose_name='保函放款额度', default=0)
+    back_limit = models.FloatField(verbose_name='单笔限额（保函）', default=0)
+    credit_date = models.DateField(verbose_name='合作日期', default=datetime.date.today)
+    due_date = models.DateField(verbose_name='到期日', default=datetime.date.today)
+    flow_used = models.FloatField(verbose_name='_流贷&承兑占用额度', default=0)
+    flow_loan = models.FloatField(verbose_name='_流贷&承兑放款额度', default=0)
+    back_used = models.FloatField(verbose_name='_保函占用额度', default=0)
+    back_loan = models.FloatField(verbose_name='_保函放款额度', default=0)
 
     # Cancellation = models.BooleanField('注销', default=False)
     class Meta:
-        verbose_name_plural = '外部-授信银行'  # 指定显示名称
+        verbose_name_plural = '外部-合作机构'  # 指定显示名称
         db_table = 'dbms_cooperators'  # 指定数据表的名称
 
     def __str__(self):
@@ -27,9 +30,9 @@ class Cooperators(models.Model):  # 授信银行
 
 # -----------------------放款银行-------------------------#
 class Branches(models.Model):  # 放款银行
-    cooperator = models.ForeignKey(to='Cooperators',
-                                   verbose_name="授信银行",
+    cooperator = models.ForeignKey(to='Cooperators', verbose_name="授信银行",
                                    on_delete=models.CASCADE,
+                                   limit_choices_to={'cooperator_state': 1},
                                    related_name='branch_cooperator')
     name = models.CharField(verbose_name='放款银行', max_length=32)
     institution_code = models.CharField(verbose_name='金融机构代码', max_length=32, unique=True)

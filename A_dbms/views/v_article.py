@@ -11,8 +11,6 @@ import json
 from django.db.utils import IntegrityError
 
 
-# 项目信息管理
-# --------------------------------70---------------------------------#
 # -----------------------------项目管理-------------------------------#
 def creat_article_num(custom_id):
     custom = models.Customes.objects.get(id=custom_id)
@@ -188,15 +186,12 @@ def article_edit_ajax(request):  # 修改项目ajax
             augment = cleaned_data['augment']
             amount = renewal + augment
             try:
-                article_list = models.Articles.objects.filter(
-                    id=article_id)
+                article_list = models.Articles.objects.filter(id=article_id)
                 article_list.update(
                     custom_id=cleaned_data['custom_id'], renewal=renewal,
-                    augment=augment, amount=amount,
-                    credit_term=cleaned_data['credit_term'],
-                    director_id=cleaned_data['director_id'],
-                    assistant_id=cleaned_data['assistant_id'],
-                    control_id=cleaned_data['control_id'])
+                    augment=augment, amount=amount, credit_term=cleaned_data['credit_term'],
+                    director_id=cleaned_data['director_id'], assistant_id=cleaned_data['assistant_id'],
+                    control_id=cleaned_data['control_id'], article_buildor=request.user)
                 response['message'] = '成功修改项目：%s！' % article_obj.article_num
             except Exception as e:
                 response['status'] = False

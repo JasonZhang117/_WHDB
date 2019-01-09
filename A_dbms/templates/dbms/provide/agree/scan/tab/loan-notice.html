@@ -1,0 +1,43 @@
+<div class="table-responsive">
+    <table class="table table-bordered table-hover table-condensed active">
+        <thead>
+        <tr style="text-align: center">
+            <th>序号</th>
+            <th>借款合同</th>
+            <th>保证合同</th>
+            <th>通知日期</th>
+            <th>通知金额</th>
+            <th>备注</th>
+            <th>操作人员</th>
+            <th>已放款金额</th>
+            <th>操作</th>
+        </tr>
+        </thead>
+        <tbody id="provide-notify-tb">
+        {% for notify in agree_obj.notify_agree.all %}
+            <tr notify-nid="{{ notify.id }}">
+                {% if notify_id %}
+                    {% if notify.id == notify_id %}
+                        <td><a href="{% url 'dbms:provide_agree_notify' agree_id=agree_obj.id notify_id=notify.id %}">
+                            {{ forloop.counter }}*</a></td>
+                    {% else %}
+                        <td><a href="{% url 'dbms:provide_agree_notify' agree_id=agree_obj.id notify_id=notify.id %}">
+                            {{ forloop.counter }}</a></td>
+                    {% endif %}
+                {% else %}
+                    <td><a href="{% url 'dbms:provide_agree_notify' agree_id=agree_obj.id notify_id=notify.id %}">
+                        {{ forloop.counter }}</a></td>
+                {% endif %}
+                <td>{{ notify.contracts_lease }}</td>
+                <td>{{ notify.contract_guaranty }}</td>
+                <td>{{ notify.notify_date }}</td>
+                <td>{{ notify.notify_money }}</td>
+                <td>{{ notify.remark }}</td>
+                <td>{{ notify.notifyor.name }}</td>
+                <td>{{ notify.notify_provide_sum }}</td>
+                <td><a class="btn btn-danger btn-xs delNotifyB">删除</a></td>
+            <tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>

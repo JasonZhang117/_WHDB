@@ -5,10 +5,12 @@
     });
 
     function bindDelNotifyB() {
-        $('#agree-notify-tb').on('click', '.delNotifyB', function () {
-            console.log("bindDelNotifyB")
+        console.log("bindDelNotifyB---");
+
+        $('#provide-notify-tb').on('click', '.delNotifyB', function () {
+            console.log("bindDelNotifyB");
             var delNotifyNid = $(this).parent().parent().attr('notify-nid');
-            console.log(delNotifyNid)
+            console.log(delNotifyNid);
             $('#delNotifyModalId').val(delNotifyNid);
             $('#delNotifyModal').modal('show');
         })

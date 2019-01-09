@@ -32,6 +32,7 @@ from .v_dun import compensatory, compensatory_scan
 # ----------------------v_custom客户管理视图--------------------#
 from .v_custom import (
     custom, custom_scan, custom_add_ajax, custom_del_ajax, custom_edit_ajax, shareholder_add_ajax)
+from .v_external import cooperative
 
 # 部门、员工
 from .v_interior import department, department_add, department_edit

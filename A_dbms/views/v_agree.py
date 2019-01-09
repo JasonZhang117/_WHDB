@@ -37,16 +37,14 @@ def agree(request, *args, **kwargs):  # 委托合同列表
 @login_required
 def agree_scan(request, agree_id):  # 查看合同
     print(__file__, '---->def agree_scan')
-    page_title = '合同详情'
+    PAGE_TITLE = '合同详情'
+    COUNTER_TYP_CUSTOM = [1, 2]
 
     '''COUNTER_TYP_LIST = (
         (1, '企业担保'), (2, '个人保证'),
         (11, '房产抵押'), (12, '土地抵押'), (13, '设备抵押'), (14, '存货抵押'), (15, '车辆抵押'),
         (31, '应收质押'), (32, '股权质押'), (33, '票据质押'),
         (51, '股权预售'), (52, '房产预售'), (53, '土地预售'))'''
-    counter_typ_custom = [1, 2]
-    counter_typ_h_g = [11, 12, 52, 53]
-    agree_counter_operate = False
 
     agree_obj = models.Agrees.objects.get(id=agree_id)
     agree_lending_obj = agree_obj.lending
@@ -137,8 +135,6 @@ def agree_add_ajax(request):  # 添加合同
         if form_agree_add.is_valid():
             agree_add_cleaned = form_agree_add.cleaned_data
             lending_obj = agree_add_cleaned['lending']
-            print('lending_obj:', lending_obj)
-            print('type(lending_obj):', type(lending_obj))
             agree_amount = agree_add_cleaned['agree_amount']
             guarantee_typ = agree_add_cleaned['guarantee_typ']
             agree_copies = agree_add_cleaned['agree_copies']

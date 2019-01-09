@@ -1,14 +1,13 @@
 <div class="table-responsive">
     {#"table-responsive":表格响应式布局#}
-    <table class="table table-bordered table-hover
-                table-condensed active">
+    <table class="table table-bordered table-hover table-condensed active">
         <thead>
         <tr style="text-align: center">
             <th>合同编号</th>
             <th>合同类型</th>
             <th>签订人</th>
             <th>签订情况</th>
-            {% if agree_counter_operate %}
+            {% if PAGE_TITLE == '合同详情' or PAGE_TITLE == '放款管理' %}
                 <th>操作</th>
             {% endif %}
         </tr>
@@ -18,7 +17,7 @@
             <tr counter-nid={{ counter.id }} counter-typ-nid={{ counter.counter_typ }}>
                 <td>{{ counter.counter_num }}</td>
                 <td>{{ counter.get_counter_typ_display }}</td>
-                {% if counter.counter_typ in counter_typ_custom %}
+                {% if counter.counter_typ in COUNTER_TYP_CUSTOM %}
                     <td>
                         {% for custome in counter.assure_counter.custome.all %}
                             {{ custome.name }}
@@ -44,8 +43,10 @@
                     </td>
                 {% endif %}
                 <td>{{ counter.get_counter_state_display }}</td>
-                {% if agree_counter_operate %}
+                {% if PAGE_TITLE == '合同详情' %}
                     <td><a class="btn btn-danger btn-xs delCounterB">删除</a></td>
+                {% elif PAGE_TITLE == '放款管理' %}
+                    <td><a class="btn btn-danger btn-xs signAgreeB">签订</a></td>
                 {% endif %}
             <tr>
         {% endfor %}

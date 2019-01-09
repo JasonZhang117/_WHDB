@@ -289,8 +289,7 @@ def warrant_edit_ajax(request):
                 print('house_add_edit_clean:', house_add_edit_clean)
                 try:
                     with transaction.atomic():
-                        warrant_list.update(
-                            warrant_num=warrant_edit_clean['warrant_num'])
+                        warrant_list.update(warrant_num=warrant_edit_clean['warrant_num'])
                         models.Houses.objects.filter(warrant=warrant_obj).update(
                             house_locate=house_add_edit_clean['house_locate'],
                             house_app=house_add_edit_clean['house_app'],
@@ -326,25 +325,13 @@ def warrant_edit_ajax(request):
                 response['message'] = '表单信息有误！！！'
                 response['forme'] = form_ground_add_edit.errors
         elif warrant_typ == 99:
-            print('warrant_typ == 9')
-            form_hypothecs_add_eidt = forms.HypothecsAddEidtForm(post_data)
-            if form_hypothecs_add_eidt.is_valid():
-                hypothecs_add_edit_clean = form_hypothecs_add_eidt.cleaned_data
-                print('hypothecs_add_edit_clean:', hypothecs_add_edit_clean)
-                try:
-                    with transaction.atomic():
-                        warrant_list.update(
-                            warrant_num=warrant_edit_clean['warrant_num'])
-                        models.Hypothecs.objects.filter(warrant=warrant_obj).update(
-                            agree=hypothecs_add_edit_clean['agree'])
-                        response['message'] = '土地创建成功！！！，请继续创建产权证信息。'
-                except Exception as e:
-                    response['status'] = False
-                    response['message'] = '土地创建失败：%s' % str(e)
-            else:
+            print('warrant_typ == 99')
+            try:
+                warrant_list.update(warrant_num=warrant_edit_clean['warrant_num'])
+                response['message'] = '他权信息修改该成功！！！'
+            except Exception as e:
                 response['status'] = False
-                response['message'] = '表单信息有误！！！'
-                response['forme'] = form_hypothecs_add_eidt.errors
+                response['message'] = '他权信息修改失败：%s' % str(e)
     else:
         response['status'] = False
         response['message'] = '表单信息有误！！！'
@@ -739,7 +726,7 @@ def warrant_scan(request, warrant_id):  # house_scan房产预览
 @login_required
 def warrant_agree_scan(request, agree_id):  # 查看合同
     print(__file__, '---->def warrant_agree_scan')
-    page_title = '权证管理'
+    PAGE_TITAL = '权证管理'
     '''SURE_TYP_LIST = (
             (1, '企业保证'), (2, '个人保证'),
             (11, '房产抵押'), (12, '土地抵押'), (13, '设备抵押'), (14, '存货抵押'), (15, '车辆抵押'),

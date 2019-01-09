@@ -13,7 +13,7 @@ from django.db.models import Avg, Min, Sum, Max, Count
 @login_required
 def provide_agree(request, *args, **kwargs):  # 放款管理
     print(__file__, '---->def provide_agree')
-    PAGE_TITAL = '放款管理'
+    PAGE_TITLE = '放款管理'
 
     agree_state_list = models.Agrees.AGREE_STATE_LIST
     '''AGREE_STATE_LIST = ((11, '待签批'), (21, '已签批'), (31, '已落实，未放款'), (41, '已落实，放款'),
@@ -38,34 +38,71 @@ def provide_agree(request, *args, **kwargs):  # 放款管理
 @login_required
 def provide_agree_scan(request, agree_id):  # 查看放款
     print(__file__, '---->def provide_agree_scan')
-    PAGE_TITAL = '放款管理'
-    '''SURE_TYP_LIST = (
-                (1, '企业保证'), (2, '个人保证'),
-                (11, '房产抵押'), (12, '土地抵押'), (13, '设备抵押'), (14, '存货抵押'), (15, '车辆抵押'),
-                (21, '房产顺位'), (22, '土地顺位'),
-                (31, '应收质押'), (32, '股权质押'), (33, '票据质押'),
-                (41, '合格证监管'), (42, '房产监管'), (43, '土地监管'),
-                (51, '股权预售'), (52, '房产预售'), (53, '土地预售'))'''
+    PAGE_TITLE = '放款管理'
     '''COUNTER_TYP_LIST = (
         (1, '企业担保'), (2, '个人保证'),
         (11, '房产抵押'), (12, '土地抵押'), (13, '设备抵押'), (14, '存货抵押'), (15, '车辆抵押'),
         (31, '应收质押'), (32, '股权质押'), (33, '票据质押'),
         (51, '股权预售'), (52, '房产预售'), (53, '土地预售'))'''
-    agree_obj = models.Agrees.objects.get(id=agree_id)
-    lending_obj = agree_obj.lending
-
+    COUNTER_TYP_CUSTOM = [1, 2]
+    '''SURE_TYP_LIST = (
+                    (1, '企业保证'), (2, '个人保证'),
+                    (11, '房产抵押'), (12, '土地抵押'), (13, '设备抵押'), (14, '存货抵押'), (15, '车辆抵押'),
+                    (21, '房产顺位'), (22, '土地顺位'),
+                    (31, '应收质押'), (32, '股权质押'), (33, '票据质押'),
+                    (41, '合格证监管'), (42, '房产监管'), (43, '土地监管'),
+                    (51, '股权预售'), (52, '房产预售'), (53, '土地预售'))'''
     '''WARRANT_TYP_LIST = [
-        (1, '房产'), (2, '土地'), (11, '应收'), (21, '股权'),
-        (31, '票据'), (41, '车辆'), (51, '动产'), (99, '他权')]'''
+           (1, '房产'), (2, '土地'), (11, '应收'), (21, '股权'),
+           (31, '票据'), (41, '车辆'), (51, '动产'), (99, '他权')]'''
     sure_list = [1, 2]  # 保证反担保类型
     house_list = [11, 21, 42, 52]
     ground_list = [12, 22, 43, 53]
     receivable_list = [31]
     stock_list = [32]
 
+    agree_obj = models.Agrees.objects.get(id=agree_id)
+    lending_obj = agree_obj.lending
+
     form_notify_add = forms.FormNotifyAdd()
 
     return render(request, 'dbms/provide/provide-agree-scan.html', locals())
+
+
+# -----------------------------查看放款通知------------------------------#
+@login_required
+def provide_agree_notify(request, agree_id, notify_id):  # 查看放款通知
+    print(__file__, '---->def provide_agree_notify')
+    PAGE_TITLE = '放款管理'
+    '''COUNTER_TYP_LIST = (
+        (1, '企业担保'), (2, '个人保证'),
+        (11, '房产抵押'), (12, '土地抵押'), (13, '设备抵押'), (14, '存货抵押'), (15, '车辆抵押'),
+        (31, '应收质押'), (32, '股权质押'), (33, '票据质押'),
+        (51, '股权预售'), (52, '房产预售'), (53, '土地预售'))'''
+    COUNTER_TYP_CUSTOM = [1, 2]
+    '''SURE_TYP_LIST = (
+                    (1, '企业保证'), (2, '个人保证'),
+                    (11, '房产抵押'), (12, '土地抵押'), (13, '设备抵押'), (14, '存货抵押'), (15, '车辆抵押'),
+                    (21, '房产顺位'), (22, '土地顺位'),
+                    (31, '应收质押'), (32, '股权质押'), (33, '票据质押'),
+                    (41, '合格证监管'), (42, '房产监管'), (43, '土地监管'),
+                    (51, '股权预售'), (52, '房产预售'), (53, '土地预售'))'''
+    '''WARRANT_TYP_LIST = [
+           (1, '房产'), (2, '土地'), (11, '应收'), (21, '股权'),
+           (31, '票据'), (41, '车辆'), (51, '动产'), (99, '他权')]'''
+    sure_list = [1, 2]  # 保证反担保类型
+    house_list = [11, 21, 42, 52]
+    ground_list = [12, 22, 43, 53]
+    receivable_list = [31]
+    stock_list = [32]
+
+    agree_obj = models.Agrees.objects.get(id=agree_id)
+    lending_obj = agree_obj.lending
+    notify_obj = models.Notify.objects.get(id=notify_id)
+
+    form_provide_add = forms.FormProvideAdd()
+
+    return render(request, 'dbms/provide/provide-agree-notify.html', locals())
 
 
 # -----------------------------添加放款通知ajax------------------------------#
@@ -96,7 +133,9 @@ def notify_add_ajax(request):
                 with transaction.atomic():
                     notify_obj = models.Notify.objects.create(
                         agree=agree_obj, notify_money=notify_money, notify_date=form_notify_cleaned['notify_date'],
-                        notifyor=request.user)
+                        contracts_lease=form_notify_cleaned['contracts_lease'],
+                        contract_guaranty=form_notify_cleaned['contract_guaranty'],
+                        remark=form_notify_cleaned['remark'], notifyor=request.user)
                     agree_list.update(agree_notify_sum=amount)
                 response['message'] = '成功添加放款通知！'
             except Exception as e:
@@ -138,20 +177,6 @@ def notify_del_ajax(request):  # 反担保人删除ajax
             response['message'] = '放款通知删除失败：%s' % str(e)
     result = json.dumps(response, ensure_ascii=False)
     return HttpResponse(result)
-
-
-# ------------------------provide_scan_notice查看放款通知-------------------------#
-@login_required
-def provide_agree_notify(request, agree_id, notify_id):  # 查看放款通知
-    print(__file__, '---->def provide_scan_notify')
-
-    agree_obj = models.Agrees.objects.get(id=agree_id)
-    notify_obj = models.Notify.objects.get(id=notify_id)
-    print('notify_obj:', notify_obj)
-
-    form_provide_add = forms.FormProvideAdd()
-
-    return render(request, 'dbms/provide/agreep-scan-notify.html', locals())
 
 
 # -----------------------------添加放款ajax------------------------------#

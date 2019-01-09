@@ -7,7 +7,7 @@ class Articles(models.Model):  # 项目、纪要
     article_num = models.CharField(verbose_name='_项目编号', max_length=32, unique=True)
     custom = models.ForeignKey(to='Customes', verbose_name="客户",
                                on_delete=models.PROTECT,
-                               limit_choices_to={'counter_only': 0},
+                               limit_choices_to={'agree_state': 11},
                                related_name='article_custom')
     renewal = models.FloatField(verbose_name='续贷金额（元）', default=0)
     augment = models.FloatField(verbose_name='新增金额（元）', default=0)
@@ -57,7 +57,7 @@ class Feedback(models.Model):
     analysis = models.TextField(verbose_name='风险分析')
     suggestion = models.TextField(verbose_name='风控意见')
     feedback_buildor = models.ForeignKey(to='Employees', verbose_name="创建者",
-                                         on_delete=models.PROTECT, default=1,
+                                         on_delete=models.PROTECT,
                                          related_name='feedback_buildor_employee')
     feedback_date = models.DateField(verbose_name='提交日期', default=datetime.date.today)
 

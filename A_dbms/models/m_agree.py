@@ -19,8 +19,7 @@ class Agrees(models.Model):  # 委托合同
     agree_typ = models.IntegerField(verbose_name='合同种类', choices=AGREE_TYP_LIST)
     GUARANTEE_TYP_LIST = (('②', '②'), ('③', '③'), ('④', '④'),
                           ('⑤', '⑤'), ('⑥', '⑥'), ('⑦', '⑦'),)
-    guarantee_typ = models.CharField(
-        verbose_name='反担保种类数', max_length=6, choices=GUARANTEE_TYP_LIST)
+    guarantee_typ = models.CharField(verbose_name='反担保种类数', max_length=6, choices=GUARANTEE_TYP_LIST)
     agree_copies = models.IntegerField(verbose_name='合同份数')
     agree_amount = models.FloatField(verbose_name='合同金额')
     AGREE_STATE_LIST = ((11, '待签批'), (21, '已签批'), (31, '已落实，未放款'), (41, '已落实，放款'),
@@ -30,6 +29,7 @@ class Agrees(models.Model):  # 委托合同
     charge = models.FloatField(verbose_name='应收保费（元）', default=0)
     agree_notify_sum = models.FloatField(verbose_name='_通知金额', default=0)
     agree_provide_sum = models.FloatField(verbose_name='_放款金额', default=0)
+    agree_remark = models.CharField(verbose_name='备注', max_length=128, null=True, blank=True)
     agree_buildor = models.ForeignKey(to='Employees', verbose_name="创建人", default=1,
                                       on_delete=models.PROTECT,
                                       related_name='agree_buildor_employee')
@@ -47,8 +47,8 @@ class Agrees(models.Model):  # 委托合同
 
 
 class AgreeesExtend(models.Model):
-    agree = models.OneToOneField(to='Agrees',
-                                 verbose_name="委托合同",
+    agree = models.OneToOneField(to='Agrees', verbose_name="委托合同",
+                                 limit_choices_to={'counter_only': 0},
                                  on_delete=models.PROTECT,
                                  related_name='extend_agree')
     contact_addr = models.CharField(verbose_name='联系地址', max_length=64)

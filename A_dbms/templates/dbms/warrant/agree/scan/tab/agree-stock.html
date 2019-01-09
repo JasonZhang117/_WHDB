@@ -8,10 +8,8 @@
             <th>标的公司</th>
             <th>质押数量(万元/股)</th>
             <th>股权性质</th>
+            <th>他权情况</th>
             <th>入库情况</th>
-            {% if page_title == '权证管理' %}
-                <th>操作</th>
-            {% endif %}
         </tr>
         </thead>
         <tbody class="agree-warrant-tb">
@@ -24,10 +22,14 @@
                         <td>{{ warrant.stock_warrant.target }}</td>
                         <td>{{ warrant.stock_warrant.share }}</td>
                         <td>{{ warrant.stock_warrant.get_stock_typ_display }}</td>
+                        <td>
+                            {% for ypothec in warrant.ypothec_m_agree.all %}
+                                {% if ypothec.agree.id == agree_obj.id %}
+                                    {{ ypothec.warrant }}
+                                {% endif %}
+                            {% endfor %}
+                        </td>
                         <td>{{ warrant.get_warrant_state_display }}</td>
-                        {% if page_title == '权证管理' %}
-                            <td><a class="btn btn-danger btn-xs addStoragesAgreeB">出入库</a></td>
-                        {% endif %}
                     </tr>
                 {% endfor %}
             {% endif %}

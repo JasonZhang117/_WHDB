@@ -17,8 +17,7 @@ class WarrantAddForm(dform.ModelForm):
 class WarrantEditForm(dform.Form):
     warrant_num = fields.CharField(
         label='权证编码', label_suffix="：",
-        widget=widgets.TextInput(
-            attrs={'class': 'form-control', 'placeholder': '权证编码'}))
+        widget=widgets.TextInput(attrs={'class': 'form-control', 'placeholder': '权证编码'}))
 
 
 # ------------------OwerShipEditForm产权证编辑-------------------#

@@ -1,41 +1,30 @@
 <div>
     <label>
         {% if kwargs.article_state == None %}
-            <a class="active btn btn-primary btn-sm"
-               href="{% url 'dbms:article_all' %}">全部</a>
+            <a class="active btn btn-primary btn-sm" href="{% url 'dbms:article_all' %}">全部</a>
         {% else %}
-            <a class="btn btn btn-primary btn-sm"
-               href="{% url 'dbms:article_all' %}">全部</a>
+            <a class="btn btn btn-primary btn-sm" href="{% url 'dbms:article_all' %}">全部</a>
         {% endif %}
 
         {# 方式一：#}
         {% for item in article_state_list_dic %}
             {% if item.id == kwargs.article_state %}
                 <a class="active btn btn-primary btn-sm"
-                   href="{% url 'dbms:article' article_state=item.id %}">
-                    {{ item.name }}
-                </a>
+                   href="{% url 'dbms:article' article_state=item.id %}"> {{ item.name }} </a>
             {% else %}
                 <a class="btn btn-primary btn-sm"
-                   href="{% url 'dbms:article' article_state=item.id %}">
-                    {{ item.name }}
-                </a>
+                   href="{% url 'dbms:article' article_state=item.id %}">{{ item.name }}</a>
             {% endif %}
         {% endfor %}
     </label>
     <label>
         <form class="navbar-form" style="display: inline">
-            <input type="text" class="form-control"
-                   placeholder="搜索客户或项目经理">
-            <button type="submit" class="btn btn-primary btn-sm">
-                搜索
-            </button>
+            <input type="text" class="form-control" placeholder="搜索客户或项目经理">
+            <button type="submit" class="btn btn-primary btn-sm">搜索</button>
         </form>
     </label>
     <label class="pull-right">
-        <a class="btn btn-primary btn-sm" id="addArticle">
-            添加项目
-        </a>
+        <a class="btn btn-primary btn-sm" id="addArticle">添加项目</a>
     </label>
 </div>
 
