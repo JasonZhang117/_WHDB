@@ -34,7 +34,9 @@ class Articles(models.Model):  # 项目、纪要
     sign_type = models.IntegerField(verbose_name='签批结论', choices=SIGN_TYPE_LIST, null=True, blank=True)
     sign_detail = models.TextField(verbose_name='签批意见', null=True, blank=True)
     sign_date = models.DateField(verbose_name='签批日期', null=True, blank=True)
+
     article_provide_sum = models.FloatField(verbose_name='_放款金额', default=0)
+    article_repayment_sum = models.FloatField(verbose_name='_还款金额', default=0)
     article_buildor = models.ForeignKey(to='Employees', verbose_name="创建者",
                                         on_delete=models.PROTECT, default=1,
                                         related_name='article_buildor_employee')

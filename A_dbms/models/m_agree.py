@@ -27,9 +27,12 @@ class Agrees(models.Model):  # 委托合同
     agree_state = models.IntegerField(verbose_name='_合同状态', choices=AGREE_STATE_LIST, default=11)
     agree_sign_date = models.DateField(verbose_name='签批日期', null=True, blank=True)
     charge = models.FloatField(verbose_name='应收保费（元）', default=0)
+    agree_remark = models.CharField(verbose_name='备注', max_length=128, null=True, blank=True)
+
     agree_notify_sum = models.FloatField(verbose_name='_通知金额', default=0)
     agree_provide_sum = models.FloatField(verbose_name='_放款金额', default=0)
-    agree_remark = models.CharField(verbose_name='备注', max_length=128, null=True, blank=True)
+    agree_repayment_sum = models.FloatField(verbose_name='_还款金额', default=0)
+
     agree_buildor = models.ForeignKey(to='Employees', verbose_name="创建人", default=1,
                                       on_delete=models.PROTECT,
                                       related_name='agree_buildor_employee')

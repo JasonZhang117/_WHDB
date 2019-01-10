@@ -27,15 +27,15 @@
             {% if lending_sure.sure_typ in house_list %}
                 {% for warrant in lending_sure.warrant_sure.warrant.all %}
                     <tr warrant-nid={{ warrant.id }}>
-                        <td>{{ forloop.counter }}</td>
+                        <td><a target="_blank" href="{% url 'dbms:warrant_scan' warrant_id=warrant.id %}">
+                            {{ forloop.counter }}</a></td>
                         <td>{{ lending_sure.get_sure_typ_display }}</td>
                         <td>
                             {% for ownership in warrant.ownership_warrant.all %}
                                 {{ ownership.owner }}{% if not forloop.last %}、{% endif %}
                             {% endfor %}
                         </td>
-                        <td><a target="_blank" href="{% url 'dbms:warrant_scan' warrant_id=warrant.id %}">
-                            {{ warrant.house_warrant.house_locate }}</a></td>
+                        <td>{{ warrant.house_warrant.house_locate }}</td>
                         <td>{{ warrant.house_warrant.house_area }}</td>
                         <td>{{ warrant.house_warrant.get_house_app_display }}</td>
                         <td>

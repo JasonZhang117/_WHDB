@@ -13,9 +13,9 @@
         <tbody class="agree-warrant-tb">
         {% for ypothec in agree_obj.ypothec_agree.all %}
             <tr warrant-nid={{ ypothec.warrant.id }}>
-                <td>{{ forloop.counter }}</td>
                 <td><a target="_blank" href="{% url 'dbms:warrant_scan' warrant_id=ypothec.warrant.id %}">
-                    {{ ypothec.warrant.warrant_num }}</a></td>
+                    {{ forloop.counter }}</a></td>
+                <td>{{ ypothec.warrant.warrant_num }}</td>
                 <td>{{ ypothec.warrant.get_warrant_state_display }}</td>
                 {% if PAGE_TITAL == '权证管理' %}
                     <td><a class="btn btn-danger btn-xs addStoragesAgreeB">出入库</a></td>

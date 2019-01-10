@@ -76,7 +76,10 @@ class LendingOrder(models.Model):
     ORDER_LIST = ((1, '第一次'), (2, '第二次'), (3, '第三次'), (4, '第四次'))
     order = models.IntegerField(verbose_name='发放次序', choices=ORDER_LIST, default=1)
     order_amount = models.FloatField(verbose_name='拟放金额')
+
     lending_provide_sum = models.FloatField(verbose_name='_放款金额', default=0)
+    lending_repayment_sum = models.FloatField(verbose_name='_还款金额', default=0)
+
     lending_buildor = models.ForeignKey(to='Employees', verbose_name="创建者",
                                         on_delete=models.PROTECT, default=1,
                                         related_name='lending_employee')

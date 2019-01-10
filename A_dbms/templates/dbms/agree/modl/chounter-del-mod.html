@@ -1,0 +1,18 @@
+<div class="modal fade bs-example-modal-sm" id="delCounterModal"
+     tabindex="-1" role="dialog" aria-labelledby="delCounterModal">
+    <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="delCounterModalLabel">删除反担保合同
+                    <input style="display: none" name="agree_id" id="id_agree_id" value={{ agree_obj.id }}>
+                    <input style="display: none" name="counter_id" id="delCounterModalId">
+                </h4>
+            </div>
+            <div class="modal-body">是否确定删除此反担保合同!!!</div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                <button type="button" class="btn btn-primary" id="delCounterModalOk">删除</button>
+            </div>
+        </div>
+    </div>
+</div>

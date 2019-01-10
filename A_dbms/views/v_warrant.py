@@ -470,7 +470,7 @@ def storages_add_ajax(request):  # 出入库添加ajax
 
     warrant_id = post_data['warrant_id']
     warrant_list = models.Warrants.objects.filter(id=warrant_id)
-    warrant_obj = warrant_list[0]
+    warrant_obj = warrant_list.first()
     warrant_state = warrant_obj.warrant_state
     form_storage_add_edit = forms.StoragesAddEidtForm(post_data)
     '''STORAGE_TYP_LIST = ((1, '入库'), (2, '出库'), (3, '借出'), (4, '归还'), (5, '解保'))'''
@@ -481,17 +481,16 @@ def storages_add_ajax(request):  # 出入库添加ajax
         print('storage_add_clean:', storage_add_clean)
         storage_typ = storage_add_clean['storage_typ']
         print('warrant_state:', warrant_state)
-        if warrant_state == 2:
-            if storage_typ in [2, 3, 5]:
-                print('storage_typ in [2, 3, 5]')
-                print("storage_add_clean['transfer_builder']:", type(storage_add_clean['transfer']))
+
+        if warrant_state == 2:  # (2, '已入库'),
+            if storage_typ in [2, 3, 5]:  # (2, '出库'), (3, '借出'), (5, '解保')
                 '''WARRANT_TYP_LIST = [
-                    (1, '房产'), (2, '土地'), (3, '应收'), (4, '股权'),
-                    (5, '票据'), (6, '车辆'), (7, '其他'), (9, '他权')]'''
-                if warrant_obj.warrant_typ == 9 and storage_typ == 5:  # 他权解保
+                    (1, '房产'), (2, '土地'), (11, '应收'), (21, '股权'),
+                    (31, '票据'), (41, '车辆'), (51, '动产'), (99, '他权')]'''
+                if warrant_obj.warrant_typ == 99:  # 他权解保
                     ypothec_obj = warrant_obj.ypothec_warrant  # 他权
                     agree_list = models.Agrees.objects.filter(ypothec_agree=ypothec_obj)
-                    agree_obj = agree_list[0]
+                    agree_obj = agree_list.first()
                     if agree_obj.agree_state == 5:
                         # ypothec_obj.agree  # 他权对应委托合同
                         # 判断合同项下有无余额******
@@ -508,8 +507,8 @@ def storages_add_ajax(request):  # 出入库添加ajax
                             response['message'] = '他权解保失败：%s' % str(e)
                     else:
                         response['status'] = False
-                        response['message'] = '%s合同状态为：%s，无法解保他权' % (agree_obj.agree_num,
-                                                                     agree_obj.agree_state)
+                        response['message'] = '%s合同状态为：%s，无法办理他权出库' % (agree_obj.agree_num,
+                                                                       agree_obj.agree_state)
                 else:
                     try:
                         with transaction.atomic():
@@ -521,18 +520,16 @@ def storages_add_ajax(request):  # 出入库添加ajax
                                 warrant_list.update(warrant_state=4)
                             else:
                                 warrant_list.update(warrant_state=3)
-                        response['message'] = '权证出库信息创建成功！！！'
+                        response['message'] = '权证出库成功！！！'
                     except Exception as e:
                         response['status'] = False
-                        response['message'] = '权证出库信息创建失败：%s' % str(e)
+                        response['message'] = '权证出库失败：%s' % str(e)
             else:
                 response['status'] = False
-                response['message'] = '该权证已在库中或无需入库，无法办理入库操作！！！'
-        else:
-            if storage_typ in [1, 4]:
+                response['message'] = '该权证不在库中，无法办理出库操作！！！'
+        else:  # (1, '未入库'), (3, '已出库'), (4, '已借出'), (5, '已注销'), (6, '无需入库')
+            if storage_typ in [1, 4]:  # (1, '入库'), (4, '归还')
                 print("storage_typ in [1, 4]")
-                print("storage_add_clean['transfer_builder']:",
-                      type(storage_add_clean['transfer']))
                 try:
                     with transaction.atomic():
                         storage_obj = models.Storages.objects.create(
@@ -541,13 +538,13 @@ def storages_add_ajax(request):  # 出入库添加ajax
                             transfer=storage_add_clean['transfer'], conservator=request.user)
                         print('storage_obj:', storage_obj)
                         warrant_list.update(warrant_state=2)
-                    response['message'] = '权证入库信息创建成功！！！'
+                    response['message'] = '权证入库成功！！！'
                 except Exception as e:
                     response['status'] = False
-                    response['message'] = '权证入库信息创建失败：%s' % str(e)
+                    response['message'] = '权证入库失败：%s' % str(e)
             else:
                 response['status'] = False
-                response['message'] = '该权证不在库中，无法办理出库操作！！！'
+                response['message'] = '该权证已在库中，无法办理入库操作！！！'
     else:
         response['status'] = False
         response['message'] = '表单信息有误！！！'

@@ -2,7 +2,7 @@
 from .v_index import index
 # ----------------------v_article合项目管理视图--------------------#
 from .v_article import (
-    article, article_add_ajax, article_feedback_ajax, article_scan, article_edit_ajax, article_scan_lending,
+    article, article_add_ajax, article_feedback_ajax, article_scan, article_edit_ajax,
     article_scan_agree, article_del_ajax)
 # ----------------------v_meeting评审会视图--------------------#
 from .v_meeting import (
@@ -12,10 +12,10 @@ from .v_meeting import (
 # ----------------------v_appraisal评审视图--------------------#
 from .v_appraisal import (
     appraisal, appraisal_scan, appraisal_scan_lending, article_sign_ajax, guarantee_add_ajax, guarantee_del_ajax,
-    single_del_ajax, comment_edit_ajax, summary_scan, single_quota_ajax, lending_del_ajax, lending_order_ajax)
+    single_del_ajax, comment_edit_ajax, summary_scan, single_quota_ajax, lending_del_ajax, lending_order_ajax, )
 # ----------------------v_agree合同管理视图--------------------#
 from .v_agree import (
-    agree, agree_add_ajax, counter_add_ajax, agree_scan, agree_preview, agree_sign_ajax)
+    agree, agree_add_ajax, counter_add_ajax, agree_scan, agree_preview, agree_sign_ajax, counter_del_ajax)
 # ----------------------v_warrant权证管理视图--------------------#
 from .v_warrant import (
     warrant, house, ground, warrant_add_ajax, warrant_del_ajax, warrant_edit_ajax, owership_add_ajax, owership_del_ajax,
@@ -24,7 +24,7 @@ from .v_warrant import (
 # ----------------------v_provide放款管理视图--------------------#
 from .v_provide import (
     provide_agree, provide_agree_scan, provide_agree_notify, provide, provide_scan, notify_add_ajax, notify_del_ajax,
-    provide_add_ajax)
+    provide_add_ajax, repayment_add_ajax)
 # ----------------------v_review保后管理视图--------------------#
 from .v_review import review
 # ----------------------v_dun追偿视图--------------------#

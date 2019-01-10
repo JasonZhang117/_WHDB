@@ -81,6 +81,8 @@ def article(request, *args, **kwargs):  # 项目列表
 @login_required
 def article_scan(request, article_id):  # 项目预览
     print(__file__, '---->def article_scan')
+    PAGE_TITLE = '查看项目'
+
     article_obj = models.Articles.objects.get(id=article_id)
 
     form_date = {
@@ -103,30 +105,23 @@ def article_scan(request, article_id):  # 项目预览
     return render(request, 'dbms/article/article-scan.html', locals())
 
 
+# -----------------------------项目预览------------------------------#
+
 @login_required
 def article_scan_agree(request, article_id, agree_id):  # 项目预览
     print(__file__, '---->def article_scan_agree')
-    article_obj = models.Articles.objects.get(id=article_id)
-    agree_obj = models.Agrees.objects.get(id=agree_id)
-    return render(request, 'dbms/article/article-scan-agree.html', locals())
+    PAGE_TITLE = '查看项目'
 
-
-@login_required
-def article_scan_lending(request, article_id, lending_id):  # 项目预览
-    print(__file__, '---->def article_scan_lending')
-    print('request.path:', request.path)
-
-    sure_list = [1, 2]
+    sure_list = [1, 2]  # 保证反担保类型
     house_list = [11, 21, 42, 52]
     ground_list = [12, 22, 43, 53]
     receivable_list = [31]
-    stock_list = [32, 51]
-    lending_operate = False
+    stock_list = [32]
 
     article_obj = models.Articles.objects.get(id=article_id)
-    lending_obj = models.LendingOrder.objects.get(id=lending_id)
-    print(article_obj, lending_obj)
-    return render(request, 'dbms/article/article-scan-lending.html', locals())
+    agree_obj = models.Agrees.objects.get(id=agree_id)
+    lending_obj = agree_obj.lending
+    return render(request, 'dbms/article/article-scan-agree.html', locals())
 
 
 # -----------------------------添加项目ajax------------------------------#
@@ -202,7 +197,7 @@ def article_edit_ajax(request):  # 修改项目ajax
             response['forme'] = form.errors
     else:
         response['status'] = False
-        response['message'] = '状态为：%s，无法修改！！！' % article_obj.article_state
+        response['message'] = '项目状态为：%s，无法修改！！！' % article_obj.article_state
 
     result = json.dumps(response, ensure_ascii=False)
 
@@ -275,3 +270,21 @@ def article_feedback_ajax(request):
         response['message'] = '项目状态为：%s，无法反馈！！！' % article_obj.article_state
     result = json.dumps(response, ensure_ascii=False)
     return HttpResponse(result)
+
+#
+# @login_required
+# def article_scan_lending(request, article_id, lending_id):  # 项目预览
+#     print(__file__, '---->def article_scan_lending')
+#     print('request.path:', request.path)
+#
+#     sure_list = [1, 2]
+#     house_list = [11, 21, 42, 52]
+#     ground_list = [12, 22, 43, 53]
+#     receivable_list = [31]
+#     stock_list = [32, 51]
+#     lending_operate = False
+#
+#     article_obj = models.Articles.objects.get(id=article_id)
+#     lending_obj = models.LendingOrder.objects.get(id=lending_id)
+#     print(article_obj, lending_obj)
+#     return render(request, 'dbms/article/article-scan-lending.html', locals())

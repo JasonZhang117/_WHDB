@@ -9,7 +9,7 @@ urlpatterns = [
     path('article/', views.article, name='article_all'),  # 菜单-项目管理
     path('article/<int:article_state>/', views.article, name='article'),  # /dbms/article/(0-9)
     path('article/scan/<int:article_id>/', views.article_scan, name='article_scan_all'),
-    path('article/scan/<int:article_id>/<int:lending_id>/', views.article_scan_lending, name='article_scan_lending'),
+    path('article/scan/<int:article_id>/<int:agree_id>/', views.article_scan_agree, name='article_scan_agree'),
     path('article/add/', views.article_add_ajax),
     path('article/del/', views.article_del_ajax),
     path('article/edit/', views.article_edit_ajax),
@@ -50,6 +50,7 @@ urlpatterns = [
     path('agree/add/', views.agree_add_ajax),
     path('agree/sign/', views.agree_sign_ajax),
     path('agree/counter/add/', views.counter_add_ajax),
+    path('agree/counter/del/', views.counter_del_ajax),
     # -----------------------warrant权证管理-------------------------#
     path('warrant/', views.warrant, name='warrant_all'),  # 菜单-权证管理-所有权证
     path('warrant/<int:warrant_typ>/', views.warrant, name='warrant'),  # /dbms/warrant/(0-9)
@@ -76,11 +77,12 @@ urlpatterns = [
     path('provide/agree', views.provide_agree, name='provide_agree_all'),  # 菜单-放款管理-放款通知
     path('provide/agree/<int:agree_state>/', views.provide_agree, name='provide_agree'),  # /dbms/provide/(0-9)
     path('provide/agree/scan/<int:agree_id>/', views.provide_agree_scan, name='provide_agree_scan'),
-    path('provide/agree/scan/<int:agree_id>/<int:notify_id>/', views.provide_agree_notify, name='provide_agree_notify'),
+    path('provide/agree/notify/<int:agree_id>/<int:notify_id>/', views.provide_agree_notify, name='provide_agree_notify'),
 
     path('provide/notify/add/', views.notify_add_ajax),
     path('provide/notify/del/', views.notify_del_ajax),
     path('provide/add/', views.provide_add_ajax),
+    path('provide/repayment/add/', views.repayment_add_ajax),
 
     path('provide/', views.provide, name='provide_all'),  # 菜单-放款管理-放款
     path('provide/<int:provide_status>/', views.provide, name='provide'),  # /dbms/grant/(0-9)

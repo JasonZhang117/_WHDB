@@ -1,11 +1,5 @@
 <div class="table-responsive">
-    {#"table-responsive":表格响应式布局#}
-    <table class="table table-bordered table-hover
-                table-condensed active">
-        {#"table-bordered":表格表格边框#}
-        {#"table-hover":表格悬停变色#}
-        {#"table-condensed":表格紧缩#}
-        {#<caption><h4>项目管理</h4></caption>#}
+    <table class="table table-bordered table-hover table-condensed active">
         <thead>
         <tr style="text-align: center">
             <th>合同编号</th>
@@ -25,17 +19,17 @@
                     {% if agree_id %}
                         {% if agree_id == agree.id %}
                             <td><a class="active"
-                                   href="{% url 'dbms:agree_scan' agree_id=agree.id %}">
+                                   href="{% url 'dbms:article_scan_agree' article_id=article_obj.id agree_id=agree.id %}">
                                 {{ agree.agree_num }}*
                             </a></td>
                         {% else %}
                             <td>
-                                <a href="{% url 'dbms:agree_scan' agree_id=agree.id %}">
+                                <a href="{% url 'dbms:article_scan_agree' article_id=article_obj.id agree_id=agree.id %}">
                                     {{ agree.agree_num }}
                                 </a></td>
                         {% endif %}
                     {% else %}
-                        <td><a href="{% url 'dbms:agree_scan' agree_id=agree.id %}">
+                        <td><a href="{% url 'dbms:article_scan_agree' article_id=article_obj.id agree_id=agree.id %}">
                             {{ agree.agree_num }}
                         </a></td>
                     {% endif %}

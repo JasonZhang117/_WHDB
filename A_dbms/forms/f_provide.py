@@ -23,6 +23,16 @@ class FormProvideAdd(dform.ModelForm):
         fields = ['provide_typ', 'provide_money', 'provide_date', 'due_date']
         widgets = {
             'provide_typ': dform.Select(attrs={'class': 'form-control', 'placeholder': '通知金额'}),
-            'provide_money': dform.NumberInput(attrs={'class': 'form-control'}),
+            'provide_money': dform.NumberInput(attrs={'class': 'form-control', 'placeholder': '放款金额'}),
             'provide_date': dform.DateInput(attrs={'class': 'form-control', 'type': 'date'}),
             'due_date': dform.DateInput(attrs={'class': 'form-control', 'type': 'date'})}
+
+
+# -----------------------放款添加-------------------------#
+class FormRepaymentAdd(dform.ModelForm):
+    class Meta:
+        model = models.Repayments
+        fields = ['repayment_money', 'repayment_date']
+        widgets = {
+            'repayment_money': dform.NumberInput(attrs={'class': 'form-control', 'placeholder': '还款金额'}),
+            'repayment_date': dform.DateInput(attrs={'class': 'form-control', 'type': 'date'})}

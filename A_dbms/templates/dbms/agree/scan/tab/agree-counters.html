@@ -1,5 +1,4 @@
 <div class="table-responsive">
-    {#"table-responsive":表格响应式布局#}
     <table class="table table-bordered table-hover table-condensed active">
         <thead>
         <tr style="text-align: center">
@@ -12,7 +11,7 @@
             {% endif %}
         </tr>
         </thead>
-        <tbody class="agree-counters-tb">
+        <tbody id="agree-counters-tb">
         {% for counter in agree_obj.counter_agree.all %}
             <tr counter-nid={{ counter.id }} counter-typ-nid={{ counter.counter_typ }}>
                 <td>{{ counter.counter_num }}</td>
@@ -44,9 +43,10 @@
                 {% endif %}
                 <td>{{ counter.get_counter_state_display }}</td>
                 {% if PAGE_TITLE == '合同详情' %}
-                    <td><a class="btn btn-danger btn-xs delCounterB">删除</a></td>
+                    <td><a class="btn btn-primary btn-xs delCounterB">删除</a>
+                        <a class="btn btn-primary btn-xs scanCounterB">预览</a></td>
                 {% elif PAGE_TITLE == '放款管理' %}
-                    <td><a class="btn btn-danger btn-xs signAgreeB">签订</a></td>
+                    <td><a class="btn btn-primary btn-xs signAgreeB">签订</a></td>
                 {% endif %}
             <tr>
         {% endfor %}

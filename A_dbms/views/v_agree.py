@@ -37,7 +37,59 @@ def agree(request, *args, **kwargs):  # 委托合同列表
 @login_required
 def agree_scan(request, agree_id):  # 查看合同
     print(__file__, '---->def agree_scan')
+    APPLICATION = 'agree_scan'
     PAGE_TITLE = '合同详情'
+    COUNTER_TYP_CUSTOM = [1, 2]
+
+    '''COUNTER_TYP_LIST = (
+        (1, '企业担保'), (2, '个人保证'),
+        (11, '房产抵押'), (12, '土地抵押'), (13, '设备抵押'), (14, '存货抵押'), (15, '车辆抵押'),
+        (31, '应收质押'), (32, '股权质押'), (33, '票据质押'),
+        (51, '股权预售'), (52, '房产预售'), (53, '土地预售'))'''
+
+    agree_obj = models.Agrees.objects.get(id=agree_id)
+    agree_lending_obj = agree_obj.lending
+
+    warrant_agree_list = models.Warrants.objects.filter(counter_warrant__counter__agree=agree_obj)
+    print('warrant_agree_list:', warrant_agree_list)
+    '''WARRANT_TYP_LIST = [
+        (1, '房产'), (2, '土地'), (11, '应收'), (21, '股权'),
+        (31, '票据'), (41, '车辆'), (51, '动产'), (99, '他权')]'''
+    custom_c_lending_list = models.Customes.objects.filter(
+        lending_custom__sure__lending=agree_lending_obj, genre=1).exclude(
+        counter_custome__counter__agree=agree_obj).values_list('id', 'name')
+    custom_p_lending_list = models.Customes.objects.filter(
+        lending_custom__sure__lending=agree_lending_obj, genre=2).exclude(
+        counter_custome__counter__agree=agree_obj).values_list('id', 'name')
+    warrants_h_lending_list = models.Warrants.objects.filter(
+        lending_warrant__sure__lending=agree_lending_obj, warrant_typ=1).exclude(
+        counter_warrant__counter__agree=agree_obj).values_list('id', 'warrant_num')
+    warrants_g_lending_list = models.Warrants.objects.filter(
+        lending_warrant__sure__lending=agree_lending_obj, warrant_typ=2).exclude(
+        counter_warrant__counter__agree=agree_obj).values_list('id', 'warrant_num')
+    warrants_r_lending_list = models.Warrants.objects.filter(
+        lending_warrant__sure__lending=agree_lending_obj, warrant_typ=11).exclude(
+        counter_warrant__counter__agree=agree_obj).values_list('id', 'warrant_num')
+    warrants_s_lending_list = models.Warrants.objects.filter(
+        lending_warrant__sure__lending=agree_lending_obj, warrant_typ=21).exclude(
+        counter_warrant__counter__agree=agree_obj).values_list('id', 'warrant_num')
+    print(custom_c_lending_list, custom_p_lending_list, warrants_h_lending_list, warrants_g_lending_list,
+          warrants_r_lending_list, warrants_s_lending_list)
+    from_counter = forms.AddCounterForm()
+    from_counter = forms.AddCounterForm()
+
+    today_str = time.strftime("%Y-%m-%d", time.gmtime())
+    form_agree_sign_data = {'agree_sign_date': str(today_str)}
+    form_agree_sign = forms.FormAgreeSign(initial=form_agree_sign_data)
+    return render(request, 'dbms/agree/agree-scan.html', locals())
+
+
+# -----------------------------查看合同------------------------------#
+@login_required
+def agree_scan_counter(request, agree_id, counter_id):  # 查看合同
+    print(__file__, '---->def agree_scan_counter')
+    APPLICATION = 'agree_scan_counter'
+    PAGE_TITLE = '担保合同'
     COUNTER_TYP_CUSTOM = [1, 2]
 
     '''COUNTER_TYP_LIST = (
@@ -305,6 +357,35 @@ def counter_add_ajax(request):
     else:
         response['status'] = False
         response['message'] = '委托合同状态为：%s，反担保合同创建失败！！！' % agree_state_counter
+    result = json.dumps(response, ensure_ascii=False)
+    return HttpResponse(result)
+
+
+# -----------------------删除反担保合同ajax-------------------------#
+@login_required
+def counter_del_ajax(request):  # 删除反担保合同ajax
+    print(__file__, '---->def counter_del_ajax')
+    response = {'status': True, 'message': None, 'forme': None, }
+    post_data_str = request.POST.get('postDataStr')
+    post_data = json.loads(post_data_str)
+
+    agree_id = post_data['agree_id']
+    counter_id = post_data['counter_id']
+
+    agree_obj = models.Agrees.objects.get(id=agree_id)
+    counter_obj = models.Counters.objects.get(id=counter_id)
+    '''AGREE_STATE_LIST = ((11, '待签批'), (21, '已签批'), (31, '已落实，未放款'), (41, '已落实，放款'),
+                        (42, '未落实，放款'), (51, '待变更'), (61, '已解保'), (99, '已作废'))'''
+    if agree_obj.agree_state in [11, 51]:
+        try:
+            counter_obj.delete()  # 删除反担保合同
+            response['message'] = '反担保合同删除成功！'
+        except Exception as e:
+            response['status'] = False
+            response['message'] = '反担保合同删除失败:%s！' % str(e)
+    else:
+        response['status'] = False
+        response['message'] = '委托担保合同状态为%s，无法删除反担保合同！' % agree_obj.agree_state
     result = json.dumps(response, ensure_ascii=False)
     return HttpResponse(result)
 

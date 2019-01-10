@@ -1,0 +1,55 @@
+<script>
+    $(function () {
+        bindDelCounterB();
+        bindDelCounterModalOk();
+    });
+
+    function bindDelCounterB() {
+        console.log("bindDelCounterB")
+        $('#agree-counters-tb').on('click', '.delCounterB', function () {
+            console.log("bindDelCounterB")
+            var delCounterNid = $(this).parent().parent().attr('counter-nid');
+            console.log(delCounterNid)
+            $('#delCounterModalId').val(delCounterNid);
+            $('#delCounterModal').modal('show');
+        })
+    }
+
+    function bindDelCounterModalOk() {
+        $('#delCounterModalOk').click(function () {
+            var postData = {};
+
+            $('#delCounterModal').find('input,select').each(function () {
+                var v = $(this).val();
+                var n = $(this).attr('name');
+                postData[n] = v;
+            });
+            var postDataStr = JSON.stringify(postData);
+            console.log(postDataStr)
+            $.ajax({
+                url: '/dbms/agree/counter/del/',
+                type: 'POST',
+                dataType: 'JSON',
+                data: {'postDataStr': postDataStr},
+                success: function (arg) {
+                    if (arg.status) {
+                        $('#delCounterModal').modal('hide');
+                        alert(arg.message);
+                        window.location.reload();
+                    } else {
+                        $('#delCounterModal').modal('hide');
+                        alert(arg.message);
+                        {#window.location.reload();#}
+                    }
+                }
+            })
+
+        })
+    }
+</script>
+
+
+
+
+
+

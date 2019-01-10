@@ -73,7 +73,7 @@ def provide_agree_scan(request, agree_id):  # 查看放款
 @login_required
 def provide_agree_notify(request, agree_id, notify_id):  # 查看放款通知
     print(__file__, '---->def provide_agree_notify')
-    PAGE_TITLE = '放款管理'
+    PAGE_TITLE = '放款通知'
     '''COUNTER_TYP_LIST = (
         (1, '企业担保'), (2, '个人保证'),
         (11, '房产抵押'), (12, '土地抵押'), (13, '设备抵押'), (14, '存货抵押'), (15, '车辆抵押'),
@@ -227,22 +227,72 @@ def provide_add_ajax(request):
     return HttpResponse(result)
 
 
+# -----------------------------添加还款ajax------------------------------#
+@login_required
+def repayment_add_ajax(request):
+    print(__file__, '---->def repayment_add_ajax')
+    response = {'status': True, 'message': None, 'forme': None, }
+    post_data_str = request.POST.get('postDataStr')
+    post_data = json.loads(post_data_str)
+    print('post_data:', post_data)
+    provide_list = models.Provides.objects.filter(id=post_data['provide_id'])
+    provide_obj = provide_list.first()
+    form_repayment_add = forms.FormRepaymentAdd(post_data)
+
+    if form_repayment_add.is_valid():
+        form_repayment_cleaned = form_repayment_add.cleaned_data
+
+        repayment_money = form_repayment_cleaned['repayment_money']
+        repayment_amount = models.Repayments.objects.filter(provide=provide_obj).aggregate(Sum('repayment_money'))
+        repayment_money_sum = repayment_amount['repayment_money__sum']
+        if repayment_money_sum:
+            amount = repayment_money_sum + repayment_money
+        else:
+            amount = repayment_money
+        if amount > provide_obj.provide_money:
+            response['status'] = False
+            response['message'] = '还款金额合计（%s）大于放款金额（%s）' % (amount, provide_obj.provide_money)
+        else:
+            try:
+                with transaction.atomic():
+                    repayment_obj = models.Repayments.objects.create(
+                        provide=provide_obj, repayment_money=repayment_money,
+                        repayment_date=form_repayment_cleaned['repayment_date'], repaymentor=request.user)
+                    provide_list.update(provide_repayment_sum=amount)
+                    if provide_obj.provide_money == provide_obj.provide_repayment_sum:
+                        provide_list.update(provide_status=2)
+                        response['message'] = '成功还款,本次放款已全部结清！'
+                    else:
+                        response['message'] = '成功还款！'
+            except Exception as e:
+                response['status'] = False
+                response['message'] = '还款失败：%s' % str(e)
+    else:
+        response['status'] = False
+        response['message'] = '表单信息有误！！！'
+        response['forme'] = form_repayment_add.errors
+    result = json.dumps(response, ensure_ascii=False)
+    return HttpResponse(result)
+
+
 # -----------------------放款列表---------------------#
 @login_required
 def provide(request, *args, **kwargs):  # 委托合同列表
     print(__file__, '---->def provide')
+    PAGE_TITLE = '放款管理'
+
     provide_status_list = models.Provides.STATUS_LIST
     provide_list = models.Provides.objects.filter(**kwargs).select_related('notify').order_by('-id')
 
     ####分页信息###
-    paginator = Paginator(provide_list, 10)
+    paginator = Paginator(provide_list, 20)
     page = request.GET.get('page')
     try:
-        p_list = paginator.page(page)
+        provide_p_list = paginator.page(page)
     except PageNotAnInteger:
-        p_list = paginator.page(1)
+        provide_p_list = paginator.page(1)
     except EmptyPage:
-        p_list = paginator.page(paginator.num_pages)
+        provide_p_list = paginator.page(paginator.num_pages)
 
     return render(request, 'dbms/provide/provide.html', locals())
 
@@ -251,7 +301,10 @@ def provide(request, *args, **kwargs):  # 委托合同列表
 @login_required
 def provide_scan(request, provide_id):  # 查看放款
     print(__file__, '---->def provide_scan')
+    PAGE_TITLE = '放款详情'
 
     provide_obj = models.Provides.objects.get(id=provide_id)
+
+    form_repayment_add = forms.FormRepaymentAdd()
 
     return render(request, 'dbms/provide/provide-scan.html', locals())

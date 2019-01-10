@@ -3,22 +3,25 @@
     <ul class="nav nav-tabs" role="tablist" style="background-color: #f5f5f5">
         <li role="presentation">
             <a href="#feedback" style="background-color: #f5f5f5"
-               aria-controls="profile" role="tab" data-toggle="tab"> 反馈结论 </a></li>
+               aria-controls="profile" role="tab" data-toggle="tab">反馈结论</a></li>
         <li role="presentation">
             <a href="#meeting" style="background-color: #f5f5f5"
-               aria-controls="profile" role="tab" data-toggle="tab"> 评审会 </a></li>
+               aria-controls="profile" role="tab" data-toggle="tab">评审会</a></li>
         <li role="presentation">
             <a href="#comment" style="background-color: #f5f5f5"
-               aria-controls="messages" role="tab" data-toggle="tab"> 评委意见 </a></li>
+               aria-controls="messages" role="tab" data-toggle="tab">评委意见</a></li>
         <li role="presentation">
             <a href="#sign" style="background-color: #f5f5f5"
-               aria-controls="messages" role="tab" data-toggle="tab"> 签批情况 </a></li>
+               aria-controls="messages" role="tab" data-toggle="tab">签批情况</a></li>
         <li role="presentation">
             <a href="#single" style="background-color: #f5f5f5"
-               aria-controls="settings" role="tab" data-toggle="tab"> 单项额度 </a></li>
-        <li role="presentation" class="active">
+               aria-controls="settings" role="tab" data-toggle="tab">单项额度</a></li>
+        <li role="presentation">
             <a href="#lenging" style="background-color: #f5f5f5"
-               aria-controls="settings" role="tab" data-toggle="tab"> 分笔发放 </a></li>
+               aria-controls="settings" role="tab" data-toggle="tab">分笔发放</a></li>
+        <li role="presentation" class="active">
+            <a href="#agree" style="background-color: #f5f5f5"
+               aria-controls="settings" role="tab" data-toggle="tab">委托合同</a></li>
     </ul>
     <!-- Tab panes -->
     <div class="tab-content">
@@ -32,7 +35,9 @@
             {% include 'dbms/appraisal/scan/tab/sign.html' %} </div>
         <div role="tabpanel" class="tab-pane" id="single"> <!--单项额度-->
             {% include 'dbms/appraisal/scan/tab/single.html' %} </div>
-        <div role="tabpanel" class="tab-pane active" id="lenging"> <!--分笔发放-->
+        <div role="tabpanel" class="tab-pane" id="lenging"> <!--分笔发放-->
             {% include 'dbms/article/scan/tab/lending.html' %} </div>
+        <div role="tabpanel" class="tab-pane active" id="agree"> <!--委托合同-->
+            {% include 'dbms/article/scan/tab/agree.html' %} </div>
     </div>
 </div>
