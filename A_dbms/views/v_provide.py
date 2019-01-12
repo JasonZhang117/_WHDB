@@ -213,8 +213,14 @@ def provide_add_ajax(request):
                         notify=notify_obj, provide_typ=form_provide_cleaned['provide_typ'],
                         provide_money=provide_money, provide_date=form_provide_cleaned['provide_date'],
                         due_date=form_provide_cleaned['due_date'], providor=request.user)
-                    notify_list.update(notify_provide_sum=amount)
-                    agree_list.update(agree_provide_sum=F('agree_provide_sum') + provide_money)
+                    '''更新放款总额'''
+                    models.Customes.objects.filter().update()  # 客户
+                    models.Branches.objects.filter().update()  # 放款银行
+                    models.Articles.objects.filter().update()  # 项目
+                    models.LendingOrder.objects.filter().update()  # 放款次序
+                    agree_list.update(agree_provide_sum=F('agree_provide_sum') + provide_money)  # 合同
+                    notify_list.update(notify_provide_sum=amount)  # 放款通知
+
                 response['message'] = '成功添加放款通知！'
             except Exception as e:
                 response['status'] = False
@@ -223,6 +229,42 @@ def provide_add_ajax(request):
         response['status'] = False
         response['message'] = '表单信息有误！！！'
         response['forme'] = form_provide_add.errors
+    result = json.dumps(response, ensure_ascii=False)
+    return HttpResponse(result)
+
+
+# -----------------------删除放款ajax-------------------------#
+@login_required
+def provide_del_ajax(request):  # 删除放款ajax
+    print(__file__, '---->def provide_del_ajax')
+    response = {'status': True, 'message': None, 'forme': None, }
+    post_data_str = request.POST.get('postDataStr')
+    post_data = json.loads(post_data_str)
+    print('post_data:', post_data)
+
+    provide_id = post_data['provide_id']
+    provide_obj = models.Provides.objects.get(id=provide_id)
+    repayment_id = post_data['repayment_id']
+    repayment_obj = models.Repayments.objects.get(id=repayment_id)
+    '''PROVIDE_STATUS_LIST = ((1, '在保'), (11, '解保'), (21, '代偿'))'''
+    if provide_obj.provide_status == 1:
+        try:
+            with transaction.atomic():
+                models.Customes.objects.filter().update()  # 客户
+                models.Branches.objects.filter().update()  # 放款银行
+                models.Articles.objects.filter().update()  # 项目
+                models.LendingOrder.objects.filter().update()  # 放款次序
+                models.Agrees.objects.filter().update()  # 合同
+                models.Notify.objects.filter().update()  # 放款通知
+                models.Provides.objects.filter().update()  # 放款
+                repayment_obj.delete()  # 删除还款信息
+            response['message'] = '还款信息删除成功！'
+        except Exception as e:
+            response['status'] = False
+            response['message'] = '还款信息删除失败：%s' % str(e)
+    else:
+        response['status'] = False
+        response['message'] = '该笔放款状态为：%s，还款信息删除失败！！！' % provide_obj.provide_status
     result = json.dumps(response, ensure_ascii=False)
     return HttpResponse(result)
 
@@ -240,9 +282,9 @@ def repayment_add_ajax(request):
     form_repayment_add = forms.FormRepaymentAdd(post_data)
 
     if form_repayment_add.is_valid():
-        form_repayment_cleaned = form_repayment_add.cleaned_data
+        repayment_cleaned = form_repayment_add.cleaned_data
 
-        repayment_money = form_repayment_cleaned['repayment_money']
+        repayment_money = repayment_cleaned['repayment_money']
         repayment_amount = models.Repayments.objects.filter(provide=provide_obj).aggregate(Sum('repayment_money'))
         repayment_money_sum = repayment_amount['repayment_money__sum']
         if repayment_money_sum:
@@ -256,11 +298,18 @@ def repayment_add_ajax(request):
             try:
                 with transaction.atomic():
                     repayment_obj = models.Repayments.objects.create(
-                        provide=provide_obj, repayment_money=repayment_money,
-                        repayment_date=form_repayment_cleaned['repayment_date'], repaymentor=request.user)
-                    provide_list.update(provide_repayment_sum=amount)
-                    if provide_obj.provide_money == provide_obj.provide_repayment_sum:
-                        provide_list.update(provide_status=2)
+                        provide=provide_obj, repayment_money=repayment_money, repaymentor=request.user,
+                        repayment_date=repayment_cleaned['repayment_date'])  # 创建还款记录
+                    models.Customes.objects.filter().update()  # 客户
+                    models.Branches.objects.filter().update()  # 放款银行
+                    models.Articles.objects.filter().update()  # 项目
+                    models.LendingOrder.objects.filter().update()  # 放款次序
+                    models.Agrees.objects.filter().update()  # 合同
+                    models.Notify.objects.filter().update()  # 放款通知
+                    provide_list.update(provide_repayment_sum=amount)  # 放款，更新还款总额
+
+                    if provide_obj.provide_money == provide_obj.provide_repayment_sum:  # 放款金额=还款金额合计
+                        provide_list.update(provide_status=11)  # 放款解保
                         response['message'] = '成功还款,本次放款已全部结清！'
                     else:
                         response['message'] = '成功还款！'
@@ -275,13 +324,49 @@ def repayment_add_ajax(request):
     return HttpResponse(result)
 
 
+# -----------------------删除还款信息ajax-------------------------#
+@login_required
+def repayment_del_ajax(request):  # 删除还款信息ajax
+    print(__file__, '---->def repayment_del_ajax')
+    response = {'status': True, 'message': None, 'forme': None, }
+    post_data_str = request.POST.get('postDataStr')
+    post_data = json.loads(post_data_str)
+    print('post_data:', post_data)
+
+    provide_id = post_data['provide_id']
+    provide_obj = models.Provides.objects.get(id=provide_id)
+    repayment_id = post_data['repayment_id']
+    repayment_obj = models.Repayments.objects.get(id=repayment_id)
+    '''PROVIDE_STATUS_LIST = ((1, '在保'), (11, '解保'), (21, '代偿'))'''
+    if provide_obj.provide_status == 1:
+        try:
+            with transaction.atomic():
+                models.Customes.objects.filter().update()  # 客户
+                models.Branches.objects.filter().update()  # 放款银行
+                models.Articles.objects.filter().update()  # 项目
+                models.LendingOrder.objects.filter().update()  # 放款次序
+                models.Agrees.objects.filter().update()  # 合同
+                models.Notify.objects.filter().update()  # 放款通知
+                models.Provides.objects.filter().update()  # 放款
+                repayment_obj.delete()  # 删除还款信息
+            response['message'] = '还款信息删除成功！'
+        except Exception as e:
+            response['status'] = False
+            response['message'] = '还款信息删除失败：%s' % str(e)
+    else:
+        response['status'] = False
+        response['message'] = '该笔放款状态为：%s，还款信息删除失败！！！' % provide_obj.provide_status
+    result = json.dumps(response, ensure_ascii=False)
+    return HttpResponse(result)
+
+
 # -----------------------放款列表---------------------#
 @login_required
 def provide(request, *args, **kwargs):  # 委托合同列表
     print(__file__, '---->def provide')
     PAGE_TITLE = '放款管理'
 
-    provide_status_list = models.Provides.STATUS_LIST
+    provide_status_list = models.Provides.PROVIDE_STATUS_LIST
     provide_list = models.Provides.objects.filter(**kwargs).select_related('notify').order_by('-id')
 
     ####分页信息###

@@ -54,21 +54,22 @@ class Provides(models.Model):  # 放款
     notify = models.ForeignKey(to='Notify', verbose_name="_放款通知",
                                on_delete=models.PROTECT,
                                related_name='provide_notify')
-    SELECT_LIST = ((1, '流贷'), (2, '承兑'), (3, '保函'))
-    provide_typ = models.IntegerField(verbose_name='放款种类', choices=SELECT_LIST, default=1)
+
+    PROVIDE_TYP_LIST = ((1, '流贷'), (11, '承兑'), (21, '保函'))
+    provide_typ = models.IntegerField(verbose_name='放款种类', choices=PROVIDE_TYP_LIST)
     provide_money = models.FloatField(verbose_name='放款金额')
-    provide_date = models.DateField(verbose_name='放款日期', default=datetime.date.today)
-    due_date = models.DateField(verbose_name='到期日', default=datetime.date.today)
-    IMPLEMENT_LIST = ((1, '未归档'), (2, '暂存风控'), (3, '已归档'))
+    provide_date = models.DateField(verbose_name='放款日期')
+    due_date = models.DateField(verbose_name='到期日')
+
+    IMPLEMENT_LIST = [(1, '未归档'), (11, '暂存风控'), (21, '已归档')]
     implement = models.IntegerField(verbose_name='_归档状态', choices=IMPLEMENT_LIST, default=1)
-    STATUS_LIST = ((1, '在保'), (2, '解保'), (3, '代偿'))
-    provide_status = models.IntegerField(verbose_name='_放款状态', choices=STATUS_LIST, default=1)
-
-    provide_repayment_sum = models.FloatField(verbose_name='_还款金额', default=0)
-
+    PROVIDE_STATUS_LIST = [(1, '在保'), (11, '解保'), (21, '代偿')]
+    provide_status = models.IntegerField(verbose_name='_放款状态', choices=PROVIDE_STATUS_LIST, default=1)
+    provide_repayment_sum = models.FloatField(verbose_name='_还款总额', default=0)
     providor = models.ForeignKey(to='Employees', verbose_name="_创建者",
-                                 on_delete=models.PROTECT, default=1,
+                                 on_delete=models.PROTECT,
                                  related_name='providor_employee')
+    providordate = models.DateField(verbose_name='_创建日期', default=datetime.date.today)
 
     # Cancellation = models.BooleanField('注销', default=False)
     class Meta:

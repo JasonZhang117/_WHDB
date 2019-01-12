@@ -83,6 +83,7 @@ urlpatterns = [
     path('provide/notify/del/', views.notify_del_ajax),
     path('provide/add/', views.provide_add_ajax),
     path('provide/repayment/add/', views.repayment_add_ajax),
+    path('provide/repayment/del/', views.repayment_del_ajax),
 
     path('provide/', views.provide, name='provide_all'),  # 菜单-放款管理-放款
     path('provide/<int:provide_status>/', views.provide, name='provide'),  # /dbms/grant/(0-9)

@@ -1,0 +1,55 @@
+<script>
+    $(function () {
+        bindDelRepaymentB();
+        bindDelRepaymentModalOk();
+    });
+
+    function bindDelRepaymentB() {
+        console.log("bindDelRepaymentB");
+        $('#provide-repayment-tb').on('click', '.delRepaymentB', function () {
+            console.log("bindDelRepaymentB");
+            var delRepaymentNid = $(this).parent().parent().attr('repayment-nid');
+            console.log(delRepaymentNid);
+            $('#delRepaymentModalId').val(delRepaymentNid);
+            $('#delRepaymentModal').modal('show');
+        })
+    }
+
+    function bindDelRepaymentModalOk() {
+        $('#delRepaymentModalOk').click(function () {
+            var postData = {};
+
+            $('#delRepaymentModal').find('input,select').each(function () {
+                var v = $(this).val();
+                var n = $(this).attr('name');
+                postData[n] = v;
+            });
+            var postDataStr = JSON.stringify(postData);
+            console.log(postDataStr)
+            $.ajax({
+                url: '/dbms/provide/repayment/del/',
+                type: 'POST',
+                dataType: 'JSON',
+                data: {'postDataStr': postDataStr},
+                success: function (arg) {
+                    if (arg.status) {
+                        $('#delRepaymentModal').modal('hide');
+                        alert(arg.message);
+                        window.location.reload();
+                    } else {
+                        $('#delRepaymentModal').modal('hide');
+                        alert(arg.message);
+                        {#window.location.reload();#}
+                    }
+                }
+            })
+
+        })
+    }
+</script>
+
+
+
+
+
+
