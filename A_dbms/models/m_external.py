@@ -6,7 +6,7 @@ import datetime
 class Cooperators(models.Model):  # 授信银行
     name = models.CharField(verbose_name='合作机构', max_length=32, unique=True)
     short_name = models.CharField(verbose_name='机构简称', max_length=32, unique=True)
-    COOPERATOR_STATE_LIST = ((1, '金融机构'), (2, '律师事务所'), (3, '评估事务所'))
+    COOPERATOR_STATE_LIST = ((1, '金融机构'), (11, '律师事务所'), (21, '评估事务所'))
     cooperator_state = models.IntegerField(verbose_name='机构类型', choices=COOPERATOR_STATE_LIST, default=1)
     flow_credit = models.FloatField(verbose_name='综合额度', default=100000000)
     flow_limit = models.FloatField(verbose_name='单笔限额（综合）', default=10000000)
@@ -14,10 +14,6 @@ class Cooperators(models.Model):  # 授信银行
     back_limit = models.FloatField(verbose_name='单笔限额（保函）', default=0)
     credit_date = models.DateField(verbose_name='合作日期', default=datetime.date.today)
     due_date = models.DateField(verbose_name='到期日', default=datetime.date.today)
-    flow_used = models.FloatField(verbose_name='_流贷&承兑占用额度', default=0)
-    flow_loan = models.FloatField(verbose_name='_流贷&承兑放款额度', default=0)
-    back_used = models.FloatField(verbose_name='_保函占用额度', default=0)
-    back_loan = models.FloatField(verbose_name='_保函放款额度', default=0)
 
     # Cancellation = models.BooleanField('注销', default=False)
     class Meta:
@@ -38,6 +34,12 @@ class Branches(models.Model):  # 放款银行
     institution_code = models.CharField(verbose_name='金融机构代码', max_length=32, unique=True)
     BRANCH_STATE_LIST = ((1, '正常'), (2, '注销'))
     branch_state = models.IntegerField(verbose_name='银行状态', choices=BRANCH_STATE_LIST, default=1)
+
+    branch_flow = models.FloatField(verbose_name='_流贷余额', default=0)
+    branch_accept = models.FloatField(verbose_name='_承兑余额', default=0)
+    branch_back = models.FloatField(verbose_name='_保函余额', default=0)
+
+
 
     # Cancellation = models.BooleanField('注销', default=False)
     class Meta:
