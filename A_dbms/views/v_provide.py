@@ -199,27 +199,57 @@ def provide_add_ajax(request):
         provide_amount = models.Provides.objects.filter(notify=notify_obj).aggregate(Sum('provide_money'))
         provide_money_sum = provide_amount['provide_money__sum']
         if provide_money_sum:
-            amount = provide_money_sum + provide_money
+            amount = round(provide_money_sum + provide_money, 2)
         else:
             amount = provide_money
         if amount > notify_obj.notify_money:
             response['status'] = False
             response['message'] = '放款金额合计（%s）大于放款通知金额（%s）' % (amount, notify_obj.notify_money)
         else:
-            agree_list = models.Agrees.objects.filter(notify_agree=notify_obj)
             try:
                 with transaction.atomic():
                     provide_obj = models.Provides.objects.create(
                         notify=notify_obj, provide_typ=form_provide_cleaned['provide_typ'],
                         provide_money=provide_money, provide_date=form_provide_cleaned['provide_date'],
                         due_date=form_provide_cleaned['due_date'], providor=request.user)
-                    '''更新放款总额'''
-                    models.Customes.objects.filter().update()  # 客户
-                    models.Branches.objects.filter().update()  # 放款银行
-                    models.Articles.objects.filter().update()  # 项目
-                    models.LendingOrder.objects.filter().update()  # 放款次序
-                    agree_list.update(agree_provide_sum=F('agree_provide_sum') + provide_money)  # 合同
-                    notify_list.update(notify_provide_sum=amount)  # 放款通知
+                    '''notify_provide_sum，更新放款通知放款情况'''
+                    notify_list.update(notify_provide_sum=amount)  # 放款通知，更新放款总额
+                    '''agree_provide_sum，更新合同放款信息'''
+                    agree_list = models.Agrees.objects.filter(notify_agree=notify_obj)  # 合同
+                    agree_obj = agree_list.first()
+                    agree_provide_amount = models.Provides.objects.filter(
+                        notify__agree=agree_obj).aggregate(Sum('provide_money'))['provide_money__sum']  # 合同项下放款合计
+                    print('agree_provide_amount:', agree_provide_amount)
+                    agree_list.update(agree_provide_sum=round(agree_provide_amount, 2))  # 合同，更新放款总额
+                    '''lending_provide_sum，更新放款次序还款信息'''
+                    lending_list = models.LendingOrder.objects.filter(agree_lending=agree_obj)  # 放款次序
+                    lending_obj = lending_list.first()
+                    lending_provide_amount = models.Provides.objects.filter(
+                        notify__agree__lending=lending_obj).aggregate(Sum('provide_money'))['provide_money__sum']
+                    print('lending_provide_amount:', lending_provide_amount)
+                    lending_list.update(lending_provide_sum=round(lending_provide_amount, 2))  # 放款次序，更新放款总额
+                    '''article_provide_sum，更新项目放款信息'''
+                    article_list = models.Articles.objects.filter(lending_summary=lending_obj)  # 项目
+                    article_obj = article_list.first()
+                    article_provide_amount = models.Provides.objects.filter(
+                        notify__agree__lending__summary=article_obj).aggregate(
+                        Sum('provide_money'))['provide_money__sum']
+                    print('article_provide_amount:', article_provide_amount)
+                    article_list.update(article_provide_sum=round(article_provide_amount, 2))  # 项目，更新放款总额
+                    '''更新客户余额信息,custom_flow,custom_accept,custom_back'''
+                    '''更新银行余额信息,branch_flow,branch_accept,branch_back'''
+                    custom_list = models.Customes.objects.filter(article_custom=article_obj)
+                    branch_list = models.Branches.objects.filter(agree_branch=agree_obj)
+                    provide_typ = provide_obj.provide_typ
+                    if provide_typ == 1:
+                        custom_list.update(custom_flow=F('custom_flow') + provide_money)  # 客户，更新流贷余额
+                        branch_list.update(branch_flow=F('branch_flow') + provide_money)  # 放款银行，更新流贷余额
+                    elif provide_typ == 11:
+                        custom_list.update(custom_accept=F('custom_accept') + provide_money)  # 客户，更新承兑余额
+                        branch_list.update(branch_accept=F('branch_accept') + provide_money)  # 放款银行，更新承兑余额
+                    else:
+                        custom_list.update(custom_back=F('custom_back') + provide_money)  # 客户，更新保函余额
+                        branch_list.update(branch_back=F('branch_back') + provide_money)  # 放款银行，更新保函余额
 
                 response['message'] = '成功添加放款通知！'
             except Exception as e:
@@ -242,29 +272,77 @@ def provide_del_ajax(request):  # 删除放款ajax
     post_data = json.loads(post_data_str)
     print('post_data:', post_data)
 
-    provide_id = post_data['provide_id']
-    provide_obj = models.Provides.objects.get(id=provide_id)
-    repayment_id = post_data['repayment_id']
-    repayment_obj = models.Repayments.objects.get(id=repayment_id)
+    provide_list = models.Provides.objects.filter(id=post_data['provide_id'])
+    provide_obj = provide_list.first()
+    print('provide_obj:', provide_obj)
+
     '''PROVIDE_STATUS_LIST = ((1, '在保'), (11, '解保'), (21, '代偿'))'''
-    if provide_obj.provide_status == 1:
-        try:
-            with transaction.atomic():
-                models.Customes.objects.filter().update()  # 客户
-                models.Branches.objects.filter().update()  # 放款银行
-                models.Articles.objects.filter().update()  # 项目
-                models.LendingOrder.objects.filter().update()  # 放款次序
-                models.Agrees.objects.filter().update()  # 合同
-                models.Notify.objects.filter().update()  # 放款通知
-                models.Provides.objects.filter().update()  # 放款
-                repayment_obj.delete()  # 删除还款信息
-            response['message'] = '还款信息删除成功！'
-        except Exception as e:
-            response['status'] = False
-            response['message'] = '还款信息删除失败：%s' % str(e)
-    else:
+    try:
+        with transaction.atomic():
+            provide_m = provide_obj.provide_money
+            provide_obj.delete()  # 删除放款信息
+            '''notify_provide_sum，更新放款通知放款信息'''
+            notify_list = models.Notify.objects.filter(id=post_data['notify_id'])
+            notify_obj = notify_list.first()
+            print('notify_obj:', notify_obj)
+            notify_provide_amount = models.Provides.objects.filter(notify=notify_obj).aggregate(
+                Sum('provide_money'))['provide_money__sum']  # 通知项下放款合计
+            if notify_provide_amount:
+                print('notify_provide_amount:', notify_provide_amount)
+                notify_list.update(notify_provide_sum=round(notify_provide_amount, 2))  # 放款通知，更新放款总额
+            else:
+                notify_list.update(notify_provide_sum=0)  # 放款通知，更新放款总额
+            '''agree_provide_sum，更新合同放款信息'''
+            agree_list = models.Agrees.objects.filter(notify_agree=notify_obj)  # 合同
+            agree_obj = agree_list.first()
+            agree_provide_amount = models.Provides.objects.filter(
+                notify__agree=agree_obj).aggregate(Sum('provide_money'))['provide_money__sum']  # 合同项下放款合计
+            print('agree_provide_amount:', agree_provide_amount)
+            if agree_provide_amount:
+                print('agree_provide_amount:', agree_provide_amount)
+                agree_list.update(agree_provide_sum=round(agree_provide_amount, 2))  # 合同，更新放款总额
+            else:
+                agree_list.update(agree_provide_sum=0)  # 合同，更新放款总额
+            '''lending_provide_sum，更新放款次序放款信息'''
+            lending_list = models.LendingOrder.objects.filter(agree_lending=agree_obj)  # 放款次序
+            lending_obj = lending_list.first()
+            lending_provide_amount = models.Provides.objects.filter(
+                notify__agree__lending=lending_obj).aggregate(Sum('provide_money'))['provide_money__sum']
+            print('lending_provide_amount:', lending_provide_amount)
+            if lending_provide_amount:
+                print('lending_repayment_amount:', lending_provide_amount)
+                lending_list.update(lending_provide_sum=round(lending_provide_amount, 2))  # 放款次序，更新放款总额
+            else:
+                lending_list.update(lending_provide_sum=0)  # 放款次序，更新放款总额
+            '''article_provide_sum，更新项目放款信息'''
+            article_list = models.Articles.objects.filter(lending_summary=lending_obj)  # 项目
+            article_obj = article_list.first()
+            article_provide_amount = models.Provides.objects.filter(
+                notify__agree__lending__summary=article_obj).aggregate(Sum('provide_money'))['provide_money__sum']
+            print('article_provide_amount:', article_provide_amount)
+            if article_provide_amount:
+                print('article_provide_amount:', article_provide_amount)
+                article_list.update(article_provide_sum=round(article_provide_amount, 2))  # 项目，更新放款总额
+            else:
+                article_list.update(article_provide_sum=0)  # 项目，更新放款总额
+            '''更新客户余额信息,custom_flow,custom_accept,custom_back'''
+            '''更新银行余额信息,branch_flow,branch_accept,branch_back'''
+            custom_list = models.Customes.objects.filter(article_custom=article_obj)
+            branch_list = models.Branches.objects.filter(agree_branch=agree_obj)
+            provide_typ = provide_obj.provide_typ
+            if provide_typ == 1:
+                custom_list.update(custom_flow=F('custom_flow') - provide_m)  # 客户，更新流贷余额
+                branch_list.update(branch_flow=F('branch_flow') - provide_m)  # 放款银行，更新流贷余额
+            elif provide_typ == 11:
+                custom_list.update(custom_accept=F('custom_accept') - provide_m)  # 客户，更新承兑余额
+                branch_list.update(branch_accept=F('branch_accept') - provide_m)  # 放款银行，更新承兑余额
+            else:
+                custom_list.update(custom_back=F('custom_back') - provide_m)  # 客户，更新保函余额
+                branch_list.update(branch_back=F('branch_back') - provide_m)  # 放款银行，更新保函余额
+        response['message'] = '借款信息删除成功！'
+    except Exception as e:
         response['status'] = False
-        response['message'] = '该笔放款状态为：%s，还款信息删除失败！！！' % provide_obj.provide_status
+        response['message'] = '还款信息删除失败：%s' % str(e)
     result = json.dumps(response, ensure_ascii=False)
     return HttpResponse(result)
 
@@ -313,9 +391,9 @@ def repayment_add_ajax(request):
                     '''agree_repayment_sum，更新合同还款信息'''
                     agree_list = models.Agrees.objects.filter(notify_agree=notify_obj)  # 合同
                     agree_obj = agree_list.first()
-                    agree_repayment_amount = \
-                        models.Repayments.objects.filter(provide__notify__agree=agree_obj).aggregate(
-                            Sum('repayment_money'))['repayment_money__sum']  # 合同项下还款合计
+                    agree_repayment_amount = models.Repayments.objects.filter(
+                        provide__notify__agree=agree_obj).aggregate(
+                        Sum('repayment_money'))['repayment_money__sum']  # 合同项下还款合计
                     print('agree_repayment_amount:', agree_repayment_amount)
                     agree_list.update(agree_repayment_sum=round(agree_repayment_amount, 2))  # 合同，更新还款总额
                     '''lending_repayment_sum，更新放款次序还款信息'''
@@ -334,25 +412,27 @@ def repayment_add_ajax(request):
                         Sum('repayment_money'))['repayment_money__sum']
                     print('article_repayment_amount:', article_repayment_amount)
                     article_list.update(article_repayment_sum=round(article_repayment_amount, 2))  # 项目，更新还款总额
+                    '''更新客户余额信息,custom_flow,custom_accept,custom_back'''
+                    '''更新银行余额信息,branch_flow,branch_accept,branch_back'''
                     custom_list = models.Customes.objects.filter(article_custom=article_obj)
                     branch_list = models.Branches.objects.filter(agree_branch=agree_obj)
                     provide_typ = provide_obj.provide_typ
                     if provide_typ == 1:
                         custom_list.update(custom_flow=F('custom_flow') - repayment_money)  # 客户，更新流贷余额
-                        branch_list.update(branch_flow=F('branch_flow') - repayment_money)  # 客户，更新流贷余额
-
+                        branch_list.update(branch_flow=F('branch_flow') - repayment_money)  # 放款银行，更新流贷余额
                     elif provide_typ == 11:
                         custom_list.update(custom_accept=F('custom_accept') - repayment_money)  # 客户，更新承兑余额
-                        custom_list.update(branch_accept=F('branch_accept') - repayment_money)  # 客户，更新承兑余额
+                        branch_list.update(branch_accept=F('branch_accept') - repayment_money)  # 放款银行，更新承兑余额
                     else:
                         custom_list.update(custom_back=F('custom_back') - repayment_money)  # 客户，更新保函余额
-                        custom_list.update(branch_back=F('branch_back') - repayment_money)  # 客户，更新保函余额
+                        branch_list.update(branch_back=F('branch_back') - repayment_money)  # 放款银行，更新保函余额
 
                     if provide_obj.provide_money == provide_obj.provide_repayment_sum:  # 放款金额=还款金额合计
                         provide_list.update(provide_status=11)  # 放款解保
                         response['message'] = '成功还款,本次放款已全部结清！'
                     else:
                         response['message'] = '成功还款！'
+
             except Exception as e:
                 response['status'] = False
                 response['message'] = '还款失败：%s' % str(e)
@@ -442,15 +522,15 @@ def repayment_del_ajax(request):  # 删除还款信息ajax
                 provide_typ = provide_obj.provide_typ
                 if provide_typ == 1:
                     custom_list.update(custom_flow=F('custom_flow') + repayment_m)  # 客户，更新流贷余额
-                    branch_list.update(branch_flow=F('branch_flow') + repayment_m)  # 客户，更新流贷余额
-
+                    branch_list.update(branch_flow=F('branch_flow') + repayment_m)  # 放款银行，更新流贷余额
                 elif provide_typ == 11:
                     custom_list.update(custom_accept=F('custom_accept') + repayment_m)  # 客户，更新承兑余额
-                    custom_list.update(branch_accept=F('branch_accept') + repayment_m)  # 客户，更新承兑余额
+                    branch_list.update(branch_accept=F('branch_accept') + repayment_m)  # 放款银行，更新承兑余额
                 else:
                     custom_list.update(custom_back=F('custom_back') + repayment_m)  # 客户，更新保函余额
-                    custom_list.update(branch_back=F('branch_back') + repayment_m)  # 客户，更新保函余额
-                response['message'] = '还款信息删除成功！'
+                    branch_list.update(branch_back=F('branch_back') + repayment_m)  # 放款银行，更新保函余额
+
+            response['message'] = '还款信息删除成功！'
         except Exception as e:
             response['status'] = False
             response['message'] = '还款信息删除失败：%s' % str(e)

@@ -1,0 +1,18 @@
+<div class="modal fade bs-example-modal-sm" id="delProvideModal" tabindex="-1" role="dialog"
+     aria-labelledby="delRepaymentModal">
+    <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="delProvideModalLabel">删除放款信息
+                    <input style="display: none" name="notify_id" id="id_notify_id" value={{ notify_obj.id }}>
+                    <input style="display: none" name="provide_id" id="delProvideModalId">
+                </h4>
+            </div>
+            <div class="modal-body">是否确定删除该放款信息!!!</div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                <button type="button" class="btn btn-primary" id="delProvideModalOk">删除</button>
+            </div>
+        </div>
+    </div>
+</div>

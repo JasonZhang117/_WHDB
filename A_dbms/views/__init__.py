@@ -24,7 +24,7 @@ from .v_warrant import (
 # ----------------------v_provide放款管理视图--------------------#
 from .v_provide import (
     provide_agree, provide_agree_scan, provide_agree_notify, provide, provide_scan, notify_add_ajax, notify_del_ajax,
-    provide_add_ajax, repayment_add_ajax, repayment_del_ajax)
+    provide_add_ajax, provide_del_ajax, repayment_add_ajax, repayment_del_ajax)
 # ----------------------v_review保后管理视图--------------------#
 from .v_review import review
 # ----------------------v_dun追偿视图--------------------#

@@ -82,9 +82,9 @@ urlpatterns = [
     path('provide/notify/add/', views.notify_add_ajax),
     path('provide/notify/del/', views.notify_del_ajax),
     path('provide/add/', views.provide_add_ajax),
+    path('provide/del/', views.provide_del_ajax),
     path('provide/repayment/add/', views.repayment_add_ajax),
     path('provide/repayment/del/', views.repayment_del_ajax),
-
     path('provide/', views.provide, name='provide_all'),  # 菜单-放款管理-放款
     path('provide/<int:provide_status>/', views.provide, name='provide'),  # /dbms/grant/(0-9)
     path('provide/scan/<int:provide_id>/', views.provide_scan, name='provide_scan'),

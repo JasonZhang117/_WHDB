@@ -1,0 +1,55 @@
+<script>
+    $(function () {
+        bindDelProvideB();
+        bindDelProvideModalOk();
+    });
+
+    function bindDelProvideB() {
+        console.log("bindDelProvideB");
+        $('#notify-provide-tb').on('click', '.delProvideB', function () {
+            console.log("bindDelProvideB");
+            var delProvideNid = $(this).parent().parent().attr('provide-nid');
+            console.log(delProvideNid);
+            $('#delProvideModalId').val(delProvideNid);
+            $('#delProvideModal').modal('show');
+        })
+    }
+
+    function bindDelProvideModalOk() {
+        $('#delProvideModalOk').click(function () {
+            var postData = {};
+
+            $('#delProvideModal').find('input,select').each(function () {
+                var v = $(this).val();
+                var n = $(this).attr('name');
+                postData[n] = v;
+            });
+            var postDataStr = JSON.stringify(postData);
+            console.log(postDataStr);
+            $.ajax({
+                url: '/dbms/provide/del/',
+                type: 'POST',
+                dataType: 'JSON',
+                data: {'postDataStr': postDataStr},
+                success: function (arg) {
+                    if (arg.status) {
+                        $('#delProvideModal').modal('hide');
+                        alert(arg.message);
+                        window.location.reload();
+                    } else {
+                        $('#delProvideModal').modal('hide');
+                        alert(arg.message);
+                        {#window.location.reload();#}
+                    }
+                }
+            })
+
+        })
+    }
+</script>
+
+
+
+
+
+

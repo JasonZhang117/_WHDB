@@ -54,7 +54,6 @@ class Provides(models.Model):  # 放款
     notify = models.ForeignKey(to='Notify', verbose_name="_放款通知",
                                on_delete=models.PROTECT,
                                related_name='provide_notify')
-
     PROVIDE_TYP_LIST = ((1, '流贷'), (11, '承兑'), (21, '保函'))
     provide_typ = models.IntegerField(verbose_name='放款种类', choices=PROVIDE_TYP_LIST)
     provide_money = models.FloatField(verbose_name='放款金额')
