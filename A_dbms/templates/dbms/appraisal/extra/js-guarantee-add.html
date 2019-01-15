@@ -1,7 +1,7 @@
 <script>
     $(function () {
         bindGuaranteeB();
-        bind_id_sure_typ()
+        bind_id_sure_typ();
         bindGuaranteeAddModalOk();
 
     });
@@ -18,7 +18,7 @@
             console.log("bind_id_sure_typ");
             var selected_sure_typ = $('#id_sure_typ').val();
             console.log(selected_sure_typ);
-            $('.guarantee-extend').hide()
+            $('.guarantee-extend').hide();
             switch (selected_sure_typ) {
                 case ('1'):
                     $('#form_lendingcustoms_c_add').show();
@@ -73,7 +73,7 @@
             });
 
             var postDataStr = JSON.stringify(postData);
-            console.log(postDataStr)
+            console.log(postDataStr);
             $.ajax({
                 url: '/dbms/appraisal/guarantee/add/',
                 type: 'POST',

@@ -173,7 +173,7 @@ class Comments(models.Model):  # 评委意见
                                related_name='comment_expert')
     COMMENT_TYPE_LIST = ((1, '同意'), (2, '复议'), (3, '不同意'))
     comment_type = models.IntegerField(verbose_name='评委意见', choices=COMMENT_TYPE_LIST, default=1)
-    concrete = models.TextField(verbose_name='意见详情', null=True, blank=True)
+    concrete = models.TextField(verbose_name='意见详情')
     comment_buildor = models.ForeignKey(to='Employees', verbose_name="创建人",
                                         on_delete=models.PROTECT, default=1,
                                         related_name='comment_buildor_employee')

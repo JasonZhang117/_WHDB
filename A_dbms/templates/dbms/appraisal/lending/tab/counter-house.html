@@ -8,11 +8,13 @@
         {#<caption><h4>项目管理</h4></caption>#}
         <thead>
         <tr style="text-align: center">
+            <th>编号</th>
             <th>担保方式</th>
-            <th>房产编号</th>
+            <th>所有权人</th>
             <th>房产地址</th>
-            <th>房产用途</th>
             <th>房产面积</th>
+            <th>房产用途</th>
+            <th>产权证</th>
             {% if page_title == '放款次序' %}
                 <th>操作</th>
             {% endif %}
@@ -24,11 +26,22 @@
             {% if lending_sure.sure_typ in house_list %}
                 {% for warrant in lending_sure.warrant_sure.warrant.all %}
                     <tr guarantee-nid={{ warrant.id }} sure-typ-nid={{ lending_sure.sure_typ }}>
+                        <td><a target="_blank" href="{% url 'dbms:warrant_scan' warrant_id=warrant.id %}">
+                            {{ forloop.counter }}</a></td>
                         <td>{{ lending_sure.get_sure_typ_display }}</td>
-                        <td>{{ warrant.warrant_num }}</td>
+                        <td>
+                            {% for ownership in warrant.ownership_warrant.all %}
+                                {{ ownership.owner }}{% if not forloop.last %}、{% endif %}
+                            {% endfor %}
+                        </td>
                         <td>{{ warrant.house_warrant.house_locate }}</td>
-                        <td>{{ warrant.house_warrant.get_house_app_display }}</td>
                         <td>{{ warrant.house_warrant.house_area }}</td>
+                        <td>{{ warrant.house_warrant.get_house_app_display }}</td>
+                        <td>
+                            {% for ownership in warrant.ownership_warrant.all %}
+                                {{ ownership.ownership_num }}{% if not forloop.last %}、{% endif %}
+                            {% endfor %}
+                        </td>
                         {% if page_title == '放款次序' %}
                             <td><a class="btn btn-danger btn-xs delGuaranteeB">删除</a></td>
                         {% endif %}

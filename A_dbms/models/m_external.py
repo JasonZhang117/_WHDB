@@ -39,8 +39,6 @@ class Branches(models.Model):  # 放款银行
     branch_accept = models.FloatField(verbose_name='_承兑余额', default=0)
     branch_back = models.FloatField(verbose_name='_保函余额', default=0)
 
-
-
     # Cancellation = models.BooleanField('注销', default=False)
     class Meta:
         verbose_name_plural = '外部-放款银行'  # 指定显示名称
@@ -59,7 +57,7 @@ class Experts(models.Model):  # 评审专家
     LEVEL_LIST = ((1, '内部'), (2, '顾问'), (3, '一级'), (4, '二级'))
     level = models.IntegerField(verbose_name='级别', choices=LEVEL_LIST, default=1)
     contact_numb = models.CharField(verbose_name='联系电话', max_length=16, unique=True)
-    email = models.CharField(verbose_name='邮箱', max_length=32, unique=True)
+    email = models.CharField(verbose_name='邮箱', max_length=32)
     ordery = models.IntegerField(verbose_name='优先级')
     EXPERT_STATE_LIST = ((1, '正常'), (2, '注销'))
     expert_state = models.IntegerField(verbose_name='评审状态', choices=EXPERT_STATE_LIST, default=1)

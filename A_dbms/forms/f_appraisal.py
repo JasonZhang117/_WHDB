@@ -88,7 +88,7 @@ class LendingGroundForm(dform.Form):
 
     def __init__(self, *args, **kwargs):
         super(LendingGroundForm, self).__init__(*args, **kwargs)
-        self.fields['sure_ground'].choices = models.Warrants.objects.filter(warrant_typ=2).values_list(
+        self.fields['sure_ground'].choices = models.Warrants.objects.filter(warrant_typ=5).values_list(
             'id', 'warrant_num').order_by('warrant_num')
 
 

@@ -1,7 +1,7 @@
 <script>
     $(function () {
         bindEditCustom();
-        bindAddCounterModalOk();
+        bindEditCustomModalOk();
     });
 
     function bindEditCustom() {
@@ -11,7 +11,7 @@
         })
     }
 
-    function bindAddCounterModalOk() {
+    function bindEditCustomModalOk() {
         $('#editCustomModalOk').click(function () {
             var postData = {};
             $('#editCustomModal').find('input,select').each(function () {

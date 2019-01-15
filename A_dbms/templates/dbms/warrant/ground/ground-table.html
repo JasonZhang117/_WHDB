@@ -20,7 +20,7 @@
             <tr>
                 <td>
                     <a href="{% url 'dbms:warrant_scan' warrant_id=ground.warrant.id %}">
-                        {{ ground.warrant.warrant_num }}
+                        {{ ground.warrant.warrant_num }}{% if not forloop.last %}、{% endif %}
                     </a>
                 </td>
                 <td>{{ ground.ground_locate }}</td>

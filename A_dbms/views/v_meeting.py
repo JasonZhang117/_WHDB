@@ -26,9 +26,16 @@ def meeting_scan(request, meeting_id):  # 评审会预览
     print(__file__, '---->def meeting_scan')
     meeting_obj = models.Appraisals.objects.get(id=meeting_id)
     expert_list = models.Experts.objects.filter(article_expert__appraisal_article=meeting_obj).distinct()
+    expert_article_count = {}
+    article_count = list()
     for expert_obj in expert_list:
         article_count = models.Articles.objects.filter(expert=expert_obj, appraisal_article=meeting_obj).count()
-        print("article_count:", expert_obj.id, article_count)
+        expert_article_count['id'] = expert_obj.id
+        expert_article_count['count'] = article_count
+        print("article_count:", expert_obj.name, article_count)
+        print("expert_article_count:", expert_article_count)
+    print("article_count:", article_count)
+
     expert_ll = models.Experts.objects.filter(article_expert__appraisal_article=meeting_obj).count()
     print('expert_ll:', expert_ll)
     form_meeting_article_add = forms.MeetingArticleAddForm()
@@ -371,7 +378,7 @@ def meeting_close_ajax(request):  # 完成上会ajax
                     num = 0
                     for article in article_list:
                         num = num + 1
-                        summary_num = '%s-%s' % (meeting_obj.num, num)
+                        summary_num = '%s-%s号' % (meeting_obj.num, num)
                         models.Articles.objects.filter(id=article.id).update(summary_num=summary_num)
                 response['message'] = '%s,完成上会！' % meeting_obj.num
             except Exception as e:

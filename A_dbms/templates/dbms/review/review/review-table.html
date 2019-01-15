@@ -15,9 +15,9 @@
             <tr>
                 <td><a href="{% url 'dbms:custom_scan' custom_id=custom.id %}">{{ custom.name }}</a></td>
                 <td>{{ custom.credit_amount }}</td>
-                <td>{{ custom.flow_loan }}</td>
-                <td>{{ custom.accept_loan }}</td>
-                <td>{{ custom.back_loan }}</td>
+                <td>{{ custom.custom_flow }}</td>
+                <td>{{ custom.custom_accept }}</td>
+                <td>{{ custom.custom_back }}</td>
                 <td></td>
             </tr>
         {% endfor %}

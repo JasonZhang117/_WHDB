@@ -12,7 +12,6 @@ class Customes(models.Model):  # 客户
     contact_num = models.CharField(verbose_name='联系电话', max_length=13)
     counter_only = models.BooleanField(verbose_name='仅反担保', default=1)
     credit_amount = models.FloatField(verbose_name='_授信总额', default=0)
-
     custom_flow = models.FloatField(verbose_name='_流贷余额', default=0)
     custom_accept = models.FloatField(verbose_name='_承兑余额', default=0)
     custom_back = models.FloatField(verbose_name='_保函余额', default=0)

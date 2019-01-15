@@ -28,7 +28,7 @@
                 <td>{{ house.house_area }}</td>
                 <td>
                     {% for ownership in house.warrant.ownership_warrant.all %}
-                        {{ ownership.ownership_num }}、
+                        {{ ownership.ownership_num }}{% if not forloop.last %}、{% endif %}
                     {% endfor %}
                 </td>
             </tr>

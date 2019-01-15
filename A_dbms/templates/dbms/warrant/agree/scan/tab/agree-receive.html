@@ -3,6 +3,7 @@
 
         <thead>
         <tr style="text-align: center">
+            <th>序号</th>
             <th>担保方式</th>
             <th>所有人</th>
             <th>详情</th>
@@ -16,6 +17,7 @@
             {% if lending_sure.sure_typ in receivable_list %}
                 {% for warrant in lending_sure.warrant_sure.warrant.all %}
                     <tr warrant-nid={{ warrant.id }}>
+                        <td>{{ forloop.counter }}</td>
                         <td>{{ lending_sure.get_sure_typ_display }}</td>
                         <td>{{ warrant.receive_warrant.receive_owner }}</td>
                         <td>{{ warrant.receive_warrant.receivable_detail }}</td>

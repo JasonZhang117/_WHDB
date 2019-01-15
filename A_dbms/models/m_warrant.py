@@ -4,14 +4,15 @@ import datetime
 
 # ------------------------担保物--------------------------#
 class Warrants(models.Model):  # 担保物
-    warrant_num = models.CharField(verbose_name='权证编码', max_length=32, unique=True)
+    warrant_num = models.CharField(verbose_name='权证编码', max_length=128, unique=True)
     WARRANT_TYP_LIST = [
-        (1, '房产'), (2, '土地'), (11, '应收'), (21, '股权'),
+        (1, '房产'), (5, '土地'), (11, '应收'), (21, '股权'),
         (31, '票据'), (41, '车辆'), (51, '动产'), (99, '他权')]
     '''其他-存货、设备、合格证、'''
     warrant_typ = models.IntegerField(verbose_name='权证类型', choices=WARRANT_TYP_LIST, default=1)
     evaluate_value = models.FloatField(verbose_name='评估价值', null=True, blank=True)
     evaluate_date = models.DateField(verbose_name='评估日期', null=True, blank=True)
+    warrant_detail = models.CharField(verbose_name='说明', max_length=128, null=True, blank=True)
     WARRANT_STATE_LIST = (
         (1, '未入库'), (2, '已入库'), (3, '已出库'), (4, '已借出'), (5, '已注销'), (6, '无需入库'))
     warrant_state = models.IntegerField(verbose_name='_权证状态', choices=WARRANT_STATE_LIST, default=1)

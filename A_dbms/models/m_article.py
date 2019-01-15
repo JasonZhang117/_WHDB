@@ -7,7 +7,7 @@ class Articles(models.Model):  # 项目、纪要
     article_num = models.CharField(verbose_name='_项目编号', max_length=32, unique=True)
     custom = models.ForeignKey(to='Customes', verbose_name="客户",
                                on_delete=models.PROTECT,
-                               limit_choices_to={'agree_state': 11},
+                               limit_choices_to={'counter_only': 0},
                                related_name='article_custom')
     renewal = models.FloatField(verbose_name='续贷金额（元）', default=0)
     augment = models.FloatField(verbose_name='新增金额（元）', default=0)

@@ -16,10 +16,10 @@ def custom(request, *args, **kwargs):  # 委托合同列表
     form_custom_p_add = forms.CustomPAddForm()
 
     genre_list = models.Customes.GENRE_LIST
-    custom_list = models.Customes.objects.filter(**kwargs).order_by('-credit_amount')
+    custom_list = models.Customes.objects.filter(**kwargs).order_by('-credit_amount', 'name')
 
     ####分页信息###
-    paginator = Paginator(custom_list, 10)
+    paginator = Paginator(custom_list, 20)
     page = request.GET.get('page')
     try:
         p_list = paginator.page(page)
@@ -125,7 +125,11 @@ def shareholder_add_ajax(request):
         print('shareholder_ratio_amount:', shareholder_ratio_amount)
         shareholding_ratio = shareholder_add_data['shareholding_ratio']
         print('shareholding_ratio:', shareholding_ratio)
-        ratio_amount = shareholder_ratio_amount['shareholding_ratio__sum'] + shareholding_ratio
+        shareholder_ratio_a = shareholder_ratio_amount['shareholding_ratio__sum']
+        if shareholder_ratio_a:
+            ratio_amount = shareholder_ratio_a + shareholding_ratio
+        else:
+            ratio_amount = shareholding_ratio
         print('ratio_amount:', ratio_amount)
         if ratio_amount > 100:
             response['status'] = False
@@ -260,8 +264,9 @@ def custom_edit_ajax(request):
 def custom_scan(request, custom_id):  # 项目预览
     print(__file__, '---->def custom_scan')
     custom_obj = models.Customes.objects.get(id=custom_id)
-    shareholder_list = custom_obj.company_custome.shareholder_custom_c.all()
-    print('shareholder_list:', shareholder_list)
+    if custom_obj.genre == 1:
+        shareholder_list = custom_obj.company_custome.shareholder_custom_c.all()
+        print('shareholder_list:', shareholder_list)
     form_date = {
         'name': custom_obj.name,
         'contact_addr': custom_obj.contact_addr,

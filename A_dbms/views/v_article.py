@@ -15,8 +15,7 @@ from django.db.utils import IntegrityError
 def creat_article_num(custom_id):
     custom = models.Customes.objects.get(id=custom_id)
     if custom.genre == 1:
-        short_name = models.CustomesC.objects. \
-            get(custome__id=custom_id).short_name
+        short_name = models.CustomesC.objects.get(custome__id=custom_id).short_name
     else:
         short_name = custom.name
         ###时间处理
@@ -43,8 +42,7 @@ def article(request, *args, **kwargs):  # 项目列表
     # print('request.user:', request.user)
     # print('request.GET.items():', request.GET.items())
     # request.GET.items()获取get传递的参数对
-
-    form_article_add_edit = forms.ArticlesAddForm()
+    print('request.GET:', request.GET)
     for k, v in request.GET.items():
         print(k, ' ', v)
     condition = {
@@ -56,16 +54,18 @@ def article(request, *args, **kwargs):  # 项目列表
         kwargs[k] = temp
         if temp:
             condition[k] = temp  # 将参数放入查询字典
-    article_state_list = models.Articles.ARTICLE_STATE_LIST
-    article_state_list_dic = list(map(
-        lambda x: {'id': x[0], 'name': x[1]},
-        article_state_list))
-    # 列表或元组转换为字典并添加key
-    article_list = models.Articles.objects.filter(
-        **kwargs).select_related('custom', 'director', 'assistant', 'control').order_by('-article_date')
 
+    article_state_list = models.Articles.ARTICLE_STATE_LIST
+    article_state_list_dic = list(map(lambda x: {'id': x[0], 'name': x[1]}, article_state_list))
+    print('article_state_list_dic:', article_state_list_dic)
+    # 列表或元组转换为字典并添加key
+
+    article_list = models.Articles.objects.filter(**kwargs).select_related(
+        'custom', 'director', 'assistant', 'control').order_by('-article_date')
+
+    form_article_add_edit = forms.ArticlesAddForm()
     # 分页
-    paginator = Paginator(article_list, 20)
+    paginator = Paginator(article_list, 2)
     page = request.GET.get('page')
     try:
         p_list = paginator.page(page)

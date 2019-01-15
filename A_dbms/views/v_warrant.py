@@ -28,22 +28,24 @@ def warrant_add_ajax(request):
     if form_warrant_add.is_valid():
         warrant_add_clean = form_warrant_add.cleaned_data
         print('warrant_add_clean:', warrant_add_clean)
-        if warrant_typ == 1:
+        '''WARRANT_TYP_LIST = [
+        (1, '房产'), (2, '房产'), (5, '土地'), (11, '应收'), (21, '股权'),
+        (31, '票据'), (41, '车辆'), (51, '动产'), (99, '他权')]'''
+        if warrant_typ == 1:  # 房产
             print('warrant_typ == 1')
             form_house_add_edit = forms.HouseAddEidtForm(post_data)
             if form_house_add_edit.is_valid():
                 house_add_edit_clean = form_house_add_edit.cleaned_data
                 try:
+                    print('house_add_edit_clean:', house_add_edit_clean)
                     with transaction.atomic():
                         warrant_obj = models.Warrants.objects.create(
                             warrant_num=warrant_add_clean['warrant_num'], warrant_typ=warrant_typ,
                             warrant_buildor=request.user)
                         house_obj = models.Houses.objects.create(
-                            warrant=warrant_obj,
-                            house_locate=house_add_edit_clean['house_locate'],
+                            warrant=warrant_obj, house_locate=house_add_edit_clean['house_locate'],
                             house_app=house_add_edit_clean['house_app'],
-                            house_area=house_add_edit_clean['house_area'],
-                            house_buildor=request.user)
+                            house_area=house_add_edit_clean['house_area'], house_buildor=request.user)
                     response['message'] = '房产创建成功！！！，请继续创建产权证信息。'
                     response['skip'] = "/dbms/warrant/scan/%s" % warrant_obj.id
                 except Exception as e:
@@ -53,8 +55,8 @@ def warrant_add_ajax(request):
                 response['status'] = False
                 response['message'] = '表单信息有误！！！'
                 response['forme'] = form_house_add_edit.errors
-        elif warrant_typ == 2:
-            print('warrant_typ == 2')
+        elif warrant_typ == 5:  # 土地
+            print('warrant_typ == 5')
             form_ground_add_edit = forms.GroundAddEidtForm(post_data)
             if form_ground_add_edit.is_valid():
                 ground_add_edit_clean = form_ground_add_edit.cleaned_data
@@ -203,9 +205,8 @@ def warrant_add_ajax(request):
                 response['status'] = False
                 response['message'] = '表单信息有误！！！'
                 response['forme'] = form_chattel_add_eidt.errors
-
         elif warrant_typ == 99:
-            print('warrant_typ == 9')
+            print('warrant_typ == 99')
             form_hypothecs_add_eidt = forms.HypothecsAddEidtForm(post_data)
             if form_hypothecs_add_eidt.is_valid():
                 hypothecs_add_edit_clean = form_hypothecs_add_eidt.cleaned_data
@@ -281,6 +282,9 @@ def warrant_edit_ajax(request):
 
     if form_warrant_edit.is_valid():
         warrant_edit_clean = form_warrant_edit.cleaned_data
+        '''WARRANT_TYP_LIST = [
+                    (1, '房产'), (2, '房产'), (5, '土地'), (11, '应收'), (21, '股权'),
+                    (31, '票据'), (41, '车辆'), (51, '动产'), (99, '他权')]'''
         if warrant_typ == 1:
             print('warrant_typ == 1')
             form_house_add_edit = forms.HouseAddEidtForm(post_data)
@@ -302,8 +306,8 @@ def warrant_edit_ajax(request):
                 response['status'] = False
                 response['message'] = '表单信息有误！！！'
                 response['forme'] = form_house_add_edit.errors
-        elif warrant_typ == 2:
-            print('warrant_typ == 2')
+        elif warrant_typ == 5:
+            print('warrant_typ == 5')
             form_ground_add_edit = forms.GroundAddEidtForm(post_data)
             if form_ground_add_edit.is_valid():
                 ground_add_edit_clean = form_ground_add_edit.cleaned_data
@@ -485,12 +489,14 @@ def storages_add_ajax(request):  # 出入库添加ajax
         if warrant_state == 2:  # (2, '已入库'),
             if storage_typ in [2, 3, 5]:  # (2, '出库'), (3, '借出'), (5, '解保')
                 '''WARRANT_TYP_LIST = [
-                    (1, '房产'), (2, '土地'), (11, '应收'), (21, '股权'),
+                    (1, '房产'), (2, '房产'), (5, '土地'), (11, '应收'), (21, '股权'),
                     (31, '票据'), (41, '车辆'), (51, '动产'), (99, '他权')]'''
                 if warrant_obj.warrant_typ == 99:  # 他权解保
                     ypothec_obj = warrant_obj.ypothec_warrant  # 他权
                     agree_list = models.Agrees.objects.filter(ypothec_agree=ypothec_obj)
                     agree_obj = agree_list.first()
+                    '''AGREE_STATE_LIST = ((11, '待签批'), (21, '已签批'), (31, '已落实，未放款'), (41, '已落实，
+                    放款'),(42, '未落实，放款'), (51, '待变更'), (61, '已解保'), (99, '已作废'))'''
                     if agree_obj.agree_state == 5:
                         # ypothec_obj.agree  # 他权对应委托合同
                         # 判断合同项下有无余额******
@@ -590,7 +596,7 @@ def ground(request, *args, **kwargs):  # 房产列表
 
     PAGE_TITAL = '权证-土地'
     add_warrant = '添加土地'
-    warrant_typ_n = 2
+    warrant_typ_n = 5
 
     form_warrant_edit = forms.WarrantEditForm()
     form_ground_add_edit = forms.GroundAddEidtForm()
@@ -615,7 +621,7 @@ def ground(request, *args, **kwargs):  # 房产列表
 @login_required
 def warrant(request, *args, **kwargs):  # 房产列表
     print(__file__, '---->def warrant')
-
+    print('request.GET:', request.GET)
     PAGE_TITAL = '权证-所有'
     add_warrant = '添加权证'
     warrant_typ_n = 0
@@ -631,10 +637,10 @@ def warrant(request, *args, **kwargs):  # 房产列表
     form_hypothecs_add_eidt = forms.HypothecsAddEidtForm()  # 99
 
     warrant_typ_list = models.Warrants.WARRANT_TYP_LIST
-    warrant_list = models.Warrants.objects.filter(**kwargs)
+    warrant_list = models.Warrants.objects.filter(**kwargs).order_by('warrant_num')
 
     ####分页信息###
-    paginator = Paginator(warrant_list, 10)
+    paginator = Paginator(warrant_list, 20)
     page = request.GET.get('page')
     try:
         p_list = paginator.page(page)
@@ -677,8 +683,8 @@ def warrant_scan(request, warrant_id):  # house_scan房产预览
     warrant_obj = models.Warrants.objects.get(id=warrant_id)
     warrant_typ_n = warrant_obj.warrant_typ
     '''WARRANT_TYP_LIST = [
-        (1, '房产'), (2, '土地'), (11, '应收'), (21, '股权'),
-        (31, '票据'), (41, '车辆'), (51, '动产'), (99, '他权')]'''
+                    (1, '房产'), (2, '房产'), (5, '土地'), (11, '应收'), (21, '股权'),
+                    (31, '票据'), (41, '车辆'), (51, '动产'), (99, '他权')]'''
     if warrant_typ_n == 99:
         agree_lending_obj = warrant_obj.ypothec_warrant.agree.lending
         warrants_lending_list = models.Warrants.objects.filter(
@@ -693,7 +699,7 @@ def warrant_scan(request, warrant_id):  # house_scan房产预览
             'house_app': warrant_obj.house_warrant.house_app,
             'house_area': warrant_obj.house_warrant.house_area}
         form_house_add_edit = forms.HouseAddEidtForm(form_date)
-    elif warrant_typ == 2:
+    elif warrant_typ == 5:
         form_date = {
             'ground_locate': warrant_obj.ground_warrant.ground_locate,
             'ground_app': warrant_obj.ground_warrant.ground_app,
@@ -740,8 +746,20 @@ def warrant_agree_scan(request, agree_id):  # 查看合同
     lending_obj = agree_obj.lending
 
     '''WARRANT_TYP_LIST = [
-        (1, '房产'), (2, '土地'), (11, '应收'), (21, '股权'),
-        (31, '票据'), (41, '车辆'), (51, '动产'), (99, '他权')]'''
+                    (1, '房产'), (2, '房产'), (5, '土地'), (11, '应收'), (21, '股权'),
+                    (31, '票据'), (41, '车辆'), (51, '动产'), (99, '他权')]'''
+    '''COUNTER_TYP_LIST = (
+        (1, '企业担保'), (2, '个人保证'),
+        (11, '房产抵押'), (12, '土地抵押'), (13, '设备抵押'), (14, '存货抵押'), (15, '车辆抵押'),
+        (31, '应收质押'), (32, '股权质押'), (33, '票据质押'),
+        (51, '股权预售'), (52, '房产预售'), (53, '土地预售'))'''
+    '''SURE_TYP_LIST = (
+            (1, '企业保证'), (2, '个人保证'),
+            (11, '房产抵押'), (12, '土地抵押'), (13, '设备抵押'), (14, '存货抵押'), (15, '车辆抵押'),
+            (21, '房产顺位'), (22, '土地顺位'),
+            (31, '应收质押'), (32, '股权质押'), (33, '票据质押'),
+            (41, '合格证监管'), (42, '房产监管'), (43, '土地监管'),
+            (51, '股权预售'), (52, '房产预售'), (53, '土地预售'))'''
     sure_list = [1, 2]  # 保证反担保类型
     house_list = [11, 21, 42, 52]
     ground_list = [12, 22, 43, 53]

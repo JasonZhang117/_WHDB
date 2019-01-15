@@ -9,7 +9,7 @@
         </tr>
         </thead>
         <tbody>
-        {% for warrant in warrant_list %}
+        {% for warrant in p_list %}
             <tr>
                 <td>
                     <a href="{% url 'dbms:warrant_scan' warrant_id=warrant.id %}">{{ warrant.warrant_num }}</a>
@@ -18,7 +18,7 @@
                 <td>
                     {% if warrant.warrant_typ == 1 %}
                         {{ warrant.house_warrant.house_locate }}
-                    {% elif warrant.warrant_typ == 2 %}
+                    {% elif warrant.warrant_typ == 5 %}
                         {{ warrant.ground_warrant.ground_locate }}
                     {% elif warrant.warrant_typ == 11 %}
                         {{ warrant.receive_warrant.receivable_detail }}
@@ -37,5 +37,7 @@
         {% endfor %}
         </tbody>
     </table>
+
     {% include 'dbms/board/page.html' %}
+
 </div>

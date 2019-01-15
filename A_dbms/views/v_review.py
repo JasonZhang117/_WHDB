@@ -13,7 +13,7 @@ from django.db.models import Q
 def review(request):  # 保后列表
     print(__file__, '---->def review')
     custom_list = models.Customes.objects.filter(
-        Q(flow_loan__gt=0) | Q(accept_loan__gt=0) | Q(back_loan__gt=0)).order_by('-credit_amount')
+        Q(custom_flow__gt=0) | Q(custom_accept__gt=0) | Q(custom_back__gt=0)).order_by('-credit_amount')
 
     ####分页信息###
     paginator = Paginator(custom_list, 10)
