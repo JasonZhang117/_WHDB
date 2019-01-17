@@ -20,10 +20,14 @@
                 var n = $(this).attr('name');
                 postData[n] = v;
             });
-            var ttt = $('#id_sign_detail').val()
-            postData['sign_detail'] = ttt;
+            var rcd = $('#id_rcd_opinion').val();
+            postData['rcd_opinion'] = rcd;
+            var convenorl = $('#id_convenor_opinionl').val();
+            postData['convenor_opinionl'] = convenorl;
+            var sign = $('#id_sign_detail').val();
+            postData['sign_detail'] = sign;
             var postDataStr = JSON.stringify(postData);
-            console.log(postDataStr)
+            console.log(postDataStr);
             $.ajax({
                 url: '/dbms/appraisal/sign/',
                 type: 'POST',

@@ -22,7 +22,7 @@ def appraisal(request):  # 评审情况
         (5, '已签批'), (6, '已注销'))'''
     appraisal_list = models.Articles.objects.filter(article_state__in=[4, 5]).order_by('-review_date')
     print('appraisal_list:', appraisal_list)
-    paginator = Paginator(appraisal_list, 10)
+    paginator = Paginator(appraisal_list, 20)
     page = request.GET.get('page')
     try:
         p_list = paginator.page(page)
@@ -53,7 +53,8 @@ def appraisal_scan(request, article_id):  # 评审项目预览
     else:
         form_date = {
             'summary_num': article_obj.summary_num, 'sign_type': article_obj.sign_type, 'renewal': article_obj.renewal,
-            'augment': article_obj.augment, 'sign_detail': article_obj.sign_detail,
+            'augment': article_obj.augment, 'rcd_opinion': article_obj.rcd_opinion,
+            'convenor_opinion': article_obj.convenor_opinion, 'sign_detail': article_obj.sign_detail,
             'sign_date': str(article_obj.sign_date)}
         form_article_sign = forms.ArticlesSignForm(initial=form_date)
     form_comment = forms.CommentsAddForm()
@@ -550,7 +551,7 @@ def article_sign_ajax(request):
                         try:
                             with transaction.atomic():
                                 models.Articles.objects.filter(id=article_id).update(
-                                    sign_type=sign_type, renewal=renewal, augment=augment,
+                                    sign_type=sign_type, renewal=renewal, augment=augment, amount=article_amount,
                                     sign_detail=cleaned_data['sign_detail'], sign_date=cleaned_data['sign_date'],
                                     article_state=5)
                                 # 更新客户授信总额

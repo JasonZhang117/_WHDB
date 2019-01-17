@@ -65,6 +65,7 @@ def provide_agree_scan(request, agree_id):  # 查看放款
     lending_obj = agree_obj.lending
 
     form_notify_add = forms.FormNotifyAdd()
+    form_ascertain_add = forms.FormAscertainAdd()
 
     return render(request, 'dbms/provide/provide-agree-scan.html', locals())
 
@@ -103,6 +104,50 @@ def provide_agree_notify(request, agree_id, notify_id):  # 查看放款通知
     form_provide_add = forms.FormProvideAdd()
 
     return render(request, 'dbms/provide/provide-agree-notify.html', locals())
+
+
+# -----------------------------风控落实ajax------------------------------#
+@login_required
+def ascertain_add_ajax(request):
+    print(__file__, '---->def notify_add_ajax')
+    response = {'status': True, 'message': None, 'forme': None, }
+    post_data_str = request.POST.get('postDataStr')
+    post_data = json.loads(post_data_str)
+    print('post_data:', post_data)
+    agree_list = models.Agrees.objects.filter(id=post_data['agree_id'])
+    agree_obj = agree_list.first()
+    form_notify_add = forms.FormNotifyAdd(post_data)
+    if form_notify_add.is_valid():
+        form_notify_cleaned = form_notify_add.cleaned_data
+        notify_money = form_notify_cleaned['notify_money']
+        notify_amount = models.Notify.objects.filter(agree=agree_obj).aggregate(Sum('notify_money'))
+        notify_money_sum = notify_amount['notify_money__sum']
+        if notify_money_sum:
+            amount = notify_money_sum + notify_money
+        else:
+            amount = notify_money
+        if amount > agree_obj.agree_amount:
+            response['status'] = False
+            response['message'] = '放款通知金额合计（%s）大于合同金额（%s）' % (amount, agree_obj.agree_amount)
+        else:
+            try:
+                with transaction.atomic():
+                    notify_obj = models.Notify.objects.create(
+                        agree=agree_obj, notify_money=notify_money, notify_date=form_notify_cleaned['notify_date'],
+                        contracts_lease=form_notify_cleaned['contracts_lease'],
+                        contract_guaranty=form_notify_cleaned['contract_guaranty'],
+                        remark=form_notify_cleaned['remark'], notifyor=request.user)
+                    agree_list.update(agree_notify_sum=amount)
+                response['message'] = '成功添加放款通知！'
+            except Exception as e:
+                response['status'] = False
+                response['message'] = '放款通知添加失败：%s' % str(e)
+    else:
+        response['status'] = False
+        response['message'] = '表单信息有误！！！'
+        response['forme'] = form_notify_add.errors
+    result = json.dumps(response, ensure_ascii=False)
+    return HttpResponse(result)
 
 
 # -----------------------------添加放款通知ajax------------------------------#

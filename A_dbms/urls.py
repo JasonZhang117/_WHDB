@@ -77,8 +77,10 @@ urlpatterns = [
     path('provide/agree', views.provide_agree, name='provide_agree_all'),  # 菜单-放款管理-放款通知
     path('provide/agree/<int:agree_state>/', views.provide_agree, name='provide_agree'),  # /dbms/provide/(0-9)
     path('provide/agree/scan/<int:agree_id>/', views.provide_agree_scan, name='provide_agree_scan'),
-    path('provide/agree/notify/<int:agree_id>/<int:notify_id>/', views.provide_agree_notify, name='provide_agree_notify'),
+    path('provide/agree/notify/<int:agree_id>/<int:notify_id>/', views.provide_agree_notify,
+         name='provide_agree_notify'),
 
+    path('provide/ascertain/add/', views.ascertain_add_ajax),
     path('provide/notify/add/', views.notify_add_ajax),
     path('provide/notify/del/', views.notify_del_ajax),
     path('provide/add/', views.provide_add_ajax),

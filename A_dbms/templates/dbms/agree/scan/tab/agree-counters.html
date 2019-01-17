@@ -26,7 +26,7 @@
                 {% else %}
                     <td>
                         {% for warrant in counter.warrant_counter.warrant.all %}
-                            {% if warrant.warrant_typ == 1 or warrant.warrant_typ == 2 %}
+                            {% if warrant.warrant_typ == 1 or warrant.warrant_typ == 5 %}
                                 {% for ownership in warrant.ownership_warrant.all %}
                                     {{ ownership.owner.name }}
                                     {% if not forloop.last %}、{% endif %}

@@ -3,6 +3,16 @@ from django.forms import fields, widgets
 from .. import models
 
 
+# -----------------------风控落实添加-------------------------#
+class FormAscertainAdd(dform.ModelForm):
+    class Meta:
+        model = models.Agrees
+        fields = ['ascertain_date', 'agree_remark']
+        widgets = {
+            'ascertain_date': dform.DateInput(attrs={'class': 'form-control', 'type': 'date'}),
+            'agree_remark': dform.Textarea(attrs={'class': 'form-control', 'rows': '3', 'placeholder': '落实情况'})}
+
+
 # -----------------------放款通知添加-------------------------#
 class FormNotifyAdd(dform.ModelForm):
     class Meta:

@@ -28,9 +28,15 @@ class ArticlesSignForm(dform.Form):  # 项目签批
     augment = fields.FloatField(
         label='本次新增', label_suffix="：",
         widget=widgets.NumberInput(attrs={'class': 'form-control', 'placeholder': '本次新增额度（元）'}))
+    rcd_opinion = fields.CharField(
+        label='风控部意见', label_suffix="：",
+        widget=widgets.Textarea(attrs={'class': 'form-control', 'rows': '1', 'placeholder': '风控部意见'}))
+    convenor_opinion = fields.CharField(
+        label='招集人意见', label_suffix="：",
+        widget=widgets.Textarea(attrs={'class': 'form-control', 'rows': '1', 'placeholder': '招集人意见'}))
     sign_detail = fields.CharField(
-        label='签批详情', label_suffix="：",
-        widget=widgets.Textarea(attrs={'class': 'form-control', 'rows': '3', 'placeholder': '签批详情'}))
+        label='签批人意见', label_suffix="：",
+        widget=widgets.Textarea(attrs={'class': 'form-control', 'rows': '2', 'placeholder': '签批详情'}))
     sign_date = fields.DateField(
         label='签批日期', label_suffix="：", initial=str(datetime.date.today()),
         widget=widgets.DateInput(attrs={'class': 'form-control', 'type': 'date'}))

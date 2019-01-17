@@ -5,6 +5,7 @@ import time, json
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.db import transaction
 from django.db.models import Sum, Max, Count
+from django.db.models import Q, F
 
 
 # -----------------------客户管理-------------------------#
@@ -16,10 +17,22 @@ def custom(request, *args, **kwargs):  # 委托合同列表
     form_custom_p_add = forms.CustomPAddForm()
 
     genre_list = models.Customes.GENRE_LIST
-    custom_list = models.Customes.objects.filter(**kwargs).order_by('-credit_amount', 'name')
+    custom_list = models.Customes.objects.filter(**kwargs).order_by('-credit_amount', '-name')
+
+    search_key = request.GET.get('_s')
+    print('search_key:', search_key)
+    if search_key:
+        search_fields = ['name', 'contact_addr', 'contact_num']
+        q = Q()
+        q.connector = 'OR'
+
+        for field in search_fields:
+            q.children.append(("%s__contains" % field, search_key))
+        print('q:', q)
+        custom_list = custom_list.filter(q)
 
     ####分页信息###
-    paginator = Paginator(custom_list, 20)
+    paginator = Paginator(custom_list, 18)
     page = request.GET.get('page')
     try:
         p_list = paginator.page(page)

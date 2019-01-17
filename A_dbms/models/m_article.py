@@ -23,8 +23,7 @@ class Articles(models.Model):  # 项目、纪要
                                 on_delete=models.PROTECT,
                                 related_name='control_employee')
     article_date = models.DateField(verbose_name='反馈日期', default=datetime.date.today)
-    ARTICLE_STATE_LIST = ((1, '待反馈'), (2, '已反馈'), (3, '待上会'), (4, '已上会'), (5, '已签批'), (6, '已注销'))
-    article_state = models.IntegerField(verbose_name='项目状态', choices=ARTICLE_STATE_LIST, default=1)
+
     # 自动创建第三张表
     expert = models.ManyToManyField(to='Experts', verbose_name="评审委员",
                                     related_name='article_expert')
@@ -32,12 +31,19 @@ class Articles(models.Model):  # 项目、纪要
     summary_num = models.CharField(verbose_name='_纪要编号', max_length=32, unique=True, null=True, blank=True)
     SIGN_TYPE_LIST = ((1, '同意'), (2, '不同意'))
     sign_type = models.IntegerField(verbose_name='签批结论', choices=SIGN_TYPE_LIST, null=True, blank=True)
-    sign_detail = models.TextField(verbose_name='签批意见', null=True, blank=True)
+    rcd_opinion = models.TextField(verbose_name='风控部意见', null=True, blank=True)
+    convenor_opinion = models.TextField(verbose_name='招集人意见', null=True, blank=True)
+    sign_detail = models.TextField(verbose_name='签批人意见', null=True, blank=True)
     sign_date = models.DateField(verbose_name='签批日期', null=True, blank=True)
 
+    ARTICLE_STATE_LIST = ((1, '待反馈'), (2, '已反馈'), (3, '待上会'), (4, '已上会'), (5, '已签批'),
+                          (6, '已注销'), (7, '已放完'))
+    article_state = models.IntegerField(verbose_name='_项目状态', choices=ARTICLE_STATE_LIST, default=1)
+    CLASSIFICATION_LIST = ((1, '正常'), (11, '关注'), (21, '次级'), (31, '可疑'), (41, '损失'))
+    classification = models.IntegerField(verbose_name='_风险分类', choices=CLASSIFICATION_LIST, default=1)
     article_provide_sum = models.FloatField(verbose_name='_放款金额', default=0)
     article_repayment_sum = models.FloatField(verbose_name='_还款金额', default=0)
-    article_buildor = models.ForeignKey(to='Employees', verbose_name="创建者",
+    article_buildor = models.ForeignKey(to='Employees', verbose_name="_创建者",
                                         on_delete=models.PROTECT, default=1,
                                         related_name='article_buildor_employee')
 

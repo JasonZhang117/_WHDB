@@ -18,8 +18,9 @@
         {% endfor %}
     </label>
     <label>
-        <form method="post" class="navbar-form" style="display: inline">
-            <input type="search" class="form-control" placeholder="搜索客户或项目经理">
+        <form class="navbar-form" style="display: inline">
+            {#            {% csrf_token %}#}
+            <input type="search" name="_s" class="form-control" placeholder="客户、经理、助理、专员">
             <button type="submit" class="btn btn-primary btn-sm">搜索</button>
         </form>
     </label>

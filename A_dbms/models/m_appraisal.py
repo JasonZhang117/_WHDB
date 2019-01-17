@@ -12,6 +12,7 @@ class Appraisals(models.Model):  # 评审会
     review_date = models.DateField(verbose_name='评审日期', default=datetime.date.today)
     article = models.ManyToManyField(to='Articles', verbose_name="参评项目",
                                      related_name='appraisal_article',
+                                     limit_choices_to={'article_state': 2},
                                      null=True, blank=True)
     MEETING_STATE_LIST = ((1, '待上会'), (2, '已上会'))
     meeting_state = models.IntegerField(verbose_name='会议状态', choices=MEETING_STATE_LIST, default=1)

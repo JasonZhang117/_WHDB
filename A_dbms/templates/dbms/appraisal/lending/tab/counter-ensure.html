@@ -26,7 +26,8 @@
                 {% for custom in lending_sure.custom_sure.custome.all %}
                     <tr guarantee-nid={{ custom.id }} sure-typ-nid={{ lending_sure.sure_typ }}>
                         <td>{{ lending_sure.get_sure_typ_display }}</td>
-                        <td>{{ custom.name }}</td>
+                        <td><a target="_blank" href="{% url 'dbms:custom_scan' custom_id=custom.id %}">
+                            {{ custom.name }}</a></td>
                         <td>{{ custom.get_genre_display }}</td>
                         <td>{{ custom.contact_addr }}</td>
                         <td>{{ custom.linkman }}</td>

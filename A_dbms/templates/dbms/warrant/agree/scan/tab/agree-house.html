@@ -8,6 +8,7 @@
             <th>土地地址</th>
             <th>土地面积</th>
             <th>土地用途</th>
+            <th>产权证</th>
             <th>他权情况</th>
             <th>入库情况</th>
             {% if PAGE_TITAL == '权证管理' %}
@@ -32,6 +33,11 @@
                         <td>{{ warrant.house_warrant.house_locate }}</td>
                         <td>{{ warrant.house_warrant.house_area }}</td>
                         <td>{{ warrant.house_warrant.get_house_app_display }}</td>
+                        <td>
+                            {% for ownership in warrant.ownership_warrant.all %}
+                                {{ ownership.ownership_num }}{% if not forloop.last %}、{% endif %}
+                            {% endfor %}
+                        </td>
                         <td>
                             {% for ypothec in warrant.ypothec_m_agree.all %}
                                 {% if ypothec.agree.id == agree_obj.id %}

@@ -18,6 +18,18 @@
         <label id="e_augment" class="pull-right">{{ form_article_sign.augment.errors }}</label>
     </div>
 
+    <div class="form-group"><!--风控部意见-->
+        <label for="id_rcd_opinion" class="col-sm-3 control-label">{{ form_article_sign.rcd_opinion.label }}：</label>
+        <div class="col-sm-9">{{ form_article_sign.rcd_opinion }}</div>
+        <label id="e_rcd_opinion" class="pull-right">{{ form_article_sign.rcd_opinion.errors }}</label>
+    </div>
+
+    <div class="form-group"><!--招集人意见-->
+        <label for="id_convenor_opinionl" class="col-sm-3 control-label">{{ form_article_sign.convenor_opinion.label }}：</label>
+        <div class="col-sm-9">{{ form_article_sign.convenor_opinion }}</div>
+        <label id="e_convenor_opinion" class="pull-right">{{ form_article_sign.convenor_opinion.errors }}</label>
+    </div>
+
     <div class="form-group"><!--签批详情-->
         <label for="id_sign_detail" class="col-sm-3 control-label">{{ form_article_sign.sign_detail.label }}：</label>
         <div class="col-sm-9">{{ form_article_sign.sign_detail }}</div>

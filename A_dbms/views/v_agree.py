@@ -65,7 +65,7 @@ def agree_scan(request, agree_id):  # 查看合同
         lending_warrant__sure__lending=agree_lending_obj, warrant_typ=1).exclude(
         counter_warrant__counter__agree=agree_obj).values_list('id', 'warrant_num')
     warrants_g_lending_list = models.Warrants.objects.filter(
-        lending_warrant__sure__lending=agree_lending_obj, warrant_typ=2).exclude(
+        lending_warrant__sure__lending=agree_lending_obj, warrant_typ=5).exclude(
         counter_warrant__counter__agree=agree_obj).values_list('id', 'warrant_num')
     warrants_r_lending_list = models.Warrants.objects.filter(
         lending_warrant__sure__lending=agree_lending_obj, warrant_typ=11).exclude(
@@ -299,7 +299,9 @@ def counter_add_ajax(request):
     counter_num = '%s%s%s-%s' % (counter_prefix, counter_typ_n, counter_copies, counter_max)
 
     agree_state_counter = agree_obj.agree_state
-    if agree_state_counter in [1, 7]:
+    '''AGREE_STATE_LIST = ((11, '待签批'), (21, '已签批'), (31, '已落实，未放款'), (41, '已落实，放款'),
+                        (42, '未落实，放款'), (51, '待变更'), (61, '已解保'), (99, '已作废'))'''
+    if agree_state_counter in [11, 51]:
         if counter_typ in [1, 2]:  # 保证反担保
             if counter_typ == 1:
                 custom_list = post_data['custom_c']
@@ -374,11 +376,14 @@ def counter_del_ajax(request):  # 删除反担保合同ajax
 
     agree_obj = models.Agrees.objects.get(id=agree_id)
     counter_obj = models.Counters.objects.get(id=counter_id)
+    assure_counter_obj = counter_obj.assure_counter
     '''AGREE_STATE_LIST = ((11, '待签批'), (21, '已签批'), (31, '已落实，未放款'), (41, '已落实，放款'),
                         (42, '未落实，放款'), (51, '待变更'), (61, '已解保'), (99, '已作废'))'''
     if agree_obj.agree_state in [11, 51]:
         try:
-            counter_obj.delete()  # 删除反担保合同
+            with transaction.atomic():
+                assure_counter_obj.delete()  # 删除保证反担保合同
+                counter_obj.delete()  # 删除反担保合同
             response['message'] = '反担保合同删除成功！'
         except Exception as e:
             response['status'] = False

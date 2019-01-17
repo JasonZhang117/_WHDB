@@ -6,7 +6,7 @@
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
-                <h4 class="modal-title" id="addAscertainModalLabel">风控落实：{{ agree_obj.agree_num }}
+                <h4 class="modal-title" id="addAscertainModalLabel">风控落实
                     <input style="display: none" name="agree_id" id="id_agree_id" value={{ agree_obj.id }}>
                 </h4>
             </div>
@@ -15,7 +15,6 @@
                     {% include 'dbms/provide/modl/mod_form/ascertain-add.html' %}
                 </form>
             </div>
-
             <label id="formErrors"></label>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>

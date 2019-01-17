@@ -1,0 +1,54 @@
+<script>
+    $(function () {
+        bindAddAscertainB();
+        bindAddAscertainModalOk();
+    });
+
+    function bindAddAscertainB() {
+        $('#addAscertainB').click(function () {
+            console.log("bindAddAscertainB");
+            $('#addAscertainModal').modal('show');
+        })
+    }
+
+    function bindAddAscertainModalOk() {
+        $('#addAscertainModalOk').click(function () {
+            var postData = {};
+            $('#addAscertainModal').find('input,select').each(function () {
+                var v = $(this).val();
+                var n = $(this).attr('name');
+                postData[n] = v;
+            });
+            var agree_remark = $('#id_agree_remark').val();
+            postData['agree_remark'] = agree_remark;
+            var postDataStr = JSON.stringify(postData);
+            console.log(postDataStr);
+            $.ajax({
+                url: '/dbms/provide/ascertain/add/',
+                type: 'POST',
+                traditional: true,
+                data: {'postDataStr': postDataStr},
+                dataType: 'JSON',
+                success: function (arg) {
+                    console.log(arg);
+                    if (arg.status) {
+                        $('#addAscertainModal').modal('hide');
+                        alert(arg.message);
+                        {#window.location.href = arg.skip;#}
+                        window.location.reload();
+                    } else {
+                        alert(arg.message);
+                        $('#e_ascertain_date').text(arg.forme.ascertain_date);
+                        $('#e_agree_remark').text(arg.forme.agree_remark);
+                    }
+                }
+            })
+        })
+    }
+</script>
+
+
+
+
+
+

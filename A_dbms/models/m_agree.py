@@ -22,13 +22,14 @@ class Agrees(models.Model):  # 委托合同
     guarantee_typ = models.CharField(verbose_name='反担保种类数', max_length=6, choices=GUARANTEE_TYP_LIST)
     agree_copies = models.IntegerField(verbose_name='合同份数')
     agree_amount = models.FloatField(verbose_name='合同金额')
-    AGREE_STATE_LIST = ((11, '待签批'), (21, '已签批'), (31, '已落实，未放款'), (41, '已落实，放款'),
-                        (42, '未落实，放款'), (51, '待变更'), (61, '已解保'), (99, '已作废'))
-    agree_state = models.IntegerField(verbose_name='_合同状态', choices=AGREE_STATE_LIST, default=11)
     agree_sign_date = models.DateField(verbose_name='签批日期', null=True, blank=True)
     charge = models.FloatField(verbose_name='应收保费（元）', default=0)
+    ascertain_date = models.DateField(verbose_name='落实日期', default=datetime.date.today)
     agree_remark = models.CharField(verbose_name='备注', max_length=128, null=True, blank=True)
 
+    AGREE_STATE_LIST = ((11, '待签批'), (21, '已签批'), (31, '未落实'), (41, '部分落实'),
+                        (51, '已落实'), (51, '待变更'), (61, '已解保'), (99, '已作废'))
+    agree_state = models.IntegerField(verbose_name='_合同状态', choices=AGREE_STATE_LIST, default=11)
     agree_notify_sum = models.FloatField(verbose_name='_通知金额', default=0)
     agree_provide_sum = models.FloatField(verbose_name='_放款金额', default=0)
     agree_repayment_sum = models.FloatField(verbose_name='_还款金额', default=0)

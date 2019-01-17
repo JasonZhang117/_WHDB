@@ -5,6 +5,8 @@ from django.contrib.auth.decorators import login_required
 import time, json
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.db import transaction
+from django.db.models import Q, F
+
 from django.views import View
 
 
@@ -638,9 +640,20 @@ def warrant(request, *args, **kwargs):  # 房产列表
 
     warrant_typ_list = models.Warrants.WARRANT_TYP_LIST
     warrant_list = models.Warrants.objects.filter(**kwargs).order_by('warrant_num')
+    search_key = request.GET.get('_s')
+    print('search_key:', search_key)
+    if search_key:
+        search_fields = ['warrant_num']
+        q = Q()
+        q.connector = 'OR'
+
+        for field in search_fields:
+            q.children.append(("%s__contains" % field, search_key))
+        print('q:', q)
+        warrant_list = warrant_list.filter(q)
 
     ####分页信息###
-    paginator = Paginator(warrant_list, 20)
+    paginator = Paginator(warrant_list, 18)
     page = request.GET.get('page')
     try:
         p_list = paginator.page(page)
@@ -682,6 +695,8 @@ def warrant_scan(request, warrant_id):  # house_scan房产预览
     print(__file__, '---->def warrant_scan')
     warrant_obj = models.Warrants.objects.get(id=warrant_id)
     warrant_typ_n = warrant_obj.warrant_typ
+    house_ground_list = [1, 5]
+
     '''WARRANT_TYP_LIST = [
                     (1, '房产'), (2, '房产'), (5, '土地'), (11, '应收'), (21, '股权'),
                     (31, '票据'), (41, '车辆'), (51, '动产'), (99, '他权')]'''
@@ -689,28 +704,34 @@ def warrant_scan(request, warrant_id):  # house_scan房产预览
         agree_lending_obj = warrant_obj.ypothec_warrant.agree.lending
         warrants_lending_list = models.Warrants.objects.filter(
             lending_warrant__sure__lending=agree_lending_obj).values_list('id', 'warrant_num')
+
     form_warrant_edit_date = {'warrant_num': warrant_obj.warrant_num}
-    form_warrant_edit = forms.WarrantEditForm(initial=form_warrant_edit_date)
-    house_ground_list = [1, 2]
+    form_warrant_edit = forms.WarrantEditForm(initial=form_warrant_edit_date)  # 权证编辑form
     warrant_typ = warrant_obj.warrant_typ
     if warrant_typ == 1:
         form_date = {
             'house_locate': warrant_obj.house_warrant.house_locate,
             'house_app': warrant_obj.house_warrant.house_app,
             'house_area': warrant_obj.house_warrant.house_area}
-        form_house_add_edit = forms.HouseAddEidtForm(form_date)
+        form_house_add_edit = forms.HouseAddEidtForm(form_date)  # 房产form
     elif warrant_typ == 5:
         form_date = {
             'ground_locate': warrant_obj.ground_warrant.ground_locate,
             'ground_app': warrant_obj.ground_warrant.ground_app,
             'ground_area': warrant_obj.ground_warrant.ground_area}
-        form_ground_add_edit = forms.GroundAddEidtForm(form_date)
+        form_ground_add_edit = forms.GroundAddEidtForm(form_date)  # 土地form
+    elif warrant_typ == 11:
+        form_date = {
+            'receive_owner': warrant_obj.receive_warrant.receive_owner,
+            'receivable_detail': warrant_obj.receive_warrant.receivable_detail}
+        form_receivable_add_edit = forms.FormReceivable(form_date)  # 土地form
+
     elif warrant_typ == 99:
         form_date = {
             'agree': warrant_obj.ypothec_warrant.agree}
-        form_hypothecs_add_eidt = forms.HypothecsAddEidtForm(initial=form_date)
-    form_storage_add_edit = forms.StoragesAddEidtForm()
-    form_owership_add_edit = forms.OwerShipAddForm()
+        form_hypothecs_add_eidt = forms.HypothecsAddEidtForm(initial=form_date)  # 他权form
+    form_storage_add_edit = forms.StoragesAddEidtForm()  # 出入库form
+    form_owership_add_edit = forms.OwerShipAddForm()  # 所有权证form
     ####分页信息###
     storages_list = warrant_obj.storage_warrant.all().order_by('-id')
     paginator = Paginator(storages_list, 5)

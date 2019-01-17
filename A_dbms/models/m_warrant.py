@@ -79,10 +79,10 @@ class Houses(models.Model):  # 房产
 class Grounds(models.Model):  # 土地
     warrant = models.OneToOneField(to='Warrants', verbose_name="权证",
                                    on_delete=models.CASCADE,
-                                   limit_choices_to={'warrant_typ': 2},
+                                   limit_choices_to={'warrant_typ': 5},
                                    related_name='ground_warrant')
     ground_locate = models.CharField(verbose_name='土地坐落', max_length=64)
-    GROUND_APP_LIST = ((1, '住宅'), (2, '商住'), (3, '商服'), (4, '工业'))
+    GROUND_APP_LIST = ((1, '住宅'), (5, '城镇混合住宅'), (11, '商住'), (21, '商服'), (31, '工业'))
     ground_app = models.IntegerField(verbose_name='土地用途', choices=GROUND_APP_LIST, default=1)
     ground_area = models.FloatField(verbose_name='土地面积')
     ground_buildor = models.ForeignKey(to='Employees', verbose_name="创建者", default=1,

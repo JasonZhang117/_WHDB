@@ -43,6 +43,9 @@ def article(request, *args, **kwargs):  # 项目列表
     # print('request.GET.items():', request.GET.items())
     # request.GET.items()获取get传递的参数对
     print('request.GET:', request.GET)
+
+    form_article_add_edit = forms.ArticlesAddForm()
+
     for k, v in request.GET.items():
         print(k, ' ', v)
     condition = {
@@ -62,10 +65,20 @@ def article(request, *args, **kwargs):  # 项目列表
 
     article_list = models.Articles.objects.filter(**kwargs).select_related(
         'custom', 'director', 'assistant', 'control').order_by('-article_date')
+    search_key = request.GET.get('_s')
+    print('search_key:', search_key)
+    if search_key:
+        search_fields = ['custom__name', 'director__name', 'assistant__name', 'control__name']
+        q = Q()
+        q.connector = 'OR'
 
-    form_article_add_edit = forms.ArticlesAddForm()
+        for field in search_fields:
+            q.children.append(("%s__contains" % field, search_key))
+        print('q:', q)
+        article_list = article_list.filter(q)
+
     # 分页
-    paginator = Paginator(article_list, 2)
+    paginator = Paginator(article_list, 18)
     page = request.GET.get('page')
     try:
         p_list = paginator.page(page)
