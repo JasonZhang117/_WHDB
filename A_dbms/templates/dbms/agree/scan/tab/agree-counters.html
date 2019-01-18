@@ -6,6 +6,11 @@
             <th>合同类型</th>
             <th>签订人</th>
             <th>签订情况</th>
+            {% if PAGE_TITLE == '放款管理' %}
+                <th>签订日期</th>
+                <th>签订情况</th>
+            {% endif %}
+
             {% if PAGE_TITLE == '合同详情' or PAGE_TITLE == '放款管理' %}
                 <th>操作</th>
             {% endif %}
@@ -46,7 +51,9 @@
                     <td><a class="btn btn-primary btn-xs delCounterB">删除</a>
                         <a class="btn btn-primary btn-xs scanCounterB">预览</a></td>
                 {% elif PAGE_TITLE == '放款管理' %}
-                    <td><a class="btn btn-primary btn-xs signAgreeB">签订</a></td>
+                    <td>{{ counter.counter_sign_date }}</td>
+                    <td>{{ counter.counter_remark }}</td>
+                    <td><a class="btn btn-primary btn-xs counterSignB">签订</a></td>
                 {% endif %}
             <tr>
         {% endfor %}

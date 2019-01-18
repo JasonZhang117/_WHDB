@@ -25,11 +25,11 @@ class Agrees(models.Model):  # 委托合同
     agree_sign_date = models.DateField(verbose_name='签批日期', null=True, blank=True)
     charge = models.FloatField(verbose_name='应收保费（元）', default=0)
     ascertain_date = models.DateField(verbose_name='落实日期', default=datetime.date.today)
-    agree_remark = models.CharField(verbose_name='备注', max_length=128, null=True, blank=True)
+    agree_remark = models.TextField(verbose_name='落实情况', null=True, blank=True)
 
-    AGREE_STATE_LIST = ((11, '待签批'), (21, '已签批'), (31, '未落实'), (41, '部分落实'),
-                        (51, '已落实'), (51, '待变更'), (61, '已解保'), (99, '已作废'))
-    agree_state = models.IntegerField(verbose_name='_合同状态', choices=AGREE_STATE_LIST, default=11)
+    AGREE_STATE_LIST = ((11, '待签批'), (21, '已签批'), (31, '未落实'),
+                        (41, '已落实'), (51, '待变更'), (61, '已解保'), (99, '作废'))
+    agree_state = models.IntegerField(verbose_name='合同状态', choices=AGREE_STATE_LIST, default=11)
     agree_notify_sum = models.FloatField(verbose_name='_通知金额', default=0)
     agree_provide_sum = models.FloatField(verbose_name='_放款金额', default=0)
     agree_repayment_sum = models.FloatField(verbose_name='_还款金额', default=0)
@@ -58,12 +58,9 @@ class AgreeesExtend(models.Model):
     contact_addr = models.CharField(verbose_name='联系地址', max_length=64)
     linkman = models.CharField(verbose_name='联系人', max_length=16)
     contact_num = models.CharField(verbose_name='联系电话', max_length=13)
-    registered_addr = models.CharField(
-        verbose_name='注册地址', max_length=64, null=True, blank=True)
-    representative = models.CharField(
-        verbose_name='法人代表', max_length=16, null=True, blank=True)
-    license_num = models.CharField(
-        verbose_name='身份证号码', max_length=18, null=True, blank=True)
+    registered_addr = models.CharField(verbose_name='注册地址', max_length=64, null=True, blank=True)
+    representative = models.CharField(verbose_name='法人代表', max_length=16, null=True, blank=True)
+    license_num = models.CharField(verbose_name='身份证号码', max_length=18, null=True, blank=True)
 
     class Meta:
         verbose_name_plural = '合同-委托合同扩展信息'  # 指定显示名称
@@ -92,8 +89,12 @@ class Counters(models.Model):  # 反担保合同
         (51, '股权预售'), (52, '房产预售'), (53, '土地预售'))
     counter_typ = models.IntegerField(verbose_name='合同类型', choices=COUNTER_TYP_LIST)
     counter_copies = models.IntegerField(verbose_name='合同份数')
-    COUNTER_STATE_LIST = ((11, '未签订'), (21, '已签订'), (31, '已注销'))
-    counter_state = models.IntegerField(verbose_name='_签订情况', choices=COUNTER_STATE_LIST, default=11)
+    COUNTER_STATE_LIST = ((11, '未签订'), (21, '已签订'), (31, '作废'))
+
+    counter_state = models.IntegerField(verbose_name='签订状态', choices=COUNTER_STATE_LIST, default=11)
+    counter_sign_date = models.DateField(verbose_name='签订日期', null=True, blank=True)
+    counter_remark = models.TextField(verbose_name='签订备注', null=True, blank=True)
+
     counter_buildor = models.ForeignKey(to='Employees', verbose_name="创建者", default=1,
                                         on_delete=models.PROTECT,
                                         related_name='counteror_employee')

@@ -1,0 +1,61 @@
+<script>
+    $(function () {
+        bindCounterSignB();
+        bindAddCounterSignModalOk();
+    });
+
+    function bindCounterSignB() {
+        console.log("bindCounterSignB");
+        $('#agree-counters-tb').on('click', '.counterSignB', function () {
+            console.log("bindCounterSignB");
+            var addCounterSingNid = $(this).parent().parent().attr('counter-nid');
+            console.log(addCounterSingNid);
+            $('#addCounterSignModalId').val(addCounterSingNid);
+            $('#addCounterSignModal').modal('show');
+        })
+    }
+
+    function bindAddCounterSignModalOk() {
+        $('#addCounterSignModalOk').click(function () {
+            var postData = {};
+            $('#addCounterSignModal').find('input,select').each(function () {
+                var v = $(this).val();
+                var n = $(this).attr('name');
+                postData[n] = v;
+            });
+            var counter_remark = $('#id_counter_remark').val();
+            postData['counter_remark'] = counter_remark;
+
+            var postDataStr = JSON.stringify(postData);
+
+            console.log(postDataStr);
+
+            $.ajax({
+                url: '/dbms/provide/counter/sign/',
+                type: 'POST',
+                traditional: true,
+                data: {'postDataStr': postDataStr},
+                dataType: 'JSON',
+                success: function (arg) {
+                    console.log(arg);
+                    if (arg.status) {
+                        $('#addCounterSignModal').modal('hide');
+                        alert(arg.message);
+                        window.location.reload();
+                    } else {
+                        alert(arg.message);
+                        $('#e_counter_state').text(arg.forme.counter_state);
+                        $('#e_counter_sign_date').text(arg.forme.counter_sign_date);
+                        $('#e_counter_remark').text(arg.forme.counter_remark);
+                    }
+                }
+            })
+        })
+    }
+</script>
+
+
+
+
+
+

@@ -79,7 +79,7 @@ urlpatterns = [
     path('provide/agree/scan/<int:agree_id>/', views.provide_agree_scan, name='provide_agree_scan'),
     path('provide/agree/notify/<int:agree_id>/<int:notify_id>/', views.provide_agree_notify,
          name='provide_agree_notify'),
-
+    path('provide/counter/sign/', views.counter_sign_ajax),
     path('provide/ascertain/add/', views.ascertain_add_ajax),
     path('provide/notify/add/', views.notify_add_ajax),
     path('provide/notify/del/', views.notify_del_ajax),

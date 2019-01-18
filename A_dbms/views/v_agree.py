@@ -21,14 +21,14 @@ def agree(request, *args, **kwargs):  # 委托合同列表
         'lending', 'branch').order_by('-agree_num')
 
     ####分页信息###
-    paginator = Paginator(agree_list, 10)
+    paginator = Paginator(agree_list, 20)
     page = request.GET.get('page')
     try:
-        p_agree_list = paginator.page(page)
+        p_list = paginator.page(page)
     except PageNotAnInteger:
-        p_agree_list = paginator.page(1)
+        p_list = paginator.page(1)
     except EmptyPage:
-        p_agree_list = paginator.page(paginator.num_pages)
+        p_list = paginator.page(paginator.num_pages)
 
     return render(request, 'dbms/agree/agree.html', locals())
 
@@ -76,7 +76,6 @@ def agree_scan(request, agree_id):  # 查看合同
     print(custom_c_lending_list, custom_p_lending_list, warrants_h_lending_list, warrants_g_lending_list,
           warrants_r_lending_list, warrants_s_lending_list)
     from_counter = forms.AddCounterForm()
-    from_counter = forms.AddCounterForm()
 
     today_str = time.strftime("%Y-%m-%d", time.gmtime())
     form_agree_sign_data = {'agree_sign_date': str(today_str)}
@@ -108,25 +107,24 @@ def agree_scan_counter(request, agree_id, counter_id):  # 查看合同
         (31, '票据'), (41, '车辆'), (51, '动产'), (99, '他权')]'''
     custom_c_lending_list = models.Customes.objects.filter(
         lending_custom__sure__lending=agree_lending_obj, genre=1).exclude(
-        counter_custome__counter__agree=agree_obj).values_list('id', 'name')
+        counter_custome__counter__agree=agree_obj).values_list('id', 'name').order_by('name')
     custom_p_lending_list = models.Customes.objects.filter(
         lending_custom__sure__lending=agree_lending_obj, genre=2).exclude(
-        counter_custome__counter__agree=agree_obj).values_list('id', 'name')
+        counter_custome__counter__agree=agree_obj).values_list('id', 'name').order_by('name')
     warrants_h_lending_list = models.Warrants.objects.filter(
         lending_warrant__sure__lending=agree_lending_obj, warrant_typ=1).exclude(
-        counter_warrant__counter__agree=agree_obj).values_list('id', 'warrant_num')
+        counter_warrant__counter__agree=agree_obj).values_list('id', 'warrant_num').order_by('warrant_num')
     warrants_g_lending_list = models.Warrants.objects.filter(
         lending_warrant__sure__lending=agree_lending_obj, warrant_typ=2).exclude(
-        counter_warrant__counter__agree=agree_obj).values_list('id', 'warrant_num')
+        counter_warrant__counter__agree=agree_obj).values_list('id', 'warrant_num').order_by('warrant_num')
     warrants_r_lending_list = models.Warrants.objects.filter(
         lending_warrant__sure__lending=agree_lending_obj, warrant_typ=11).exclude(
-        counter_warrant__counter__agree=agree_obj).values_list('id', 'warrant_num')
+        counter_warrant__counter__agree=agree_obj).values_list('id', 'warrant_num').order_by('warrant_num')
     warrants_s_lending_list = models.Warrants.objects.filter(
         lending_warrant__sure__lending=agree_lending_obj, warrant_typ=21).exclude(
-        counter_warrant__counter__agree=agree_obj).values_list('id', 'warrant_num')
+        counter_warrant__counter__agree=agree_obj).values_list('id', 'warrant_num').order_by('warrant_num')
     print(custom_c_lending_list, custom_p_lending_list, warrants_h_lending_list, warrants_g_lending_list,
           warrants_r_lending_list, warrants_s_lending_list)
-    from_counter = forms.AddCounterForm()
     from_counter = forms.AddCounterForm()
 
     today_str = time.strftime("%Y-%m-%d", time.gmtime())

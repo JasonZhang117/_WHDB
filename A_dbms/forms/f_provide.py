@@ -7,10 +7,22 @@ from .. import models
 class FormAscertainAdd(dform.ModelForm):
     class Meta:
         model = models.Agrees
-        fields = ['ascertain_date', 'agree_remark']
+        fields = ['agree_state', 'ascertain_date', 'agree_remark']
         widgets = {
+            'agree_state': dform.Select(attrs={'class': 'form-control'}),
             'ascertain_date': dform.DateInput(attrs={'class': 'form-control', 'type': 'date'}),
             'agree_remark': dform.Textarea(attrs={'class': 'form-control', 'rows': '3', 'placeholder': '落实情况'})}
+
+
+# -----------------------合同签订-------------------------#
+class FormCounterSignAdd(dform.ModelForm):
+    class Meta:
+        model = models.Counters
+        fields = ['counter_state', 'counter_sign_date', 'counter_remark']
+        widgets = {
+            'counter_state': dform.Select(attrs={'class': 'form-control'}),
+            'counter_sign_date': dform.DateInput(attrs={'class': 'form-control', 'type': 'date'}),
+            'counter_remark': dform.Textarea(attrs={'class': 'form-control', 'rows': '3', 'placeholder': '签订情况'})}
 
 
 # -----------------------放款通知添加-------------------------#
