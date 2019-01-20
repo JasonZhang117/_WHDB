@@ -38,6 +38,8 @@ def provide_agree(request, *args, **kwargs):  # 放款管理
 @login_required
 def provide_agree_scan(request, agree_id):  # 查看放款
     print(__file__, '---->def provide_agree_scan')
+    response = {'status': True, 'message': None, 'forme': None, }
+
     PAGE_TITLE = '放款管理'
     '''COUNTER_TYP_LIST = (
         (1, '企业担保'), (2, '个人保证'),
@@ -63,11 +65,66 @@ def provide_agree_scan(request, agree_id):  # 查看放款
 
     agree_obj = models.Agrees.objects.get(id=agree_id)
     lending_obj = agree_obj.lending
+    warrant_storage_str = ''  # 未入库权证
+    warrant_ypothec_str = ''  # 缺他权
+    ypothec_storage_str = ''  # 他权未入库
+    ascertain_str = ''  # 未落实情况
+    agree_str = ''
+    '''AGREE_STATE_LIST = ((11, '待签批'), (21, '已签批'), (31, '未落实'),
+                        (41, '已落实'), (51, '待变更'), (61, '已解保'), (99, '作废'))'''
+    agree_state_n = 41
+    agree_lending_sure_list = agree_obj.lending.sure_lending.all()
+    for sure in agree_lending_sure_list:
+        if sure.sure_typ not in [1, 2]:
+            sure_warrant = sure.warrant_sure.warrant.all()
+            for warrant in sure_warrant:
+                ypothec_list = warrant.ypothec_m_agree.all().filter(agree=agree_obj)
+                '''WARRANT_STATE_LIST = (
+        (1, '未入库'), (2, '已入库'), (6, '无需入库'), (11, '续抵出库'), (21, '已借出'), (31, '解保出库'),
+         (99, '已注销'))'''
+                if warrant.warrant_state in [1, 11, 21]:
+                    warrant_storage_str += '%s，' % warrant.warrant_num  # 待入库
+                if not ypothec_list:
+                    warrant_ypothec_str += '%s，' % warrant.warrant_num  # 无他权
+                else:
+                    for ypothec in ypothec_list:
+                        warrant_state = ypothec.warrant.warrant_state
+                        if warrant_state in [1, 11, 21]:
+                            ypothec_storage_str += '%s，' % ypothec.warrant.warrant_num  # 他权未入库
 
-    form_notify_add = forms.FormNotifyAdd()
-    form_ascertain_add = forms.FormAscertainAdd()
-    form_ascertain_add = forms.FormAscertainAdd()
-    from_counter_sign = forms.FormCounterSignAdd()
+    counter_list = agree_obj.counter_agree.all()
+    counter_agree_str = ''
+    for counter in counter_list:
+        '''COUNTER_STATE_LIST = ((11, '未签订'), (21, '已签订'), (31, '作废'))'''
+        if counter.counter_state == 11:
+            counter_agree_str += '%s，' % counter.counter_num  # 合同未签订
+    print('warrant_ypothec_str:', warrant_ypothec_str)
+    print('warrant_storage_str:', warrant_storage_str)
+    print('ypothec_storage_str:', ypothec_storage_str)
+    print('counter_agree_str:', counter_agree_str)
+
+    if warrant_ypothec_str != '':
+        agree_state_n = 31
+        ascertain_str += '无他权：%s；\r\n' % warrant_ypothec_str
+    if warrant_storage_str != '':
+        agree_state_n = 31
+        ascertain_str += '权证未入库：%s；\r\n' % warrant_storage_str
+    if ypothec_storage_str != '':
+        agree_state_n = 31
+        ascertain_str += '他权未入库：%s；\r\n' % ypothec_storage_str
+    if counter_agree_str != '':
+        agree_state_n = 31
+        ascertain_str += '合同未签订：%s；\r\n' % counter_agree_str
+    print('ascertain_str:', ascertain_str)
+    if agree_state_n == 41:
+        agree_str = '所有风控措施已落实，可以出具放款通知！'
+    else:
+        agree_str = '以下风控措施未落实：\r\n' + ascertain_str + '如确定后可以放款，请后续持续跟进，否者点击取消！'
+    print('agree_str:', agree_str)
+
+    form_notify_add = forms.FormNotifyAdd()  # 添加放款通知
+    form_ascertain_add = forms.FormAscertainAdd()  # 风控落实
+    from_counter_sign = forms.FormCounterSignAdd()  # 反担保合同签订
     return render(request, 'dbms/provide/provide-agree-scan.html', locals())
 
 
@@ -158,44 +215,35 @@ def ascertain_add_ajax(request):
     agree_list = models.Agrees.objects.filter(id=post_data['agree_id'])
     agree_obj = agree_list.first()
     print('agree_obj:', agree_obj)
-    form_ascertain_add = forms.FormAscertainAdd(post_data)
-
-    if form_ascertain_add.is_valid():
-        ascertain_cleaned = form_ascertain_add.cleaned_data
-        agree_state = ascertain_cleaned['agree_state']
-        ascertain_date = ascertain_cleaned['ascertain_date']
-        agree_remark = ascertain_cleaned['agree_remark']
-        '''AGREE_STATE_LIST = ((11, '待签批'), (21, '已签批'), (31, '未落实'),
+    '''AGREE_STATE_LIST = ((11, '待签批'), (21, '已签批'), (31, '未落实'),
                         (41, '已落实'), (51, '待变更'), (61, '已解保'), (99, '作废'))'''
-        if agree_obj.agree_state in [11, 61, 99]:
-            response['status'] = False
-            response['message'] = '合同状态为：（%s），风控落实失败!!!' % agree_obj.agree_state
-        else:
-            agree_lending_sure_list = agree_obj.lending.sure_lending.all()
-            for sure in agree_lending_sure_list:
-                print('sure:', sure)
-                if sure.sure_typ not in [1, 2]:
-                    sure_warrant = sure.warrant_sure.warrant.all()
-                    print('sure_warrant:', sure_warrant)
-                    ypothec = sure_warrant.ypothec_m_agree.all()
-                    print('ypothec:', ypothec)
-            counter_list = agree_obj.counter_agree.all()
-            for counter in counter_list:
-                if counter.counter_state == 11:
-                    response['status'] = False
-                    response['message'] = '%s,反担保合同未签订，风控落实失败！！！' % counter.counter_num
-                    result = json.dumps(response, ensure_ascii=False)
-                    return HttpResponse(result)
-            try:
-                agree_list.update(agree_state=amount, ascertain_date=ascertain_date, agree_remark=agree_remark)
-                response['message'] = '成功添加放款通知！'
-            except Exception as e:
+    if agree_obj.agree_state in [21, 31, 51]:
+        form_ascertain_add = forms.FormAscertainAdd(post_data)
+        if form_ascertain_add.is_valid():
+            ascertain_cleaned = form_ascertain_add.cleaned_data
+            agree_state = ascertain_cleaned['agree_state']
+            agree_remark = ascertain_cleaned['agree_remark']
+            '''AGREE_STATE_LIST = ((11, '待签批'), (21, '已签批'), (31, '未落实'),
+                            (41, '已落实'), (51, '待变更'), (61, '已解保'), (99, '作废'))'''
+            if agree_obj.agree_state in [11, 61, 99]:
                 response['status'] = False
-                response['message'] = '放款通知添加失败：%s' % str(e)
+                response['message'] = '合同状态为：（%s），风控落实失败!!!' % agree_obj.agree_state
+            else:
+                try:
+                    today_str = time.strftime("%Y-%m-%d", time.gmtime())
+                    agree_list.update(
+                        agree_state=agree_state, ascertain_date=today_str, agree_remark=agree_remark)
+                    response['message'] = '风控落实手续办理成功！'
+                except Exception as e:
+                    response['status'] = False
+                    response['message'] = '风控落实手续办理失败：%s' % str(e)
+        else:
+            response['status'] = False
+            response['message'] = '表单信息有误！！！'
+            response['forme'] = form_ascertain_add.errors
     else:
         response['status'] = False
-        response['message'] = '表单信息有误！！！'
-        response['forme'] = form_ascertain_add.errors
+        response['message'] = '合同状态为%s,无法落实风控条件！！！'
     result = json.dumps(response, ensure_ascii=False)
     return HttpResponse(result)
 
@@ -211,35 +259,42 @@ def notify_add_ajax(request):
     agree_list = models.Agrees.objects.filter(id=post_data['agree_id'])
     agree_obj = agree_list.first()
     form_notify_add = forms.FormNotifyAdd(post_data)
-    if form_notify_add.is_valid():
-        form_notify_cleaned = form_notify_add.cleaned_data
-        notify_money = form_notify_cleaned['notify_money']
-        notify_amount = models.Notify.objects.filter(agree=agree_obj).aggregate(Sum('notify_money'))
-        notify_money_sum = notify_amount['notify_money__sum']
-        if notify_money_sum:
-            amount = notify_money_sum + notify_money
-        else:
-            amount = notify_money
-        if amount > agree_obj.agree_amount:
-            response['status'] = False
-            response['message'] = '放款通知金额合计（%s）大于合同金额（%s）' % (amount, agree_obj.agree_amount)
-        else:
-            try:
-                with transaction.atomic():
-                    notify_obj = models.Notify.objects.create(
-                        agree=agree_obj, notify_money=notify_money, notify_date=form_notify_cleaned['notify_date'],
-                        contracts_lease=form_notify_cleaned['contracts_lease'],
-                        contract_guaranty=form_notify_cleaned['contract_guaranty'],
-                        remark=form_notify_cleaned['remark'], notifyor=request.user)
-                    agree_list.update(agree_notify_sum=amount)
-                response['message'] = '成功添加放款通知！'
-            except Exception as e:
+    '''AGREE_STATE_LIST = ((11, '待签批'), (21, '已签批'), (31, '未落实'),
+                        (41, '已落实'), (51, '待变更'), (61, '已解保'), (99, '作废'))'''
+    agree_state = agree_obj.agree_state
+    if agree_state in [31, 41]:
+        if form_notify_add.is_valid():
+            form_notify_cleaned = form_notify_add.cleaned_data
+            notify_money = form_notify_cleaned['notify_money']
+            notify_amount = models.Notify.objects.filter(agree=agree_obj).aggregate(Sum('notify_money'))
+            notify_money_sum = notify_amount['notify_money__sum']
+            if notify_money_sum:
+                amount = notify_money_sum + notify_money
+            else:
+                amount = notify_money
+            if amount > agree_obj.agree_amount:
                 response['status'] = False
-                response['message'] = '放款通知添加失败：%s' % str(e)
+                response['message'] = '放款通知金额合计（%s）大于合同金额（%s）' % (amount, agree_obj.agree_amount)
+            else:
+                try:
+                    with transaction.atomic():
+                        notify_obj = models.Notify.objects.create(
+                            agree=agree_obj, notify_money=notify_money, notify_date=form_notify_cleaned['notify_date'],
+                            contracts_lease=form_notify_cleaned['contracts_lease'],
+                            contract_guaranty=form_notify_cleaned['contract_guaranty'],
+                            remark=form_notify_cleaned['remark'], notifyor=request.user)
+                        agree_list.update(agree_notify_sum=amount)
+                    response['message'] = '成功添加放款通知！'
+                except Exception as e:
+                    response['status'] = False
+                    response['message'] = '放款通知添加失败：%s' % str(e)
+        else:
+            response['status'] = False
+            response['message'] = '表单信息有误！！！'
+            response['forme'] = form_notify_add.errors
     else:
         response['status'] = False
-        response['message'] = '表单信息有误！！！'
-        response['forme'] = form_notify_add.errors
+        response['message'] = '委托合同状态为:%s,添加放款通知失败！！！' % agree_state
     result = json.dumps(response, ensure_ascii=False)
     return HttpResponse(result)
 

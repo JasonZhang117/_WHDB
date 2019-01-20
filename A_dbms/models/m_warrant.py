@@ -14,7 +14,7 @@ class Warrants(models.Model):  # 担保物
     evaluate_date = models.DateField(verbose_name='评估日期', null=True, blank=True)
     warrant_detail = models.CharField(verbose_name='说明', max_length=128, null=True, blank=True)
     WARRANT_STATE_LIST = (
-        (1, '未入库'), (2, '已入库'), (3, '已出库'), (4, '已借出'), (5, '已注销'), (6, '无需入库'))
+        (1, '未入库'), (2, '已入库'), (6, '无需入库'), (11, '续抵出库'), (21, '已借出'), (31, '解保出库'), (99, '已注销'))
     warrant_state = models.IntegerField(verbose_name='_权证状态', choices=WARRANT_STATE_LIST, default=1)
     warrant_buildor = models.ForeignKey(to='Employees', verbose_name="创建者", default=1,
                                         on_delete=models.PROTECT,
@@ -296,7 +296,10 @@ class Storages(models.Model):  # 出入库
     warrant = models.ForeignKey(to='Warrants', verbose_name="权证",
                                 on_delete=models.PROTECT,
                                 related_name='storage_warrant')
-    STORAGE_TYP_LIST = ((1, '入库'), (2, '出库'), (3, '借出'), (4, '归还'), (5, '解保'))
+    '''WARRANT_STATE_LIST = (
+            (1, '未入库'), (2, '已入库'), (6, '无需入库'), (11, '续抵出库'), (21, '已借出'), (31, '解保出库'),
+             (99, '已注销'))'''
+    STORAGE_TYP_LIST = ((1, '入库'), (2, '续抵出库'), (11, '借出'), (12, '归还'), (31, '解保出库'))
     storage_typ = models.IntegerField(verbose_name='出入库', choices=STORAGE_TYP_LIST, default=1)
     transfer = models.ForeignKey(to='Employees', verbose_name="移交/接收者",
                                  on_delete=models.PROTECT,

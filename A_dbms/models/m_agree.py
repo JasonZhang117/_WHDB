@@ -24,7 +24,8 @@ class Agrees(models.Model):  # 委托合同
     agree_amount = models.FloatField(verbose_name='合同金额')
     agree_sign_date = models.DateField(verbose_name='签批日期', null=True, blank=True)
     charge = models.FloatField(verbose_name='应收保费（元）', default=0)
-    ascertain_date = models.DateField(verbose_name='落实日期', default=datetime.date.today)
+
+    ascertain_date = models.DateField(verbose_name='落实日期', null=True, blank=True)
     agree_remark = models.TextField(verbose_name='落实情况', null=True, blank=True)
 
     AGREE_STATE_LIST = ((11, '待签批'), (21, '已签批'), (31, '未落实'),

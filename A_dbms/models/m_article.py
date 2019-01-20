@@ -37,7 +37,7 @@ class Articles(models.Model):  # 项目、纪要
     sign_date = models.DateField(verbose_name='签批日期', null=True, blank=True)
 
     ARTICLE_STATE_LIST = ((1, '待反馈'), (2, '已反馈'), (3, '待上会'), (4, '已上会'), (5, '已签批'),
-                          (6, '已注销'), (7, '已放完'))
+                          (51, '已放完'), (99, '已注销'))
     article_state = models.IntegerField(verbose_name='_项目状态', choices=ARTICLE_STATE_LIST, default=1)
     CLASSIFICATION_LIST = ((1, '正常'), (11, '关注'), (21, '次级'), (31, '可疑'), (41, '损失'))
     classification = models.IntegerField(verbose_name='_风险分类', choices=CLASSIFICATION_LIST, default=1)
@@ -60,7 +60,7 @@ class Feedback(models.Model):
     article = models.ForeignKey(to='Articles', verbose_name="项目",
                                 on_delete=models.PROTECT,
                                 related_name='feedback_article')
-    PROPOSE_LIST = ((1, '符合上会条件'), (2, '暂不符合上会条件'), (3, '建议终止项目'))
+    PROPOSE_LIST = ((1, '符合上会条件'), (11, '暂不符合上会条件'), (21, '建议终止项目'))
     propose = models.IntegerField(verbose_name='上会建议', choices=PROPOSE_LIST, default=0)
     analysis = models.TextField(verbose_name='风险分析')
     suggestion = models.TextField(verbose_name='风控意见')

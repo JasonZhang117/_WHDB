@@ -8,11 +8,14 @@
                 </button>
                 <h4 class="modal-title" id="addAscertainModalLabel">风控落实
                     <input style="display: none" name="agree_id" id="id_agree_id" value={{ agree_obj.id }}>
+                    <input style="display: none" name="agree_state" id="id_agree_state" value={{ agree_state_n }}>
                 </h4>
             </div>
             <div class="modal-body">
                 <form class="form-horizontal">
-                    {% include 'dbms/provide/modl/mod_form/ascertain-add.html' %}
+                        <textarea name="agree_remark" id="id_agree_remark" required="" rows="5" class="form-control"
+                                  contenteditable="false" cols="4">
+                            {{ agree_str }}</textarea>
                 </form>
             </div>
             <label id="formErrors"></label>

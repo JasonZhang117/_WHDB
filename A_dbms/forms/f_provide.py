@@ -7,10 +7,9 @@ from .. import models
 class FormAscertainAdd(dform.ModelForm):
     class Meta:
         model = models.Agrees
-        fields = ['agree_state', 'ascertain_date', 'agree_remark']
+        fields = ['agree_state', 'agree_remark']
         widgets = {
             'agree_state': dform.Select(attrs={'class': 'form-control'}),
-            'ascertain_date': dform.DateInput(attrs={'class': 'form-control', 'type': 'date'}),
             'agree_remark': dform.Textarea(attrs={'class': 'form-control', 'rows': '3', 'placeholder': '落实情况'})}
 
 
