@@ -1,6 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import (
-    BaseUserManager, AbstractBaseUser, PermissionsMixin)
+    BaseUserManager, AbstractBaseUser, PermissionsMixin, Group)
 
 
 # -----------------------------岗位模型------------------------------#
@@ -39,8 +39,7 @@ class EmployeesManager(BaseUserManager):
 class Employees(AbstractBaseUser, PermissionsMixin):
     email = models.EmailField(
         max_length=150, verbose_name='电子邮箱', unique=True,
-        error_messages={
-            'unique': ("email already exists.")}, )
+        error_messages={'unique': ("email already exists.")}, )
     num = models.CharField(max_length=64, verbose_name="代码")
     name = models.CharField(max_length=64, verbose_name="姓名")
     is_active = models.BooleanField(default=True)
@@ -51,9 +50,7 @@ class Employees(AbstractBaseUser, PermissionsMixin):
                                    on_delete=models.PROTECT,
                                    related_name='employee_department',
                                    blank=True, null=True)
-
     objects = EmployeesManager()
-
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['name', 'num']
 
@@ -72,24 +69,10 @@ class Employees(AbstractBaseUser, PermissionsMixin):
         verbose_name_plural = '内部-员工'  # 指定显示名称
         db_table = 'dbms_employees'  # 指定数据表的名称
         permissions = (
-            ('dbms_article_list',
-             '访问项目列表'),
-            ('dbms_article_list_all',
-             '访问所有项目列表'),
-            ('dbms_article_add_view',
-             '访问项目添加页'),
-            ('dbms_article_add_change',
-             '添加项目'),
-            ('crm_table_list',
-             '可以查看kingadmin每张表里所有的数据'),
-            ('crm_table_list_view',
-             '可以访问kingadmin表里每条数据的修改页'),
-            ('crm_table_list_change',
-             '可以对kingadmin表里的每条数据进行修改'),
-            ('crm_table_obj_add_view',
-             '可以访问kingadmin每张表的数据增加页'),
-            ('crm_table_obj_add',
-             '可以对kingadmin每张表进行数据添加'),)
+            ('dbms_article_all', '访问项目列表'),
+            ('dbms_article', '访问所有项目列表'),
+            ('article_scan_all', '访问项目添加页'),
+            ('article_scan_agree', '添加项目'),)
 
 
 # -----------------------------岗位模型------------------------------#

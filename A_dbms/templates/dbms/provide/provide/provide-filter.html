@@ -7,7 +7,7 @@
         {% endif %}
 
         {# 方式一：#}
-        {% for provide_status in provide_status_list %}
+        {% for provide_status in PROVIDE_STATUS_LIST %}
             {% if provide_status.0 == kwargs.provide_status %}
                 <a class="btn btn-primary btn-sm active"
                    href="{% url 'dbms:provide' provide_status=provide_status.0 %}">{{ provide_status.1 }}</a>
@@ -20,7 +20,7 @@
 
     <label>
         <form class="navbar-form" style="display: inline">
-            <input type="text" class="form-control" placeholder="搜索客户或银行">
+            <input type="search" name="_s" class="form-control" placeholder="客户,银行,合同">
             <button type="submit" class="btn btn-primary btn-sm">搜索</button>
         </form>
     </label>

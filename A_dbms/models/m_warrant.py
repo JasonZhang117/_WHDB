@@ -54,15 +54,18 @@ class Ownership(models.Model):  # 产权证
 
 # -------------------------房产1---------------------------#
 class Houses(models.Model):  # 房产
+    ''' WARRANT_TYP_LIST = [
+            (1, '房产'), (5, '土地'), (11, '应收'), (21, '股权'),
+            (31, '票据'), (41, '车辆'), (51, '动产'), (99, '他权')]'''
     warrant = models.OneToOneField(to='Warrants', verbose_name="权证",
                                    on_delete=models.CASCADE,
                                    limit_choices_to={'warrant_typ': 1},
                                    related_name='house_warrant')
     house_locate = models.CharField(verbose_name='房产坐落', max_length=64, unique=True)
-    HOUSE_APP_LIST = ((1, '住宅'), (2, '商业'), (3, '办公'), (4, '公寓'), (5, '厂房'), (6, '科研'))
+    HOUSE_APP_LIST = ((1, '住宅'), (11, '商业'), (21, '办公'), (31, '公寓'), (41, '厂房'), (51, '科研'))
     house_app = models.IntegerField(verbose_name='房产用途', choices=HOUSE_APP_LIST, default=1)
     house_area = models.FloatField(verbose_name='建筑面积')
-    house_buildor = models.ForeignKey(to='Employees', verbose_name="创建者", default=1,
+    house_buildor = models.ForeignKey(to='Employees', verbose_name="创建者",
                                       on_delete=models.PROTECT,
                                       related_name='house_buildor_employee')
     house_date = models.DateField(verbose_name='创建日期', default=datetime.date.today)
@@ -77,6 +80,9 @@ class Houses(models.Model):  # 房产
 
 # ------------------------土地2--------------------------#
 class Grounds(models.Model):  # 土地
+    ''' WARRANT_TYP_LIST = [
+                (1, '房产'), (5, '土地'), (11, '应收'), (21, '股权'),
+                (31, '票据'), (41, '车辆'), (51, '动产'), (99, '他权')]'''
     warrant = models.OneToOneField(to='Warrants', verbose_name="权证",
                                    on_delete=models.CASCADE,
                                    limit_choices_to={'warrant_typ': 5},
@@ -145,7 +151,7 @@ class Stockes(models.Model):  # 股权
                                    on_delete=models.CASCADE,
                                    limit_choices_to={'warrant_typ': 21},
                                    related_name='stock_warrant')
-    STOCK_TYP_LIST = ((1, '有限公司股权'), (2, '股份公司股份'), (3, '举办者权益'))
+    STOCK_TYP_LIST = ((1, '有限公司股权'), (11, '股份公司股份'), (21, '举办者权益'))
     stock_typ = models.IntegerField(verbose_name='股权性质', choices=STOCK_TYP_LIST, default=1)
     stock_owner = models.ForeignKey(to='Customes', verbose_name="所有权人",
                                     on_delete=models.PROTECT,
@@ -174,7 +180,7 @@ class Draft(models.Model):  # 应收票据
     draft_owner = models.ForeignKey(to='Customes', verbose_name="所有权人",
                                     on_delete=models.PROTECT,
                                     related_name='draft_custome')
-    DRAFT_TYP_LIST = ((1, '银行承兑汇票'), (2, '商业承兑汇票'), (3, '支票'))
+    DRAFT_TYP_LIST = ((1, '银行承兑汇票'), (11, '商业承兑汇票'), (21, '支票'))
     draft_typ = models.IntegerField(verbose_name='票据种类', choices=DRAFT_TYP_LIST, default=1)
     draft_detail = models.TextField(verbose_name="汇票描述")
     draft_buildor = models.ForeignKey(to='Employees', verbose_name="创建者", default=1,
@@ -245,7 +251,7 @@ class Chattel(models.Model):  # 动产
     chattel_owner = models.ForeignKey(to='Customes', verbose_name="所有权人",
                                       on_delete=models.PROTECT,
                                       related_name='chattel_custome')
-    CHATTEL_TYP_LIST = ((1, '存货'), (2, '设备'))
+    CHATTEL_TYP_LIST = ((1, '存货'), (11, '设备'))
     chattel_typ = models.IntegerField(verbose_name='动产种类', choices=CHATTEL_TYP_LIST, default=1)
     chattel_detail = models.TextField(verbose_name="动产具体描述")
     chattel_buildor = models.ForeignKey(to='Employees', verbose_name="创建者", default=1,
@@ -334,3 +340,4 @@ class Evaluate(models.Model):  # 评估
 
     def __str__(self):
         return '%s' % self.warrant
+

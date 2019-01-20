@@ -12,7 +12,7 @@
         </tr>
         </thead>
         <tbody>
-        {% for agree in p_agree_list %}
+        {% for agree in p_list %}
             <tr>
                 <td><a href="{% url 'dbms:warrant_agree_scan' agree_id=agree.id %}">{{ agree.agree_num }}</a></td>
                 <td>{{ agree.lending.summary.custom }}</td>
@@ -25,8 +25,5 @@
         {% endfor %}
         </tbody>
     </table>
-
     {% include 'dbms/board/page.html' %}
-
-
 </div>

@@ -6,8 +6,8 @@ from django.db import models
 class Agrees(models.Model):  # 委托合同
     agree_num = models.CharField(verbose_name='_合同编号', max_length=32, unique=True)
     num_prefix = models.CharField(verbose_name='_编号前缀', max_length=32)
-    '''((1, '待反馈'), (2, '已反馈'), (3, '待上会'),
-     (4, '已上会'), (5, '已签批'), (6, '已注销'))'''
+    '''ARTICLE_STATE_LIST = ((1, '待反馈'), (2, '已反馈'), (3, '待上会'), (4, '已上会'), (5, '已签批'),
+                          (51, '已放完'), (61, '待变更'), (99, '已注销'))'''
     lending = models.ForeignKey(to='LendingOrder', verbose_name="放款纪要",
                                 on_delete=models.PROTECT,
                                 limit_choices_to={'summary__article_state': 5},

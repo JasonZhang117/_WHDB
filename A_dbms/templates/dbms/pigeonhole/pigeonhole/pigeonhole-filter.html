@@ -1,0 +1,28 @@
+<div>
+    <label>
+        {% if kwargs.implement == None %}
+            <a class="btn btn-primary btn-sm active" href="{% url 'dbms:pigeonhole_all' %}">全部</a>
+        {% else %}
+            <a class="btn btn-primary btn-sm" href="{% url 'dbms:pigeonhole_all' %}">全部</a>
+        {% endif %}
+
+        {# 方式一：#}
+        {% for implement in IMPLEMENT_LIST %}
+            {% if implement.0 == kwargs.implement %}
+                <a class="btn btn-primary btn-sm active"
+                   href="{% url 'dbms:pigeonhole' implement=implement.0 %}">{{ implement.1 }}</a>
+            {% else %}
+                <a class="btn btn-primary btn-sm"
+                   href="{% url 'dbms:pigeonhole' implement=implement.0 %}">{{ implement.1 }} </a>
+            {% endif %}
+        {% endfor %}
+    </label>
+
+    <label>
+        <form class="navbar-form" style="display: inline">
+            <input type="search" name="_s" class="form-control" placeholder="客户,银行,合同">
+            <button type="submit" class="btn btn-primary btn-sm">搜索</button>
+        </form>
+    </label>
+
+</div>

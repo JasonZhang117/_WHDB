@@ -7,6 +7,7 @@ from django.contrib.auth.decorators import login_required
 from django.db.models import Sum, Max, Count
 from django.db.models import Q, F
 from django.db import transaction
+from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 
 
 # -----------------------评审会-------------------------#
@@ -14,9 +15,30 @@ from django.db import transaction
 def meeting(request, *args, **kwargs):  # 评审会
     print(__file__, '---->def meeting')
     # print('kwargs:', kwargs)
-    form_meeting_add = forms.MeetingAddForm()
-    meeting_state_list = models.Appraisals.MEETING_STATE_LIST
-    meeting_list = models.Appraisals.objects.filter(**kwargs).order_by('-review_date', '-review_order')
+    '''模态框'''
+    form_meeting_add = forms.MeetingAddForm()  # 评审会添加
+    '''MEETING_STATE_LIST = ((1, '待上会'), (2, '已上会'))'''
+    meeting_state_list = models.Appraisals.MEETING_STATE_LIST  # 筛选条件
+    '''筛选'''
+    meeting_list = models.Appraisals.objects.filter(**kwargs).order_by('-review_date')
+    '''搜索'''
+    search_key = request.GET.get('_s')
+    if search_key:
+        search_fields = ['num']
+        q = Q()
+        q.connector = 'OR'
+        for field in search_fields:
+            q.children.append(("%s__contains" % field, search_key))
+        meeting_list = meeting_list.filter(q)
+    '''分页'''
+    paginator = Paginator(meeting_list, 18)
+    page = request.GET.get('page')
+    try:
+        p_list = paginator.page(page)
+    except PageNotAnInteger:
+        p_list = paginator.page(1)
+    except EmptyPage:
+        p_list = paginator.page(paginator.num_pages)
     return render(request, 'dbms/meeting/meeting.html', locals())
 
 
@@ -44,6 +66,15 @@ def meeting_scan(request, meeting_id):  # 评审会预览
     form_meeting_edit = forms.MeetingEditForm(meeting_edit_form_data)
 
     return render(request, 'dbms/meeting/meeting-scan.html', locals())
+
+
+# -----------------------评审会通知-------------------------#
+@login_required
+def meeting_notice(request, meeting_id):  # 评审会通知
+    print(__file__, '---->def meeting_scan')
+    meeting_obj = models.Appraisals.objects.get(id=meeting_id)
+
+    return render(request, 'dbms/meeting/meeting-notice.html', locals())
 
 
 # -----------------------参评项目预览-------------------------#
@@ -389,12 +420,3 @@ def meeting_close_ajax(request):  # 完成上会ajax
         response['message'] = '本次评审会无参会项目，你玩我？？？'
     result = json.dumps(response, ensure_ascii=False)
     return HttpResponse(result)
-
-
-# -----------------------评审会通知-------------------------#
-@login_required
-def meeting_notice(request, meeting_id):  # 评审会通知
-    print(__file__, '---->def meeting_scan')
-    meeting_obj = models.Appraisals.objects.get(id=meeting_id)
-
-    return render(request, 'dbms/meeting/meeting-notice.html', locals())

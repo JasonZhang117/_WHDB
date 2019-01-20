@@ -12,12 +12,19 @@ class Customes(models.Model):  # 客户
     contact_num = models.CharField(verbose_name='联系电话', max_length=13)
     counter_only = models.BooleanField(verbose_name='仅反担保', default=1)
 
+    lately_date = models.DateField(verbose_name='最近调查', null=True, blank=True)
+
     credit_amount = models.FloatField(verbose_name='_授信总额', default=0)
     custom_flow = models.FloatField(verbose_name='_流贷余额', default=0)
     custom_accept = models.FloatField(verbose_name='_承兑余额', default=0)
     custom_back = models.FloatField(verbose_name='_保函余额', default=0)
+    custom_buildor = models.ForeignKey(to='Employees', verbose_name="_创建者",
+                                       on_delete=models.PROTECT, default=1,
+                                       related_name='custom_buildor_employee')
+    custom_date = models.DateField(verbose_name='创建日期', default=datetime.date.today)
 
     # Cancellation = models.BooleanField('注销', default=False)
+
     class Meta:
         verbose_name_plural = '客户'  # 指定显示名称
         db_table = 'dbms_customes'  # 指定数据表的名称

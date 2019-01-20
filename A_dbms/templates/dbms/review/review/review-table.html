@@ -7,7 +7,7 @@
             <th>流贷余额</th>
             <th>承兑余额</th>
             <th>保函余额</th>
-            <th>上次保后</th>
+            <th>最近调查</th>
         </tr>
         </thead>
         <tbody>
@@ -18,7 +18,7 @@
                 <td>{{ custom.custom_flow }}</td>
                 <td>{{ custom.custom_accept }}</td>
                 <td>{{ custom.custom_back }}</td>
-                <td></td>
+                <td>{{ custom.lately_date }}</td>
             </tr>
         {% endfor %}
         </tbody>

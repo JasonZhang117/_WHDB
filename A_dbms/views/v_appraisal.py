@@ -12,17 +12,29 @@ from django.db import transaction
 
 # -----------------------appraisal评审情况-------------------------#
 @login_required
-def appraisal(request):  # 评审情况
+def appraisal(request, *args, **kwargs):  # 评审情况
     print(__file__, '---->def appraisal')
-    page_title = '评审管理'
-
-    # print('kwargs:', kwargs)
-    form_meeting_add = forms.MeetingAddForm()
-    '''ARTICLE_STATE_LIST = ((1, '待反馈'), (2, '已反馈'), (3, '待上会'), (4, '已上会'),
-        (5, '已签批'), (6, '已注销'))'''
-    appraisal_list = models.Articles.objects.filter(article_state__in=[4, 5]).order_by('-review_date')
-    print('appraisal_list:', appraisal_list)
-    paginator = Paginator(appraisal_list, 20)
+    print('**kwargs:', kwargs)
+    PAGE_TITLE = '评审管理'  # 页面标题
+    '''模态框'''
+    '''ARTICLE_STATE_LIST = ((1, '待反馈'), (2, '已反馈'), (3, '待上会'), (4, '已上会'), (5, '已签批'),
+                          (51, '已放完'),(61, '待变更'), (99, '已注销'))'''
+    ARTICLE_STATE_LIST = models.Articles.ARTICLE_STATE_LIST  # 筛选条件
+    '''筛选'''
+    appraisal_list = models.Articles.objects.filter(**kwargs).select_related(
+        'custom', 'director', 'assistant', 'control').order_by('-review_date')
+    appraisal_list = appraisal_list.filter(article_state__in=[4, 5, 61])
+    '''搜索'''
+    search_key = request.GET.get('_s')
+    if search_key:
+        search_fields = ['custom__name', 'director__name', 'assistant__name', 'control__name', 'summary_num']
+        q = Q()
+        q.connector = 'OR'
+        for field in search_fields:
+            q.children.append(("%s__contains" % field, search_key))
+        appraisal_list = appraisal_list.filter(q)
+    '''分页'''
+    paginator = Paginator(appraisal_list, 18)
     page = request.GET.get('page')
     try:
         p_list = paginator.page(page)

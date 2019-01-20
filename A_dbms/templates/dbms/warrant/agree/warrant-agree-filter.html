@@ -1,10 +1,24 @@
 <div>
     <label>
-
+        {% if kwargs.agree_state == None %}
+            <a class="active btn btn-primary btn-sm" href="{% url 'dbms:warrant_agree_all' %}">全部</a>
+        {% else %}
+            <a class="btn btn btn-primary btn-sm" href="{% url 'dbms:warrant_agree_all' %}">全部</a>
+        {% endif %}
+        {# 方式一：#}
+        {% for agree_state in AGREE_STATE_LIST %}
+            {% if agree_state.0 == kwargs.agree_state %}
+                <a class="active btn btn-primary btn-sm"
+                   href="{% url 'dbms:warrant_agree' agree_state=agree_state.0 %}">{{ agree_state.1 }} </a>
+            {% else %}
+                <a class="btn btn-primary btn-sm"
+                   href="{% url 'dbms:warrant_agree' agree_state=agree_state.0 %}">{{ agree_state.1 }}</a>
+            {% endif %}
+        {% endfor %}
     </label>
     <label>
         <form class="navbar-form" style="display: inline">
-            <input type="text" class="form-control" placeholder="搜索客户或银行">
+            <input type="search" name="_s" class="form-control" placeholder="合同编号,客户,银行,纪要">
             <button type="submit" class="btn btn-primary btn-sm">搜索</button>
         </form>
     </label>

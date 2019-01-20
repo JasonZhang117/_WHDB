@@ -14,14 +14,22 @@ from django.db.models import Avg, Min, Sum, Max, Count
 def provide_agree(request, *args, **kwargs):  # 放款管理
     print(__file__, '---->def provide_agree')
     PAGE_TITLE = '放款管理'
-
-    agree_state_list = models.Agrees.AGREE_STATE_LIST
     '''AGREE_STATE_LIST = ((11, '待签批'), (21, '已签批'), (31, '未落实'),
-                        (41, '已落实'), (51, '待变更'), (61, '已解保'), (99, '已作废'))'''
-    agree_list = models.Agrees.objects.filter(**kwargs).filter(agree_state__in=[21, 31, 41, 51]).select_related(
-        'lending', 'branch').order_by('-agree_num')
-
-    ####分页信息###
+                        (41, '已落实'), (51, '待变更'), (61, '已解保'), (99, '作废'))'''
+    AGREE_STATE_LIST = models.Agrees.AGREE_STATE_LIST  # 筛选条件
+    '''筛选'''
+    agree_list = models.Agrees.objects.filter(**kwargs).select_related('lending', 'branch').order_by('-agree_num')
+    '''搜索'''
+    search_key = request.GET.get('_s')
+    if search_key:
+        search_fields = ['agree_num', 'lending__summary__custom__name',
+                         'branch__name', 'lending__summary__summary_num']
+        q = Q()
+        q.connector = 'OR'
+        for field in search_fields:
+            q.children.append(("%s__contains" % field, search_key))
+        agree_list = agree_list.filter(q)
+    '''分页'''
     paginator = Paginator(agree_list, 20)
     page = request.GET.get('page')
     try:
@@ -696,19 +704,29 @@ def repayment_del_ajax(request):  # 删除还款信息ajax
 def provide(request, *args, **kwargs):  # 委托合同列表
     print(__file__, '---->def provide')
     PAGE_TITLE = '放款管理'
-
-    provide_status_list = models.Provides.PROVIDE_STATUS_LIST
-    provide_list = models.Provides.objects.filter(**kwargs).select_related('notify').order_by('-id')
-
-    ####分页信息###
-    paginator = Paginator(provide_list, 20)
+    '''PROVIDE_STATUS_LIST = [(1, '在保'), (11, '解保'), (21, '代偿')]'''
+    PROVIDE_STATUS_LIST = models.Provides.PROVIDE_STATUS_LIST  # 筛选条件
+    '''筛选'''
+    provide_list = models.Provides.objects.filter(**kwargs).select_related('notify').order_by('-provide_date')
+    '''搜索'''
+    search_key = request.GET.get('_s')
+    if search_key:
+        search_fields = ['notify__agree__lending__summary__custom__name', 'notify__agree__branch__name',
+                         'notify__agree__agree_num']
+        q = Q()
+        q.connector = 'OR'
+        for field in search_fields:
+            q.children.append(("%s__contains" % field, search_key))
+        provide_list = provide_list.filter(q)
+    '''分页'''
+    paginator = Paginator(provide_list, 18)
     page = request.GET.get('page')
     try:
-        provide_p_list = paginator.page(page)
+        p_list = paginator.page(page)
     except PageNotAnInteger:
-        provide_p_list = paginator.page(1)
+        p_list = paginator.page(1)
     except EmptyPage:
-        provide_p_list = paginator.page(paginator.num_pages)
+        p_list = paginator.page(paginator.num_pages)
 
     return render(request, 'dbms/provide/provide.html', locals())
 

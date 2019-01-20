@@ -9,6 +9,7 @@ from django.db.models import Q, F
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 import json
 from django.db.utils import IntegrityError
+from django.db import transaction
 
 
 # -----------------------------项目管理-------------------------------#
@@ -57,27 +58,23 @@ def article(request, *args, **kwargs):  # 项目列表
         kwargs[k] = temp
         if temp:
             condition[k] = temp  # 将参数放入查询字典
-
-    article_state_list = models.Articles.ARTICLE_STATE_LIST
+    '''筛选条件'''
+    article_state_list = models.Articles.ARTICLE_STATE_LIST  # 筛选条件
     article_state_list_dic = list(map(lambda x: {'id': x[0], 'name': x[1]}, article_state_list))
-    print('article_state_list_dic:', article_state_list_dic)
     # 列表或元组转换为字典并添加key
-
+    '''筛选'''
     article_list = models.Articles.objects.filter(**kwargs).select_related(
         'custom', 'director', 'assistant', 'control').order_by('-article_date')
+    '''搜索'''
     search_key = request.GET.get('_s')
-    print('search_key:', search_key)
     if search_key:
         search_fields = ['custom__name', 'director__name', 'assistant__name', 'control__name']
         q = Q()
         q.connector = 'OR'
-
         for field in search_fields:
             q.children.append(("%s__contains" % field, search_key))
-        print('q:', q)
         article_list = article_list.filter(q)
-
-    # 分页
+    '''分页'''
     paginator = Paginator(article_list, 18)
     page = request.GET.get('page')
     try:
@@ -155,11 +152,14 @@ def article_add_ajax(request):  # 添加项目
         print('article_num:', article_num)
         amount = renewal + augment
         try:
-            article_obj = models.Articles.objects.create(
-                article_num=article_num, custom_id=custom_id, renewal=renewal,
-                augment=augment, amount=amount, credit_term=cleaned_data['credit_term'],
-                director_id=cleaned_data['director_id'], assistant_id=cleaned_data['assistant_id'],
-                control_id=cleaned_data['control_id'], article_buildor=request.user)
+            with transaction.atomic():
+                article_obj = models.Articles.objects.create(
+                    article_num=article_num, custom_id=custom_id, renewal=renewal,
+                    augment=augment, amount=amount, credit_term=cleaned_data['credit_term'],
+                    director_id=cleaned_data['director_id'], assistant_id=cleaned_data['assistant_id'],
+                    control_id=cleaned_data['control_id'], article_buildor=request.user)
+                today_str = time.strftime("%Y-%m-%d", time.gmtime())
+                models.Customes.objects.filter(article_custom=article_obj).update(lately_date=today_str)
             response['message'] = '成功创建项目：%s！' % article_obj.article_num
         except Exception as e:
             response['status'] = False

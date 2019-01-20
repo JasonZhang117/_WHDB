@@ -29,7 +29,8 @@ urlpatterns = [
     path('meeting/article/add/', views.meeting_article_add_ajax),
     path('meeting/article/del/', views.meeting_article_del_ajax),
     # -----------------------appraisal评审管理-------------------------#
-    path('appraisal/', views.appraisal, name='appraisal'),  # 菜单-评审管理-项目评审
+    path('appraisal/', views.appraisal, name='appraisal_all'),  # 菜单-评审管理-项目评审
+    path('appraisal/<int:article_state>/', views.appraisal, name='appraisal'),  # /dbms/article/(0-9)
     path('appraisal/scan/<int:article_id>/', views.appraisal_scan, name='appraisal_scan'),
     path('appraisal/scan/<int:article_id>/<int:lending_id>/', views.appraisal_scan_lending,
          name='appraisal_scan_lending'),
@@ -55,7 +56,8 @@ urlpatterns = [
     path('warrant/', views.warrant, name='warrant_all'),  # 菜单-权证管理-所有权证
     path('warrant/<int:warrant_typ>/', views.warrant, name='warrant'),  # /dbms/warrant/(0-9)
     path('warrant/scan/<int:warrant_id>/', views.warrant_scan, name='warrant_scan'),
-    path('warrant/agree/', views.warrant_agree, name='warrant_agree'),
+    path('warrant/agree/', views.warrant_agree, name='warrant_agree_all'),
+    path('warrant/agree/<int:agree_state>', views.warrant_agree, name='warrant_agree'),
     path('warrant/agree/scan/<int:agree_id>/', views.warrant_agree_scan, name='warrant_agree_scan'),
     path('warrant/agree/warrant/<int:agree_id>/<int:warrant_id>/', views.warrant_agree_warrant,
          name='warrant_agree_warrant'),
@@ -90,6 +92,9 @@ urlpatterns = [
     path('provide/', views.provide, name='provide_all'),  # 菜单-放款管理-放款
     path('provide/<int:provide_status>/', views.provide, name='provide'),  # /dbms/grant/(0-9)
     path('provide/scan/<int:provide_id>/', views.provide_scan, name='provide_scan'),
+    # -----------------------归档管理-------------------------#
+    path('pigeonhole/', views.pigeonhole, name='pigeonhole_all'),  # 菜单-放款管理-放款
+    path('pigeonhole/<int:implement>/', views.pigeonhole, name='pigeonhole'),  # /dbms/grant/(0-9)
 
     # -----------------------保后管理-------------------------#
     path('review/', views.review, name='review_all'),  # 菜单-保后管理

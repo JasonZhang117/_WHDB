@@ -640,32 +640,38 @@ def warrant(request, *args, **kwargs):  # 房产列表
     PAGE_TITAL = '权证-所有'
     add_warrant = '添加权证'
     warrant_typ_n = 0
-
-    form_warrant_add = forms.WarrantAddForm()
-    form_house_add_edit = forms.HouseAddEidtForm()  # 1
-    form_ground_add_edit = forms.GroundAddEidtForm()  # 2
-    form_receivable_add_edit = forms.FormReceivable()  # 11
-    form_stockes_add_edit = forms.FormStockes()  # 21
-    form_draft_add_eidt = forms.FormDraft()  # 31
-    form_vehicle_add_eidt = forms.FormVehicle()  # 41
-    form_chattel_add_eidt = forms.FormChattel()  # 51
-    form_hypothecs_add_eidt = forms.HypothecsAddEidtForm()  # 99
-
-    warrant_typ_list = models.Warrants.WARRANT_TYP_LIST
+    '''WARRANT_STATE_LIST = (
+           (1, '未入库'), (2, '已入库'), (6, '无需入库'), (11, '续抵出库'), (21, '已借出'), 
+           (31, '解保出库'), (99, '已注销'))'''
+    ''' WARRANT_TYP_LIST = [
+        (1, '房产'), (5, '土地'), (11, '应收'), (21, '股权'),
+        (31, '票据'), (41, '车辆'), (51, '动产'), (99, '他权')]'''
+    '''模态框'''
+    form_warrant_add = forms.WarrantAddForm()  # 权证添加
+    form_house_add_edit = forms.HouseAddEidtForm()  # 房产添加
+    form_ground_add_edit = forms.GroundAddEidtForm()  # 土地添加
+    form_receivable_add_edit = forms.FormReceivable()  # 应收添加
+    form_stockes_add_edit = forms.FormStockes()  # 21股权添加
+    form_draft_add_eidt = forms.FormDraft()  # 31票据添加
+    form_vehicle_add_eidt = forms.FormVehicle()  # 41车辆添加
+    form_chattel_add_eidt = forms.FormChattel()  # 51动产添加
+    form_hypothecs_add_eidt = forms.HypothecsAddEidtForm()  # 99他权添加
+    '''WARRANT_TYP_LIST = [
+        (1, '房产'), (5, '土地'), (11, '应收'), (21, '股权'),
+        (31, '票据'), (41, '车辆'), (51, '动产'), (99, '他权')]'''
+    warrant_typ_list = models.Warrants.WARRANT_TYP_LIST  # 筛选条件
+    '''筛选'''
     warrant_list = models.Warrants.objects.filter(**kwargs).order_by('warrant_num')
+    '''搜索'''
     search_key = request.GET.get('_s')
-    print('search_key:', search_key)
     if search_key:
         search_fields = ['warrant_num']
         q = Q()
         q.connector = 'OR'
-
         for field in search_fields:
             q.children.append(("%s__contains" % field, search_key))
-        print('q:', q)
         warrant_list = warrant_list.filter(q)
-
-    ####分页信息###
+    '''分页'''
     paginator = Paginator(warrant_list, 18)
     page = request.GET.get('page')
     try:
@@ -683,21 +689,31 @@ def warrant(request, *args, **kwargs):  # 房产列表
 def warrant_agree(request, *args, **kwargs):  # 按合同入库
     print(__file__, '---->def warrant_agree')
     PAGE_TITAL = '权证-按合同'
-
-    '''AGREE_STATE_LIST = ((11, '待签批'), (21, '已签批'), (31, '已落实，未放款'), (41, '已落实，放款'),
-                        (42, '未落实，放款'), (51, '待变更'), (61, '已解保'), (99, '已作废'))'''
-    agree_list = models.Agrees.objects.filter(**kwargs).filter(agree_state__in=[21, 42]).select_related(
+    '''AGREE_STATE_LIST = ((11, '待签批'), (21, '已签批'), (31, '未落实'),
+                        (41, '已落实'), (51, '待变更'), (61, '已解保'), (99, '作废'))'''
+    AGREE_STATE_LIST = models.Agrees.AGREE_STATE_LIST  # 筛选条件
+    '''筛选'''
+    agree_list = models.Agrees.objects.filter(**kwargs).filter(agree_state__in=[21, 31]).select_related(
         'lending', 'branch').order_by('-agree_num')
-
-    ####分页信息###
-    paginator = Paginator(agree_list, 10)
+    '''搜索'''
+    search_key = request.GET.get('_s')
+    if search_key:
+        search_fields = ['agree_num', 'lending__summary__custom__name',
+                         'branch__name', 'lending__summary__summary_num']
+        q = Q()
+        q.connector = 'OR'
+        for field in search_fields:
+            q.children.append(("%s__contains" % field, search_key))
+        agree_list = agree_list.filter(q)
+    '''分页'''
+    paginator = Paginator(agree_list, 18)
     page = request.GET.get('page')
     try:
-        p_agree_list = paginator.page(page)
+        p_list = paginator.page(page)
     except PageNotAnInteger:
-        p_agree_list = paginator.page(1)
+        p_list = paginator.page(1)
     except EmptyPage:
-        p_agree_list = paginator.page(paginator.num_pages)
+        p_list = paginator.page(paginator.num_pages)
 
     return render(request, 'dbms/warrant/warrant-agree.html', locals())
 

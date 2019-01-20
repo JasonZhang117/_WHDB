@@ -5,6 +5,7 @@ from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.db.utils import IntegrityError
 from django.db import transaction
 from django.contrib.auth.decorators import login_required
+from django.db.models import Q, F
 import datetime
 
 
@@ -14,14 +15,25 @@ def agree(request, *args, **kwargs):  # 委托合同列表
     print(__file__, '---->def agree')
     PAGE_TITAL = '合同管理'
     operate_agree_add = True
-
-    form_agree_add = forms.AgreeAddForm()
-    agree_state_list = models.Agrees.AGREE_STATE_LIST
-    agree_list = models.Agrees.objects.filter(**kwargs).select_related(
-        'lending', 'branch').order_by('-agree_num')
-
-    ####分页信息###
-    paginator = Paginator(agree_list, 20)
+    '''模态框'''
+    form_agree_add = forms.AgreeAddForm()  # 合同添加
+    '''AGREE_STATE_LIST = ((11, '待签批'), (21, '已签批'), (31, '未落实'),
+                        (41, '已落实'), (51, '待变更'), (61, '已解保'), (99, '作废'))'''
+    AGREE_STATE_LIST = models.Agrees.AGREE_STATE_LIST  # 筛选条件
+    '''筛选'''
+    agree_list = models.Agrees.objects.filter(**kwargs).select_related('lending', 'branch').order_by('-agree_num')
+    '''搜索'''
+    search_key = request.GET.get('_s')
+    if search_key:
+        search_fields = ['agree_num', 'lending__summary__custom__name',
+                         'branch__name', 'lending__summary__summary_num']
+        q = Q()
+        q.connector = 'OR'
+        for field in search_fields:
+            q.children.append(("%s__contains" % field, search_key))
+        agree_list = agree_list.filter(q)
+    '''分页'''
+    paginator = Paginator(agree_list, 18)
     page = request.GET.get('page')
     try:
         p_list = paginator.page(page)

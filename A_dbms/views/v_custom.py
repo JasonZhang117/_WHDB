@@ -6,32 +6,32 @@ from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.db import transaction
 from django.db.models import Sum, Max, Count
 from django.db.models import Q, F
+from django.contrib.auth.decorators import login_required
 
 
 # -----------------------客户管理-------------------------#
+@login_required
 def custom(request, *args, **kwargs):  # 委托合同列表
     print(__file__, '---->def agree')
     PAGE_TITLE = '客户管理'
-    form_custom_add = forms.CustomAddForm()
-    form_custom_c_add = forms.CustomCAddForm()
-    form_custom_p_add = forms.CustomPAddForm()
-
-    genre_list = models.Customes.GENRE_LIST
+    '''模态框'''
+    form_custom_add = forms.CustomAddForm()  # 客户添加
+    form_custom_c_add = forms.CustomCAddForm()  # 企业客户添加
+    form_custom_p_add = forms.CustomPAddForm()  # 个人客户添加
+    '''GENRE_LIST = ((1, '企业'), (2, '个人'))'''
+    genre_list = models.Customes.GENRE_LIST  # 筛选条件
+    '''筛选'''
     custom_list = models.Customes.objects.filter(**kwargs).order_by('-credit_amount', '-name')
-
+    '''搜索'''
     search_key = request.GET.get('_s')
-    print('search_key:', search_key)
     if search_key:
-        search_fields = ['name', 'contact_addr', 'contact_num']
+        search_fields = ['name', 'contact_addr', 'linkman', 'contact_num']
         q = Q()
         q.connector = 'OR'
-
         for field in search_fields:
             q.children.append(("%s__contains" % field, search_key))
-        print('q:', q)
         custom_list = custom_list.filter(q)
-
-    ####分页信息###
+    '''分页'''
     paginator = Paginator(custom_list, 18)
     page = request.GET.get('page')
     try:
@@ -40,11 +40,11 @@ def custom(request, *args, **kwargs):  # 委托合同列表
         p_list = paginator.page(1)
     except EmptyPage:
         p_list = paginator.page(paginator.num_pages)
-
     return render(request, 'dbms/custom/custom.html', locals())
 
 
 # -----------------------客户添加-------------------------#
+@login_required
 def custom_add_ajax(request):
     print(__file__, '---->def custom_add_ajax')
     response = {'status': True, 'message': None, 'forme': None, }
@@ -63,16 +63,15 @@ def custom_add_ajax(request):
                 try:
                     with transaction.atomic():
                         custom_obj = models.Customes.objects.create(
-                            name=custom_add_data['name'],
-                            genre=custom_add_data['genre'],
+                            name=custom_add_data['name'], genre=genre,
                             counter_only=custom_add_data['counter_only'],
                             contact_addr=custom_add_data['contact_addr'],
                             linkman=custom_add_data['linkman'],
-                            contact_num=custom_add_data['contact_num'])
+                            contact_num=custom_add_data['contact_num'],
+                            custom_buildor=request.user)
 
                         custom_c_obj = models.CustomesC.objects.create(
-                            custome=custom_obj,
-                            short_name=custom_c_data['short_name'],
+                            custome=custom_obj, short_name=custom_c_data['short_name'],
                             idustry=custom_c_data['idustry'],
                             district=custom_c_data['district'],
                             capital=custom_c_data['capital'],
@@ -86,7 +85,6 @@ def custom_add_ajax(request):
                 response['status'] = False
                 response['message'] = '表单信息有误！！！'
                 response['forme'] = form_custom_c_add.errors
-
         elif genre == 2:
             form_custom_p_add = forms.CustomPAddForm(post_data)
             if form_custom_p_add.is_valid():
@@ -94,15 +92,14 @@ def custom_add_ajax(request):
                 try:
                     with transaction.atomic():
                         custom_obj = models.Customes.objects.create(
-                            name=custom_add_data['name'],
-                            genre=custom_add_data['genre'],
+                            name=custom_add_data['name'], genre=genre,
                             counter_only=custom_add_data['counter_only'],
                             contact_addr=custom_add_data['contact_addr'],
                             linkman=custom_add_data['linkman'],
-                            contact_num=custom_add_data['contact_num'])
+                            contact_num=custom_add_data['contact_num'],
+                            custom_buildor=request.user)
                         custom_p_obj = models.CustomesP.objects.create(
-                            custome=custom_obj,
-                            license_num=custom_p_data['license_num'],
+                            custome=custom_obj, license_num=custom_p_data['license_num'],
                             license_addr=custom_p_data['license_addr'])
                         response['message'] = '客户：%s，创建成功！！！' % custom_add_data['name']
                 except Exception as e:
@@ -121,6 +118,7 @@ def custom_add_ajax(request):
 
 
 # -----------------------股权信息添加-------------------------#
+@login_required
 def shareholder_add_ajax(request):
     print(__file__, '---->def shareholder_add_ajax')
     response = {'status': True, 'message': None, 'forme': None, }
@@ -167,6 +165,7 @@ def shareholder_add_ajax(request):
 
 
 # -----------------------客户删除-------------------------#
+@login_required
 def custom_del_ajax(request):
     print(__file__, '---->def custom_del_ajax')
     response = {'status': True, 'message': None, 'forme': None, }
@@ -195,6 +194,7 @@ def custom_del_ajax(request):
 
 
 # -----------------------客户修改-------------------------#
+@login_required
 def custom_edit_ajax(request):
     print(__file__, '---->def custom_edit_ajax')
     response = {'status': True, 'message': None, 'forme': None, }
@@ -274,6 +274,7 @@ def custom_edit_ajax(request):
 
 
 # -----------------------------客户预览------------------------------#
+@login_required
 def custom_scan(request, custom_id):  # 项目预览
     print(__file__, '---->def custom_scan')
     custom_obj = models.Customes.objects.get(id=custom_id)

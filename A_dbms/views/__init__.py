@@ -26,6 +26,8 @@ from .v_provide import (
     provide_agree, provide_agree_scan, provide_agree_notify, provide, provide_scan, counter_sign_ajax,
     ascertain_add_ajax, notify_add_ajax,
     notify_del_ajax, provide_add_ajax, provide_del_ajax, repayment_add_ajax, repayment_del_ajax)
+
+from .v_pigeonhole import pigeonhole
 # ----------------------v_review保后管理视图--------------------#
 from .v_review import review
 # ----------------------v_dun追偿视图--------------------#
