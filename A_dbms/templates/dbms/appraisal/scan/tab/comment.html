@@ -11,7 +11,7 @@
             <th>评审委员</th>
             <th>评委意见</th>
             <th>意见详情</th>
-            {% if page_title == '项目评审' %}
+            {% if PAGE_TITLE == '项目评审' %}
                 <th>操作</th>
             {% endif %}
         </tr>
@@ -34,7 +34,7 @@
                         {% endif %}
                     {% endfor %}
                 </td>
-                {% if page_title == '项目评审' %}
+                {% if PAGE_TITLE == '项目评审' %}
                     <td><a class="btn btn-primary btn-xs expert-comment">评审意见</a></td>
                 {% endif %}
             </tr>

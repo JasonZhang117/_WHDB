@@ -1,0 +1,56 @@
+<script>
+    $(function () {
+        bindArticleChangeB();
+        bindArticleChangeModalOk();
+
+    });
+
+    function bindArticleChangeB() {
+        $('#articleChangeB').click(function () {
+            console.log("bindArticleChangeB");
+            $('#articleChangeModal').modal('show');
+        })
+    }
+
+    function bindArticleChangeModalOk() {
+        $('#articleChangeModalOk').click(function () {
+            var postData = {};
+            $('#articleChangeModal').find('input,select').each(function () {
+                var v = $(this).val();
+                var n = $(this).attr('name');
+                postData[n] = v;
+            });
+            var change = $('#id_change_detail').val();
+            postData['change_detail'] = change;
+            var postDataStr = JSON.stringify(postData);
+            console.log(postDataStr);
+            $.ajax({
+                url: '/dbms/appraisal/article/change/',
+                type: 'POST',
+                data: {'postDataStr': postDataStr},
+                dataType: 'JSON',
+                success: function (arg) {
+                    console.log(arg);
+                    if (arg.status) {
+                        $('#articleChangeModal').modal('hide');
+                        alert(arg.message);
+                        window.location.reload();
+                    } else {
+                        alert(arg.message);
+                        $('#e_sign_type').text(arg.forme.sign_type);
+                        $('#e_renewal').text(arg.forme.renewal);
+                        $('#e_augment').text(arg.forme.augment);
+                        $('#e_sign_detail').text(arg.forme.sign_detail);
+                        $('#e_sign_date').text(arg.forme.sign_date);
+                    }
+                }
+            })
+        })
+    }
+</script>
+
+
+
+
+
+

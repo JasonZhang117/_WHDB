@@ -103,7 +103,7 @@ def meeting_add_ajax(request):
     response = {'status': True, 'message': None, 'forme': None, }
     post_data_str = request.POST.get('postDataStr')
     post_data = json.loads(post_data_str)
-
+    print('post_data:',post_data)
     form = forms.MeetingAddForm(post_data, request.FILES)
 
     if form.is_valid():

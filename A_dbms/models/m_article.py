@@ -46,6 +46,7 @@ class Articles(models.Model):  # 项目、纪要
     article_buildor = models.ForeignKey(to='Employees', verbose_name="_创建者",
                                         on_delete=models.PROTECT, default=1,
                                         related_name='article_buildor_employee')
+    build_date = models.DateField(verbose_name='创建日期', default=datetime.date.today)
 
     class Meta:
         verbose_name_plural = '项目'  # 指定显示名称
@@ -61,7 +62,7 @@ class Feedback(models.Model):
                                 on_delete=models.PROTECT,
                                 related_name='feedback_article')
     PROPOSE_LIST = ((1, '符合上会条件'), (11, '暂不符合上会条件'), (21, '建议终止项目'))
-    propose = models.IntegerField(verbose_name='上会建议', choices=PROPOSE_LIST, default=0)
+    propose = models.IntegerField(verbose_name='上会建议', choices=PROPOSE_LIST)
     analysis = models.TextField(verbose_name='风险分析')
     suggestion = models.TextField(verbose_name='风控意见')
     feedback_buildor = models.ForeignKey(to='Employees', verbose_name="创建者",
@@ -75,6 +76,28 @@ class Feedback(models.Model):
 
     def __str__(self):
         return '%s_%s' % (self.article, self.propose)
+
+
+# -----------------------------项目变更------------------------------#
+class ArticleChange(models.Model):
+    article = models.ForeignKey(to='Articles', verbose_name="项目",
+                                on_delete=models.PROTECT,
+                                related_name='change_article')
+    CHANGE_VIEW_LIST = ((1, '变更申请'), (11, '同意变更'), (21, '否决变更'))
+    change_view = models.IntegerField(verbose_name='变更意见', choices=CHANGE_VIEW_LIST, default=1)
+    change_detail = models.TextField(verbose_name='签批详情')
+    change_date = models.DateField(verbose_name='变更日期')
+    change_buildor = models.ForeignKey(to='Employees', verbose_name="创建者",
+                                       on_delete=models.PROTECT,
+                                       related_name='change_buildor_employee')
+    build_date = models.DateField(verbose_name='创建日期', default=datetime.date.today)
+
+    class Meta:
+        verbose_name_plural = '项目-变更'  # 指定显示名称
+        db_table = 'dbms_articlechange'  # 指定数据表的名称
+
+    def __str__(self):
+        return '%s_%s' % (self.article, self.change_view)
 
 
 '''

@@ -41,6 +41,8 @@ urlpatterns = [
     path('appraisal/lending/add/', views.lending_order_ajax),
     path('appraisal/lending/del/', views.lending_del_ajax),
     path('appraisal/sign/', views.article_sign_ajax),
+    path('appraisal/article/change/', views.article_change_ajax),
+
     path('appraisal/guarantee/add/', views.guarantee_add_ajax),
     path('appraisal/guarantee/del/', views.guarantee_del_ajax),
     # -----------------------agree合同管理-------------------------#

@@ -3,14 +3,18 @@ from django.db import models
 
 
 # -----------------------委托合同模型-------------------------#
+def limit_agree_choices():
+    ''''ARTICLE_STATE_LIST = ((1, '待反馈'), (2, '已反馈'), (3, '待上会'), (4, '已上会'), (5, '已签批'),
+                          (51, '已放完'), (61, '待变更'), (99, '已注销'))'''
+    return {'summary__article_state__in': [5, 61]}
+
+
 class Agrees(models.Model):  # 委托合同
     agree_num = models.CharField(verbose_name='_合同编号', max_length=32, unique=True)
     num_prefix = models.CharField(verbose_name='_编号前缀', max_length=32)
-    '''ARTICLE_STATE_LIST = ((1, '待反馈'), (2, '已反馈'), (3, '待上会'), (4, '已上会'), (5, '已签批'),
-                          (51, '已放完'), (61, '待变更'), (99, '已注销'))'''
     lending = models.ForeignKey(to='LendingOrder', verbose_name="放款纪要",
                                 on_delete=models.PROTECT,
-                                limit_choices_to={'summary__article_state': 5},
+                                limit_choices_to=limit_agree_choices,
                                 related_name='agree_lending')
     branch = models.ForeignKey(to='Branches', verbose_name="放款银行",
                                on_delete=models.PROTECT,
@@ -78,14 +82,14 @@ class Counters(models.Model):  # 反担保合同
                               on_delete=models.PROTECT, related_name='counter_agree')
     '''SURE_TYP_LIST = (
         (1, '企业保证'), (2, '个人保证'),
-        (11, '房产抵押'), (12, '土地抵押'), (13, '设备抵押'), (14, '存货抵押'), (15, '车辆抵押'),
+        (11, '房产抵押'), (12, '土地抵押'), (13, '动产抵押'),  (15, '车辆抵押'),
         (21, '房产顺位'), (22, '土地顺位'),
         (31, '应收质押'), (32, '股权质押'), (33, '票据质押'),
         (41, '合格证监管'), (42, '房产监管'), (43, '土地监管'),
         (51, '股权预售'), (52, '房产预售'), (53, '土地预售'))'''
     COUNTER_TYP_LIST = (
         (1, '企业担保'), (2, '个人保证'),
-        (11, '房产抵押'), (12, '土地抵押'), (13, '设备抵押'), (14, '存货抵押'), (15, '车辆抵押'),
+        (11, '房产抵押'), (12, '土地抵押'), (13, '动产抵押'), (15, '车辆抵押'),
         (31, '应收质押'), (32, '股权质押'), (33, '票据质押'),
         (51, '股权预售'), (52, '房产预售'), (53, '土地预售'))
     counter_typ = models.IntegerField(verbose_name='合同类型', choices=COUNTER_TYP_LIST)

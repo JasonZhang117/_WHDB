@@ -2,9 +2,18 @@ from django.contrib import admin
 from A_dbms import models
 from .usera import EmployeesAdmin
 
+
 # -----------------------项目-------------------------#
-admin.site.register(models.Articles)  # 项目
+class ArticlesAdmin(admin.ModelAdmin):
+    list_display = ('article_num', 'custom', 'amount', 'director', 'article_state')  # 显示字段
+    list_per_page = 20  # 每页显示条目数
+    search_fields = ['article_num']  # 搜索字段
+    ordering = ['-build_date']  # 排序字段
+
+
+admin.site.register(models.Articles, ArticlesAdmin)  # 项目
 admin.site.register(models.Feedback)  # 风控反馈
+admin.site.register(models.ArticleChange)  # 项目变更
 admin.site.register(models.Appraisals)  # 评审会
 admin.site.register(models.SingleQuota)  # 单项额度
 admin.site.register(models.Comments)  # 评审意见
@@ -38,8 +47,17 @@ admin.site.register(models.Pigeonholes)  # 归档
 # -----------------------追偿-------------------------#
 admin.site.register(models.Compensatories)  # 代偿
 
+
 # -----------------------客户-------------------------#
-admin.site.register(models.Customes)  # 客户
+class CustomesAdmin(admin.ModelAdmin):
+    list_display = ('name', 'genre', 'contact_addr', 'linkman', 'contact_num', 'credit_amount',
+                    'custom_flow', 'custom_accept', 'custom_back')  # 显示字段
+    list_per_page = 20  # 每页显示条目数
+    search_fields = ['name']  # 搜索字段
+    ordering = ['-credit_amount', 'name']  # 排序字段
+
+
+admin.site.register(models.Customes, CustomesAdmin)  # 客户
 admin.site.register(models.CustomesC)  # 企业客户
 admin.site.register(models.CustomesP)  # 个人客户
 admin.site.register(models.Districtes)  # 区域
@@ -59,7 +77,16 @@ class CooperatorsAdmin(admin.ModelAdmin):
 
 
 admin.site.register(models.Cooperators, CooperatorsAdmin)  # 合作机构
-admin.site.register(models.Branches)  # 放款银行
+
+
+class BranchesAdmin(admin.ModelAdmin):
+    list_display = ('name', 'branch_flow', 'branch_accept', 'branch_back')  # 显示字段
+    list_per_page = 30  # 每页显示条目数
+    search_fields = ['name']  # 搜索字段
+    ordering = ['-branch_flow', '-branch_accept']  # 排序字段
+
+
+admin.site.register(models.Branches, BranchesAdmin)  # 放款银行
 
 
 class ExpertsAdmin(admin.ModelAdmin):

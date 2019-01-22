@@ -120,3 +120,18 @@ class LendinStockForm(dform.Form):
         super(LendinStockForm, self).__init__(*args, **kwargs)
         self.fields['sure_stock'].choices = models.Warrants.objects.filter(warrant_typ=21).values_list(
             'id', 'warrant_num').order_by('warrant_num')
+
+
+# -----------------------动产抵押form-------------------------#
+class LendinChattelForm(dform.Form):
+    sure_chattel = fields.TypedMultipleChoiceField(
+        label="动产", label_suffix="：", coerce=lambda x: int(x),
+        widget=widgets.SelectMultiple(attrs={'class': 'form-control'}))
+
+    def __init__(self, *args, **kwargs):
+        super(LendinChattelForm, self).__init__(*args, **kwargs)
+        '''WARRANT_TYP_LIST = [
+        (1, '房产'), (5, '土地'), (11, '应收'), (21, '股权'),
+        (31, '票据'), (41, '车辆'), (51, '动产'), (99, '他权')]'''
+        self.fields['sure_chattel'].choices = models.Warrants.objects.filter(warrant_typ=51).values_list(
+            'id', 'warrant_num').order_by('warrant_num')

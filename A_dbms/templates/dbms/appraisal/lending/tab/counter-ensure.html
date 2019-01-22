@@ -22,7 +22,7 @@
         </thead>
         <tbody class="guarantee-tb">
         {% for lending_sure in lending_obj.sure_lending.all %}
-            {% if lending_sure.sure_typ in sure_list %}
+            {% if lending_sure.sure_typ in SURE_LIST %}
                 {% for custom in lending_sure.custom_sure.custome.all %}
                     <tr guarantee-nid={{ custom.id }} sure-typ-nid={{ lending_sure.sure_typ }}>
                         <td>{{ lending_sure.get_sure_typ_display }}</td>

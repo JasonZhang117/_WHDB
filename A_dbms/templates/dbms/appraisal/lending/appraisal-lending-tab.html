@@ -16,6 +16,9 @@
         <li role="presentation">
             <a href="#counter-stock " style="background-color: #f5f5f5"
                aria-controls="home" role="tab" data-toggle="tab">股权</a></li>
+         <li role="presentation">
+            <a href="#counter-chattel " style="background-color: #f5f5f5"
+               aria-controls="home" role="tab" data-toggle="tab">动产</a></li>
     </ul>
 
     <!-- Tab panes -->
@@ -30,5 +33,7 @@
             {% include 'dbms/appraisal/lending/tab/counter-receive.html' %}</div>
         <div role="tabpanel" class="tab-pane" id="counter-stock"><!--股权质押-->
             {% include 'dbms/appraisal/lending/tab/counter-stock.html' %}</div>
+        <div role="tabpanel" class="tab-pane" id="counter-chattel"><!--动产抵押-->
+            {% include 'dbms/appraisal/lending/tab/counter-chattel.html' %}</div>
     </div>
 </div>

@@ -1,5 +1,5 @@
 # ----------------------m_article项目模型--------------------#
-from .m_article import (Articles, Feedback)
+from .m_article import (Articles, Feedback, ArticleChange)
 # ----------------------m_appraisal评审管理--------------------#
 from .m_appraisal import (
     Appraisals, SingleQuota, Comments, LendingOrder, LendingSures,

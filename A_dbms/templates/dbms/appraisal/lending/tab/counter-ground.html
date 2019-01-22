@@ -22,7 +22,7 @@
         </thead>
         <tbody class="guarantee-tb">
         {% for lending_sure in lending_obj.sure_lending.all %}
-            {% if lending_sure.sure_typ in ground_list %}
+            {% if lending_sure.sure_typ in GROUND_LIST %}
                 {% for warrant in lending_sure.warrant_sure.warrant.all %}
                     <tr guarantee-nid={{ warrant.id }} sure-typ-nid={{ lending_sure.sure_typ }}>
                         <td><a target="_blank" href="{% url 'dbms:warrant_scan' warrant_id=warrant.id %}">

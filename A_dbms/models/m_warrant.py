@@ -269,9 +269,9 @@ class Chattel(models.Model):  # 动产
 
 # ------------------------他权模型99--------------------------#
 def limit_agree_choices():
-    '''AGREE_STATE_LIST = ((11, '待签批'), (21, '已签批'), (31, '已落实，未放款'), (41, '已落实，放款'),
-                        (42, '未落实，放款'), (51, '待变更'), (61, '已解保'), (99, '已作废'))'''
-    return {'agree_state__in': [21, 42]}
+    '''AGREE_STATE_LIST = ((11, '待签批'), (21, '已签批'), (31, '未落实'),
+                        (41, '已落实'), (51, '待变更'), (61, '已解保'), (99, '作废'))'''
+    return {'agree_state__in': [21, 31, 51]}
 
 
 class Hypothecs(models.Model):  # 他权
@@ -340,4 +340,3 @@ class Evaluate(models.Model):  # 评估
 
     def __str__(self):
         return '%s' % self.warrant
-

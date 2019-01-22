@@ -122,11 +122,12 @@ def article_scan_agree(request, article_id, agree_id):  # 项目预览
     print(__file__, '---->def article_scan_agree')
     PAGE_TITLE = '查看项目'
 
-    sure_list = [1, 2]  # 保证反担保类型
-    house_list = [11, 21, 42, 52]
-    ground_list = [12, 22, 43, 53]
-    receivable_list = [31]
-    stock_list = [32]
+    SURE_LIST = [1, 2]
+    HOUSE_LIST = [11, 21, 42, 52]
+    GROUND_LIST = [12, 22, 43, 53]
+    RECEIVABLE_LIST = [31]
+    STOCK_LIST = [32]
+    CHATTEL_LIST = [13]
 
     article_obj = models.Articles.objects.get(id=article_id)
     agree_obj = models.Agrees.objects.get(id=agree_id)

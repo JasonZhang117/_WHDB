@@ -1,0 +1,20 @@
+<div class="table-responsive">
+    <table class="table table-bordered table-hover table-condensed active">
+        <thead>
+        <tr style="text-align: center">
+            <th>变更意见</th>
+            <th>变更日期</th>
+            <th>变更详情</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            {% for change in article_obj.change_article.all %}
+                <td>{{ change.get_change_view_display }}</td>
+                <td>{{ change.change_date }}</td>
+                <td>{{ change.change_detail }}</td>
+            {% endfor %}
+        <tr>
+        </tbody>
+    </table>
+</div>

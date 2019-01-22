@@ -189,9 +189,12 @@ def warrant_add_ajax(request):
                 chattel_clean = form_chattel_add_eidt.cleaned_data
                 print('chattel_clean:', chattel_clean)
                 try:
+                    '''WARRANT_STATE_LIST = (
+        (1, '未入库'), (2, '已入库'), (6, '无需入库'), (11, '续抵出库'), (21, '已借出'), 
+        (31, '解保出库'), (99, '已注销'))'''
                     with transaction.atomic():
                         warrant_obj = models.Warrants.objects.create(
-                            warrant_num=warrant_add_clean['warrant_num'],
+                            warrant_num=warrant_add_clean['warrant_num'], warrant_state=6,
                             warrant_typ=warrant_typ, warrant_buildor=request.user)
                         chattel_obj = models.Chattel.objects.create(
                             warrant=warrant_obj, chattel_buildor=request.user,
@@ -796,25 +799,26 @@ def warrant_agree_scan(request, agree_id):  # 查看合同
     lending_obj = agree_obj.lending
 
     '''WARRANT_TYP_LIST = [
-                    (1, '房产'), (2, '房产'), (5, '土地'), (11, '应收'), (21, '股权'),
-                    (31, '票据'), (41, '车辆'), (51, '动产'), (99, '他权')]'''
+        (1, '房产'), (5, '土地'), (11, '应收'), (21, '股权'),
+        (31, '票据'), (41, '车辆'), (51, '动产'), (99, '他权')]'''
     '''COUNTER_TYP_LIST = (
         (1, '企业担保'), (2, '个人保证'),
-        (11, '房产抵押'), (12, '土地抵押'), (13, '设备抵押'), (14, '存货抵押'), (15, '车辆抵押'),
+        (11, '房产抵押'), (12, '土地抵押'), (13, '动产抵押'), (15, '车辆抵押'),
         (31, '应收质押'), (32, '股权质押'), (33, '票据质押'),
         (51, '股权预售'), (52, '房产预售'), (53, '土地预售'))'''
     '''SURE_TYP_LIST = (
-            (1, '企业保证'), (2, '个人保证'),
-            (11, '房产抵押'), (12, '土地抵押'), (13, '设备抵押'), (14, '存货抵押'), (15, '车辆抵押'),
-            (21, '房产顺位'), (22, '土地顺位'),
-            (31, '应收质押'), (32, '股权质押'), (33, '票据质押'),
-            (41, '合格证监管'), (42, '房产监管'), (43, '土地监管'),
-            (51, '股权预售'), (52, '房产预售'), (53, '土地预售'))'''
-    sure_list = [1, 2]  # 保证反担保类型
-    house_list = [11, 21, 42, 52]
-    ground_list = [12, 22, 43, 53]
-    receivable_list = [31]
-    stock_list = [32]
+        (1, '企业保证'), (2, '个人保证'),
+        (11, '房产抵押'), (12, '土地抵押'), (13, '动产抵押'), (15, '车辆抵押'),
+        (21, '房产顺位'), (22, '土地顺位'),
+        (31, '应收质押'), (32, '股权质押'), (33, '票据质押'),
+        (41, '合格证监管'), (42, '房产监管'), (43, '土地监管'),
+        (51, '股权预售'), (52, '房产预售'), (53, '土地预售'))'''
+    SURE_LIST = [1, 2]
+    HOUSE_LIST = [11, 21, 42, 52]
+    GROUND_LIST = [12, 22, 43, 53]
+    RECEIVABLE_LIST = [31]
+    STOCK_LIST = [32]
+    CHATTEL_LIST = [13]
 
     form_storage_add_edit = forms.StoragesAddEidtForm()
 

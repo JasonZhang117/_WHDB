@@ -14,7 +14,7 @@
         </thead>
         <tbody class="agree-warrant-tb">
         {% for lending_sure in lending_obj.sure_lending.all %}
-            {% if lending_sure.sure_typ in receivable_list %}
+            {% if lending_sure.sure_typ in RECEIVABLE_LIST %}
                 {% for warrant in lending_sure.warrant_sure.warrant.all %}
                     <tr warrant-nid={{ warrant.id }}>
                         <td>{{ forloop.counter }}</td>

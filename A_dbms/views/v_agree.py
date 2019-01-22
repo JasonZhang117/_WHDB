@@ -386,13 +386,22 @@ def counter_del_ajax(request):  # 删除反担保合同ajax
 
     agree_obj = models.Agrees.objects.get(id=agree_id)
     counter_obj = models.Counters.objects.get(id=counter_id)
-    assure_counter_obj = counter_obj.assure_counter
-    '''AGREE_STATE_LIST = ((11, '待签批'), (21, '已签批'), (31, '已落实，未放款'), (41, '已落实，放款'),
-                        (42, '未落实，放款'), (51, '待变更'), (61, '已解保'), (99, '已作废'))'''
+    '''COUNTER_TYP_LIST = (
+        (1, '企业担保'), (2, '个人保证'),
+        (11, '房产抵押'), (12, '土地抵押'), (13, '设备抵押'), (14, '存货抵押'), (15, '车辆抵押'),
+        (31, '应收质押'), (32, '股权质押'), (33, '票据质押'),
+        (51, '股权预售'), (52, '房产预售'), (53, '土地预售'))'''
+    if counter_obj.counter_typ in [1,2]:
+        counter_counter_obj = counter_obj.assure_counter
+    else:
+        counter_counter_obj = counter_obj.warrant_counter
+
+    '''AGREE_STATE_LIST = ((11, '待签批'), (21, '已签批'), (31, '未落实'),
+                        (41, '已落实'), (51, '待变更'), (61, '已解保'), (99, '作废'))'''
     if agree_obj.agree_state in [11, 51]:
         try:
             with transaction.atomic():
-                assure_counter_obj.delete()  # 删除保证反担保合同
+                counter_counter_obj.delete()  # 删除保证反担保合同
                 counter_obj.delete()  # 删除反担保合同
             response['message'] = '反担保合同删除成功！'
         except Exception as e:

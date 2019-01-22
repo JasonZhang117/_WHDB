@@ -23,7 +23,7 @@ def appraisal(request, *args, **kwargs):  # 评审情况
     '''筛选'''
     appraisal_list = models.Articles.objects.filter(**kwargs).select_related(
         'custom', 'director', 'assistant', 'control').order_by('-review_date')
-    appraisal_list = appraisal_list.filter(article_state__in=[4, 5, 61])
+    appraisal_list = appraisal_list.filter(article_state__in=[4, 5, 51, 61])
     '''搜索'''
     search_key = request.GET.get('_s')
     if search_key:
@@ -48,16 +48,15 @@ def appraisal(request, *args, **kwargs):  # 评审情况
 # -----------------------appraisal_scan评审项目-------------------------#
 @login_required
 def appraisal_scan(request, article_id):  # 评审项目预览
-    page_title = '项目评审'
-
     print(__file__, '---->def appraisal_scam')
+
+    PAGE_TITLE = '项目评审'
     single_operate = True
     comment_operate = True
     lending_operate = True
     article_obj = models.Articles.objects.get(id=article_id)
-    '''((1, '待反馈'), (2, '已反馈'), (3, '待上会'),
-       (4, '已上会'), (5, '已签批'), (6, '已注销'))'''
-    print()
+    '''ARTICLE_STATE_LIST = ((1, '待反馈'), (2, '已反馈'), (3, '待上会'), (4, '已上会'), (5, '已签批'),
+                          (51, '已放完'), (61, '待变更'), (99, '已注销'))'''
     if article_obj.article_state in [1, 2, 3, 4]:
         today_str = time.strftime("%Y-%m-%d", time.gmtime())
         form_date = {'renewal': article_obj.renewal, 'augment': article_obj.augment, 'sign_date': str(today_str)}
@@ -72,6 +71,7 @@ def appraisal_scan(request, article_id):  # 评审项目预览
     form_comment = forms.CommentsAddForm()
     form_single = forms.SingleQuotaForm()
     form_lending = forms.FormLendingOrder()
+    form_article_change = forms.ArticleChangeForm()
     return render(request, 'dbms/appraisal/appraisal-scan.html', locals())
 
 
@@ -93,22 +93,24 @@ def appraisal_scan_lending(request, article_id, lending_id):  # 评审项目预�
     page_title = '放款次序'
     article_obj = models.Articles.objects.get(id=article_id)
     lending_obj = models.LendingOrder.objects.get(id=lending_id)
-    '''((1, '待反馈'), (2, '已反馈'), (3, '待上会'),
-       (4, '已上会'), (5, '已签批'), (6, '已注销'))'''
-    '''(0, '--------'),
+    '''ARTICLE_STATE_LIST = ((1, '待反馈'), (2, '已反馈'), (3, '待上会'), (4, '已上会'), (5, '已签批'),
+                          (51, '已放完'), (61, '待变更'), (99, '已注销'))'''
+    '''SURE_TYP_LIST = (
         (1, '企业保证'), (2, '个人保证'),
-        (11, '房产抵押'), (12, '土地抵押'), (13, '设备抵押'), (14, '存货抵押'),
-        (15, '车辆抵押'),
+        (11, '房产抵押'), (12, '土地抵押'), (13, '动产抵押'), (15, '车辆抵押'),
         (21, '房产顺位'), (22, '土地顺位'),
         (31, '应收质押'), (32, '股权质押'), (33, '票据质押'),
         (41, '合格证监管'), (42, '房产监管'), (43, '土地监管'),
         (51, '股权预售'), (52, '房产预售'), (53, '土地预售'))'''
-    sure_list = [1, 2]
-    house_list = [11, 21, 42, 52]
-    ground_list = [12, 22, 43, 53]
-    receivable_list = [31]
-    stock_list = [32]
-
+    '''WARRANT_TYP_LIST = [
+        (1, '房产'), (5, '土地'), (11, '应收'), (21, '股权'),
+        (31, '票据'), (41, '车辆'), (51, '动产'), (99, '他权')]'''
+    SURE_LIST = [1, 2]
+    HOUSE_LIST = [11, 21, 42, 52]
+    GROUND_LIST = [12, 22, 43, 53]
+    RECEIVABLE_LIST = [31]
+    STOCK_LIST = [32]
+    CHATTEL_LIST = [13]
     form_lendingcustoms_c_add = models.Customes.objects.exclude(
         id=article_obj.custom.id).filter(genre=1).values_list('id', 'name')
     form_lendingcustoms_p_add = models.Customes.objects.exclude(
@@ -120,6 +122,7 @@ def appraisal_scan_lending(request, article_id, lending_id):  # 评审项目预�
     form_lendingground_add = forms.LendingGroundForm()
     form_lendinggreceivable_add = forms.LendinReceivableForm()
     form_lendingstock_add = forms.LendinStockForm()
+    form_lendingchattel_add = forms.LendinChattelForm()
 
     return render(request, 'dbms/appraisal/appraisal-scan-lending.html', locals())
 
@@ -137,22 +140,22 @@ def guarantee_add_ajax(request):  # 反担保措施添加ajax
     lending_obj = models.LendingOrder.objects.get(id=lending_id)
 
     form_lendingsures = forms.LendingSuresForm(post_data)
-    '''ARTICLE_STATE_LIST = ((1, '待反馈'), (2, '已反馈'), (3, '待上会'), 
-    (4, '已上会'), (5, '已签批'), (6, '已注销'))'''
+    '''ARTICLE_STATE_LIST = ((1, '待反馈'), (2, '已反馈'), (3, '待上会'), (4, '已上会'), (5, '已签批'),
+                          (51, '已放完'), (61, '待变更'), (99, '已注销'))'''
     article_state = lending_obj.summary.article_state
     ''' SURE_TYP_LIST = (
         (1, '企业保证'), (2, '个人保证'),
-        (11, '房产抵押'), (12, '土地抵押'), (13, '设备抵押'), (14, '存货抵押'), (15, '车辆抵押'),
+        (11, '房产抵押'), (12, '土地抵押'), (13, '动产抵押'),  (15, '车辆抵押'),
         (21, '房产顺位'), (22, '土地顺位'),
         (31, '应收质押'), (32, '股权质押'), (33, '票据质押'),
         (41, '合格证监管'), (42, '房产监管'), (43, '土地监管'),
         (51, '股权预售'), (52, '房产预售'), (53, '土地预售'))'''
-    if article_state in [1, 2, 3, 4]:
+    if article_state in [1, 2, 3, 4, 61]:
         if form_lendingsures.is_valid():
             lendingsures_clean = form_lendingsures.cleaned_data
             sure_typ = lendingsures_clean['sure_typ']
             default_sure = {'lending': lending_obj, 'sure_typ': sure_typ, 'sure_buildor': request.user}
-            if sure_typ == 1:
+            if sure_typ == 1:  # 企业保证
                 form_lendingcustoms_c_add = forms.LendingCustomsCForm(post_data)
                 if form_lendingcustoms_c_add.is_valid():
                     lendingcustoms_c_clean = form_lendingcustoms_c_add.cleaned_data
@@ -170,8 +173,7 @@ def guarantee_add_ajax(request):  # 反担保措施添加ajax
                     except Exception as e:
                         response['status'] = False
                         response['message'] = '反担保设置失败：%s' % str(e)
-
-            elif sure_typ == 2:
+            elif sure_typ == 2:  # 个人保证
                 form_lendingcustoms_p_add = forms.LendingCustomsPForm(post_data)
                 if form_lendingcustoms_p_add.is_valid():
                     lendingcustoms_p_clean = form_lendingcustoms_p_add.cleaned_data
@@ -188,7 +190,7 @@ def guarantee_add_ajax(request):  # 反担保措施添加ajax
                     except Exception as e:
                         response['status'] = False
                         response['message'] = '反担保设置失败：%s' % str(e)
-            elif sure_typ in [11, 21, 42, 52]:
+            elif sure_typ in [11, 21, 42, 52]:  # 房产
                 form_lendinghouse_add = forms.LendingHouseForm(post_data)
                 if form_lendinghouse_add.is_valid():
                     lendingwarrant_clean = form_lendinghouse_add.cleaned_data
@@ -205,7 +207,7 @@ def guarantee_add_ajax(request):  # 反担保措施添加ajax
                 except Exception as e:
                     response['status'] = False
                     response['message'] = '反担保设置失败：%s' % str(e)
-            elif sure_typ in [12, 22, 43, 53]:
+            elif sure_typ in [12, 22, 43, 53]:  # 土地
                 form_lendingground_add = forms.LendingGroundForm(post_data)
                 if form_lendingground_add.is_valid():
                     lendingwarrant_clean = form_lendingground_add.cleaned_data
@@ -223,7 +225,7 @@ def guarantee_add_ajax(request):  # 反担保措施添加ajax
                 except Exception as e:
                     response['status'] = False
                     response['message'] = '反担保设置失败：%s' % str(e)
-            elif sure_typ == 31:
+            elif sure_typ == 31:  # 应收质押
                 form_lendinggreceivable_add = forms.LendinReceivableForm(post_data)
                 if form_lendinggreceivable_add.is_valid():
                     lendingwarrant_clean = form_lendinggreceivable_add.cleaned_data
@@ -240,7 +242,7 @@ def guarantee_add_ajax(request):  # 反担保措施添加ajax
                 except Exception as e:
                     response['status'] = False
                     response['message'] = '反担保设置失败：%s' % str(e)
-            elif sure_typ == 32:
+            elif sure_typ == 32:  # 股权质押
                 form_lendingstock_add = forms.LendinStockForm(post_data)
                 if form_lendingstock_add.is_valid():
                     lendingwarrant_clean = form_lendingstock_add.cleaned_data
@@ -257,7 +259,26 @@ def guarantee_add_ajax(request):  # 反担保措施添加ajax
                 except Exception as e:
                     response['status'] = False
                     response['message'] = '反担保设置失败：%s' % str(e)
-
+            elif sure_typ == 13:  # 动产抵押
+                form_lendingchattel_add = forms.LendinChattelForm(post_data)
+                if form_lendingchattel_add.is_valid():
+                    lendingwarrant_clean = form_lendingchattel_add.cleaned_data
+                try:
+                    with transaction.atomic():
+                        lendingsure_obj, created = models.LendingSures.objects.update_or_create(
+                            lending=lending_obj, sure_typ=sure_typ, defaults=default_sure)
+                        default = {'sure': lendingsure_obj, 'lending_w_buildor': request.user}
+                        lendingchattel_obj, created = models.LendingWarrants.objects.update_or_create(
+                            sure=lendingsure_obj, defaults=default)
+                        for warrant in lendingwarrant_clean['sure_chattel']:
+                            lendingchattel_obj.warrant.add(warrant)
+                    response['message'] = '反担保设置成功！'
+                except Exception as e:
+                    response['status'] = False
+                    response['message'] = '反担保设置失败：%s' % str(e)
+            else:
+                response['status'] = False
+                response['message'] = '本反担保类型尚不能设置，请联系开发人员！！！'
         else:
             response['status'] = False
             response['message'] = '表单信息有误！！！'
@@ -270,7 +291,7 @@ def guarantee_add_ajax(request):  # 反担保措施添加ajax
     return HttpResponse(result)
 
 
-# -----------------------反担保人删除ajax-------------------------#
+# -----------------------反担保措施删除ajax-------------------------#
 @login_required
 def guarantee_del_ajax(request):  # 反担保人删除ajax
     print(__file__, '---->def guarantee_del_ajax')
@@ -282,11 +303,18 @@ def guarantee_del_ajax(request):  # 反担保人删除ajax
     sure_typ = int(post_data['sure_typ'])
 
     lending_obj = models.LendingOrder.objects.get(id=lending_id)
-    '''((1, '待反馈'), (2, '已反馈'), (3, '待上会'),
-       (4, '已上会'), (5, '已签批'), (6, '已注销'))'''
+    '''ARTICLE_STATE_LIST = ((1, '待反馈'), (2, '已反馈'), (3, '待上会'), (4, '已上会'), (5, '已签批'),
+                          (51, '已放完'), (61, '待变更'), (99, '已注销'))'''
     article_state = lending_obj.summary.article_state
-    if article_state in [1, 2, 3, 4]:
+    if article_state in [1, 2, 3, 4, 61]:
         lendingsure_obj = lending_obj.sure_lending.get(sure_typ=sure_typ)
+        '''SURE_TYP_LIST = (
+        (1, '企业保证'), (2, '个人保证'),
+        (11, '房产抵押'), (12, '土地抵押'), (13, '动产抵押'), (15, '车辆抵押'),
+        (21, '房产顺位'), (22, '土地顺位'),
+        (31, '应收质押'), (32, '股权质押'), (33, '票据质押'),
+        (41, '合格证监管'), (42, '房产监管'), (43, '土地监管'),
+        (51, '股权预售'), (52, '房产预售'), (53, '土地预售'))'''
         if sure_typ in [1, 2]:
             custom_id = post_data['del_guarantee_id']
             custom_obj = models.Customes.objects.get(id=custom_id)
@@ -428,17 +456,11 @@ def lending_order_ajax(request):  # 放款次序ajax
     post_data = json.loads(post_data_str)
 
     article_id = post_data['article_id']
-    order = post_data['order']
-    order_amount = post_data['order_amount']
-
     article_obj = models.Articles.objects.get(id=article_id)
-    '''((1, '待反馈'), (2, '已反馈'), (3, '待上会'),
-        (4, '已上会'), (5, '已签批'), (6, '已注销'))'''
-    if article_obj.article_state == 4:
-        data = {
-            'order': order,
-            'order_amount': order_amount}
-        form = forms.FormLendingOrder(data)
+    '''ARTICLE_STATE_LIST = ((1, '待反馈'), (2, '已反馈'), (3, '待上会'), (4, '已上会'), (5, '已签批'),
+                          (51, '已放完'), (61, '待变更'), (99, '已注销'))'''
+    if article_obj.article_state in [4, 61]:
+        form = forms.FormLendingOrder(post_data)
         if form.is_valid():
             cleaned_data = form.cleaned_data
             try:
@@ -535,8 +557,8 @@ def article_sign_ajax(request):
     sign_type = int(post_data['sign_type'])
     article_id = post_data['article_id']
     aritcle_obj = models.Articles.objects.get(id=article_id)
-    '''((1, '待反馈'), (2, '已反馈'), (3, '待上会'),
-        (4, '已上会'), (5, '已签批'), (6, '已注销'))'''
+    '''ARTICLE_STATE_LIST = ((1, '待反馈'), (2, '已反馈'), (3, '待上会'), (4, '已上会'), (5, '已签批'),
+                          (51, '已放完'), (61, '待变更'), (99, '已注销'))'''
     if aritcle_obj.article_state == 4:
         if sign_type == 2:
             models.Articles.objects.filter(id=article_id).update(
@@ -588,5 +610,48 @@ def article_sign_ajax(request):
     else:
         response['status'] = False
         response['message'] = '项目状态为：%s，本次签批失败！！！' % aritcle_obj.article_state
+    result = json.dumps(response, ensure_ascii=False)
+    return HttpResponse(result)
+
+
+# -----------------------项目变更ajax-------------------------#
+@login_required
+def article_change_ajax(request):
+    print(__file__, '---->def 项目变更ajax')
+    response = {'status': True, 'message': None, 'forme': None, }
+    post_data_str = request.POST.get('postDataStr')
+    post_data = json.loads(post_data_str)
+    print('post_data:', post_data)
+
+    '''((1, '同意'), (2, '不同意'))'''
+    article_id = post_data['article_id']
+    article_list = models.Articles.objects.filter(id=article_id)
+    article_obj = article_list.first()
+    '''ARTICLE_STATE_LIST = ((1, '待反馈'), (2, '已反馈'), (3, '待上会'), (4, '已上会'), (5, '已签批'),
+                          (51, '已放完'), (61, '待变更'), (99, '已注销'))'''
+    form_article_change = forms.ArticleChangeForm(post_data)
+    if form_article_change.is_valid():
+        change_cleaned = form_article_change.cleaned_data
+        change_view = change_cleaned['change_view']
+        '''CHANGE_VIEW_LIST = ((1, '变更申请'), (11, '同意变更'), (21, '否决变更'))'''
+        if change_view == 11:
+            try:
+                with transaction.atomic():
+                    article_list.update(article_state=61)
+                    models.ArticleChange.objects.create(
+                        article=article_obj, change_view=change_view, change_detail=change_cleaned['change_detail'],
+                        change_date=change_cleaned['change_date'], change_buildor=request.user)
+                response['message'] = '项目变更成功，请重新设置方案！'
+            except Exception as e:
+                response['status'] = False
+                response['message'] = '项目变更失败：%s' % str(e)
+        else:
+            response['status'] = False
+            response['message'] = '项目状态为：%s，本次变更失败！！！' % article_obj.article_state
+    else:
+        response['status'] = False
+        response['message'] = '表单信息有误！！！'
+        response['forme'] = form_article_change.errors
+
     result = json.dumps(response, ensure_ascii=False)
     return HttpResponse(result)

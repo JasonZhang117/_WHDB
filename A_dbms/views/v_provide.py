@@ -16,9 +16,12 @@ def provide_agree(request, *args, **kwargs):  # 放款管理
     PAGE_TITLE = '放款管理'
     '''AGREE_STATE_LIST = ((11, '待签批'), (21, '已签批'), (31, '未落实'),
                         (41, '已落实'), (51, '待变更'), (61, '已解保'), (99, '作废'))'''
+    '''ARTICLE_STATE_LIST = ((1, '待反馈'), (2, '已反馈'), (3, '待上会'), (4, '已上会'), (5, '已签批'),
+                          (51, '已放完'), (61, '待变更'), (99, '已注销'))'''
     AGREE_STATE_LIST = models.Agrees.AGREE_STATE_LIST  # 筛选条件
     '''筛选'''
     agree_list = models.Agrees.objects.filter(**kwargs).select_related('lending', 'branch').order_by('-agree_num')
+    agree_list = agree_list.filter(agree_state__in=[21, 31, 41, 51], lending__summary__article_state__in=[5, 51, 61])
     '''搜索'''
     search_key = request.GET.get('_s')
     if search_key:
@@ -46,30 +49,32 @@ def provide_agree(request, *args, **kwargs):  # 放款管理
 @login_required
 def provide_agree_scan(request, agree_id):  # 查看放款
     print(__file__, '---->def provide_agree_scan')
+    PAGE_TITLE = '放款管理'
     response = {'status': True, 'message': None, 'forme': None, }
 
-    PAGE_TITLE = '放款管理'
+    COUNTER_TYP_CUSTOM = [1, 2]
+
+    '''WARRANT_TYP_LIST = [
+            (1, '房产'), (5, '土地'), (11, '应收'), (21, '股权'),
+            (31, '票据'), (41, '车辆'), (51, '动产'), (99, '他权')]'''
     '''COUNTER_TYP_LIST = (
         (1, '企业担保'), (2, '个人保证'),
-        (11, '房产抵押'), (12, '土地抵押'), (13, '设备抵押'), (14, '存货抵押'), (15, '车辆抵押'),
+        (11, '房产抵押'), (12, '土地抵押'), (13, '动产抵押'), (15, '车辆抵押'),
         (31, '应收质押'), (32, '股权质押'), (33, '票据质押'),
         (51, '股权预售'), (52, '房产预售'), (53, '土地预售'))'''
-    COUNTER_TYP_CUSTOM = [1, 2]
     '''SURE_TYP_LIST = (
-                    (1, '企业保证'), (2, '个人保证'),
-                    (11, '房产抵押'), (12, '土地抵押'), (13, '设备抵押'), (14, '存货抵押'), (15, '车辆抵押'),
-                    (21, '房产顺位'), (22, '土地顺位'),
-                    (31, '应收质押'), (32, '股权质押'), (33, '票据质押'),
-                    (41, '合格证监管'), (42, '房产监管'), (43, '土地监管'),
-                    (51, '股权预售'), (52, '房产预售'), (53, '土地预售'))'''
-    '''WARRANT_TYP_LIST = [
-           (1, '房产'), (2, '土地'), (11, '应收'), (21, '股权'),
-           (31, '票据'), (41, '车辆'), (51, '动产'), (99, '他权')]'''
-    sure_list = [1, 2]  # 保证反担保类型
-    house_list = [11, 21, 42, 52]
-    ground_list = [12, 22, 43, 53]
-    receivable_list = [31]
-    stock_list = [32]
+        (1, '企业保证'), (2, '个人保证'),
+        (11, '房产抵押'), (12, '土地抵押'), (13, '动产抵押'), (15, '车辆抵押'),
+        (21, '房产顺位'), (22, '土地顺位'),
+        (31, '应收质押'), (32, '股权质押'), (33, '票据质押'),
+        (41, '合格证监管'), (42, '房产监管'), (43, '土地监管'),
+        (51, '股权预售'), (52, '房产预售'), (53, '土地预售'))'''
+    SURE_LIST = [1, 2]
+    HOUSE_LIST = [11, 21, 42, 52]
+    GROUND_LIST = [12, 22, 43, 53]
+    RECEIVABLE_LIST = [31]
+    STOCK_LIST = [32]
+    CHATTEL_LIST = [13]
 
     agree_obj = models.Agrees.objects.get(id=agree_id)
     lending_obj = agree_obj.lending
@@ -225,33 +230,30 @@ def ascertain_add_ajax(request):
     print('agree_obj:', agree_obj)
     '''AGREE_STATE_LIST = ((11, '待签批'), (21, '已签批'), (31, '未落实'),
                         (41, '已落实'), (51, '待变更'), (61, '已解保'), (99, '作废'))'''
-    if agree_obj.agree_state in [21, 31, 51]:
-        form_ascertain_add = forms.FormAscertainAdd(post_data)
-        if form_ascertain_add.is_valid():
-            ascertain_cleaned = form_ascertain_add.cleaned_data
-            agree_state = ascertain_cleaned['agree_state']
-            agree_remark = ascertain_cleaned['agree_remark']
-            '''AGREE_STATE_LIST = ((11, '待签批'), (21, '已签批'), (31, '未落实'),
-                            (41, '已落实'), (51, '待变更'), (61, '已解保'), (99, '作废'))'''
-            if agree_obj.agree_state in [11, 61, 99]:
+    form_ascertain_add = forms.FormAscertainAdd(post_data)
+    if form_ascertain_add.is_valid():
+        ascertain_cleaned = form_ascertain_add.cleaned_data
+        agree_state = ascertain_cleaned['agree_state']
+        agree_remark = ascertain_cleaned['agree_remark']
+        '''AGREE_STATE_LIST = ((11, '待签批'), (21, '已签批'), (31, '未落实'),
+                    (41, '已落实'), (51, '待变更'), (61, '已解保'), (99, '作废'))'''
+        agree_state_y = agree_obj.agree_state
+        if agree_state_y in [21, 31, 51]:
+            try:
+                today_str = time.strftime("%Y-%m-%d", time.gmtime())
+                agree_list.update(
+                    agree_state=agree_state, ascertain_date=today_str, agree_remark=agree_remark)
+                response['message'] = '风控落实手续办理成功！'
+            except Exception as e:
                 response['status'] = False
-                response['message'] = '合同状态为：（%s），风控落实失败!!!' % agree_obj.agree_state
-            else:
-                try:
-                    today_str = time.strftime("%Y-%m-%d", time.gmtime())
-                    agree_list.update(
-                        agree_state=agree_state, ascertain_date=today_str, agree_remark=agree_remark)
-                    response['message'] = '风控落实手续办理成功！'
-                except Exception as e:
-                    response['status'] = False
-                    response['message'] = '风控落实手续办理失败：%s' % str(e)
+                response['message'] = '风控落实手续办理失败：%s' % str(e)
         else:
             response['status'] = False
-            response['message'] = '表单信息有误！！！'
-            response['forme'] = form_ascertain_add.errors
+            response['message'] = '合同状态为：%s，风控落实失败!!!' % agree_state_y
     else:
         response['status'] = False
-        response['message'] = '合同状态为%s,无法落实风控条件！！！'
+        response['message'] = '表单信息有误！！！'
+        response['forme'] = form_ascertain_add.errors
     result = json.dumps(response, ensure_ascii=False)
     return HttpResponse(result)
 
@@ -399,6 +401,7 @@ def provide_add_ajax(request):
                     custom_list = models.Customes.objects.filter(article_custom=article_obj)
                     branch_list = models.Branches.objects.filter(agree_branch=agree_obj)
                     provide_typ = provide_obj.provide_typ
+                    '''PROVIDE_TYP_LIST = ((1, '流贷'), (11, '承兑'), (21, '保函'))'''
                     if provide_typ == 1:
                         custom_list.update(custom_flow=F('custom_flow') + provide_money)  # 客户，更新流贷余额
                         branch_list.update(branch_flow=F('branch_flow') + provide_money)  # 放款银行，更新流贷余额

@@ -12,7 +12,8 @@ from .v_meeting import (
 # ----------------------v_appraisal评审视图--------------------#
 from .v_appraisal import (
     appraisal, appraisal_scan, appraisal_scan_lending, article_sign_ajax, guarantee_add_ajax, guarantee_del_ajax,
-    single_del_ajax, comment_edit_ajax, summary_scan, single_quota_ajax, lending_del_ajax, lending_order_ajax, )
+    single_del_ajax, comment_edit_ajax, summary_scan, single_quota_ajax, lending_del_ajax, lending_order_ajax,
+    article_change_ajax)
 # ----------------------v_agree合同管理视图--------------------#
 from .v_agree import (
     agree, agree_add_ajax, counter_add_ajax, agree_scan, agree_preview, agree_sign_ajax, counter_del_ajax)

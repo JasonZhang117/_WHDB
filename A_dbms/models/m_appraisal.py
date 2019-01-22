@@ -10,6 +10,8 @@ class Appraisals(models.Model):  # 评审会
     REVIEW_MODEL_LIST = ((1, '内审'), (2, '外审'))
     review_model = models.IntegerField(verbose_name='评审类型', choices=REVIEW_MODEL_LIST)
     review_date = models.DateField(verbose_name='评审日期', default=datetime.date.today)
+    '''ARTICLE_STATE_LIST = ((1, '待反馈'), (2, '已反馈'), (3, '待上会'), (4, '已上会'), (5, '已签批'),
+                          (51, '已放完'), (61, '待变更'), (99, '已注销'))'''
     article = models.ManyToManyField(to='Articles', verbose_name="参评项目",
                                      related_name='appraisal_article',
                                      limit_choices_to={'article_state': 2},
@@ -32,9 +34,9 @@ class Appraisals(models.Model):  # 评审会
 
 # ------------------------单项额度--------------------------#
 def limit_article_choices():
-    '''ARTICLE_STATE_LIST = ((1, '待反馈'), (2, '已反馈'), (3, '待上会'), (4, '已上会'),
-    (5, '已签批'), (6, '已注销'))'''
-    return {'article_state__in': [4, 5]}
+    '''ARTICLE_STATE_LIST = ((1, '待反馈'), (2, '已反馈'), (3, '待上会'), (4, '已上会'), (5, '已签批'),
+                          (51, '已放完'), (61, '待变更'), (99, '已注销'))'''
+    return {'article_state__in': [3, 4]}
 
 
 class SingleQuota(models.Model):  # 单项额度
@@ -47,7 +49,7 @@ class SingleQuota(models.Model):  # 单项额度
     credit_model = models.IntegerField(verbose_name='授信类型', choices=CREDIT_MODEL_LIST, default=1)
     credit_amount = models.FloatField(verbose_name='授信额度（元）')
     flow_rate = models.FloatField(verbose_name='费率（%）')
-    amount = models.FloatField(verbose_name='_放款金额（元）', default=0)
+
     single_buildor = models.ForeignKey(to='Employees', verbose_name="创建人",
                                        on_delete=models.PROTECT, default=1,
                                        related_name='single_buildor_employee')
@@ -64,9 +66,9 @@ class SingleQuota(models.Model):  # 单项额度
 
 # ------------------------放款次序--------------------------#
 def limit_lending_choices():
-    '''ARTICLE_STATE_LIST = ((1, '待反馈'), (2, '已反馈'), (3, '待上会'), (4, '已上会'),
-    (5, '已签批'), (6, '已注销'))'''
-    return {'article_state__in': [1, 2]}
+    '''ARTICLE_STATE_LIST = ((1, '待反馈'), (2, '已反馈'), (3, '待上会'), (4, '已上会'), (5, '已签批'),
+                          (51, '已放完'), (61, '待变更'), (99, '已注销'))'''
+    return {'article_state__in': [4, 61]}
 
 
 class LendingOrder(models.Model):
@@ -102,7 +104,7 @@ class LendingSures(models.Model):
                                 related_name='sure_lending')
     SURE_TYP_LIST = (
         (1, '企业保证'), (2, '个人保证'),
-        (11, '房产抵押'), (12, '土地抵押'), (13, '设备抵押'), (14, '存货抵押'), (15, '车辆抵押'),
+        (11, '房产抵押'), (12, '土地抵押'), (13, '动产抵押'), (15, '车辆抵押'),
         (21, '房产顺位'), (22, '土地顺位'),
         (31, '应收质押'), (32, '股权质押'), (33, '票据质押'),
         (41, '合格证监管'), (42, '房产监管'), (43, '土地监管'),

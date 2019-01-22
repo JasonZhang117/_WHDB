@@ -52,3 +52,13 @@ class FeedbackAddForm(dform.Form):  # 风控反馈添加
         label='风控建议', label_suffix="：", widget=widgets.Textarea(
             attrs={'class': 'form-control', 'rows': '5',
                    'placeholder': '提出项目风控措施建议（额度、担保措施、过程控制、保后要求等）'}))
+
+
+# -----------------------项目变更-------------------------#
+class ArticleChangeForm(dform.ModelForm):  # 项目变更
+    class Meta:
+        model = models.ArticleChange
+        fields = ['change_view', 'change_date', 'change_detail']
+        widgets = {'change_view': dform.Select(attrs={'class': 'form-control'}),
+                   'change_date': dform.DateInput(attrs={'class': 'form-control', 'type': 'date'}),
+                   'change_detail': dform.Textarea(attrs={'class': 'form-control', 'rows': '3', 'placeholder': '变更情况'})}

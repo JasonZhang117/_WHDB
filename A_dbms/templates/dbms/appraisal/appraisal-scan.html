@@ -1,19 +1,19 @@
 {% extends 'dbms/index_dbms.html' %}
 
-{% block title %}{{ page_title }}:{{ article_obj }}{% endblock %}
+{% block title %}{{ PAGE_TITLE }}:{{ article_obj }}{% endblock %}
 
 {% block right-content-container %}
 
     <div class="container-fluid" style="padding-left: 1px;">
         {% include 'dbms/appraisal/scan/appraisal-summry.html' %}
         {% include 'dbms/appraisal/scan/appraisal-tab.html' %}
-
         {% include 'dbms/appraisal/modl/comment-add-mod.html' %}
         {% include 'dbms/appraisal/modl/single-add-mod.html' %}
         {% include 'dbms/appraisal/modl/single-del-mod.html' %}
         {% include 'dbms/appraisal/modl/lending-add-mod.html' %}
         {% include 'dbms/appraisal/modl/lending-del-mod.html' %}
         {% include 'dbms/appraisal/modl/article-sign-mod.html' %}
+        {% include 'dbms/appraisal/modl/article-change-mod.html' %}
 
     </div>
 
@@ -26,4 +26,5 @@
     {% include 'dbms/appraisal/extra/js-lending-add.html' %}
     {% include 'dbms/appraisal/extra/js-lending-del.html' %}
     {% include 'dbms/appraisal/extra/js-article-sign.html' %}
+    {% include 'dbms/appraisal/extra/js-article-change.html' %}
 {% endblock %}

@@ -25,10 +25,10 @@
                 var n = $(this).attr('name');
                 postData[n] = v;
             });
-            var ttt = $('#id_concrete').val()
+            var ttt = $('#id_concrete').val();
             postData['concrete'] = ttt;
             var postDataStr = JSON.stringify(postData);
-            console.log(postDataStr)
+            console.log(postDataStr);
             $.ajax({
                 url: '/dbms/appraisal/comment/',
                 type: 'POST',

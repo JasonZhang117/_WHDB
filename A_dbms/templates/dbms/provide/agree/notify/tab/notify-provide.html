@@ -3,8 +3,8 @@
         <thead>
         <tr style="text-align: center">
             <th>序号</th>
-            <th>放款种类</th>
             <th>放款金额</th>
+            <th>放款种类</th>
             <th>放款日期</th>
             <th>到期日</th>
             <th>归档状态</th>
@@ -17,8 +17,8 @@
             <tr provide-nid="{{ provide.id }}">
                 <td><a href="{% url 'dbms:provide_scan' provide_id=provide.id %}"
                        target="_blank">{{ forloop.counter }}</a></td>
-                <td>{{ provide.get_provide_typ_display }}</td>
                 <td>{{ provide.provide_money }}</td>
+                <td>{{ provide.get_provide_typ_display }}</td>
                 <td>{{ provide.provide_date }}</td>
                 <td>{{ provide.due_date }}</td>
                 <td>{{ provide.get_implement_display }}</td>
