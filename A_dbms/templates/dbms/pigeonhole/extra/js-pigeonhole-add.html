@@ -1,0 +1,79 @@
+<script>
+    $(function () {
+        bindPigeonholeB();
+        bind_id_implement();
+        bindAddPigeonholeModalOk();
+    });
+
+    function bindPigeonholeB() {
+        console.log("bindPigeonholeB");
+        $('#pigeonholeB').click(function () {
+            {#console.log("bindAddCounterB")#}
+            $('#addPigeonholeModal').modal('show');
+        })
+    }
+
+    function bind_id_implement() {
+        $('#id_implement').change(function () {
+            console.log("bind_id_implement");
+            $('.extend').hide();
+            var implement = $('#id_implement').val();
+            console.log(implement);
+            switch (implement) {
+                case ('1'): {#未归档#}
+                    $('#form_pigeonhole_add').show();
+                    break;
+                case ('11'):{#退回#}
+                    $('#form_pigeonhole_add').show();
+                    break;
+                case ('21'):{#暂存风控#}
+                    $('#form_pigeonhole_add').show();
+                    break;
+                case ('31'):{#移交行政#}
+                    $('#form_pigeonhole_add').show();
+                    break;
+                case ('41'):{#已归档#}
+                    $('#form_pigeonhole_num').show();
+                    break;
+                default:
+                    $('.extend').hide()
+            }
+        })
+    }
+
+    function bindAddPigeonholeModalOk() {
+        $('#addPigeonholeModalOk').click(function () {
+            var postData = {};
+            $('#addPigeonholeModal').find('input,select').each(function () {
+                var v = $(this).val();
+                var n = $(this).attr('name');
+                postData[n] = v;
+            });
+            var postDataStr = JSON.stringify(postData);
+            console.log(postDataStr);
+            $.ajax({
+                url: '/dbms/pigeonhole/add/',
+                type: 'POST',
+                data: {'postDataStr': postDataStr},
+                dataType: 'JSON',
+                success: function (arg) {
+                    console.log(arg);
+                    if (arg.status) {
+                        $('#addPigeonholeModal').modal('hide');
+                        alert(arg.message);
+                        window.location.reload();
+                    } else {
+                        alert(arg.message);
+                        $('#e_pigeonhole_explain').text(arg.forme.pigeonhole_explain);
+                    }
+                }
+            })
+        })
+    }
+</script>
+
+
+
+
+
+

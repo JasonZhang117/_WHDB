@@ -20,10 +20,9 @@ class MeetingAddForm(dform.Form):  # 评审会添加
 
     def __init__(self, *args, **kwargs):
         super(MeetingAddForm, self).__init__(*args, **kwargs)
-        '''((1, '待反馈'), (2, '已反馈'), (3, '待上会'),
-            (4, '已上会'), (5, '已签批'), (6, '已注销'))
-            ((0, '--------------'), (1, '符合上会条件'),
-            (2, '暂不符合上会条件'), (3, '建议终止项目'))'''
+        '''ARTICLE_STATE_LIST = ((1, '待反馈'), (2, '已反馈'), (3, '待上会'), (4, '已上会'), (5, '已签批'),
+                          (51, '已放完'), (61, '待变更'), (99, '已注销'))'''
+        '''PROPOSE_LIST = ((1, '符合上会条件'), (11, '暂不符合上会条件'), (21, '建议终止项目'))'''
         self.fields['article'].choices = models.Articles.objects.filter(
             article_state=2, feedback_article__propose=1).values_list('id', 'article_num').order_by('article_num')
 

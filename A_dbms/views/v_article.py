@@ -64,7 +64,7 @@ def article(request, *args, **kwargs):  # 项目列表
     # 列表或元组转换为字典并添加key
     '''筛选'''
     article_list = models.Articles.objects.filter(**kwargs).select_related(
-        'custom', 'director', 'assistant', 'control').order_by('-article_date')
+        'custom', 'director', 'assistant', 'control').order_by('-build_date')
     '''搜索'''
     search_key = request.GET.get('_s')
     if search_key:
@@ -115,7 +115,7 @@ def article_scan(request, article_id):  # 项目预览
     return render(request, 'dbms/article/article-scan.html', locals())
 
 
-# -----------------------------项目预览------------------------------#
+# -----------------------------项目预览-按合同------------------------------#
 
 @login_required
 def article_scan_agree(request, article_id, agree_id):  # 项目预览
@@ -133,6 +133,25 @@ def article_scan_agree(request, article_id, agree_id):  # 项目预览
     agree_obj = models.Agrees.objects.get(id=agree_id)
     lending_obj = agree_obj.lending
     return render(request, 'dbms/article/article-scan-agree.html', locals())
+
+
+# -----------------------------项目预览-按发放次序------------------------------#
+
+@login_required
+def article_scan_lending(request, article_id, lending_id):  # 项目预览
+    print(__file__, '---->def article_scan_lending')
+    PAGE_TITLE = '查看项目'
+
+    SURE_LIST = [1, 2]
+    HOUSE_LIST = [11, 21, 42, 52]
+    GROUND_LIST = [12, 22, 43, 53]
+    RECEIVABLE_LIST = [31]
+    STOCK_LIST = [32]
+    CHATTEL_LIST = [13]
+
+    article_obj = models.Articles.objects.get(id=article_id)
+    lending_obj = models.LendingOrder.objects.get(id=lending_id)
+    return render(request, 'dbms/article/article-scan-lending.html', locals())
 
 
 # -----------------------------添加项目ajax------------------------------#
@@ -267,7 +286,7 @@ def article_feedback_ajax(request):
                     'feedback_date': today_str, 'feedback_buildor': request.user}
                 article, created = models.Feedback.objects.update_or_create(
                     article_id=article_id, defaults=default)
-                article_list.update(article_state=2)  # 更新项目状态
+                article_list.update(article_state=2, article_date=today_str)  # 更新项目状态
                 if created:
                     response['message'] = '成功成功反馈项目%s！' % article_obj.article_num
                 else:

@@ -8,6 +8,7 @@
         {#<caption><h4>项目管理</h4></caption>#}
         <thead>
         <tr style="text-align: center">
+            <th>序号</th>
             <th>担保方式</th>
             <th>保证人</th>
             <th>保证人类型</th>
@@ -25,6 +26,7 @@
             {% if lending_sure.sure_typ in SURE_LIST %}
                 {% for custom in lending_sure.custom_sure.custome.all %}
                     <tr guarantee-nid={{ custom.id }} sure-typ-nid={{ lending_sure.sure_typ }}>
+                        <td>{{ forloop.counter }}</td>
                         <td>{{ lending_sure.get_sure_typ_display }}</td>
                         <td><a target="_blank" href="{% url 'dbms:custom_scan' custom_id=custom.id %}">
                             {{ custom.name }}</a></td>

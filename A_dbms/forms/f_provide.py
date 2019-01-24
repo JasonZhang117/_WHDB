@@ -43,13 +43,13 @@ class FormProvideAdd(dform.ModelForm):
         model = models.Provides
         fields = ['provide_typ', 'provide_money', 'provide_date', 'due_date']
         widgets = {
-            'provide_typ': dform.Select(attrs={'class': 'form-control', 'placeholder': '通知金额'}),
+            'provide_typ': dform.Select(attrs={'class': 'form-control'}),
             'provide_money': dform.NumberInput(attrs={'class': 'form-control', 'placeholder': '放款金额'}),
             'provide_date': dform.DateInput(attrs={'class': 'form-control', 'type': 'date'}),
             'due_date': dform.DateInput(attrs={'class': 'form-control', 'type': 'date'})}
 
 
-# -----------------------放款添加-------------------------#
+# -----------------------还款添加-------------------------#
 class FormRepaymentAdd(dform.ModelForm):
     class Meta:
         model = models.Repayments
@@ -57,3 +57,31 @@ class FormRepaymentAdd(dform.ModelForm):
         widgets = {
             'repayment_money': dform.NumberInput(attrs={'class': 'form-control', 'placeholder': '还款金额'}),
             'repayment_date': dform.DateInput(attrs={'class': 'form-control', 'type': 'date'})}
+
+
+# -----------------------归档添加-------------------------#
+class FormImplementAdd(dform.ModelForm):
+    class Meta:
+        model = models.Pigeonholes
+        fields = ['implement']
+        '''IMPLEMENT_LIST = [(1, '未归档'), (11, '退回'), (21, '暂存风控'), (31, '移交行政'), (41, '已归档')]'''
+        widgets = {
+            'implement': dform.Select(attrs={'class': 'form-control'})}
+
+# -----------------------归档添加-------------------------#
+class FormPigeonholeAdd(dform.ModelForm):
+    class Meta:
+        model = models.Pigeonholes
+        fields = ['pigeonhole_transfer', 'pigeonhole_explain']
+        widgets = {
+            'pigeonhole_transfer': dform.Select(attrs={'class': 'form-control'}),
+            'pigeonhole_explain': dform.TextInput(attrs={'class': 'form-control', 'placeholder': '归档说明'})}
+
+
+# -----------------------归档添加-------------------------#
+class FormPigeonholeNumAdd(dform.ModelForm):
+    class Meta:
+        model = models.Provides
+        fields = ['file_num']
+        widgets = {
+            'file_num': dform.TextInput(attrs={'class': 'form-control', 'placeholder': '档案编号'})}

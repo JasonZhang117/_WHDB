@@ -26,7 +26,9 @@ class FormAgreeSign(dform.ModelForm):
         widgets = {'agree_sign_date': dform.DateInput(attrs={'class': 'form-control', 'type': 'date'})}
 
 
-initial=str(datetime.date.today()),
+initial = str(datetime.date.today()),
+
+
 # -----------------------反担保合同添加-------------------------#
 class AddCounterForm(dform.ModelForm):  # 反担保合同添加
     class Meta:

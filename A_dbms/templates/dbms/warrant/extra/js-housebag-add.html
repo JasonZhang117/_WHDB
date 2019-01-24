@@ -1,0 +1,53 @@
+<script>
+    $(function () {
+        bindAddHouseBagB();
+        bindAddHouseBagModalOk();
+    });
+
+    function bindAddHouseBagB() {
+        $('#addHouseBagB').click(function () {
+            console.log("bindAddHouseBagB")
+            $('#addHouseBagModal').modal('show');
+        })
+    }
+
+    function bindAddHouseBagModalOk() {
+        $('#addHouseBagModalOk').click(function () {
+            var postData = {};
+            $('#addHouseBagModal').find('input,select').each(function () {
+                var v = $(this).val();
+                var n = $(this).attr('name');
+                postData[n] = v;
+            });
+            var postDataStr = JSON.stringify(postData);
+            console.log(postDataStr);
+            $.ajax({
+                url: '/dbms/warrant/housebag/add/',
+                type: 'POST',
+                traditional: true,
+                data: {'postDataStr': postDataStr},
+                dataType: 'JSON',
+                success: function (arg) {
+                    console.log(arg);
+                    if (arg.status) {
+                        $('#addHouseBagModal').modal('hide');
+                        alert(arg.message);
+                        window.location.reload();
+                    } else {
+                        alert(arg.message);
+
+                        $('#e_housebag_locate').text(arg.forme.housebag_locate);
+                        $('#e_housebag_app').text(arg.forme.housebag_app);
+                        $('#id_housebag_area').text(arg.forme.housebag_area);
+                    }
+                }
+            })
+        })
+    }
+</script>
+
+
+
+
+
+

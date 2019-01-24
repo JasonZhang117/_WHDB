@@ -45,6 +45,8 @@ class Employees(AbstractBaseUser, PermissionsMixin):
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=True)
     # is_admin = models.BooleanField(default=False)
+    EMPLOYEE_STATUS_LIST = [(1, '在职'), (11, '离职')]
+    employee_status = models.IntegerField(verbose_name='_放款状态', choices=EMPLOYEE_STATUS_LIST, default=1)
     job = models.ManyToManyField("Jobs", blank=True, null=True)
     department = models.ForeignKey(to="Departments", verbose_name="部门",
                                    on_delete=models.PROTECT,
@@ -68,11 +70,11 @@ class Employees(AbstractBaseUser, PermissionsMixin):
     class Meta:
         verbose_name_plural = '内部-员工'  # 指定显示名称
         db_table = 'dbms_employees'  # 指定数据表的名称
-        permissions = (
+        permissions = [
             ('dbms_article_all', '访问项目列表'),
             ('dbms_article', '访问所有项目列表'),
             ('article_scan_all', '访问项目添加页'),
-            ('article_scan_agree', '添加项目'),)
+            ('article_scan_agree', '添加项目'),]
 
 
 # -----------------------------岗位模型------------------------------#

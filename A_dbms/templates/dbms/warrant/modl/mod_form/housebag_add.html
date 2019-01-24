@@ -1,0 +1,22 @@
+<div id="form_housebag_add_edit">
+
+    <div class="form-group"><!--坐落-->
+        <label for="id_housebag_locate"
+               class="col-sm-3 control-label">{{ form_housebag_add_edit.housebag_locate.label }}：</label>
+        <div class="col-sm-9">{{ form_housebag_add_edit.housebag_locate }}</div>
+        <label id="e_housebag_locate" class="pull-right">{{ form_housebag_add_edit.housebag_locate.errors }}</label>
+    </div>
+    <div class="form-group"><!--用途-->
+        <label for="id_housebag_app"
+               class="col-sm-3 control-label">{{ form_housebag_add_edit.housebag_app.label }}：</label>
+        <div class="col-sm-9">{{ form_housebag_add_edit.housebag_app }}</div>
+        <label id="e_housebag_app" class="pull-right">{{ form_housebag_add_edit.housebag_app.errors }}</label>
+    </div>
+
+    <div class="form-group"><!--建筑面积（平方米)-->
+        <label for="id_housebag_area"
+               class="col-sm-3 control-label">{{ form_housebag_add_edit.housebag_area.label }}：</label>
+        <div class="col-sm-9">{{ form_housebag_add_edit.housebag_area }}</div>
+        <label id="e_housebag_area" class="pull-right">{{ form_housebag_add_edit.housebag_area.errors }}</label>
+    </div>
+</div>

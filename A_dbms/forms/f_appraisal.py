@@ -82,7 +82,7 @@ class LendingHouseForm(dform.Form):
 
     def __init__(self, *args, **kwargs):
         super(LendingHouseForm, self).__init__(*args, **kwargs)
-        self.fields['sure_house'].choices = models.Warrants.objects.filter(warrant_typ=1).values_list(
+        self.fields['sure_house'].choices = models.Warrants.objects.filter(warrant_typ__in=[1, 2]).values_list(
             'id', 'warrant_num').order_by('warrant_num')
 
 

@@ -25,7 +25,7 @@ class Appraisals(models.Model):  # 评审会
 
     # Cancellation = models.BooleanField('注销', default=False)
     class Meta:
-        verbose_name_plural = '评审-审保会'  # 指定显示名称
+        verbose_name_plural = '评审'  # 指定显示名称
         db_table = 'dbms_appraisals'  # 指定数据表的名称
 
     def __str__(self):
@@ -94,7 +94,7 @@ class LendingOrder(models.Model):
         unique_together = ('summary', 'order')
 
     def __str__(self):
-        return "%s_%s_%s" % (self.summary.summary_num, self.order, self.order_amount)
+        return "%s_%s" % (self.summary.summary_num, self.order)
 
 
 # ------------------------反担保措施--------------------------#
@@ -116,7 +116,7 @@ class LendingSures(models.Model):
     sure_date = models.DateField(verbose_name='创建日期', default=datetime.date.today)
 
     class Meta:
-        verbose_name_plural = '反担保-反担保措施'  # 指定显示名称
+        verbose_name_plural = '反担保'  # 指定显示名称
         db_table = 'dbms_lendingsure'  # 指定数据表的名称
 
     def __str__(self):

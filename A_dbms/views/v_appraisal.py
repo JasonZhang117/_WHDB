@@ -586,7 +586,10 @@ def article_sign_ajax(request):
                             with transaction.atomic():
                                 models.Articles.objects.filter(id=article_id).update(
                                     sign_type=sign_type, renewal=renewal, augment=augment, amount=article_amount,
-                                    sign_detail=cleaned_data['sign_detail'], sign_date=cleaned_data['sign_date'],
+                                    sign_detail=cleaned_data['sign_detail'],
+                                    rcd_opinion=cleaned_data['rcd_opinion'],
+                                    convenor_opinion=cleaned_data['convenor_opinion'],
+                                    sign_date=cleaned_data['sign_date'],
                                     article_state=5)
                                 # 更新客户授信总额
                                 custom_id = aritcle_obj.custom.id

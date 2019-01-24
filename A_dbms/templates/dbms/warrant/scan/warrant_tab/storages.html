@@ -1,17 +1,12 @@
 <div class="table-responsive">
-    {#"table-responsive":表格响应式布局#}
-    <table class="table table-bordered table-hover
-                table-condensed active">
-        {#"table-bordered":表格表格边框#}
-        {#"table-hover":表格悬停变色#}
-        {#"table-condensed":表格紧缩#}
-        {#<caption><h4>项目管理</h4></caption>#}
+    <table class="table table-bordered table-hover table-condensed active">
         <thead>
         <tr style="text-align: center">
             <th>出/入库类别</th>
             <th>出/入库时间</th>
             <th>权证管理岗</th>
             <th>移交/出库/借出人</th>
+            <th>备注</th>
             <th>操作</th>
         </tr>
         </thead>
@@ -22,10 +17,11 @@
                 <td>{{ storage.storage_date }}</td>
                 <td>{{ storage.conservator.name }}</td>
                 <td>{{ storage.transfer.name }}</td>
+                <td>{{ storage.storage_explain }}</td>
                 <td><a class="btn btn-danger btn-xs delStorageB">删除</a></td>
             </tr>
         {% endfor %}
         </tbody>
     </table>
-    {% include 'dbms/warrant/scan/warrant_tab/storages_page.html' %}
+    {#    {% include 'dbms/warrant/scan/warrant_tab/storages_page.html' %}#}
 </div>

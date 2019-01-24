@@ -9,7 +9,7 @@ from .m_agree import (
     Agrees, AgreeesExtend, Counters, CountersAssure, CountersWarrants)
 # -------------------v_warrant担保物模型---------------------#
 from .m_warrant import (
-    Warrants, Ownership, Houses, Grounds, Stockes, Receivable, ReceiveExtend, Draft,
+    Warrants, Ownership, Houses, HouseBag, Grounds, Stockes, Receivable, ReceiveExtend, Draft,
     Chattel, Vehicle, Hypothecs, Evaluate, Storages)
 # -----------------------m_provide放款模型-------------------#
 from .m_provide import (Notify, Provides, Repayments, Pigeonholes, Charges)

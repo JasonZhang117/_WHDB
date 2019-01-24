@@ -1,0 +1,27 @@
+<div class="modal fade" id="addPigeonholeModal" tabindex="-1"
+     role="dialog" aria-labelledby="addPigeonholeModal">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title" id="addPigeonholeModalLabel">归档
+                    <input name="provide_id" value="{{ provide_obj.id }}" style="display: none">
+                </h4>
+            </div>
+            <div class="modal-body">
+                <form class="form-horizontal">
+                    {% include 'dbms/pigeonhole/modl/mod_form/implement-add.html' %}
+                    {% include 'dbms/pigeonhole/modl/mod_form/pigeonhole.html' %}
+                    {% include 'dbms/pigeonhole/modl/mod_form/pigeonhole-num.html' %}
+                </form>
+            </div>
+            <label id="formErrors"></label>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                <button type="button" class="btn btn-primary" id="addPigeonholeModalOk">确定</button>
+            </div>
+        </div>
+    </div>
+</div>

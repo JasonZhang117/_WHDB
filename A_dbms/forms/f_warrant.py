@@ -40,9 +40,23 @@ class HouseAddEidtForm(dform.ModelForm):
 
     class Meta:
         model = models.Houses
-        fields = ['house_app', 'house_area']
+        fields = ['house_app', 'house_area', 'house_name']
         widgets = {'house_app': dform.Select(attrs={'class': 'form-control'}),
-                   'house_area': dform.NumberInput(attrs={'class': 'form-control'})}
+                   'house_area': dform.NumberInput(attrs={'class': 'form-control'}),
+                   'house_name': dform.TextInput(attrs={'class': 'form-control', 'placeholder': '楼盘名称'})}
+
+
+# -----------------------房产包modelform1-------------------------#
+class HouseBagAddEidtForm(dform.ModelForm):
+    housebag_locate = fields.CharField(
+        label="房产坐落", label_suffix="：", max_length=64,
+        widget=widgets.TextInput(attrs={'class': 'form-control', 'placeholder': '房产坐落'}))
+
+    class Meta:
+        model = models.HouseBag
+        fields = ['housebag_app', 'housebag_area']
+        widgets = {'housebag_app': dform.Select(attrs={'class': 'form-control'}),
+                   'housebag_area': dform.NumberInput(attrs={'class': 'form-control'})}
 
 
 # -----------------------土地modelform2-------------------------#
@@ -75,7 +89,7 @@ class FormStockes(dform.ModelForm):  # 股权
         fields = ['stock_owner', 'target', 'share', 'stock_typ']
         widgets = {'stock_owner': dform.Select(attrs={'class': 'form-control'}),
                    'target': dform.TextInput(attrs={'class': 'form-control'}),
-                   'share': dform.NumberInput(attrs={'class': 'form-control'}),
+                   'share': dform.NumberInput(attrs={'class': 'form-control', 'placeholder': '土地坐落'}),
                    'stock_typ': dform.Select(attrs={'class': 'form-control'})}
 
 
@@ -95,8 +109,8 @@ class FormVehicle(dform.ModelForm):  # 车辆FormVehicle41
         model = models.Vehicle
         fields = ['vehicle_owner', 'frame_num', 'plate_num']
         widgets = {'vehicle_owner': dform.Select(attrs={'class': 'form-control'}),
-                   'frame_num': dform.TextInput(attrs={'class': 'form-control'}),
-                   'plate_num': dform.TextInput(attrs={'class': 'form-control'})}
+                   'frame_num': dform.TextInput(attrs={'class': 'form-control', 'placeholder': '车架号'}),
+                   'plate_num': dform.TextInput(attrs={'class': 'form-control', 'placeholder': '车牌号'})}
 
 
 # ------------------------动产FormChattel51--------------------------#
@@ -106,7 +120,8 @@ class FormChattel(dform.ModelForm):  # 动产FormChattel51
         fields = ['chattel_owner', 'chattel_typ', 'chattel_detail']
         widgets = {'chattel_owner': dform.Select(attrs={'class': 'form-control'}),
                    'chattel_typ': dform.Select(attrs={'class': 'form-control'}),
-                   'chattel_detail': dform.Textarea(attrs={'class': 'form-control', 'rows': '3'})}
+                   'chattel_detail': dform.Textarea(
+                       attrs={'class': 'form-control', 'rows': '3', 'placeholder': '详细情况'})}
 
 
 # -----------------------HypothecsAddEidtForm他权-------------------------#
@@ -121,8 +136,21 @@ class HypothecsAddEidtForm(dform.ModelForm):
 class StoragesAddEidtForm(dform.ModelForm):
     class Meta:
         model = models.Storages
-        fields = ['storage_typ', 'storage_date', 'transfer']
+        fields = ['storage_typ', 'storage_date', 'transfer', 'storage_explain']
 
         widgets = {'storage_typ': dform.Select(attrs={'class': 'form-control'}),
                    'storage_date': dform.DateInput(attrs={'class': 'form-control', 'type': 'date'}),
-                   'transfer': dform.Select(attrs={'class': 'form-control'})}
+                   'transfer': dform.Select(attrs={'class': 'form-control'}),
+                   'storage_explain': dform.TextInput(attrs={'class': 'form-control', 'placeholder': '出入库说明'})}
+
+
+# -----------------------EvaluateAddEidtForm评估-------------------------#
+class EvaluateAddEidtForm(dform.ModelForm):
+    class Meta:
+        model = models.Evaluate
+        fields = ['evaluate_state', 'evaluate_value', 'evaluate_date', 'evaluate_explain']
+
+        widgets = {'evaluate_state': dform.Select(attrs={'class': 'form-control'}),
+                   'evaluate_value': dform.NumberInput(attrs={'class': 'form-control', 'placeholder': '评估价值（元）'}),
+                   'evaluate_date': dform.DateInput(attrs={'class': 'form-control', 'type': 'date'}),
+                   'evaluate_explain': dform.TextInput(attrs={'class': 'form-control', 'placeholder': '评估说明'})}

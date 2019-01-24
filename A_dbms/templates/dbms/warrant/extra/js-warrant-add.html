@@ -20,33 +20,38 @@
         var selected_warrant_typ_n = $('#id_warrant_typ_n').val();
         $('.warrant-extend').hide();
         console.log(selected_warrant_typ_n);
-
+        {#WARRANT_TYP_LIST = [#}
+        {#(1, '房产'), (2, '房产包'), (5, '土地'), (11, '应收'), (21, '股权'),#}
+        {#(31, '票据'), (41, '车辆'), (51, '动产'), (99, '他权')]#}
         switch (selected_warrant_typ_n) {
             case ('0'):
                 $('#form_house_add_edit').show();
                 break;
-            case ('1'):
+            case ('1'):{#房产#}
                 $('#form_house_add_edit').show();
                 break;
-            case ('5'):
+            case ('2'):{#房产包#}
+                $('.warrant-extend').hide()
+                break;
+            case ('5'):{#土地#}
                 $('#form_ground_add_edit').show();
                 break;
-            case ('11'):
+            case ('11'):{#应收#}
                 $('#form_receivable_add_edit').show();
                 break;
-            case ('21'):
+            case ('21'):{#股权#}
                 $('#form_stockes_add_edit').show();
                 break;
-            case ('31'):
+            case ('31'):{#票据#}
                 $('#form_draft_add_eidt').show();
                 break;
-            case ('41'):
+            case ('41'):{#车辆#}
                 $('#form_vehicle_add_eidt').show();
                 break;
-            case ('51'):
+            case ('51'):{#动产#}
                 $('#form_chattel_add_eidt').show();
                 break;
-            case ('99'):
+            case ('99'):{#他权#}
                 $('#form_hypothecs_add_eidt').show();
                 break;
             default:
@@ -64,28 +69,34 @@
             console.log(selected_warrant_typ);
 
             switch (selected_warrant_typ) {
-                case ('1'):
+                case ('0'):
                     $('#form_house_add_edit').show();
                     break;
-                case ('5'):
+                case ('1'):{#房产#}
+                    $('#form_house_add_edit').show();
+                    break;
+                case ('2'):{#房产包#}
+                    $('.warrant-extend').hide()
+                    break;
+                case ('5'):{#土地#}
                     $('#form_ground_add_edit').show();
                     break;
-                case ('11'):
+                case ('11'):{#应收#}
                     $('#form_receivable_add_edit').show();
                     break;
-                case ('21'):
+                case ('21'):{#股权#}
                     $('#form_stockes_add_edit').show();
                     break;
-                case ('31'):
+                case ('31'):{#票据#}
                     $('#form_draft_add_eidt').show();
                     break;
-                case ('41'):
+                case ('41'):{#车辆#}
                     $('#form_vehicle_add_eidt').show();
                     break;
-                case ('51'):
+                case ('51'):{#动产#}
                     $('#form_chattel_add_eidt').show();
                     break;
-                case ('99'):
+                case ('99'):{#他权#}
                     $('#form_hypothecs_add_eidt').show();
                     break;
                 default:
@@ -163,7 +174,6 @@
                         $('#e_chattel_owner').text(arg.forme.chattel_owner);
                         $('#e_chattel_typ').text(arg.forme.chattel_typ);
                         $('#e_chattel_detail').text(arg.forme.chattel_detail);
-
 
 
                         $('#e_agree').text(arg.forme.agree);

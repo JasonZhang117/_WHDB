@@ -14,15 +14,21 @@
                 <th>归档状态</th>
             {% elif PAGE_TITLE == '放款管理' %}
                 <th>还款金额</th>
-                <th>在保状态</th>
             {% endif %}
+            <th>在保状态</th>
+
         </tr>
         </thead>
         <tbody>
         {% for provide in p_list %}
             <tr>
-                <td><a href="{% url 'dbms:provide_scan' provide_id=provide.id %}">
-                    {{ forloop.counter }} </a></td>
+                {% if PAGE_TITLE == '放款管理' %}
+                    <td><a href="{% url 'dbms:provide_scan' provide_id=provide.id %}">
+                        {{ forloop.counter }} </a></td>
+                {% elif PAGE_TITLE == '归档管理' %}
+                    <td><a href="{% url 'dbms:pigeonhole_scan' provide_id=provide.id %}">
+                        {{ forloop.counter }} </a></td>
+                {% endif %}
                 <td>{{ provide.notify.agree.lending.summary.custom }}</td>
                 <td>{{ provide.notify.agree.branch }}</td>
                 <td>{{ provide.notify.agree.agree_num }}</td>
@@ -34,11 +40,14 @@
                     <td>{{ provide.get_implement_display }}</td>
                 {% elif PAGE_TITLE == '放款管理' %}
                     <td>{{ provide.provide_repayment_sum }}</td>
-                    <td>{{ provide.get_provide_status_display }}</td>
                 {% endif %}
+                <td>{{ provide.get_provide_status_display }}</td>
+
 
             <tr>
         {% endfor %}
         </tbody>
     </table>
+    {% include 'dbms/board/page.html' %}
+
 </div>

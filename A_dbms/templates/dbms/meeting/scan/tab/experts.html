@@ -1,13 +1,8 @@
 <div class="table-responsive">
-    {#"table-responsive":表格响应式布局#}
-    <table class="table table-bordered table-hover
-                table-condensed active">
-        {#"table-bordered":表格表格边框#}
-        {#"table-hover":表格悬停变色#}
-        {#"table-condensed":表格紧缩#}
-        {#<caption><h4>项目管理</h4></caption>#}
+    <table class="table table-bordered table-hover table-condensed active">
         <thead>
         <tr style="text-align: center">
+            <th>序号</th>
             <th>评审姓名</th>
             <th>项目数</th>
             <th>单位</th>
@@ -20,6 +15,7 @@
         <tbody>
         {% for expert in expert_list %}
             <tr>
+                <td>{{ forloop.counter }}</td>
                 <td>{{ expert.name }}</td>
                 <td>{{ expert.name }}</td>
                 <td>{{ expert.organization }}</td>

@@ -3,7 +3,7 @@ from .v_index import index
 # ----------------------v_article合项目管理视图--------------------#
 from .v_article import (
     article, article_add_ajax, article_feedback_ajax, article_scan, article_edit_ajax,
-    article_scan_agree, article_del_ajax)
+    article_scan_agree, article_scan_lending,article_del_ajax)
 # ----------------------v_meeting评审会视图--------------------#
 from .v_meeting import (
     meeting, meeting_scan, meeting_notice, meeting_article_del_ajax, meeting_article_add_ajax, meeting_edit_ajax,
@@ -21,14 +21,14 @@ from .v_agree import (
 from .v_warrant import (
     warrant, house, ground, warrant_add_ajax, warrant_del_ajax, warrant_edit_ajax, owership_add_ajax, owership_del_ajax,
     guaranty_add_ajax, guaranty_del_ajax, storages_add_ajax, warrant_scan, warrant_agree, warrant_agree_scan,
-    warrant_agree_warrant)
+    warrant_agree_warrant, housebag_add_ajax,evaluate_add_ajax)
 # ----------------------v_provide放款管理视图--------------------#
 from .v_provide import (
     provide_agree, provide_agree_scan, provide_agree_notify, provide, provide_scan, counter_sign_ajax,
     ascertain_add_ajax, notify_add_ajax,
     notify_del_ajax, provide_add_ajax, provide_del_ajax, repayment_add_ajax, repayment_del_ajax)
 
-from .v_pigeonhole import pigeonhole
+from .v_pigeonhole import pigeonhole, pigeonhole_scan, pigeonhole_add_ajax
 # ----------------------v_review保后管理视图--------------------#
 from .v_review import review
 # ----------------------v_dun追偿视图--------------------#

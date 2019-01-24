@@ -45,11 +45,11 @@ class Agrees(models.Model):  # 委托合同
     agree_date = models.DateField(verbose_name='创建日期', default=datetime.date.today)
 
     class Meta:
-        verbose_name_plural = '合同-委托保证'  # 指定显示名称
+        verbose_name_plural = '合同'  # 指定显示名称
         db_table = 'dbms_agrees'  # 指定数据表的名称
 
     def __str__(self):
-        return "%s(%s)" % (self.agree_num, self.lending)
+        return "%s_%s_(%s)" % (self.agree_num, self.agree_amount, self.lending)
 
 
 # 合同变更-----********

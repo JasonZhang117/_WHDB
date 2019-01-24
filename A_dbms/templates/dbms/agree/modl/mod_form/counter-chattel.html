@@ -1,0 +1,17 @@
+<div id="form_counter_chattel" class="extend" style="display: none">
+
+    <div class="form-group"><!--动产抵押-->
+        <label for="id_stock" class="col-sm-3 control-label">动产：</label>
+        <div class="col-sm-9">
+            <select name="stock" class="form-control" multiple="" id="id_stock" required="">
+                {% for chattel in warrants_c_lending_list %}
+                    <option value="{{ chattel.0 }}">{{ chattel.1 }}</option>
+                {% endfor %}
+            </select></div>
+        <label id="e_stock" class="pull-right"></label>
+    </div>
+
+</div>
+
+
+

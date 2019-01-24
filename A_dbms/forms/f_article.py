@@ -31,11 +31,11 @@ class ArticlesAddForm(dform.Form):  # 项目添加
         self.fields['custom_id'].widget.choices = models.Customes.objects.filter(
             counter_only=0).values_list('id', 'name').order_by('name')
         self.fields['director_id'].widget.choices = models.Employees.objects.filter(
-            job__name='项目经理').values_list('id', 'name').order_by('name')
+            job__name='项目经理', employee_status=1).values_list('id', 'name').order_by('name')
         self.fields['assistant_id'].widget.choices = models.Employees.objects.filter(
-            job__name='项目经理').values_list('id', 'name').order_by('name')
+            job__name='项目经理', employee_status=1).values_list('id', 'name').order_by('name')
         self.fields['control_id'].widget.choices = models.Employees.objects.filter(
-            job__name='风控专员').values_list('id', 'name').order_by('name')
+            job__name='风控专员', employee_status=1).values_list('id', 'name').order_by('name')
 
 
 # -----------------------风控反馈添加-------------------------#

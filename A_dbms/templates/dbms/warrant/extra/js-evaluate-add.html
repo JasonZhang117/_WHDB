@@ -1,0 +1,55 @@
+<script>
+    $(function () {
+        bindAddEvaluateB();
+        bindAddEvaluateModalOk();
+    });
+
+    function bindAddEvaluateB() {
+        $('#addEvaluateB').click(function () {
+            console.log("bindAddEvaluateB")
+            $('#addEvaluateModal').modal('show');
+        })
+    }
+
+    function bindAddEvaluateModalOk() {
+        $('#addEvaluateModalOk').click(function () {
+            var postData = {};
+            $('#addEvaluateModal').find('input,select').each(function () {
+                var v = $(this).val();
+                var n = $(this).attr('name');
+                postData[n] = v;
+            });
+            var postDataStr = JSON.stringify(postData);
+
+            console.log(postDataStr)
+
+            $.ajax({
+                url: '/dbms/warrant/evaluate/add/',
+                type: 'POST',
+                traditional: true,
+                data: {'postDataStr': postDataStr},
+                dataType: 'JSON',
+                success: function (arg) {
+                    console.log(arg);
+                    if (arg.status) {
+                        $('#addEvaluateModal').modal('hide');
+                        alert(arg.message);
+                        window.location.reload();
+                    } else {
+                        alert(arg.message);
+                        $('#e_vehicle_owner').text(arg.forme.vehicle_owner);
+                        $('#e_frame_num').text(arg.forme.frame_num);
+                        $('#e_plate_num').text(arg.forme.plate_num);
+                        $('#e_evaluate_explain').text(arg.forme.evaluate_explain);
+                    }
+                }
+            })
+        })
+    }
+</script>
+
+
+
+
+
+

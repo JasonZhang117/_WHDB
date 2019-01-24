@@ -60,10 +60,9 @@ class Provides(models.Model):  # 放款
     provide_date = models.DateField(verbose_name='放款日期')
     due_date = models.DateField(verbose_name='到期日')
 
-    IMPLEMENT_LIST = [(1, '未归档'), (11, '暂存风控'), (21, '已归档')]
+    IMPLEMENT_LIST = [(1, '未归档'), (11, '退回'), (21, '暂存风控'), (31, '移交行政'), (41, '已归档')]
     implement = models.IntegerField(verbose_name='_归档状态', choices=IMPLEMENT_LIST, default=1)
     file_num = models.CharField(verbose_name='档案编号', max_length=64, unique=True, null=True, blank=True)
-    pigeonhole_date = models.DateField(verbose_name='归档日期', null=True, blank=True)
 
     PROVIDE_STATUS_LIST = [(1, '在保'), (11, '解保'), (21, '代偿')]
     provide_status = models.IntegerField(verbose_name='_放款状态', choices=PROVIDE_STATUS_LIST, default=1)
@@ -105,17 +104,23 @@ class Repayments(models.Model):  # 还款
 
 # ------------------------归档模型--------------------------#
 class Pigeonholes(models.Model):  # 归档
-    provide = models.OneToOneField(to='Provides', verbose_name="放款",
-                                   on_delete=models.PROTECT,
-                                   related_name='pigeonhole_provide')
-    pigeonholor = models.ForeignKey(to='Employees', verbose_name="_创建者",
-                                    on_delete=models.PROTECT, default=1,
-                                    related_name='pigeonholor_employee')
+    provide = models.ForeignKey(to='Provides', verbose_name="放款",
+                                on_delete=models.PROTECT,
+                                related_name='pigeonhole_provide')
+    IMPLEMENT_LIST = Provides.IMPLEMENT_LIST
+    implement = models.IntegerField(verbose_name='归档状态', choices=IMPLEMENT_LIST, default=1)
     pigeonhole_date = models.DateField(verbose_name='归档日期', default=datetime.date.today)
+    pigeonhole_explain = models.CharField(verbose_name='归档说明', max_length=128, null=True, blank=True)
+    pigeonhole_transfer = models.ForeignKey(to='Employees', verbose_name="移交人",
+                                            on_delete=models.PROTECT,
+                                            related_name='pigeonhole_transfer_employee')
+    pigeonholor = models.ForeignKey(to='Employees', verbose_name="_创建者",
+                                    on_delete=models.PROTECT,
+                                    related_name='pigeonholor_employee')
 
     class Meta:
         verbose_name_plural = '放款-归档'  # 指定显示名称
         db_table = 'dbms_pigeonholes'  # 指定数据表的名称
 
     def __str__(self):
-        return '%s_%s' % (self.provide, self.pigeonhole_date)
+        return '%s_%s_%s' % (self.provide, self.pigeonhole_date, self.pigeonhole_transfer.name)

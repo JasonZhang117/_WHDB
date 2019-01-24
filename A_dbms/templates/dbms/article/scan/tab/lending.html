@@ -10,7 +10,23 @@
         <tbody>
         {% for lending in article_obj.lending_summary.all %}
             <tr>
-                <td>{{ lending.get_order_display }}</td>
+                {% if lending_id %}
+                    {% if lending_id == lending.id %}
+                        <td><a class="active"
+                               href="{% url 'dbms:article_scan_lending' article_id=article_obj.id lending_id=lending.id %}">
+                            {{ lending.get_order_display }}*
+                        </a></td>
+                    {% else %}
+                        <td>
+                            <a href="{% url 'dbms:article_scan_lending' article_id=article_obj.id lending_id=lending.id %}">
+                                {{ lending.get_order_display }}
+                            </a></td>
+                    {% endif %}
+                {% else %}
+                    <td><a href="{% url 'dbms:article_scan_lending' article_id=article_obj.id lending_id=lending.id %}">
+                        {{ lending.get_order_display }}
+                    </a></td>
+                {% endif %}
                 <td>{{ lending.order_amount }}</td>
                 <td>{{ lending.lending_provide_sum }}</td>
             <tr>

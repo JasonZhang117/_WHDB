@@ -55,7 +55,7 @@ def agree_scan(request, agree_id):  # 查看合同
 
     '''COUNTER_TYP_LIST = (
         (1, '企业担保'), (2, '个人保证'),
-        (11, '房产抵押'), (12, '土地抵押'), (13, '设备抵押'), (14, '存货抵押'), (15, '车辆抵押'),
+        (11, '房产抵押'), (12, '土地抵押'), (13, '动产抵押'), (15, '车辆抵押'),
         (31, '应收质押'), (32, '股权质押'), (33, '票据质押'),
         (51, '股权预售'), (52, '房产预售'), (53, '土地预售'))'''
 
@@ -85,6 +85,9 @@ def agree_scan(request, agree_id):  # 查看合同
     warrants_s_lending_list = models.Warrants.objects.filter(
         lending_warrant__sure__lending=agree_lending_obj, warrant_typ=21).exclude(
         counter_warrant__counter__agree=agree_obj).values_list('id', 'warrant_num')
+    warrants_c_lending_list = models.Warrants.objects.filter(
+        lending_warrant__sure__lending=agree_lending_obj, warrant_typ=51).exclude(
+        counter_warrant__counter__agree=agree_obj).values_list('id', 'warrant_num').order_by('warrant_num')
     print(custom_c_lending_list, custom_p_lending_list, warrants_h_lending_list, warrants_g_lending_list,
           warrants_r_lending_list, warrants_s_lending_list)
     from_counter = forms.AddCounterForm()
@@ -105,7 +108,7 @@ def agree_scan_counter(request, agree_id, counter_id):  # 查看合同
 
     '''COUNTER_TYP_LIST = (
         (1, '企业担保'), (2, '个人保证'),
-        (11, '房产抵押'), (12, '土地抵押'), (13, '设备抵押'), (14, '存货抵押'), (15, '车辆抵押'),
+        (11, '房产抵押'), (12, '土地抵押'), (13, '动产抵押'), (15, '车辆抵押'),
         (31, '应收质押'), (32, '股权质押'), (33, '票据质押'),
         (51, '股权预售'), (52, '房产预售'), (53, '土地预售'))'''
 
@@ -115,7 +118,7 @@ def agree_scan_counter(request, agree_id, counter_id):  # 查看合同
     warrant_agree_list = models.Warrants.objects.filter(counter_warrant__counter__agree=agree_obj)
     print('warrant_agree_list:', warrant_agree_list)
     '''WARRANT_TYP_LIST = [
-        (1, '房产'), (2, '土地'), (11, '应收'), (21, '股权'),
+        (1, '房产'), (5, '土地'), (11, '应收'), (21, '股权'),
         (31, '票据'), (41, '车辆'), (51, '动产'), (99, '他权')]'''
     custom_c_lending_list = models.Customes.objects.filter(
         lending_custom__sure__lending=agree_lending_obj, genre=1).exclude(
@@ -134,6 +137,9 @@ def agree_scan_counter(request, agree_id, counter_id):  # 查看合同
         counter_warrant__counter__agree=agree_obj).values_list('id', 'warrant_num').order_by('warrant_num')
     warrants_s_lending_list = models.Warrants.objects.filter(
         lending_warrant__sure__lending=agree_lending_obj, warrant_typ=21).exclude(
+        counter_warrant__counter__agree=agree_obj).values_list('id', 'warrant_num').order_by('warrant_num')
+    warrants_c_lending_list = models.Warrants.objects.filter(
+        lending_warrant__sure__lending=agree_lending_obj, warrant_typ=51).exclude(
         counter_warrant__counter__agree=agree_obj).values_list('id', 'warrant_num').order_by('warrant_num')
     print(custom_c_lending_list, custom_p_lending_list, warrants_h_lending_list, warrants_g_lending_list,
           warrants_r_lending_list, warrants_s_lending_list)
@@ -269,15 +275,15 @@ def counter_add_ajax(request):
 
     counter_prefix = agree_obj.num_prefix
     '''SURE_TYP_LIST = (
-            (1, '企业保证'), (2, '个人保证'),
-            (11, '房产抵押'), (12, '土地抵押'), (13, '设备抵押'), (14, '存货抵押'), (15, '车辆抵押'),
-            (21, '房产顺位'), (22, '土地顺位'),
-            (31, '应收质押'), (32, '股权质押'), (33, '票据质押'),
-            (41, '合格证监管'), (42, '房产监管'), (43, '土地监管'),
-            (51, '股权预售'), (52, '房产预售'), (53, '土地预售'))'''
+        (1, '企业保证'), (2, '个人保证'),
+        (11, '房产抵押'), (12, '土地抵押'), (13, '动产抵押'), (15, '车辆抵押'),
+        (21, '房产顺位'), (22, '土地顺位'),
+        (31, '应收质押'), (32, '股权质押'), (33, '票据质押'),
+        (41, '合格证监管'), (42, '房产监管'), (43, '土地监管'),
+        (51, '股权预售'), (52, '房产预售'), (53, '土地预售'))'''
     '''COUNTER_TYP_LIST = (
         (1, '企业担保'), (2, '个人保证'),
-        (11, '房产抵押'), (12, '土地抵押'), (13, '设备抵押'), (14, '存货抵押'), (15, '车辆抵押'),
+        (11, '房产抵押'), (12, '土地抵押'), (13, '动产抵押'), (15, '车辆抵押'),
         (31, '应收质押'), (32, '股权质押'), (33, '票据质押'),
         (51, '股权预售'), (52, '房产预售'), (53, '土地预售'))'''
     if counter_typ == 1:
@@ -309,8 +315,8 @@ def counter_add_ajax(request):
     counter_num = '%s%s%s-%s' % (counter_prefix, counter_typ_n, counter_copies, counter_max)
 
     agree_state_counter = agree_obj.agree_state
-    '''AGREE_STATE_LIST = ((11, '待签批'), (21, '已签批'), (31, '已落实，未放款'), (41, '已落实，放款'),
-                        (42, '未落实，放款'), (51, '待变更'), (61, '已解保'), (99, '已作废'))'''
+    '''AGREE_STATE_LIST = ((11, '待签批'), (21, '已签批'), (31, '未落实'),
+                        (41, '已落实'), (51, '待变更'), (61, '已解保'), (99, '作废'))'''
     if agree_state_counter in [11, 51]:
         if counter_typ in [1, 2]:  # 保证反担保
             if counter_typ == 1:
@@ -332,15 +338,15 @@ def counter_add_ajax(request):
                 response['message'] = '委托合同创建失败：%s' % str(e)
         else:
             '''SURE_TYP_LIST = (
-                        (1, '企业保证'), (2, '个人保证'),
-                        (11, '房产抵押'), (12, '土地抵押'), (13, '设备抵押'), (14, '存货抵押'), (15, '车辆抵押'),
-                        (21, '房产顺位'), (22, '土地顺位'),
-                        (31, '应收质押'), (32, '股权质押'), (33, '票据质押'),
-                        (41, '合格证监管'), (42, '房产监管'), (43, '土地监管'),
-                        (51, '股权预售'), (52, '房产预售'), (53, '土地预售'))'''
+                    (1, '企业保证'), (2, '个人保证'),
+                    (11, '房产抵押'), (12, '土地抵押'), (13, '动产抵押'), (15, '车辆抵押'),
+                    (21, '房产顺位'), (22, '土地顺位'),
+                    (31, '应收质押'), (32, '股权质押'), (33, '票据质押'),
+                    (41, '合格证监管'), (42, '房产监管'), (43, '土地监管'),
+                    (51, '股权预售'), (52, '房产预售'), (53, '土地预售'))'''
             '''COUNTER_TYP_LIST = (
                 (1, '企业担保'), (2, '个人保证'),
-                (11, '房产抵押'), (12, '土地抵押'), (13, '设备抵押'), (14, '存货抵押'), (15, '车辆抵押'),
+                (11, '房产抵押'), (12, '土地抵押'), (13, '动产抵押'), (15, '车辆抵押'),
                 (31, '应收质押'), (32, '股权质押'), (33, '票据质押'),
                 (51, '股权预售'), (52, '房产预售'), (53, '土地预售'))'''
             if counter_typ in [11, 52]:
@@ -350,6 +356,8 @@ def counter_add_ajax(request):
             elif counter_typ == 31:
                 warrant_list = post_data['receivable']
             elif counter_typ == 32:
+                warrant_list = post_data['stock']
+            elif counter_typ == 13:
                 warrant_list = post_data['stock']
             else:
                 warrant_list = post_data['ground']
@@ -391,7 +399,7 @@ def counter_del_ajax(request):  # 删除反担保合同ajax
         (11, '房产抵押'), (12, '土地抵押'), (13, '设备抵押'), (14, '存货抵押'), (15, '车辆抵押'),
         (31, '应收质押'), (32, '股权质押'), (33, '票据质押'),
         (51, '股权预售'), (52, '房产预售'), (53, '土地预售'))'''
-    if counter_obj.counter_typ in [1,2]:
+    if counter_obj.counter_typ in [1, 2]:
         counter_counter_obj = counter_obj.assure_counter
     else:
         counter_counter_obj = counter_obj.warrant_counter

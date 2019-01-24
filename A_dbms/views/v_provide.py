@@ -13,7 +13,7 @@ from django.db.models import Avg, Min, Sum, Max, Count
 @login_required
 def provide_agree(request, *args, **kwargs):  # 放款管理
     print(__file__, '---->def provide_agree')
-    PAGE_TITLE = '放款管理'
+    PAGE_TITLE = '风控落实'
     '''AGREE_STATE_LIST = ((11, '待签批'), (21, '已签批'), (31, '未落实'),
                         (41, '已落实'), (51, '待变更'), (61, '已解保'), (99, '作废'))'''
     '''ARTICLE_STATE_LIST = ((1, '待反馈'), (2, '已反馈'), (3, '待上会'), (4, '已上会'), (5, '已签批'),
@@ -138,6 +138,7 @@ def provide_agree_scan(request, agree_id):  # 查看放款
     form_notify_add = forms.FormNotifyAdd()  # 添加放款通知
     form_ascertain_add = forms.FormAscertainAdd()  # 风控落实
     from_counter_sign = forms.FormCounterSignAdd()  # 反担保合同签订
+    print('form_notify_add:', form_notify_add)
     return render(request, 'dbms/provide/provide-agree-scan.html', locals())
 
 
@@ -151,7 +152,6 @@ def provide_agree_notify(request, agree_id, notify_id):  # 查看放款通知
         (11, '房产抵押'), (12, '土地抵押'), (13, '设备抵押'), (14, '存货抵押'), (15, '车辆抵押'),
         (31, '应收质押'), (32, '股权质押'), (33, '票据质押'),
         (51, '股权预售'), (52, '房产预售'), (53, '土地预售'))'''
-    COUNTER_TYP_CUSTOM = [1, 2]
     '''SURE_TYP_LIST = (
                     (1, '企业保证'), (2, '个人保证'),
                     (11, '房产抵押'), (12, '土地抵押'), (13, '设备抵押'), (14, '存货抵押'), (15, '车辆抵押'),
@@ -162,17 +162,20 @@ def provide_agree_notify(request, agree_id, notify_id):  # 查看放款通知
     '''WARRANT_TYP_LIST = [
            (1, '房产'), (2, '土地'), (11, '应收'), (21, '股权'),
            (31, '票据'), (41, '车辆'), (51, '动产'), (99, '他权')]'''
-    sure_list = [1, 2]  # 保证反担保类型
-    house_list = [11, 21, 42, 52]
-    ground_list = [12, 22, 43, 53]
-    receivable_list = [31]
-    stock_list = [32]
+    COUNTER_TYP_CUSTOM = [1, 2]
+    SURE_LIST = [1, 2]
+    HOUSE_LIST = [11, 21, 42, 52]
+    GROUND_LIST = [12, 22, 43, 53]
+    RECEIVABLE_LIST = [31]
+    STOCK_LIST = [32]
+    CHATTEL_LIST = [13]
 
     agree_obj = models.Agrees.objects.get(id=agree_id)
     lending_obj = agree_obj.lending
     notify_obj = models.Notify.objects.get(id=notify_id)
 
     form_provide_add = forms.FormProvideAdd()
+    print('form_provide_add:', form_provide_add)
 
     return render(request, 'dbms/provide/provide-agree-notify.html', locals())
 
@@ -743,5 +746,4 @@ def provide_scan(request, provide_id):  # 查看放款
     provide_obj = models.Provides.objects.get(id=provide_id)
 
     form_repayment_add = forms.FormRepaymentAdd()
-
     return render(request, 'dbms/provide/provide-scan.html', locals())

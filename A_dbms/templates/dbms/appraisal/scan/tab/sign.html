@@ -9,6 +9,8 @@
         <thead>
         <tr style="text-align: center">
             <th>签批结论</th>
+            <th>风控部意见</th>
+            <th>招集人意见</th>
             <th>签批意见</th>
             <th>签批日期</th>
         </tr>
@@ -16,6 +18,8 @@
         <tbody>
         <tr>
             <td>{{ article_obj.get_sign_type_display }}</td>
+            <td>{{ article_obj.rcd_opinion }}</td>
+            <td>{{ article_obj.convenor_opinion }}</td>
             <td>{{ article_obj.sign_detail }}</td>
             <td>{{ article_obj.sign_date }}</td>
         <tr>

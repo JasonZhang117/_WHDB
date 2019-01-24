@@ -22,17 +22,35 @@ admin.site.register(models.LendingSures)  # 反担保
 admin.site.register(models.LendingCustoms)  # 保证反担保
 admin.site.register(models.LendingWarrants)  # 抵质押反担保
 
+
 # -----------------------合同-------------------------#
-admin.site.register(models.Agrees)  # 合同
+class AgreesAdmin(admin.ModelAdmin):
+    list_display = ('agree_num', 'agree_typ', 'agree_amount', 'agree_sign_date', 'ascertain_date', 'agree_date')  # 显示字段
+    list_per_page = 20  # 每页显示条目数
+    search_fields = ['agree_num']  # 搜索字段
+    ordering = ['-agree_date']  # 排序字段
+
+
+admin.site.register(models.Agrees, AgreesAdmin)  # 合同
 admin.site.register(models.AgreeesExtend)  # 合同扩展
 admin.site.register(models.Counters)  # 反担保合同
 admin.site.register(models.CountersAssure)  # 保证反担保合同
 admin.site.register(models.CountersWarrants)  # 抵质押押反担保合同
+
+
 # ------------------------担保物--------------------------#
-admin.site.register(models.Warrants)  # 担保物
+class WarrantsAdmin(admin.ModelAdmin):
+    list_display = ('warrant_num', 'warrant_typ', 'evaluate_state', 'evaluate_value', 'evaluate_date', 'warrant_state')
+    list_per_page = 20  # 每页显示条目数
+    search_fields = ['warrant_num']  # 搜索字段
+    ordering = ['warrant_num']  # 排序字段
+
+
+admin.site.register(models.Warrants, WarrantsAdmin)  # 担保物
 admin.site.register(models.Ownership)  # 产权证
 admin.site.register(models.Hypothecs)  # 他权
 admin.site.register(models.Houses)  # 房产
+admin.site.register(models.HouseBag)  # 房产包
 admin.site.register(models.Grounds)  # 土地
 admin.site.register(models.Stockes)  # 股权
 admin.site.register(models.Receivable)  # 应收账款

@@ -1,0 +1,24 @@
+<div class="table-responsive">
+    <table class="table table-bordered table-hover table-condensed active">
+        <thead>
+        <tr style="text-align: center">
+            <th>序号</th>
+            <th>房产地址</th>
+            <th>建筑面积</th>
+            <th>用途</th>
+            <th>操作</th>
+        </tr>
+        </thead>
+        <tbody id="housebag-tb">
+        {% for housebag in warrant_obj.housebag_warrant.all %}
+            <tr housebag-nid="{{ housebag.id }}">
+                <td>{{ forloop.counter }}</td>
+                <td>{{ housebag.housebag_locate }}</td>
+                <td>{{ housebag.housebag_area }}</td>
+                <td>{{ housebag.get_housebag_app_display }}</td>
+                <td><a class="btn btn-danger btn-xs delHouseBagB">删除</a></td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>

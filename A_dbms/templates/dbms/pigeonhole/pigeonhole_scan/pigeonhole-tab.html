@@ -1,0 +1,17 @@
+<div>
+    <!-- Nav tabs -->
+    <ul class="nav nav-tabs" role="tablist" style="background-color: #f5f5f5">
+        <li role="presentation">
+            <a href="#pigeonhole" style="background-color: #f5f5f5" aria-controls="home" role="tab"
+               data-toggle="tab">归档 </a></li>
+        <li role="presentation">
+            <a href="#borrow" style="background-color: #f5f5f5" aria-controls="home" role="tab"
+               data-toggle="tab">借阅 </a></li>
+    </ul>
+
+    <!-- Tab panes -->
+    <div class="tab-content">
+        <div role="presentation" class="tab-pane active" id="pigeonhole"> <!--归档-->
+            {% include 'dbms/pigeonhole/pigeonhole_scan/tab/pigeonhole.html' %} </div>
+    </div>
+</div>

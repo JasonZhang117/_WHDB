@@ -1,23 +1,29 @@
 <div class="table-responsive">
-    {#"table-responsive":表格响应式布局#}
-    <table class="table table-bordered table-hover
-                table-condensed active">
-        {#"table-bordered":表格表格边框#}
-        {#"table-hover":表格悬停变色#}
-        {#"table-condensed":表格紧缩#}
-        {#<caption><h4>项目管理</h4></caption>#}
+    <table class="table table-bordered table-hover table-condensed active">
         <thead>
         <tr style="text-align: center">
-            <th>联系地址</th>
-            <th>联系人</th>
-            <th>联系电话</th>
+            <th>序号</th>
+            <th>评估方式</th>
+            <th>评估价值</th>
+            <th>评估日期</th>
+            <th>评估说明</th>
+            {% if  PAGE_TITAL == '权证预览' %}
+                <th>操作</th>
+            {% endif %}
         </tr>
         </thead>
         <tbody>
         <tr>
-            <td>{{ custom_obj.contact_addr }}</td>
-            <td>{{ custom_obj.linkman }}</td>
-            <td>{{ custom_obj.contact_num }}</td>
+            {% for evaluate in warrant_obj.evaluate_warrant.all %}
+                <td>{{ forloop.counter }}</td>
+                <td>{{ evaluate.get_evaluate_state_display }}</td>
+                <td>{{ evaluate.evaluate_value }}</td>
+                <td>{{ evaluate.evaluate_date }}</td>
+                <td>{{ evaluate.evaluate_explain }}</td>
+                {% if  PAGE_TITAL == '权证预览' %}
+                    <th><a class="btn btn-danger btn-xs delEvaluateB">删除</a></th>
+                {% endif %}
+            {% endfor %}
         </tr>
         </tbody>
     </table>

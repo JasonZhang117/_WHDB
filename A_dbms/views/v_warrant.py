@@ -24,14 +24,12 @@ def warrant_add_ajax(request):
     else:
         warrant_typ = warrant_typ_n
     print('warrant_typ:', warrant_typ)
-    form_warrant_data = {'warrant_typ': warrant_typ,
-                         'warrant_num': post_data['warrant_num']}
-    form_warrant_add = forms.WarrantAddForm(form_warrant_data)
+    form_warrant_add = forms.WarrantAddForm(post_data)
     if form_warrant_add.is_valid():
         warrant_add_clean = form_warrant_add.cleaned_data
         print('warrant_add_clean:', warrant_add_clean)
         '''WARRANT_TYP_LIST = [
-        (1, '房产'), (2, '房产'), (5, '土地'), (11, '应收'), (21, '股权'),
+        (1, '房产'), (2, '房产包'), (5, '土地'), (11, '应收'), (21, '股权'),
         (31, '票据'), (41, '车辆'), (51, '动产'), (99, '他权')]'''
         if warrant_typ == 1:  # 房产
             print('warrant_typ == 1')
@@ -47,7 +45,9 @@ def warrant_add_ajax(request):
                         house_obj = models.Houses.objects.create(
                             warrant=warrant_obj, house_locate=house_add_edit_clean['house_locate'],
                             house_app=house_add_edit_clean['house_app'],
-                            house_area=house_add_edit_clean['house_area'], house_buildor=request.user)
+                            house_area=house_add_edit_clean['house_area'],
+                            house_name=house_add_edit_clean['house_name'],
+                            house_buildor=request.user)
                     response['message'] = '房产创建成功！！！，请继续创建产权证信息。'
                     response['skip'] = "/dbms/warrant/scan/%s" % warrant_obj.id
                 except Exception as e:
@@ -57,6 +57,17 @@ def warrant_add_ajax(request):
                 response['status'] = False
                 response['message'] = '表单信息有误！！！'
                 response['forme'] = form_house_add_edit.errors
+        elif warrant_typ == 2:  # 房产包
+            print('warrant_typ == 2')
+            try:
+                warrant_obj = models.Warrants.objects.create(
+                    warrant_num=warrant_add_clean['warrant_num'],
+                    warrant_typ=warrant_typ, warrant_buildor=request.user)
+                response['message'] = '房产包创建成功，请继续添加房产信息！！！'
+                response['skip'] = "/dbms/warrant/scan/%s" % warrant_obj.id
+            except Exception as e:
+                response['status'] = False
+                response['message'] = '土地创建失败：%s' % str(e)
         elif warrant_typ == 5:  # 土地
             print('warrant_typ == 5')
             form_ground_add_edit = forms.GroundAddEidtForm(post_data)
@@ -82,7 +93,7 @@ def warrant_add_ajax(request):
                 response['status'] = False
                 response['message'] = '表单信息有误！！！'
                 response['forme'] = form_ground_add_edit.errors
-        elif warrant_typ == 11:
+        elif warrant_typ == 11:  # 应收
             print('warrant_typ == 11')
             form_receivable_add_edit = forms.FormReceivable(post_data)
             if form_receivable_add_edit.is_valid():
@@ -106,7 +117,7 @@ def warrant_add_ajax(request):
                 response['status'] = False
                 response['message'] = '表单信息有误！！！'
                 response['forme'] = form_receivable_add_edit.errors
-        elif warrant_typ == 21:
+        elif warrant_typ == 21:  # 股权
             print('warrant_typ == 21')
             form_stockes_add_edit = forms.FormStockes(post_data)
             if form_stockes_add_edit.is_valid():
@@ -132,7 +143,7 @@ def warrant_add_ajax(request):
                 response['status'] = False
                 response['message'] = '表单信息有误！！！'
                 response['forme'] = form_stockes_add_edit.errors
-        elif warrant_typ == 31:
+        elif warrant_typ == 31:  # 票据
             print('warrant_typ == 31')
             form_draft_add_eidt = forms.FormDraft(post_data)
             if form_draft_add_eidt.is_valid():
@@ -157,7 +168,7 @@ def warrant_add_ajax(request):
                 response['status'] = False
                 response['message'] = '表单信息有误！！！'
                 response['forme'] = form_draft_add_eidt.errors
-        elif warrant_typ == 41:
+        elif warrant_typ == 41:  # 车辆
             print('warrant_typ == 41')
             form_vehicle_add_eidt = forms.FormVehicle(post_data)
             if form_vehicle_add_eidt.is_valid():
@@ -182,7 +193,7 @@ def warrant_add_ajax(request):
                 response['status'] = False
                 response['message'] = '表单信息有误！！！'
                 response['forme'] = form_vehicle_add_eidt.errors
-        elif warrant_typ == 51:
+        elif warrant_typ == 51:  # 动产
             print('warrant_typ == 51')
             form_chattel_add_eidt = forms.FormChattel(post_data)
             if form_chattel_add_eidt.is_valid():
@@ -210,7 +221,7 @@ def warrant_add_ajax(request):
                 response['status'] = False
                 response['message'] = '表单信息有误！！！'
                 response['forme'] = form_chattel_add_eidt.errors
-        elif warrant_typ == 99:
+        elif warrant_typ == 99:  # 他权
             print('warrant_typ == 99')
             form_hypothecs_add_eidt = forms.HypothecsAddEidtForm(post_data)
             if form_hypothecs_add_eidt.is_valid():
@@ -413,6 +424,37 @@ def owership_del_ajax(request):  # 产权证删除ajax
     return HttpResponse(result)
 
 
+# -----------------------产权证添加ajax-------------------------#
+@login_required
+def housebag_add_ajax(request):  # 产权证添加ajax
+    print(__file__, '---->def housebag_add_ajax')
+    response = {'status': True, 'message': None, 'forme': None, }
+    post_data_str = request.POST.get('postDataStr')
+    post_data = json.loads(post_data_str)
+    print('post_data:', post_data)
+    warrant_id = post_data['warrant_id']
+    warrant_obj = models.Warrants.objects.get(id=warrant_id)
+    form_housebag_add_edit = forms.HouseBagAddEidtForm(post_data)
+    if form_housebag_add_edit.is_valid():
+        housebag_clean = form_housebag_add_edit.cleaned_data
+        print('housebag_clean:', housebag_clean)
+        try:
+            housebag_obj = models.HouseBag.objects.create(
+                warrant=warrant_obj, housebag_locate=housebag_clean['housebag_locate'],
+                housebag_app=housebag_clean['housebag_app'], housebag_area=housebag_clean['housebag_area'],
+                housebag_buildor=request.user)
+            response['message'] = '资产包创建成功！！！'
+        except Exception as e:
+            response['status'] = False
+            response['message'] = '资产包创建失败：%s' % str(e)
+    else:
+        response['status'] = False
+        response['message'] = '表单信息有误！！！'
+        response['forme'] = form_housebag_add_edit.errors
+    result = json.dumps(response, ensure_ascii=False)
+    return HttpResponse(result)
+
+
 # -----------------------抵押物添加ajax-------------------------#
 @login_required
 def guaranty_add_ajax(request):  # 抵押物添加ajax
@@ -482,10 +524,6 @@ def storages_add_ajax(request):  # 出入库添加ajax
     warrant_obj = warrant_list.first()
     warrant_state = warrant_obj.warrant_state
     form_storage_add_edit = forms.StoragesAddEidtForm(post_data)
-    '''STORAGE_TYP_LIST = ((1, '入库'), (2, '出库'), (3, '借出'), (4, '归还'), (5, '解保'))'''
-    '''WARRANT_STATE_LIST = (
-        (1, '未入库'), (2, '已入库'), (6, '无需入库'), (11, '续抵出库'), (21, '已借出'), (31, '解保出库'),
-         (99, '已注销'))'''
     '''STORAGE_TYP_LIST = ((1, '入库'), (2, '续抵出库'), (11, '借出'), (12, '归还'), (31, '解保出库'))'''
     '''WARRANT_STATE_LIST = (
         (1, '未入库'), (2, '已入库'), (6, '无需入库'), (11, '续抵出库'), (21, '已借出'), (31, '解保出库'),
@@ -495,9 +533,11 @@ def storages_add_ajax(request):  # 出入库添加ajax
         print('storage_add_clean:', storage_add_clean)
         storage_typ = storage_add_clean['storage_typ']
         print('warrant_state:', warrant_state)
-
-        if warrant_state == 2:  # (2, '已入库'),
-            if storage_typ in [2, 11, 31]:  # (2, '出库'), (3, '借出'), (5, '解保')
+        if warrant_state in [6, 99]:  # (6, '无需入库'),(99, '已注销'))
+            response['status'] = False
+            response['message'] = '权证状态为：%s，无法办理出入库操作！' % warrant_state
+        elif warrant_state == 2:  # (2, '已入库')----在库状态
+            if storage_typ in [2, 11, 31]:  # (2, '出库'), (3, '借出'), (5, '解保')----出库
                 '''WARRANT_TYP_LIST = [
                     (1, '房产'), (2, '房产'), (5, '土地'), (11, '应收'), (21, '股权'),
                     (31, '票据'), (41, '车辆'), (51, '动产'), (99, '他权')]'''
@@ -514,11 +554,14 @@ def storages_add_ajax(request):  # 出入库添加ajax
                         # 判断合同项下有无余额******
                         try:
                             with transaction.atomic():
+                                storage_explain = storage_add_clean['storage_explain']
                                 storage_obj = models.Storages.objects.create(
                                     warrant=warrant_obj, storage_typ=storage_typ,
                                     storage_date=storage_add_clean['storage_date'],
-                                    transfer=storage_add_clean['transfer'], conservator=request.user)
-                                warrant_list.update(warrant_state=99)
+                                    transfer=storage_add_clean['transfer'],
+                                    storage_explain=storage_explain,
+                                    conservator=request.user)
+                                warrant_list.update(warrant_state=99, storage_explain=storage_explain)
                             response['message'] = '他权解保出库并注销！！！'
                         except Exception as e:
                             response['status'] = False
@@ -530,20 +573,23 @@ def storages_add_ajax(request):  # 出入库添加ajax
                 else:
                     try:
                         with transaction.atomic():
+                            storage_explain = storage_add_clean['storage_explain']
                             storage_obj = models.Storages.objects.create(
                                 warrant=warrant_obj, storage_typ=storage_typ,
                                 storage_date=storage_add_clean['storage_date'],
-                                transfer=storage_add_clean['transfer'], conservator=request.user)
+                                transfer=storage_add_clean['transfer'],
+                                storage_explain=storage_explain,
+                                conservator=request.user)
                             '''STORAGE_TYP_LIST = ((1, '入库'), (2, '续抵出库'), (11, '借出'), (12, '归还'), (31, '解保出库'))'''
                             '''WARRANT_STATE_LIST = (
                                 (1, '未入库'), (2, '已入库'), (6, '无需入库'), (11, '续抵出库'), (21, '已借出'), (31, '解保出库'),
                                  (99, '已注销'))'''
                             if storage_typ == 2:
-                                warrant_list.update(warrant_state=11)
+                                warrant_list.update(warrant_state=11, storage_explain=storage_explain)
                             elif storage_typ == 11:
-                                warrant_list.update(warrant_state=21)
+                                warrant_list.update(warrant_state=21, storage_explain=storage_explain)
                             else:
-                                warrant_list.update(warrant_state=31)
+                                warrant_list.update(warrant_state=31, storage_explain=storage_explain)
                         response['message'] = '权证出库成功！！！'
                     except Exception as e:
                         response['status'] = False
@@ -551,17 +597,20 @@ def storages_add_ajax(request):  # 出入库添加ajax
             else:
                 response['status'] = False
                 response['message'] = '该权证不在库中，无法办理出库操作！！！'
-        else:  # (1, '未入库'), (3, '已出库'), (4, '已借出'), (5, '已注销'), (6, '无需入库')
-            if storage_typ in [1, 12]:  # (1, '入库'), (4, '归还')
+        else:  # (1, '未入库'), (3, '已出库'), (4, '已借出')----不在库状态
+            if storage_typ in [1, 12]:  # (1, '入库'), (4, '归还')----入库
                 print("storage_typ in [1, 4]")
                 try:
                     with transaction.atomic():
+                        storage_explain = storage_add_clean['storage_explain']
                         storage_obj = models.Storages.objects.create(
                             warrant=warrant_obj, storage_typ=storage_typ,
                             storage_date=storage_add_clean['storage_date'],
-                            transfer=storage_add_clean['transfer'], conservator=request.user)
+                            transfer=storage_add_clean['transfer'],
+                            storage_explain=storage_explain,
+                            conservator=request.user)
                         print('storage_obj:', storage_obj)
-                        warrant_list.update(warrant_state=2)
+                        warrant_list.update(warrant_state=2, storage_explain=storage_explain)
                     response['message'] = '权证入库成功！！！'
                 except Exception as e:
                     response['status'] = False
@@ -573,6 +622,45 @@ def storages_add_ajax(request):  # 出入库添加ajax
         response['status'] = False
         response['message'] = '表单信息有误！！！'
         response['forme'] = form_storage_add_edit.errors
+    result = json.dumps(response, ensure_ascii=False)
+    return HttpResponse(result)
+
+
+# -----------------------评估添加ajax-------------------------#
+@login_required
+def evaluate_add_ajax(request):  # 出入库添加ajax
+    print(__file__, '---->def evaluate_add_ajax')
+    response = {'status': True, 'message': None, 'forme': None, }
+    post_data_str = request.POST.get('postDataStr')
+    post_data = json.loads(post_data_str)
+    print('post_data:', post_data)
+    warrant_id = post_data['warrant_id']
+    warrant_list = models.Warrants.objects.filter(id=warrant_id)
+    warrant_obj = warrant_list.first()
+    form_evaluate_add_edit = forms.EvaluateAddEidtForm(post_data)
+    if form_evaluate_add_edit.is_valid():
+        evaluate_clean = form_evaluate_add_edit.cleaned_data
+        print('evaluate_clean:', evaluate_clean)
+        try:
+            with transaction.atomic():
+                evaluate_state = evaluate_clean['evaluate_state']
+                evaluate_value = evaluate_clean['evaluate_value']
+                evaluate_date = evaluate_clean['evaluate_date']
+                evaluate_explain = evaluate_clean['evaluate_explain']
+                evaluate_obj = models.Evaluate.objects.create(
+                    warrant=warrant_obj, evaluate_state=evaluate_state,
+                    evaluate_value=evaluate_value, evaluate_date=evaluate_date,
+                    evaluate_explain=evaluate_explain, evaluator=request.user)
+                warrant_list.update(evaluate_state=evaluate_state, evaluate_value=evaluate_value,
+                                    evaluate_date=evaluate_date, evaluate_explain=evaluate_explain)
+            response['message'] = '评估成功！！！'
+        except Exception as e:
+            response['status'] = False
+            response['message'] = '评估失败：%s' % str(e)
+    else:
+        response['status'] = False
+        response['message'] = '表单信息有误！！！'
+        response['forme'] = form_evaluate_add_edit.errors
     result = json.dumps(response, ensure_ascii=False)
     return HttpResponse(result)
 
@@ -594,7 +682,7 @@ def house(request, *args, **kwargs):  # 房产列表
     house_list = models.Houses.objects.filter(**kwargs)
     print('house_list:', house_list)
     ####分页信息###
-    paginator = Paginator(house_list, 10)
+    paginator = Paginator(house_list, 18)
     page = request.GET.get('page')
     try:
         p_list = paginator.page(page)
@@ -623,7 +711,7 @@ def ground(request, *args, **kwargs):  # 房产列表
     ground_list = models.Grounds.objects.filter(**kwargs)
     print('ground_list:', ground_list)
     ####分页信息###
-    paginator = Paginator(ground_list, 10)
+    paginator = Paginator(ground_list, 18)
     page = request.GET.get('page')
     try:
         p_list = paginator.page(page)
@@ -640,7 +728,7 @@ def ground(request, *args, **kwargs):  # 房产列表
 def warrant(request, *args, **kwargs):  # 房产列表
     print(__file__, '---->def warrant')
     print('request.GET:', request.GET)
-    PAGE_TITAL = '权证-所有'
+    PAGE_TITAL = '权证列表'
     add_warrant = '添加权证'
     warrant_typ_n = 0
     '''WARRANT_STATE_LIST = (
@@ -696,7 +784,7 @@ def warrant_agree(request, *args, **kwargs):  # 按合同入库
                         (41, '已落实'), (51, '待变更'), (61, '已解保'), (99, '作废'))'''
     AGREE_STATE_LIST = models.Agrees.AGREE_STATE_LIST  # 筛选条件
     '''筛选'''
-    agree_list = models.Agrees.objects.filter(**kwargs).filter(agree_state__in=[21, 31]).select_related(
+    agree_list = models.Agrees.objects.filter(**kwargs).filter(agree_state__in=[21, 31, 51]).select_related(
         'lending', 'branch').order_by('-agree_num')
     '''搜索'''
     search_key = request.GET.get('_s')
@@ -725,10 +813,10 @@ def warrant_agree(request, *args, **kwargs):  # 按合同入库
 @login_required
 def warrant_scan(request, warrant_id):  # house_scan房产预览
     print(__file__, '---->def warrant_scan')
+    PAGE_TITAL = '权证预览'
     warrant_obj = models.Warrants.objects.get(id=warrant_id)
     warrant_typ_n = warrant_obj.warrant_typ
-    house_ground_list = [1, 5]
-
+    HOUSE_GROUND_TYP_LIST = [1, 5]
     '''WARRANT_TYP_LIST = [
                     (1, '房产'), (2, '房产'), (5, '土地'), (11, '应收'), (21, '股权'),
                     (31, '票据'), (41, '车辆'), (51, '动产'), (99, '他权')]'''
@@ -740,40 +828,43 @@ def warrant_scan(request, warrant_id):  # house_scan房产预览
     form_warrant_edit_date = {'warrant_num': warrant_obj.warrant_num}
     form_warrant_edit = forms.WarrantEditForm(initial=form_warrant_edit_date)  # 权证编辑form
     warrant_typ = warrant_obj.warrant_typ
-    if warrant_typ == 1:
+    print('warrant_typ:', warrant_typ)
+    if warrant_typ == 1:  # 房产
         form_date = {
             'house_locate': warrant_obj.house_warrant.house_locate,
             'house_app': warrant_obj.house_warrant.house_app,
             'house_area': warrant_obj.house_warrant.house_area}
-        form_house_add_edit = forms.HouseAddEidtForm(form_date)  # 房产form
-    elif warrant_typ == 5:
+        form_house_add_edit = forms.HouseAddEidtForm(form_date)
+    elif warrant_typ == 5:  # 土地form
         form_date = {
             'ground_locate': warrant_obj.ground_warrant.ground_locate,
             'ground_app': warrant_obj.ground_warrant.ground_app,
             'ground_area': warrant_obj.ground_warrant.ground_area}
-        form_ground_add_edit = forms.GroundAddEidtForm(form_date)  # 土地form
+        form_ground_add_edit = forms.GroundAddEidtForm(form_date)
     elif warrant_typ == 11:
         form_date = {
             'receive_owner': warrant_obj.receive_warrant.receive_owner,
             'receivable_detail': warrant_obj.receive_warrant.receivable_detail}
-        form_receivable_add_edit = forms.FormReceivable(form_date)  # 土地form
-
-    elif warrant_typ == 99:
+        form_receivable_add_edit = forms.FormReceivable(form_date)
+    elif warrant_typ == 99:  # 他权form
         form_date = {
             'agree': warrant_obj.ypothec_warrant.agree}
-        form_hypothecs_add_eidt = forms.HypothecsAddEidtForm(initial=form_date)  # 他权form
+        form_hypothecs_add_eidt = forms.HypothecsAddEidtForm(initial=form_date)
     form_storage_add_edit = forms.StoragesAddEidtForm()  # 出入库form
     form_owership_add_edit = forms.OwerShipAddForm()  # 所有权证form
+    form_housebag_add_edit = forms.HouseBagAddEidtForm()  # 房产包form
+    form_evaluate_add_edit = forms.EvaluateAddEidtForm()  # 评估
+
     ####分页信息###
-    storages_list = warrant_obj.storage_warrant.all().order_by('-id')
-    paginator = Paginator(storages_list, 5)
+    lendingwarrant_list = warrant_obj.lending_warrant.all()
+    paginator = Paginator(lendingwarrant_list, 10)
     page = request.GET.get('page')
     try:
-        storages_p_list = paginator.page(page)
+        p_list = paginator.page(page)
     except PageNotAnInteger:
-        storages_p_list = paginator.page(1)
+        p_list = paginator.page(1)
     except EmptyPage:
-        storages_p_list = paginator.page(paginator.num_pages)
+        p_list = paginator.page(paginator.num_pages)
 
     return render(request, 'dbms/warrant/warrant-scan.html', locals())
 
