@@ -69,7 +69,7 @@ class Houses(models.Model):  # 房产
                                    related_name='house_warrant')
     house_locate = models.CharField(verbose_name='房产坐落', max_length=64, unique=True)
     HOUSE_APP_LIST = ((1, '住宅'), (11, '商业'), (21, '办公'), (31, '公寓'), (41, '生产性工业用房'), (51, '科研')
-                      , (61, '车库'), (71, '仓储'))
+                      , (61, '车库'), (71, '仓储'), (99, '期房'))
     house_app = models.IntegerField(verbose_name='房产用途', choices=HOUSE_APP_LIST, default=1)
     house_area = models.FloatField(verbose_name='建筑面积')
     house_name = models.CharField(verbose_name='楼盘名称', max_length=64, null=True, blank=True)
@@ -214,9 +214,8 @@ class Draft(models.Model):  # 应收票据
     draft_owner = models.ForeignKey(to='Customes', verbose_name="所有权人",
                                     on_delete=models.PROTECT,
                                     related_name='draft_custome')
-    DRAFT_TYP_LIST = ((1, '银行承兑汇票'), (11, '商业承兑汇票'), (21, '支票'))
-    draft_typ = models.IntegerField(verbose_name='票据种类', choices=DRAFT_TYP_LIST, default=1)
-    draft_detail = models.TextField(verbose_name="汇票描述")
+
+    draft_detail = models.TextField(verbose_name="票据描述")
     draft_buildor = models.ForeignKey(to='Employees', verbose_name="创建者", default=1,
                                       on_delete=models.PROTECT,
                                       related_name='draft_buildor_employee')
@@ -227,16 +226,19 @@ class Draft(models.Model):  # 应收票据
         db_table = 'dbms_draft'  # 指定数据表的名称
 
     def __str__(self):
-        return '%s' % self.warrant
+        return '%s' % self.warrant,
 
 
 class DraftExtend(models.Model):  # 票据列表
     draft = models.ForeignKey(to='Draft', verbose_name="票据",
                               on_delete=models.PROTECT,
-                              related_name='extend_receiveable')
+                              related_name='extend_draft')
+    DRAFT_TYP_LIST = ((1, '电子银行承兑汇票'), (2, '普通银行承兑汇票'), (11, '电子商业承兑汇票'),
+                      (12, '普通商业承兑汇票'), (21, '支票'))
+    draft_typ = models.IntegerField(verbose_name='票据种类', choices=DRAFT_TYP_LIST, default=1)
     draft_num = models.CharField(verbose_name="票据编号", max_length=64)
-    draft_drawer = models.CharField(verbose_name="出票人", max_length=64)
     draft_acceptor = models.CharField(verbose_name="承兑人", max_length=64)
+    draft_amount = models.FloatField(verbose_name="票面金额")
     issue_date = models.DateField(verbose_name="出票日期")
     due_date = models.DateField(verbose_name="到期日")
     draft_e_buildor = models.ForeignKey(to='Employees', verbose_name="创建者", default=1,
@@ -249,7 +251,7 @@ class DraftExtend(models.Model):  # 票据列表
         db_table = 'dbms_draftextend'  # 指定数据表的名称
 
     def __str__(self):
-        return '%s' % self.draft
+        return '%s_%s_%s' % (self.draft, self.draft_typ, self.draft_num)
 
 
 # ------------------------车辆41--------------------------#

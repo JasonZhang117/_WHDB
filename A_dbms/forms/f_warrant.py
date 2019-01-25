@@ -56,7 +56,7 @@ class HouseBagAddEidtForm(dform.ModelForm):
         model = models.HouseBag
         fields = ['housebag_app', 'housebag_area']
         widgets = {'housebag_app': dform.Select(attrs={'class': 'form-control'}),
-                   'housebag_area': dform.NumberInput(attrs={'class': 'form-control'})}
+                   'housebag_area': dform.NumberInput(attrs={'class': 'form-control', 'placeholder': '面积（平方米'})}
 
 
 # -----------------------土地modelform2-------------------------#
@@ -97,10 +97,23 @@ class FormStockes(dform.ModelForm):  # 股权
 class FormDraft(dform.ModelForm):  # 票据31
     class Meta:
         model = models.Draft
-        fields = ['draft_owner', 'draft_typ', 'draft_detail']
+        fields = ['draft_owner', 'draft_detail']
         widgets = {'draft_owner': dform.Select(attrs={'class': 'form-control'}),
-                   'draft_typ': dform.Select(attrs={'class': 'form-control'}),
                    'draft_detail': dform.Textarea(attrs={'class': 'form-control', 'rows': '3'})}
+
+
+# ------------------------票据包31--------------------------#
+class FormDraftExtend(dform.ModelForm):  # 票据31
+    class Meta:
+        model = models.DraftExtend
+        fields = ['draft_typ', 'draft_num', 'draft_acceptor', 'draft_amount', 'issue_date', 'due_date']
+        widgets = {'draft_typ': dform.Select(attrs={'class': 'form-control'}),
+                   'draft_num': dform.TextInput(attrs={'class': 'form-control', 'placeholder': '票据号码'}),
+                   'draft_acceptor': dform.TextInput(attrs={'class': 'form-control', 'placeholder': '承兑人'}),
+                   'draft_amount': dform.NumberInput(attrs={'class': 'form-control', 'placeholder': '票面金额'}),
+                   'issue_date': dform.DateInput(attrs={'class': 'form-control', 'type': 'date', 'placeholder': '出票日'}),
+                   'due_date': dform.DateInput(attrs={'class': 'form-control', 'type': 'date', 'placeholder': '到期日'})
+                   }
 
 
 # ------------------------车辆FormVehicle41--------------------------#

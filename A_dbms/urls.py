@@ -70,11 +70,11 @@ urlpatterns = [
     path('warrant/owership/add/', views.owership_add_ajax),
     path('warrant/owership/del/', views.owership_del_ajax),
     path('warrant/housebag/add/', views.housebag_add_ajax),
+    path('warrant/draftbag/add/', views.draftextend_add_ajax),
     path('warrant/guaranty/add/', views.guaranty_add_ajax),
     path('warrant/guaranty/del/', views.guaranty_del_ajax),
     path('warrant/storages/add/', views.storages_add_ajax),
     path('warrant/evaluate/add/', views.evaluate_add_ajax),
-
 
     # -----------------------house房产管理-------------------------#
     path('house/', views.house, name='house_all'),  # 菜单-权证管理-房产列表

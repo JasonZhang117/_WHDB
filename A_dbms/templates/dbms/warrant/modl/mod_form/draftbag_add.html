@@ -1,0 +1,41 @@
+<div id="form_draftbag_add_edit">
+
+    <div class="form-group"><!--票据种类-->
+        <label for="id_draft_typ"
+               class="col-sm-3 control-label">{{ form_draftbag_add_edit.draft_typ.label }}：</label>
+        <div class="col-sm-9">{{ form_draftbag_add_edit.draft_typ }}</div>
+        <label id="e_draft_typ" class="pull-right">{{ form_draftbag_add_edit.draft_typ.errors }}</label>
+    </div>
+    <div class="form-group"><!--票据号码-->
+        <label for="id_draft_num"
+               class="col-sm-3 control-label">{{ form_draftbag_add_edit.draft_num.label }}：</label>
+        <div class="col-sm-9">{{ form_draftbag_add_edit.draft_num }}</div>
+        <label id="e_draft_num" class="pull-right">{{ form_draftbag_add_edit.draft_num.errors }}</label>
+    </div>
+    <div class="form-group"><!--承兑人-->
+        <label for="id_draft_acceptor"
+               class="col-sm-3 control-label">{{ form_draftbag_add_edit.draft_acceptor.label }}：</label>
+        <div class="col-sm-9">{{ form_draftbag_add_edit.draft_acceptor }}</div>
+        <label id="e_draft_acceptor" class="pull-right">{{ form_draftbag_add_edit.draft_acceptor.errors }}</label>
+    </div>
+    <div class="form-group"><!--票面金额-->
+        <label for="id_draft_amount"
+               class="col-sm-3 control-label">{{ form_draftbag_add_edit.draft_amount.label }}：</label>
+        <div class="col-sm-9">{{ form_draftbag_add_edit.draft_amount }}</div>
+        <label id="e_draft_amount" class="pull-right">{{ form_draftbag_add_edit.draft_amount.errors }}</label>
+    </div>
+
+    <div class="form-group"><!--出票日-->
+        <label for="id_issue_date"
+               class="col-sm-3 control-label">{{ form_draftbag_add_edit.issue_date.label }}：</label>
+        <div class="col-sm-9">{{ form_draftbag_add_edit.issue_date }}</div>
+        <label id="e_issue_date" class="pull-right">{{ form_draftbag_add_edit.issue_date.errors }}</label>
+    </div>
+    <div class="form-group"><!--到期日-->
+        <label for="id_due_date"
+               class="col-sm-3 control-label">{{ form_draftbag_add_edit.due_date.label }}：</label>
+        <div class="col-sm-9">{{ form_draftbag_add_edit.due_date }}</div>
+        <label id="e_due_date" class="pull-right">{{ form_draftbag_add_edit.due_date.errors }}</label>
+    </div>
+
+</div>

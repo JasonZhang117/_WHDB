@@ -1,0 +1,56 @@
+<script>
+    $(function () {
+        bindAddDraftBagB();
+        bindAddDraftBagModalOk();
+    });
+
+    function bindAddDraftBagB() {
+        $('#addDraftBagB').click(function () {
+            console.log("bindAddDraftBagB");
+            $('#addDraftBagModal').modal('show');
+        })
+    }
+
+    function bindAddDraftBagModalOk() {
+        $('#addDraftBagModalOk').click(function () {
+            var postData = {};
+            $('#addDraftBagModal').find('input,select').each(function () {
+                var v = $(this).val();
+                var n = $(this).attr('name');
+                postData[n] = v;
+            });
+            var postDataStr = JSON.stringify(postData);
+            console.log(postDataStr);
+            $.ajax({
+                url: '/dbms/warrant/draftbag/add/',
+                type: 'POST',
+                traditional: true,
+                data: {'postDataStr': postDataStr},
+                dataType: 'JSON',
+                success: function (arg) {
+                    console.log(arg);
+                    if (arg.status) {
+                        $('#addDraftBagModal').modal('hide');
+                        alert(arg.message);
+                        window.location.reload();
+                    } else {
+                        alert(arg.message);
+
+                        $('#e_draft_typ').text(arg.forme.draft_typ);
+                        $('#e_draft_num').text(arg.forme.draft_num);
+                        $('#id_draft_acceptor').text(arg.forme.draft_acceptor);
+                        $('#id_draft_amount').text(arg.forme.draft_amount);
+                        $('#id_issue_date').text(arg.forme.issue_date);
+                        $('#id_due_date').text(arg.forme.due_date);
+                    }
+                }
+            })
+        })
+    }
+</script>
+
+
+
+
+
+

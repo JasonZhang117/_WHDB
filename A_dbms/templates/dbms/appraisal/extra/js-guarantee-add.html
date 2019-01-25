@@ -3,7 +3,6 @@
         bindGuaranteeB();
         bind_id_sure_typ();
         bindGuaranteeAddModalOk();
-
     });
 
     function bindGuaranteeB() {
@@ -59,7 +58,9 @@
                 case ('13'): {#<--动产抵押-->#}
                     $('#form_lendingchattel_add').show();
                     break;
-
+                case ('33'): {#<--票据质押-->#}
+                    $('#form_lendingdraft_add').show();
+                    break;
                 default:
                     $('.guarantee-extend').hide()
             }

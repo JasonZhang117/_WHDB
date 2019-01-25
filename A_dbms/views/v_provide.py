@@ -73,8 +73,9 @@ def provide_agree_scan(request, agree_id):  # 查看放款
     HOUSE_LIST = [11, 21, 42, 52]
     GROUND_LIST = [12, 22, 43, 53]
     RECEIVABLE_LIST = [31]
-    STOCK_LIST = [32]
+    STOCK_LIST = [32, 51]
     CHATTEL_LIST = [13]
+    DRAFT_LIST = [33]
 
     agree_obj = models.Agrees.objects.get(id=agree_id)
     lending_obj = agree_obj.lending
@@ -86,23 +87,34 @@ def provide_agree_scan(request, agree_id):  # 查看放款
     '''AGREE_STATE_LIST = ((11, '待签批'), (21, '已签批'), (31, '未落实'),
                         (41, '已落实'), (51, '待变更'), (61, '已解保'), (99, '作废'))'''
     agree_state_n = 41
-    agree_lending_sure_list = agree_obj.lending.sure_lending.all()
+    agree_lending_sure_list = agree_obj.lending.sure_lending.all()  # 反担保措施列表'LendingSures'
     for sure in agree_lending_sure_list:
-        if sure.sure_typ not in [1, 2]:
+        '''SURE_TYP_LIST = (
+        (1, '企业保证'), (2, '个人保证'),
+        (11, '房产抵押'), (12, '土地抵押'), (13, '动产抵押'), (15, '车辆抵押'),
+        (21, '房产顺位'), (22, '土地顺位'),
+        (31, '应收质押'), (32, '股权质押'), (33, '票据质押'),
+        (41, '合格证监管'), (42, '房产监管'), (43, '土地监管'),
+        (51, '股权预售'), (52, '房产预售'), (53, '土地预售'))'''
+        if sure.sure_typ not in [1, 2]:  # (1, '企业保证'), (2, '个人保证')
             sure_warrant = sure.warrant_sure.warrant.all()
             for warrant in sure_warrant:
-                ypothec_list = warrant.ypothec_m_agree.all().filter(agree=agree_obj)
+                ypothec_list = warrant.ypothec_m_agree.all().filter(agree=agree_obj).distinct()
                 '''WARRANT_STATE_LIST = (
         (1, '未入库'), (2, '已入库'), (6, '无需入库'), (11, '续抵出库'), (21, '已借出'), (31, '解保出库'),
          (99, '已注销'))'''
-                if warrant.warrant_state in [1, 11, 21]:
+                if warrant.warrant_state in [1, 11, 21]:  # (1, '未入库'), (11, '续抵出库'), (21, '已借出')
                     warrant_storage_str += '%s，' % warrant.warrant_num  # 待入库
-                if not ypothec_list:
+                '''WARRANT_TYP_LIST = [
+        (1, '房产'), (2, '房产包'), (5, '土地'), (11, '应收'), (21, '股权'),
+        (31, '票据'), (41, '车辆'), (51, '动产'), (99, '他权')]'''
+                if not ypothec_list:  # 票据无需他权
                     warrant_ypothec_str += '%s，' % warrant.warrant_num  # 无他权
                 else:
                     for ypothec in ypothec_list:
                         warrant_state = ypothec.warrant.warrant_state
-                        if warrant_state in [1, 11, 21]:
+                        # (1, '未入库'), (11, '续抵出库'), (21, '已借出')
+                        if warrant_state in [1, 11, 21] and not warrant.warrant_typ == 31:
                             ypothec_storage_str += '%s，' % ypothec.warrant.warrant_num  # 他权未入库
 
     counter_list = agree_obj.counter_agree.all()

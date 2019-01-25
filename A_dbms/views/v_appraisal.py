@@ -109,8 +109,9 @@ def appraisal_scan_lending(request, article_id, lending_id):  # 评审项目预�
     HOUSE_LIST = [11, 21, 42, 52]
     GROUND_LIST = [12, 22, 43, 53]
     RECEIVABLE_LIST = [31]
-    STOCK_LIST = [32]
+    STOCK_LIST = [32, 51]
     CHATTEL_LIST = [13]
+    DRAFT_LIST = [33]
     form_lendingcustoms_c_add = models.Customes.objects.exclude(
         id=article_obj.custom.id).filter(genre=1).values_list('id', 'name')
     form_lendingcustoms_p_add = models.Customes.objects.exclude(
@@ -123,6 +124,7 @@ def appraisal_scan_lending(request, article_id, lending_id):  # 评审项目预�
     form_lendinggreceivable_add = forms.LendinReceivableForm()
     form_lendingstock_add = forms.LendinStockForm()
     form_lendingchattel_add = forms.LendinChattelForm()
+    form_lendingdraft_add = forms.LendinDraftForm()
 
     return render(request, 'dbms/appraisal/appraisal-scan-lending.html', locals())
 
@@ -242,7 +244,7 @@ def guarantee_add_ajax(request):  # 反担保措施添加ajax
                 except Exception as e:
                     response['status'] = False
                     response['message'] = '反担保设置失败：%s' % str(e)
-            elif sure_typ == 32:  # 股权质押
+            elif sure_typ in [32, 51]:  # 股权质押
                 form_lendingstock_add = forms.LendinStockForm(post_data)
                 if form_lendingstock_add.is_valid():
                     lendingwarrant_clean = form_lendingstock_add.cleaned_data
@@ -272,6 +274,23 @@ def guarantee_add_ajax(request):  # 反担保措施添加ajax
                             sure=lendingsure_obj, defaults=default)
                         for warrant in lendingwarrant_clean['sure_chattel']:
                             lendingchattel_obj.warrant.add(warrant)
+                    response['message'] = '反担保设置成功！'
+                except Exception as e:
+                    response['status'] = False
+                    response['message'] = '反担保设置失败：%s' % str(e)
+            elif sure_typ == 33:  # 票据质押
+                form_lendingdraft_add = forms.LendinDraftForm(post_data)
+                if form_lendingdraft_add.is_valid():
+                    lendingwarrant_clean = form_lendingdraft_add.cleaned_data
+                try:
+                    with transaction.atomic():
+                        lendingsure_obj, created = models.LendingSures.objects.update_or_create(
+                            lending=lending_obj, sure_typ=sure_typ, defaults=default_sure)
+                        default = {'sure': lendingsure_obj, 'lending_w_buildor': request.user}
+                        lendingdraft_obj, created = models.LendingWarrants.objects.update_or_create(
+                            sure=lendingsure_obj, defaults=default)
+                        for warrant in lendingwarrant_clean['sure_draft']:
+                            lendingdraft_obj.warrant.add(warrant)
                     response['message'] = '反担保设置成功！'
                 except Exception as e:
                     response['status'] = False

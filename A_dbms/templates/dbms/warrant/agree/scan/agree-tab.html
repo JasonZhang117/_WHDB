@@ -19,6 +19,9 @@
         <li role="presentation">
             <a href="#agree-chattel" style="background-color: #f5f5f5"
                aria-controls="home" role="tab" data-toggle="tab">动产</a></li>
+                <li role="presentation">
+            <a href="#agree-draft" style="background-color: #f5f5f5"
+               aria-controls="home" role="tab" data-toggle="tab">票据</a></li>
     </ul>
 
     <!-- Tab panes -->
@@ -35,5 +38,7 @@
             {% include 'dbms/warrant/agree/scan/tab/agree-stock.html' %}</div>
         <div role="tabpanel" class="tab-pane" id="agree-chattel"><!--动产抵押-->
             {% include 'dbms/warrant/agree/scan/tab/agree-chattel.html' %}</div>
+        <div role="tabpanel" class="tab-pane" id="agree-draft"><!--票据质押-->
+            {% include 'dbms/warrant/agree/scan/tab/agree-draft.html' %}</div>
     </div>
 </div>

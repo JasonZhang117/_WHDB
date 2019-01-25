@@ -79,6 +79,9 @@ class LendingHouseForm(dform.Form):
     sure_house = fields.TypedMultipleChoiceField(
         label="房产", label_suffix="：", coerce=lambda x: int(x),
         widget=widgets.SelectMultiple(attrs={'class': 'form-control'}))
+    ''' WARRANT_TYP_LIST = [
+        (1, '房产'), (2, '房产包'), (5, '土地'), (11, '应收'), (21, '股权'),
+        (31, '票据'), (41, '车辆'), (51, '动产'), (99, '他权')]'''
 
     def __init__(self, *args, **kwargs):
         super(LendingHouseForm, self).__init__(*args, **kwargs)
@@ -91,6 +94,9 @@ class LendingGroundForm(dform.Form):
     sure_ground = fields.TypedMultipleChoiceField(
         label="土地", label_suffix="：", coerce=lambda x: int(x),
         widget=widgets.SelectMultiple(attrs={'class': 'form-control'}))
+    ''' WARRANT_TYP_LIST = [
+        (1, '房产'), (2, '房产包'), (5, '土地'), (11, '应收'), (21, '股权'),
+        (31, '票据'), (41, '车辆'), (51, '动产'), (99, '他权')]'''
 
     def __init__(self, *args, **kwargs):
         super(LendingGroundForm, self).__init__(*args, **kwargs)
@@ -103,6 +109,9 @@ class LendinReceivableForm(dform.Form):
     sure_receivable = fields.TypedMultipleChoiceField(
         label="应收账款", label_suffix="：", coerce=lambda x: int(x),
         widget=widgets.SelectMultiple(attrs={'class': 'form-control'}))
+    ''' WARRANT_TYP_LIST = [
+        (1, '房产'), (2, '房产包'), (5, '土地'), (11, '应收'), (21, '股权'),
+        (31, '票据'), (41, '车辆'), (51, '动产'), (99, '他权')]'''
 
     def __init__(self, *args, **kwargs):
         super(LendinReceivableForm, self).__init__(*args, **kwargs)
@@ -115,6 +124,9 @@ class LendinStockForm(dform.Form):
     sure_stock = fields.TypedMultipleChoiceField(
         label="股权", label_suffix="：", coerce=lambda x: int(x),
         widget=widgets.SelectMultiple(attrs={'class': 'form-control'}))
+    ''' WARRANT_TYP_LIST = [
+        (1, '房产'), (2, '房产包'), (5, '土地'), (11, '应收'), (21, '股权'),
+        (31, '票据'), (41, '车辆'), (51, '动产'), (99, '他权')]'''
 
     def __init__(self, *args, **kwargs):
         super(LendinStockForm, self).__init__(*args, **kwargs)
@@ -130,8 +142,23 @@ class LendinChattelForm(dform.Form):
 
     def __init__(self, *args, **kwargs):
         super(LendinChattelForm, self).__init__(*args, **kwargs)
-        '''WARRANT_TYP_LIST = [
-        (1, '房产'), (5, '土地'), (11, '应收'), (21, '股权'),
+        ''' WARRANT_TYP_LIST = [
+        (1, '房产'), (2, '房产包'), (5, '土地'), (11, '应收'), (21, '股权'),
         (31, '票据'), (41, '车辆'), (51, '动产'), (99, '他权')]'''
         self.fields['sure_chattel'].choices = models.Warrants.objects.filter(warrant_typ=51).values_list(
+            'id', 'warrant_num').order_by('warrant_num')
+
+
+# -----------------------票据质押form-------------------------#
+class LendinDraftForm(dform.Form):
+    sure_draft = fields.TypedMultipleChoiceField(
+        label="票据", label_suffix="：", coerce=lambda x: int(x),
+        widget=widgets.SelectMultiple(attrs={'class': 'form-control'}))
+
+    def __init__(self, *args, **kwargs):
+        super(LendinDraftForm, self).__init__(*args, **kwargs)
+        ''' WARRANT_TYP_LIST = [
+        (1, '房产'), (2, '房产包'), (5, '土地'), (11, '应收'), (21, '股权'),
+        (31, '票据'), (41, '车辆'), (51, '动产'), (99, '他权')]'''
+        self.fields['sure_draft'].choices = models.Warrants.objects.filter(warrant_typ=31).values_list(
             'id', 'warrant_num').order_by('warrant_num')

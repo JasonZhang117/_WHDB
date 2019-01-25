@@ -1,0 +1,30 @@
+<div class="table-responsive">
+    <table class="table table-bordered table-hover table-condensed active">
+        <thead>
+        <tr style="text-align: center">
+            <th>序号</th>
+            <th>票据编号</th>
+            <th>票据种类</th>
+            <th>承兑人</th>
+            <th>票面金额</th>
+            <th>出票日期</th>
+            <th>到期日</th>
+            <th>操作</th>
+        </tr>
+        </thead>
+        <tbody id="draftbag-tb">
+        {% for draft in warrant_obj.draft_warrant.extend_draft.all %}
+            <tr draft-nid="{{ draft.id }}">
+                <td>{{ forloop.counter }}</td>
+                <td>{{ draft.draft_num }}</td>
+                <td>{{ draft.get_draft_typ_display }}</td>
+                <td>{{ draft.draft_acceptor }}</td>
+                <td>{{ draft.draft_amount }}</td>
+                <td>{{ draft.issue_date }}</td>
+                <td>{{ draft.due_date }}</td>
+                <td><a class="btn btn-danger btn-xs delDraftBagB">删除</a></td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
