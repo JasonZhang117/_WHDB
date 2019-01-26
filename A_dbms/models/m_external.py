@@ -30,11 +30,10 @@ class Branches(models.Model):  # 放款银行
                                    on_delete=models.CASCADE,
                                    limit_choices_to={'cooperator_state': 1},
                                    related_name='branch_cooperator')
-    name = models.CharField(verbose_name='放款银行', max_length=32)
-    institution_code = models.CharField(verbose_name='金融机构代码', max_length=32, unique=True)
+    name = models.CharField(verbose_name='放款银行', max_length=32, unique=True)
+    short_name = models.CharField(verbose_name='银行简称', max_length=32, unique=True)
     BRANCH_STATE_LIST = ((1, '正常'), (2, '注销'))
     branch_state = models.IntegerField(verbose_name='银行状态', choices=BRANCH_STATE_LIST, default=1)
-
     branch_flow = models.FloatField(verbose_name='_流贷余额', default=0)
     branch_accept = models.FloatField(verbose_name='_承兑余额', default=0)
     branch_back = models.FloatField(verbose_name='_保函余额', default=0)

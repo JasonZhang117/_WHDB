@@ -4,7 +4,8 @@ import datetime
 
 # -----------------------客户模型-------------------------#
 class Customes(models.Model):  # 客户
-    name = models.CharField(verbose_name='名称', max_length=32, unique=True)
+    name = models.CharField(verbose_name='客户名称', max_length=32, unique=True)
+    short_name = models.CharField(verbose_name='客户简称', max_length=16, unique=True)
     GENRE_LIST = ((1, '企业'), (2, '个人'))
     genre = models.IntegerField(verbose_name='客户类型', choices=GENRE_LIST, default=1)
     contact_addr = models.CharField(verbose_name='联系地址', max_length=64)
@@ -39,7 +40,6 @@ class CustomesC(models.Model):
                                    on_delete=models.CASCADE,
                                    limit_choices_to={'genre': 1},
                                    related_name='company_custome')
-    short_name = models.CharField(verbose_name='简称', max_length=8, unique=True)
     idustry = models.ForeignKey(to='Industries', verbose_name="所属行业",
                                 on_delete=models.PROTECT,
                                 related_name='custome_idustry')

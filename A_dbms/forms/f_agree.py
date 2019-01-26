@@ -7,15 +7,22 @@ from django.core.exceptions import NON_FIELD_ERRORS, ValidationError
 
 # -----------------------委托合同添加-------------------------#
 class AgreeAddForm(dform.ModelForm):
+    branch = fields.ChoiceField(
+        label="反担保个人", label_suffix="：", widget=widgets.Select(attrs={'class': 'form-control'}))
+
     class Meta:
         model = models.Agrees
-        fields = ['lending', 'branch', 'agree_typ', 'guarantee_typ', 'agree_copies', 'agree_amount']
+        fields = ['lending', 'agree_typ', 'guarantee_typ', 'agree_copies', 'agree_amount']
         widgets = {'lending': dform.Select(attrs={'class': 'form-control'}),
-                   'branch': dform.Select(attrs={'class': 'form-control'}),
                    'agree_typ': dform.Select(attrs={'class': 'form-control'}),
                    'guarantee_typ': dform.Select(attrs={'class': 'form-control'}),
                    'agree_copies': dform.NumberInput(attrs={'class': 'form-control', 'placeholder': '合同份数'}),
                    'agree_amount': dform.NumberInput(attrs={'class': 'form-control', 'placeholder': '合同金额（元）'})}
+
+    def __init__(self, *args, **kwargs):
+        super(AgreeAddForm, self).__init__(*args, **kwargs)
+        self.fields['branch'].choices = models.Branches.objects.filter(branch_state=1).values_list(
+            'id', 'name').order_by('name')
 
 
 # -----------------------合同签批-------------------------#

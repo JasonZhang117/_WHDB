@@ -15,8 +15,8 @@
         {% for agree in p_list %}
             <tr>
                 <td><a href="{% url 'dbms:agree_scan' agree_id=agree.id %}">{{ agree.agree_num }}</a></td>
-                <td>{{ agree.lending.summary.custom }}</td>
-                <td>{{ agree.branch.name }}</td>
+                <td>{{ agree.lending.summary.custom.short_name }}</td>
+                <td>{{ agree.branch.short_name }}</td>
                 <td>{{ agree.agree_amount }}</td>
                 <td>{{ agree.get_agree_typ_display }}</td>
                 <td>{{ agree.lending }}</td>

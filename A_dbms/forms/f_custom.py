@@ -9,10 +9,12 @@ from django.core.exceptions import NON_FIELD_ERRORS, ValidationError
 class CustomAddForm(dform.ModelForm):
     class Meta:
         model = models.Customes
-        fields = ['name', 'contact_addr', 'linkman', 'contact_num', 'genre', 'counter_only']
+        fields = ['name', 'short_name', 'contact_addr', 'linkman', 'contact_num', 'genre', 'counter_only']
         widgets = {
             'name': dform.TextInput(
                 attrs={'class': 'form-control', 'placeholder': '客户名称'}),
+            'short_name': dform.TextInput(
+                attrs={'class': 'form-control', 'placeholder': '客户简称'}),
             'contact_addr': dform.TextInput(
                 attrs={'class': 'form-control', 'placeholder': '联系地址'}),
             'linkman': dform.TextInput(
@@ -27,6 +29,10 @@ class CustomEditForm(dform.ModelForm):
         label="客户名称", label_suffix="：", max_length=32,
         widget=widgets.TextInput(
             attrs={'class': 'form-control', 'placeholder': '客户名称'}))
+    short_name = fields.CharField(
+        label="客户简称", label_suffix="：", max_length=32,
+        widget=widgets.TextInput(
+            attrs={'class': 'form-control', 'placeholder': '客户简称'}))
 
     class Meta:
         model = models.Customes
@@ -42,11 +48,6 @@ class CustomEditForm(dform.ModelForm):
 
 # -----------------------企业客户添加-------------------------#
 class CustomCAddForm(dform.ModelForm):  # 企业客户
-    short_name = fields.CharField(
-        label="客户简称", label_suffix="：", max_length=32,
-        widget=widgets.TextInput(
-            attrs={'class': 'form-control', 'placeholder': '客户简称'}))
-
     class Meta:
         model = models.CustomesC
         fields = ['idustry', 'district', 'capital', 'registered_addr', 'representative']
@@ -60,7 +61,7 @@ class CustomCAddForm(dform.ModelForm):  # 企业客户
 
 
 # -----------------------股权信息添加-------------------------#
-class FormShareholderAdd(dform.ModelForm):  # 企业客户
+class FormShareholderAdd(dform.ModelForm):  # 股权信息添加
     class Meta:
         model = models.Shareholders
         fields = ['shareholder_name', 'invested_amount', 'shareholding_ratio']

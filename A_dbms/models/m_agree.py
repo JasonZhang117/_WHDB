@@ -14,10 +14,11 @@ class Agrees(models.Model):  # 委托合同
     num_prefix = models.CharField(verbose_name='_编号前缀', max_length=32)
     lending = models.ForeignKey(to='LendingOrder', verbose_name="放款纪要",
                                 on_delete=models.PROTECT,
-                                limit_choices_to=limit_agree_choices,
+                                # limit_choices_to={'summary__article_state': 5},
                                 related_name='agree_lending')
     branch = models.ForeignKey(to='Branches', verbose_name="放款银行",
                                on_delete=models.PROTECT,
+                               # limit_choices_to={'branch_state': 1},
                                related_name='agree_branch')
     AGREE_TYP_LIST = ((1, '单笔'), (2, '最高额'), (3, '保函'))
     agree_typ = models.IntegerField(verbose_name='合同种类', choices=AGREE_TYP_LIST)

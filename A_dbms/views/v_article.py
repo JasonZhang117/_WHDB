@@ -15,11 +15,7 @@ from django.db import transaction
 # -----------------------------项目管理-------------------------------#
 def creat_article_num(custom_id):
     custom = models.Customes.objects.get(id=custom_id)
-    if custom.genre == 1:
-        short_name = models.CustomesC.objects.get(custome__id=custom_id).short_name
-    else:
-        short_name = custom.name
-        ###时间处理
+    ###时间处理
     article_date = time.gmtime()
     n_year = article_date.tm_year
     if article_date.tm_mon < 10:
@@ -28,7 +24,7 @@ def creat_article_num(custom_id):
         n_mon = str(article_date.tm_mon)
     r_order = models.Articles.objects.filter(
         custom=custom_id, article_date__year=n_year).count() + 1
-    article_num = '%s-%s%s-%s' % (short_name, str(n_year), n_mon, r_order)
+    article_num = '%s-%s%s-%s' % (custom.short_name, str(n_year), n_mon, r_order)
     return article_num
 
 
