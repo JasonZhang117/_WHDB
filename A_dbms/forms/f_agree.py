@@ -8,7 +8,7 @@ from django.core.exceptions import NON_FIELD_ERRORS, ValidationError
 # -----------------------委托合同添加-------------------------#
 class AgreeAddForm(dform.ModelForm):
     branch = fields.ChoiceField(
-        label="反担保个人", label_suffix="：", widget=widgets.Select(attrs={'class': 'form-control'}))
+        label="放款银行", label_suffix="：", widget=widgets.Select(attrs={'class': 'form-control'}))
 
     class Meta:
         model = models.Agrees

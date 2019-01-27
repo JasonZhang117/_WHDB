@@ -5,9 +5,9 @@
             <th>序号</th>
             <th>担保方式</th>
             <th>所有权人</th>
-            <th>土地地址</th>
-            <th>土地面积</th>
-            <th>土地用途</th>
+            <th>房产地址</th>
+            <th>房产面积</th>
+            <th>房产用途</th>
             <th>产权证</th>
             <th>他权情况</th>
             <th>入库情况</th>
@@ -27,7 +27,7 @@
                         <td>{{ lending_sure.get_sure_typ_display }}</td>
                         <td>
                             {% for ownership in warrant.ownership_warrant.all %}
-                                {{ ownership.owner }}{% if not forloop.last %}、{% endif %}
+                                {{ ownership.owner.short_name }}{% if not forloop.last %}、{% endif %}
                             {% endfor %}
                         </td>
                         <td>{{ warrant.house_warrant.house_locate }}</td>

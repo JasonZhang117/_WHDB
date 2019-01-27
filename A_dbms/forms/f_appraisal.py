@@ -82,7 +82,6 @@ class LendingHouseForm(dform.Form):
     ''' WARRANT_TYP_LIST = [
         (1, '房产'), (2, '房产包'), (5, '土地'), (11, '应收'), (21, '股权'),
         (31, '票据'), (41, '车辆'), (51, '动产'), (99, '他权')]'''
-
     def __init__(self, *args, **kwargs):
         super(LendingHouseForm, self).__init__(*args, **kwargs)
         self.fields['sure_house'].choices = models.Warrants.objects.filter(warrant_typ__in=[1, 2]).values_list(
@@ -97,7 +96,6 @@ class LendingGroundForm(dform.Form):
     ''' WARRANT_TYP_LIST = [
         (1, '房产'), (2, '房产包'), (5, '土地'), (11, '应收'), (21, '股权'),
         (31, '票据'), (41, '车辆'), (51, '动产'), (99, '他权')]'''
-
     def __init__(self, *args, **kwargs):
         super(LendingGroundForm, self).__init__(*args, **kwargs)
         self.fields['sure_ground'].choices = models.Warrants.objects.filter(warrant_typ=5).values_list(

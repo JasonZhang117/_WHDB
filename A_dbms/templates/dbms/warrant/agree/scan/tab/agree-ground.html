@@ -32,7 +32,7 @@
                         <td>{{ lending_sure.get_sure_typ_display }}</td>
                         <td>
                             {% for ownership in warrant.ownership_warrant.all %}
-                                {{ ownership.owner }}{% if not forloop.last %}、{% endif %}
+                                {{ ownership.owner.short_name }}{% if not forloop.last %}、{% endif %}
                             {% endfor %}
                         </td>
                         <td>{{ warrant.ground_warrant.ground_locate }}</td>

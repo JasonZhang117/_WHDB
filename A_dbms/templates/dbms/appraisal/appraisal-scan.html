@@ -1,9 +1,6 @@
 {% extends 'dbms/index_dbms.html' %}
-
 {% block title %}{{ PAGE_TITLE }}:{{ article_obj }}{% endblock %}
-
 {% block right-content-container %}
-
     <div class="container-fluid" style="padding-left: 1px;">
         {% include 'dbms/appraisal/scan/appraisal-summry.html' %}
         {% include 'dbms/appraisal/scan/appraisal-tab.html' %}
@@ -14,11 +11,8 @@
         {% include 'dbms/appraisal/modl/lending-del-mod.html' %}
         {% include 'dbms/appraisal/modl/article-sign-mod.html' %}
         {% include 'dbms/appraisal/modl/article-change-mod.html' %}
-
     </div>
-
 {% endblock %}
-
 {% block extra-js %}
     {% include 'dbms/appraisal/extra/js-comment-add.html' %}
     {% include 'dbms/appraisal/extra/js-single-add.html' %}

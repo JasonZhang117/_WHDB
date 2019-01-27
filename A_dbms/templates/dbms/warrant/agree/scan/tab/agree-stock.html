@@ -20,7 +20,7 @@
                     <tr warrant-nid={{ warrant.id }}>
                         <td>{{ forloop.counter }}</td>
                         <td>{{ lending_sure.get_sure_typ_display }}</td>
-                        <td>{{ warrant.stock_warrant.stock_owner }}</td>
+                        <td>{{ warrant.stock_warrant.stock_owner.short_name }}</td>
                         <td>{{ warrant.stock_warrant.target }}</td>
                         <td>{{ warrant.stock_warrant.share }}</td>
                         <td>{{ warrant.stock_warrant.get_stock_typ_display }}</td>

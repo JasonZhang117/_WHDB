@@ -23,7 +23,7 @@
                         <td><a target="_blank" href="{% url 'dbms:warrant_scan' warrant_id=warrant.id %}">
                             {{ forloop.counter }}</a></td>
                         <td>{{ lending_sure.get_sure_typ_display }}</td>
-                        <td>{{ warrant.chattel_warrant.chattel_owner }}</td>
+                        <td>{{ warrant.chattel_warrant.chattel_owner.short_name }}</td>
                         <td>{{ warrant.chattel_warrant.get_chattel_typ_display }}</td>
                         <td>{{ warrant.chattel_warrant.chattel_detail }}</td>
                         <td>

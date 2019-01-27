@@ -75,17 +75,6 @@ def appraisal_scan(request, article_id):  # 评审项目预览
     return render(request, 'dbms/appraisal/appraisal-scan.html', locals())
 
 
-# -----------------------summary_scan纪要预览-------------------------#
-@login_required
-def summary_scan(request, article_id):  # 评审项目预览
-    print(__file__, '---->def summary_scan')
-    page_title = '纪要预览'
-
-    article_obj = models.Articles.objects.get(id=article_id)
-
-    return render(request, 'dbms/appraisal/appraisal-summary-scan.html', locals())
-
-
 # -----------------------appraisal_scan_lending评审项目预览-------------------------#
 @login_required
 def appraisal_scan_lending(request, article_id, lending_id):  # 评审项目预览
@@ -127,3 +116,14 @@ def appraisal_scan_lending(request, article_id, lending_id):  # 评审项目预�
     form_lendingdraft_add = forms.LendinDraftForm()
 
     return render(request, 'dbms/appraisal/appraisal-scan-lending.html', locals())
+
+
+# -----------------------summary_scan纪要预览-------------------------#
+@login_required
+def summary_scan(request, article_id):  # 评审项目预览
+    print(__file__, '---->def summary_scan')
+    page_title = '纪要预览'
+
+    article_obj = models.Articles.objects.get(id=article_id)
+
+    return render(request, 'dbms/appraisal/appraisal-summary-scan.html', locals())

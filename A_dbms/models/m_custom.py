@@ -55,7 +55,7 @@ class CustomesC(models.Model):
         db_table = 'dbms_customesc'  # 指定数据表的名称
 
     def __str__(self):
-        return '%s-%s' % (self.custome, self.short_name)
+        return '%s' % (self.custome)
 
 
 # -----------------------股东信息-------------------------#

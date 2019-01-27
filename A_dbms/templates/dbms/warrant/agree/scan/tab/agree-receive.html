@@ -19,7 +19,7 @@
                     <tr warrant-nid={{ warrant.id }}>
                         <td>{{ forloop.counter }}</td>
                         <td>{{ lending_sure.get_sure_typ_display }}</td>
-                        <td>{{ warrant.receive_warrant.receive_owner }}</td>
+                        <td>{{ warrant.receive_warrant.receive_owner.short_name }}</td>
                         <td>{{ warrant.receive_warrant.receivable_detail }}</td>
                          <td>
                             {% for ypothec in warrant.ypothec_m_agree.all %}

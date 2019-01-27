@@ -15,7 +15,7 @@
             {% endif %}
         </tr>
         </thead>
-        <tbody id="provide-notify-tb">
+        <tbody id="notify-tb">
         {% for notify in agree_obj.notify_agree.all %}
             <tr notify-nid="{{ notify.id }}">
                 {% if notify_id %}

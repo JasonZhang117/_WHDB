@@ -21,7 +21,7 @@
                         <td><a target="_blank" href="{% url 'dbms:warrant_scan' warrant_id=warrant.id %}">
                             {{ forloop.counter }}</a></td>
                         <td>{{ lending_sure.get_sure_typ_display }}</td>
-                        <td>{{ warrant.draft_warrant.draft_owner }}</td>
+                        <td>{{ warrant.draft_warrant.draft_owner.short_name }}</td>
                         <td>{{ warrant.draft_warrant.draft_detail }}</td>
                         <td>
                             {% for ypothec in warrant.ypothec_m_agree.all %}
