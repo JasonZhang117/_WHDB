@@ -47,10 +47,9 @@ def custom(request, *args, **kwargs):  # 委托合同列表
 @login_required
 def custom_scan(request, custom_id):  # 项目预览
     print(__file__, '---->def custom_scan')
+    PAGE_TITLE = '客户预览'
     custom_obj = models.Customes.objects.get(id=custom_id)
-    if custom_obj.genre == 1:
-        shareholder_list = custom_obj.company_custome.shareholder_custom_c.all()
-        print('shareholder_list:', shareholder_list)
+
     form_date = {
         'name': custom_obj.name,
         'short_name': custom_obj.short_name,

@@ -1,0 +1,51 @@
+<script>
+    $(function () {
+        bindReviewPlanB();
+        bindAddReviewPlanModalOk();
+    });
+
+    function bindReviewPlanB() {
+        $('#reviewPlanB').click(function () {
+            {#console.log("bindAddCounterB")#}
+            $('#addReviewPlanModal').modal('show');
+        })
+    }
+
+    function bindAddReviewPlanModalOk() {
+        $('#addReviewPlanModalOk').click(function () {
+            var postData = {};
+            $('#addReviewPlanModal').find('input,select').each(function () {
+                var v = $(this).val();
+                var n = $(this).attr('name');
+                postData[n] = v;
+            });
+            var postDataStr = JSON.stringify(postData);
+
+            console.log(postDataStr);
+
+            $.ajax({
+                url: '/dbms/review/plan/',
+                type: 'POST',
+                data: {'postDataStr': postDataStr},
+                dataType: 'JSON',
+                success: function (arg) {
+                    console.log(arg);
+                    if (arg.status) {
+                        $('#addReviewPlanModal').modal('hide');
+                        alert(arg.message);
+                        window.location.reload();
+                    } else {
+                        alert(arg.message);
+                        $('#e_review_plan_date').text(arg.review_plan_date.name);
+                    }
+                }
+            })
+        })
+    }
+</script>
+
+
+
+
+
+

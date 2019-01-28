@@ -7,6 +7,7 @@
             <th>放款银行</th>
             <th>合同金额</th>
             <th>合同种类</th>
+            <th>放款金额</th>
             <th>纪要编号</th>
             <th>合同状态</th>
         </tr>
@@ -19,6 +20,7 @@
                 <td>{{ agree.branch.short_name }}</td>
                 <td>{{ agree.agree_amount }}</td>
                 <td>{{ agree.get_agree_typ_display }}</td>
+                <td>{{ agree.agree_provide_sum }}</td>
                 <td>{{ agree.lending.summary.summary_num }}</td>
                 <td>{{ agree.get_agree_state_display }}</td>
             </tr>

@@ -34,7 +34,7 @@ from .v_provide_act import (
 
 from .v_pigeonhole import pigeonhole, pigeonhole_scan, pigeonhole_add_ajax
 # ----------------------v_review保后管理视图--------------------#
-from .v_review import review
+from .v_review import review, review_scan, review_plan_ajax
 # ----------------------v_dun追偿视图--------------------#
 from .v_dun import compensatory, compensatory_scan
 # ----------------------v_custom客户管理视图--------------------#

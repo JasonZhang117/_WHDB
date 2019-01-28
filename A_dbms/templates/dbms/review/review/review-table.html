@@ -8,17 +8,28 @@
             <th>承兑余额</th>
             <th>保函余额</th>
             <th>最近调查</th>
+            <th>风险分类</th>
+            <th>计划时间</th>
+            <th>保后状态</th>
         </tr>
         </thead>
         <tbody>
         {% for custom in custom_list %}
             <tr>
-                <td><a href="{% url 'dbms:custom_scan' custom_id=custom.id %}">{{ custom.name }}</a></td>
+                {% if PAGE_TITLE == '客户管理' %}
+                    <td><a href="{% url 'dbms:custom_scan' custom_id=custom.id %}">{{ custom.short_name }}</a></td>
+                {% endif %}
+                {% if PAGE_TITLE == '保后管理' %}
+                    <td><a href="{% url 'dbms:review_scan' custom_id=custom.id %}">{{ custom.short_name }}</a></td>
+                {% endif %}
                 <td>{{ custom.credit_amount }}</td>
                 <td>{{ custom.custom_flow }}</td>
                 <td>{{ custom.custom_accept }}</td>
                 <td>{{ custom.custom_back }}</td>
                 <td>{{ custom.lately_date }}</td>
+                <td>{{ custom.get_classification_display }}</td>
+                <td>{{ custom.review_plan_date }}</td>
+                <td>{{ custom.get_review_state_display }}</td>
             </tr>
         {% endfor %}
         </tbody>

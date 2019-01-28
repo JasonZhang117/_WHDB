@@ -11,6 +11,14 @@ class Customes(models.Model):  # 客户
     contact_addr = models.CharField(verbose_name='联系地址', max_length=64)
     linkman = models.CharField(verbose_name='联系人', max_length=16)
     contact_num = models.CharField(verbose_name='联系电话', max_length=13)
+
+    review_plan_date = models.DateField(verbose_name='保后计划', blank=True, null=True)
+    REVIEW_STATE_LIST = ((1, '待保后'), (11, '待报告'), (21, '已完成'))
+    review_state = models.IntegerField(verbose_name='_保后状态', choices=REVIEW_STATE_LIST, default=21)
+    review_date = models.DateField(verbose_name='保后日期', blank=True, null=True)
+
+    CLASSIFICATION_LIST = ((1, '正常'), (11, '关注'), (21, '次级'), (31, '可疑'), (41, '损失'))
+    classification = models.IntegerField(verbose_name='_风险分类', choices=CLASSIFICATION_LIST, default=1)
     counter_only = models.BooleanField(verbose_name='仅反担保', default=1)
 
     lately_date = models.DateField(verbose_name='最近调查', null=True, blank=True)

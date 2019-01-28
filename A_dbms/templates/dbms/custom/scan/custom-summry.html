@@ -2,14 +2,17 @@
     <div class="panel-heading">
         <label>客户情况</label>
         <label class="navbar-right">
-            {% if custom_obj.genre == 1 %}
-                <a class="btn btn-primary btn-sm " id="addShareholderB">添加股权 </a>
+            {% if PAGE_TITLE == '客户预览' %}
+                {% if custom_obj.genre == 1 %}
+                    <a class="btn btn-primary btn-sm " id="addShareholderB">添加股权 </a>
+                {% endif %}
+                <a class="btn btn-primary btn-sm " id="editCustom">修改 </a><!--#path('custom/edit/'-->
+                <a class="btn btn-danger btn-sm " id="delCustom">删除</a><!--#path('custom/del/'-->
             {% endif %}
-            <a class="btn btn-primary btn-sm " id="editCustom">修改 </a><!--#path('custom/edit/'-->
-            <a class="btn btn-danger btn-sm " id="delCustom">删除</a><!--#path('custom/del/'-->
-            <a class="btn btn-danger btn-sm " id="delCustom">保后</a><!--#path('custom/del/'-->
-
-
+            {% if PAGE_TITLE == '保后管理' %}
+                <a class="btn btn-primary btn-sm " id="reviewPlanB">保后计划</a><!--#path('custom/del/'-->
+                <a class="btn btn-primary btn-sm " id="reviewB">保后</a><!--#path('custom/del/'-->
+            {% endif %}
         </label>
     </div>
 
