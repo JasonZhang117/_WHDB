@@ -125,5 +125,15 @@ def summary_scan(request, article_id):  # 评审项目预览
     page_title = '纪要预览'
 
     article_obj = models.Articles.objects.get(id=article_id)
-
+    review_model = article_obj.appraisal_article.all().first().review_model
+    expert_amount = article_obj.expert.count()
+    comment_type_1 = article_obj.comment_summary.filter(comment_type=1).count()
+    comment_type_2 = article_obj.comment_summary.filter(comment_type=2).count()
+    comment_type_3 = article_obj.comment_summary.filter(comment_type=3).count()
+    lending_count = article_obj.lending_summary.count()
+    lending_list = article_obj.lending_summary.all()
+    for lending in lending_list:
+        sure_lending_list = lending.sure_lending.all()
+        print('sure_lending_list:', sure_lending_list)
+    print('comment_type_1:', comment_type_1)
     return render(request, 'dbms/appraisal/appraisal-summary-scan.html', locals())

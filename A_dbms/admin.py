@@ -77,7 +77,17 @@ class CustomesAdmin(admin.ModelAdmin):
 
 admin.site.register(models.Customes, CustomesAdmin)  # 客户
 admin.site.register(models.CustomesC)  # 企业客户
-admin.site.register(models.CustomesP)  # 个人客户
+
+
+# -----------------------客户-------------------------#
+class CustomesPAdmin(admin.ModelAdmin):
+    list_display = ('custome', 'spouse', 'license_num', 'license_addr')  # 显示字段
+    # list_per_page = 20  # 每页显示条目数
+    search_fields = ['custome', 'spouse']  # 搜索字段
+    ordering = ['id']  # 排序字段
+
+
+admin.site.register(models.CustomesP, CustomesPAdmin)  # 个人客户
 admin.site.register(models.Districtes)  # 区域
 admin.site.register(models.Industries)  # 行业
 admin.site.register(models.Shareholders)  # 股东

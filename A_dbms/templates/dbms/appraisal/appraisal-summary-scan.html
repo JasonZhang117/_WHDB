@@ -35,12 +35,12 @@
             <h2>担保审查委员会项目审查意见书</h2>
         </div>
         <div class="notice-body">
-            <p>编号：成武担审保会{{ article_obj.summary_num }}号</p>
+            <p>编号：成武担审保会{{ article_obj.summary_num }}</p>
             <div>
                 <table style="width: 100%">
                     <tbody>
                     <tr style="border: 1px solid black">
-                        <th style="border: 1px solid black">审保会次数</th>
+                        <th style="border: 1px solid black;width: 100px">审保会次数</th>
                         <td style="border: 1px solid black">
                             {{ article_obj.appraisal_article.all.first.review_year }}年度第
                             {{ article_obj.appraisal_article.all.first.review_order }}次审保会（
@@ -64,7 +64,7 @@
                         </td>
                     </tr>
                     <tr style="border: 1px solid black">
-                        <th style="border: 1px solid black">上会项目名称</th>
+                        <th style="border: 1px solid black">项目名称</th>
                         <td style="border: 1px solid black">{{ article_obj.custom }}</td>
                     </tr>
                     <tr style="border: 1px solid black">
@@ -84,14 +84,84 @@
                     <tr style="border: 1px solid black">
                         <th style="border: 1px solid black">业务品种</th>
                         <td style="border: 1px solid black">
-                            {% for single in article_obj.single_quota_summary.all %}
+                            {% for single in  article_obj.single_quota_summary.all %}
                                 {{ single.get_credit_model_display }}
+                                {% if not forloop.last %}、{% endif %}
                             {% endfor %}
                         </td>
                     </tr>
                     <tr style="border: 1px solid black">
-                        <th style="border: 1px solid black">评审结论</th>
-                        <td style="border: 1px solid black">{{ article_obj.amount }}</td>
+                        <th style="border: 1px solid black">金额</th>
+                        <td style="border: 1px solid black">
+                            {% if article_obj.renewal > 0 %}
+                                {{ article_obj.renewal }}（存量）
+                            {% endif %}
+                            {% if article_obj.augment > 0 %}
+                                {{ article_obj.augment }}（新增）
+                            {% endif %}
+                        </td>
+                    </tr>
+                    <tr style="border: 1px solid black">
+                        <th style="border: 1px solid black">期限</th>
+                        <td style="border: 1px solid black">{{ article_obj.credit_term }}个月</td>
+                    </tr>
+                    <tr style="border: 1px solid black">
+                        <th style="border: 1px solid black">费率及收费方式</th>
+                        <td style="border: 1px solid black">
+                            {% if article_obj.single_quota_summary.all.count > 1 %}
+                                {% for single in  article_obj.single_quota_summary.all %}
+                                    {{ single.get_credit_model_display }}按{{ single.flow_rate }}%/
+                                    {{ article_obj.credit_term }}个月一次性收取
+                                    {% if not forloop.last %}、{% endif %}
+                                {% endfor %}
+                            {% else %}
+                                {% for single in  article_obj.single_quota_summary.all %}
+                                    {{ single.flow_rate }}%/{{ article_obj.credit_term }}个月一次性收取
+                                {% endfor %}
+                            {% endif %}
+                        </td>
+                    </tr>
+                    <tr style="border: 1px solid black">
+                        <th style="border: 1px solid black">评审意见</th>
+                        <td>
+                            根据公司成武担发[2014]5号文件《成都武侯中小企业融资担保有限责任公司担保审查委员
+                            会组织与管理办法》规定，该项目符合公司
+                            {% if review_model == 1 %}
+                                内部评审程序，
+                            {% else %}评审程序，{% endif %}
+                            参会人员{{ expert_amount }}人，其中
+                            {% if comment_type_1 %}{{ comment_type_1 }}人同意{% endif %}
+                            {% if comment_type_2 %}，{{ comment_type_2 }}人复议{% endif %}
+                            {% if comment_type_3 %}，{{ comment_type_3 }}人不同意{% endif %}，会议形成如下结论：
+                        </td>
+                    </tr>
+                    <tr style="border: 1px solid black">
+                        <th style="border: 1px solid black"></th>
+                        <td style="border: 1px solid black">
+                            一、同意为该客户？？？万元，？？？提供担保，期限？？，综合费率？？。
+                            {% if lending_count > 1 %}
+                                贷款分{{ lending_count }}次发放，
+                                {% for lending in lending_list %}
+                                    {{ lending.order }}发放？？？万元
+                                    {% if not forloop.last %}、{% else %}。{% endif %}
+                                {% endfor %}
+                            {% endif %}
+                        </td>
+                    </tr>
+                    <tr style="border: 1px solid black">
+                        <th style="border: 1px solid black"></th>
+                        <td style="border: 1px solid black">
+                            二、落实以下反担保措施<br>
+                            {% if lending_count > 1 %}
+                                {% for lending in lending_list %}
+                                    {{ forloop.counter }}、{{ lending.order }}发放？？？万元，并落实以下担保措施
+                                    {% if not forloop.last %}、{% else %}。{% endif %}
+                                {% endfor %}
+                            {% endif %}
+                            {% for sure_lending in sure_lending_list %}
+                                {{ forloop.counter }}、{{ sure_lending.get_sure_typ_display }}<br>
+                            {% endfor %}
+                        </td>
                     </tr>
                     </tbody>
                 </table>

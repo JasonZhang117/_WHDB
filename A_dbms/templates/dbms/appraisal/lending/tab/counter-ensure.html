@@ -29,7 +29,13 @@
                         <td>{{ forloop.counter }}</td>
                         <td>{{ lending_sure.get_sure_typ_display }}</td>
                         <td><a target="_blank" href="{% url 'dbms:custom_scan' custom_id=custom.id %}">
-                            {{ custom.name }}</a></td>
+                            {{ custom.name }}</a>
+                            {% if custom.person_custome.spouse %}
+                                、<a target="_blank"
+                                    href="{% url 'dbms:custom_scan' custom_id=custom.person_custome.spouse.custome.id %}">
+                                {{ custom.person_custome.spouse.custome.name }}</a>
+                            {% endif %}
+                        </td>
                         <td>{{ custom.get_genre_display }}</td>
                         <td>{{ custom.contact_addr }}</td>
                         <td>{{ custom.linkman }}</td>

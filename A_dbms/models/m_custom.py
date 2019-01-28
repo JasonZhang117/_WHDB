@@ -86,6 +86,9 @@ class CustomesP(models.Model):  # 个人客户
                                    on_delete=models.CASCADE,
                                    limit_choices_to={'genre': 2},
                                    related_name='person_custome')
+    spouse = models.OneToOneField(to='self', verbose_name='配偶',
+                                  on_delete=models.CASCADE,
+                                  null=True, blank=True)
     license_num = models.CharField(verbose_name='身份证号码', max_length=18, unique=True)
     license_addr = models.CharField(verbose_name='身份证地址', max_length=64)
 
