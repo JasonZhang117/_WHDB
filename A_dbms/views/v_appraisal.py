@@ -125,13 +125,32 @@ def summary_scan(request, article_id):  # 评审项目预览
     page_title = '纪要预览'
 
     article_obj = models.Articles.objects.get(id=article_id)
-    review_model = article_obj.appraisal_article.all().first().review_model
-    expert_amount = article_obj.expert.count()
-    comment_type_1 = article_obj.comment_summary.filter(comment_type=1).count()
-    comment_type_2 = article_obj.comment_summary.filter(comment_type=2).count()
-    comment_type_3 = article_obj.comment_summary.filter(comment_type=3).count()
-    lending_count = article_obj.lending_summary.count()
-    lending_list = article_obj.lending_summary.all()
+
+    credit_term = article_obj.credit_term
+    renewal_str = str(article_obj.renewal / 10000).rstrip('0').rstrip('.')  # 续贷（万元）
+    augment_str = str(article_obj.augment / 10000).rstrip('0').rstrip('.')  # 新增（万元）
+    amount_str = str(article_obj.amount / 10000).rstrip('0').rstrip('.')  # 总额（万元）
+
+    single_list = article_obj.single_quota_summary.values_list('credit_model', 'credit_amount')  # 单项额度
+    single_dic_list = list(
+        map(lambda x: {'credit_model': x[0], 'credit_amount': str(x[1] / 10000).rstrip('0').rstrip('.')}, single_list))
+    print('single_dic_list:', single_dic_list)  # 单项额度
+
+    order_amount_list = article_obj.lending_summary.values_list('order', 'order_amount')
+    order_amount_dic_list = list(
+        map(lambda x: {'order': x[0], 'order_amount': str(x[1] / 10000).rstrip('0').rstrip('.')},
+            order_amount_list))
+    print('order_amount_dic_list:', order_amount_dic_list)  # 放款次序
+
+    review_model = article_obj.appraisal_article.all().first().review_model  # ((1, '内审'), (2, '外审'))
+    expert_amount = article_obj.expert.count()  # 评委个数
+    '''COMMENT_TYPE_LIST = ((1, '同意'), (2, '复议'), (3, '不同意'))'''
+    comment_type_1 = article_obj.comment_summary.filter(comment_type=1).count()  # 同意票数
+    comment_type_2 = article_obj.comment_summary.filter(comment_type=2).count()  # 复议票数
+    comment_type_3 = article_obj.comment_summary.filter(comment_type=3).count()  # 不同意票数
+    lending_count = article_obj.lending_summary.count()  # 放款笔数
+    lending_list = article_obj.lending_summary.all()  # 放款次序列表
+
     for lending in lending_list:
         sure_lending_list = lending.sure_lending.all()
         print('sure_lending_list:', sure_lending_list)

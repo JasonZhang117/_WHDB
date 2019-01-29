@@ -18,7 +18,7 @@ class Customes(models.Model):  # 客户
     review_date = models.DateField(verbose_name='保后日期', blank=True, null=True)
 
     CLASSIFICATION_LIST = ((1, '正常'), (11, '关注'), (21, '次级'), (31, '可疑'), (41, '损失'))
-    classification = models.IntegerField(verbose_name='_风险分类', choices=CLASSIFICATION_LIST, default=1)
+    classification = models.IntegerField(verbose_name='_风险分类', choices=CLASSIFICATION_LIST, blank=True, null=True)
     counter_only = models.BooleanField(verbose_name='仅反担保', default=1)
 
     lately_date = models.DateField(verbose_name='最近调查', null=True, blank=True)

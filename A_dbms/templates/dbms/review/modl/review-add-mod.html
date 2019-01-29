@@ -1,0 +1,25 @@
+<div class="modal fade" id="addReviewModal" tabindex="-1"
+     role="dialog" aria-labelledby="addReviewModal">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title" id="addReviewModalLabel">保后
+                    <input style="display: none" name="custom_id" value="{{ custom_obj.id }}">
+                    <input style="display: none" name="review_id" id="reviewNid">
+                </h4>
+            </div>
+            <div class="modal-body">
+                <form class="form-horizontal">
+                    {% include 'dbms/review/modl/mod_form/review-add.html' %}
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                <button type="button" class="btn btn-primary" id="addReviewModalOk">添加</button>
+            </div>
+        </div>
+    </div>
+</div>

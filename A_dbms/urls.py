@@ -83,7 +83,7 @@ urlpatterns = [
     path('ground/', views.ground, name='ground_all'),  # 菜单-权证管理-土地列表
     path('ground/<int:application>/', views.ground, name='ground'),  # /dbms/ground/(0-9)
     # -----------------------放款管理-------------------------#
-    path('provide/agree', views.provide_agree, name='provide_agree_all'),  # 菜单-放款管理-放款通知
+    path('provide/agree/', views.provide_agree, name='provide_agree_all'),  # 菜单-放款管理-放款通知
     path('provide/agree/<int:agree_state>/', views.provide_agree, name='provide_agree'),  # /dbms/provide/(0-9)
     path('provide/agree/scan/<int:agree_id>/', views.provide_agree_scan, name='provide_agree_scan'),
     path('provide/agree/notify/<int:agree_id>/<int:notify_id>/', views.provide_agree_notify,
@@ -110,6 +110,7 @@ urlpatterns = [
     path('review/<int:review_state>/', views.review, name='review'),  # 菜单-保后管理
     path('review/scan/<int:custom_id>/', views.review_scan, name='review_scan'),  #
     path('review/plan/', views.review_plan_ajax, name='review_plan_ajax'),  #
+    path('review/update/', views.review_update_ajax, name='review_update_ajax'),  #
     # -----------------------追偿管理-------------------------#
     path('compensatory/', views.compensatory, name='compensatory_all'),  # 菜单-追偿管理
     path('compensatory/<int:dun_state>/', views.compensatory, name='compensatory'),

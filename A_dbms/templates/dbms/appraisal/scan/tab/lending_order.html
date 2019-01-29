@@ -1,11 +1,5 @@
 <div class="table-responsive">
-    {#"table-responsive":表格响应式布局#}
-    <table class="table table-bordered table-hover
-                table-condensed active">
-        {#"table-bordered":表格表格边框#}
-        {#"table-hover":表格悬停变色#}
-        {#"table-condensed":表格紧缩#}
-        {#<caption><h4>项目管理</h4></caption>#}
+    <table class="table table-bordered table-hover table-condensed active">
         <thead>
         <tr style="text-align: center">
             <th>发放次序</th>
@@ -42,7 +36,7 @@
                     </td>
                 {% endif %}
                 <td>{{ lending.order_amount }}</td>
-                <td>{{ lending.amount }}</td>
+                <td>{{ lending.lending_provide_sum }}</td>
                 {% if page_title == '项目评审' %}
                     <td><a class="btn btn-danger btn-xs delLendingOrderB">删除</a></td>
                 {% endif %}

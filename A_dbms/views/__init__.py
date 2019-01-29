@@ -6,8 +6,10 @@ from .v_article import (
     article_scan_agree, article_scan_lending, article_del_ajax)
 # ----------------------v_meeting评审会视图--------------------#
 from .v_meeting import (
-    meeting, meeting_scan, meeting_notice, meeting_article_del_ajax, meeting_article_add_ajax, meeting_edit_ajax,
-    meeting_del_ajax, meeting_close_ajax, meeting_scan_article, meeting_add_ajax, meeting_allot_add_ajax,
+    meeting, meeting_scan, meeting_notice, meeting_scan_article)
+from .v_meeting_act import (
+    meeting_article_del_ajax, meeting_article_add_ajax, meeting_edit_ajax,
+    meeting_del_ajax, meeting_close_ajax, meeting_add_ajax, meeting_allot_add_ajax,
     meeting_allot_del_ajax)
 # ----------------------v_appraisal评审视图--------------------#
 from .v_appraisal import (appraisal, appraisal_scan, appraisal_scan_lending, summary_scan)
@@ -34,7 +36,7 @@ from .v_provide_act import (
 
 from .v_pigeonhole import pigeonhole, pigeonhole_scan, pigeonhole_add_ajax
 # ----------------------v_review保后管理视图--------------------#
-from .v_review import review, review_scan, review_plan_ajax
+from .v_review import review, review_scan, review_plan_ajax, review_update_ajax
 # ----------------------v_dun追偿视图--------------------#
 from .v_dun import compensatory, compensatory_scan
 # ----------------------v_custom客户管理视图--------------------#

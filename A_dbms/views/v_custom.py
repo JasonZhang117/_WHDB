@@ -48,6 +48,7 @@ def custom(request, *args, **kwargs):  # 委托合同列表
 def custom_scan(request, custom_id):  # 项目预览
     print(__file__, '---->def custom_scan')
     PAGE_TITLE = '客户预览'
+
     custom_obj = models.Customes.objects.get(id=custom_id)
 
     form_date = {
@@ -72,5 +73,8 @@ def custom_scan(request, custom_id):  # 项目预览
             'license_addr': custom_obj.person_custome.license_addr}
         form_custom_p_add = forms.CustomPAddForm(initial=form_date)
     form_shareholder_add = forms.FormShareholderAdd()
+
+    review_custom_list = custom_obj.review_custom.all().filter().order_by('-review_date', '-review_plan_date')
+    article_custom_list = custom_obj.article_custom.all().order_by('-build_date')
 
     return render(request, 'dbms/custom/custom-scan.html', locals())

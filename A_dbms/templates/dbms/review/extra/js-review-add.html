@@ -1,0 +1,59 @@
+<script>
+    $(function () {
+        bindReviewB();
+        bindAddReviewModalOk();
+    });
+
+    function bindReviewB() {
+        console.log("bindReviewB");
+        $('#review-tb').on('click', '.reviewB', function () {
+            console.log("bindReviewB");
+            reviewNid = $(this).parent().parent().attr('review-nid');
+            console.log(reviewNid);
+            $('#reviewNid').val(reviewNid);
+            $('#addReviewModal').modal('show');
+        })
+    }
+
+    function bindAddReviewModalOk() {
+        $('#addReviewModalOk').click(function () {
+            var postData = {};
+            $('#addReviewModal').find('input,select').each(function () {
+                var v = $(this).val();
+                var n = $(this).attr('name');
+                postData[n] = v;
+            });
+            var analysis = $('#id_analysis').val();
+            var suggestion = $('#id_suggestion').val();
+            postData['analysis'] = analysis;
+            postData['suggestion'] = suggestion;
+
+            var postDataStr = JSON.stringify(postData);
+            console.log(postDataStr);
+            $.ajax({
+                url: '/dbms/review/update/',
+                type: 'POST',
+                data: {'postDataStr': postDataStr},
+                success: function (arg) {
+                    var dict = JSON.parse(arg);
+                    console.log(dict);
+                    if (dict.status) {
+                        $('#addCommentModal').modal('hide');
+                        alert(dict.message);
+                        window.location.reload();
+                    } else {
+                        alert(dict.message);
+                        $('#e_analysis').text(dict.forme.analysis);
+                        $('#e_suggestion').text(dict.forme.suggestion);
+                    }
+                }
+            })
+        })
+    }
+</script>
+
+
+
+
+
+

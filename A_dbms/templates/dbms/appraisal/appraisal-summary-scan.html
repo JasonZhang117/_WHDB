@@ -74,12 +74,25 @@
                     </tr>
                     <tr style="border: 1px solid black">
                         <th style="border: 1px solid black">项目成员</th>
-                        <td style="border: 1px solid black">A角：{{ article_obj.director.name }}A角：
-                            {{ article_obj.assistant.name }}风控专员：{{ article_obj.control.name }}</td>
+                        <td style="border: 1px solid black">A角：{{ article_obj.director.name }}&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbspB角：
+                            {{ article_obj.assistant.name }}&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp风控专员：
+                            {{ article_obj.control.name }}</td>
                     </tr>
                     <tr style="border: 1px solid black">
                         <th style="border: 1px solid black">评审结论</th>
-                        <td style="border: 1px solid black">{{ article_obj.amount }}</td>
+                        <td style="border: 1px solid black">
+                            同意为该公司
+                            {% for single_dic in  single_dic_list %}
+                                {{ single_dic.credit_amount }}万元
+                                {% if single_dic.credit_model == 1 %}流动资金贷款
+                                {% elif single_dic.credit_model == 2 %}银行承兑汇票
+                                {% elif single_dic.credit_model == 3 %}保函
+                                {% elif single_dic.credit_model == 4 %}综合授信额度（含流贷、银承、保函）
+                                {% endif %}
+                                {% if not forloop.last %}、{% endif %}
+                            {% endfor %}
+                            提供担保
+                        </td>
                     </tr>
                     <tr style="border: 1px solid black">
                         <th style="border: 1px solid black">业务品种</th>
@@ -94,10 +107,10 @@
                         <th style="border: 1px solid black">金额</th>
                         <td style="border: 1px solid black">
                             {% if article_obj.renewal > 0 %}
-                                {{ article_obj.renewal }}（存量）
+                                {{ renewal_str }}万元（存量）
                             {% endif %}
                             {% if article_obj.augment > 0 %}
-                                {{ article_obj.augment }}（新增）
+                                {{ augment_str }}万元（新增）
                             {% endif %}
                         </td>
                     </tr>
@@ -138,7 +151,30 @@
                     <tr style="border: 1px solid black">
                         <th style="border: 1px solid black"></th>
                         <td style="border: 1px solid black">
-                            一、同意为该客户？？？万元，？？？提供担保，期限？？，综合费率？？。
+                            一、同意为该客户{% for single_dic in  single_dic_list %}
+                            {{ single_dic.credit_amount }}万元
+                            {% if single_dic.credit_model == 1 %}流动资金贷款
+                            {% elif single_dic.credit_model == 2 %}银行承兑汇票
+                            {% elif single_dic.credit_model == 3 %}保函
+                            {% elif single_dic.credit_model == 4 %}综合授信额度（含流贷、银承、保函）
+                            {% endif %}
+                            {% if not forloop.last %}、{% endif %}
+                        {% endfor %}提供担保，
+                            期限{{ article_obj.credit_term }}个月，综合费率
+                            {% if article_obj.single_quota_summary.all.count > 1 %}
+                                {% for single in  article_obj.single_quota_summary.all %}
+                                    {{ single.get_credit_model_display }}按{{ single.flow_rate }}%/
+                                    {{ article_obj.credit_term }}个月一次性收取。
+                                    {% if not forloop.last %}、{% endif %}
+                                {% endfor %}
+                            {% else %}
+                                {% for single in  article_obj.single_quota_summary.all %}
+                                    {{ single.flow_rate }}%/{{ article_obj.credit_term }}个月一次性收取
+                                {% endfor %}
+                            {% endif %}
+
+
+
                             {% if lending_count > 1 %}
                                 贷款分{{ lending_count }}次发放，
                                 {% for lending in lending_list %}
@@ -154,13 +190,25 @@
                             二、落实以下反担保措施<br>
                             {% if lending_count > 1 %}
                                 {% for lending in lending_list %}
-                                    {{ forloop.counter }}、{{ lending.order }}发放？？？万元，并落实以下担保措施
-                                    {% if not forloop.last %}、{% else %}。{% endif %}
+                                    {{ forloop.counter }}、{{ lending.get_order_display }}发放
+                                    {% for order_amount_dic in order_amount_dic_list %}
+                                        {% if order_amount_dic.order == lending.order %}
+                                            {{ order_amount_dic.order_amount }}
+                                        {% endif %}
+                                    {% endfor %}
+                                    万元，并落实以下担保措施<br>
+                                    {% for sure_lending in lending.sure_lending.all %}
+                                        （{{ forloop.counter }}）{{ sure_lending.get_sure_typ_display }}
+
+
+
+                                        <br>
+                                    {% endfor %}
                                 {% endfor %}
+                            {% else %}
+
                             {% endif %}
-                            {% for sure_lending in sure_lending_list %}
-                                {{ forloop.counter }}、{{ sure_lending.get_sure_typ_display }}<br>
-                            {% endfor %}
+
                         </td>
                     </tr>
                     </tbody>

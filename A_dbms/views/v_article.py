@@ -16,7 +16,7 @@ from django.db import transaction
 def creat_article_num(custom_id):
     custom = models.Customes.objects.get(id=custom_id)
     ###时间处理
-    article_date = time.gmtime()
+    article_date = time.localtime()  # 时间戳--》元组(像gmtime())
     n_year = article_date.tm_year
     if article_date.tm_mon < 10:
         n_mon = '0' + str(article_date.tm_mon)
@@ -57,7 +57,8 @@ def article(request, *args, **kwargs):  # 项目列表
     '''筛选条件'''
     article_state_list = models.Articles.ARTICLE_STATE_LIST  # 筛选条件
     article_state_list_dic = list(map(lambda x: {'id': x[0], 'name': x[1]}, article_state_list))
-    # 列表或元组转换为字典并添加key
+    print('article_state_list_dic:', article_state_list_dic)
+    # 列表或元组转换为字典并添加key[{'id': 1, 'name': '待反馈'}, {'id': 2, 'name': '已反馈'}]
     '''筛选'''
     article_list = models.Articles.objects.filter(**kwargs).select_related(
         'custom', 'director', 'assistant', 'control').order_by('-build_date')
@@ -174,7 +175,7 @@ def article_add_ajax(request):  # 添加项目
                     augment=augment, amount=amount, credit_term=cleaned_data['credit_term'],
                     director_id=cleaned_data['director_id'], assistant_id=cleaned_data['assistant_id'],
                     control_id=cleaned_data['control_id'], article_buildor=request.user)
-                today_str = time.strftime("%Y-%m-%d", time.gmtime())
+                today_str = time.strftime("%Y-%m-%d", time.localtime())  # 元组转换为字符串
                 models.Customes.objects.filter(article_custom=article_obj).update(lately_date=today_str)
             response['message'] = '成功创建项目：%s！' % article_obj.article_num
         except Exception as e:

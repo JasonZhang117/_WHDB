@@ -44,8 +44,8 @@ class SingleQuota(models.Model):  # 单项额度
                                 on_delete=models.PROTECT,
                                 limit_choices_to=limit_article_choices,
                                 related_name='single_quota_summary')
-    CREDIT_MODEL_LIST = [(1, '流动资金贷款担保'), (2, '银行承兑汇票担保'), (3, '保函担保'),
-                         (4, '综合授信额度担保（含流贷、银承、保函）')]
+    CREDIT_MODEL_LIST = [(1, '流动资金贷款'), (2, '银行承兑汇票'), (3, '保函'),
+                         (4, '综合授信额度（含流贷、银承、保函）')]
     credit_model = models.IntegerField(verbose_name='授信类型', choices=CREDIT_MODEL_LIST, default=1)
     credit_amount = models.FloatField(verbose_name='授信额度（元）')
     flow_rate = models.FloatField(verbose_name='费率（%）')
