@@ -29,8 +29,9 @@ def pigeonhole(request, *args, **kwargs):  # 归档
         for field in search_fields:
             q.children.append(("%s__contains" % field, search_key))
         provide_list = provide_list.filter(q)
+    provide_acount = provide_list.count()  # 信息数目
     '''分页'''
-    paginator = Paginator(provide_list, 18)
+    paginator = Paginator(provide_list, 19)
     page = request.GET.get('page')
     try:
         p_list = paginator.page(page)

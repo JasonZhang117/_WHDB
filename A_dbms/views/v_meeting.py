@@ -30,8 +30,9 @@ def meeting(request, *args, **kwargs):  # 评审会
         for field in search_fields:
             q.children.append(("%s__contains" % field, search_key))
         meeting_list = meeting_list.filter(q)
+    meeting_acount = meeting_list.count()
     '''分页'''
-    paginator = Paginator(meeting_list, 18)
+    paginator = Paginator(meeting_list, 19)
     page = request.GET.get('page')
     try:
         p_list = paginator.page(page)

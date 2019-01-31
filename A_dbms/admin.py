@@ -36,7 +36,7 @@ admin.site.register(models.LendingWarrants)  # 抵质押反担保
 # -----------------------合同-------------------------#
 class AgreesAdmin(admin.ModelAdmin):
     list_display = ('agree_num', 'agree_typ', 'agree_amount', 'agree_sign_date', 'ascertain_date',
-                    'agree_date', 'agree_notify_sum','agree_provide_sum', 'agree_repayment_sum')  # 显示字段
+                    'agree_date', 'agree_notify_sum', 'agree_provide_sum', 'agree_repayment_sum')  # 显示字段
     list_per_page = 20  # 每页显示条目数
     search_fields = ['agree_num']  # 搜索字段
     ordering = ['-agree_date']  # 排序字段
@@ -82,7 +82,7 @@ class CustomesAdmin(admin.ModelAdmin):
     list_display = ('name', 'short_name', 'genre', 'linkman', 'contact_num', 'credit_amount',
                     'custom_flow', 'custom_accept', 'custom_back')  # 显示字段
     list_per_page = 20  # 每页显示条目数
-    search_fields = ['short_name']  # 搜索字段
+    search_fields = ['name', 'short_name']  # 搜索字段
     ordering = ['-credit_amount', 'name']  # 排序字段
 
 

@@ -5,6 +5,8 @@
             {% if PAGE_TITLE == '客户预览' %}
                 {% if custom_obj.genre == 1 %}
                     <a class="btn btn-primary btn-sm " id="addShareholderB">添加股权 </a>
+                {% elif custom_obj.genre == 2 %}
+                    <a class="btn btn-primary btn-sm " id="addSpouseB">添加配偶 </a>
                 {% endif %}
                 <a class="btn btn-primary btn-sm " id="editCustom">修改 </a><!--#path('custom/edit/'-->
                 <a class="btn btn-danger btn-sm " id="delCustom">删除</a><!--#path('custom/del/'-->

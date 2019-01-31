@@ -13,7 +13,7 @@ from django.contrib.auth.decorators import login_required
 @login_required
 def custom_add_ajax(request):
     print(__file__, '---->def custom_add_ajax')
-    response = {'status': True, 'message': None, 'forme': None, }
+    response = {'status': True, 'message': None, 'forme': None, ' skip': None,}
     post_data_str = request.POST.get('postDataStr')
     post_data = json.loads(post_data_str)
     print('post_data:', post_data)
@@ -43,7 +43,8 @@ def custom_add_ajax(request):
                             capital=custom_c_data['capital'],
                             registered_addr=custom_c_data['registered_addr'],
                             representative=custom_c_data['representative'])
-                    response['message'] = '客户：%s，创建成功！！！' % custom_add_data['name']
+                    response['message'] = '客户：%s，创建成功。请继续添加股权信息！' % custom_add_data['name']
+                    response['skip'] = "/dbms/custom/scan/%s/" % custom_obj.id
                 except Exception as e:
                     response['status'] = False
                     response['message'] = '客户创建失败：%s' % str(e)
@@ -68,7 +69,8 @@ def custom_add_ajax(request):
                         custom_p_obj = models.CustomesP.objects.create(
                             custome=custom_obj, license_num=custom_p_data['license_num'],
                             license_addr=custom_p_data['license_addr'])
-                        response['message'] = '客户：%s，创建成功！！！' % custom_add_data['name']
+                        response['message'] = '客户：%s，创建成功。请继续添加配偶信息！' % custom_add_data['name']
+                        response['skip'] = "/dbms/custom/scan/%s/" % custom_obj.id
                 except Exception as e:
                     response['status'] = False
                     response['message'] = '客户创建失败：%s' % str(e)

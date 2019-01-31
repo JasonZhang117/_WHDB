@@ -49,8 +49,9 @@ def warrant(request, *args, **kwargs):  # 房产列表
         for field in search_fields:
             q.children.append(("%s__contains" % field, search_key))
         warrant_list = warrant_list.filter(q)
+    warrant_acount = warrant_list.count()
     '''分页'''
-    paginator = Paginator(warrant_list, 18)
+    paginator = Paginator(warrant_list, 19)
     page = request.GET.get('page')
     try:
         p_list = paginator.page(page)
@@ -145,7 +146,7 @@ def warrant_agree(request, *args, **kwargs):  # 按合同入库
             q.children.append(("%s__contains" % field, search_key))
         agree_list = agree_list.filter(q)
     '''分页'''
-    paginator = Paginator(agree_list, 18)
+    paginator = Paginator(agree_list, 19)
     page = request.GET.get('page')
     try:
         p_list = paginator.page(page)
@@ -259,7 +260,7 @@ def house(request, *args, **kwargs):  # 房产列表
     house_list = models.Houses.objects.filter(**kwargs)
     print('house_list:', house_list)
     ####分页信息###
-    paginator = Paginator(house_list, 18)
+    paginator = Paginator(house_list, 19)
     page = request.GET.get('page')
     try:
         p_list = paginator.page(page)
@@ -288,7 +289,7 @@ def ground(request, *args, **kwargs):  # 房产列表
     ground_list = models.Grounds.objects.filter(**kwargs)
     print('ground_list:', ground_list)
     ####分页信息###
-    paginator = Paginator(ground_list, 18)
+    paginator = Paginator(ground_list, 19)
     page = request.GET.get('page')
     try:
         p_list = paginator.page(page)

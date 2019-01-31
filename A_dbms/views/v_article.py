@@ -55,8 +55,9 @@ def article(request, *args, **kwargs):  # 项目列表
         for field in search_fields:
             q.children.append(("%s__contains" % field, search_key))
         article_list = article_list.filter(q)
+    article_acount = article_list.count()  # 信息数目
     '''分页'''
-    paginator = Paginator(article_list, 18)
+    paginator = Paginator(article_list, 19)
     page = request.GET.get('page')
     try:
         p_list = paginator.page(page)

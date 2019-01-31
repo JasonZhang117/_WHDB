@@ -49,7 +49,7 @@ def warrant_add_ajax(request):
                             house_name=house_add_edit_clean['house_name'],
                             house_buildor=request.user)
                     response['message'] = '房产创建成功！！！，请继续创建产权证信息。'
-                    response['skip'] = "/dbms/warrant/scan/%s" % warrant_obj.id
+                    response['skip'] = "/dbms/warrant/scan/%s/" % warrant_obj.id
                 except Exception as e:
                     response['status'] = False
                     response['message'] = '房产创建失败：%s' % str(e)
@@ -64,7 +64,7 @@ def warrant_add_ajax(request):
                     warrant_num=warrant_add_clean['warrant_num'],
                     warrant_typ=warrant_typ, warrant_buildor=request.user)
                 response['message'] = '房产包创建成功，请继续添加房产信息！！！'
-                response['skip'] = "/dbms/warrant/scan/%s" % warrant_obj.id
+                response['skip'] = "/dbms/warrant/scan/%s/" % warrant_obj.id
             except Exception as e:
                 response['status'] = False
                 response['message'] = '土地创建失败：%s' % str(e)
@@ -85,7 +85,7 @@ def warrant_add_ajax(request):
                             ground_app=ground_add_edit_clean['ground_app'],
                             ground_area=ground_add_edit_clean['ground_area'], ground_buildor=request.user)
                     response['message'] = '土地创建成功！！！，请继续创建产权证信息。'
-                    response['skip'] = "/dbms/warrant/scan/%s" % warrant_obj.id
+                    response['skip'] = "/dbms/warrant/scan/%s/" % warrant_obj.id
                 except Exception as e:
                     response['status'] = False
                     response['message'] = '土地创建失败：%s' % str(e)
@@ -109,7 +109,7 @@ def warrant_add_ajax(request):
                             receive_owner=receivable_clean['receive_owner'],
                             receivable_detail=receivable_clean['receivable_detail'])
                     response['message'] = '应收账款创建成功！！！'
-                    response['skip'] = "/dbms/warrant/scan/%s" % warrant_obj.id
+                    response['skip'] = "/dbms/warrant/scan/%s/" % warrant_obj.id
                 except Exception as e:
                     response['status'] = False
                     response['message'] = '应收账款创建失败：%s' % str(e)
@@ -135,7 +135,7 @@ def warrant_add_ajax(request):
                             target=stocke_clean['target'],
                             share=stocke_clean['share'])
                     response['message'] = '股权创建成功！！！'
-                    response['skip'] = "/dbms/warrant/scan/%s" % warrant_obj.id
+                    response['skip'] = "/dbms/warrant/scan/%s/" % warrant_obj.id
                 except Exception as e:
                     response['status'] = False
                     response['message'] = '股权创建失败：%s' % str(e)
@@ -159,7 +159,7 @@ def warrant_add_ajax(request):
                             draft_owner=draft_clean['draft_owner'],
                             draft_detail=draft_clean['draft_detail'])
                     response['message'] = '票据包创建成功，请添加票据！！！'
-                    response['skip'] = "/dbms/warrant/scan/%s" % warrant_obj.id
+                    response['skip'] = "/dbms/warrant/scan/%s/" % warrant_obj.id
                 except Exception as e:
                     response['status'] = False
                     response['message'] = '票据创建失败：%s' % str(e)
@@ -184,7 +184,7 @@ def warrant_add_ajax(request):
                             frame_num=vehicle_clean['frame_num'],
                             plate_num=vehicle_clean['plate_num'])
                     response['message'] = '车辆创建成功！！！'
-                    response['skip'] = "/dbms/warrant/scan/%s" % warrant_obj.id
+                    response['skip'] = "/dbms/warrant/scan/%s/" % warrant_obj.id
                 except Exception as e:
                     response['status'] = False
                     response['message'] = '车辆创建失败：%s' % str(e)
@@ -212,7 +212,7 @@ def warrant_add_ajax(request):
                             chattel_typ=chattel_clean['chattel_typ'],
                             chattel_detail=chattel_clean['chattel_detail'])
                     response['message'] = '动产创建成功！！！'
-                    response['skip'] = "/dbms/warrant/scan/%s" % warrant_obj.id
+                    response['skip'] = "/dbms/warrant/scan/%s/" % warrant_obj.id
                 except Exception as e:
                     response['status'] = False
                     response['message'] = '动产创建失败：%s' % str(e)
@@ -235,7 +235,7 @@ def warrant_add_ajax(request):
                             warrant=warrant_obj,
                             agree=hypothecs_add_edit_clean['agree'])
                     response['message'] = '他权创建成功！！！，请继续创建抵押资产信息。'
-                    response['skip'] = "/dbms/warrant/scan/%s" % warrant_obj.id
+                    response['skip'] = "/dbms/warrant/scan/%s/" % warrant_obj.id
                 except Exception as e:
                     response['status'] = False
                     response['message'] = '他权创建失败：%s' % str(e)

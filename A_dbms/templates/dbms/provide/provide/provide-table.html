@@ -2,10 +2,9 @@
     <table class="table table-bordered table-hover table-condensed active">
         <thead>
         <tr style="text-align: center">
-            <th>序号</th>
+            <th>合同编号({{ provide_acount }})</th>
             <th>客户名称</th>
             <th>放款银行</th>
-            <th>委托保证合同</th>
             <th>放款金额</th>
             <th>放款种类</th>
             <th>放款日期</th>
@@ -24,14 +23,13 @@
             <tr>
                 {% if PAGE_TITLE == '放款管理' %}
                     <td><a href="{% url 'dbms:provide_scan' provide_id=provide.id %}">
-                        {{ forloop.counter }} </a></td>
+                        {{ provide.notify.agree.agree_num }} </a></td>
                 {% elif PAGE_TITLE == '归档管理' %}
                     <td><a href="{% url 'dbms:pigeonhole_scan' provide_id=provide.id %}">
-                        {{ forloop.counter }} </a></td>
+                        {{ provide.notify.agree.agree_num }} </a></td>
                 {% endif %}
                 <td>{{ provide.notify.agree.lending.summary.custom.short_name }}</td>
                 <td>{{ provide.notify.agree.branch.short_name }}</td>
-                <td>{{ provide.notify.agree.agree_num }}</td>
                 <td>{{ provide.provide_money }}</td>
                 <td>{{ provide.get_provide_typ_display }}</td>
                 <td>{{ provide.provide_date }}</td>

@@ -32,8 +32,9 @@ def provide_agree(request, *args, **kwargs):  # 放款管理
         for field in search_fields:
             q.children.append(("%s__contains" % field, search_key))
         agree_list = agree_list.filter(q)
+    agree_amount = agree_list.count()  # 信息数目
     '''分页'''
-    paginator = Paginator(agree_list, 20)
+    paginator = Paginator(agree_list, 18)
     page = request.GET.get('page')
     try:
         p_list = paginator.page(page)
@@ -211,8 +212,9 @@ def provide(request, *args, **kwargs):  # 委托合同列表
         for field in search_fields:
             q.children.append(("%s__contains" % field, search_key))
         provide_list = provide_list.filter(q)
+    provide_acount = provide_list.count()
     '''分页'''
-    paginator = Paginator(provide_list, 18)
+    paginator = Paginator(provide_list, 19)
     page = request.GET.get('page')
     try:
         p_list = paginator.page(page)

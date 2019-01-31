@@ -33,8 +33,8 @@ def review(request, *args, **kwargs):  # 保后列表
         for field in search_fields:
             q.children.append(("%s__contains" % field, search_key))
         custom_list = custom_list.filter(q)
-    '''分页'''
-    paginator = Paginator(custom_list, 20)
+    custom_acount = custom_list.count()
+    paginator = Paginator(custom_list, 19)
     page = request.GET.get('page')
     try:
         p_list = paginator.page(page)

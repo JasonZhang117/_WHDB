@@ -55,7 +55,8 @@
                     if (arg.status) {
                         $('#addCustomModal').modal('hide');
                         alert(arg.message);
-                        window.location.reload();
+                        window.location.href = arg.skip;
+                        {#window.location.reload();#}
                     } else {
                         alert(arg.message);
                         $('#e_name').text(arg.forme.name);

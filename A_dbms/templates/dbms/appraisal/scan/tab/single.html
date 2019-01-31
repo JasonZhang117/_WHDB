@@ -5,7 +5,7 @@
             <th>额度类型</th>
             <th>授信额度（元）</th>
             <th>费率（%）</th>
-            {% if page_title == '项目评审' %}
+            {% if PAGE_TITLE == '项目评审' %}
                 <th>操作</th>
             {% endif %}
         </tr>
@@ -16,7 +16,7 @@
                 <td>{{ single.get_credit_model_display }}</td>
                 <td>{{ single.credit_amount }}</td>
                 <td>{{ single.flow_rate }}</td>
-                {% if page_title == '项目评审' %}
+                {% if PAGE_TITLE == '项目评审' %}
                     <td><a class="btn btn-danger btn-xs delSingleQuotaB">删除</a></td>
                 {% endif %}
             <tr>
