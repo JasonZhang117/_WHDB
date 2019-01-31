@@ -49,7 +49,7 @@ def provide_agree(request, *args, **kwargs):  # 放款管理
 @login_required
 def provide_agree_scan(request, agree_id):  # 查看放款
     print(__file__, '---->def provide_agree_scan')
-    PAGE_TITLE = '放款管理'
+    PAGE_TITLE = '风控落实'
     response = {'status': True, 'message': None, 'forme': None, }
 
     COUNTER_TYP_CUSTOM = [1, 2]

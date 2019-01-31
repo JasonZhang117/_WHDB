@@ -2,8 +2,9 @@
 from .v_index import index
 # ----------------------v_article合项目管理视图--------------------#
 from .v_article import (
-    article, article_add_ajax, article_feedback_ajax, article_scan, article_edit_ajax,
-    article_scan_agree, article_scan_lending, article_del_ajax)
+    article, article_scan, article_scan_agree, article_scan_lending)
+from .v_article_act import (
+    article_add_ajax, article_feedback_ajax, article_edit_ajax, article_del_ajax)
 # ----------------------v_meeting评审会视图--------------------#
 from .v_meeting import (
     meeting, meeting_scan, meeting_notice, meeting_scan_article)

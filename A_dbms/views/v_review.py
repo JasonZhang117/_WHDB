@@ -16,10 +16,14 @@ def review(request, *args, **kwargs):  # 保后列表
 
     REVIEW_STATE_LIST = models.Customes.REVIEW_STATE_LIST
     custom_list = models.Customes.objects.filter(**kwargs)
-
+    '''
+    custom_flow = models.FloatField(verbose_name='_流贷余额', default=0)
+    custom_accept = models.FloatField(verbose_name='_承兑余额', default=0)
+    custom_back = models.FloatField(verbose_name='_保函余额', default=0)
+    '''
     custom_list = custom_list.filter(
         Q(custom_flow__gt=0) | Q(custom_accept__gt=0) | Q(custom_back__gt=0)).order_by('-credit_amount')
-
+    print('custom_list.count()', custom_list.count())
     '''搜索'''
     search_key = request.GET.get('_s')
     if search_key:
@@ -30,14 +34,14 @@ def review(request, *args, **kwargs):  # 保后列表
             q.children.append(("%s__contains" % field, search_key))
         custom_list = custom_list.filter(q)
     '''分页'''
-    paginator = Paginator(custom_list, 10)
+    paginator = Paginator(custom_list, 20)
     page = request.GET.get('page')
     try:
-        custom_list = paginator.page(page)
+        p_list = paginator.page(page)
     except PageNotAnInteger:
-        custom_list = paginator.page(1)
+        p_list = paginator.page(1)
     except EmptyPage:
-        custom_list = paginator.page(paginator.num_pages)
+        p_list = paginator.page(paginator.num_pages)
 
     return render(request, 'dbms/review/review.html', locals())
 
@@ -52,7 +56,7 @@ def review_scan(request, custom_id):  # 保后预览
     form_review_add = forms.FormRewiewAdd()
 
     custom_obj = models.Customes.objects.get(id=custom_id)
-    review_custom_list = custom_obj.review_custom.all().filter().order_by('-review_date', '-review_plan_date')
+    review_custom_list = custom_obj.review_custom.all().order_by('-review_date', '-review_plan_date')
     article_custom_list = custom_obj.article_custom.all().order_by('-build_date')
 
     return render(request, 'dbms/review/review-scan.html', locals())

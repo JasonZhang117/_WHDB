@@ -10,7 +10,7 @@
             <th>备注</th>
             <th>操作人员</th>
             <th>已放款金额</th>
-            {% if PAGE_TITLE == '放款管理' %}
+            {% if PAGE_TITLE == '风控落实' %}
                 <th>操作</th>
             {% endif %}
         </tr>
@@ -37,7 +37,7 @@
                 <td>{{ notify.remark }}</td>
                 <td>{{ notify.notifyor.name }}</td>
                 <td>{{ notify.notify_provide_sum }}</td>
-                {% if PAGE_TITLE == '放款管理' %}
+                {% if PAGE_TITLE == '风控落实' %}
                     <td><a class="btn btn-danger btn-xs delNotifyB">删除</a></td>
                 {% endif %}
             <tr>

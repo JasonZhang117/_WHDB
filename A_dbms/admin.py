@@ -5,14 +5,24 @@ from .usera import EmployeesAdmin
 
 # -----------------------项目-------------------------#
 class ArticlesAdmin(admin.ModelAdmin):
-    list_display = ('article_num', 'custom', 'amount', 'director', 'article_state')  # 显示字段
+    list_display = (
+        'article_num', 'custom', 'amount', 'director', 'article_state', 'build_date', 'article_date')  # 显示字段
     list_per_page = 20  # 每页显示条目数
     search_fields = ['article_num']  # 搜索字段
     ordering = ['-build_date']  # 排序字段
 
 
 admin.site.register(models.Articles, ArticlesAdmin)  # 项目
-admin.site.register(models.Feedback)  # 风控反馈
+
+
+class FeedbackAdmin(admin.ModelAdmin):
+    list_display = ('article', 'feedback_date')  # 显示字段
+    list_per_page = 20  # 每页显示条目数
+    # search_fields = ['article_num']  # 搜索字段
+    ordering = ['-feedback_date']  # 排序字段
+
+
+admin.site.register(models.Feedback, FeedbackAdmin)  # 风控反馈
 admin.site.register(models.ArticleChange)  # 项目变更
 admin.site.register(models.Appraisals)  # 评审会
 admin.site.register(models.SingleQuota)  # 单项额度
@@ -25,7 +35,8 @@ admin.site.register(models.LendingWarrants)  # 抵质押反担保
 
 # -----------------------合同-------------------------#
 class AgreesAdmin(admin.ModelAdmin):
-    list_display = ('agree_num', 'agree_typ', 'agree_amount', 'agree_sign_date', 'ascertain_date', 'agree_date')  # 显示字段
+    list_display = ('agree_num', 'agree_typ', 'agree_amount', 'agree_sign_date', 'ascertain_date',
+                    'agree_date', 'agree_notify_sum','agree_provide_sum', 'agree_repayment_sum')  # 显示字段
     list_per_page = 20  # 每页显示条目数
     search_fields = ['agree_num']  # 搜索字段
     ordering = ['-agree_date']  # 排序字段

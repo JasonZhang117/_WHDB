@@ -2,7 +2,6 @@
     <table class="table table-bordered table-hover table-condensed active">
         <thead>
         <tr style="text-align: center">
-            <th>序号</th>
             <th>计划日期</th>
             <th>保后状态</th>
             <th>保后方式</th>
@@ -18,7 +17,6 @@
         <tbody id="review-tb">
         {% for review in review_custom_list %}
             <tr review-nid="{{ review.id }}">
-                <td>{{ forloop.counter }}</td>
                 <td>{{ review.review_plan_date }}</td>
                 <td>{{ review.get_review_state_display }}</td>
                 <td>{{ review.get_review_sty_display }}</td>
