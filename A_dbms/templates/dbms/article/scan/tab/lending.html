@@ -3,8 +3,9 @@
         <thead>
         <tr style="text-align: center">
             <th>发放次序</th>
-            <th>拟放款金额（元）</th>
-            <th>已放款金额（元）</th>
+            <th>通知金额（元）</th>
+            <th>放款金额（元）</th>
+            <th>还款金额（元）</th>
         </tr>
         </thead>
         <tbody>
@@ -29,6 +30,7 @@
                 {% endif %}
                 <td>{{ lending.order_amount }}</td>
                 <td>{{ lending.lending_provide_sum }}</td>
+                <td>{{ lending.lending_repayment_sum }}</td>
             <tr>
         {% endfor %}
         </tbody>
