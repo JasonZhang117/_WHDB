@@ -24,7 +24,16 @@ class FeedbackAdmin(admin.ModelAdmin):
 
 admin.site.register(models.Feedback, FeedbackAdmin)  # 风控反馈
 admin.site.register(models.ArticleChange)  # 项目变更
-admin.site.register(models.Appraisals)  # 评审会
+
+
+class AppraisalsAdmin(admin.ModelAdmin):
+    list_display = ('num', 'review_model', 'review_date')  # 显示字段
+    list_per_page = 20  # 每页显示条目数
+    # search_fields = ['article_num']  # 搜索字段
+    # ordering = ['num']  # 排序字段
+
+
+admin.site.register(models.Appraisals, AppraisalsAdmin)  # 评审会
 admin.site.register(models.SingleQuota)  # 单项额度
 admin.site.register(models.Comments)  # 评审意见
 admin.site.register(models.LendingOrder)  # 发放次序
@@ -87,7 +96,16 @@ class CustomesAdmin(admin.ModelAdmin):
 
 
 admin.site.register(models.Customes, CustomesAdmin)  # 客户
-admin.site.register(models.CustomesC)  # 企业客户
+
+
+class CustomesCAdmin(admin.ModelAdmin):
+    list_display = ('custome', 'idustry', 'district', 'capital', 'representative')  # 显示字段
+    # list_per_page = 20  # 每页显示条目数
+    # search_fields = ['name', 'short_name']  # 搜索字段
+    ordering = ['idustry', 'district']  # 排序字段
+
+
+admin.site.register(models.CustomesC, CustomesCAdmin)  # 企业客户
 
 
 # -----------------------客户-------------------------#
@@ -100,7 +118,16 @@ class CustomesPAdmin(admin.ModelAdmin):
 
 admin.site.register(models.CustomesP, CustomesPAdmin)  # 个人客户
 admin.site.register(models.Districtes)  # 区域
-admin.site.register(models.Industries)  # 行业
+
+
+class IndustriesAdmin(admin.ModelAdmin):
+    list_display = ('code', 'name')  # 显示字段
+    # list_per_page = 20  # 每页显示条目数
+    search_fields = ['code', 'name']  # 搜索字段
+    ordering = ['code']  # 排序字段
+
+
+admin.site.register(models.Industries, IndustriesAdmin)  # 行业
 admin.site.register(models.Shareholders)  # 股东
 # -----------------------保后-------------------------#
 admin.site.register(models.Review)  # 行业

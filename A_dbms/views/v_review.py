@@ -22,7 +22,7 @@ def review(request, *args, **kwargs):  # 保后列表
     custom_back = models.FloatField(verbose_name='_保函余额', default=0)
     '''
     custom_list = custom_list.filter(
-        Q(custom_flow__gt=0) | Q(custom_accept__gt=0) | Q(custom_back__gt=0)).order_by('-credit_amount')
+        Q(custom_flow__gt=0) | Q(custom_accept__gt=0) | Q(custom_back__gt=0)).order_by('lately_date')
     print('custom_list.count()', custom_list.count())
     '''搜索'''
     search_key = request.GET.get('_s')

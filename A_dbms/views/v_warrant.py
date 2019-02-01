@@ -110,16 +110,7 @@ def warrant_scan(request, warrant_id):  # house_scan房产预览
     form_draftbag_add_edit = forms.FormDraftExtend()  # 票据包form
     form_evaluate_add_edit = forms.EvaluateAddEidtForm()  # 评估
 
-    ####分页信息###
-    lendingwarrant_list = warrant_obj.lending_warrant.all()
-    paginator = Paginator(lendingwarrant_list, 10)
-    page = request.GET.get('page')
-    try:
-        p_list = paginator.page(page)
-    except PageNotAnInteger:
-        p_list = paginator.page(1)
-    except EmptyPage:
-        p_list = paginator.page(paginator.num_pages)
+    storage_warrant_list = warrant_obj.storage_warrant.all()  # 出入库信息
 
     return render(request, 'dbms/warrant/warrant-scan.html', locals())
 
@@ -133,8 +124,9 @@ def warrant_agree(request, *args, **kwargs):  # 按合同入库
                         (41, '已落实'), (51, '待变更'), (61, '已解保'), (99, '作废'))'''
     AGREE_STATE_LIST = models.Agrees.AGREE_STATE_LIST  # 筛选条件
     '''筛选'''
-    agree_list = models.Agrees.objects.filter(**kwargs).filter(agree_state__in=[21, 31, 51]).select_related(
-        'lending', 'branch').order_by('-agree_num')
+    # agree_list = models.Agrees.objects.filter(**kwargs).filter(agree_state__in=[21, 31, 51]).select_related(
+    #     'lending', 'branch').order_by('-agree_num')
+    agree_list = models.Agrees.objects.filter(**kwargs).select_related('lending', 'branch').order_by('-agree_num')
     '''搜索'''
     search_key = request.GET.get('_s')
     if search_key:
@@ -145,6 +137,7 @@ def warrant_agree(request, *args, **kwargs):  # 按合同入库
         for field in search_fields:
             q.children.append(("%s__contains" % field, search_key))
         agree_list = agree_list.filter(q)
+    agree_acount = agree_list.count()
     '''分页'''
     paginator = Paginator(agree_list, 19)
     page = request.GET.get('page')

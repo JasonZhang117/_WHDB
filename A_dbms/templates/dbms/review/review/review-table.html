@@ -14,7 +14,7 @@
         </tr>
         </thead>
         <tbody>
-        {% for custom in custom_list %}
+        {% for custom in p_list %}
             <tr>
                 {% if PAGE_TITLE == '客户管理' %}
                     <td><a href="{% url 'dbms:custom_scan' custom_id=custom.id %}">{{ custom.short_name }}</a></td>
@@ -35,4 +35,5 @@
         </tbody>
     </table>
     {% include 'dbms/board/page.html' %}
+
 </div>
