@@ -14,6 +14,7 @@ class Cooperators(models.Model):  # 授信银行
     back_limit = models.FloatField(verbose_name='单笔限额（保函）', default=0)
     credit_date = models.DateField(verbose_name='合作日期', default=datetime.date.today)
     due_date = models.DateField(verbose_name='到期日', default=datetime.date.today)
+    up_scale = models.FloatField(verbose_name='最高额上浮比例', default=0)
 
     # Cancellation = models.BooleanField('注销', default=False)
     class Meta:

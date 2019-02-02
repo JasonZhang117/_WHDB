@@ -33,7 +33,8 @@ class Notify(models.Model):  # Notify放款通知
     contracts_lease = models.CharField(verbose_name='借款合同编号', max_length=32, null=True, blank=True)
     contract_guaranty = models.CharField(verbose_name='保证合同编号', max_length=32, null=True, blank=True)
     remark = models.CharField(verbose_name='备注', max_length=256, null=True, blank=True)
-
+    time_limit = models.IntegerField(verbose_name='期限（月）')
+    weighting = models.FloatField(verbose_name='加权金额')
     notify_provide_sum = models.FloatField(verbose_name='_放款金额', default=0)
     notify_repayment_sum = models.FloatField(verbose_name='_还款金额', default=0)
 

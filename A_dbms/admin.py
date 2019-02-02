@@ -44,7 +44,7 @@ admin.site.register(models.LendingWarrants)  # 抵质押反担保
 
 # -----------------------合同-------------------------#
 class AgreesAdmin(admin.ModelAdmin):
-    list_display = ('agree_num', 'agree_typ', 'agree_amount', 'agree_sign_date', 'ascertain_date',
+    list_display = ('agree_num', 'agree_typ', 'agree_amount', 'agree_term', 'agree_sign_date', 'ascertain_date',
                     'agree_date', 'agree_notify_sum', 'agree_provide_sum', 'agree_repayment_sum')  # 显示字段
     list_per_page = 20  # 每页显示条目数
     search_fields = ['agree_num']  # 搜索字段
@@ -79,7 +79,17 @@ admin.site.register(models.Storages)  # 评估
 # -----------------------放款-------------------------#
 admin.site.register(models.Charges)  # 收费
 admin.site.register(models.Provides)  # 放款
-admin.site.register(models.Notify)  # 放款通知
+
+
+class NotifyAdmin(admin.ModelAdmin):
+    list_display = ('agree', 'notify_money', 'notify_date', 'time_limit', 'weighting',
+                    'notify_provide_sum', 'notify_repayment_sum')  # 显示字段
+    # list_per_page = 20  # 每页显示条目数
+    # search_fields = ['name', 'short_name']  # 搜索字段
+    # ordering = ['-credit_amount', 'name']  # 排序字段
+
+
+admin.site.register(models.Notify, NotifyAdmin)  # 放款通知
 admin.site.register(models.Repayments)  # 还款
 admin.site.register(models.Pigeonholes)  # 归档
 # -----------------------追偿-------------------------#
@@ -139,7 +149,7 @@ class CooperatorsAdmin(admin.ModelAdmin):
                     'back_credit', 'back_limit')  # 显示字段
     list_per_page = 30  # 每页显示条目数
     search_fields = ['name']  # 搜索字段
-    ordering = ['-flow_credit', '-flow_limit']  # 排序字段
+    # ordering = ['-flow_credit', '-flow_limit']  # 排序字段
 
 
 admin.site.register(models.Cooperators, CooperatorsAdmin)  # 合作机构

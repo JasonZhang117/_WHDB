@@ -7,6 +7,7 @@
             <th>放款种类</th>
             <th>放款日期</th>
             <th>到期日</th>
+            <th>还款金额</th>
             <th>归档状态</th>
             <th>放款状态</th>
             <th>操作</th>
@@ -21,6 +22,7 @@
                 <td>{{ provide.get_provide_typ_display }}</td>
                 <td>{{ provide.provide_date }}</td>
                 <td>{{ provide.due_date }}</td>
+                <td>{{ provide.provide_repayment_sum }}</td>
                 <td>{{ provide.get_implement_display }}</td>
                 <td>{{ provide.get_provide_status_display }}</td>
                 <td><a class="btn btn-danger btn-xs delProvideB">删除</a></td>

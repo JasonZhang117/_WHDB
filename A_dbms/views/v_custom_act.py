@@ -13,7 +13,7 @@ from django.contrib.auth.decorators import login_required
 @login_required
 def custom_add_ajax(request):
     print(__file__, '---->def custom_add_ajax')
-    response = {'status': True, 'message': None, 'forme': None, ' skip': None,}
+    response = {'status': True, 'message': None, 'forme': None, ' skip': None, }
     post_data_str = request.POST.get('postDataStr')
     post_data = json.loads(post_data_str)
     print('post_data:', post_data)
@@ -38,7 +38,7 @@ def custom_add_ajax(request):
                             custom_buildor=request.user)
                         custom_c_obj = models.CustomesC.objects.create(
                             custome=custom_obj,
-                            idustry=custom_c_data['idustry'],
+                            idustry_id=custom_c_data['idustry'],
                             district=custom_c_data['district'],
                             capital=custom_c_data['capital'],
                             registered_addr=custom_c_data['registered_addr'],

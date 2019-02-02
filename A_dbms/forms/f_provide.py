@@ -28,9 +28,10 @@ class FormCounterSignAdd(dform.ModelForm):
 class FormNotifyAdd(dform.ModelForm):
     class Meta:
         model = models.Notify
-        fields = ['notify_money', 'notify_date', 'contracts_lease', 'contract_guaranty', 'remark']
+        fields = ['notify_money', 'time_limit', 'notify_date', 'contracts_lease', 'contract_guaranty', 'remark']
         widgets = {
             'notify_money': dform.NumberInput(attrs={'class': 'form-control', 'placeholder': '通知金额'}),
+            'time_limit': dform.NumberInput(attrs={'class': 'form-control', 'placeholder': '期限'}),
             'notify_date': dform.DateInput(attrs={'class': 'form-control', 'type': 'date'}),
             'contracts_lease': dform.TextInput(attrs={'class': 'form-control'}),
             'contract_guaranty': dform.TextInput(attrs={'class': 'form-control'}),
@@ -67,6 +68,7 @@ class FormImplementAdd(dform.ModelForm):
         '''IMPLEMENT_LIST = [(1, '未归档'), (11, '退回'), (21, '暂存风控'), (31, '移交行政'), (41, '已归档')]'''
         widgets = {
             'implement': dform.Select(attrs={'class': 'form-control'})}
+
 
 # -----------------------归档添加-------------------------#
 class FormPigeonholeAdd(dform.ModelForm):

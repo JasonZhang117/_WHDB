@@ -106,30 +106,39 @@ def notify_add_ajax(request):
     agree_state = agree_obj.agree_state
     if agree_state in [31, 41]:
         if form_notify_add.is_valid():
+            agree_term = agree_obj.agree_term  # 合同期限
             form_notify_cleaned = form_notify_add.cleaned_data
-            notify_money = form_notify_cleaned['notify_money']
-            notify_amount = models.Notify.objects.filter(agree=agree_obj).aggregate(Sum('notify_money'))
-            notify_money_sum = notify_amount['notify_money__sum']
-            if notify_money_sum:
-                amount = notify_money_sum + notify_money
-            else:
-                amount = notify_money
-            if amount > agree_obj.agree_amount:
+            time_limit = form_notify_cleaned['time_limit']  # 通知期限
+            if time_limit > agree_term:
                 response['status'] = False
-                response['message'] = '放款通知金额合计（%s）大于合同金额（%s）' % (amount, agree_obj.agree_amount)
+                response['message'] = '通知期限（%s个月）大于合同期限（%s个月），放款通知添加失败！'
             else:
-                try:
-                    with transaction.atomic():
-                        notify_obj = models.Notify.objects.create(
-                            agree=agree_obj, notify_money=notify_money, notify_date=form_notify_cleaned['notify_date'],
-                            contracts_lease=form_notify_cleaned['contracts_lease'],
-                            contract_guaranty=form_notify_cleaned['contract_guaranty'],
-                            remark=form_notify_cleaned['remark'], notifyor=request.user)
-                        agree_list.update(agree_notify_sum=amount)
-                    response['message'] = '成功添加放款通知！'
-                except Exception as e:
+                notify_money = form_notify_cleaned['notify_money']  # 通知金额
+                weighting_money = round((time_limit / agree_term) * notify_money, 2)  # 时间加权通知金额
+                weighting_amount = models.Notify.objects.filter(agree=agree_obj).aggregate(Sum('weighting'))
+                weighting_money_sum = weighting_amount['weighting__sum']  # 时间加权通知金额合计（已有）
+                if weighting_money_sum:
+                    amount = weighting_money_sum + weighting_money  # 时间加权通知金额合计（含当前）
+                else:
+                    amount = weighting_money  # 时间加权通知金额合计（含当前）
+                agree_amount = agree_obj.agree_amount  # 合同金额
+                if amount > agree_amount:
                     response['status'] = False
-                    response['message'] = '放款通知添加失败：%s' % str(e)
+                    response['message'] = '加权放款通知金额合计（%s）大于合同金额（%s）' % (amount, agree_amount)
+                else:
+                    try:
+                        with transaction.atomic():
+                            notify_obj = models.Notify.objects.create(
+                                agree=agree_obj, notify_money=notify_money, time_limit=time_limit,
+                                weighting=weighting_money, notify_date=form_notify_cleaned['notify_date'],
+                                contracts_lease=form_notify_cleaned['contracts_lease'],
+                                contract_guaranty=form_notify_cleaned['contract_guaranty'],
+                                remark=form_notify_cleaned['remark'], notifyor=request.user)
+                            agree_list.update(agree_notify_sum=amount)
+                        response['message'] = '成功添加放款通知！'
+                    except Exception as e:
+                        response['status'] = False
+                        response['message'] = '放款通知添加失败：%s' % str(e)
         else:
             response['status'] = False
             response['message'] = '表单信息有误！！！'
@@ -419,8 +428,9 @@ def repayment_add_ajax(request):
                     else:
                         custom_list.update(custom_back=F('custom_back') - repayment_money)  # 客户，更新保函余额
                         branch_list.update(branch_back=F('branch_back') - repayment_money)  # 放款银行，更新保函余额
-
-                    if provide_obj.provide_money == provide_obj.provide_repayment_sum:  # 放款金额=还款金额合计
+                    print(provide_obj.provide_money, provide_obj.provide_repayment_sum)
+                    if round(provide_obj.provide_money, 2) == round(provide_obj.provide_repayment_sum, 2):
+                        # 放款金额=还款金额合计
                         provide_list.update(provide_status=11)  # 放款解保
                         response['message'] = '成功还款,本次放款已全部结清！'
                     else:

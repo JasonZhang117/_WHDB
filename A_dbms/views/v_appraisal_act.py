@@ -326,9 +326,9 @@ def single_quota_ajax(request):  # 单项额度ajax
     flow_rate = post_data['flow_rate']
 
     article_obj = models.Articles.objects.get(id=article_id)
-    '''((1, '待反馈'), (2, '已反馈'), (3, '待上会'),
-        (4, '已上会'), (5, '已签批'), (6, '已注销'))'''
-    if article_obj.article_state == 4:
+    '''ARTICLE_STATE_LIST = ((1, '待反馈'), (2, '已反馈'), (3, '待上会'), (4, '已上会'), (5, '已签批'),
+                          (51, '已放完'), (61, '待变更'), (99, '已注销'))'''
+    if article_obj.article_state in [4, 61]:
 
         form = forms.SingleQuotaForm(post_data)
         if form.is_valid():
@@ -386,7 +386,7 @@ def lending_order_ajax(request):  # 放款次序ajax
 
 # -----------------------放款次序删除ajax-------------------------#
 @login_required
-def lending_del_ajax(request):  # 单项额度删除ajax
+def lending_del_ajax(request):  # 放款次序删除ajax
     print(__file__, '---->def single_del_ajax')
     response = {'status': True, 'message': None, 'forme': None, }
     post_data_str = request.POST.get('postDataStr')
@@ -398,9 +398,9 @@ def lending_del_ajax(request):  # 单项额度删除ajax
     lending_obj = models.LendingOrder.objects.get(id=lending_id)
     article_obj = models.Articles.objects.get(id=article_id)
     print('lending_obj:', lending_obj)
-    '''((1, '待反馈'), (2, '已反馈'), (3, '待上会'),
-       (4, '已上会'), (5, '已签批'), (6, '已注销'))'''
-    if article_obj.article_state in [1, 2, 3, 4]:
+    '''ARTICLE_STATE_LIST = ((1, '待反馈'), (2, '已反馈'), (3, '待上会'), (4, '已上会'), (5, '已签批'),
+                          (51, '已放完'), (61, '待变更'), (99, '已注销'))'''
+    if article_obj.article_state in [1, 2, 3, 4, 61]:
         try:
             lending_obj.delete()  # 删除单项额度
             response['message'] = '放款次序删除成功！'
@@ -428,9 +428,9 @@ def single_del_ajax(request):  # 单项额度删除ajax
     single_obj = models.SingleQuota.objects.get(id=single_id)
     article_obj = models.Articles.objects.get(id=article_id)
     print('single_obj:', single_obj)
-    '''((1, '待反馈'), (2, '已反馈'), (3, '待上会'),
-       (4, '已上会'), (5, '已签批'), (6, '已注销'))'''
-    if article_obj.article_state in [1, 2, 3, 4]:
+    '''ARTICLE_STATE_LIST = ((1, '待反馈'), (2, '已反馈'), (3, '待上会'), (4, '已上会'), (5, '已签批'),
+                          (51, '已放完'), (61, '待变更'), (99, '已注销'))'''
+    if article_obj.article_state in [1, 2, 3, 4, 61]:
         single_obj.delete()  # 删除单项额度
         response['obj_id'] = single_obj.id
         msg = '单项额度删除成功！'
@@ -537,17 +537,19 @@ def article_change_ajax(request):
         change_cleaned = form_article_change.cleaned_data
         change_view = change_cleaned['change_view']
         '''CHANGE_VIEW_LIST = ((1, '变更申请'), (11, '同意变更'), (21, '否决变更'))'''
-        if change_view == 11:
-            try:
-                with transaction.atomic():
-                    article_list.update(article_state=61)
-                    models.ArticleChange.objects.create(
-                        article=article_obj, change_view=change_view, change_detail=change_cleaned['change_detail'],
-                        change_date=change_cleaned['change_date'], change_buildor=request.user)
-                response['message'] = '项目变更成功，请重新设置方案！'
-            except Exception as e:
-                response['status'] = False
-                response['message'] = '项目变更失败：%s' % str(e)
+        article_state = article_obj.article_state
+        if article_state in [5, 61]:
+            if change_view == 11:
+                try:
+                    with transaction.atomic():
+                        article_list.update(article_state=61)
+                        models.ArticleChange.objects.create(
+                            article=article_obj, change_view=change_view, change_detail=change_cleaned['change_detail'],
+                            change_date=change_cleaned['change_date'], change_buildor=request.user)
+                    response['message'] = '项目变更成功，请重新设置方案！'
+                except Exception as e:
+                    response['status'] = False
+                    response['message'] = '项目变更失败：%s' % str(e)
         else:
             response['status'] = False
             response['message'] = '项目状态为：%s，本次变更失败！！！' % article_obj.article_state

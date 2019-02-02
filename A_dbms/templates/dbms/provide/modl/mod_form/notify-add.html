@@ -5,6 +5,11 @@
         <div class="col-sm-9">{{ form_notify_add.notify_money }}</div>
         <label id="e_notify_money" class="pull-right">{{ form_notify_add.notify_money.errors }}</label>
     </div>
+    <div class="form-group"><!--期限-->
+        <label for="id_time_limit" class="col-sm-3 control-label">{{ form_notify_add.time_limit.label }}：</label>
+        <div class="col-sm-9">{{ form_notify_add.time_limit }}</div>
+        <label id="e_time_limit" class="pull-right">{{ form_notify_add.time_limit.errors }}</label>
+    </div>
 
     <div class="form-group"><!--通知日期-->
         <label for="id_notify_date" class="col-sm-3 control-label">{{ form_notify_add.notify_date.label }}：</label>

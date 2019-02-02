@@ -7,9 +7,12 @@
             <th>保证合同</th>
             <th>通知日期</th>
             <th>通知金额</th>
+            <th>期限(月)</th>
+            <th>加权金额</th>
+            <th>放款金额</th>
+            <th>还款金额</th>
             <th>备注</th>
             <th>操作人员</th>
-            <th>已放款金额</th>
             {% if PAGE_TITLE == '风控落实' %}
                 <th>操作</th>
             {% endif %}
@@ -34,9 +37,12 @@
                 <td>{{ notify.contract_guaranty }}</td>
                 <td>{{ notify.notify_date }}</td>
                 <td>{{ notify.notify_money }}</td>
+                <td>{{ notify.time_limit }}</td>
+                <td>{{ notify.weighting }}</td>
+                <td>{{ notify.notify_provide_sum }}</td>
+                <td>{{ notify.notify_repayment_sum }}</td>
                 <td>{{ notify.remark }}</td>
                 <td>{{ notify.notifyor.name }}</td>
-                <td>{{ notify.notify_provide_sum }}</td>
                 {% if PAGE_TITLE == '风控落实' %}
                     <td><a class="btn btn-danger btn-xs delNotifyB">删除</a></td>
                 {% endif %}

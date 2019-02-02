@@ -56,6 +56,8 @@ def agree_add_ajax(request):  # 添加合同
     lending_obj = models.LendingOrder.objects.get(id=lending_id)
     article_state_lending = lending_obj.summary.article_state
     print('article_state_lending:', article_state_lending)
+    '''ARTICLE_STATE_LIST = ((1, '待反馈'), (2, '已反馈'), (3, '待上会'), (4, '已上会'), (5, '已签批'),
+                          (51, '已放完'), (61, '待变更'), (99, '已注销'))'''
     if article_state_lending == 5:
         form_agree_add = forms.AgreeAddForm(post_data, request.FILES)
         if form_agree_add.is_valid():
@@ -65,11 +67,21 @@ def agree_add_ajax(request):  # 添加合同
             guarantee_typ = agree_add_cleaned['guarantee_typ']
             agree_copies = agree_add_cleaned['agree_copies']
 
+            branch_id = agree_add_cleaned['branch']
+            agree_typ = agree_add_cleaned['agree_typ']
+            branche_obj = models.Branches.objects.get(id=branch_id)
+            cooperator_up_scale = branche_obj.cooperator.up_scale
+            '''AGREE_TYP_LIST = ((1, '单笔'), (2, '最高额'), (3, '保函'))'''
+            order_amount = lending_obj.order_amount  # 放款次序金额
+            if agree_typ == 2:  # (2, '最高额')
+                order_amount_up = order_amount * (1 + cooperator_up_scale)  # 最高允许的合同金额
+            else:
+                order_amount_up = order_amount
+            print('order_amount_up:', order_amount_up)
             ###判断合同情况：
-            if agree_amount > lending_obj.order_amount:
+            if agree_amount > order_amount_up:
                 response['status'] = False
-                msg = '该项目本次发放额度最高为%s,合同金额超过审批额度！！！' % lending_obj.order_amount
-                response['message'] = msg
+                response['message'] = '该项目本次发放额度最高为%s,合同金额超过审批额度！！！' % order_amount_up
                 result = json.dumps(response, ensure_ascii=False)
                 return HttpResponse(result)
 
@@ -96,7 +108,8 @@ def agree_add_ajax(request):  # 添加合同
             try:
                 agree_obj = models.Agrees.objects.create(
                     agree_num=agree_num, num_prefix=agree_num_prefix, lending=lending_obj,
-                    branch_id=agree_add_cleaned['branch'], agree_typ=agree_add_cleaned['agree_typ'],
+                    branch_id=branch_id, agree_typ=agree_typ,
+                    agree_term=agree_add_cleaned['agree_term'],
                     agree_amount=agree_amount, guarantee_typ=guarantee_typ, agree_copies=agree_copies,
                     agree_buildor=request.user)
                 response['skip'] = "/dbms/agree/scan/%s" % agree_obj.id
