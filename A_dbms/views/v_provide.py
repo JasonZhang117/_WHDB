@@ -205,7 +205,8 @@ def provide(request, *args, **kwargs):  # 委托合同列表
     '''搜索'''
     search_key = request.GET.get('_s')
     if search_key:
-        search_fields = ['notify__agree__lending__summary__custom__name', 'notify__agree__branch__name',
+        search_fields = ['notify__agree__lending__summary__custom__name',
+                         'notify__agree__branch__name',
                          'notify__agree__agree_num']
         q = Q()
         q.connector = 'OR'
@@ -235,4 +236,5 @@ def provide_scan(request, provide_id):  # 查看放款
     provide_obj = models.Provides.objects.get(id=provide_id)
 
     form_repayment_add = forms.FormRepaymentAdd()
+    form_compensatory_add = forms.FormCompensatoryAdd()
     return render(request, 'dbms/provide/provide-scan.html', locals())

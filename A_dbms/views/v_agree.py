@@ -17,6 +17,7 @@ def agree(request, *args, **kwargs):  # 委托合同列表
     operate_agree_add = True
     '''模态框'''
     form_agree_add = forms.AgreeAddForm()  # 合同添加
+    print('form_agree_add:', form_agree_add)
     '''AGREE_STATE_LIST = ((11, '待签批'), (21, '已签批'), (31, '未落实'),
                         (41, '已落实'), (51, '待变更'), (61, '已解保'), (99, '作废'))'''
     AGREE_STATE_LIST = models.Agrees.AGREE_STATE_LIST  # 筛选条件

@@ -76,6 +76,7 @@ class LendingOrder(models.Model):
                                 on_delete=models.PROTECT,
                                 limit_choices_to=limit_lending_choices,
                                 related_name='lending_summary')
+    # limit_choices_to=limit_lending_choices,
     ORDER_LIST = ((1, '第一次'), (2, '第二次'), (3, '第三次'), (4, '第四次'))
     order = models.IntegerField(verbose_name='发放次序', choices=ORDER_LIST, default=1)
     order_amount = models.FloatField(verbose_name='拟放金额')

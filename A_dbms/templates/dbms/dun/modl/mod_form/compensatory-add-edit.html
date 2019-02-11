@@ -1,0 +1,24 @@
+<div id="form_compensatory_add">
+    <div class="form-group"><!--代偿日期-->
+        <label for="id_compensatory_dateg"
+               class="col-sm-3 control-label">{{ form_compensatory_add.compensatory_date.label }}：</label>
+        <div class="col-sm-9">{{ form_compensatory_add.compensatory_date }} </div>
+        <label id="e_compensatory_date" class="pull-right">{{ form_compensatory_add.compensatory_date.errors }}</label>
+    </div>
+    <div class="form-group"><!--代偿本金金额-->
+        <label for="id_compensatory_capital"
+               class="col-sm-3 control-label">{{ form_compensatory_add.compensatory_capital.label }}：</label>
+        <div class="col-sm-9">{{ form_compensatory_add.compensatory_capital }}</div>
+        <label id="e_compensatory_capital"
+               class="pull-right">{{ form_compensatory_add.compensatory_capital.errors }}</label>
+    </div>
+    <div class="form-group"><!--代偿利息金额-->
+        <label for="id_compensatory_interestp"
+               class="col-sm-3 control-label">{{ form_compensatory_add.compensatory_interest.label }}：</label>
+        <div class="col-sm-9">{{ form_compensatory_add.compensatory_interest }}</div>
+        <label id="e_compensatory_interest"
+               class="pull-right">{{ form_compensatory_add.compensatory_interest.errors }}</label>
+    </div>
+</div>
+
+

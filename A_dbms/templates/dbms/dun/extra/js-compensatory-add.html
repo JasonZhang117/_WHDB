@@ -1,0 +1,55 @@
+<script>
+    $(function () {
+        bindCompensatoryB();
+        bindAddCompModalOk();
+    });
+
+    function bindCompensatoryB() {
+        $('#compensatoryB').click(function () {
+            console.log("bindAddAgree");
+            $('#addCompModal').modal('show');
+        })
+    }
+
+    function bindAddCompModalOk() {
+        $('#addCompModalOk').click(function () {
+            var postData = {};
+            $('#addCompModal').find('input,select').each(function () {
+                var v = $(this).val();
+                var n = $(this).attr('name');
+                postData[n] = v;
+            });
+            var postDataStr = JSON.stringify(postData);
+
+            console.log(postDataStr);
+
+            $.ajax({
+                url: '/dbms/agree/add/',
+                type: 'POST',
+                traditional: true,
+                data: {'postDataStr': postDataStr},
+                dataType: 'JSON',
+                success: function (arg) {
+                    console.log(arg);
+                    if (arg.status) {
+                        $('#addAgreeModal').modal('hide');
+                        alert(arg.message);
+                        {#window.location.href = arg.skip;#}
+                        window.location.reload();
+                    } else {
+                        alert(arg.message);
+                        $('#e_compensatory_date').text(arg.forme.compensatory_date);
+                        $('#e_compensatory_capital').text(arg.forme.compensatory_capital);
+                        $('#e_compensatory_interest').text(arg.forme.compensatory_interest);
+                    }
+                }
+            })
+        })
+    }
+</script>
+
+
+
+
+
+

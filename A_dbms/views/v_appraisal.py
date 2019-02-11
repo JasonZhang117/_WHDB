@@ -109,12 +109,12 @@ def appraisal_scan_lending(request, article_id, lending_id):  # 评审项目预�
     form_lendingsures = forms.LendingSuresForm()
     # form_lendingcustoms_c_add = forms.LendingCustomsCForm()
     # form_lendingcustoms_p_add = forms.LendingCustomsPForm()
-    form_lendinghouse_add = forms.LendingHouseForm()
-    form_lendingground_add = forms.LendingGroundForm()
-    form_lendinggreceivable_add = forms.LendinReceivableForm()
-    form_lendingstock_add = forms.LendinStockForm()
-    form_lendingchattel_add = forms.LendinChattelForm()
-    form_lendingdraft_add = forms.LendinDraftForm()
+    form_lendinghouse_add = forms.LendingHouseForm()  # 房产
+    form_lendingground_add = forms.LendingGroundForm()  # 土地
+    form_lendinggreceivable_add = forms.LendinReceivableForm()  # 应收账款
+    form_lendingstock_add = forms.LendinStockForm()  # 股权
+    form_lendingchattel_add = forms.LendinChattelForm()  # 动产
+    form_lendingdraft_add = forms.LendinDraftForm()  # 票据
 
     return render(request, 'dbms/appraisal/appraisal-scan-lending.html', locals())
 
