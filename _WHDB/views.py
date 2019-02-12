@@ -61,6 +61,11 @@ def home(request):
         'ordery').values('name', 'url_name')
     print('menu_list:', menu_list)
     print('list(menu_list):', list(menu_list))
-    article_list = models.Articles.objects.all().count()
-    print('article_list:',article_list)
+    agree_list = models.Provides.objects.all()
+    for agree in agree_list:
+        agree_list_obj = models.Provides.objects.filter(id=agree.id)
+        agree_obj = agree_list_obj.first()
+        agree_amount = agree_obj.implement
+        print('agree_amount:', agree_amount)
+        # agree_list_obj.update(implement=31)
     return render(request, 'home.html', locals())

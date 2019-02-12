@@ -19,6 +19,11 @@
         <div class="col-sm-9">{{ form_agree_add.agree_amount }}</div>
         <label id="e_agree_amount" class="pull-right">{{ form_agree_add.agree_amount.errors }}</label>
     </div>
+    <div class="form-group"><!--合同金额-->
+        <label for="id_amount_limit" class="col-sm-3 control-label">{{ form_agree_add.amount_limit.label }}：</label>
+        <div class="col-sm-9">{{ form_agree_add.amount_limit }}</div>
+        <label id="e_amount_limit" class="pull-right">{{ form_agree_add.amount_limit.errors }}</label>
+    </div>
     <div class="form-group"><!--期限-->
         <label for="id_agree_term" class="col-sm-3 control-label">{{ form_agree_add.agree_term.label }}：</label>
         <div class="col-sm-9">{{ form_agree_add.agree_term }}</div>

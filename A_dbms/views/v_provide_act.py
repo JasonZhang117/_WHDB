@@ -121,10 +121,31 @@ def notify_add_ajax(request):
                     amount = weighting_money_sum + weighting_money  # 时间加权通知金额合计（含当前）
                 else:
                     amount = weighting_money  # 时间加权通知金额合计（含当前）
-                agree_amount = agree_obj.agree_amount  # 合同金额
-                if amount > agree_amount:
+                amount_limit = agree_obj.amount_limit  # 合同放款限额
+                '''合同项下放款合计'''
+                agree_provide_amount = models.Provides.objects.filter(
+                    notify__agree=agree_obj).aggregate(Sum('provide_money'))['provide_money__sum']
+                if agree_provide_amount:
+                    agree_provide_amount = agree_provide_amount
+                else:
+                    agree_provide_amount = 0
+                '''#合同项下还款合计'''
+                agree_repayment_amount = models.Repayments.objects.filter(
+                    provide__notify__agree=agree_obj).aggregate(
+                    Sum('repayment_money'))['repayment_money__sum']
+                if agree_repayment_amount:
+                    agree_repayment_amount = agree_repayment_amount
+                else:
+                    agree_repayment_amount = 0
+
+                agree_balance = agree_provide_amount - agree_repayment_amount
+                agree_balance_notify = agree_balance + notify_money
+                if amount > amount_limit:
                     response['status'] = False
-                    response['message'] = '加权放款通知金额合计（%s）大于合同金额（%s）' % (amount, agree_amount)
+                    response['message'] = '加权放款通知金额合计（%s）大于合同放款限额（%s）' % (amount, amount_limit)
+                elif agree_balance_notify > amount_limit:
+                    response['status'] = False
+                    response['message'] = '担保余额与通知金额合计（%s）大于合同放款限额（%s）' % (agree_balance_notify, amount_limit)
                 else:
                     try:
                         with transaction.atomic():
@@ -145,7 +166,7 @@ def notify_add_ajax(request):
                                 Sum('weighting'))['weighting__sum']
                             print('article_notify_amount:', article_notify_amount)
                             article_list.update(article_notify_sum=round(article_notify_amount, 2))
-                            # 项目，更新加权通知总额
+
                         response['message'] = '成功添加放款通知！'
                     except Exception as e:
                         response['status'] = False
@@ -182,6 +203,9 @@ def notify_del_ajax(request):  # 反担保人删除ajax
             with transaction.atomic():
                 models.Agrees.objects.filter(notify_agree=notify_obj).update(
                     agree_notify_sum=F('agree_notify_sum') - notify_obj.notify_money)
+                models.Articles.objects.filter(
+                    lending_summary__agree_lending__notify_agree=notify_obj).update(
+                    article_notify_sum=F('article_notify_sum') - notify_obj.notify_money)  # 项目
                 notify_obj.delete()
             response['message'] = '放款通知删除成功！'
         except Exception as e:
@@ -438,8 +462,9 @@ def repayment_add_ajax(request):
                     else:
                         custom_list.update(custom_back=F('custom_back') - repayment_money)  # 客户，更新保函余额
                         branch_list.update(branch_back=F('branch_back') - repayment_money)  # 放款银行，更新保函余额
+                    provide_repayment_sum = provide_obj.provide_repayment_sum + repayment_money
                     print(provide_obj.provide_money, provide_obj.provide_repayment_sum)
-                    if round(provide_obj.provide_money, 2) == round(provide_obj.provide_repayment_sum, 2):
+                    if round(provide_obj.provide_money, 2) == round(provide_repayment_sum, 2):
                         # 放款金额=还款金额合计
                         provide_list.update(provide_status=11)  # 放款解保
                         response['message'] = '成功还款,本次放款已全部结清！'

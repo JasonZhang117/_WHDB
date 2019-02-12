@@ -12,13 +12,14 @@ class AgreeAddForm(dform.ModelForm):
 
     class Meta:
         model = models.Agrees
-        fields = ['lending', 'agree_typ', 'guarantee_typ', 'agree_copies', 'agree_amount', 'agree_term']
+        fields = ['lending', 'agree_typ', 'guarantee_typ', 'agree_copies', 'agree_amount', 'amount_limit', 'agree_term']
         widgets = {'lending': dform.Select(attrs={'class': 'form-control'}),
                    'agree_typ': dform.Select(attrs={'class': 'form-control'}),
                    'guarantee_typ': dform.Select(attrs={'class': 'form-control'}),
                    'agree_copies': dform.NumberInput(attrs={'class': 'form-control', 'placeholder': '合同份数'}),
                    'agree_term': dform.NumberInput(attrs={'class': 'form-control', 'placeholder': '期限'}),
-                   'agree_amount': dform.NumberInput(attrs={'class': 'form-control', 'placeholder': '合同金额（元）'})}
+                   'agree_amount': dform.NumberInput(attrs={'class': 'form-control', 'placeholder': '合同金额（元）'}),
+                   'amount_limit': dform.NumberInput(attrs={'class': 'form-control', 'placeholder': '放款限额（元）'})}
 
     def __init__(self, *args, **kwargs):
         super(AgreeAddForm, self).__init__(*args, **kwargs)

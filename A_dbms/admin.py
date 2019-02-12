@@ -79,7 +79,13 @@ admin.site.register(models.Evaluate)  # 出入库
 admin.site.register(models.Storages)  # 评估
 # -----------------------放款-------------------------#
 admin.site.register(models.Charges)  # 收费
-admin.site.register(models.Provides)  # 放款
+
+class ProvidesAdmin(admin.ModelAdmin):
+    list_display = ('notify', 'provide_typ', 'provide_money', 'provide_date', 'due_date', 'implement')
+    # list_per_page = 20  # 每页显示条目数
+    # search_fields = ['warrant_num']  # 搜索字段
+    ordering = ['-provide_date']  # 排序字段
+admin.site.register(models.Provides,ProvidesAdmin)  # 放款
 
 
 class NotifyAdmin(admin.ModelAdmin):

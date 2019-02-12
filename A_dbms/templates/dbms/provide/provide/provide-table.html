@@ -11,6 +11,7 @@
             <th>到期日</th>
             {% if PAGE_TITLE == '归档管理' %}
                 <th>归档状态</th>
+                <th>档案编号</th>
             {% elif PAGE_TITLE == '放款管理' %}
                 <th>还款金额</th>
             {% endif %}
@@ -36,6 +37,7 @@
                 <td>{{ provide.due_date }}</td>
                 {% if PAGE_TITLE == '归档管理' %}
                     <td>{{ provide.get_implement_display }}</td>
+                    <td>{{ provide.file_num }}</td>
                 {% elif PAGE_TITLE == '放款管理' %}
                     <td>{{ provide.provide_repayment_sum }}</td>
                 {% endif %}

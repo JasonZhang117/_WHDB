@@ -7,7 +7,9 @@
             <th>客户名称</th>
             <th>放款银行</th>
             <th>合同种类</th>
+            <th>期限</th>
             <th>合同金额</th>
+            <th>放款限额</th>
             <th>加权通知金额</th>
             <th>放款金额</th>
             <th>还款金额</th>
@@ -26,7 +28,9 @@
                 <td>{{ agree.lending.summary.custom.short_name }}</td>
                 <td>{{ agree.branch.short_name }}</td>
                 <td>{{ agree.get_agree_typ_display }}</td>
+                <td>{{ agree.agree_term }}</td>
                 <td>{{ agree.agree_amount }}</td>
+                <td>{{ agree.amount_limit }}</td>
                 <td>{{ agree.agree_notify_sum }}</td>
                 <td>{{ agree.agree_provide_sum }}</td>
                 <td>{{ agree.agree_repayment_sum }}</td>
