@@ -31,10 +31,6 @@ def acc_login(request):
             # request.session['menus'] = [{'menu': '评审管理', 'url': 'dbms:article_all'},
             #                             {'menu': '个人主页', 'url': 'dbms:agree'}]
             login(request, user)
-            # request.user = user
-            print("acc_login-->user:", user)
-            print("acc_login-->user.name:", user.name)
-            print("acc_login-->user.num:", user.num)
             return redirect(request.GET.get('next', 'dbms:index'))
         else:
             error_msg = "用户名或密码错误！"
@@ -53,12 +49,18 @@ def home(request):
     print('acc_login-->request.COOKIES:', request.COOKIES)
     print("acc_login-->request.user:", request.user)
     print('acc_login-->request.session:', request.session)
-    print('acc_login-->request.session.get:', request.session.get('menus'))
+    print("acc_login-->request.session.get('menus'):", request.session.get('menus'))
+
     article_state_list = models.Articles.ARTICLE_STATE_LIST
-    article_state_list_dic = list(map(lambda x: {'id': x[0], 'name': x[1]}, article_state_list))
+    # article_state_list_dic = list(map(lambda x: {'id': x[0], 'name': x[1]}, article_state_list))
+    article_state_list_dic = list(article_state_list)
     print('acc_login-->article_state_list:', article_state_list)
     print('acc_login-->article_state_list_dic:', article_state_list_dic)
     # 列表或元组转换为字典并添加key
-    article_list = models.Articles.objects.all().select_related('custom', 'director', 'assistant', 'control')
-    print('acc_login-->article_list:', article_list)
-    return render(request, 'dbms/index_dbms.html', locals())
+    menu_list = models.Menus.objects.filter(jobs__employees=request.user).distinct().order_by(
+        'ordery').values('name', 'url_name')
+    print('menu_list:', menu_list)
+    print('list(menu_list):', list(menu_list))
+    article_list = models.Articles.objects.all().count()
+    print('article_list:',article_list)
+    return render(request, 'home.html', locals())

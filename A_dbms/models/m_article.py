@@ -42,6 +42,7 @@ class Articles(models.Model):  # 项目、纪要
     article_state = models.IntegerField(verbose_name='_项目状态', choices=ARTICLE_STATE_LIST, default=1)
     CLASSIFICATION_LIST = ((1, '正常'), (11, '关注'), (21, '次级'), (31, '可疑'), (41, '损失'))
     classification = models.IntegerField(verbose_name='_风险分类', choices=CLASSIFICATION_LIST, default=1)
+    article_notify_sum = models.FloatField(verbose_name='_通知金额', default=0)
     article_provide_sum = models.FloatField(verbose_name='_放款金额', default=0)
     article_repayment_sum = models.FloatField(verbose_name='_还款金额', default=0)
     article_buildor = models.ForeignKey(to='Employees', verbose_name="_创建者",

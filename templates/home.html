@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+
 {% block title %}武侯担保{% endblock %}
 
 {% block body %}
@@ -6,10 +7,34 @@
         <div>Hello {{ request.user.name }},
             欢迎使用武侯中小担业务系统，请选择……
         </div>
-        <a class="btn btn-primary"
-           href="{% url 'dbms:index' %}"
-           role="button">
-            担保业务管理系统
-        </a>
+        <a class="btn btn-primary" href="{% url 'dbms:index' %}" role="button">担保业务管理系统</a>
     </div>
+
+    {% include 'sub/nav_bar.html' %} {#导航栏}#}
+    <div class="container-fluid">{#主体框架}#}
+        <div class="row">{#主体框架}#}
+
+
+            <div class="col-sm-2 col-md-2 sidebar">{#左侧菜单}#}
+                <ul class="nav nav-sidebar">
+                    {% for mm in request.session.menus %}
+                        <ul>
+                        <li><a href={% url mm.url_name %}>{{ mm.name }}</a></li>
+                        </ul>
+                    {% endfor %}
+                </ul>
+            </div>
+
+
+            <div class="col-sm-10 col-sm-offset-3 col-md-10 col-md-offset-2 main" style="padding: 1px;">{#右侧主体框架}#}
+                {% block right-content-container %}{#右侧内容}#}
+                    <h2 class="page-header">{{ request.user.name }}的个人首页</h2>
+                {% endblock %}
+            </div>
+
+
+        </div>
+    </div>
+
+
 {% endblock %}

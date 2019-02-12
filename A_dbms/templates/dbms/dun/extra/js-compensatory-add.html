@@ -24,7 +24,7 @@
             console.log(postDataStr);
 
             $.ajax({
-                url: '/dbms/agree/add/',
+                url: '/dbms/compensatory/add/',
                 type: 'POST',
                 traditional: true,
                 data: {'postDataStr': postDataStr},
@@ -41,6 +41,7 @@
                         $('#e_compensatory_date').text(arg.forme.compensatory_date);
                         $('#e_compensatory_capital').text(arg.forme.compensatory_capital);
                         $('#e_compensatory_interest').text(arg.forme.compensatory_interest);
+                        $('#e_default_interest').text(arg.forme.default_interest);
                     }
                 }
             })

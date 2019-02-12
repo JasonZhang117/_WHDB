@@ -13,7 +13,7 @@ import datetime
 @login_required
 def agree(request, *args, **kwargs):  # 委托合同列表
     print(__file__, '---->def agree')
-    PAGE_TITLE = '合同管理'
+    PAGE_TITLE = '合同列表'
     operate_agree_add = True
     '''模态框'''
     form_agree_add = forms.AgreeAddForm()  # 合同添加

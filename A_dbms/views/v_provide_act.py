@@ -134,7 +134,18 @@ def notify_add_ajax(request):
                                 contracts_lease=form_notify_cleaned['contracts_lease'],
                                 contract_guaranty=form_notify_cleaned['contract_guaranty'],
                                 remark=form_notify_cleaned['remark'], notifyor=request.user)
+                            '''agree_notify_sum，更新合同加权通知总额'''
                             agree_list.update(agree_notify_sum=amount)
+                            '''article_notify_sum，更新项目加权通知总额'''
+                            article_list = models.Articles.objects.filter(
+                                lending_summary__agree_lending=agree_obj)  # 项目
+                            article_obj = article_list.first()
+                            article_notify_amount = models.Notify.objects.filter(
+                                agree__lending__summary=article_obj).aggregate(
+                                Sum('weighting'))['weighting__sum']
+                            print('article_notify_amount:', article_notify_amount)
+                            article_list.update(article_notify_sum=round(article_notify_amount, 2))
+                            # 项目，更新加权通知总额
                         response['message'] = '成功添加放款通知！'
                     except Exception as e:
                         response['status'] = False
@@ -379,7 +390,6 @@ def repayment_add_ajax(request):
                     repayment_obj = models.Repayments.objects.create(
                         provide=provide_obj, repayment_money=repayment_money, repaymentor=request.user,
                         repayment_date=repayment_cleaned['repayment_date'])  # 创建还款记录
-
                     '''provide_repayment_sum，更新放款通知还款情况'''
                     provide_list.update(provide_repayment_sum=amount)  # 放款，更新还款总额
                     '''notify_repayment_sum，更新放款通知还款情况'''

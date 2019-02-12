@@ -43,9 +43,8 @@ class Agrees(models.Model):  # 委托合同
     agree_provide_sum = models.FloatField(verbose_name='_放款金额', default=0)
     agree_repayment_sum = models.FloatField(verbose_name='_还款金额', default=0)
 
-    agree_buildor = models.ForeignKey(to='Employees', verbose_name="创建人", default=1,
-                                      on_delete=models.PROTECT,
-                                      related_name='agree_buildor_employee')
+    agree_buildor = models.ForeignKey(to='Employees', verbose_name="创建人",
+                                      on_delete=models.PROTECT, related_name='agree_buildor_employee')
     agree_date = models.DateField(verbose_name='创建日期', default=datetime.date.today)
 
     class Meta:

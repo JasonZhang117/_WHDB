@@ -111,10 +111,13 @@ urlpatterns = [
     path('review/scan/<int:custom_id>/', views.review_scan, name='review_scan'),  #
     path('review/plan/', views.review_plan_ajax, name='review_plan_ajax'),  #
     path('review/update/', views.review_update_ajax, name='review_update_ajax'),  #
-    # -----------------------追偿管理-------------------------#
+    # -----------------------代偿管理-------------------------#
     path('compensatory/', views.compensatory, name='compensatory_all'),  # 菜单-追偿管理
     path('compensatory/<int:dun_state>/', views.compensatory, name='compensatory'),
     path('compensatory/scan/<int:compensatory_id>/', views.compensatory_scan, name='compensatory_scan'),
+    path('compensatory/add/', views.compensatory_add_ajax),
+
+
     # -----------------------客户管理-------------------------#
     path('custom/', views.custom, name='custom_all'),  # 菜单-客户管理
     path('custom/<int:genre>/', views.custom, name='custom'),  # /dbms/cstom/(0-9)

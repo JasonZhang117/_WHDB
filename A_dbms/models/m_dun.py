@@ -4,22 +4,26 @@ import datetime
 
 # -----------------------代偿模型-------------------------#
 class Compensatories(models.Model):  # 代偿
-    provide = models.OneToOneField(to='Provides', verbose_name="放款",
+    provide = models.ForeignKey(to='Provides', verbose_name="放款",
                                    on_delete=models.PROTECT,
                                    related_name='compensatory_provide')
     compensatory_date = models.DateField(verbose_name='代偿日期', default=datetime.date.today)
     compensatory_capital = models.FloatField(verbose_name='代偿本金', default=0)
     compensatory_interest = models.FloatField(verbose_name='代偿利息', default=0)
-    retrieve_amount = models.FloatField(verbose_name='追偿总额')
-    DUN_STATE_LIST = ((1, '起诉'), (11, '判决'), (21, '执行'), (31, '和解'), (41, '终止执行'), (91, '结案'))
+    default_interest = models.FloatField(verbose_name='代偿罚息', default=0)
+    compensatory_amount = models.FloatField(verbose_name='代偿总额')
+    DUN_STATE_LIST = ((1, '已代偿'), (11, '已起诉'), (21, '已判决'), (31, '已和解'), (41, '执行中'), (91, '结案'))
     dun_state = models.IntegerField(verbose_name='追偿状态', choices=DUN_STATE_LIST, default=1)
+    compensator = models.ForeignKey(to='Employees', verbose_name="创建人", on_delete=models.PROTECT,
+                                    related_name='compensator_employee')
+    compensator_date = models.DateField(verbose_name='创建日期', default=datetime.date.today)
 
     class Meta:
         verbose_name_plural = '追偿-代偿'  # 指定显示名称
         db_table = 'dbms_compensatories'  # 指定数据表的名称
 
     def __str__(self):
-        return '%s_%s' % (self.provide, self.retrieve_amount)
+        return '%s_%s' % (self.provide, self.compensatory_amount)
 
 
 # -----------------------追偿模型-------------------------#

@@ -2,33 +2,33 @@
     <table class="table table-bordered table-hover table-condensed active">
         <thead>
         <tr style="text-align: center">
-            <th>客户名称</th>
-            <th>银行名称</th>
-            <th>代偿日期</th>
+            <th>序号</th>
             <th>代偿本金</th>
             <th>代偿利息</th>
             <th>代偿罚息</th>
             <th>代偿总额</th>
+            <th>代偿日期</th>
             <th>状态</th>
+            {% if PAGE_TITLE == '放款详情' %}
+                <th>操作</th>
+            {% endif %}
         </tr>
         </thead>
-        <tbody>
-        {% for compensatory in compensatory_list %}
-            <tr>
-                <td>
-                    <a href="{% url 'dbms:compensatory_scan' compensatory_id=compensatory.id %}">
-                        {{ compensatory.provide.notify.agree.lending.summary.custom }}</a>
-                </td>
-                <td>{{ compensatory.provide.notify.agree.branch }}</td>
-                <td>{{ compensatory.compensatory_date }}</td>
+        <tbody id="provide-compensatory-tb">
+        {% for compensatory in provide_obj.compensatory_provide.all %}
+            <tr compensatory-nid="{{ compensatory.id }}">
+                <td>{{ forloop.counter }}</td>
                 <td>{{ compensatory.compensatory_capital }}</td>
                 <td>{{ compensatory.compensatory_interest }}</td>
                 <td>{{ compensatory.default_interest }}</td>
                 <td>{{ compensatory.compensatory_amount }}</td>
+                <td>{{ compensatory.compensatory_date }}</td>
                 <td>{{ compensatory.get_dun_state_display }}</td>
-            </tr>
+                {% if PAGE_TITLE == '放款详情' %}
+                    <td><a class="btn btn-danger btn-xs delCompensatoryB">删除</a></td>
+                {% endif %}
+            <tr>
         {% endfor %}
         </tbody>
     </table>
-    {% include 'dbms/board/page.html' %}
 </div>
