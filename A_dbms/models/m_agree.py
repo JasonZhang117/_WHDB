@@ -14,7 +14,7 @@ class Agrees(models.Model):  # 委托合同
     num_prefix = models.CharField(verbose_name='_编号前缀', max_length=32)
     lending = models.ForeignKey(to='LendingOrder', verbose_name="放款纪要",
                                 on_delete=models.PROTECT,
-                                # limit_choices_to=limit_agree_choices,
+                                limit_choices_to=limit_agree_choices,
                                 related_name='agree_lending')
     # limit_choices_to = limit_agree_choices,
 
@@ -25,7 +25,7 @@ class Agrees(models.Model):  # 委托合同
     agree_term = models.IntegerField(verbose_name='合同期限（月）')
     AGREE_TYP_LIST = ((1, '单笔'), (2, '最高额'), (3, '保函'))
     agree_typ = models.IntegerField(verbose_name='合同种类', choices=AGREE_TYP_LIST)
-    GUARANTEE_TYP_LIST = (('②', '②'), ('③', '③'), ('④', '④'),
+    GUARANTEE_TYP_LIST = (('①', '①'), ('②', '②'), ('③', '③'), ('④', '④'),
                           ('⑤', '⑤'), ('⑥', '⑥'), ('⑦', '⑦'),)
     guarantee_typ = models.CharField(verbose_name='反担保种类数', max_length=6, choices=GUARANTEE_TYP_LIST)
     agree_copies = models.IntegerField(verbose_name='合同份数')

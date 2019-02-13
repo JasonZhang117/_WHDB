@@ -66,6 +66,7 @@ def home(request):
         agree_list_obj = models.Provides.objects.filter(id=agree.id)
         agree_obj = agree_list_obj.first()
         agree_amount = agree_obj.implement
-        print('agree_amount:', agree_amount)
+        # print('agree_amount:', agree_amount)
         # agree_list_obj.update(implement=31)
-    return render(request, 'home.html', locals())
+    return render(request, 'dbms/index_dbms.html', locals())
+    # return render(request, 'home.html', locals())
