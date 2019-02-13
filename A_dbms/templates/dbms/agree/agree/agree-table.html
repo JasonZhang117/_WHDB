@@ -3,7 +3,6 @@
         <thead>
         <tr style="text-align: center">
             <th>合同编号({{ agree_amount }})</th>
-            {#({{ agree_amount }})#}
             <th>客户名称</th>
             <th>放款银行</th>
             <th>合同种类</th>
@@ -29,19 +28,16 @@
                 <td>{{ agree.branch.short_name }}</td>
                 <td>{{ agree.get_agree_typ_display }}</td>
                 <td>{{ agree.agree_term }}</td>
-                <td>{{ agree.agree_amount }}</td>
-                <td>{{ agree.amount_limit }}</td>
-                <td>{{ agree.agree_notify_sum }}</td>
-                <td>{{ agree.agree_provide_sum }}</td>
-                <td>{{ agree.agree_repayment_sum }}</td>
+                <td align="right">{{ agree.agree_amount }}</td>
+                <td align="right">{{ agree.amount_limit }}</td>
+                <td align="right">{{ agree.agree_notify_sum }}</td>
+                <td align="right">{{ agree.agree_provide_sum }}</td>
+                <td align="right">{{ agree.agree_repayment_sum }}</td>
                 <td>{{ agree.lending }}</td>
                 <td>{{ agree.get_agree_state_display }}</td>
             </tr>
         {% endfor %}
         </tbody>
     </table>
-
     {% include 'dbms/board/page.html' %}
-
-
 </div>

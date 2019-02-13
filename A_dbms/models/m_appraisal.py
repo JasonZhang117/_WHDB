@@ -74,7 +74,7 @@ def limit_lending_choices():
 class LendingOrder(models.Model):
     summary = models.ForeignKey(to='Articles', verbose_name="项目纪要",
                                 on_delete=models.PROTECT,
-                                limit_choices_to=limit_lending_choices,
+                                # limit_choices_to=limit_lending_choices,
                                 related_name='lending_summary')
     # limit_choices_to=limit_lending_choices,
     ORDER_LIST = ((1, '第一次'), (2, '第二次'), (3, '第三次'), (4, '第四次'))

@@ -22,10 +22,10 @@
                 {% if PAGE_TITLE == '保后管理' %}
                     <td><a href="{% url 'dbms:review_scan' custom_id=custom.id %}">{{ custom.short_name }}</a></td>
                 {% endif %}
-                <td>{{ custom.credit_amount }}</td>
-                <td>{{ custom.custom_flow }}</td>
-                <td>{{ custom.custom_accept }}</td>
-                <td>{{ custom.custom_back }}</td>
+                <td align="right">{{ custom.credit_amount }}</td>
+                <td align="right">{{ custom.custom_flow }}</td>
+                <td align="right">{{ custom.custom_accept }}</td>
+                <td align="right">{{ custom.custom_back }}</td>
                 <td>{{ custom.lately_date }}</td>
                 <td>{{ custom.get_classification_display }}</td>
                 <td>{{ custom.review_plan_date }}</td>

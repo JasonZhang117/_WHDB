@@ -41,7 +41,7 @@
                 <td>{{ notify.weighting }}</td>
                 <td>{{ notify.notify_provide_sum }}</td>
                 <td>{{ notify.notify_repayment_sum }}</td>
-                <td>{{ notify.remark }}</td>
+                <td>{{ notify.remark|default:"" }}</td>
                 <td>{{ notify.notifyor.name }}</td>
                 {% if PAGE_TITLE == '风控落实' %}
                     <td><a class="btn btn-danger btn-xs delNotifyB">删除</a></td>

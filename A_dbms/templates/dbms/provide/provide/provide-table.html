@@ -16,7 +16,6 @@
                 <th>还款金额</th>
             {% endif %}
             <th>在保状态</th>
-
         </tr>
         </thead>
         <tbody>
@@ -31,23 +30,20 @@
                 {% endif %}
                 <td>{{ provide.notify.agree.lending.summary.custom.short_name }}</td>
                 <td>{{ provide.notify.agree.branch.short_name }}</td>
-                <td>{{ provide.provide_money }}</td>
+                <td align="right">{{ provide.provide_money }}</td>
                 <td>{{ provide.get_provide_typ_display }}</td>
                 <td>{{ provide.provide_date }}</td>
                 <td>{{ provide.due_date }}</td>
                 {% if PAGE_TITLE == '归档管理' %}
                     <td>{{ provide.get_implement_display }}</td>
-                    <td>{{ provide.file_num }}</td>
+                    <td>{{ provide.file_num|default_if_none:"" }}</td>
                 {% elif PAGE_TITLE == '放款管理' %}
-                    <td>{{ provide.provide_repayment_sum }}</td>
+                    <td align="right">{{ provide.provide_repayment_sum }}</td>
                 {% endif %}
                 <td>{{ provide.get_provide_status_display }}</td>
-
-
             <tr>
         {% endfor %}
         </tbody>
     </table>
     {% include 'dbms/board/page.html' %}
-
 </div>

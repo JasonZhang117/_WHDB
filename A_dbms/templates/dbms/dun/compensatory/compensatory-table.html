@@ -21,10 +21,10 @@
                 </td>
                 <td>{{ compensatory.provide.notify.agree.branch }}</td>
                 <td>{{ compensatory.compensatory_date }}</td>
-                <td>{{ compensatory.compensatory_capital }}</td>
-                <td>{{ compensatory.compensatory_interest }}</td>
-                <td>{{ compensatory.default_interest }}</td>
-                <td>{{ compensatory.compensatory_amount }}</td>
+                <td align="right">{{ compensatory.compensatory_capital|floatformat:2 }}</td>
+                <td align="right">{{ compensatory.compensatory_interest|floatformat:2 }}</td>
+                <td align="right">{{ compensatory.default_interest|floatformat:2 }}</td>
+                <td align="right">{{ compensatory.compensatory_amount|floatformat:2 }}</td>
                 <td>{{ compensatory.get_dun_state_display }}</td>
             </tr>
         {% endfor %}
