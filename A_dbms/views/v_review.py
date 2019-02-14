@@ -6,6 +6,7 @@ from django.db.utils import IntegrityError
 from django.db import transaction
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q
+from django.db.models import Avg, Min, Sum, Max, Count
 
 
 # -----------------------保后列表---------------------#
@@ -33,6 +34,26 @@ def review(request, *args, **kwargs):  # 保后列表
         for field in search_fields:
             q.children.append(("%s__contains" % field, search_key))
         custom_list = custom_list.filter(q)
+
+    flow_amount = custom_list.aggregate(Sum('custom_flow'))['custom_flow__sum']  # 流贷余额
+    accept_amount = custom_list.aggregate(Sum('custom_accept'))['custom_accept__sum']  # 承兑余额
+    back_amount = custom_list.aggregate(Sum('custom_back'))['custom_back__sum']  # 保函余额
+
+    if flow_amount:
+        flow_amount = flow_amount
+    else:
+        flow_amount = 0
+    if accept_amount:
+        accept_amount = accept_amount
+    else:
+        accept_amount = 0
+    if back_amount:
+        back_amount = back_amount
+    else:
+        bac_amount = 0
+
+    balance = flow_amount + accept_amount + back_amount
+
     custom_acount = custom_list.count()
     paginator = Paginator(custom_list, 19)
     page = request.GET.get('page')

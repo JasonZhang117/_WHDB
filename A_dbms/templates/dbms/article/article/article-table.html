@@ -10,6 +10,7 @@
             <th>项目助理</th>
             <th>风控专员</th>
             <th>创建日期</th>
+            <th>反馈日期</th>
             <th>加权通知金额</th>
             <th>放款金额</th>
             <th>还款金额</th>
@@ -32,6 +33,7 @@
                 <td>{{ article.assistant.name }}</td>
                 <td>{{ article.control.name }}</td>
                 <td>{{ article.build_date }}</td>
+                <td>{{ article.article_date|default_if_none:"" }}</td>
                 <td align="right">{{ article.article_notify_sum }}</td>
                 <td align="right">{{ article.article_provide_sum }}</td>
                 <td align="right">{{ article.article_repayment_sum }}</td>

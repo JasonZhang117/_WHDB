@@ -414,15 +414,13 @@ def repayment_add_ajax(request):
                     repayment_obj = models.Repayments.objects.create(
                         provide=provide_obj, repayment_money=repayment_money, repaymentor=request.user,
                         repayment_date=repayment_cleaned['repayment_date'])  # 创建还款记录
-                    '''provide_repayment_sum，更新放款通知还款情况'''
+                    '''provide_repayment_sum，更新放款还款情况'''
                     provide_list.update(provide_repayment_sum=amount)  # 放款，更新还款总额
                     '''notify_repayment_sum，更新放款通知还款情况'''
                     notify_list = models.Notify.objects.filter(provide_notify=provide_obj)  # 放款通知
-                    print('notify_list:', notify_list)
                     notify_obj = notify_list.first()
                     notify_repayment_amount = models.Repayments.objects.filter(provide__notify=notify_obj).aggregate(
                         Sum('repayment_money'))['repayment_money__sum']  # 通知项下还款合计
-                    print('notify_repayment_amount:', notify_repayment_amount)
                     notify_list.update(notify_repayment_sum=round(notify_repayment_amount, 2))  # 放款通知，更新还款总额
                     '''agree_repayment_sum，更新合同还款信息'''
                     agree_list = models.Agrees.objects.filter(notify_agree=notify_obj)  # 合同
@@ -430,7 +428,6 @@ def repayment_add_ajax(request):
                     agree_repayment_amount = models.Repayments.objects.filter(
                         provide__notify__agree=agree_obj).aggregate(
                         Sum('repayment_money'))['repayment_money__sum']  # 合同项下还款合计
-                    print('agree_repayment_amount:', agree_repayment_amount)
                     agree_list.update(agree_repayment_sum=round(agree_repayment_amount, 2))  # 合同，更新还款总额
                     '''lending_repayment_sum，更新放款次序还款信息'''
                     lending_list = models.LendingOrder.objects.filter(agree_lending=agree_obj)  # 放款次序
@@ -438,7 +435,6 @@ def repayment_add_ajax(request):
                     lending_repayment_amount = models.Repayments.objects.filter(
                         provide__notify__agree__lending=lending_obj).aggregate(
                         Sum('repayment_money'))['repayment_money__sum']
-                    print('lending_repayment_amount:', lending_repayment_amount)
                     lending_list.update(lending_repayment_sum=round(lending_repayment_amount, 2))  # 放款次序，更新还款总额
                     '''article_repayment_sum，更新项目还款信息'''
                     article_list = models.Articles.objects.filter(lending_summary=lending_obj)  # 项目
@@ -446,7 +442,6 @@ def repayment_add_ajax(request):
                     article_repayment_amount = models.Repayments.objects.filter(
                         provide__notify__agree__lending__summary=article_obj).aggregate(
                         Sum('repayment_money'))['repayment_money__sum']
-                    print('article_repayment_amount:', article_repayment_amount)
                     article_list.update(article_repayment_sum=round(article_repayment_amount, 2))  # 项目，更新还款总额
                     '''更新客户余额信息,custom_flow,custom_accept,custom_back'''
                     '''更新银行余额信息,branch_flow,branch_accept,branch_back'''
@@ -463,14 +458,12 @@ def repayment_add_ajax(request):
                         custom_list.update(custom_back=F('custom_back') - repayment_money)  # 客户，更新保函余额
                         branch_list.update(branch_back=F('branch_back') - repayment_money)  # 放款银行，更新保函余额
                     provide_repayment_sum = provide_obj.provide_repayment_sum + repayment_money
-                    print(provide_obj.provide_money, provide_obj.provide_repayment_sum)
                     if round(provide_obj.provide_money, 2) == round(provide_repayment_sum, 2):
                         # 放款金额=还款金额合计
                         provide_list.update(provide_status=11)  # 放款解保
                         response['message'] = '成功还款,本次放款已全部结清！'
                     else:
                         response['message'] = '成功还款！'
-
             except Exception as e:
                 response['status'] = False
                 response['message'] = '还款失败：%s' % str(e)

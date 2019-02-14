@@ -26,12 +26,27 @@ def provide_agree(request, *args, **kwargs):  # 放款管理
     search_key = request.GET.get('_s')
     if search_key:
         search_fields = ['agree_num', 'lending__summary__custom__name',
-                         'branch__name', 'lending__summary__summary_num']
+                         'branch__name', 'branch__short_name', 'lending__summary__summary_num']
         q = Q()
         q.connector = 'OR'
         for field in search_fields:
             q.children.append(("%s__contains" % field, search_key))
         agree_list = agree_list.filter(q)
+
+    provide_amount = agree_list.aggregate(Sum('agree_provide_sum'))['agree_provide_sum__sum']  # 放款金额合计
+    repayment_amount = agree_list.aggregate(
+        Sum('agree_repayment_sum'))['agree_repayment_sum__sum']  # 还款金额合计
+    if provide_amount:
+        provide_amount = provide_amount
+    else:
+        provide_amount = 0
+
+    if repayment_amount:
+        repayment_amount = repayment_amount
+    else:
+        repayment_amount = 0
+    balance = provide_amount - repayment_amount
+
     agree_amount = agree_list.count()  # 信息数目
     '''分页'''
     paginator = Paginator(agree_list, 18)
@@ -202,17 +217,34 @@ def provide(request, *args, **kwargs):  # 委托合同列表
     PROVIDE_STATUS_LIST = models.Provides.PROVIDE_STATUS_LIST  # 筛选条件
     '''筛选'''
     provide_list = models.Provides.objects.filter(**kwargs).select_related('notify').order_by('-provide_date')
+
     '''搜索'''
     search_key = request.GET.get('_s')
     if search_key:
         search_fields = ['notify__agree__lending__summary__custom__name',
-                         'notify__agree__branch__name',
+                         'notify__agree__branch__name', 'notify__agree__branch__short_name',
                          'notify__agree__agree_num']
         q = Q()
         q.connector = 'OR'
         for field in search_fields:
             q.children.append(("%s__contains" % field, search_key))
         provide_list = provide_list.filter(q)
+
+    provide_amount = provide_list.aggregate(Sum('provide_money'))['provide_money__sum']  # 放款金额合计
+    repayment_amount = provide_list.aggregate(
+        Sum('provide_repayment_sum'))['provide_repayment_sum__sum']  # 还款金额合计
+    if provide_amount:
+        provide_amount = provide_amount
+    else:
+        provide_amount = 0
+
+    if repayment_amount:
+        repayment_amount = repayment_amount
+    else:
+        repayment_amount = 0
+    balance = provide_amount - repayment_amount
+
+
     provide_acount = provide_list.count()
     '''分页'''
     paginator = Paginator(provide_list, 19)
@@ -223,6 +255,8 @@ def provide(request, *args, **kwargs):  # 委托合同列表
         p_list = paginator.page(1)
     except EmptyPage:
         p_list = paginator.page(paginator.num_pages)
+
+
 
     return render(request, 'dbms/provide/provide.html', locals())
 

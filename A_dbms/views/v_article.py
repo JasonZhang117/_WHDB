@@ -10,6 +10,7 @@ from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 import json
 from django.db.utils import IntegrityError
 from django.db import transaction
+from django.db.models import Avg, Min, Sum, Max, Count
 
 
 @login_required
@@ -56,6 +57,22 @@ def article(request, *args, **kwargs):  # 项目列表
             q.children.append(("%s__contains" % field, search_key))
         article_list = article_list.filter(q)
     article_acount = article_list.count()  # 信息数目
+
+    provide_amount = article_list.aggregate(Sum('article_provide_sum'))['article_provide_sum__sum']  # 放款金额合计
+    repayment_amount = article_list.aggregate(
+        Sum('article_repayment_sum'))['article_repayment_sum__sum']  # 还款金额合计
+    if provide_amount:
+        provide_amount = provide_amount
+    else:
+        provide_amount = 0
+
+    if repayment_amount:
+        repayment_amount = repayment_amount
+    else:
+        repayment_amount = 0
+    balance = provide_amount - repayment_amount
+
+
     '''分页'''
     paginator = Paginator(article_list, 19)
     page = request.GET.get('page')
@@ -65,6 +82,8 @@ def article(request, *args, **kwargs):  # 项目列表
         p_list = paginator.page(1)
     except EmptyPage:
         p_list = paginator.page(paginator.num_pages)
+
+
 
     return render(request, 'dbms/article/article.html', locals())
 
