@@ -83,8 +83,6 @@ def article(request, *args, **kwargs):  # 项目列表
     except EmptyPage:
         p_list = paginator.page(paginator.num_pages)
 
-
-
     return render(request, 'dbms/article/article.html', locals())
 
 

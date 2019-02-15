@@ -78,10 +78,16 @@ def agree_add_ajax(request):  # 添加合同
             else:
                 order_amount_up = order_amount
             print('order_amount_up:', order_amount_up)
-            ###判断合同情况：
+            amount_limit = agree_add_cleaned['amount_limit']
+            ###判断合同金额情况：
             if agree_amount > order_amount_up:
                 response['status'] = False
-                response['message'] = '该项目本次发放额度最高为%s,合同金额超过审批额度！！！' % order_amount_up
+                response['message'] = '合同金额（%s）超过审批额度（%s）！' % (agree_amount,order_amount)
+                result = json.dumps(response, ensure_ascii=False)
+                return HttpResponse(result)
+            elif amount_limit > order_amount:
+                response['status'] = False
+                response['message'] = '放款限额（%s）超过审批额度（%s）！' % (amount_limit,order_amount,)
                 result = json.dumps(response, ensure_ascii=False)
                 return HttpResponse(result)
 
@@ -110,7 +116,7 @@ def agree_add_ajax(request):  # 添加合同
                     agree_num=agree_num, num_prefix=agree_num_prefix, lending=lending_obj,
                     branch_id=branch_id, agree_typ=agree_typ,
                     agree_term=agree_add_cleaned['agree_term'],
-                    amount_limit=agree_add_cleaned['amount_limit'],
+                    amount_limit=amount_limit,
                     agree_amount=agree_amount, guarantee_typ=guarantee_typ, agree_copies=agree_copies,
                     agree_buildor=request.user)
                 response['skip'] = "/dbms/agree/scan/%s" % agree_obj.id

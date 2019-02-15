@@ -28,7 +28,8 @@
                     <td><a href="{% url 'dbms:pigeonhole_scan' provide_id=provide.id %}">
                         {{ provide.notify.agree.agree_num }} </a></td>
                 {% endif %}
-                <td>{{ provide.notify.agree.lending.summary.custom.short_name }}</td>
+{#                <td>{{ provide.notify.agree.lending.summary.custom.short_name }}</td>#}
+                <td>{{ provide.notify.agree.lending.summary.custom.name }}</td>
                 <td>{{ provide.notify.agree.branch.short_name }}</td>
                 <td align="right">{{ provide.provide_money }}</td>
                 <td>{{ provide.get_provide_typ_display }}</td>

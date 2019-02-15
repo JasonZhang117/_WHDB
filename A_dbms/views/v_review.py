@@ -50,7 +50,7 @@ def review(request, *args, **kwargs):  # 保后列表
     if back_amount:
         back_amount = back_amount
     else:
-        bac_amount = 0
+        back_amount = 0
 
     balance = flow_amount + accept_amount + back_amount
 

@@ -18,7 +18,7 @@ def pigeonhole(request, *args, **kwargs):  # 归档
     '''IMPLEMENT_LIST = [(1, '未归档'), (11, '暂存风控'), (21, '已归档')]'''
     IMPLEMENT_LIST = models.Provides.IMPLEMENT_LIST  # 筛选条件
     '''筛选'''
-    provide_list = models.Provides.objects.filter(**kwargs).select_related('notify').order_by('-provide_date')
+    provide_list = models.Provides.objects.filter(**kwargs).select_related('notify').order_by('provide_date')
     '''搜索'''
     search_key = request.GET.get('_s')
     if search_key:

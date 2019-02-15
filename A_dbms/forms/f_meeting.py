@@ -63,7 +63,9 @@ class MeetingAllotForm(dform.Form):  # 分配项目评委
 
     def __init__(self, *args, **kwargs):
         super(MeetingAllotForm, self).__init__(*args, **kwargs)
-        self.fields['expert'].choices = models.Experts.objects.order_by('ordery').values_list('id', 'name')
+        '''EXPERT_STATE_LIST = ((1, '正常'), (2, '注销'))'''
+        self.fields['expert'].choices = models.Experts.objects.filter(
+            expert_state=1).order_by('ordery').values_list('id', 'name')
 
 
 # -----------------------单项额度-------------------------#
