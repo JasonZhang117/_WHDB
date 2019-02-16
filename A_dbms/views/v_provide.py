@@ -244,7 +244,6 @@ def provide(request, *args, **kwargs):  # 委托合同列表
         repayment_amount = 0
     balance = provide_amount - repayment_amount
 
-
     provide_acount = provide_list.count()
     '''分页'''
     paginator = Paginator(provide_list, 19)
@@ -255,8 +254,6 @@ def provide(request, *args, **kwargs):  # 委托合同列表
         p_list = paginator.page(1)
     except EmptyPage:
         p_list = paginator.page(paginator.num_pages)
-
-
 
     return render(request, 'dbms/provide/provide.html', locals())
 

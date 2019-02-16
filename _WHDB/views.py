@@ -28,6 +28,12 @@ def acc_login(request):
                 'ordery').values('name', 'url_name')
             print('menu_list:', menu_list)
             request.session['menus'] = list(menu_list)
+            authority_list = models.Authorities.objects.filter(
+                jobs__employees=user).distinct().values('name', 'url_name')  # 权限列表
+            request.session['authoritis'] = list(authority_list)
+            carte_list = models.Cartes.objects.filter(
+                authority_carte__jobs__employees=user).distinct().values('name', 'url_name')  # 菜单列表
+            request.session['cartes'] = list(carte_list)
             # request.session['menus'] = [{'menu': '评审管理', 'url': 'dbms:article_all'},
             #                             {'menu': '个人主页', 'url': 'dbms:agree'}]
             login(request, user)
@@ -61,12 +67,26 @@ def home(request):
         'ordery').values('name', 'url_name')
     print('menu_list:', menu_list)
     print('list(menu_list):', list(menu_list))
+    authority_list = models.Authorities.objects.filter(
+        jobs__employees=request.user).distinct().values('name', 'url_name')  # 权限列表
+    print('authority_list:', authority_list)
+    print('list(authority_list):', list(authority_list))
+    carte_list = models.Cartes.objects.filter(
+        authority_carte__jobs__employees=request.user).distinct().values('name', 'url_name')  # 菜单列表
+    print('carte_list:', carte_list)
+    print('list(carte_list):', list(carte_list))
+    job_list = models.Jobs.objects.filter(employees=request.user)  # 角色列表
+    print('job_list:', job_list)
+
+    menus_session = request.session.get('menus')
+    authoritis_session = request.session.get('authoritis')
+    cartes_session = request.session.get('cartes')
+
     agree_list = models.Provides.objects.all()
     for agree in agree_list:
         agree_list_obj = models.Provides.objects.filter(id=agree.id)
-        agree_obj = agree_list_obj.first()
-        agree_amount = agree_obj.implement
-        # print('agree_amount:', agree_amount)
-        # agree_list_obj.update(implement=31)
-    return render(request, 'dbms/index_dbms.html', locals())
-    # return render(request, 'home.html', locals())
+    agree_obj = agree_list_obj.first()
+    agree_amount = agree_obj.implement
+    # print('agree_amount:', agree_amount)
+    # agree_list_obj.update(implement=31)
+    return render(request, 'index.html', locals())

@@ -80,12 +80,15 @@ admin.site.register(models.Storages)  # 评估
 # -----------------------放款-------------------------#
 admin.site.register(models.Charges)  # 收费
 
+
 class ProvidesAdmin(admin.ModelAdmin):
     list_display = ('notify', 'provide_typ', 'provide_money', 'provide_date', 'due_date', 'implement')
     # list_per_page = 20  # 每页显示条目数
     # search_fields = ['warrant_num']  # 搜索字段
     ordering = ['-provide_date']  # 排序字段
-admin.site.register(models.Provides,ProvidesAdmin)  # 放款
+
+
+admin.site.register(models.Provides, ProvidesAdmin)  # 放款
 
 
 class NotifyAdmin(admin.ModelAdmin):
@@ -198,10 +201,20 @@ admin.site.register(models.Departments, DepartmentsAdmin)
 class JobsAdmin(admin.ModelAdmin):
     list_display = ('name',)  # 显示字段
     list_per_page = 30  # 每页显示条目数
-    filter_horizontal = ("menu",)
+    filter_horizontal = ("menu", "authority")
 
 
 admin.site.register(models.Jobs, JobsAdmin)
+
+
+class AuthoritiesAdmin(admin.ModelAdmin):
+    list_display = ('name', 'url_name', 'carte')  # 显示字段
+    list_per_page = 30  # 每页显示条目数
+    # filter_horizontal = ("menu", "authority")
+
+
+admin.site.register(models.Authorities, AuthoritiesAdmin)
+admin.site.register(models.Cartes)
 # 员工
 admin.site.register(models.Employees, EmployeesAdmin)
 

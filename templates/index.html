@@ -37,16 +37,15 @@
         <div class="row">
             <div class="col-sm-3 col-md-2 sidebar">
                 <ul class="nav nav-sidebar">
-
                     {#        {{ request.user.userprofile.role.all }}#}
                     {% for role in  request.user.userprofile.role.select_related %}
                         {% for menu in role.menus.select_related %}
                             <li>
-                                <a href="
-
-
-
-                                        {% if menu.url_type == 0 %}{{ menu.url_name }}{% else %}{% url menu.url_name %}{% endif %}">
+                                <a href="{% if menu.url_type == 0 %}
+                                                {{ menu.url_name }}
+                                         {% else %}
+                                                 {% url menu.url_name %}
+                                         {% endif %}">
                                     {{ menu.name }}
                                 </a>
                             </li>
@@ -59,6 +58,21 @@
                  style="padding-left: 1px;padding-right: 1px;">
                 {% block right-content-container %}
                     <h2 class="page-header">Dashboard</h2>
+
+                    权限列表：{{ authority_list }}<br>
+                    菜单列表：{{ carte_list }}<br>
+                    角色列表：{{ job_list }}<br><br>
+
+                    menus_list：{{ request.session.menus }}<br>
+                    authoritis_list：{{ request.session.authoritis }}<br>
+                    cartes_list：{{ request.session.cartes }}<br><br>
+
+                    menus_session：{{ menus_session }}<br>
+                    authoritis_session：{{ authoritis_session }}<br>
+                    cartes_session：{{ cartes_session }}<br>
+
+
+
                 {% endblock %}
             </div>
         </div>

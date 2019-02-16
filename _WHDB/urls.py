@@ -22,7 +22,6 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('login/', views.acc_login, name="login"),
     path('logout/', views.acc_logout, name="logout"),
-    # path('', views.home, name="home"),
-    path('', include('A_dbms.urls')),
+    path('', views.home, name="home"),
     path('dbms/', include('A_dbms.urls')),
 ]

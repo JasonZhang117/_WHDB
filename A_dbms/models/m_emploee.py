@@ -74,13 +74,14 @@ class Employees(AbstractBaseUser, PermissionsMixin):
             ('dbms_article_all', '访问项目列表'),
             ('dbms_article', '访问所有项目列表'),
             ('article_scan_all', '访问项目添加页'),
-            ('article_scan_agree', '添加项目'),]
+            ('article_scan_agree', '添加项目'), ]
 
 
 # -----------------------------岗位模型------------------------------#
 class Jobs(models.Model):  # 岗位（角色）
     name = models.CharField(verbose_name='岗位名称', max_length=16, unique=True)
-    menu = models.ManyToManyField(to="Menus", verbose_name="菜单", blank=True)
+    authority = models.ManyToManyField(to="Authorities", verbose_name="权限", null=True, blank=True)
+    menu = models.ManyToManyField(to="Menus", verbose_name="菜单", null=True, blank=True)
 
     class Meta:
         verbose_name_plural = '内部-岗位'  # 指定显示名称
@@ -106,3 +107,40 @@ class Menus(models.Model):
         return self.name
 
 
+# -----------------------------菜单模型------------------------------#
+class Cartes(models.Model):
+    """动态菜单"""
+    name = models.CharField(verbose_name="菜单名称", max_length=64)
+    url_name = models.CharField(verbose_name="URL", max_length=128, null=True, blank=True)
+    ordery = models.IntegerField(verbose_name="优先级")
+    parrent = models.ForeignKey(to="self", verbose_name="母菜单",
+                                on_delete=models.PROTECT,
+                                related_name='carte_parrent',
+                                blank=True, null=True)
+
+    class Meta:
+        verbose_name_plural = '内部-菜单'
+        db_table = 'dbms_cartes'
+        unique_together = ('name', 'url_name')
+
+    def __str__(self):
+        return '%s-%s' % (self.name, self.url_name)
+
+
+# -----------------------------权限模型------------------------------#
+class Authorities(models.Model):
+    """权限"""
+    name = models.CharField(verbose_name="权限名称", max_length=64)
+    url_name = models.CharField(verbose_name="URL", max_length=128)
+    carte = models.ForeignKey(to="Cartes", verbose_name="菜单",
+                              on_delete=models.PROTECT,
+                              related_name='authority_carte',
+                              blank=True, null=True)
+
+    class Meta:
+        verbose_name_plural = '内部-权限'
+        db_table = 'dbms_authorities'
+        unique_together = ('name', 'url_name')
+
+    def __str__(self):
+        return '%s-%s' % (self.name, self.url_name)
