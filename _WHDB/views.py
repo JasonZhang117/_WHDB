@@ -34,6 +34,10 @@ def acc_login(request):
             carte_list = models.Cartes.objects.filter(
                 authority_carte__jobs__employees=user).distinct().values('name', 'url_name')  # 菜单列表
             request.session['cartes'] = list(carte_list)
+            job_list = models.Jobs.objects.filter(employees=user).values('name')  # 角色列表
+            print('job_list:', job_list)
+            request.session['jobs'] = list(job_list)
+
             # request.session['menus'] = [{'menu': '评审管理', 'url': 'dbms:article_all'},
             #                             {'menu': '个人主页', 'url': 'dbms:agree'}]
             login(request, user)
@@ -57,36 +61,22 @@ def home(request):
     print('acc_login-->request.session:', request.session)
     print("acc_login-->request.session.get('menus'):", request.session.get('menus'))
 
-    article_state_list = models.Articles.ARTICLE_STATE_LIST
-    # article_state_list_dic = list(map(lambda x: {'id': x[0], 'name': x[1]}, article_state_list))
-    article_state_list_dic = list(article_state_list)
-    print('acc_login-->article_state_list:', article_state_list)
-    print('acc_login-->article_state_list_dic:', article_state_list_dic)
-    # 列表或元组转换为字典并添加key
     menu_list = models.Menus.objects.filter(jobs__employees=request.user).distinct().order_by(
-        'ordery').values('name', 'url_name')
-    print('menu_list:', menu_list)
-    print('list(menu_list):', list(menu_list))
+        'ordery').values('name', 'url_name')  # 菜单列表
     authority_list = models.Authorities.objects.filter(
         jobs__employees=request.user).distinct().values('name', 'url_name')  # 权限列表
-    print('authority_list:', authority_list)
-    print('list(authority_list):', list(authority_list))
     carte_list = models.Cartes.objects.filter(
         authority_carte__jobs__employees=request.user).distinct().values('name', 'url_name')  # 菜单列表
-    print('carte_list:', carte_list)
-    print('list(carte_list):', list(carte_list))
-    job_list = models.Jobs.objects.filter(employees=request.user)  # 角色列表
-    print('job_list:', job_list)
+    job_list = models.Jobs.objects.filter(employees=request.user).values('name')  # 角色列表
 
-    menus_session = request.session.get('menus')
-    authoritis_session = request.session.get('authoritis')
-    cartes_session = request.session.get('cartes')
+    menus_session = request.session.get('menus')  # 菜单
+    authoritis_session = request.session.get('authoritis')  # 权限
+    cartes_session = request.session.get('cartes')  # 菜单
+    job_session = request.session.get('jobs')  # 菜单
 
     agree_list = models.Provides.objects.all()
     for agree in agree_list:
         agree_list_obj = models.Provides.objects.filter(id=agree.id)
     agree_obj = agree_list_obj.first()
     agree_amount = agree_obj.implement
-    # print('agree_amount:', agree_amount)
-    # agree_list_obj.update(implement=31)
     return render(request, 'index.html', locals())

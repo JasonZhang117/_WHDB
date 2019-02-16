@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect, HttpResponse
 from .. import models, forms
-import time, json
+import datetime, time, json
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.db.utils import IntegrityError
 from django.db import transaction
@@ -269,3 +269,98 @@ def provide_scan(request, provide_id):  # 查看放款
     form_repayment_add = forms.FormRepaymentAdd()
     form_compensatory_add = forms.FormCompensatoryAdd()
     return render(request, 'dbms/provide/provide-scan.html', locals())
+
+
+# -----------------------逾期列表---------------------#
+@login_required
+def overdue(request, *args, **kwargs):  # 逾期列表
+    print(__file__, '---->def provide')
+    PAGE_TITLE = '逾期项目'
+    overdue_list = models.Provides.objects.filter(
+        provide_status=1, due_date__lt=datetime.date.today()).order_by('due_date')  # 逾期
+    '''搜索'''
+    search_key = request.GET.get('_s')
+    if search_key:
+        search_fields = ['notify__agree__lending__summary__custom__name',
+                         'notify__agree__branch__name', 'notify__agree__branch__short_name',
+                         'notify__agree__agree_num']
+        q = Q()
+        q.connector = 'OR'
+        for field in search_fields:
+            q.children.append(("%s__contains" % field, search_key))
+        overdue_list = overdue_list.filter(q)
+
+    provide_amount = overdue_list.aggregate(Sum('provide_money'))['provide_money__sum']  # 放款金额合计
+    repayment_amount = overdue_list.aggregate(
+        Sum('provide_repayment_sum'))['provide_repayment_sum__sum']  # 还款金额合计
+    if provide_amount:
+        provide_amount = provide_amount
+    else:
+        provide_amount = 0
+
+    if repayment_amount:
+        repayment_amount = repayment_amount
+    else:
+        repayment_amount = 0
+    balance = provide_amount - repayment_amount
+
+    provide_acount = overdue_list.count()
+    '''分页'''
+    paginator = Paginator(overdue_list, 19)
+    page = request.GET.get('page')
+    try:
+        p_list = paginator.page(page)
+    except PageNotAnInteger:
+        p_list = paginator.page(1)
+    except EmptyPage:
+        p_list = paginator.page(paginator.num_pages)
+
+    return render(request, 'dbms/provide/overdu.html', locals())
+
+
+# -----------------------即将到期列表---------------------#
+@login_required
+def soondue(request, *args, **kwargs):  # 委托合同列表
+    print(__file__, '---->def provide')
+    PAGE_TITLE = '即将到期（含逾期）'
+    date_th_later = datetime.date.today() - datetime.timedelta(days=-30)  # 30天前的日期
+    soondue_list = models.Provides.objects.filter(
+        provide_status=1, due_date__lt=date_th_later).order_by('due_date')  # 30天内到期
+    '''搜索'''
+    search_key = request.GET.get('_s')
+    if search_key:
+        search_fields = ['notify__agree__lending__summary__custom__name',
+                         'notify__agree__branch__name', 'notify__agree__branch__short_name',
+                         'notify__agree__agree_num']
+        q = Q()
+        q.connector = 'OR'
+        for field in search_fields:
+            q.children.append(("%s__contains" % field, search_key))
+        soondue_list = soondue_list.filter(q)
+
+    provide_amount = soondue_list.aggregate(Sum('provide_money'))['provide_money__sum']  # 放款金额合计
+    repayment_amount = soondue_list.aggregate(
+        Sum('provide_repayment_sum'))['provide_repayment_sum__sum']  # 还款金额合计
+    if provide_amount:
+        provide_amount = provide_amount
+    else:
+        provide_amount = 0
+
+    if repayment_amount:
+        repayment_amount = repayment_amount
+    else:
+        repayment_amount = 0
+    balance = provide_amount - repayment_amount
+
+    provide_acount = soondue_list.count()
+    '''分页'''
+    paginator = Paginator(soondue_list, 19)
+    page = request.GET.get('page')
+    try:
+        p_list = paginator.page(page)
+    except PageNotAnInteger:
+        p_list = paginator.page(1)
+    except EmptyPage:
+        p_list = paginator.page(paginator.num_pages)
+
+    return render(request, 'dbms/provide/overdu.html', locals())

@@ -97,6 +97,9 @@ urlpatterns = [
     path('provide/repayment/add/', views.repayment_add_ajax),
     path('provide/repayment/del/', views.repayment_del_ajax),
     path('provide/', views.provide, name='provide_all'),  # 菜单-放款管理-放款
+    path('provide/overdue/', views.overdue, name='overdue'),  # 菜单-放款管理-逾期项目
+    path('provide/soondue/', views.soondue, name='soondue'),  # 菜单-放款管理-即将到期
+
     path('provide/<int:provide_status>/', views.provide, name='provide'),  # /dbms/grant/(0-9)
     path('provide/scan/<int:provide_id>/', views.provide_scan, name='provide_scan'),
     # -----------------------归档管理-------------------------#
@@ -116,7 +119,6 @@ urlpatterns = [
     path('compensatory/<int:dun_state>/', views.compensatory, name='compensatory'),
     path('compensatory/scan/<int:compensatory_id>/', views.compensatory_scan, name='compensatory_scan'),
     path('compensatory/add/', views.compensatory_add_ajax),
-
 
     # -----------------------客户管理-------------------------#
     path('custom/', views.custom, name='custom_all'),  # 菜单-客户管理

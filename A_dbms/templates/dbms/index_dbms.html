@@ -27,7 +27,9 @@
                         <h3>未归档项目数：<a href="{% url 'dbms:pigeonhole' implement=1 %}">{{ no_pigeonhole_count }}</a></h3>
                     {% endif %}
                     {#                    <h3>待保后项目：<a href="{% url 'dbms:pigeonhole' implement=1 %}">{{ no_pigeonhole_count }}</a></h3>#}
-                    {#                    <h3>逾期项目：<a href="{% url 'dbms:pigeonhole' implement=1 %}">{{ no_pigeonhole_count }}</a></h3>#}
+                    <h3>逾期项目：<a href="{% url 'dbms:overdue' %}">{{ overdue_count }}</a></h3>
+                    <h3>30天内到期项目（含逾期）：<a href="{% url 'dbms:soondue' %}">{{ soondue_count }}</a></h3>
+
                 {% endblock %}
             </div>
         </div>
