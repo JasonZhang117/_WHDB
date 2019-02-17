@@ -214,7 +214,15 @@ class AuthoritiesAdmin(admin.ModelAdmin):
 
 
 admin.site.register(models.Authorities, AuthoritiesAdmin)
-admin.site.register(models.Cartes)
+
+
+class CartesAdmin(admin.ModelAdmin):
+    list_display = ('name', 'ordery', 'parrent')  # 显示字段
+    list_per_page = 30  # 每页显示条目数
+    # filter_horizontal = ("menu", "authority")
+
+
+admin.site.register(models.Cartes, CartesAdmin)
 # 员工
 admin.site.register(models.Employees, EmployeesAdmin)
 

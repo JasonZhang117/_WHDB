@@ -58,25 +58,28 @@
                  style="padding-left: 1px;padding-right: 1px;">
                 {% block right-content-container %}
                     <h2 class="page-header">Dashboard</h2>
-
                     权限列表：{{ authority_list }}<br>
                     菜单列表：{{ carte_list }}<br>
-                    角色列表：{{ job_list }}<br><br>
-
-                    menus_list：{{ request.session.menus }}<br>
-                    authoritis_list：{{ request.session.authoritis }}<br>
-                    cartes_list：{{ request.session.cartes }}<br><br>
-                    job_list：{{ request.session.jobs }}<br><br>
-
-                    menus_session：{{ menus_session }}<br>
-                    authoritis_session：{{ authoritis_session }}<br>
-                    cartes_session：{{ cartes_session }}<br>
-                    job_session：{{ job_session }}<br>
-
-
-
+                    {#                    无菜单权限：{{ no_carte_list }}<br>#}
+                    菜单权限：{{ yes_carte_list }}<br>
+                    菜单字典：{{ carte_dict }}<br>
+                    菜单权限字典：{{ yes_carte_dict }}<br>
+                    菜单权限字典：{{ result }}<br>
+                    <!--    for item in result:
+                                print(item['name'])
+                                for r in item['child']:
+                                    print('----', r['name'])-->
+                    {% for item in result %}
+                        {{ item.name }} <br>
+                        {% for r in item.child %}
+                            ---->{{ r.name }}<br>
+                        {% endfor %}
+                    {% endfor %}
                 {% endblock %}
             </div>
         </div>
     </div>
 {% endblock %}
+
+
+

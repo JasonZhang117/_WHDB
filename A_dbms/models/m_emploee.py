@@ -110,8 +110,8 @@ class Menus(models.Model):
 # -----------------------------菜单模型------------------------------#
 class Cartes(models.Model):
     """动态菜单"""
-    name = models.CharField(verbose_name="菜单名称", max_length=64)
-    url_name = models.CharField(verbose_name="URL", max_length=128, null=True, blank=True)
+    name = models.CharField(verbose_name="菜单名称", max_length=64, unique=True)
+    # url_name = models.CharField(verbose_name="URL", max_length=128, null=True, blank=True)
     ordery = models.IntegerField(verbose_name="优先级")
     parrent = models.ForeignKey(to="self", verbose_name="母菜单",
                                 on_delete=models.PROTECT,
@@ -121,10 +121,10 @@ class Cartes(models.Model):
     class Meta:
         verbose_name_plural = '内部-菜单'
         db_table = 'dbms_cartes'
-        unique_together = ('name', 'url_name')
+        # unique_together = ('name', 'url_name')
 
     def __str__(self):
-        return '%s-%s' % (self.name, self.url_name)
+        return '%s-%s' % (self.name, self.ordery)
 
 
 # -----------------------------权限模型------------------------------#

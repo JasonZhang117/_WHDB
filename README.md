@@ -37,7 +37,40 @@
 在保余额--上年同期
 本年发生额--上年同期
 每月放款额，每月还款额，每月净增加额--上年同期
-
+carte_list：
+[{
+	'parrent': None,
+	'child': [
+		{'parrent': 1, 'child': [], 'id': 2, 'url': 'dbms:article_all', 'name': '查看项目列表'}],
+	'id': 1,
+	'ordery': 1,
+	'name': '项目管理'
+},
+{
+	'parrent': None,
+	'child': [
+		{'parrent': 2, 'child': [], 'id': 3, 'url': 'dbms:meeting_all', 'name': '查看评审会'},
+		{'parrent': 2, 'child': [], 'id': 4, 'url': 'dbms:appraisal_all', 'name': '查看项目评审'}],
+	'id': 2,
+	'ordery': 2,
+	'name': '评审管理'}]
+result：
+[{
+	'parrent': None,
+	'child': [
+		{'parrent': 1, 'child': [],'id': 2, 'url': 'dbms:article_all', 'name': '查看项目列表'}],
+	'id': 1,
+	'ordery': 1,
+	'name': '项目管理'
+},
+{
+	'parrent': None,
+	'child': [
+		{'parrent': 2, 'child': [], 'id': 3, 'url': 'dbms:meeting_all', 'name': '查看评审会'},
+		{'parrent': 2, 'child': [], 'id': 4, 'url': 'dbms:appraisal_all', 'name': '查看项目评审'}],
+	'id': 2,
+	'ordery': 2,
+	'name': '评审管理'}]
 
 
 申保会纪要变更---变更情况（tab,modle)

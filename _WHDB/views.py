@@ -5,10 +5,7 @@ from A_dbms import models
 
 
 def acc_login(request):
-    '''
-    :param request:
-    :return:
-    '''
+    ''':param request::return:'''
     print(__file__, '-->acc_login')
     print('acc_login-->request.COOKIES:', request.COOKIES)
     print('acc_login-->request.session:', request.session)
@@ -24,18 +21,21 @@ def acc_login(request):
         print("acc_login-->request.POST.get('code'):", code)
         user = authenticate(username=username, password=password)
         if user:
+            '''查询菜单并写入session'''
             menu_list = models.Menus.objects.filter(jobs__employees=user).distinct().order_by(
                 'ordery').values('name', 'url_name')
-            print('menu_list:', menu_list)
             request.session['menus'] = list(menu_list)
+            '''查询权限并写入session'''
             authority_list = models.Authorities.objects.filter(
-                jobs__employees=user).distinct().values('name', 'url_name')  # 权限列表
+                jobs__employees=user).distinct().values('name', 'url_name', 'carte')  # 权限列表
             request.session['authoritis'] = list(authority_list)
+            '''查询菜单本写入session'''
             carte_list = models.Cartes.objects.filter(
-                authority_carte__jobs__employees=user).distinct().values('name', 'url_name')  # 菜单列表
+                authority_carte__jobs__employees=user).distinct().values('name', 'ordery', 'parrent')  # 菜单列表
+
             request.session['cartes'] = list(carte_list)
+            '''查询角色并写入session'''
             job_list = models.Jobs.objects.filter(employees=user).values('name')  # 角色列表
-            print('job_list:', job_list)
             request.session['jobs'] = list(job_list)
 
             # request.session['menus'] = [{'menu': '评审管理', 'url': 'dbms:article_all'},
@@ -45,7 +45,6 @@ def acc_login(request):
         else:
             error_msg = "用户名或密码错误！"
     return render(request, 'login.html', {'error_msg': error_msg})
-    # return render(request, 'dbms\login.html', {'error_msg': error_msg})
 
 
 def acc_logout(request):
@@ -56,23 +55,67 @@ def acc_logout(request):
 @login_required
 def home(request):
     print(__file__, '---->def home')
-    print('acc_login-->request.COOKIES:', request.COOKIES)
     print("acc_login-->request.user:", request.user)
-    print('acc_login-->request.session:', request.session)
-    print("acc_login-->request.session.get('menus'):", request.session.get('menus'))
-
-    menu_list = models.Menus.objects.filter(jobs__employees=request.user).distinct().order_by(
-        'ordery').values('name', 'url_name')  # 菜单列表
-    authority_list = models.Authorities.objects.filter(
-        jobs__employees=request.user).distinct().values('name', 'url_name')  # 权限列表
     carte_list = models.Cartes.objects.filter(
-        authority_carte__jobs__employees=request.user).distinct().values('name', 'url_name')  # 菜单列表
-    job_list = models.Jobs.objects.filter(employees=request.user).values('name')  # 角色列表
+        authority_carte__jobs__employees=request.user).distinct().values(
+        'id', 'parrent', 'name', 'ordery')  # 菜单列表
+    print('carte_list:', carte_list)
+    authority_list = models.Authorities.objects.filter(
+        jobs__employees=request.user).distinct().values('name', 'url_name', 'carte')  # 权限列表
 
-    menus_session = request.session.get('menus')  # 菜单
-    authoritis_session = request.session.get('authoritis')  # 权限
-    cartes_session = request.session.get('cartes')  # 菜单
-    job_session = request.session.get('jobs')  # 菜单
+    no_carte_list = models.Authorities.objects.filter(
+        jobs__employees=request.user).distinct().filter(
+        carte__isnull=True).values('name', 'url_name', 'carte')  # 无菜单权限列表
+
+    yes_carte_list = models.Authorities.objects.filter(
+        jobs__employees=request.user).distinct().exclude(
+        carte__isnull=True).values('id', 'name', 'url_name', 'carte')  # 有菜单权限列表
+
+    yes_carte_dict = {}  # 有菜单权限字典
+    for item in yes_carte_list:
+        item = {
+            'id': item['id'],
+            'url': item['url_name'],
+            'name': item['name'],
+            'parrent': item['carte'],
+            'child': []
+        }  # 替换每个字典的键
+        if item['parrent'] in yes_carte_dict:
+            yes_carte_dict[item['parrent']].append(item)
+        else:
+            yes_carte_dict[item['parrent']] = [item, ]
+    print('carte_list:', carte_list)
+
+    carte_dict = {}  # 菜单字典
+    '''将列表carte_list转换为字典，'''
+    for item in carte_list:  # carte_list为列表，其中的元素为字典，取出列表中的字典元素为item
+        item['child'] = []  # 将每个字典添加一个child键，值设置为一个空列表
+        carte_dict[item['id']] = item  # 将字典carte_dict键设为item字典的id值，值设为item字典
+    print(carte_dict)
+    for k, v in yes_carte_dict.items():
+        carte_dict[k]['child'] = v  # 将权限挂到菜单上
+    print('carte_list:', carte_list)
+
+    ''' [
+            {'name': '项目管理', 'parrent': None, 'ordery': 1, 'chaild':[
+                {'name': '评审管理', 'url': 'dbms/meeting/scan'},
+                {'name': '评审管理', 'url': 'dbms/meeting/scan'},]},
+            {'name': '评审管理', 'parrent': None, 'ordery': 2}
+     ]'''
+    result = []
+    for row in carte_dict.values():
+        if not row['parrent']:
+            result.append(row)
+        else:
+            carte_dict[row['parrent']]['child'].append(row)
+    print('carte_list:', carte_list)
+
+    for item in result:
+        print(item['name'])
+        for r in item['child']:
+            print('----', r['name'])
+            for n in r['child']:
+                print('-------->', n['name'])
 
     agree_list = models.Provides.objects.all()
     for agree in agree_list:
