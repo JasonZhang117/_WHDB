@@ -35,6 +35,6 @@ def index(request):
     print("date_th_later.strftime('%Y-%m-%d'):", date_th_later.strftime('%Y-%m-%d'))
     '''PROVIDE_STATUS_LIST = [(1, '在保'), (11, '解保'), (21, '代偿')]'''
     overdue_count = models.Provides.objects.filter(provide_status=1, due_date__lt=datetime.date.today()).count()  # 逾期
-    soondue_count = models.Provides.objects.filter(provide_status=1,
+    soondue_count = models.Provides.objects.filter(provide_status=1, due_date__gt=datetime.date.today(),
                                                    due_date__lt=date_th_later).count()  # 30天内到期
     return render(request, 'dbms/index_dbms.html', locals())
