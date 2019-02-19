@@ -13,7 +13,7 @@
             </div>
             <div class="col-sm-10 col-sm-offset-3 col-md-10 col-md-offset-2 main" style="padding: 1px;">{#右侧主体框架}#}
                 {% block right-content-container %}{#右侧内容}#}
-                    <h2 class="page-header">待处理事项：</h2>
+                    <h2 class="page-header">跟踪事项：</h2>
                     {% if no_feedback_count > 0 %}
                         <h3>待反馈项目：<a href="{% url 'dbms:article' article_state=1 %}">{{ no_feedback_count }}</a>
                         </h3>
@@ -32,6 +32,9 @@
                     {% endif %}
                     {% if soondue_count > 0 %}
                         <h3>30天内到期项目：<a href="{% url 'dbms:soondue' %}">{{ soondue_count }}</a></h3>
+                    {% endif %}
+                    {% if soondue_draft_count > 0 %}
+                        <h3>30天内到期票据：<a href="{% url 'dbms:soondue_draft' %}">{{ soondue_draft_count }}</a></h3>
                     {% endif %}
 
                 {% endblock %}

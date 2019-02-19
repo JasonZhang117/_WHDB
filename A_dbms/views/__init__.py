@@ -22,7 +22,7 @@ from .v_agree import (agree, agree_scan, agree_preview)
 from .v_agree_act import (agree_add_ajax, counter_add_ajax, agree_sign_ajax, counter_del_ajax)
 # ----------------------v_warrant权证管理视图--------------------#
 from .v_warrant import (
-    warrant, warrant_scan, warrant_agree, warrant_agree_scan, warrant_agree_warrant, house, ground)
+    warrant, warrant_scan, warrant_agree, warrant_agree_scan, warrant_agree_warrant, house, ground, soondue_draft)
 from .v_warrant_act import (
     warrant_add_ajax, warrant_del_ajax, warrant_edit_ajax, owership_add_ajax, owership_del_ajax,
     guaranty_add_ajax, guaranty_del_ajax, storages_add_ajax, housebag_add_ajax, draftextend_add_ajax,

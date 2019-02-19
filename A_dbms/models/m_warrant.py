@@ -241,6 +241,9 @@ class DraftExtend(models.Model):  # 票据列表
     draft_amount = models.FloatField(verbose_name="票面金额")
     issue_date = models.DateField(verbose_name="出票日期")
     due_date = models.DateField(verbose_name="到期日")
+    DRAFT_STATE_LIST = (
+        (1, '未入库'), (2, '已入库'), (21, '置换出库'), (31, '解保出库'), (41, '托收出库'), (99, '已注销'))
+    draft_state = models.IntegerField(verbose_name='_票据状态', choices=DRAFT_STATE_LIST, default=1)
     draft_e_buildor = models.ForeignKey(to='Employees', verbose_name="创建者", default=1,
                                         on_delete=models.PROTECT,
                                         related_name='draft_e_buildor_employee')

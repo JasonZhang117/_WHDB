@@ -37,4 +37,7 @@ def index(request):
     overdue_count = models.Provides.objects.filter(provide_status=1, due_date__lt=datetime.date.today()).count()  # 逾期
     soondue_count = models.Provides.objects.filter(provide_status=1, due_date__gt=datetime.date.today(),
                                                    due_date__lt=date_th_later).count()  # 30天内到期
+    soondue_draft_count = models.DraftExtend.objects.filter(draft_state__in=[1, 2], due_date__gt=datetime.date.today(),
+                                                            due_date__lt=date_th_later).count()  # 30天内到期
+
     return render(request, 'dbms/index_dbms.html', locals())
