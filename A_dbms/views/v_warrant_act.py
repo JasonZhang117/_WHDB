@@ -106,7 +106,7 @@ def warrant_add_ajax(request):
                             warrant_typ=warrant_typ, warrant_buildor=request.user)
                         receivable_obj = models.Receivable.objects.create(
                             warrant=warrant_obj, receivable_buildor=request.user,
-                            receive_owner=receivable_clean['receive_owner'],
+                            receive_owner_id=receivable_clean['receive_owner'],
                             receivable_detail=receivable_clean['receivable_detail'])
                     response['message'] = '应收账款创建成功！！！'
                     response['skip'] = "/dbms/warrant/scan/%s/" % warrant_obj.id
@@ -131,7 +131,7 @@ def warrant_add_ajax(request):
                         stock_obj = models.Stockes.objects.create(
                             warrant=warrant_obj, stock_buildor=request.user,
                             stock_typ=stocke_clean['stock_typ'],
-                            stock_owner=stocke_clean['stock_owner'],
+                            stock_owner_id=stocke_clean['stock_owner'],
                             target=stocke_clean['target'],
                             share=stocke_clean['share'])
                     response['message'] = '股权创建成功！！！'
@@ -156,7 +156,7 @@ def warrant_add_ajax(request):
                             warrant_typ=warrant_typ, warrant_buildor=request.user)
                         draft_obj = models.Draft.objects.create(
                             warrant=warrant_obj, draft_buildor=request.user,
-                            draft_owner=draft_clean['draft_owner'],
+                            draft_owner_id=draft_clean['draft_owner'],
                             draft_detail=draft_clean['draft_detail'])
                     response['message'] = '票据包创建成功，请添加票据！！！'
                     response['skip'] = "/dbms/warrant/scan/%s/" % warrant_obj.id
@@ -180,7 +180,7 @@ def warrant_add_ajax(request):
                             warrant_typ=warrant_typ, warrant_buildor=request.user)
                         vehicle_obj = models.Vehicle.objects.create(
                             warrant=warrant_obj, vehicle_buildor=request.user,
-                            vehicle_owner=vehicle_clean['vehicle_owner'],
+                            vehicle_owner_id=vehicle_clean['vehicle_owner'],
                             frame_num=vehicle_clean['frame_num'],
                             plate_num=vehicle_clean['plate_num'])
                     response['message'] = '车辆创建成功！！！'
@@ -208,7 +208,7 @@ def warrant_add_ajax(request):
                             warrant_typ=warrant_typ, warrant_buildor=request.user)
                         chattel_obj = models.Chattel.objects.create(
                             warrant=warrant_obj, chattel_buildor=request.user,
-                            chattel_owner=chattel_clean['chattel_owner'],
+                            chattel_owner_id=chattel_clean['chattel_owner'],
                             chattel_typ=chattel_clean['chattel_typ'],
                             chattel_detail=chattel_clean['chattel_detail'])
                     response['message'] = '动产创建成功！！！'

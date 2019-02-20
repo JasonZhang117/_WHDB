@@ -73,6 +73,7 @@ def custom_scan(request, custom_id):  # 项目预览
             'license_addr': custom_obj.person_custome.license_addr}
         form_custom_p_add = forms.CustomPAddForm(initial=form_date)
     form_shareholder_add = forms.FormShareholderAdd()
+    form_article_add = forms.ArticlesAddForm()
 
     review_custom_list = custom_obj.review_custom.all().filter().order_by('-review_date', '-review_plan_date')
     article_custom_list = custom_obj.article_custom.all().order_by('-build_date')

@@ -3,6 +3,7 @@
         <label>客户情况</label>
         <label class="navbar-right">
             {% if PAGE_TITLE == '客户预览' %}
+                <a class="btn btn-primary btn-sm " id="addArticle">创建项目 </a>
                 {% if custom_obj.genre == 1 %}
                     <a class="btn btn-primary btn-sm " id="addShareholderB">添加股权 </a>
                 {% elif custom_obj.genre == 2 %}

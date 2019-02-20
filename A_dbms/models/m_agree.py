@@ -14,7 +14,7 @@ class Agrees(models.Model):  # 委托合同
     num_prefix = models.CharField(verbose_name='_编号前缀', max_length=32)
     lending = models.ForeignKey(to='LendingOrder', verbose_name="放款纪要",
                                 on_delete=models.PROTECT,
-                                # limit_choices_to=limit_agree_choices,
+                                limit_choices_to=limit_agree_choices,
                                 related_name='agree_lending')
     # limit_choices_to = limit_agree_choices,
 

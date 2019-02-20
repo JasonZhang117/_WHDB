@@ -538,7 +538,7 @@ def article_change_ajax(request):
         change_view = change_cleaned['change_view']
         '''CHANGE_VIEW_LIST = ((1, '变更申请'), (11, '同意变更'), (21, '否决变更'))'''
         article_state = article_obj.article_state
-        if article_state in [5, 61]:
+        if article_state in [5, 51, 61]:
             if change_view == 11:
                 try:
                     with transaction.atomic():

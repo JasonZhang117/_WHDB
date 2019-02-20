@@ -1,0 +1,41 @@
+<div id="form_article_add">
+
+    <div class="form-group"><!--续贷金额-->
+        <label for="id_renewal" class="col-sm-3 control-label">{{ form_article_add.renewal.label }}：</label>
+        <div class="col-sm-9">{{ form_article_add.renewal }}</div>
+        <label id="e_renewal" class="pull-right">{{ form_article_add.renewal.errors }}</label>
+    </div>
+
+    <div class="form-group"><!--新增金额-->
+        <label for="id_augment" class="col-sm-3 control-label">{{ form_article_add.augment.label }}：</label>
+        <div class="col-sm-9">{{ form_article_add.augment }}</div>
+        <label id="e_augment" class="pull-right">{{ form_article_add.augment.errors }}</label>
+    </div>
+
+    <div class="form-group"><!--授信期限-->
+        <label for="id_credit_term"
+               class="col-sm-3 control-label">{{ form_article_add.credit_term.label }}：</label>
+        <div class="col-sm-9">{{ form_article_add.credit_term }}</div>
+        <label id="e_credit_term" class="pull-right">{{ form_article_add.credit_term.errors }}</label>
+    </div>
+
+    <div class="form-group"><!--项目经理id-->
+        <label for="id_director_id"
+               class="col-sm-3 control-label">{{ form_article_add.director_id.label }}：</label>
+        <div class="col-sm-9">{{ form_article_add.director_id }}</div>
+        <label id="e_director_id" class="pull-right">{{ form_article_add.director_id.errors }}</label>
+    </div>
+
+    <div class="form-group"><!--项目助理id-->
+        <label for="id_assistant_id"
+               class="col-sm-3 control-label">{{ form_article_add.assistant_id.label }}：</label>
+        <div class="col-sm-9">{{ form_article_add.assistant_id }}</div>
+        <label id="e_assistant_id" class="pull-right">{{ form_article_add.assistant_id.errors }}</label>
+    </div>
+
+    <div class="form-group"><!--风控专员id-->
+        <label for="id_control_id" class="col-sm-3 control-label">{{ form_article_add.control_id.label }}：</label>
+        <div class="col-sm-9">{{ form_article_add.control_id }}</div>
+        <label id="e_control_id" class="pull-right">{{ form_article_add.control_id.errors }}</label>
+    </div>
+</div>

@@ -75,31 +75,46 @@ class GroundAddEidtForm(dform.ModelForm):
 
 # ------------------------应收帐款FormReceivable11--------------------------#
 class FormReceivable(dform.ModelForm):  # 应收帐款
+    receive_owner = fields.IntegerField(
+        label='所有权人', label_suffix="：", widget=widgets.Select(attrs={'class': 'form-control'}))
     class Meta:
         model = models.Receivable
-        fields = ['receive_owner', 'receivable_detail']
-        widgets = {'receive_owner': dform.Select(attrs={'class': 'form-control'}),
-                   'receivable_detail': dform.Textarea(attrs={'class': 'form-control', 'rows': '3'})}
-
+        fields = ['receivable_detail']
+        widgets = {'receivable_detail': dform.Textarea(attrs={'class': 'form-control', 'rows': '3'})}
+    def __init__(self, *args, **kwargs):
+        super(FormReceivable, self).__init__(*args, **kwargs)
+        self.fields['receive_owner'].widget.choices = models.Customes.objects.values_list('id', 'name').order_by('name')
 
 # ------------------------股权FormStockes21--------------------------#
 class FormStockes(dform.ModelForm):  # 股权
+    stock_owner = fields.IntegerField(
+        label='所有权人', label_suffix="：", widget=widgets.Select(attrs={'class': 'form-control'}))
+
     class Meta:
         model = models.Stockes
-        fields = ['stock_owner', 'target', 'share', 'stock_typ']
-        widgets = {'stock_owner': dform.Select(attrs={'class': 'form-control'}),
-                   'target': dform.TextInput(attrs={'class': 'form-control'}),
+        fields = ['target', 'share', 'stock_typ']
+        widgets = {'target': dform.TextInput(attrs={'class': 'form-control'}),
                    'share': dform.NumberInput(attrs={'class': 'form-control', 'placeholder': '土地坐落'}),
                    'stock_typ': dform.Select(attrs={'class': 'form-control'})}
+
+    def __init__(self, *args, **kwargs):
+        super(FormStockes, self).__init__(*args, **kwargs)
+        self.fields['stock_owner'].widget.choices = models.Customes.objects.values_list('id', 'name').order_by('name')
 
 
 # ------------------------票据31--------------------------#
 class FormDraft(dform.ModelForm):  # 票据31
+    draft_owner = fields.IntegerField(
+        label='所有权人', label_suffix="：", widget=widgets.Select(attrs={'class': 'form-control'}))
+
     class Meta:
         model = models.Draft
-        fields = ['draft_owner', 'draft_detail']
-        widgets = {'draft_owner': dform.Select(attrs={'class': 'form-control'}),
-                   'draft_detail': dform.Textarea(attrs={'class': 'form-control', 'rows': '3'})}
+        fields = ['draft_detail']
+        widgets = {'draft_detail': dform.Textarea(attrs={'class': 'form-control', 'rows': '3'})}
+
+    def __init__(self, *args, **kwargs):
+        super(FormDraft, self).__init__(*args, **kwargs)
+        self.fields['draft_owner'].widget.choices = models.Customes.objects.values_list('id', 'name').order_by('name')
 
 
 # ------------------------票据包31--------------------------#
@@ -118,23 +133,35 @@ class FormDraftExtend(dform.ModelForm):  # 票据31
 
 # ------------------------车辆FormVehicle41--------------------------#
 class FormVehicle(dform.ModelForm):  # 车辆FormVehicle41
+    vehicle_owner = fields.IntegerField(
+        label='所有权人', label_suffix="：", widget=widgets.Select(attrs={'class': 'form-control'}))
+
     class Meta:
         model = models.Vehicle
-        fields = ['vehicle_owner', 'frame_num', 'plate_num']
-        widgets = {'vehicle_owner': dform.Select(attrs={'class': 'form-control'}),
-                   'frame_num': dform.TextInput(attrs={'class': 'form-control', 'placeholder': '车架号'}),
+        fields = ['frame_num', 'plate_num']
+        widgets = {'frame_num': dform.TextInput(attrs={'class': 'form-control', 'placeholder': '车架号'}),
                    'plate_num': dform.TextInput(attrs={'class': 'form-control', 'placeholder': '车牌号'})}
+
+    def __init__(self, *args, **kwargs):
+        super(FormVehicle, self).__init__(*args, **kwargs)
+        self.fields['vehicle_owner'].widget.choices = models.Customes.objects.values_list('id', 'name').order_by('name')
 
 
 # ------------------------动产FormChattel51--------------------------#
 class FormChattel(dform.ModelForm):  # 动产FormChattel51
+    chattel_owner = fields.IntegerField(
+        label='所有权人', label_suffix="：", widget=widgets.Select(attrs={'class': 'form-control'}))
+
     class Meta:
         model = models.Chattel
-        fields = ['chattel_owner', 'chattel_typ', 'chattel_detail']
-        widgets = {'chattel_owner': dform.Select(attrs={'class': 'form-control'}),
-                   'chattel_typ': dform.Select(attrs={'class': 'form-control'}),
+        fields = ['chattel_typ', 'chattel_detail']
+        widgets = {'chattel_typ': dform.Select(attrs={'class': 'form-control'}),
                    'chattel_detail': dform.Textarea(
                        attrs={'class': 'form-control', 'rows': '3', 'placeholder': '详细情况'})}
+
+    def __init__(self, *args, **kwargs):
+        super(FormChattel, self).__init__(*args, **kwargs)
+        self.fields['chattel_owner'].widget.choices = models.Customes.objects.values_list('id', 'name').order_by('name')
 
 
 # -----------------------HypothecsAddEidtForm他权-------------------------#

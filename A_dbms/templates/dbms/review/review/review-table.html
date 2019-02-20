@@ -28,7 +28,7 @@
                 <td align="right">{{ custom.custom_back }}</td>
                 <td>{{ custom.lately_date }}</td>
                 <td>{{ custom.get_classification_display }}</td>
-                <td>{{ custom.review_plan_date }}</td>
+                <td>{{ custom.review_plan_date|default_if_none:"" }}</td>
                 <td>{{ custom.get_review_state_display }}</td>
             </tr>
         {% endfor %}
