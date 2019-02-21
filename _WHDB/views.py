@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from A_dbms import models
+import datetime, time
 
 
 def acc_login(request):
@@ -122,4 +123,25 @@ def home(request):
         agree_list_obj = models.Provides.objects.filter(id=agree.id)
     agree_obj = agree_list_obj.first()
     agree_amount = agree_obj.implement
-    return render(request, 'index.html', locals())
+    # return render(request, 'index.html', locals())
+
+    '''ARTICLE_STATE_LIST = ((1, '待反馈'), (2, '已反馈'), (3, '待上会'), (4, '已上会'), (5, '已签批'),
+                              (51, '已放完'), (61, '待变更'), (99, '已注销'))'''
+    no_feedback_count = models.Articles.objects.filter(article_state=1).count()  # 待反馈
+    '''IMPLEMENT_LIST = [(1, '未归档'), (11, '退回'), (21, '暂存风控'), (31, '移交行政'), (41, '已归档')]'''
+    no_pigeonhole_count = models.Provides.objects.filter(implement__in=[1, 11]).count()  # 未归档
+    '''AGREE_STATE_LIST = ((11, '待签批'), (21, '已签批'), (31, '未落实'),
+                        (41, '已落实'), (51, '待变更'), (61, '已解保'), (99, '作废'))'''
+    no_ascertain_count = models.Agrees.objects.filter(agree_state=31).count()  # 未落实
+    today_str = datetime.date.today()
+    date_th_later = datetime.datetime.now() - datetime.timedelta(days=-30)  # 30天前的日期
+    date_th_later = datetime.date.today() - datetime.timedelta(days=-30)  # 30天前的日期
+    '''PROVIDE_STATUS_LIST = [(1, '在保'), (11, '解保'), (21, '代偿')]'''
+    overdue_count = models.Provides.objects.filter(provide_status=1, due_date__lt=datetime.date.today()).count()  # 逾期
+    soondue_count = models.Provides.objects.filter(provide_status=1, due_date__gte=datetime.date.today(),
+                                                   due_date__lt=date_th_later).count()  # 30天内到期
+    soondue_draft_count = models.DraftExtend.objects.filter(draft_state__in=[1, 2], due_date__gte=datetime.date.today(),
+                                                            due_date__lt=date_th_later).count()  # 30天内到期
+    overdue_draft_count = models.DraftExtend.objects.filter(
+        draft_state__in=[1, 2], due_date__lt=datetime.date.today()).count()  # 逾期票据
+    return render(request, 'dbms/index_dbms.html', locals())

@@ -14,7 +14,7 @@ from .m_warrant import (
 # -----------------------m_provide放款模型-------------------#
 from .m_provide import (Notify, Provides, Repayments, Pigeonholes, Charges)
 # -----------------------m_dun追偿-------------------#
-from .m_dun import Compensatories
+from .m_dun import Compensatories, Dun, Agent, Staff, Charge
 # ---------------------m_custom客户信息-----------------------#
 from .m_custom import Customes, CustomesC, CustomesP, Shareholders
 # ---------------------m_review保后信息-----------------------#

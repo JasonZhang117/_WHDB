@@ -325,7 +325,7 @@ def soondue(request, *args, **kwargs):  # 委托合同列表
     PAGE_TITLE = '即将到期（含逾期）'
     date_th_later = datetime.date.today() - datetime.timedelta(days=-30)  # 30天前的日期
     soondue_list = models.Provides.objects.filter(
-        provide_status=1, due_date__lt=date_th_later).order_by('due_date')  # 30天内到期
+        provide_status=1, due_date__lte=date_th_later).order_by('due_date')  # 30天内到期
     '''搜索'''
     search_key = request.GET.get('_s')
     if search_key:

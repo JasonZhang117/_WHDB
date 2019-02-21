@@ -26,7 +26,7 @@ class Agrees(models.Model):  # 委托合同
     AGREE_TYP_LIST = ((1, '单笔'), (2, '最高额'), (3, '保函'))
     agree_typ = models.IntegerField(verbose_name='合同种类', choices=AGREE_TYP_LIST)
     GUARANTEE_TYP_LIST = (('①', '①'), ('②', '②'), ('③', '③'), ('④', '④'),
-                          ('⑤', '⑤'), ('⑥', '⑥'), ('⑦', '⑦'),)
+                          ('⑤', '⑤'), ('⑥', '⑥'), ('⑦', '⑦'), ('⑧', '⑧'),)
     guarantee_typ = models.CharField(verbose_name='反担保种类数', max_length=6, choices=GUARANTEE_TYP_LIST)
     agree_copies = models.IntegerField(verbose_name='合同份数')
     agree_amount = models.FloatField(verbose_name='合同金额')

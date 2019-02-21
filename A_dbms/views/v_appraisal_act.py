@@ -272,15 +272,7 @@ def comment_edit_ajax(request):  # 修改项目ajax
     '''((1, '待反馈'), (2, '已反馈'), (3, '待上会'),
        (4, '已上会'), (5, '已签批'), (6, '已注销'))'''
     if article_obj.article_state == 4:
-        comment_type = post_data['comment_type']
-        concrete = post_data['concrete']
-
-        data = {
-            'comment_type': comment_type,
-            'concrete': concrete}
-
-        form = forms.CommentsAddForm(data)
-
+        form = forms.CommentsAddForm(post_data)
         if form.is_valid():
             cleaned_data = form.cleaned_data
             expert_id = post_data['expert_id']

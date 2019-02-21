@@ -14,7 +14,7 @@
         </tr>
         </thead>
         <tbody>
-        {% for compensatory in p_list %}
+        {% for compensatory in dun_obj.compensatory.all %}
             <tr>
                 <td>{{ compensatory.provide.notify.agree.agree_num }}</td>
                 <td>

@@ -301,7 +301,7 @@ def soondue_draft(request, *args, **kwargs):  # 房产列表
     PAGE_TITLE = '票据列表'
 
     date_th_later = datetime.date.today() - datetime.timedelta(days=-30)  # 30天前的日期
-    soondue_draft_list = models.DraftExtend.objects.filter(draft_state__in=[1, 2], due_date__gt=datetime.date.today(),
+    soondue_draft_list = models.DraftExtend.objects.filter(draft_state__in=[1, 2], due_date__gte=datetime.date.today(),
                                                            due_date__lt=date_th_later)  # 30天内到期
     '''搜索'''
     search_key = request.GET.get('_s')

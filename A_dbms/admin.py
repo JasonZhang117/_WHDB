@@ -104,6 +104,8 @@ admin.site.register(models.Repayments)  # 还款
 admin.site.register(models.Pigeonholes)  # 归档
 # -----------------------追偿-------------------------#
 admin.site.register(models.Compensatories)  # 代偿
+admin.site.register(models.Dun)  # 追偿
+admin.site.register(models.Agent)  # 代理情况
 
 
 # -----------------------客户-------------------------#

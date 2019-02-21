@@ -1,0 +1,25 @@
+<div>
+    <label>
+        {% if kwargs.dun_stage == None %}
+            <a class="active btn btn-primary btn-sm" href="{% url 'dbms:dun_all' %}">全部</a>
+        {% else %}
+            <a class="btn btn btn-primary btn-sm" href="{% url 'dbms:dun_all' %}">全部</a>
+        {% endif %}
+        {# 方式一：#}
+        {% for dun_stage in dun_stage_list %}
+            {% if dun_stage.0 == kwargs.dun_stage %}
+                <a class="active btn btn-primary btn-sm"
+                   href="{% url 'dbms:dun' dun_stage=dun_stage.0 %}">{{ dun_stage.1 }} </a>
+            {% else %}
+                <a class="btn btn-primary btn-sm"
+                   href="{% url 'dbms:dun' dun_stage=dun_stage.0 %}">{{ dun_stage.1 }}</a>
+            {% endif %}
+        {% endfor %}
+    </label>
+        <label>
+        <form class="navbar-form" style="display: inline">
+            <input type="search" name="_s" class="form-control" placeholder="合同编号,客户,银行,纪要">
+            <button type="submit" class="btn btn-primary btn-sm">搜索</button>
+        </form>
+    </label>
+</div>

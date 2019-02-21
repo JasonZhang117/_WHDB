@@ -78,8 +78,6 @@ urlpatterns = [
     path('warrant/storages/add/', views.storages_add_ajax),
     path('warrant/evaluate/add/', views.evaluate_add_ajax),
 
-
-
     # -----------------------house房产管理-------------------------#
     path('house/', views.house, name='house_all'),  # 菜单-权证管理-房产列表
     path('house/<int:house_app>/', views.house, name='house'),  # /dbms/house/(0-9)
@@ -123,6 +121,9 @@ urlpatterns = [
     path('compensatory/<int:dun_state>/', views.compensatory, name='compensatory'),
     path('compensatory/scan/<int:compensatory_id>/', views.compensatory_scan, name='compensatory_scan'),
     path('compensatory/add/', views.compensatory_add_ajax),
+    path('dun/', views.dun, name='dun_all'),  # 菜单-追偿管理
+    path('dun/<int:dun_stage>/', views.dun, name='dun'),
+    path('dun/scan/<int:dun_id>/', views.dun_scan, name='dun_scan'),
 
     # -----------------------客户管理-------------------------#
     path('custom/', views.custom, name='custom_all'),  # 菜单-客户管理
