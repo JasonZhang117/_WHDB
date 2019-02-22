@@ -34,11 +34,22 @@ def index(request):
     print('date_th_later:', date_th_later)
     print("date_th_later.strftime('%Y-%m-%d'):", date_th_later.strftime('%Y-%m-%d'))
     '''PROVIDE_STATUS_LIST = [(1, '在保'), (11, '解保'), (21, '代偿')]'''
-    overdue_count = models.Provides.objects.filter(provide_status=1, due_date__lt=datetime.date.today()).count()  # 逾期
-    soondue_count = models.Provides.objects.filter(provide_status=1, due_date__gte=datetime.date.today(),
-                                                   due_date__lt=date_th_later).count()  # 30天内到期
-    soondue_draft_count = models.DraftExtend.objects.filter(draft_state__in=[1, 2], due_date__gte=datetime.date.today(),
-                                                            due_date__lt=date_th_later).count()  # 30天内到期
+    overdue_count = models.Provides.objects.filter(
+        provide_status=1, due_date__lt=datetime.date.today()).count()  # 逾期
+    soondue_count = models.Provides.objects.filter(
+        provide_status=1, due_date__gte=datetime.date.today(), due_date__lt=date_th_later).count()  # 30天内到期
+    '''DRAFT_STATE_LIST = (
+        (1, '未入库'), (2, '已入库'), (21, '置换出库'), (31, '解保出库'), (41, '托收出库'), (99, '已注销'))'''
+    soondue_draft_count = models.DraftExtend.objects.filter(
+        draft_state__in=[1, 2], due_date__gte=datetime.date.today(), due_date__lt=date_th_later).count()  # 30天内到期
     overdue_draft_count = models.DraftExtend.objects.filter(
         draft_state__in=[1, 2], due_date__lt=datetime.date.today()).count()  # 逾期票据
+    '''COOPERATOR_STATE_LIST = ((1, '正常'), (11, '注销'))'''
+    soondue_cooperator_count = models.Cooperators.objects.filter(
+        cooperator_state=1, due_date__gte=datetime.date.today(),
+        due_date__lt=date_th_later).count()  # 30天内到期协议
+    overdue_cooperator_count = models.Cooperators.objects.filter(
+        cooperator_state=1, due_date__lt=datetime.date.today()).count()  # 逾期协议
+    # 协议到期
+
     return render(request, 'dbms/index_dbms.html', locals())

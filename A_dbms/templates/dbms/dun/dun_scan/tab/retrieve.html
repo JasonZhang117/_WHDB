@@ -1,0 +1,23 @@
+<div class="table-responsive">
+    <table class="table table-bordered table-hover table-condensed active">
+        <thead>
+        <tr style="text-align: center">
+            <th>回收类型</th>
+            <th>金额</th>
+            <th>回收日期</th>
+            <th>备注</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for retrieve in dun_obj.retrieve_dun.all %}
+            <tr>
+                <td>{{ retrieve.get_retrieve_type_display }}</td>
+                <td>{{ retrieve.retrieve_amount }}</td>
+                <td>{{ retrieve.retrieve_date }}</td>
+                <td>{{ retrieve.retrieve_remark }}</td>
+            <tr>
+        {% endfor %}
+
+        </tbody>
+    </table>
+</div>

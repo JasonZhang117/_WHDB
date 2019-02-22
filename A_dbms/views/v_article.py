@@ -12,7 +12,7 @@ from django.db.utils import IntegrityError
 from django.db import transaction
 from django.db.models import Avg, Min, Sum, Max, Count
 
-
+# -----------------------------项目列表------------------------------#
 @login_required
 def article(request, *args, **kwargs):  # 项目列表
     print(__file__, '---->def article')

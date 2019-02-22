@@ -1,0 +1,23 @@
+<div class="table-responsive">
+    <table class="table table-bordered table-hover table-condensed active">
+        <thead>
+        <tr style="text-align: center">
+            <th>流程</th>
+            <th>文件</th>
+            <th>文件日期</th>
+            <th>备注</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for stag in dun_obj.stage_dun.all %}
+            <tr>
+                <td>{{ stag.get_stage_type_display }}</td>
+                <td>{{ stag.stage_file }}</td>
+                <td>{{ stag.stage_date }}</td>
+                <td>{{ stag.stage_remark }}</td>
+            <tr>
+        {% endfor %}
+
+        </tbody>
+    </table>
+</div>

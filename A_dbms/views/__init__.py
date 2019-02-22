@@ -22,7 +22,8 @@ from .v_agree import (agree, agree_scan, agree_preview)
 from .v_agree_act import (agree_add_ajax, counter_add_ajax, agree_sign_ajax, counter_del_ajax)
 # ----------------------v_warrant权证管理视图--------------------#
 from .v_warrant import (
-    warrant, warrant_scan, warrant_agree, warrant_agree_scan, warrant_agree_warrant, house, ground, soondue_draft)
+    warrant, warrant_scan, warrant_agree, warrant_agree_scan, warrant_agree_warrant, house, ground,
+    soondue_draft, overdue_draft)
 from .v_warrant_act import (
     warrant_add_ajax, warrant_del_ajax, warrant_edit_ajax, owership_add_ajax, owership_del_ajax,
     guaranty_add_ajax, guaranty_del_ajax, storages_add_ajax, housebag_add_ajax, draftextend_add_ajax,
@@ -39,11 +40,11 @@ from .v_pigeonhole import pigeonhole, pigeonhole_scan, pigeonhole_add_ajax
 # ----------------------v_review保后管理视图--------------------#
 from .v_review import review, review_scan, review_plan_ajax, review_update_ajax
 # ----------------------v_dun追偿视图--------------------#
-from .v_dun import compensatory, compensatory_scan,dun, dun_scan,compensatory_add_ajax
+from .v_dun import compensatory, compensatory_scan, dun, dun_scan, compensatory_add_ajax
 # ----------------------v_custom客户管理视图--------------------#
 from .v_custom import (custom, custom_scan)
 from .v_custom_act import (custom_add_ajax, custom_del_ajax, custom_edit_ajax, shareholder_add_ajax)
-from .v_external import cooperative
+from .v_external import cooperative, soondue_cooperator, overdue_cooperator
 
 # 部门、员工
 from .v_interior import department, department_add, department_edit

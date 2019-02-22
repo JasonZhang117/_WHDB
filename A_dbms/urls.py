@@ -65,6 +65,7 @@ urlpatterns = [
     path('warrant/agree/warrant/<int:agree_id>/<int:warrant_id>/', views.warrant_agree_warrant,
          name='warrant_agree_warrant'),
     path('warrant/draft/soondue/', views.soondue_draft, name='soondue_draft'),  #
+    path('warrant/draft/overdue/', views.overdue_draft, name='overdue_draft'),  #
 
     path('warrant/add/', views.warrant_add_ajax),
     path('warrant/del/', views.warrant_del_ajax),
@@ -137,6 +138,8 @@ urlpatterns = [
     # ------------------------------合作机构--------------------------------------#
     path('cooperative/', views.cooperative, name='cooperative_all'),  # 菜单-合作机构
     path('cooperative/<int:cooperator_state>/', views.cooperative, name='cooperative'),  # /dbms/cstom/(0-9)
+    path('cooperative/soondue/', views.soondue_cooperator, name='soondue_cooperator'),
+    path('cooperative/overdue/', views.overdue_cooperator, name='overdue_cooperator'),
 
     # 员工
     path('employee/', views.employee, name='employee'),

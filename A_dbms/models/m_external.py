@@ -6,8 +6,8 @@ import datetime
 class Cooperators(models.Model):  # 授信银行
     name = models.CharField(verbose_name='合作机构', max_length=32, unique=True)
     short_name = models.CharField(verbose_name='机构简称', max_length=32, unique=True)
-    COOPERATOR_STATE_LIST = ((1, '金融机构'), (11, '律师事务所'), (21, '评估事务所'))
-    cooperator_state = models.IntegerField(verbose_name='机构类型', choices=COOPERATOR_STATE_LIST, default=1)
+    COOPERATOR_TYPE_LIST = ((1, '金融机构'), (11, '律师事务所'), (21, '评估事务所'))
+    cooperator_type = models.IntegerField(verbose_name='机构类型', choices=COOPERATOR_TYPE_LIST, default=1)
     flow_credit = models.FloatField(verbose_name='综合额度', default=100000000)
     flow_limit = models.FloatField(verbose_name='单笔限额（综合）', default=10000000)
     back_credit = models.FloatField(verbose_name='保函额度', default=0)
@@ -15,6 +15,8 @@ class Cooperators(models.Model):  # 授信银行
     credit_date = models.DateField(verbose_name='合作日期', default=datetime.date.today)
     due_date = models.DateField(verbose_name='到期日', default=datetime.date.today)
     up_scale = models.FloatField(verbose_name='最高额上浮比例', default=0)
+    COOPERATOR_STATE_LIST = ((1, '正常'), (11, '注销'))
+    cooperator_state = models.IntegerField(verbose_name='状态', choices=COOPERATOR_STATE_LIST, default=1)
 
     # Cancellation = models.BooleanField('注销', default=False)
     class Meta:

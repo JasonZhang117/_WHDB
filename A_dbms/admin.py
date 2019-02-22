@@ -28,7 +28,7 @@ admin.site.register(models.ArticleChange)  # 项目变更
 
 
 class AppraisalsAdmin(admin.ModelAdmin):
-    list_display = ('num', 'review_model', 'review_date')  # 显示字段
+    list_display = ('num', 'review_year', 'review_model', 'review_date')  # 显示字段
     list_per_page = 20  # 每页显示条目数
     # search_fields = ['article_num']  # 搜索字段
     # ordering = ['num']  # 排序字段
@@ -106,6 +106,12 @@ admin.site.register(models.Pigeonholes)  # 归档
 admin.site.register(models.Compensatories)  # 代偿
 admin.site.register(models.Dun)  # 追偿
 admin.site.register(models.Agent)  # 代理情况
+admin.site.register(models.Staff)  # 人员模型
+admin.site.register(models.Charge)  # 费用情况
+admin.site.register(models.Retrieve)  # 回收情况
+admin.site.register(models.Stage)  # 阶段情况
+admin.site.register(models.Judgment)  # 判决
+admin.site.register(models.Standing)  # 台账
 
 
 # -----------------------客户-------------------------#
@@ -157,7 +163,7 @@ admin.site.register(models.Review)  # 行业
 
 # -----------------------外部信息-------------------------#
 class CooperatorsAdmin(admin.ModelAdmin):
-    list_display = ('name', 'cooperator_state', 'credit_date', 'due_date', 'flow_credit', 'flow_limit',
+    list_display = ('name', 'cooperator_type', 'credit_date', 'due_date', 'flow_credit', 'flow_limit',
                     'back_credit', 'back_limit')  # 显示字段
     list_per_page = 30  # 每页显示条目数
     search_fields = ['name']  # 搜索字段

@@ -9,13 +9,16 @@
 
         <li role="presentation">
             <a href="#agent" style="background-color: #f5f5f5"
-               aria-controls="profile" role="tab" data-toggle="tab">代理情况</a></li>
+               aria-controls="profile" role="tab" data-toggle="tab">代理协议</a></li>
         <li role="presentation">
             <a href="#staff" style="background-color: #f5f5f5"
                aria-controls="settings" role="tab" data-toggle="tab">联系人</a></li>
         <li role="presentation">
             <a href="#charge" style="background-color: #f5f5f5"
                aria-controls="messages" role="tab" data-toggle="tab">追偿费用</a></li>
+        <li role="presentation">
+            <a href="#judgment" style="background-color: #f5f5f5"
+               aria-controls="messages" role="tab" data-toggle="tab">判决</a></li>
         <li role="presentation">
             <a href="#retrieve" style="background-color: #f5f5f5"
                aria-controls="messages" role="tab" data-toggle="tab">案款回收</a></li>
@@ -24,29 +27,32 @@
                aria-controls="settings" role="tab" data-toggle="tab">财产线索</a></li>
         <li role="presentation">
             <a href="#stage" style="background-color: #f5f5f5"
-               aria-controls="settings" role="tab" data-toggle="tab">追偿阶段</a></li>
+               aria-controls="settings" role="tab" data-toggle="tab">追偿流程</a></li>
         <li role="presentation" class="active">
-            <a href="standing" style="background-color: #f5f5f5"
-               aria-controls="messages" role="tab" data-toggle="tab">追偿台账</a></li>
+            <a href="#standing" style="background-color: #f5f5f5"
+               aria-controls="messages" role="tab" data-toggle="tab">跟进台账</a></li>
 
     </ul>
     <!-- Tab panes -->
     <div class="tab-content">
         <div role="tabpanel" class="tab-pane" id="compensat"> <!--代偿情况-->
             {% include 'dbms/dun/dun_scan/tab/compensatory.html' %} </div>
-        <div role="tabpanel" class="tab-pane" id="agent"> <!--代理情况-->
+        <div role="tabpanel" class="tab-pane" id="agent"> <!--代理协议-->
             {% include 'dbms/dun/dun_scan/tab/agent.html' %} </div>
-        <div role="tabpanel" class="tab-pane" id="comment"> <!--评审意见-->
-            {% include 'dbms/appraisal/scan/tab/comment.html' %} </div>
-        <div role="tabpanel" class="tab-pane" id="sign"> <!--签批情况-->
-            {% include 'dbms/appraisal/scan/tab/sign.html' %} </div>
-        <div role="tabpanel" class="tab-pane" id="single"> <!--单项额度-->
-            {% include 'dbms/appraisal/scan/tab/single.html' %} </div>
-        <div role="tabpanel" class="tab-pane" id="lenging"> <!--放款次序-->
-            {% include 'dbms/article/scan/tab/lending.html' %} </div>
-        <div role="tabpanel" class="tab-pane" id="agree"> <!--委托合同-->
-            {% include 'dbms/article/scan/tab/agree.html' %} </div>
-        <div role="tabpanel" class="tab-pane active" id="article-change"><!--项目变更-->
-            {% include 'dbms/appraisal/scan/tab/article-change.html' %} </div>
+        <div role="tabpanel" class="tab-pane" id="staff"> <!--联系人-->
+            {% include 'dbms/dun/dun_scan/tab/staff.html' %} </div>
+        <div role="tabpanel" class="tab-pane" id="charge"> <!--追偿费用-->
+            {% include 'dbms/dun/dun_scan/tab/charge.html' %} </div>
+        <div role="tabpanel" class="tab-pane" id="judgment"> <!--判决-->
+            {% include 'dbms/dun/dun_scan/tab/judgment.html' %} </div>
+        <div role="tabpanel" class="tab-pane" id="retrieve"> <!--案款回收-->
+            {% include 'dbms/dun/dun_scan/tab/retrieve.html' %} </div>
+          <div role="tabpanel" class="tab-pane" id="clue"> <!--财产线索-->
+            {% include 'dbms/dun/dun_scan/tab/clue.html' %} </div>
+        <div role="tabpanel" class="tab-pane" id="stage"> <!--追偿流程-->
+            {% include 'dbms/dun/dun_scan/tab/stage.html' %} </div>
+        <div role="tabpanel" class="tab-pane active" id="standing"> <!--跟进台账-->
+            {% include 'dbms/dun/dun_scan/tab/standing.html' %} </div>
+
     </div>
 </div>

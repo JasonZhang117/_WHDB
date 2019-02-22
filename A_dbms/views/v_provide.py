@@ -315,7 +315,7 @@ def overdue(request, *args, **kwargs):  # 逾期列表
     except EmptyPage:
         p_list = paginator.page(paginator.num_pages)
 
-    return render(request, 'dbms/provide/overdu.html', locals())
+    return render(request, 'dbms/provide/provide-overdu.html', locals())
 
 
 # -----------------------即将到期列表---------------------#
@@ -363,4 +363,4 @@ def soondue(request, *args, **kwargs):  # 委托合同列表
     except EmptyPage:
         p_list = paginator.page(paginator.num_pages)
 
-    return render(request, 'dbms/provide/overdu.html', locals())
+    return render(request, 'dbms/provide/provide-overdu.html', locals())

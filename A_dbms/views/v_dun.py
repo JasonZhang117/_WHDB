@@ -83,57 +83,6 @@ def dun(request, *args, **kwargs):  # 代偿列表
     return render(request, 'dbms/dun/dun.html', locals())
 
 
-def agree_scan(request, agree_id):  # 查看合同
-    print(__file__, '---->def agree_scan')
-    APPLICATION = 'agree_scan'
-    PAGE_TITLE = '合同详情'
-    COUNTER_TYP_CUSTOM = [1, 2]
-
-    '''COUNTER_TYP_LIST = (
-        (1, '企业担保'), (2, '个人保证'),
-        (11, '房产抵押'), (12, '土地抵押'), (13, '动产抵押'), (15, '车辆抵押'),
-        (31, '应收质押'), (32, '股权质押'), (33, '票据质押'),
-        (51, '股权预售'), (52, '房产预售'), (53, '土地预售'))'''
-
-    agree_obj = models.Agrees.objects.get(id=agree_id)
-    agree_lending_obj = agree_obj.lending
-
-    warrant_agree_list = models.Warrants.objects.filter(counter_warrant__counter__agree=agree_obj)
-    print('warrant_agree_list:', warrant_agree_list)
-    '''WARRANT_TYP_LIST = [
-        (1, '房产'), (2, '土地'), (11, '应收'), (21, '股权'),
-        (31, '票据'), (41, '车辆'), (51, '动产'), (99, '他权')]'''
-    custom_c_lending_list = models.Customes.objects.filter(
-        lending_custom__sure__lending=agree_lending_obj, genre=1).exclude(
-        counter_custome__counter__agree=agree_obj).values_list('id', 'name')
-    custom_p_lending_list = models.Customes.objects.filter(
-        lending_custom__sure__lending=agree_lending_obj, genre=2).exclude(
-        counter_custome__counter__agree=agree_obj).values_list('id', 'name')
-    warrants_h_lending_list = models.Warrants.objects.filter(
-        lending_warrant__sure__lending=agree_lending_obj, warrant_typ=1).exclude(
-        counter_warrant__counter__agree=agree_obj).values_list('id', 'warrant_num')
-    warrants_g_lending_list = models.Warrants.objects.filter(
-        lending_warrant__sure__lending=agree_lending_obj, warrant_typ=5).exclude(
-        counter_warrant__counter__agree=agree_obj).values_list('id', 'warrant_num')
-    warrants_r_lending_list = models.Warrants.objects.filter(
-        lending_warrant__sure__lending=agree_lending_obj, warrant_typ=11).exclude(
-        counter_warrant__counter__agree=agree_obj).values_list('id', 'warrant_num')
-    warrants_s_lending_list = models.Warrants.objects.filter(
-        lending_warrant__sure__lending=agree_lending_obj, warrant_typ=21).exclude(
-        counter_warrant__counter__agree=agree_obj).values_list('id', 'warrant_num')
-    warrants_c_lending_list = models.Warrants.objects.filter(
-        lending_warrant__sure__lending=agree_lending_obj, warrant_typ=51).exclude(
-        counter_warrant__counter__agree=agree_obj).values_list('id', 'warrant_num').order_by('warrant_num')
-    print(custom_c_lending_list, custom_p_lending_list, warrants_h_lending_list, warrants_g_lending_list,
-          warrants_r_lending_list, warrants_s_lending_list)
-    from_counter = forms.AddCounterForm()
-
-    today_str = time.strftime("%Y-%m-%d", time.gmtime())
-    form_agree_sign_data = {'agree_sign_date': str(today_str)}
-    form_agree_sign = forms.FormAgreeSign(initial=form_agree_sign_data)
-    return render(request, 'dbms/agree/agree-scan.html', locals())
-
-
 # -----------------------追偿列表-------------------------#
 @login_required
 def dun_scan(request, dun_id):  # 查看合同
@@ -142,8 +91,6 @@ def dun_scan(request, dun_id):  # 查看合同
     PAGE_TITLE = '追偿管理'
 
     dun_obj = models.Dun.objects.get(id=dun_id)
-
-
 
     return render(request, 'dbms/dun/dun-scan.html', locals())
 

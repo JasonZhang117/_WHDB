@@ -1,22 +1,23 @@
 <div>
-    <label>
-        {% if kwargs.cooperator_state == None %}
-            <a class="active btn btn-primary btn-sm" href="{% url 'dbms:cooperative_all' %}">全部</a>
-        {% else %}
-            <a class="btn btn btn-primary btn-sm" href="{% url 'dbms:cooperative_all' %}">全部</a>
-        {% endif %}
-        {# 方式一：#}
-        {% for item in COOPERATOR_STATE_LIST %}
-            {% if item.0 == kwargs.cooperator_state %}
-                <a class="active btn btn-primary btn-sm"
-                   href="{% url 'dbms:cooperative' cooperator_state=item.0 %}">{{ item.1 }}</a>
+    {% if PAGE_TITLE == '合作机构' %}
+        <label>
+            {% if kwargs.cooperator_state == None %}
+                <a class="active btn btn-primary btn-sm" href="{% url 'dbms:cooperative_all' %}">全部</a>
             {% else %}
-                <a class="btn btn-primary btn-sm"
-                   href="{% url 'dbms:cooperative' cooperator_state=item.0 %}">{{ item.1 }}</a>
+                <a class="btn btn btn-primary btn-sm" href="{% url 'dbms:cooperative_all' %}">全部</a>
             {% endif %}
-        {% endfor %}
-    </label>
-
+            {# 方式一：#}
+            {% for item in COOPERATOR_STATE_LIST %}
+                {% if item.0 == kwargs.cooperator_state %}
+                    <a class="active btn btn-primary btn-sm"
+                       href="{% url 'dbms:cooperative' cooperator_state=item.0 %}">{{ item.1 }}</a>
+                {% else %}
+                    <a class="btn btn-primary btn-sm"
+                       href="{% url 'dbms:cooperative' cooperator_state=item.0 %}">{{ item.1 }}</a>
+                {% endif %}
+            {% endfor %}
+        </label>
+    {% endif %}
     <label>
         <form class="navbar-form" style="display: inline">
             <input type="text" class="form-control" placeholder="搜索机构名称">
@@ -24,7 +25,10 @@
         </form>
     </label>
 
-    <label class="pull-right">
-        <a class="btn btn-success btn-sm" id="addCooperativeB">添加</a>
-    </label>
+    {% if PAGE_TITLE == '合作机构' %}
+        <label class="pull-right">
+            <a class="btn btn-success btn-sm" id="addCooperativeB">添加</a>
+        </label>
+    {% endif %}
+
 </div>

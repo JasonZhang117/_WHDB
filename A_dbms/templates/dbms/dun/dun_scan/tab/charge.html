@@ -1,0 +1,23 @@
+<div class="table-responsive">
+    <table class="table table-bordered table-hover table-condensed active">
+        <thead>
+        <tr style="text-align: center">
+            <th>费用类型</th>
+            <th>金额</th>
+            <th>支付日期</th>
+            <th>备注</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for charge in dun_obj.charge_dun.all %}
+            <tr>
+                <td>{{ charge.get_charge_type_display }}</td>
+                <td>{{ charge.charge_amount }}</td>
+                <td>{{ charge.charge_date }}</td>
+                <td>{{ charge.charge_remark }}</td>
+            <tr>
+        {% endfor %}
+
+        </tbody>
+    </table>
+</div>

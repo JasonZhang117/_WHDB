@@ -1,0 +1,19 @@
+<div class="table-responsive">
+    <table class="table table-bordered table-hover table-condensed active">
+        <thead>
+        <tr style="text-align: center">
+            <th>日期</th>
+            <th>跟进情况</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for standing in dun_obj.standing_dun.all %}
+            <tr>
+                <td>{{ standing.standing_date }}</td>
+                <td>{{ standing.standing_detail }}</td>
+            <tr>
+        {% endfor %}
+
+        </tbody>
+    </table>
+</div>

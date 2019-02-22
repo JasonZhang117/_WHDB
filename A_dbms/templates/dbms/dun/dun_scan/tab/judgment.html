@@ -1,0 +1,25 @@
+<div class="table-responsive">
+    <table class="table table-bordered table-hover table-condensed active">
+        <thead>
+        <tr style="text-align: center">
+            <th>文件</th>
+            <th>判决内容</th>
+            <th>发文单位</th>
+            <th>日期</th>
+{#            <th>备注</th>#}
+        </tr>
+        </thead>
+        <tbody>
+        {% for judgment in dun_obj.judgment_dun.all %}
+            <tr>
+                <td>{{ judgment.judgment_file }}</td>
+                <td>{{ judgment.judgment_detail }}</td>
+                <td>{{ judgment.judgment_unit }}</td>
+                <td>{{ judgment.judgment_date }}</td>
+{#                <td>{{ judgment.judgment_remark }}</td>#}
+            <tr>
+        {% endfor %}
+
+        </tbody>
+    </table>
+</div>

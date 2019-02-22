@@ -30,7 +30,7 @@
                 <td>
                     {% for  comment in article_obj.comment_summary.all %}
                         {% if comment.expert.id == expert.id %}
-                            {{ comment.concrete }}
+                            {{ comment.concrete|default:"" }}
                         {% endif %}
                     {% endfor %}
                 </td>
