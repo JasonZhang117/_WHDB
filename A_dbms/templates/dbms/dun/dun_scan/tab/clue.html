@@ -3,18 +3,32 @@
         <thead>
         <tr style="text-align: center">
             <th>资产</th>
-            <th>查封日期</th>
-            <th>查封期限(月)</th>
+            <th>查封状态</th>
+            <th>最近查封日</th>
+            <th>查封到期日</th>
+            <th>最近查询日</th>
+            <th>查询情况</th>
             <th>备注</th>
+            <th>操作</th>
         </tr>
         </thead>
-        <tbody>
-        {% for staff in dun_obj.staff_dun.all %}
-            <tr>
-                <td>{{ staff.staff_name }}</td>
+        <tbody id="dun-clue-tb">
+        {% for warrant in dun_obj.warrant.all %}
+            <tr warrant-nid="{{ warrant.id }}">
+                <td>{{ warrant.warrant_num }}</td>
                 <td>{{ staff.get_staff_type_display }}</td>
                 <td>{{ staff.contact_number }}</td>
+                <td>{{ staff.contact_number }}</td>
                 <td>{{ staff.staff_remark }}</td>
+                <td>{{ staff.staff_remark }}</td>
+                <td>{{ staff.staff_remark }}</td>
+                {% if PAGE_TITLE == '追偿管理' %}
+                    <td>
+                        <a class="btn btn-primary btn-xs sealUpB">查封</a>
+                        <a class="btn btn-primary btn-xs inquiryB">查询</a>
+                        <a class="btn btn-primary btn-xs delClueB">删除</a>
+                    </td>
+                {% endif %}
             <tr>
         {% endfor %}
         </tbody>

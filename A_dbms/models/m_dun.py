@@ -33,7 +33,10 @@ class Dun(models.Model):  #
                                           related_name='dun_compensatory')
     dun_amount = models.FloatField(verbose_name='追偿金额', default=0)
     recovered_amount = models.FloatField(verbose_name='回收金额', default=0)
-    DUN_STAGE_LIST = ((1, '起诉'), (11, '判决'), (21, '执行'), (31, '和解结案'), (41, '终止执行'))
+    warrant = models.ManyToManyField(to='Warrants', verbose_name="资产线索",
+                                     related_name='dun_article',
+                                     null=True, blank=True)
+    DUN_STAGE_LIST = ((1, '起诉'), (11, '判决'), (21, '执行'), (31, '和解结案'), (41, '终止执行'), (99, '注销'))
     dun_stage = models.IntegerField(verbose_name='追偿状态', choices=DUN_STAGE_LIST, default=1)
     dunor = models.ForeignKey(to='Employees', verbose_name="创建人", on_delete=models.PROTECT,
                               related_name='dunor_employee')
@@ -212,31 +215,32 @@ class Standing(models.Model):
         return '%s-%s' % (self.dun.title, self.standing_date)
 
 
-# -----------------------财产线索-------------------------#
-# class Clue(models.Model):  #
-#     dun = models.ForeignKey(to='Dun', verbose_name="追偿项目", on_delete=models.PROTECT,
-#                             related_name='clue_dun')
-#     warrant = models.ManyToManyField(to='Warrants', verbose_name="财产",
-#                                      related_name='clue_warrant')
-#
-#     dun_amount = models.FloatField(verbose_name='追偿金额', default=0)
-#     recovered_amount = models.FloatField(verbose_name='回收金额', default=0)
-#
-#     DUN_STAGE_LIST = ((1, '起诉'), (11, '判决'), (21, '执行'), (31, '和解结案'), (41, '终止执行'))
-#     dun_stage = models.IntegerField(verbose_name='追偿状态', choices=DUN_STAGE_LIST, default=1)
-#     sealing_date = models.DateField(verbose_name='查封日期')
-#     sealing_term = models.IntegerField(verbose_name='查封期限(月）')
-#
-#     cluor = models.ForeignKey(to='Employees', verbose_name="创建人", on_delete=models.PROTECT,
-#                               related_name='cluor_employee')
-#     cluor_date = models.DateField(verbose_name='创建日期', default=datetime.date.today)
-#
-#     class Meta:
-#         verbose_name_plural = '追偿-财产线索'  # 指定显示名称
-#         db_table = 'dbms_clue'  # 指定数据表的名称
-#
-#     def __str__(self):
-#         return self.warrant
+# ------------------------查封情况--------------------------#
+class Seal(models.Model):  # 评委意见
+    dun = models.ForeignKey(to='Dun', verbose_name="追偿项目",
+                            on_delete=models.PROTECT,
+                            related_name='seal_dun')
+    warrant = models.ForeignKey(to='Warrants', verbose_name="财产",
+                                on_delete=models.PROTECT,
+                                related_name='seal_warrant')
+    SEAL_STATE_LIST = ((1, '未查封'), (11, '已查封'), (71, '已解封'), (99, '注销'))
+    seal_state = models.IntegerField(verbose_name='查封状态', choices=SEAL_STATE_LIST, default=1)
+    seal_date = models.DateField(verbose_name='最近查封日', blank=True, null=True)
+    due_date = models.DateField(verbose_name='查封到期日', blank=True, null=True)
+    seal_remark = models.CharField(verbose_name='备注', max_length=64, blank=True, null=True)
+
+    sealor = models.ForeignKey(to='Employees', verbose_name="创建人",
+                               on_delete=models.PROTECT, default=1,
+                               related_name='sealor_employee')
+    sealor_date = models.DateField(verbose_name='创建日期', default=datetime.date.today)
+
+    class Meta:
+        verbose_name_plural = '追偿-财产'  # 指定显示名称
+        db_table = 'dbms_seal'  # 指定数据表的名称
+        unique_together = ('dun', 'warrant')
+
+    def __str__(self):
+        return "%s_%s_%s" % (self.dun.title, self.warrant.warrant_num, self.seal_state)
 
 
 # -----------------------查封财产财产-------------------------#

@@ -6,9 +6,9 @@
 
     function bindDelMeetingArticleB() {
         $('#meeting-article-tb').on('click', '.delMeetingArticleB', function () {
-            console.log("bindDelMeetingArticle")
+            console.log("bindDelMeetingArticle");
             delMeetingArticleId = $(this).parent().parent().attr('article-nid');
-            console.log(delMeetingArticleId)
+            console.log(delMeetingArticleId);
             $('#delMeetingArticleId').val(delMeetingArticleId);
             $('#delMeetingArticleModal').modal('show');
         })

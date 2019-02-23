@@ -1,0 +1,51 @@
+<script>
+    $(function () {
+        bindAddClueB();
+        bindAddClueModalOk();
+
+    });
+
+    function bindAddClueB() {
+        $('#addClueB').click(function () {
+            console.log("bindAddClueB")
+            $('#addClueModal').modal('show');
+        })
+    }
+
+    function bindAddClueModalOk() {
+        $('#addClueModalOk').click(function () {
+            var postData = {};
+
+            $('#addClueModal').find('input,select').each(function () {
+                var v = $(this).val();
+                var n = $(this).attr('name');
+                postData[n] = v;
+            });
+            var postDataStr = JSON.stringify(postData);
+            console.log(postDataStr);
+            $.ajax({
+                url: '/dbms/dun/clue/add/',
+                type: 'POST',
+                data: {'postDataStr': postDataStr},
+                success: function (arg) {
+                    var dict = JSON.parse(arg);
+                    console.log(dict);
+                    if (dict.status) {
+                        $('#addClueModal').modal('hide');
+                        alert(dict.message);
+                        window.location.reload();
+                    } else {
+                        alert(dict.message);
+                        $('#e_warrant').text(dict.forme.warrant);
+                    }
+                }
+            })
+        })
+    }
+</script>
+
+
+
+
+
+

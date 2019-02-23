@@ -121,10 +121,12 @@ urlpatterns = [
     path('compensatory/', views.compensatory, name='compensatory_all'),  # 菜单-追偿管理
     path('compensatory/<int:dun_state>/', views.compensatory, name='compensatory'),
     path('compensatory/scan/<int:compensatory_id>/', views.compensatory_scan, name='compensatory_scan'),
-    path('compensatory/add/', views.compensatory_add_ajax),
+    path('compensatory/add/', views.compensatory_add_ajax, name='compensatory_add_ajax'),
     path('dun/', views.dun, name='dun_all'),  # 菜单-追偿管理
     path('dun/<int:dun_stage>/', views.dun, name='dun'),
     path('dun/scan/<int:dun_id>/', views.dun_scan, name='dun_scan'),
+    path('dun/clue/add/', views.dun_clue_add_ajax, name='dun_clue_add_ajax'),
+    path('dun/clue/del/', views.dun_clue_del_ajax, name='dun_clue_del_ajax'),
 
     # -----------------------客户管理-------------------------#
     path('custom/', views.custom, name='custom_all'),  # 菜单-客户管理

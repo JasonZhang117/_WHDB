@@ -87,10 +87,12 @@ def dun(request, *args, **kwargs):  # 代偿列表
 @login_required
 def dun_scan(request, dun_id):  # 查看合同
     print(__file__, '---->def dun_scan')
-    APPLICATION = 'agree_scan'
     PAGE_TITLE = '追偿管理'
 
     dun_obj = models.Dun.objects.get(id=dun_id)
+
+    from_clue_add = forms.FormClueAdd()
+
 
     return render(request, 'dbms/dun/dun-scan.html', locals())
 

@@ -1,0 +1,18 @@
+<div class="modal fade bs-example-modal-sm" id="delClueModal"
+     tabindex="-1" role="dialog" aria-labelledby="delClueModal">
+    <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="delClueModalLabel">删除财产线索
+                    <input style="display: none" name="dun_id" value="{{ dun_obj.id }}">
+                    <input style="display: none" name="warrant_id" id="delClueId">
+                </h4>
+            </div>
+            <div class="modal-body">是否确定删除该财产线索？</div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                <button type="button" class="btn btn-primary" id="delClueModalOk">确定</button>
+            </div>
+        </div>
+    </div>
+</div>

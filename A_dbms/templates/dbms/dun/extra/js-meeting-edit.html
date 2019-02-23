@@ -1,0 +1,52 @@
+<script>
+    $(function () {
+        bindEditMeeting();
+        bindEditMeetingModalOk();
+
+    });
+
+    function bindEditMeeting() {
+        $('#editMeeting').click(function () {
+            console.log("bindAddMeeting")
+            $('#editMeetingModal').modal('show');
+        })
+    }
+
+    function bindEditMeetingModalOk() {
+        $('#editMeetingModalOk').click(function () {
+            var postData = {};
+
+            $('#editMeetingModal').find('input,select').each(function () {
+                var v = $(this).val();
+                var n = $(this).attr('name');
+                postData[n] = v;
+            });
+            var postDataStr = JSON.stringify(postData);
+            console.log(postDataStr)
+            $.ajax({
+                url: '/dbms/meeting/edit/',
+                type: 'POST',
+                data: {'postDataStr': postDataStr},
+                dataType: 'JSON',
+                success: function (arg) {
+                    console.log(arg);
+                    if (arg.status) {
+                        $('#editMeetingModal').modal('hide');
+                        alert(arg.message);
+                        window.location.reload();
+                    } else {
+                        alert(arg.message);
+                        $('#e_review_model').text(arg.forme.review_model);
+                        $('#e_review_date').text(arg.forme.review_date);
+                    }
+                }
+            })
+        })
+    }
+</script>
+
+
+
+
+
+

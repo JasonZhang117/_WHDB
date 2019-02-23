@@ -22,6 +22,9 @@ class Warrants(models.Model):  # 担保物
     warrant_state = models.IntegerField(verbose_name='_权证状态', choices=WARRANT_STATE_LIST, default=1)
     storage_explain = models.CharField(verbose_name='出入库说明', max_length=128, blank=True, null=True)
 
+    inquiry_date = models.DateField(verbose_name='最近查询日', blank=True, null=True)
+    inquiry_remark = models.CharField(verbose_name='查询情况', max_length=64, blank=True, null=True)
+
     warrant_buildor = models.ForeignKey(to='Employees', verbose_name="创建者", default=1,
                                         on_delete=models.PROTECT,
                                         related_name='warrant_buildor_employee')
