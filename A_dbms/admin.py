@@ -112,7 +112,9 @@ admin.site.register(models.Retrieve)  # 回收情况
 admin.site.register(models.Stage)  # 阶段情况
 admin.site.register(models.Judgment)  # 判决
 admin.site.register(models.Standing)  # 台账
-admin.site.register(models.Seal)  # 台账
+admin.site.register(models.Seal)  # 财产线索
+admin.site.register(models.Sealup)  # 查封情况
+admin.site.register(models.Inquiry)  # 查询情况
 
 
 # -----------------------客户-------------------------#

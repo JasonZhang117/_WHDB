@@ -91,10 +91,45 @@ def dun_scan(request, dun_id):  # 查看合同
 
     dun_obj = models.Dun.objects.get(id=dun_id)
 
-    from_clue_add = forms.FormClueAdd()
-
+    from_clue_add = forms.FormClueAdd()  # 财产线索
+    from_sealup_add = forms.FormSealupAdd()  # 查封情况
+    from_standing_add = forms.FormStandingAdd()  # 添加追偿台账
+    form_charge_add = forms.FormChargeAdd()  # 追偿费用
 
     return render(request, 'dbms/dun/dun-scan.html', locals())
+
+
+# -----------------------财产线索列表-------------------------#
+@login_required
+def seal(request, *args, **kwargs):  # 代偿列表
+    print(__file__, '---->def seal')
+    PAGE_TITLE = '查封列表'
+
+    seal_state_list = models.Seal.SEAL_STATE_LIST
+    seal_list = models.Seal.objects.filter(**kwargs).select_related('dun', 'warrant').order_by('dun')
+    '''搜索'''
+    search_key = request.GET.get('_s')
+    if search_key:
+        search_fields = ['dun__title',  # 追偿项目
+                         'warrant__warrant_num'  # 财产
+                         ]
+        q = Q()
+        q.connector = 'OR'
+        for field in search_fields:
+            q.children.append(("%s__contains" % field, search_key))
+        seal_list = seal_list.filter(q)
+    compensatory_amount = seal_list.count()  # 信息数目
+    '''分页'''
+    paginator = Paginator(seal_list, 19)
+    page = request.GET.get('page')
+    try:
+        p_list = paginator.page(page)
+    except PageNotAnInteger:
+        p_list = paginator.page(1)
+    except EmptyPage:
+        p_list = paginator.page(paginator.num_pages)
+
+    return render(request, 'dbms/dun/dun-seal.html', locals())
 
 
 # -----------------------代偿添加ajax-------------------------#

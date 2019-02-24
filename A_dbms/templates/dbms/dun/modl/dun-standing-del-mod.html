@@ -1,0 +1,18 @@
+<div class="modal fade bs-example-modal-sm" id="delStandingModal"
+     tabindex="-1" role="dialog" aria-labelledby="delStandingModal">
+    <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="delStandingModalLabel">删除追偿跟进信息
+                    <input style="display: none" name="dun_id" value="{{ dun_obj.id }}">
+                    <input style="display: none" name="standing_id" id="delStandingId">
+                </h4>
+            </div>
+            <div class="modal-body">是否确定删除该追偿跟进信息？</div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                <button type="button" class="btn btn-primary" id="delStandingModalOk">确定</button>
+            </div>
+        </div>
+    </div>
+</div>

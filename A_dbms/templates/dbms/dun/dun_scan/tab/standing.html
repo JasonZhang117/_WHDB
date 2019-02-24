@@ -4,13 +4,17 @@
         <tr style="text-align: center">
             <th>日期</th>
             <th>跟进情况</th>
+            <th>记录人</th>
+            <th>操作</th>
         </tr>
         </thead>
-        <tbody>
+        <tbody id="dun-standing-tb">
         {% for standing in dun_obj.standing_dun.all %}
-            <tr>
-                <td>{{ standing.standing_date }}</td>
+            <tr standing-nid="{{ standing.id }}">
+                <td>{{ standing.standingor_date }}</td>
                 <td>{{ standing.standing_detail }}</td>
+                <td>{{ standing.standingor.name }}</td>
+                <td><a class="btn btn-primary btn-xs delStandingB">删除</a></td>
             <tr>
         {% endfor %}
 

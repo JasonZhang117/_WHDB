@@ -125,10 +125,18 @@ urlpatterns = [
     path('dun/', views.dun, name='dun_all'),  # 菜单-追偿管理
     path('dun/<int:dun_stage>/', views.dun, name='dun'),
     path('dun/scan/<int:dun_id>/', views.dun_scan, name='dun_scan'),
-    path('dun/clue/add/', views.dun_clue_add_ajax, name='dun_clue_add_ajax'),
-    path('dun/clue/del/', views.dun_clue_del_ajax, name='dun_clue_del_ajax'),
+    path('dun/clue/add/', views.clue_add_ajax, name='clue_add_ajax'),
+    path('dun/clue/del/', views.clue_del_ajax, name='clue_del_ajax'),
+    path('dun/sealup/add/', views.sealup_add_ajax, name='sealup_add_ajax'),
+    path('dun/seal/', views.seal, name='seal_all'),
+    path('dun/seal/<int:seal_state>/', views.seal, name='seal'),
+    path('dun/standing/add/', views.standing_add_ajax, name='standing_add_ajax'),
+    path('dun/standing/del/', views.standing_del_ajax, name='standing_del_ajax'),
+    path('dun/charge/add/', views.charge_add_ajax, name='charge_add_ajax'),
+    path('dun/charge/del/', views.charge_del_ajax, name='charge_del_ajax'),
 
     # -----------------------客户管理-------------------------#
+
     path('custom/', views.custom, name='custom_all'),  # 菜单-客户管理
     path('custom/<int:genre>/', views.custom, name='custom'),  # /dbms/cstom/(0-9)
     path('custom/scan/<int:custom_id>/', views.custom_scan, name='custom_scan'),

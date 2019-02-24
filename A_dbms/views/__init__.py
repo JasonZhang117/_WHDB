@@ -40,8 +40,9 @@ from .v_pigeonhole import pigeonhole, pigeonhole_scan, pigeonhole_add_ajax
 # ----------------------v_review保后管理视图--------------------#
 from .v_review import review, review_scan, review_plan_ajax, review_update_ajax
 # ----------------------v_dun追偿视图--------------------#
-from .v_dun import compensatory, compensatory_scan, dun, dun_scan, compensatory_add_ajax
-from .v_dun_act import dun_clue_add_ajax, dun_clue_del_ajax
+from .v_dun import (compensatory, compensatory_scan, dun, dun_scan, seal, compensatory_add_ajax)
+from .v_dun_act import (clue_add_ajax, clue_del_ajax, sealup_add_ajax, standing_add_ajax,
+                        standing_del_ajax, charge_add_ajax, charge_del_ajax)
 
 # ----------------------v_custom客户管理视图--------------------#
 from .v_custom import (custom, custom_scan)

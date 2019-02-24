@@ -259,9 +259,7 @@ def guarantee_del_ajax(request):  # 反担保人删除ajax
 @login_required
 def comment_edit_ajax(request):  # 修改项目ajax
     print(__file__, '---->def article_edit_ajax')
-
-    response = {'status': True, 'message': None,
-                'obj_num': None, 'forme': None, }
+    response = {'status': True, 'message': None, 'obj_num': None, 'forme': None, }
 
     post_data_str = request.POST.get('postDataStr')
     post_data = json.loads(post_data_str)
@@ -299,7 +297,6 @@ def comment_edit_ajax(request):  # 修改项目ajax
         response['message'] = '项目状态为：%s，无法修改！！！' % article_obj.article_state
 
     result = json.dumps(response, ensure_ascii=False)
-
     return HttpResponse(result)
 
 

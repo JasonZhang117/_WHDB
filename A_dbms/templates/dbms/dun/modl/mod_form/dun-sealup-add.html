@@ -1,0 +1,27 @@
+<div id="from_sealup_add">
+
+    <div class="form-group"><!--查封类型-->
+        <label for="id_sealup_type" class="col-sm-3 control-label">{{ from_sealup_add.sealup_type.label }}：</label>
+        <div class="col-sm-9">{{ from_sealup_add.sealup_type }}</div>
+        <label id="e_sealup_type" class="pull-right">{{ from_sealup_add.sealup_type.errors }}</label>
+    </div>
+
+    <div class="form-group"><!--查封日期-->
+        <label for="id_sealup_date" class="col-sm-3 control-label">{{ from_sealup_add.sealup_date.label }}：</label>
+        <div class="col-sm-9">{{ from_sealup_add.sealup_date }}</div>
+        <label id="e_sealup_date" class="pull-right">{{ from_sealup_add.sealup_date.errors }}</label>
+    </div>
+
+    <div class="form-group"><!--到期日-->
+        <label for="id_due_date" class="col-sm-3 control-label">{{ from_sealup_add.due_date.label }}：</label>
+        <div class="col-sm-9">{{ from_sealup_add.due_date }}</div>
+        <label id="e_due_date" class="pull-right">{{ from_sealup_add.due_date.errors }}</label>
+    </div>
+
+    <div class="form-group"><!--备注-->
+        <label for="id_sealup_remark" class="col-sm-3 control-label">{{ from_sealup_add.sealup_remark.label }}：</label>
+        <div class="col-sm-9">{{ from_sealup_add.sealup_remark }}</div>
+        <label id="e_sealup_remark" class="pull-right">{{ from_sealup_add.sealup_remark.errors }}</label>
+    </div>
+
+</div>

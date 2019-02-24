@@ -1,42 +1,43 @@
 <script>
     $(function () {
-        bindCloseMeeting();
-        bindCloseMeetingModalOk();
+        bindDelStandingB();
+        bindDelStandingModalOk();
     });
 
-    function bindCloseMeeting() {
-        $('#closeMeeting').click(function () {
-            console.log("bindCloseMeeting")
-            $('#closeMeetingModal').modal('show');
+    function bindDelStandingB() {
+        $('#dun-standing-tb').on('click', '.delStandingB', function () {
+            console.log("bindDelStandingB");
+            delStiangIdN = $(this).parent().parent().attr('standing-nid');
+            console.log(delStiangIdN);
+            $('#delStandingId').val(delStiangIdN);
+            $('#delStandingModal').modal('show');
         })
     }
 
-    function bindCloseMeetingModalOk() {
-        $('#closeMeetingModalOk').click(function () {
+    function bindDelStandingModalOk() {
+        $('#delStandingModalOk').click(function () {
             var postData = {};
-            $('#closeMeetingModal').find('input,select').each(function () {
+
+            $('#delStandingModal').find('input,select').each(function () {
                 var v = $(this).val();
                 var n = $(this).attr('name');
                 postData[n] = v;
             });
             var postDataStr = JSON.stringify(postData);
-            console.log(postDataStr)
-
+            console.log(postDataStr);
             $.ajax({
-                url: '/dbms/meeting/close/',
+                url: '/dbms/dun/standing/del/',
                 type: 'POST',
                 data: {'postDataStr': postDataStr},
                 success: function (arg) {
                     var dict = JSON.parse(arg);
                     if (dict.status) {
-                        $('#closeMeetingModal').modal('hide');
+                        $('#delStandingModal').modal('hide');
                         alert(dict.message);
                         window.location.reload();
                     } else {
-                        $('#closeMeetingModal').modal('hide');
+                        $('#delStandingModal').modal('hide');
                         alert(dict.message);
-
-
                         {#window.location.reload();#}
                     }
                 }

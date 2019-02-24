@@ -6,15 +6,17 @@
             <th>金额</th>
             <th>支付日期</th>
             <th>备注</th>
+            <th>操作</th>
         </tr>
         </thead>
-        <tbody>
+        <tbody id="dun-charge-tb">
         {% for charge in dun_obj.charge_dun.all %}
-            <tr>
+            <tr charge-nid="{{ charge.id }}">
                 <td>{{ charge.get_charge_type_display }}</td>
                 <td>{{ charge.charge_amount }}</td>
                 <td>{{ charge.charge_date }}</td>
                 <td>{{ charge.charge_remark }}</td>
+                <td><a class="btn btn-primary btn-xs delChargeB">删除</a></td>
             <tr>
         {% endfor %}
 

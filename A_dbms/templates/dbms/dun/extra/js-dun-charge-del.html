@@ -1,24 +1,24 @@
 <script>
     $(function () {
-        bindDelClueB();
-        bindDelClueModalOk();
+        bindDelChargeB();
+        bindDelChargeModalOk();
     });
 
-    function bindDelClueB() {
-        $('#dun-clue-tb').on('click', '.delClueB', function () {
-            console.log("bindDelClueB");
-            delClueIdN = $(this).parent().parent().attr('warrant-nid');
-            console.log(delClueIdN);
-            $('#delClueId').val(delClueIdN);
-            $('#delClueModal').modal('show');
+    function bindDelChargeB() {
+        $('#dun-charge-tb').on('click', '.delChargeB', function () {
+            console.log("bindDelChargeB");
+            delChargeIdN = $(this).parent().parent().attr('charge-nid');
+            console.log(delChargeIdN);
+            $('#delChargeId').val(delChargeIdN);
+            $('#delChargeModal').modal('show');
         })
     }
 
-    function bindDelClueModalOk() {
-        $('#delClueModalOk').click(function () {
+    function bindDelChargeModalOk() {
+        $('#delChargeModalOk').click(function () {
             var postData = {};
 
-            $('#delClueModal').find('input,select').each(function () {
+            $('#delChargeModal').find('input,select').each(function () {
                 var v = $(this).val();
                 var n = $(this).attr('name');
                 postData[n] = v;
@@ -26,17 +26,17 @@
             var postDataStr = JSON.stringify(postData);
             console.log(postDataStr);
             $.ajax({
-                url: '/dbms/dun/clue/del/',
+                url: '/dbms/dun/charge/del/',
                 type: 'POST',
                 data: {'postDataStr': postDataStr},
                 dataType: 'JSON',
                 success: function (arg) {
                     if (arg.status) {
-                        $('#delClueModal').modal('hide');
+                        $('#delChargeModal').modal('hide');
                         alert(arg.message);
                         window.location.reload();
                     } else {
-                        $('#delClueModal').modal('hide');
+                        $('#delChargeModal').modal('hide');
                         alert(arg.message);
                         {#window.location.reload();#}
                     }

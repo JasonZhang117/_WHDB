@@ -14,11 +14,29 @@
         </thead>
         <tbody id="dun-clue-tb">
         {% for warrant in dun_obj.warrant.all %}
-            <tr warrant-nid="{{ warrant.id }}">
+            <tr warrant-nid="{{ warrant.id }}" warrant-num="{{ warrant.warrant_num }}">
                 <td>{{ warrant.warrant_num }}</td>
-                <td>{{ staff.get_staff_type_display }}</td>
-                <td>{{ staff.contact_number }}</td>
-                <td>{{ staff.contact_number }}</td>
+                <td>
+                    {% for seal in dun_obj.seal_dun.all %}
+                        {% if seal.warrant.id == warrant.id %}
+                            {{ seal.get_seal_state_display }}
+                        {% endif %}
+                    {% endfor %}
+                </td>
+                <td>
+                    {% for seal in dun_obj.seal_dun.all %}
+                        {% if seal.warrant.id == warrant.id %}
+                            {{ seal.seal_date|default_if_none:"" }}
+                        {% endif %}
+                    {% endfor %}
+                </td>
+                <td>
+                    {% for seal in dun_obj.seal_dun.all %}
+                        {% if seal.warrant.id == warrant.id %}
+                            {{ seal.due_date|default_if_none:"" }}
+                        {% endif %}
+                    {% endfor %}
+                </td>
                 <td>{{ staff.staff_remark }}</td>
                 <td>{{ staff.staff_remark }}</td>
                 <td>{{ staff.staff_remark }}</td>

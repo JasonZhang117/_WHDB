@@ -18,12 +18,20 @@ class Warrants(models.Model):  # 担保物
     evaluate_explain = models.CharField(verbose_name='评估说明', max_length=128, null=True, blank=True)
 
     WARRANT_STATE_LIST = (
-        (1, '未入库'), (2, '已入库'), (6, '无需入库'), (11, '续抵出库'), (21, '已借出'), (31, '解保出库'), (99, '已注销'))
+        (1, '未入库'), (2, '已入库'), (6, '无需入库'), (11, '续抵出库'), (21, '已借出'), (31, '解保出库'),
+        (99, '已注销'))
     warrant_state = models.IntegerField(verbose_name='_权证状态', choices=WARRANT_STATE_LIST, default=1)
     storage_explain = models.CharField(verbose_name='出入库说明', max_length=128, blank=True, null=True)
 
     inquiry_date = models.DateField(verbose_name='最近查询日', blank=True, null=True)
     inquiry_remark = models.CharField(verbose_name='查询情况', max_length=64, blank=True, null=True)
+
+    auction_date = models.DateField(verbose_name='拍卖日期', blank=True, null=True)
+    auction_remark = models.CharField(verbose_name='拍卖情况', max_length=64, blank=True, null=True)
+    AUCTION_STATE_LIST = (
+        (1, '正常'), (5, '挂网'), (11, '成交'), (21, '流拍'), (31, '回转'), (99, '注销'))
+    auction_state = models.IntegerField(verbose_name='_拍卖状态', choices=AUCTION_STATE_LIST, default=1)
+    auction_amount = models.FloatField(verbose_name='成交金额', blank=True, null=True)
 
     warrant_buildor = models.ForeignKey(to='Employees', verbose_name="创建者", default=1,
                                         on_delete=models.PROTECT,

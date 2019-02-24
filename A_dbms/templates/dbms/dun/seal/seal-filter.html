@@ -1,0 +1,25 @@
+<div>
+    <label>
+        {% if kwargs.seal_state == None %}
+            <a class="active btn btn-primary btn-sm" href="{% url 'dbms:seal_all' %}">全部</a>
+        {% else %}
+            <a class="btn btn btn-primary btn-sm" href="{% url 'dbms:seal_all' %}">全部</a>
+        {% endif %}
+        {# 方式一：#}
+        {% for seal_state in seal_state_list %}
+            {% if seal_state.0 == kwargs.seal_state %}
+                <a class="active btn btn-primary btn-sm"
+                   href="{% url 'dbms:seal' seal_state=seal_state.0 %}">{{ seal_state.1 }} </a>
+            {% else %}
+                <a class="btn btn-primary btn-sm"
+                   href="{% url 'dbms:seal' seal_state=seal_state.0 %}">{{ seal_state.1 }}</a>
+            {% endif %}
+        {% endfor %}
+    </label>
+    <label>
+        <form class="navbar-form" style="display: inline">
+            <input type="search" name="_s" class="form-control" placeholder="追偿项目，财产">
+            <button type="submit" class="btn btn-primary btn-sm">搜索</button>
+        </form>
+    </label>
+</div>

@@ -15,7 +15,7 @@ class FormCompensatoryAdd(dform.ModelForm):
             'default_interest': dform.NumberInput(attrs={'class': 'form-control', 'placeholder': '代偿罚息金额'})}
 
 
-# -----------------------查封财产添加-------------------------#
+# -----------------------财产线索添加-------------------------#
 class FormClueAdd(dform.Form):
     warrant = fields.TypedMultipleChoiceField(
         label="财产线索", label_suffix="：", coerce=lambda x: int(x),
@@ -31,3 +31,71 @@ class FormClueAdd(dform.Form):
         (31, '票据'), (41, '车辆'), (51, '动产'), (99, '他权')]'''
         self.fields['warrant'].choices = models.Warrants.objects.exclude(
             warrant_state=99).exclude(warrant_typ=99).values_list('id', 'warrant_num').order_by('warrant_num')
+
+
+# -----------------------查封情况添加-------------------------#
+class FormSealupAdd(dform.ModelForm):
+    class Meta:
+        model = models.Sealup
+        fields = ['sealup_type', 'sealup_date', 'due_date', 'sealup_remark']
+        widgets = {
+            'sealup_type': dform.Select(attrs={'class': 'form-control'}),
+            'sealup_date': dform.DateInput(attrs={'class': 'form-control', 'type': 'date'}),
+            'due_date': dform.DateInput(attrs={'class': 'form-control', 'type': 'date'}),
+            'sealup_remark': dform.TextInput(attrs={'class': 'form-control', 'placeholder': '查封备注'}),
+        }
+
+
+# -----------------------查询情况添加-------------------------#
+class FormInquiryAdd(dform.ModelForm):
+    class Meta:
+        model = models.Inquiry
+        fields = ['inquiry_type', 'inquiry_date', 'inquiry_detail']
+        widgets = {
+            'inquiry_type': dform.Select(attrs={'class': 'form-control'}),
+            'inquiry_date': dform.DateInput(attrs={'class': 'form-control', 'type': 'date'}),
+            'inquiry_detail': dform.Textarea(attrs={'class': 'form-control', 'rows': '3', 'placeholder': '查询情况'}),
+        }
+
+
+# -----------------------挂网添加-------------------------#
+class FormInquiryHangingAdd(dform.ModelForm):
+    class Meta:
+        model = models.Warrants
+        fields = ['auction_date']
+        widgets = {
+            'auction_date': dform.DateInput(attrs={'class': 'form-control', 'type': 'date'}),
+        }
+
+
+# -----------------------成交添加-------------------------#
+class FormInquiryTurnAdd(dform.ModelForm):
+    class Meta:
+        model = models.Warrants
+        fields = ['auction_amount']
+        widgets = {
+            'auction_amount': dform.NumberInput(attrs={'class': 'form-control', 'placeholder': '成交金额'}),
+        }
+
+
+# -----------------------台账添加-------------------------#
+class FormStandingAdd(dform.ModelForm):
+    class Meta:
+        model = models.Standing
+        fields = ['standing_detail']
+        widgets = {
+            'standing_detail': dform.Textarea(attrs={'class': 'form-control', 'placeholder': '追偿情况'}),
+        }
+
+
+# -----------------------追偿费用添加-------------------------#
+class FormChargeAdd(dform.ModelForm):
+    class Meta:
+        model = models.Charge
+        fields = ['charge_type', 'charge_amount', 'charge_date', 'charge_remark']
+        widgets = {
+            'charge_type': dform.Select(attrs={'class': 'form-control'}),
+            'charge_amount': dform.NumberInput(attrs={'class': 'form-control', 'placeholder': '费用金额'}),
+            'charge_date': dform.DateInput(attrs={'class': 'form-control', 'type': 'date'}),
+            'charge_remark': dform.TextInput(attrs={'class': 'form-control', 'placeholder': '备注'}),
+        }

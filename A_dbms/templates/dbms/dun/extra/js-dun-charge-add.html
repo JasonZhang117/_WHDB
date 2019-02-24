@@ -1,22 +1,21 @@
 <script>
     $(function () {
-        bindAddClueB();
-        bindAddClueModalOk();
+        bindAddChargeB();
+        bindAddChargeModalOk();
 
     });
 
-    function bindAddClueB() {
-        $('#addClueB').click(function () {
-            console.log("bindAddClueB")
-            $('#addClueModal').modal('show');
+    function bindAddChargeB() {
+        $('#addChargeB').click(function () {
+            console.log("bindAddChargeB")
+            $('#addChargeModal').modal('show');
         })
     }
 
-    function bindAddClueModalOk() {
-        $('#addClueModalOk').click(function () {
+    function bindAddChargeModalOk() {
+        $('#addChargeModalOk').click(function () {
             var postData = {};
-
-            $('#addClueModal').find('input,select').each(function () {
+            $('#addChargeModal').find('input,select').each(function () {
                 var v = $(this).val();
                 var n = $(this).attr('name');
                 postData[n] = v;
@@ -24,19 +23,22 @@
             var postDataStr = JSON.stringify(postData);
             console.log(postDataStr);
             $.ajax({
-                url: '/dbms/dun/clue/add/',
+                url: '/dbms/dun/charge/add/',
                 type: 'POST',
                 data: {'postDataStr': postDataStr},
                 dataType: 'JSON',
                 success: function (arg) {
                     console.log(arg);
                     if (arg.status) {
-                        $('#addClueModal').modal('hide');
+                        $('#addChargeModal').modal('hide');
                         alert(arg.message);
                         window.location.reload();
                     } else {
                         alert(arg.message);
-                        $('#e_warrant').text(arg.forme.warrant);
+                        $('#e_charge_type').text(arg.forme.charge_type);
+                        $('#e_charge_amount').text(arg.forme.charge_amount);
+                        $('#e_charge_date').text(arg.forme.charge_date);
+                        $('#e_charge_remark').text(arg.forme.charge_remark);
                     }
                 }
             })

@@ -33,9 +33,9 @@ class FormNotifyAdd(dform.ModelForm):
             'notify_money': dform.NumberInput(attrs={'class': 'form-control', 'placeholder': '通知金额'}),
             'time_limit': dform.NumberInput(attrs={'class': 'form-control', 'placeholder': '期限'}),
             'notify_date': dform.DateInput(attrs={'class': 'form-control', 'type': 'date'}),
-            'contracts_lease': dform.TextInput(attrs={'class': 'form-control'}),
-            'contract_guaranty': dform.TextInput(attrs={'class': 'form-control'}),
-            'remark': dform.TextInput(attrs={'class': 'form-control'})}
+            'contracts_lease': dform.TextInput(attrs={'class': 'form-control', 'placeholder': '借款合同编号'}),
+            'contract_guaranty': dform.TextInput(attrs={'class': 'form-control', 'placeholder': '保证合同编号'}),
+            'remark': dform.TextInput(attrs={'class': 'form-control', 'placeholder': '备注'})}
 
 
 # -----------------------放款添加-------------------------#

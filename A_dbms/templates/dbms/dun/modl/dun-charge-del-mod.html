@@ -1,0 +1,18 @@
+<div class="modal fade bs-example-modal-sm" id="delChargeModal"
+     tabindex="-1" role="dialog" aria-labelledby="delChargeModal">
+    <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="delChargeModalLabel">删除追偿费用
+                    <input style="display: none" name="dun_id" value="{{ dun_obj.id }}">
+                    <input style="display: none" name="charge_id" id="delChargeId">
+                </h4>
+            </div>
+            <div class="modal-body">是否确定删除该项追偿费用信息？</div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                <button type="button" class="btn btn-primary" id="delChargeModalOk">确定</button>
+            </div>
+        </div>
+    </div>
+</div>

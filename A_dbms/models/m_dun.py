@@ -32,9 +32,10 @@ class Dun(models.Model):  #
     compensatory = models.ManyToManyField(to='Compensatories', verbose_name="代偿",
                                           related_name='dun_compensatory')
     dun_amount = models.FloatField(verbose_name='追偿金额', default=0)
-    recovered_amount = models.FloatField(verbose_name='回收金额', default=0)
+    dun_retrieve_sun = models.FloatField(verbose_name='_回收金额', default=0)
+    dun_charge_sun = models.FloatField(verbose_name='_追偿费用', default=0)
     warrant = models.ManyToManyField(to='Warrants', verbose_name="资产线索",
-                                     related_name='dun_article',
+                                     related_name='dun_warrant',
                                      null=True, blank=True)
     DUN_STAGE_LIST = ((1, '起诉'), (11, '判决'), (21, '执行'), (31, '和解结案'), (41, '终止执行'), (99, '注销'))
     dun_stage = models.IntegerField(verbose_name='追偿状态', choices=DUN_STAGE_LIST, default=1)
@@ -95,7 +96,7 @@ class Staff(models.Model):  #
         db_table = 'dbms_staff'  # 指定数据表的名称
 
     def __str__(self):
-        return '%s-%s-%s-%s' % (self.staff_name, self.staff_type, self.contact_number, self.staff_remark)
+        return '%s_%s_%s_%s' % (self.staff_name, self.staff_type, self.contact_number, self.staff_remark)
 
 
 # -----------------------追偿费用模型-------------------------#
@@ -119,7 +120,7 @@ class Charge(models.Model):  #
         db_table = 'dbms_charge'  # 指定数据表的名称
 
     def __str__(self):
-        return '%s-%s-%s-%s' % (self.dun.title, self.charge_type, self.charge_amount, self.charge_date)
+        return '%s_%s_%s_%s' % (self.dun.title, self.charge_type, self.charge_amount, self.charge_date)
 
 
 # -----------------------案款回收模型-------------------------#
@@ -143,7 +144,7 @@ class Retrieve(models.Model):
         db_table = 'dbms_retrieve'  # 指定数据表的名称
 
     def __str__(self):
-        return '%s-%s-%s' % (self.retrieve_type, self.retrieve_amount, self.retrieve_date)
+        return '%s_%s_%s' % (self.retrieve_type, self.retrieve_amount, self.retrieve_date)
 
 
 # -----------------------追偿流程-------------------------#
@@ -169,7 +170,7 @@ class Stage(models.Model):
         db_table = 'dbms_stage'  # 指定数据表的名称
 
     def __str__(self):
-        return '%s-%s-%s' % (self.stage_type, self.stage_file, self.stage_date)
+        return '%s_%s_%s' % (self.stage_type, self.stage_file, self.stage_date)
 
 
 # -----------------------判决-------------------------#
@@ -200,8 +201,7 @@ class Standing(models.Model):
     dun = models.ForeignKey(to='Dun', verbose_name="追偿项目", on_delete=models.PROTECT,
                             related_name='standing_dun')
 
-    standing_detail = models.TextField(verbose_name='判决内容')
-    standing_date = models.DateField(verbose_name='判决日期')
+    standing_detail = models.TextField(verbose_name='追偿情况')
 
     standingor = models.ForeignKey(to='Employees', verbose_name="创建人", on_delete=models.PROTECT,
                                    related_name='standingor_employee')
@@ -212,19 +212,20 @@ class Standing(models.Model):
         db_table = 'dbms_standing'  # 指定数据表的名称
 
     def __str__(self):
-        return '%s-%s' % (self.dun.title, self.standing_date)
+        return '%s_%s' % (self.dun.title, self.standingor_date)
 
 
-# ------------------------查封情况--------------------------#
-class Seal(models.Model):  # 评委意见
+# ------------------------财产线索--------------------------#
+class Seal(models.Model):
     dun = models.ForeignKey(to='Dun', verbose_name="追偿项目",
                             on_delete=models.PROTECT,
                             related_name='seal_dun')
     warrant = models.ForeignKey(to='Warrants', verbose_name="财产",
                                 on_delete=models.PROTECT,
                                 related_name='seal_warrant')
-    SEAL_STATE_LIST = ((1, '未查封'), (11, '已查封'), (71, '已解封'), (99, '注销'))
-    seal_state = models.IntegerField(verbose_name='查封状态', choices=SEAL_STATE_LIST, default=1)
+    SEAL_STATE_LIST = (((1, '诉前保全'), (5, '首次首封'), (11, '首次轮封'), (21, '续查封'),
+                        (51, '解除查封'), (99, '注销')))
+    seal_state = models.IntegerField(verbose_name='查封状态', choices=SEAL_STATE_LIST)
     seal_date = models.DateField(verbose_name='最近查封日', blank=True, null=True)
     due_date = models.DateField(verbose_name='查封到期日', blank=True, null=True)
     seal_remark = models.CharField(verbose_name='备注', max_length=64, blank=True, null=True)
@@ -243,5 +244,47 @@ class Seal(models.Model):  # 评委意见
         return "%s_%s_%s" % (self.dun.title, self.warrant.warrant_num, self.seal_state)
 
 
-# -----------------------查封财产财产-------------------------#
-'''查封日期，续查封日期、评估情况、拍卖情况……'''
+# ------------------------查封情况--------------------------#
+class Sealup(models.Model):
+    seal = models.ForeignKey(to='Seal', verbose_name="财产线索", on_delete=models.PROTECT,
+                             related_name='sealup_seal')
+    SEALUP_TYPE_LIST = ((1, '诉前保全'), (5, '首次首封'), (11, '首次轮封'), (21, '续查封'),
+                        (51, '解除查封'), (99, '注销'))
+    sealup_type = models.IntegerField(verbose_name='查封类型', choices=SEALUP_TYPE_LIST, default=1)
+    sealup_date = models.DateField(verbose_name='查封日期')
+    due_date = models.DateField(verbose_name='到期日')
+    sealup_remark = models.CharField(verbose_name='备注', max_length=64, null=True, blank=True)
+
+    sealupor = models.ForeignKey(to='Employees', verbose_name="创建人", on_delete=models.PROTECT,
+                                 related_name='sealup_employee')
+    sealupor_date = models.DateField(verbose_name='创建日期', default=datetime.date.today)
+
+    class Meta:
+        verbose_name_plural = '追偿-查封情况'  # 指定显示名称
+        db_table = 'dbms_sealup'  # 指定数据表的名称
+
+    def __str__(self):
+        return '%s_%s_%s_%s' % (self.seal.dun.title, self.seal.warrant.warrant_num, self.sealup_type, self.sealup_date)
+
+
+# ------------------------查询情况--------------------------#
+class Inquiry(models.Model):
+    seal = models.ForeignKey(to='Seal', verbose_name="财产线索", on_delete=models.PROTECT,
+                             related_name='inquiry_seal')
+    INQUIRY_TYPE_LIST = (
+        (1, '日常跟踪'), (5, '拍卖挂网'), (11, '拍卖成交'), (21, '拍卖流拍'), (31, '执行回转'), (99, '注销'))
+    inquiry_type = models.IntegerField(verbose_name='查询类型', choices=INQUIRY_TYPE_LIST, default=1)
+
+    inquiry_date = models.DateField(verbose_name='查询日期')
+    inquiry_detail = models.TextField(verbose_name='查询情况', null=True, blank=True)
+
+    inquiryor = models.ForeignKey(to='Employees', verbose_name="创建人", on_delete=models.PROTECT,
+                                  related_name='inquiryor_employee')
+    inquiryor_date = models.DateField(verbose_name='创建日期', default=datetime.date.today)
+
+    class Meta:
+        verbose_name_plural = '追偿-查询情况'  # 指定显示名称
+        db_table = 'dbms_inquiry'  # 指定数据表的名称
+
+    def __str__(self):
+        return '%s_%s_%s' % (self.seal.dun.title, self.seal.warrant.warrant_num, self.inquiry_date)
