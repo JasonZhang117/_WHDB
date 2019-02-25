@@ -134,6 +134,10 @@ urlpatterns = [
     path('dun/standing/del/', views.standing_del_ajax, name='standing_del_ajax'),
     path('dun/charge/add/', views.charge_add_ajax, name='charge_add_ajax'),
     path('dun/charge/del/', views.charge_del_ajax, name='charge_del_ajax'),
+    path('dun/retrieve/add/', views.retrieve_add_ajax, name='retrieve_add_ajax'),
+    path('dun/retrieve/del/', views.retrieve_del_ajax, name='retrieve_del_ajax'),
+    path('dun/seal/overdue/', views.overdue_seal, name='overdue_seal'),
+    path('dun/seal/soondue/', views.soondue_seal, name='soondue_seal'),
 
     # -----------------------客户管理-------------------------#
 

@@ -292,3 +292,88 @@ def charge_del_ajax(request):
         response['message'] = '状态为：%s，无法删除！！！' % dun_stage
     result = json.dumps(response, ensure_ascii=False)
     return HttpResponse(result)
+
+
+# -----------------------------案款回收添加ajax------------------------#
+@login_required
+def retrieve_add_ajax(request):
+    print(__file__, '---->def retrieve_add_ajax')
+    response = {'status': True, 'message': None, 'forme': None, }
+
+    post_data_str = request.POST.get('postDataStr')
+    post_data = json.loads(post_data_str)
+    print('post_data:', post_data)
+    dun_id = int(post_data['dun_id'])
+    dun_list = models.Dun.objects.filter(id=dun_id)
+    dun_obj = dun_list.first()
+    '''DUN_STAGE_LIST = ((1, '起诉'), (11, '判决'), (21, '执行'), (31, '和解结案'), 
+    (41, '终止执行'), (99, '注销'))'''
+    dun_stage = dun_obj.dun_stage
+    if not dun_stage == 99:
+        form_retrieve_add = forms.FormRetrieveAdd(post_data)  # 案款回收
+
+        if form_retrieve_add.is_valid():
+            retrieve_cleaned = form_retrieve_add.cleaned_data
+            try:
+                with transaction.atomic():
+                    retrieve_obj = models.Retrieve.objects.create(
+                        dun=dun_obj, retrieve_type=retrieve_cleaned['retrieve_type'],
+                        retrieve_amount=retrieve_cleaned['retrieve_amount'],
+                        retrieve_date=retrieve_cleaned['retrieve_date'],
+                        retrieve_remark=retrieve_cleaned['retrieve_remark'],
+                        retrievor=request.user)
+                    '''dun_retrieve_sun，更新追偿项目案款回收'''
+                    dun_retrieve_amount = models.Retrieve.objects.filter(
+                        dun=dun_obj).aggregate(Sum('retrieve_amount'))['retrieve_amount__sum']  # 追偿项目项下回款合计
+                    dun_list.update(dun_retrieve_sun=round(dun_retrieve_amount, 2))  # 追偿项目，更新回款总额
+                response['message'] = '成功创建案款回收信息！'
+            except Exception as e:
+                response['status'] = False
+                response['message'] = '案款回收信息创建失败：%s！' % str(e)
+        else:
+            response['status'] = False
+            response['message'] = '表单信息有误！！！'
+            response['forme'] = form_retrieve_add.errors
+    else:
+        response['status'] = False
+        response['message'] = '追偿项目状态为：%s，案款回收信息创建失败！！！' % dun_stage
+
+    result = json.dumps(response, ensure_ascii=False)
+    return HttpResponse(result)
+
+
+# -----------------------删除案款回收ajax-------------------------#
+@login_required
+def retrieve_del_ajax(request):
+    print(__file__, '---->def retrieve_del_ajax')
+    response = {'status': True, 'message': None, 'forme': None, }
+    post_data_str = request.POST.get('postDataStr')
+    post_data = json.loads(post_data_str)
+    print('post_data:', post_data)
+
+    dun_list = models.Dun.objects.filter(id=post_data['dun_id'])
+    dun_obj = dun_list.first()
+    retrieve_obj = models.Retrieve.objects.get(id=post_data['retrieve_id'])
+
+    '''DUN_STAGE_LIST = ((1, '起诉'), (11, '判决'), (21, '执行'), (31, '和解结案'), (41, '终止执行'), (99, '注销'))'''
+    dun_stage = dun_obj.dun_stage
+    if not dun_stage == 99:
+        try:
+            with transaction.atomic():
+                retrieve_obj.delete()  # 删除案款回收信息
+                '''dun_retrieve_sun，更新追偿项目案款回收'''
+                dun_retrieve_amount = models.Retrieve.objects.filter(
+                    dun=dun_obj).aggregate(Sum('retrieve_amount'))['retrieve_amount__sum']  # 追偿项目项下回款合计
+                if dun_retrieve_amount:
+                    dun_list.update(dun_retrieve_sun=round(dun_retrieve_amount, 2))  # 追偿项目，更新追偿费用总额
+                else:
+                    dun_list.update(dun_retrieve_sun=0)  # 追偿项目，更新追偿费用总额
+            response['message'] = '案款回收信息删除成功！'
+        except Exception as e:
+            response['status'] = False
+            response['message'] = '案款回收信息删除失败：%s' % str(e)
+    else:
+        response['status'] = False
+        response['message'] = '状态为：%s，无法删除！！！' % dun_stage
+    result = json.dumps(response, ensure_ascii=False)
+    return HttpResponse(result)

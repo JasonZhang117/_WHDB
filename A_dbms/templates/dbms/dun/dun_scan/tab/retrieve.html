@@ -6,18 +6,19 @@
             <th>金额</th>
             <th>回收日期</th>
             <th>备注</th>
+            <th>操作</th>
         </tr>
         </thead>
-        <tbody>
+        <tbody id="dun-retrieve-tb">
         {% for retrieve in dun_obj.retrieve_dun.all %}
-            <tr>
+            <tr retrieve-nid="{{ retrieve.id }}">
                 <td>{{ retrieve.get_retrieve_type_display }}</td>
                 <td>{{ retrieve.retrieve_amount }}</td>
                 <td>{{ retrieve.retrieve_date }}</td>
                 <td>{{ retrieve.retrieve_remark }}</td>
+                <td><a class="btn btn-primary btn-xs delRetrieveB">删除</a></td>
             <tr>
         {% endfor %}
-
         </tbody>
     </table>
 </div>

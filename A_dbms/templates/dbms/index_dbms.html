@@ -48,6 +48,13 @@
                     <h3>30天内到期协议：
                         <a href="{% url 'dbms:soondue_cooperator' %}">{{ soondue_cooperator_count }}</a></h3>
                     {#                    {% endif %}#}
+                    {#                    {% if overdue_seal_count > 0 %}#}
+                    <h3>逾期查封：<a href="{% url 'dbms:overdue_seal' %}">{{ overdue_seal_count }}</a></h3>
+                    {#                    {% endif %}#}
+                    {#                    {% if soondue_seal_count > 0 %}#}
+                    <h3>30天内到期查封：
+                        <a href="{% url 'dbms:soondue_seal' %}">{{ soondue_seal_count }}</a></h3>
+                    {#                    {% endif %}#}
                 {% endblock %}
             </div>
         </div>

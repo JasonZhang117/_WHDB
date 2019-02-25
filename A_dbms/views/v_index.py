@@ -50,6 +50,12 @@ def index(request):
         due_date__lt=date_th_later).count()  # 30天内到期协议
     overdue_cooperator_count = models.Cooperators.objects.filter(
         cooperator_state=1, due_date__lt=datetime.date.today()).count()  # 逾期协议
-    # 协议到期
+    '''SEAL_STATE_LIST = ((1, '诉前保全'), (5, '首次首封'), (11, '首次轮封'), (21, '续查封'),
+                       (51, '解除查封'), (99, '注销'))'''
+    soondue_seal_count = models.Seal.objects.filter(
+        seal_state__in=[1, 5, 11, 21], due_date__gte=datetime.date.today(),
+        due_date__lt=date_th_later).count()  # 30天内到期协议
+    overdue_seal_count = models.Seal.objects.filter(
+        seal_state__in=[1, 5, 11, 21], due_date__lt=datetime.date.today()).count()  # 逾期协议
 
     return render(request, 'dbms/index_dbms.html', locals())

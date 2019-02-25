@@ -1,0 +1,54 @@
+<script>
+    $(function () {
+        bindDelRetrieveB();
+        bindDelRetrieveModalOk();
+    });
+
+    function bindDelRetrieveB() {
+        $('#dun-retrieve-tb').on('click', '.delRetrieveB', function () {
+            console.log("bindDelChargeB");
+            delRetrieveIdN = $(this).parent().parent().attr('retrieve-nid');
+            console.log(delRetrieveIdN);
+            $('#delRetrieveId').val(delRetrieveIdN);
+            $('#delRetrieveModal').modal('show');
+        })
+    }
+
+    function bindDelRetrieveModalOk() {
+        $('#delRetrieveModalOk').click(function () {
+            var postData = {};
+
+            $('#delRetrieveModal').find('input,select').each(function () {
+                var v = $(this).val();
+                var n = $(this).attr('name');
+                postData[n] = v;
+            });
+            var postDataStr = JSON.stringify(postData);
+            console.log(postDataStr);
+            $.ajax({
+                url: '/dbms/dun/retrieve/del/',
+                type: 'POST',
+                data: {'postDataStr': postDataStr},
+                dataType: 'JSON',
+                success: function (arg) {
+                    if (arg.status) {
+                        $('#delRetrieveModal').modal('hide');
+                        alert(arg.message);
+                        window.location.reload();
+                    } else {
+                        $('#delRetrieveModal').modal('hide');
+                        alert(arg.message);
+                        {#window.location.reload();#}
+                    }
+                }
+            })
+
+        })
+    }
+</script>
+
+
+
+
+
+

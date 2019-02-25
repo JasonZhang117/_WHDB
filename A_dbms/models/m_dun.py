@@ -223,8 +223,8 @@ class Seal(models.Model):
     warrant = models.ForeignKey(to='Warrants', verbose_name="财产",
                                 on_delete=models.PROTECT,
                                 related_name='seal_warrant')
-    SEAL_STATE_LIST = (((1, '诉前保全'), (5, '首次首封'), (11, '首次轮封'), (21, '续查封'),
-                        (51, '解除查封'), (99, '注销')))
+    SEAL_STATE_LIST = ((1, '诉前保全'), (5, '首次首封'), (11, '首次轮封'), (21, '续查封'),
+                       (51, '解除查封'), (99, '注销'))
     seal_state = models.IntegerField(verbose_name='查封状态', choices=SEAL_STATE_LIST)
     seal_date = models.DateField(verbose_name='最近查封日', blank=True, null=True)
     due_date = models.DateField(verbose_name='查封到期日', blank=True, null=True)
@@ -236,7 +236,7 @@ class Seal(models.Model):
     sealor_date = models.DateField(verbose_name='创建日期', default=datetime.date.today)
 
     class Meta:
-        verbose_name_plural = '追偿-财产'  # 指定显示名称
+        verbose_name_plural = '追偿-查封现状'  # 指定显示名称
         db_table = 'dbms_seal'  # 指定数据表的名称
         unique_together = ('dun', 'warrant')
 
@@ -260,7 +260,7 @@ class Sealup(models.Model):
     sealupor_date = models.DateField(verbose_name='创建日期', default=datetime.date.today)
 
     class Meta:
-        verbose_name_plural = '追偿-查封情况'  # 指定显示名称
+        verbose_name_plural = '追偿-查封明细'  # 指定显示名称
         db_table = 'dbms_sealup'  # 指定数据表的名称
 
     def __str__(self):

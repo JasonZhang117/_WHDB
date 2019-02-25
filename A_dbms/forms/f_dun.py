@@ -99,3 +99,16 @@ class FormChargeAdd(dform.ModelForm):
             'charge_date': dform.DateInput(attrs={'class': 'form-control', 'type': 'date'}),
             'charge_remark': dform.TextInput(attrs={'class': 'form-control', 'placeholder': '备注'}),
         }
+
+
+# -----------------------追偿费用添加-------------------------#
+class FormRetrieveAdd(dform.ModelForm):
+    class Meta:
+        model = models.Retrieve
+        fields = ['retrieve_type', 'retrieve_amount', 'retrieve_date', 'retrieve_remark']
+        widgets = {
+            'retrieve_type': dform.Select(attrs={'class': 'form-control'}),
+            'retrieve_amount': dform.NumberInput(attrs={'class': 'form-control', 'placeholder': '回收金额'}),
+            'retrieve_date': dform.DateInput(attrs={'class': 'form-control', 'type': 'date'}),
+            'retrieve_remark': dform.TextInput(attrs={'class': 'form-control', 'placeholder': '备注'}),
+        }

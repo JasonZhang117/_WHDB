@@ -94,7 +94,7 @@ class Houses(models.Model):  # 房产
         db_table = 'dbms_houses'  # 指定数据表的名称
 
     def __str__(self):
-        return '%s-%s-%s-%s' % (self.warrant, self.house_locate, self.house_area, self.house_app)
+        return '%s-%s-%s-%s' % (self.warrant.warrant_num, self.house_locate, self.house_area, self.house_app)
 
 
 # ------------------------产权证--------------------------#
@@ -120,7 +120,7 @@ class HouseBag(models.Model):  # 产权证
         db_table = 'dbms_housebag'  # 指定数据表的名称
 
     def __str__(self):
-        return '%s-%s' % (self.warrant, self.housebag_locate)
+        return '%s-%s' % (self.warrant.warrant_num, self.housebag_locate)
 
 
 # ------------------------土地2--------------------------#
@@ -146,7 +146,7 @@ class Grounds(models.Model):  # 土地
         db_table = 'dbms_grounds'  # 指定数据表的名称
 
     def __str__(self):
-        return '%s-%s-%s-%s' % (self.warrant, self.ground_locate, self.ground_area, self.ground_app)
+        return '%s-%s-%s-%s' % (self.warrant.warrant_num, self.ground_locate, self.ground_area, self.ground_app)
 
 
 # ------------------------应收帐款11--------------------------#
@@ -169,7 +169,7 @@ class Receivable(models.Model):  # 应收帐款
         db_table = 'dbms_receivable'  # 指定数据表的名称
 
     def __str__(self):
-        return '%s' % (self.warrant)
+        return '%s' % (self.warrant.warrant_num,)
 
 
 class ReceiveExtend(models.Model):  # 应收列表
@@ -187,7 +187,7 @@ class ReceiveExtend(models.Model):  # 应收列表
         db_table = 'dbms_receiveextend'  # 指定数据表的名称
 
     def __str__(self):
-        return '%s' % self.receivable
+        return '%s' % self.receivable.warrant.warrant_num
 
 
 # ------------------------股权21--------------------------#
@@ -213,7 +213,7 @@ class Stockes(models.Model):  # 股权
         db_table = 'dbms_stockes'  # 指定数据表的名称
 
     def __str__(self):
-        return '%s-%s-%s-%s' % (self.warrant, self.stock_owner, self.target, self.share)
+        return '%s-%s-%s-%s' % (self.warrant.warrant_num, self.stock_owner, self.target, self.share)
 
 
 # ------------------------应收票据31--------------------------#
@@ -237,7 +237,7 @@ class Draft(models.Model):  # 应收票据
         db_table = 'dbms_draft'  # 指定数据表的名称
 
     def __str__(self):
-        return '%s' % self.warrant,
+        return '%s' % (self.warrant.warrant_num,)
 
 
 class DraftExtend(models.Model):  # 票据列表
@@ -265,7 +265,7 @@ class DraftExtend(models.Model):  # 票据列表
         db_table = 'dbms_draftextend'  # 指定数据表的名称
 
     def __str__(self):
-        return '%s_%s_%s' % (self.draft, self.draft_typ, self.draft_num)
+        return '%s_%s_%s' % (self.draft.warrant.warrant_num, self.draft_typ, self.draft_num)
 
 
 # ------------------------车辆41--------------------------#
@@ -289,7 +289,7 @@ class Vehicle(models.Model):  # 车辆
         db_table = 'dbms_vehicle'  # 指定数据表的名称
 
     def __str__(self):
-        return '%s' % self.warrant
+        return '%s' % self.warrant.warrant_num
 
 
 # ------------------------动产51--------------------------#
@@ -314,7 +314,7 @@ class Chattel(models.Model):  # 动产
         db_table = 'dbms_rchattel'  # 指定数据表的名称
 
     def __str__(self):
-        return '%s' % self.warrant
+        return '%s' % self.warrant.warrant_num
 
 
 # ------------------------他权模型99--------------------------#
@@ -344,7 +344,7 @@ class Hypothecs(models.Model):  # 他权
         db_table = 'dbms_hypothecs'  # 指定数据表的名称
 
     def __str__(self):
-        return '%s' % self.warrant
+        return '%s' % self.warrant.warrant_num
 
 
 # ------------------------出入库模型---------------------------#
@@ -372,7 +372,7 @@ class Storages(models.Model):  # 出入库
         db_table = 'dbms_storages'  # 指定数据表的名称
 
     def __str__(self):
-        return '%s-%s-%s' % (self.warrant, self.storage_date, self.storage_typ)
+        return '%s-%s-%s' % (self.warrant.warrant_num, self.storage_date, self.storage_typ)
 
 
 # ------------------------评估模型---------------------------#
@@ -395,4 +395,4 @@ class Evaluate(models.Model):  # 评估
         db_table = 'dbms_evaluate'  # 指定数据表的名称
 
     def __str__(self):
-        return '%s_%s_%s' % (self.warrant, self.evaluate_state, self.evaluate_value)
+        return '%s_%s_%s' % (self.warrant.warrant_num, self.evaluate_state, self.evaluate_value)

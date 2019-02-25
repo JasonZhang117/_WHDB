@@ -1,0 +1,53 @@
+<script>
+    $(function () {
+        bindAddRetrieveB();
+        bindAddRetrieveModalOk();
+
+    });
+
+    function bindAddRetrieveB() {
+        $('#addRetrieveB').click(function () {
+            console.log("bindAddRetrieveB")
+            $('#addRetrieveModal').modal('show');
+        })
+    }
+
+    function bindAddRetrieveModalOk() {
+        $('#addRetrieveModalOk').click(function () {
+            var postData = {};
+            $('#addRetrieveModal').find('input,select').each(function () {
+                var v = $(this).val();
+                var n = $(this).attr('name');
+                postData[n] = v;
+            });
+            var postDataStr = JSON.stringify(postData);
+            console.log(postDataStr);
+            $.ajax({
+                url: '/dbms/dun/retrieve/add/',
+                type: 'POST',
+                data: {'postDataStr': postDataStr},
+                dataType: 'JSON',
+                success: function (arg) {
+                    console.log(arg);
+                    if (arg.status) {
+                        $('#addRetrieveModal').modal('hide');
+                        alert(arg.message);
+                        window.location.reload();
+                    } else {
+                        alert(arg.message);
+                        $('#e_retrieve_type').text(arg.forme.retrieve_type);
+                        $('#e_retrieve_amount').text(arg.forme.retrieve_amount);
+                        $('#e_retrieve_date').text(arg.forme.retrieve_date);
+                        $('#e_retrieve_remark').text(arg.forme.retrieve_remark);
+                    }
+                }
+            })
+        })
+    }
+</script>
+
+
+
+
+
+

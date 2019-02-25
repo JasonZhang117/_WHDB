@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect, HttpResponse
 from .. import models, forms
-import time, json
+import datetime, time, json
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.db.utils import IntegrityError
 from django.db import transaction
@@ -95,7 +95,7 @@ def dun_scan(request, dun_id):  # 查看合同
     from_sealup_add = forms.FormSealupAdd()  # 查封情况
     from_standing_add = forms.FormStandingAdd()  # 添加追偿台账
     form_charge_add = forms.FormChargeAdd()  # 追偿费用
-
+    form_retrieve_add = forms.FormRetrieveAdd()  # 案款回收
     return render(request, 'dbms/dun/dun-scan.html', locals())
 
 
@@ -235,3 +235,69 @@ def compensatory_add_ajax(request):  # 代偿添加ajax
         response['forme'] = form_compensatory_add.errors
     result = json.dumps(response, ensure_ascii=False)
     return HttpResponse(result)
+
+
+# -----------------------逾期查封列表---------------------#
+@login_required
+def overdue_seal(request, *args, **kwargs):
+    print(__file__, '---->def overdue_seal')
+    PAGE_TITLE = '逾期查封'
+    '''SEAL_STATE_LIST = ((1, '诉前保全'), (5, '首次首封'), (11, '首次轮封'), (21, '续查封'),
+                           (51, '解除查封'), (99, '注销'))'''
+    overdue_seal_list = models.Seal.objects.filter(
+        seal_state__in=[1, 5, 11, 21], due_date__lt=datetime.date.today()).order_by('due_date')   # 逾期协议
+    '''搜索'''
+    search_key = request.GET.get('_s')
+    if search_key:
+        search_fields = ['dun__warrant__warrant_num',]
+        q = Q()
+        q.connector = 'OR'
+        for field in search_fields:
+            q.children.append(("%s__contains" % field, search_key))
+        overdue_seal_list = overdue_seal_list.filter(q)
+    print("overdue_seal_list:",overdue_seal_list)
+    provide_acount = overdue_seal_list.count()
+    '''分页'''
+    paginator = Paginator(overdue_seal_list, 19)
+    page = request.GET.get('page')
+    try:
+        p_list = paginator.page(page)
+    except PageNotAnInteger:
+        p_list = paginator.page(1)
+    except EmptyPage:
+        p_list = paginator.page(paginator.num_pages)
+
+    return render(request, 'dbms/dun/overdu-seal.html', locals())
+
+
+# -----------------------即将到期查封列表---------------------#
+@login_required
+def soondue_seal(request, *args, **kwargs):
+    print(__file__, '---->def soondue_seal')
+    PAGE_TITLE = '即将到期查封'
+    date_th_later = datetime.date.today() - datetime.timedelta(days=-30)  # 30天前的日期
+    soondue_seal_list = models.Seal.objects.filter(
+        seal_state__in=[1, 5, 11, 21], due_date__gte=datetime.date.today(),
+        due_date__lt=date_th_later).order_by('due_date')  # 30天内到期协议
+    '''搜索'''
+    search_key = request.GET.get('_s')
+    if search_key:
+        search_fields = ['dun__warrant__warrant_num',]
+        q = Q()
+        q.connector = 'OR'
+        for field in search_fields:
+            q.children.append(("%s__contains" % field, search_key))
+        soondue_seal_list = soondue_seal_list.filter(q)
+
+    provide_acount = soondue_seal_list.count()
+    '''分页'''
+    paginator = Paginator(soondue_seal_list, 19)
+    page = request.GET.get('page')
+    try:
+        p_list = paginator.page(page)
+    except PageNotAnInteger:
+        p_list = paginator.page(1)
+    except EmptyPage:
+        p_list = paginator.page(paginator.num_pages)
+
+    return render(request, 'dbms/dun/overdu-seal.html', locals())

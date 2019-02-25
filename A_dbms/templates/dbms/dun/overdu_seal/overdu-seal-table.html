@@ -1,0 +1,28 @@
+<div class="table-responsive">
+    <table class="table table-bordered table-hover table-condensed active">
+        <thead>
+        <tr style="text-align: center">
+            <th>序号</th>
+            <th>资产</th>
+            <th>追偿项目</th>
+            <th>查封类别</th>
+            <th>最近查封日</th>
+            <th>查封到期日</th>
+            <th>备注</th>
+        </tr>
+        </thead>
+        <tbody id="draftbag-tb">
+        {% for seal in p_list %}
+            <tr draft-nid="{{ draft.id }}">
+                <td>{{ forloop.counter }}</td>
+                <td>{{ seal.warrant.warrant_num }}</td>
+                <td>{{ seal.dun.title }}</td>
+                <td>{{ seal.get_seal_state_display }}</td>
+                <td>{{ seal.seal_date }}</td>
+                <td>{{ seal.due_date }}</td>
+                <td>{{ seal.seal_remark|default_if_none:"" }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>

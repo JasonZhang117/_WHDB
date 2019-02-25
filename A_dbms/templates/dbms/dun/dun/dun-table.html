@@ -4,6 +4,7 @@
         <tr style="text-align: center">
             <th>代偿编号</th>
             <th>追偿本金</th>
+            <th>追偿费用</th>
             <th>回收金额</th>
             <th>状态</th>
         </tr>
@@ -13,7 +14,8 @@
             <tr>
                 <td><a href="{% url 'dbms:dun_scan' dun_id=dun.id %}">{{ dun.title }}</a></td>
                 <td align="right">{{ dun.dun_amount|floatformat:2 }}</td>
-                <td align="right">{{ dun.recovered_amount|floatformat:2 }}</td>
+                <td align="right">{{ dun.dun_charge_sun|floatformat:2 }}</td>
+                <td align="right">{{ dun.dun_retrieve_sun|floatformat:2 }}</td>
                 <td>{{ dun.get_dun_stage_display }}</td>
             </tr>
         {% endfor %}
