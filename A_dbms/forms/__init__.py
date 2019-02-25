@@ -18,4 +18,5 @@ from .f_custom import (CustomAddForm, CustomCAddForm, CustomPAddForm, CustomEdit
 from .f_interior import DepartmentForm, EmployeeForm
 from .f_review import FormRewiewPlanAdd, FormRewiewAdd
 from .f_dun import (FormCompensatoryAdd, FormClueAdd, FormSealupAdd, FormInquiryHangingAdd,
-                    FormInquiryTurnAdd, FormStandingAdd, FormChargeAdd, FormRetrieveAdd)
+                    FormInquiryTurnAdd, FormStandingAdd, FormChargeAdd, FormRetrieveAdd,
+                    FormInquiryAdd)

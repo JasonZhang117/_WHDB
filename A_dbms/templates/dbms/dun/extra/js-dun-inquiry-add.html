@@ -1,0 +1,56 @@
+<script>
+    $(function () {
+        bindInquiryB();
+        bindAddInquirypModalOk();
+    });
+
+    function bindInquiryB() {
+        $('#dun-clue-tb').on('click', '.inquiryB', function () {
+            console.log("bindSealUpB");
+            addInquiryIdN = $(this).parent().parent().attr('warrant-nid');
+            addInquirypModalLabelN = $(this).parent().parent().attr('warrant-num');
+            console.log(addInquiryIdN);
+            $('#addInquiryId').val(addInquiryIdN);
+            $('#addInquirypModalLabel').text(addInquirypModalLabelN);
+            $('#addInquirypModal').modal('show');
+        })
+    }
+
+    function bindAddInquirypModalOk() {
+        $('#addInquirypModalOk').click(function () {
+            var postData = {};
+            $('#addSealUpModal').find('input,select').each(function () {
+                var v = $(this).val();
+                var n = $(this).attr('name');
+                postData[n] = v;
+            });
+            var postDataStr = JSON.stringify(postData);
+            console.log(postDataStr);
+            $.ajax({
+                url: '/dbms/dun/inquiry/add/',
+                type: 'POST',
+                data: {'postDataStr': postDataStr},
+                dataType: 'JSON',
+                success: function (arg) {
+                    console.log(arg);
+                    if (arg.status) {
+                        $('#addSealUpModal').modal('hide');
+                        alert(arg.message);
+                        window.location.reload();
+                    } else {
+                        alert(arg.message);
+                        $('#e_inquiry_type').text(arg.forme.inquiry_type);
+                        $('#e_inquiry_date').text(arg.forme.inquiry_date);
+                        $('#e_inquiry_detail').text(arg.forme.inquiry_detail);
+                    }
+                }
+            })
+        })
+    }
+</script>
+
+
+
+
+
+

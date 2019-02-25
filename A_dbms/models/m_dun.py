@@ -226,8 +226,9 @@ class Seal(models.Model):
     SEAL_STATE_LIST = ((1, '诉前保全'), (5, '首次首封'), (11, '首次轮封'), (21, '续查封'),
                        (51, '解除查封'), (99, '注销'))
     seal_state = models.IntegerField(verbose_name='查封状态', choices=SEAL_STATE_LIST)
-    seal_date = models.DateField(verbose_name='最近查封日', blank=True, null=True)
-    due_date = models.DateField(verbose_name='查封到期日', blank=True, null=True)
+    seal_date = models.DateField(verbose_name='_最近查封日', blank=True, null=True)
+    due_date = models.DateField(verbose_name='_查封到期日', blank=True, null=True)
+    inquiry_date = models.DateField(verbose_name='_最近查询日', blank=True, null=True)
     seal_remark = models.CharField(verbose_name='备注', max_length=64, blank=True, null=True)
 
     sealor = models.ForeignKey(to='Employees', verbose_name="创建人",

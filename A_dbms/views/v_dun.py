@@ -96,6 +96,7 @@ def dun_scan(request, dun_id):  # 查看合同
     from_standing_add = forms.FormStandingAdd()  # 添加追偿台账
     form_charge_add = forms.FormChargeAdd()  # 追偿费用
     form_retrieve_add = forms.FormRetrieveAdd()  # 案款回收
+    form_inquiry_add = forms.FormInquiryAdd() #查询
     return render(request, 'dbms/dun/dun-scan.html', locals())
 
 

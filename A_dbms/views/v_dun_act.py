@@ -142,6 +142,58 @@ def sealup_add_ajax(request):  # 修改项目ajax
     return HttpResponse(result)
 
 
+# -----------------------------查询情况ajax------------------------#
+@login_required
+def inquiry_add_ajax(request):
+    print(__file__, '---->def inquiry_add_ajax')
+    response = {'status': True, 'message': None, 'forme': None, }
+
+    post_data_str = request.POST.get('postDataStr')
+    post_data = json.loads(post_data_str)
+    print('post_data:', post_data)
+    dun_id = int(post_data['dun_id'])
+    dun_obj = models.Dun.objects.get(id=dun_id)
+    warrant_id = int(post_data['warrant_id'])
+    warrant_obj = models.Warrants.objects.get(id=warrant_id)
+    '''DUN_STAGE_LIST = ((1, '起诉'), (11, '判决'), (21, '执行'), (31, '和解结案'), 
+    (41, '终止执行'), (99, '注销'))'''
+    dun_stage = dun_obj.dun_stage
+    if not dun_stage == 99:
+        form_inquiry_add = forms.FormInquiryAdd(post_data)  # 查询
+        if form_inquiry_add.is_valid():
+            inquiry_cleaned = form_inquiry_add.cleaned_data
+            inquiry_date = inquiry_cleaned['inquiry_date']
+            try:
+                with transaction.atomic():
+                    default = {
+                        'dun_id': dun_id, 'warrant_id': warrant_id,
+                        'inquiry_date': inquiry_date,
+                        'sealor': request.user}
+                    seal_obj, created = models.Seal.objects.update_or_create(
+                        dun_id=dun_id, warrant_id=warrant_id, defaults=default)
+                    models.Inquiry.objects.create(
+                        seal=seal_obj, inquiry_type=inquiry_cleaned['inquiry_type'], inquiry_date=inquiry_date,
+                        inquiry_detail=inquiry_cleaned['inquiry_detail'],
+                        inquiryor=request.user)
+                if created:
+                    response['message'] = '成功创建查询信息！'
+                else:
+                    response['message'] = '成功更新查询信息！'
+            except Exception as e:
+                response['status'] = False
+                response['message'] = '查询信息创建失败：%s！' % str(e)
+        else:
+            response['status'] = False
+            response['message'] = '表单信息有误！！！'
+            response['forme'] = form_inquiry_add.errors
+    else:
+        response['status'] = False
+        response['message'] = '追偿项目状态为：%s，无法修改！！！' % dun_stage
+
+    result = json.dumps(response, ensure_ascii=False)
+    return HttpResponse(result)
+
+
 # -----------------------------追偿台账添加ajax------------------------#
 @login_required
 def standing_add_ajax(request):
