@@ -20,9 +20,7 @@
                 postData[n] = v;
             });
             var postDataStr = JSON.stringify(postData);
-
             console.log(postDataStr);
-
             $.ajax({
                 url: '/dbms/compensatory/add/',
                 type: 'POST',

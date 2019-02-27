@@ -11,11 +11,11 @@
         </thead>
         <tbody>
         <tr>
-            <td>{{ article_obj.get_sign_type_display }}</td>
-            <td>{{ article_obj.rcd_opinion }}</td>
-            <td>{{ article_obj.convenor_opinion }}</td>
-            <td>{{ article_obj.sign_detail }}</td>
-            <td>{{ article_obj.sign_date }}</td>
+            <td>{{ article_obj.get_sign_type_display|default_if_none:"" }}</td>
+            <td>{{ article_obj.rcd_opinion|default_if_none:"" }}</td>
+            <td>{{ article_obj.convenor_opinion|default_if_none:"" }}</td>
+            <td>{{ article_obj.sign_detail|default_if_none:"" }}</td>
+            <td>{{ article_obj.sign_date|default_if_none:"" }}</td>
         <tr>
         </tbody>
     </table>

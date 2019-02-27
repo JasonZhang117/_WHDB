@@ -1,0 +1,28 @@
+<div class="table-responsive">
+    <table class="table table-bordered table-hover table-condensed active">
+        <thead>
+        <tr style="text-align: center">
+            <th>被告名称</th>
+            <th>联系地址</th>
+            <th>联系电话</th>
+            <th>联系人</th>
+            <th>操作</th>
+        </tr>
+        </thead>
+        <tbody id="dun-defendant-tb">
+        {% for custom in dun_obj.custom.all %}
+            <tr custom-nid="{{ custom.id }}" custom-num="{{ custom.name }}">
+                <td>{{ custom.name }}</td>
+                <td>{{ custom.contact_addr }}</td>
+                <td>{{ custom.contact_num }}</td>
+                <td>{{ custom.linkman }}</td>
+                {% if PAGE_TITLE == '追偿管理' %}
+                    <td>
+                        <a class="btn btn-primary btn-xs delDefendantB">删除</a>
+                    </td>
+                {% endif %}
+            <tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>

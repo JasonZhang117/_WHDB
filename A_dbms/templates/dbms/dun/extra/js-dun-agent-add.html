@@ -1,0 +1,60 @@
+<script>
+    $(function () {
+        bindAddAgentB();
+        bindAddAgentModalOk();
+
+    });
+
+    function bindAddAgentB() {
+        $('#addAgentB').click(function () {
+            console.log("bindAddClueB")
+            $('#addAgentModal').modal('show');
+        })
+    }
+
+    function bindAddAgentModalOk() {
+        $('#addAgentModalOk').click(function () {
+            var postData = {};
+
+            $('#addAgentModal').find('input,select').each(function () {
+                var v = $(this).val();
+                var n = $(this).attr('name');
+                postData[n] = v;
+            });
+            var agentItem = $('#id_agent_item').val();
+            var feeScale = $('#id_fee_scale').val();
+            postData['agent_item'] = agentItem;
+            postData['fee_scale'] = feeScale;
+            var postDataStr = JSON.stringify(postData);
+            console.log(postDataStr);
+            $.ajax({
+                url: '/dbms/dun/agent/add/',
+                type: 'POST',
+                data: {'postDataStr': postDataStr},
+                success: function (arg) {
+                    var dict = JSON.parse(arg);
+                    console.log(dict);
+                    if (dict.status) {
+                        $('#addAgentModal').modal('hide');
+                        alert(dict.message);
+                        window.location.reload();
+                    } else {
+                        alert(dict.message);
+                        $('#e_agent_agree').text(dict.forme.agent_agree);
+                        $('#e_agent_item').text(dict.forme.agent_item);
+                        $('#e_fee_scale').text(dict.forme.fee_scale);
+                        $('#e_agent_date').text(dict.forme.agent_date);
+                        $('#e_due_date').text(dict.forme.due_date);
+                        $('#e_agent_remark').text(dict.forme.agent_remark);
+                    }
+                }
+            })
+        })
+    }
+</script>
+
+
+
+
+
+

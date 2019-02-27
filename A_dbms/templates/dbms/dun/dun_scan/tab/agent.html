@@ -5,8 +5,8 @@
             <th>合同编号</th>
             <th>代理事项</th>
             <th>收费标准</th>
-            <th>期限(年)</th>
             <th>代理日期</th>
+            <th>到期日</th>
             <th>备注</th>
             <th>合同状态</th>
         </tr>
@@ -17,10 +17,10 @@
                 <td>{{ agent.agent_agree }}</td>
                 <td>{{ agent.agent_item }}</td>
                 <td>{{ agent.fee_scale }}</td>
-                <td>{{ agent.agent_term }}</td>
                 <td>{{ agent.agent_date }}</td>
+                <td>{{ agent.due_date }}</td>
                 <td>{{ agent.agent_remark }}</td>
-                <td>{{ agent.get_agent_state_display }}</td>
+                <td>{{ agent.get_agent_state_display|default_if_none:"" }}</td>
             <tr>
         {% endfor %}
 

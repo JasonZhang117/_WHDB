@@ -7,10 +7,10 @@
     function bindSealUpB() {
         $('#dun-clue-tb').on('click', '.sealUpB', function () {
             console.log("bindSealUpB");
-            addSealUpId = $(this).parent().parent().attr('warrant-nid');
+            addSealUpIdN = $(this).parent().parent().attr('warrant-nid');
             addSealUpModalLabel = $(this).parent().parent().attr('warrant-num');
-            console.log(addSealUpId);
-            $('#addSealUpId').val(addSealUpId);
+            console.log(addSealUpIdN);
+            $('#addSealUpId').val(addSealUpIdN);
             $('#addSealUpModalLabel').text(addSealUpModalLabel);
             $('#addSealUpModal').modal('show');
         })

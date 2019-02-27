@@ -23,10 +23,15 @@ class Customes(models.Model):  # 客户
 
     lately_date = models.DateField(verbose_name='最近调查', null=True, blank=True)
 
+    CUSTOM_DUN_LIST = ((1, '正常'), (11, '被告'), (99, '注销'))
+    custom_dun_state = models.IntegerField(verbose_name='_风险分类', choices=CUSTOM_DUN_LIST, default=1)
+
     credit_amount = models.FloatField(verbose_name='_授信总额', default=0)
     custom_flow = models.FloatField(verbose_name='_流贷余额', default=0)
     custom_accept = models.FloatField(verbose_name='_承兑余额', default=0)
     custom_back = models.FloatField(verbose_name='_保函余额', default=0)
+    CUSTOM_STATE_LIST = ((1, '正常'), (99, '注销'))
+    custom_state = models.IntegerField(verbose_name='_风险分类', choices=CUSTOM_STATE_LIST, default=1)
     custom_buildor = models.ForeignKey(to='Employees', verbose_name="_创建者",
                                        on_delete=models.PROTECT, default=1,
                                        related_name='custom_buildor_employee')

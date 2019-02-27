@@ -1,0 +1,54 @@
+<script>
+    $(function () {
+        bindAddStaffB();
+        bindAddStaffModalOk();
+
+    });
+
+    function bindAddStaffB() {
+        $('#addStaffB').click(function () {
+            console.log("bindAddStaffB")
+            $('#addStaffModal').modal('show');
+        })
+    }
+
+    function bindAddStaffModalOk() {
+        $('#addStaffModalOk').click(function () {
+            var postData = {};
+
+            $('#addStaffModal').find('input,select').each(function () {
+                var v = $(this).val();
+                var n = $(this).attr('name');
+                postData[n] = v;
+            });
+            var postDataStr = JSON.stringify(postData);
+            console.log(postDataStr);
+            $.ajax({
+                url: '/dbms/dun/staff/add/',
+                type: 'POST',
+                data: {'postDataStr': postDataStr},
+                success: function (arg) {
+                    var dict = JSON.parse(arg);
+                    console.log(dict);
+                    if (dict.status) {
+                        $('#addStaffModal').modal('hide');
+                        alert(dict.message);
+                        window.location.reload();
+                    } else {
+                        alert(dict.message);
+                        $('#e_staff_name').text(dict.forme.staff_name);
+                        $('#e_staff_type').text(dict.forme.staff_type);
+                        $('#e_contact_number').text(dict.forme.contact_number);
+                        $('#e_staff_remark').text(dict.forme.staff_remark);
+                    }
+                }
+            })
+        })
+    }
+</script>
+
+
+
+
+
+

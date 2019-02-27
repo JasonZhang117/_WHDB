@@ -1,0 +1,56 @@
+<script>
+    $(function () {
+        bindAddJudgmentB();
+        bindAddJudgmentModalOk();
+
+    });
+
+    function bindAddJudgmentB() {
+        $('#addJudgmentB').click(function () {
+            console.log("bindAddClueB")
+            $('#addJudgmentModal').modal('show');
+        })
+    }
+
+    function bindAddJudgmentModalOk() {
+        $('#addJudgmentModalOk').click(function () {
+            var postData = {};
+
+            $('#addJudgmentModal').find('input,select').each(function () {
+                var v = $(this).val();
+                var n = $(this).attr('name');
+                postData[n] = v;
+            });
+            var judgmentDetail = $('#id_judgment_detail').val();
+            postData['judgment_detail'] = judgmentDetail;
+            var postDataStr = JSON.stringify(postData);
+            console.log(postDataStr);
+            $.ajax({
+                url: '/dbms/dun/judgment/add/',
+                type: 'POST',
+                data: {'postDataStr': postDataStr},
+                success: function (arg) {
+                    var dict = JSON.parse(arg);
+                    console.log(dict);
+                    if (dict.status) {
+                        $('#addJudgmentModal').modal('hide');
+                        alert(dict.message);
+                        window.location.reload();
+                    } else {
+                        alert(dict.message);
+                        $('#e_judgment_file').text(dict.forme.judgment_file);
+                        $('#e_judgment_detail').text(dict.forme.judgment_detail);
+                        $('#e_judgment_unit').text(dict.forme.judgment_unit);
+                        $('#e_judgment_date').text(dict.forme.judgment_date);
+                    }
+                }
+            })
+        })
+    }
+</script>
+
+
+
+
+
+

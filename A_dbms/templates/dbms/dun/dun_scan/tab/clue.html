@@ -36,7 +36,13 @@
                         {% endif %}
                     {% endfor %}
                 </td>
-                <td>{{ staff.staff_remark }}</td>
+                <td>
+                    {% for seal in dun_obj.seal_dun.all %}
+                        {% if seal.warrant.id == warrant.id %}
+                            {{ seal.inquiry_date|default_if_none:"" }}
+                        {% endif %}
+                    {% endfor %}
+                </td>
                 <td>{{ staff.staff_remark }}</td>
                 {% if PAGE_TITLE == '追偿管理' %}
                     <td>

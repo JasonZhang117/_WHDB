@@ -6,7 +6,6 @@
         <li role="presentation">
             <a href="#compensat" style="background-color: #f5f5f5"
                aria-controls="profile" role="tab" data-toggle="tab">代偿情况</a></li>
-
         <li role="presentation">
             <a href="#agent" style="background-color: #f5f5f5"
                aria-controls="profile" role="tab" data-toggle="tab">代理协议</a></li>
@@ -14,23 +13,26 @@
             <a href="#staff" style="background-color: #f5f5f5"
                aria-controls="settings" role="tab" data-toggle="tab">联系人</a></li>
         <li role="presentation">
+            <a href="#defendant" style="background-color: #f5f5f5"
+               aria-controls="settings" role="tab" data-toggle="tab">被告</a></li>
+        <li role="presentation">
             <a href="#charge" style="background-color: #f5f5f5"
                aria-controls="messages" role="tab" data-toggle="tab">追偿费用</a></li>
-        <li role="presentation">
-            <a href="#judgment" style="background-color: #f5f5f5"
-               aria-controls="messages" role="tab" data-toggle="tab">判决</a></li>
         <li role="presentation">
             <a href="#retrieve" style="background-color: #f5f5f5"
                aria-controls="messages" role="tab" data-toggle="tab">案款回收</a></li>
         <li role="presentation">
-            <a href="#clue" style="background-color: #f5f5f5"
-               aria-controls="settings" role="tab" data-toggle="tab">财产线索</a></li>
+            <a href="#judgment" style="background-color: #f5f5f5"
+               aria-controls="messages" role="tab" data-toggle="tab">判决书</a></li>
         <li role="presentation">
             <a href="#stage" style="background-color: #f5f5f5"
-               aria-controls="settings" role="tab" data-toggle="tab">追偿流程</a></li>
-        <li role="presentation" class="active">
+               aria-controls="settings" role="tab" data-toggle="tab">资料目录</a></li>
+        <li role="presentation">
             <a href="#standing" style="background-color: #f5f5f5"
                aria-controls="messages" role="tab" data-toggle="tab">追偿台账</a></li>
+        <li role="presentation" class="active">
+            <a href="#clue" style="background-color: #f5f5f5"
+               aria-controls="settings" role="tab" data-toggle="tab">财产线索</a></li>
 
     </ul>
     <!-- Tab panes -->
@@ -41,18 +43,20 @@
             {% include 'dbms/dun/dun_scan/tab/agent.html' %} </div>
         <div role="tabpanel" class="tab-pane" id="staff"> <!--联系人-->
             {% include 'dbms/dun/dun_scan/tab/staff.html' %} </div>
+        <div role="tabpanel" class="tab-pane" id="defendant"> <!--被告-->
+            {% include 'dbms/dun/dun_scan/tab/defendant.html' %} </div>
         <div role="tabpanel" class="tab-pane" id="charge"> <!--追偿费用-->
             {% include 'dbms/dun/dun_scan/tab/charge.html' %} </div>
         <div role="tabpanel" class="tab-pane" id="judgment"> <!--判决-->
             {% include 'dbms/dun/dun_scan/tab/judgment.html' %} </div>
         <div role="tabpanel" class="tab-pane" id="retrieve"> <!--案款回收-->
             {% include 'dbms/dun/dun_scan/tab/retrieve.html' %} </div>
-          <div role="tabpanel" class="tab-pane" id="clue"> <!--财产线索-->
-            {% include 'dbms/dun/dun_scan/tab/clue.html' %} </div>
         <div role="tabpanel" class="tab-pane" id="stage"> <!--追偿流程-->
             {% include 'dbms/dun/dun_scan/tab/stage.html' %} </div>
-        <div role="tabpanel" class="tab-pane active" id="standing"> <!--追偿台账-->
+        <div role="tabpanel" class="tab-pane" id="standing"> <!--追偿台账-->
             {% include 'dbms/dun/dun_scan/tab/standing.html' %} </div>
+        <div role="tabpanel" class="tab-pane active" id="clue"> <!--财产线索-->
+            {% include 'dbms/dun/dun_scan/tab/clue.html' %} </div>
 
     </div>
 </div>

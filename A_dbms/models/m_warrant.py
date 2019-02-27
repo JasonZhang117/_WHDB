@@ -11,7 +11,7 @@ class Warrants(models.Model):  # 担保物
     '''其他-存货、设备、合格证、'''
     warrant_typ = models.IntegerField(verbose_name='权证类型', choices=WARRANT_TYP_LIST, default=1)
 
-    EVALUATE_STATE_LIST = ((1, '机构评估'), (11, '机构预估'), (21, '综合询价'), (31, '购买成本'))
+    EVALUATE_STATE_LIST = ((1, '机构评估'), (11, '机构预估'), (21, '综合询价'), (31, '购买成本'), (41, '拍卖评估'))
     evaluate_state = models.IntegerField(verbose_name='评估方式', choices=EVALUATE_STATE_LIST, null=True, blank=True)
     evaluate_value = models.FloatField(verbose_name='评估价值', null=True, blank=True)
     evaluate_date = models.DateField(verbose_name='评估日期', null=True, blank=True)
@@ -24,13 +24,15 @@ class Warrants(models.Model):  # 担保物
     storage_explain = models.CharField(verbose_name='出入库说明', max_length=128, blank=True, null=True)
 
     inquiry_date = models.DateField(verbose_name='最近查询日', blank=True, null=True)
-    inquiry_remark = models.CharField(verbose_name='查询情况', max_length=64, blank=True, null=True)
+    inquiry_detail = models.TextField(verbose_name='查询情况', null=True, blank=True)
 
     auction_date = models.DateField(verbose_name='拍卖日期', blank=True, null=True)
+    listing_price = models.FloatField(verbose_name='挂网价格', blank=True, null=True)
     auction_remark = models.CharField(verbose_name='拍卖情况', max_length=64, blank=True, null=True)
     AUCTION_STATE_LIST = (
-        (1, '正常'), (5, '挂网'), (11, '成交'), (21, '流拍'), (31, '回转'), (99, '注销'))
+        (1, '正常'), (2, '冻结'), (3, '评估'), (5, '挂网'), (11, '成交'), (21, '流拍'), (31, '回转'), (99, '注销'))
     auction_state = models.IntegerField(verbose_name='_拍卖状态', choices=AUCTION_STATE_LIST, default=1)
+    transaction_date = models.DateField(verbose_name='成交日期', blank=True, null=True)
     auction_amount = models.FloatField(verbose_name='成交金额', blank=True, null=True)
 
     warrant_buildor = models.ForeignKey(to='Employees', verbose_name="创建者", default=1,

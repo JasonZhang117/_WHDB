@@ -104,8 +104,17 @@ class NotifyAdmin(admin.ModelAdmin):
 admin.site.register(models.Notify, NotifyAdmin)  # 放款通知
 admin.site.register(models.Repayments)  # 还款
 admin.site.register(models.Pigeonholes)  # 归档
+
+
 # -----------------------追偿-------------------------#
-admin.site.register(models.Compensatories)  # 代偿
+class CompensatoriesAdmin(admin.ModelAdmin):
+    list_display = ('title', 'compensatory_date', 'compensatory_capital', 'dun_state')  # 显示字段
+    list_per_page = 20  # 每页显示条目数
+    search_fields = ['title']  # 搜索字段
+    ordering = ['title']  # 排序字段
+
+
+admin.site.register(models.Compensatories, CompensatoriesAdmin)  # 代偿
 admin.site.register(models.Dun)  # 追偿
 admin.site.register(models.Agent)  # 代理情况
 admin.site.register(models.Staff)  # 人员模型

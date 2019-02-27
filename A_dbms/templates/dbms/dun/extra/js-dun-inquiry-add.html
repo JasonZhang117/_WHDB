@@ -1,12 +1,13 @@
 <script>
     $(function () {
         bindInquiryB();
+        bind_id_inquiry_type();
         bindAddInquirypModalOk();
     });
 
     function bindInquiryB() {
         $('#dun-clue-tb').on('click', '.inquiryB', function () {
-            console.log("bindSealUpB");
+            console.log("bindInquiryB");
             addInquiryIdN = $(this).parent().parent().attr('warrant-nid');
             addInquirypModalLabelN = $(this).parent().parent().attr('warrant-num');
             console.log(addInquiryIdN);
@@ -16,14 +17,38 @@
         })
     }
 
+    function bind_id_inquiry_type() {
+        $('#id_inquiry_type').change(function () {
+            console.log("bind_id_warrant_typ");
+            $('.inquiry-extend').hide();
+            var selected_inquiry_typ = $('#id_inquiry_type').val();
+            switch (selected_inquiry_typ) {
+                case ('3'): <!--拍卖评估-->
+                    $('#form_evaluate_add').show();
+                    break;
+                case ('5'):<!--拍卖挂网-->
+                    $('#form_hanging_add').show();
+                    break;
+                case ('11'):<!--拍卖成交-->
+                    $('#form_turn_add').show();
+                    break;
+                default:
+                    $('.inquiry-extend').hide()
+            }
+        })
+    }
+
+
     function bindAddInquirypModalOk() {
         $('#addInquirypModalOk').click(function () {
             var postData = {};
-            $('#addSealUpModal').find('input,select').each(function () {
+            $('#addInquirypModal').find('input,select').each(function () {
                 var v = $(this).val();
                 var n = $(this).attr('name');
                 postData[n] = v;
             });
+            var inquiryDetail = $('#id_inquiry_detail').val();
+            postData['inquiry_detail'] = inquiryDetail;
             var postDataStr = JSON.stringify(postData);
             console.log(postDataStr);
             $.ajax({
@@ -34,7 +59,7 @@
                 success: function (arg) {
                     console.log(arg);
                     if (arg.status) {
-                        $('#addSealUpModal').modal('hide');
+                        $('#addInquirypModal').modal('hide');
                         alert(arg.message);
                         window.location.reload();
                     } else {

@@ -1,0 +1,51 @@
+<script>
+    $(function () {
+        bindAddDunB();
+        bindAddDunModalOk();
+
+    });
+
+    function bindAddDunB() {
+        $('#addDunB').click(function () {
+            console.log("bindAddClueB");
+            $('#addDunModal').modal('show');
+        })
+    }
+
+    function bindAddDunModalOk() {
+        $('#addDunModalOk').click(function () {
+            var postData = {};
+
+            $('#addDunModal').find('input,select').each(function () {
+                var v = $(this).val();
+                var n = $(this).attr('name');
+                postData[n] = v;
+            });
+            var postDataStr = JSON.stringify(postData);
+            console.log(postDataStr);
+            $.ajax({
+                url: '/dbms/dun/add/',
+                type: 'POST',
+                data: {'postDataStr': postDataStr},
+                dataType: 'JSON',
+                success: function (arg) {
+                    console.log(arg);
+                    if (arg.status) {
+                        $('#addDunModal').modal('hide');
+                        alert(arg.message);
+                        window.location.reload();
+                    } else {
+                        alert(arg.message);
+                        $('#e_cmpensatory').text(arg.forme.cmpensatory);
+                    }
+                }
+            })
+        })
+    }
+</script>
+
+
+
+
+
+

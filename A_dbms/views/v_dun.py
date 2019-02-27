@@ -80,6 +80,8 @@ def dun(request, *args, **kwargs):  # 代偿列表
     except EmptyPage:
         p_list = paginator.page(paginator.num_pages)
 
+    form_dun_add = forms.FormDunAdd()  # 联系人
+
     return render(request, 'dbms/dun/dun.html', locals())
 
 
@@ -92,11 +94,19 @@ def dun_scan(request, dun_id):  # 查看合同
     dun_obj = models.Dun.objects.get(id=dun_id)
 
     from_clue_add = forms.FormClueAdd()  # 财产线索
+    from_custom_add = forms.FormCustomAdd()  # 被告人
     from_sealup_add = forms.FormSealupAdd()  # 查封情况
     from_standing_add = forms.FormStandingAdd()  # 添加追偿台账
     form_charge_add = forms.FormChargeAdd()  # 追偿费用
     form_retrieve_add = forms.FormRetrieveAdd()  # 案款回收
-    form_inquiry_add = forms.FormInquiryAdd() #查询
+    form_inquiry_add = forms.FormInquiryAdd()  # 查询
+    form_evaluate_add = forms.FormInquiryEvaluateAdd()  # 评估
+    form_hanging_add = forms.FormInquiryHangingAdd()  # 挂网
+    form_turn_add = forms.FormInquiryTurnAdd()  # 成交
+    form_stage_add = forms.FormStageAdd()  # 目录
+    form_staff_add = forms.FormStaffAdd()  # 联系人
+    form_agent_add = forms.FormAgentAdd()  # 代理合同
+    form_judgment_add = forms.FormJudgmentAdd()  # 判决裁定
     return render(request, 'dbms/dun/dun-scan.html', locals())
 
 
@@ -164,11 +174,14 @@ def compensatory_add_ajax(request):  # 代偿添加ajax
                 response['status'] = False
                 response['message'] = '代偿本金(%s)超过剩余未偿还本金(%s)，代偿失败!' % (compensatory_capital, residual_amount)
             else:
+                costom_agree_num = provide_obj.notify.agree.agree_num
+                costom_short_name = provide_obj.notify.agree.lending.summary.custom.short_name
+                title = '%s_%s_%s' % (costom_short_name, costom_agree_num, compensatory_amount)
                 try:
                     compensatory_date = comp_cleaned['compensatory_date']
                     with transaction.atomic():
                         compensatorye_obj = models.Compensatories.objects.create(
-                            provide=provide_obj, compensatory_date=compensatory_date,
+                            provide=provide_obj, title=title, compensatory_date=compensatory_date,
                             compensatory_capital=compensatory_capital, compensatory_interest=compensatory_interest,
                             default_interest=default_interest,
                             compensatory_amount=compensatory_amount, dun_state=1, compensator=request.user)
@@ -246,17 +259,17 @@ def overdue_seal(request, *args, **kwargs):
     '''SEAL_STATE_LIST = ((1, '诉前保全'), (5, '首次首封'), (11, '首次轮封'), (21, '续查封'),
                            (51, '解除查封'), (99, '注销'))'''
     overdue_seal_list = models.Seal.objects.filter(
-        seal_state__in=[1, 5, 11, 21], due_date__lt=datetime.date.today()).order_by('due_date')   # 逾期协议
+        seal_state__in=[1, 5, 11, 21], due_date__lt=datetime.date.today()).order_by('due_date')  # 逾期协议
     '''搜索'''
     search_key = request.GET.get('_s')
     if search_key:
-        search_fields = ['dun__warrant__warrant_num',]
+        search_fields = ['dun__warrant__warrant_num', ]
         q = Q()
         q.connector = 'OR'
         for field in search_fields:
             q.children.append(("%s__contains" % field, search_key))
         overdue_seal_list = overdue_seal_list.filter(q)
-    print("overdue_seal_list:",overdue_seal_list)
+    print("overdue_seal_list:", overdue_seal_list)
     provide_acount = overdue_seal_list.count()
     '''分页'''
     paginator = Paginator(overdue_seal_list, 19)
@@ -283,7 +296,7 @@ def soondue_seal(request, *args, **kwargs):
     '''搜索'''
     search_key = request.GET.get('_s')
     if search_key:
-        search_fields = ['dun__warrant__warrant_num',]
+        search_fields = ['dun__warrant__warrant_num', ]
         q = Q()
         q.connector = 'OR'
         for field in search_fields:

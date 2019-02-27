@@ -1,0 +1,23 @@
+<div id="form_staff_add">
+
+    <div class="form-group"><!--目录类型-->
+        <label for="id_staff_name" class="col-sm-3 control-label">{{ form_staff_add.staff_name.label }}：</label>
+        <div class="col-sm-9">{{ form_staff_add.staff_name }}</div>
+        <label id="e_staff_name" class="pull-right">{{ form_staff_add.staff_name.errors }}</label>
+    </div>
+    <div class="form-group"><!--人员类别-->
+        <label for="id_staff_type" class="col-sm-3 control-label">{{ form_staff_add.staff_type.label }}：</label>
+        <div class="col-sm-9">{{ form_staff_add.staff_type }}</div>
+        <label id="e_staff_type" class="pull-right">{{ form_staff_add.staff_type.errors }}</label>
+    </div>
+    <div class="form-group"><!--联系电话-->
+        <label for="id_contact_number" class="col-sm-3 control-label">{{ form_staff_add.contact_number.label }}：</label>
+        <div class="col-sm-9">{{ form_staff_add.contact_number }}</div>
+        <label id="e_contact_number" class="pull-right">{{ form_staff_add.contact_number.errors }}</label>
+    </div>
+    <div class="form-group"><!--备注-->
+        <label for="id_staff_remark" class="col-sm-3 control-label">{{ form_staff_add.staff_remark.label }}：</label>
+        <div class="col-sm-9">{{ form_staff_add.staff_remark }}</div>
+        <label id="e_staff_remark" class="pull-right">{{ form_staff_add.staff_remark.errors }}</label>
+    </div>
+</div>

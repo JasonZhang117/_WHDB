@@ -1,0 +1,24 @@
+<div class="modal fade" id="addAgentModal" tabindex="-1"
+     role="dialog" aria-labelledby="addAgentModal">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title" id="addAgentModalLabel">委托代理：{{ dun_obj.title }}
+                    <input style="display: none" name="dun_id" value="{{ dun_obj.id }}">
+                </h4>
+            </div>
+            <div class="modal-body">
+                <form class="form-horizontal">
+                    {% include 'dbms/dun/modl/mod_form/dun-agent-add.html' %}
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                <button type="button" class="btn btn-primary" id="addAgentModalOk">添加</button>
+            </div>
+        </div>
+    </div>
+</div>

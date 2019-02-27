@@ -1,0 +1,52 @@
+<script>
+    $(function () {
+        bindAddStageB();
+        bindAddStageModalOk();
+    });
+
+    function bindAddStageB() {
+        $('#addStageB').click(function () {
+            console.log("bindAddStageB")
+            $('#addStageModal').modal('show');
+        })
+    }
+
+    function bindAddStageModalOk() {
+        $('#addStageModalOk').click(function () {
+            var postData = {};
+            $('#addStageModal').find('input,select').each(function () {
+                var v = $(this).val();
+                var n = $(this).attr('name');
+                postData[n] = v;
+            });
+            var postDataStr = JSON.stringify(postData);
+            console.log(postDataStr);
+            $.ajax({
+                url: '/dbms/dun/stage/add/',
+                type: 'POST',
+                data: {'postDataStr': postDataStr},
+                dataType: 'JSON',
+                success: function (arg) {
+                    console.log(arg);
+                    if (arg.status) {
+                        $('#addStageModal').modal('hide');
+                        alert(arg.message);
+                        window.location.reload();
+                    } else {
+                        alert(arg.message);
+                        $('#e_stage_type').text(arg.forme.stage_type);
+                        $('#e_stage_file').text(arg.forme.stage_file);
+                        $('#e_stage_date').text(arg.forme.stage_date);
+                        $('#e_stage_remark').text(arg.forme.stage_remark);
+                    }
+                }
+            })
+        })
+    }
+</script>
+
+
+
+
+
+

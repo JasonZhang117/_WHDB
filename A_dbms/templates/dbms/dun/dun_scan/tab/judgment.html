@@ -6,17 +6,18 @@
             <th>判决内容</th>
             <th>发文单位</th>
             <th>日期</th>
-{#            <th>备注</th>#}
+            <th>操作</th>
         </tr>
         </thead>
-        <tbody>
+        <tbody id="dun-judgment-tb">
         {% for judgment in dun_obj.judgment_dun.all %}
-            <tr>
+            <tr judgment-nid="{{ judgment.id }}">
                 <td>{{ judgment.judgment_file }}</td>
                 <td>{{ judgment.judgment_detail }}</td>
                 <td>{{ judgment.judgment_unit }}</td>
                 <td>{{ judgment.judgment_date }}</td>
-{#                <td>{{ judgment.judgment_remark }}</td>#}
+                <td><a class="btn btn-primary btn-xs delJudgmentB">删除</a></td>
+
             <tr>
         {% endfor %}
 

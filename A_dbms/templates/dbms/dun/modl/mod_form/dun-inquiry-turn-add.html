@@ -1,0 +1,17 @@
+<div id="form_turn_add" class="inquiry-extend" style="display: none">
+
+    <div class="form-group"><!--成交日期-->
+        <label for="id_transaction_date"
+               class="col-sm-3 control-label">{{ form_turn_add.transaction_date.label }}：</label>
+        <div class="col-sm-9">{{ form_turn_add.transaction_date }}</div>
+        <label id="e_transaction_date" class="pull-right">{{ form_turn_add.transaction_date.errors }}</label>
+    </div>
+
+    <div class="form-group"><!--成交金额-->
+        <label for="id_auction_amount"
+               class="col-sm-3 control-label">{{ form_turn_add.auction_amount.label }}：</label>
+        <div class="col-sm-9">{{ form_turn_add.auction_amount }}</div>
+        <label id="e_auction_amount" class="pull-right">{{ form_turn_add.auction_amount.errors }}</label>
+    </div>
+
+</div>

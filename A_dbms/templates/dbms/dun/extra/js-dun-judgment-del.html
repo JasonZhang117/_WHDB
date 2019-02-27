@@ -1,0 +1,54 @@
+<script>
+    $(function () {
+        bindDelJudgmentB();
+        bindDelJudgmentModalOk();
+    });
+
+    function bindDelJudgmentB() {
+        $('#dun-judgment-tb').on('click', '.delJudgmentB', function () {
+            console.log("bindDelStageB");
+            delJudgmentIdN = $(this).parent().parent().attr('judgment-nid');
+            console.log(delJudgmentIdN);
+            $('#delJudgmentId').val(delJudgmentIdN);
+            $('#delJudgmentModal').modal('show');
+        })
+    }
+
+    function bindDelJudgmentModalOk() {
+        $('#delJudgmentModalOk').click(function () {
+            var postData = {};
+
+            $('#delJudgmentModal').find('input,select').each(function () {
+                var v = $(this).val();
+                var n = $(this).attr('name');
+                postData[n] = v;
+            });
+            var postDataStr = JSON.stringify(postData);
+            console.log(postDataStr);
+            $.ajax({
+                url: '/dbms/dun/judgment/del/',
+                type: 'POST',
+                data: {'postDataStr': postDataStr},
+                success: function (arg) {
+                    var dict = JSON.parse(arg);
+                    if (dict.status) {
+                        $('#delJudgmentModal').modal('hide');
+                        alert(dict.message);
+                        window.location.reload();
+                    } else {
+                        $('#delJudgmentModal').modal('hide');
+                        alert(dict.message);
+                        {#window.location.reload();#}
+                    }
+                }
+            })
+
+        })
+    }
+</script>
+
+
+
+
+
+

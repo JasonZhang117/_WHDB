@@ -125,9 +125,21 @@ urlpatterns = [
     path('dun/', views.dun, name='dun_all'),  # 菜单-追偿管理
     path('dun/<int:dun_stage>/', views.dun, name='dun'),
     path('dun/scan/<int:dun_id>/', views.dun_scan, name='dun_scan'),
+    path('dun/add/', views.dun_add_ajax, name='dun_add_ajax'),
     path('dun/clue/add/', views.clue_add_ajax, name='clue_add_ajax'),
     path('dun/clue/del/', views.clue_del_ajax, name='clue_del_ajax'),
+    path('dun/defendant/add/', views.defendant_add_ajax, name='defendant_add_ajax'),
+    path('dun/defendant/del/', views.defendant_del_ajax, name='defendant_del_ajax'),
+    path('dun/stage/add/', views.stage_add_ajax, name='stage_add_ajax'),
+    path('dun/stage/del/', views.stage_del_ajax, name='stage_del_ajax'),
+    path('dun/judgment/add/', views.judgment_add_ajax, name='judgment_add_ajax'),
+    path('dun/judgment/del/', views.judgment_del_ajax, name='judgment_del_ajax'),
+    path('dun/agent/add/', views.agent_add_ajax, name='agent_add_ajax'),
+    path('dun/staff/add/', views.staff_add_ajax, name='staff_add_ajax'),
+
     path('dun/sealup/add/', views.sealup_add_ajax, name='sealup_add_ajax'),
+    path('dun/inquiry/add/', views.inquiry_add_ajax, name='inquiry_add_ajax'),
+
     path('dun/seal/', views.seal, name='seal_all'),
     path('dun/seal/<int:seal_state>/', views.seal, name='seal'),
     path('dun/standing/add/', views.standing_add_ajax, name='standing_add_ajax'),

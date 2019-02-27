@@ -1,0 +1,18 @@
+<div id="form_evaluate_add" class="inquiry-extend" style="display: none">
+
+    <div class="form-group"><!--评估日期-->
+        <label for="id_evaluate_date"
+               class="col-sm-3 control-label">{{ form_evaluate_add.evaluate_date.label }}：</label>
+        <div class="col-sm-9">{{ form_evaluate_add.evaluate_date }}</div>
+        <label id="e_evaluate_date" class="pull-right">{{ form_evaluate_add.evaluate_date.errors }}</label>
+    </div>
+
+    <div class="form-group"><!--评估金额-->
+        <label for="id_evaluate_value"
+               class="col-sm-3 control-label">{{ form_evaluate_add.evaluate_value.label }}：</label>
+        <div class="col-sm-9">{{ form_evaluate_add.evaluate_value }}</div>
+        <label id="e_evaluate_value" class="pull-right">
+            {{ form_evaluate_add.evaluate_value.errors }}</label>
+    </div>
+
+</div>
