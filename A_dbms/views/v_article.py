@@ -12,6 +12,7 @@ from django.db.utils import IntegrityError
 from django.db import transaction
 from django.db.models import Avg, Min, Sum, Max, Count
 
+
 # -----------------------------项目列表------------------------------#
 @login_required
 def article(request, *args, **kwargs):  # 项目列表
@@ -71,7 +72,6 @@ def article(request, *args, **kwargs):  # 项目列表
     else:
         repayment_amount = 0
     balance = provide_amount - repayment_amount
-
 
     '''分页'''
     paginator = Paginator(article_list, 19)
@@ -139,7 +139,7 @@ def article_scan_agree(request, article_id, agree_id):  # 项目预览
 @login_required
 def article_scan_lending(request, article_id, lending_id):  # 项目预览
     print(__file__, '---->def article_scan_lending')
-    PAGE_TITLE = '查看项目'
+    PAGE_TITLE = '放款次序'
 
     SURE_LIST = [1, 2]
     HOUSE_LIST = [11, 21, 42, 52]
@@ -150,4 +150,7 @@ def article_scan_lending(request, article_id, lending_id):  # 项目预览
 
     article_obj = models.Articles.objects.get(id=article_id)
     lending_obj = models.LendingOrder.objects.get(id=lending_id)
+
+    form_agree_add = forms.ArticleAgreeAddForm()
+
     return render(request, 'dbms/article/article-scan-lending.html', locals())

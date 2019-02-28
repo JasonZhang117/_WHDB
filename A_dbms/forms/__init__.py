@@ -1,4 +1,4 @@
-from .f_article import (ArticlesAddForm, FeedbackAddForm, ArticleChangeForm)
+from .f_article import (ArticlesAddForm, FeedbackAddForm, ArticleChangeForm, ArticleAgreeAddForm)
 from .f_meeting import (
     MeetingAddForm, MeetingEditForm, MeetingAllotForm, SingleQuotaForm, MeetingArticleAddForm,
     SingleQuotaForm, FormLendingOrder)
@@ -14,7 +14,8 @@ from .f_agree import (AgreeAddForm, AddCounterForm, FormAgreeSign)
 from .f_provide import (FormCounterSignAdd, FormAscertainAdd, FormNotifyAdd, FormProvideAdd, FormPigeonholeAdd,
                         FormImplementAdd, FormPigeonholeNumAdd, FormRepaymentAdd)
 
-from .f_custom import (CustomAddForm, CustomCAddForm, CustomPAddForm, CustomEditForm, FormShareholderAdd)
+from .f_custom import (CustomAddForm, CustomCAddForm, CustomPAddForm, CustomEditForm, FormShareholderAdd,
+                       FormCustomSpouseAdd)
 from .f_interior import DepartmentForm, EmployeeForm
 from .f_review import FormRewiewPlanAdd, FormRewiewAdd
 from .f_dun import (FormDunAdd, FormCompensatoryAdd, FormClueAdd, FormSealupAdd, FormInquiryEvaluateAdd,

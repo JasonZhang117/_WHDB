@@ -1,9 +1,21 @@
 <div id="form_lendingstock_add" class="guarantee-extend" style="display: none">
 
-    <div class="form-group"><!--股权质押-->
+    <div class="form-ground"><!--股权质押-->
+        <label for="id_sure_stock"
+               class="col-sm-3 control-label">{{ form_lendingground_add.sure_ground.label }}：</label>
+        <div class="col-sm-9">
+            <select name="sure_stock" id="id_sure_stock" multiple="" required=""
+                    class="form-control search-id">
+            </select>
+        </div>
+        <label id="e_sure_stock" class="pull-right">{{ form_lendingground_add.sure_ground.errors }}</label>
+    </div>
+
+    <!--
+    <div class="form-group">
         <label for="id_sure_stock" class="col-sm-3 control-label">{{ form_lendingstock_add.sure_stock.label }}：</label>
         <div class="col-sm-9">{{ form_lendingstock_add.sure_stock }}</div>
         <label id="e_sure_stock" class="pull-right">{{ form_lendingstock_add.sure_stock.errors }}</label>
-    </div>
+    </div>股权质押-->
 
 </div>

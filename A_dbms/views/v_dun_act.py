@@ -48,7 +48,7 @@ def dun_add_ajax(request):  # 添加参评项目ajax
 
 # -----------------------添加财产线索ajax-------------------------#
 @login_required
-def clue_add_ajax(request):  # 添加参评项目ajax
+def clue_add_ajax(request):  #
     print(__file__, '---->def dun_clue_add_ajax')
     response = {'status': True, 'message': None, 'forme': None, }
     post_data_str = request.POST.get('postDataStr')

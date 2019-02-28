@@ -8,6 +8,12 @@
         {% include 'dbms/article/scan/article-summry.html' %}
         {% include 'dbms/article/scan/article-tab.html' %}
         {% include 'dbms/article/lending/article-lending-tab.html' %}
+        {% include 'dbms/article/modl/article-agree-add-mod.html' %}
+
     </div>
+
+    {% block extra-js %}
+        {% include 'dbms/agree/extra/js-agree-add.html' %}
+    {% endblock %}
 
 {% endblock %}

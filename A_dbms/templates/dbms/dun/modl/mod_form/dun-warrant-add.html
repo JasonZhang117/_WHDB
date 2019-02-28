@@ -1,9 +1,34 @@
 <div id="from_clue_add">
 
-    <div class="form-group"><!--查封资产-->
-        <label for="id_warrant" class="col-sm-3 control-label">{{ from_clue_add.warrant.label }}：</label>
-        <div class="col-sm-9">{{ from_clue_add.warrant }}</div>
-        <label id="e_warrant" class="pull-right">{{ from_clue_add.warrant.errors }}</label>
+
+    <div class="form-group" id="custom_search"><!--搜索框-->
+        <label>
+            <form class="navbar-form" style="display: inline">
+                <label class="col-sm-9 control-label">
+                    <input type="search" name="search_warrant" class="form-control" placeholder="搜索权证信息"></label>
+                <label class="col-sm-3 control-label">
+                    <a id="searchWarrantB" class="btn btn-primary btn-sm">搜索</a>
+                </label>
+            </form>
+        </label>
     </div>
 
+
+    <div class="form-group"><!--查封资产-->
+        <label for="id_warrant" class="col-sm-3 control-label">{{ from_clue_add.warrant.label }}：</label>
+        <div class="col-sm-9">
+            <select name="warrant" id="id_warrant" multiple="" required="" class="form-control">
+                <!--<option value="" selected="">---------</option>-->
+            </select>
+        </div>
+        <label id="e_warrant" class="pull-right">{{ from_custom_add.custom.errors }}</label>
+    </div>
+
+    <!--
+    <div class="form-group">
+    <label for="id_warrant" class="col-sm-3 control-label">{{ from_clue_add.warrant.label }}：</label>
+    <div class="col-sm-9">{{ from_clue_add.warrant }}</div>
+    <label id="e_warrant" class="pull-right">{{ from_clue_add.warrant.errors }}</label>
+    </div>
+    -->
 </div>

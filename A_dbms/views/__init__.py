@@ -42,15 +42,15 @@ from .v_review import review, review_scan, review_plan_ajax, review_update_ajax
 # ----------------------v_dun追偿视图--------------------#
 from .v_dun import (compensatory, compensatory_scan, dun, dun_scan, seal, overdue_seal, soondue_seal,
                     compensatory_add_ajax)
-from .v_dun_act import (dun_add_ajax,clue_add_ajax, clue_del_ajax, sealup_add_ajax, standing_add_ajax,
+from .v_dun_act import (dun_add_ajax, clue_add_ajax, clue_del_ajax, sealup_add_ajax, standing_add_ajax,
                         standing_del_ajax, charge_add_ajax, charge_del_ajax, retrieve_add_ajax,
                         retrieve_del_ajax, inquiry_add_ajax, defendant_add_ajax, defendant_del_ajax,
-                        stage_add_ajax, stage_del_ajax, judgment_add_ajax, judgment_del_ajax,agent_add_ajax,
+                        stage_add_ajax, stage_del_ajax, judgment_add_ajax, judgment_del_ajax, agent_add_ajax,
                         staff_add_ajax)
 
 # ----------------------v_custom客户管理视图--------------------#
 from .v_custom import (custom, custom_scan)
-from .v_custom_act import (custom_add_ajax, custom_del_ajax, custom_edit_ajax, shareholder_add_ajax)
+from .v_custom_act import (custom_add_ajax, custom_del_ajax, custom_edit_ajax, shareholder_add_ajax, spouse_add_ajax)
 from .v_external import cooperative, soondue_cooperator, overdue_cooperator
 
 # 部门、员工
@@ -58,3 +58,5 @@ from .v_interior import department, department_add, department_edit
 from .v_interior import department_del
 from .v_interior import employee, employee_add, employee_edit, employee_del
 from .v_interior import employee_del_ajax
+
+from .v_search import search_custom_ajax, search_warrant_ajax, guarantee_warrant_ajax

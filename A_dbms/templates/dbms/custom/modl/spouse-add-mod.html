@@ -1,23 +1,23 @@
-<div class="modal fade" id="addWarrantModal" tabindex="-1"
-     role="dialog" aria-labelledby="addClueModal">
+<div class="modal fade" id="addCustomModal" tabindex="-1"
+     role="dialog" aria-labelledby="addSpouseModal">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
-                <h4 class="modal-title" id="addClueModalLabel">财产线索：{{ dun_obj.title }}
-                    <input style="display: none" name="dun_id" value="{{ dun_obj.id }}">
+                <h4 class="modal-title" id="addSpouseModalLabel">添加配偶
+                    <input style="display: none" name="custom_id" value="{{ custom_obj.id }}">
                 </h4>
             </div>
             <div class="modal-body">
                 <form class="form-horizontal">
-                    {% include 'dbms/dun/modl/mod_form/dun-warrant-add.html' %}
+                    {% include 'dbms/custom/modl/mod_form/spouse-add.html' %}
                 </form>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
-                <button type="button" class="btn btn-primary" id="addClueModalOk">添加</button>
+                <button type="button" class="btn btn-primary" id="addSpouseModalOk">添加</button>
             </div>
         </div>
     </div>

@@ -160,6 +160,7 @@ urlpatterns = [
     path('custom/del/', views.custom_del_ajax),
     path('custom/edit/', views.custom_edit_ajax),
     path('custom/shareholder/add/', views.shareholder_add_ajax),
+    path('custom/spouse/add/', views.spouse_add_ajax),
 
     # ------------------------------合作机构--------------------------------------#
     path('cooperative/', views.cooperative, name='cooperative_all'),  # 菜单-合作机构
@@ -178,5 +179,9 @@ urlpatterns = [
     path('department/add/', views.department_add, name='department_add'),
     path('department/edit/<int:department_id>/', views.department_edit, name='department_edit'),
     path('department/del/<int:department_id>/', views.department_del, name='department_del'),
+
+    path('search/custom/', views.search_custom_ajax, name='search_custom_ajax'),
+    path('search/warrant/', views.search_warrant_ajax, name='search_warrant_ajax'),
+    path('search/guarantee/', views.guarantee_warrant_ajax, name='guarantee_warrant_ajax'),
 
 ]

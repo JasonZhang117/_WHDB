@@ -133,6 +133,41 @@ def shareholder_add_ajax(request):
     return HttpResponse(result)
 
 
+# -----------------------股权信息添加-------------------------#
+@login_required
+def spouse_add_ajax(request):
+    print(__file__, '---->def spouse_add_ajax')
+    response = {'status': True, 'message': None, 'forme': None, }
+    post_data_str = request.POST.get('postDataStr')
+    post_data = json.loads(post_data_str)
+    print('post_data:', post_data)
+    custom_obj = models.Customes.objects.get(id=post_data['custom_id'])
+    '''CUSTOM_STATE_LIST = ((1, '正常'), (99, '注销'))'''
+    custom_state = custom_obj.custom_state
+    if custom_state == 1:
+        form_spouse_add = forms.FormCustomSpouseAdd(post_data)
+        if form_spouse_add.is_valid():
+            spouse_cleaned = form_spouse_add.cleaned_data
+            spouse_add_obj = models.Customes.objects.get(id=spouse_cleaned['spouses'])
+            try:
+                with transaction.atomic():
+                    models.CustomesP.objects.filter(custome=custom_obj).update(spouses=spouse_add_obj)
+                    models.CustomesP.objects.filter(custome=spouse_add_obj).update(spouses=custom_obj)
+                response['message'] = '成功添加配偶！'
+            except Exception as e:
+                response['status'] = False
+                response['message'] = '添加配偶失败：%s' % str(e)
+        else:
+            response['status'] = False
+            response['message'] = '表单信息有误！！！'
+            response['forme'] = form_spouse_add.errors
+    else:
+        response['status'] = False
+        response['message'] = '客户类型为：%s，无法添加配偶！！！' % custom_state
+    result = json.dumps(response, ensure_ascii=False)
+    return HttpResponse(result)
+
+
 # -----------------------客户删除-------------------------#
 @login_required
 def custom_del_ajax(request):

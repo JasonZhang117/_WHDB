@@ -1,22 +1,22 @@
 <script>
     $(function () {
-        bindAddClueB();
-        bindAddClueModalOk();
+        bindAddSpouseB();
+        bindAddSpouseModalOk();
 
     });
 
-    function bindAddClueB() {
-        $('#addClueB').click(function () {
-            console.log("bindAddClueB");
-            $('#addWarrantModal').modal('show');
+    function bindAddSpouseB() {
+        $('#addSpouseB').click(function () {
+            console.log("bindAddSpouseB");
+            $('#addCustomModal').modal('show');
         })
     }
 
-    function bindAddClueModalOk() {
-        $('#addClueModalOk').click(function () {
+    function bindAddSpouseModalOk() {
+        $('#addSpouseModalOk').click(function () {
             var postData = {};
 
-            $('#addWarrantModal').find('input,select').each(function () {
+            $('#addCustomModal').find('input,select').each(function () {
                 var v = $(this).val();
                 var n = $(this).attr('name');
                 postData[n] = v;
@@ -24,19 +24,19 @@
             var postDataStr = JSON.stringify(postData);
             console.log(postDataStr);
             $.ajax({
-                url: '/dbms/dun/clue/add/',
+                url: '/dbms/custom/spouse/add/',
                 type: 'POST',
                 data: {'postDataStr': postDataStr},
                 dataType: 'JSON',
                 success: function (arg) {
                     console.log(arg);
                     if (arg.status) {
-                        $('#addWarrantModal').modal('hide');
+                        $('#addCustomModal').modal('hide');
                         alert(arg.message);
                         window.location.reload();
                     } else {
                         alert(arg.message);
-                        $('#e_warrant').text(arg.forme.warrant);
+                        $('#e_spouses').text(arg.forme.spouses);
                     }
                 }
             })

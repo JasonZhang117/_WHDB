@@ -79,3 +79,15 @@ class CustomPAddForm(dform.ModelForm):  # 个人客户添加
         fields = ['license_addr']
         widgets = {
             'license_addr': dform.TextInput(attrs={'class': 'form-control', 'placeholder': '身份证地址'})}
+
+
+# -----------------------配偶添加-------------------------#
+class FormCustomSpouseAdd(dform.Form):  # 项目添加
+    spouses = fields.ChoiceField(
+        label="配偶", label_suffix="：", widget=widgets.Select(attrs={'class': 'form-control'}))
+
+    def __init__(self, *args, **kwargs):
+        super(FormCustomSpouseAdd, self).__init__(*args, **kwargs)
+        '''GENRE_LIST = ((1, '企业'), (2, '个人'))'''
+        self.fields['spouses'].choices = models.Customes.objects.filter(genre=2).values_list(
+            'id', 'name').order_by('name')

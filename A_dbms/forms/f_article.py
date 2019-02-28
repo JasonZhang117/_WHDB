@@ -62,3 +62,25 @@ class ArticleChangeForm(dform.ModelForm):  # 项目变更
         widgets = {'change_view': dform.Select(attrs={'class': 'form-control'}),
                    'change_date': dform.DateInput(attrs={'class': 'form-control', 'type': 'date'}),
                    'change_detail': dform.Textarea(attrs={'class': 'form-control', 'rows': '3', 'placeholder': '变更情况'})}
+
+
+# -----------------------委托合同添加-------------------------#
+class ArticleAgreeAddForm(dform.ModelForm):
+    branch = fields.ChoiceField(
+        label="放款银行", label_suffix="：", widget=widgets.Select(attrs={'class': 'form-control'}))
+
+    class Meta:
+        model = models.Agrees
+        fields = ['agree_typ', 'guarantee_typ', 'agree_copies', 'agree_amount', 'amount_limit', 'agree_term']
+        widgets = {
+            'agree_typ': dform.Select(attrs={'class': 'form-control'}),
+            'guarantee_typ': dform.Select(attrs={'class': 'form-control'}),
+            'agree_copies': dform.NumberInput(attrs={'class': 'form-control', 'placeholder': '合同份数'}),
+            'agree_term': dform.NumberInput(attrs={'class': 'form-control', 'placeholder': '期限'}),
+            'agree_amount': dform.NumberInput(attrs={'class': 'form-control', 'placeholder': '合同金额（元）'}),
+            'amount_limit': dform.NumberInput(attrs={'class': 'form-control', 'placeholder': '放款限额（元）'})}
+
+    def __init__(self, *args, **kwargs):
+        super(ArticleAgreeAddForm, self).__init__(*args, **kwargs)
+        self.fields['branch'].choices = models.Branches.objects.filter(branch_state=1).values_list(
+            'id', 'name').order_by('name')

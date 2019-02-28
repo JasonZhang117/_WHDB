@@ -1,0 +1,24 @@
+<div class="table-responsive">
+    <table class="table table-bordered table-hover table-condensed active">
+        <thead>
+        <tr style="text-align: center">
+            <th>名称</th>
+            <th>联系地址</th>
+            <th>联系人</th>
+            <th>联系电话</th>
+            <th>身份证号码</th>
+            <th>身份证地址</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td>{{ custom_obj.person_custome.spouses.name }}</td>
+            <td>{{ custom_obj.person_custome.spouses.contact_addr }}</td>
+            <td>{{ custom_obj.person_custome.spouses.linkman }}</td>
+            <td>{{ custom_obj.person_custome.spouses.contact_num }}</td>
+            <td>{{ custom_obj.person_custome.spouses.person_custome.license_num }}</td>
+            <td>{{ custom_obj.person_custome.spouses.person_custome.license_addr }}</td>
+        </tr>
+        </tbody>
+    </table>
+</div>

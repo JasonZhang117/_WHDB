@@ -1,6 +1,18 @@
 <div id="form_lendingcustoms_p_add" class="guarantee-extend" style="display: none">
 
     <div class="form-group"><!--个人保证人-->
+        <label for="id_sure_p" class="col-sm-3 control-label">反担保企业：</label>
+        <div class="col-sm-9">
+            <select name="sure_p" id="id_sure_p" multiple="" required="" class="form-control search-id">
+                <!--<option value="" selected="">---------</option>-->
+            </select>
+        </div>
+        <label id="e_sure_p" class="pull-right">{{ form_lendingchattel_add.sure_chattel.errors }}</label>
+    </div>
+
+
+    <!--
+    <div class="form-group">
         <label for="id_sure_p" class="col-sm-3 control-label">反担保个人：</label>
         <div class="col-sm-9">
             <select name="sure_p" class="form-control" multiple="" id="id_sure_p" required="">
@@ -11,5 +23,5 @@
         </div>
         <label id="id_sure_p" class="pull-right"></label>
     </div>
-
+    -->
 </div>

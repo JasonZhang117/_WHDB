@@ -6,22 +6,22 @@
 
     function bindAddOwerShip() {
         $('#addOwerShip').click(function () {
-            console.log("bindAddOwerShip")
-            $('#addOwerShipModal').modal('show');
+            console.log("bindAddOwerShip");
+            $('#addCustomModal').modal('show');
         })
     }
 
     function bindAddOwerShipModalOk() {
         $('#addOwerShipModalOk').click(function () {
             var postData = {};
-            $('#addOwerShipModal').find('input,select').each(function () {
+            $('#addCustomModal').find('input,select').each(function () {
                 var v = $(this).val();
                 var n = $(this).attr('name');
                 postData[n] = v;
             });
             var postDataStr = JSON.stringify(postData);
 
-            console.log(postDataStr)
+            console.log(postDataStr);
 
             $.ajax({
                 url: '/dbms/warrant/owership/add/',
@@ -32,7 +32,7 @@
                 success: function (arg) {
                     console.log(arg);
                     if (arg.status) {
-                        $('#addOwerShipModal').modal('hide');
+                        $('#addCustomModal').modal('hide');
                         alert(arg.message);
                         window.location.reload();
                     } else {

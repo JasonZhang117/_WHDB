@@ -1,11 +1,5 @@
-<div id="form_owership_add_edit">
+<div id="form_spouse_add">
 
-    <div class="form-group"><!--产权证编号-->
-        <label for="id_ownership_nume"
-               class="col-sm-3 control-label">{{ form_owership_add_edit.ownership_num.label }}：</label>
-        <div class="col-sm-9">{{ form_owership_add_edit.ownership_num }}</div>
-        <label id="e_ownership_num" class="pull-right">{{ form_owership_add_edit.ownership_num.errors }}</label>
-    </div>
 
     <div class="form-group" id="custom_search"><!--搜索框-->
         <label>
@@ -20,13 +14,20 @@
     </div>
 
     <div class="form-group"><!--产权人-->
-        <label for="id_custom" class="col-sm-3 control-label">{{ form_owership_add_edit.owner.label }}：</label>
+        <label for="id_custom" class="col-sm-3 control-label">{{ form_spouse_add.spouses.label }}：</label>
         <div class="col-sm-9">
-            <select name="owner" id="id_custom" required="" class="form-control">
+            <select name="spouses" id="id_custom" required="" class="form-control">
                 <option value="" selected="">---------</option>
             </select>
         </div>
-        <label id="e_owner" class="pull-right">{{ form_owership_add_edit.owner.errors }}</label>
+        <label id="e_spouses" class="pull-right">{{ form_spouse_add.owner.errors }}</label>
     </div>
 
+    <!--
+    <div class="form-group">
+        <label for="id_spouses" class="col-sm-3 control-label">{{ form_spouse_add.spouses.label }}：</label>
+        <div class="col-sm-9">{{ form_spouse_add.spouses }}</div>
+        <label id="e_spouses" class="pull-right">{{ form_spouse_add.spouses.errors }}</label>
+    </div>
+    -->
 </div>

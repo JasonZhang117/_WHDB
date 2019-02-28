@@ -1,0 +1,48 @@
+<script>
+    $(function () {
+        bindSearchCustomB();
+    });
+
+    function bindSearchCustomB() {
+        $('#searchCustomB').click(function () {
+            var postData = {};
+            $('#addCustomModal').find('input,select').each(function () {
+                var v = $(this).val();
+                var n = $(this).attr('name');
+                postData[n] = v;
+            });
+            var postDataStr = JSON.stringify(postData);
+
+            $.ajax({
+                url: '/dbms/search/custom/',
+                type: 'POST',
+                traditional: true,
+                data: {'postDataStr': postDataStr},
+                dataType: 'JSON',
+                success: function (arg) {
+                    console.log(arg);
+                    if (arg.status) {
+                        $("#id_custom").empty();
+                        var custom_list = arg.custom_list;
+                        $.each(custom_list, function (i, item) {
+                            var custom_id = item['id'];
+                            var custom_name = item['name'];
+                            var option_item = '<option value="' + custom_id + '" selected="">' + custom_name + '</option>';
+                            $("#id_custom").append(option_item);
+                        });
+                        {#window.location.reload();#}
+                    } else {
+                        alert(arg.custom_list);
+
+                    }
+                }
+            })
+        })
+    }
+</script>
+
+
+
+
+
+

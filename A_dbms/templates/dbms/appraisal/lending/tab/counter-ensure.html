@@ -30,10 +30,10 @@
                         <td>{{ lending_sure.get_sure_typ_display }}</td>
                         <td><a target="_blank" href="{% url 'dbms:custom_scan' custom_id=custom.id %}">
                             {{ custom.name }}</a>
-                            {% if custom.person_custome.spouse %}
+                            {% if custom.person_custome.spouses %}
                                 、<a target="_blank"
-                                    href="{% url 'dbms:custom_scan' custom_id=custom.person_custome.spouse.custome.id %}">
-                                {{ custom.person_custome.spouse.custome.name }}</a>
+                                    href="{% url 'dbms:custom_scan' custom_id=custom.person_custome.spouses.id %}">
+                                {{ custom.person_custome.spouses.name }}</a>
                             {% endif %}
                         </td>
                         <td>{{ custom.get_genre_display }}</td>

@@ -52,17 +52,18 @@ def agree_add_ajax(request):  # 添加合同
     post_data_str = request.POST.get('postDataStr')
     post_data = json.loads(post_data_str)
     print('post_data:', post_data)
-    lending_id = post_data['lending']
-    lending_obj = models.LendingOrder.objects.get(id=lending_id)
+    lending_obj = models.LendingOrder.objects.get(id=post_data['lending'])
     article_state_lending = lending_obj.summary.article_state
     print('article_state_lending:', article_state_lending)
     '''ARTICLE_STATE_LIST = ((1, '待反馈'), (2, '已反馈'), (3, '待上会'), (4, '已上会'), (5, '已签批'),
                           (51, '已放完'), (61, '待变更'), (99, '已注销'))'''
-    if article_state_lending == 5:
-        form_agree_add = forms.AgreeAddForm(post_data, request.FILES)
+    if article_state_lending in [4, 5, 61]:
+
+        # form_agree_add = forms.AgreeAddForm(post_data, request.FILES)
+        form_agree_add = forms.ArticleAgreeAddForm(post_data, request.FILES)
         if form_agree_add.is_valid():
             agree_add_cleaned = form_agree_add.cleaned_data
-            lending_obj = agree_add_cleaned['lending']
+            # lending_obj = agree_add_cleaned['lending']
             agree_amount = agree_add_cleaned['agree_amount']
             guarantee_typ = agree_add_cleaned['guarantee_typ']
             agree_copies = agree_add_cleaned['agree_copies']
@@ -82,12 +83,12 @@ def agree_add_ajax(request):  # 添加合同
             ###判断合同金额情况：
             if agree_amount > order_amount_up:
                 response['status'] = False
-                response['message'] = '合同金额（%s）超过审批额度（%s）！' % (agree_amount,order_amount)
+                response['message'] = '合同金额（%s）超过审批额度（%s）！' % (agree_amount, order_amount)
                 result = json.dumps(response, ensure_ascii=False)
                 return HttpResponse(result)
             elif amount_limit > order_amount:
                 response['status'] = False
-                response['message'] = '放款限额（%s）超过审批额度（%s）！' % (amount_limit,order_amount,)
+                response['message'] = '放款限额（%s）超过审批额度（%s）！' % (amount_limit, order_amount,)
                 result = json.dumps(response, ensure_ascii=False)
                 return HttpResponse(result)
 

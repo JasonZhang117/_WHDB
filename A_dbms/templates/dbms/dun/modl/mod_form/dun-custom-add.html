@@ -1,9 +1,35 @@
 <div id="from_custom_add">
 
-    <div class="form-group"><!--被告人-->
+
+    <div class="form-group" id="custom_search"><!--搜索框-->
+        <label>
+            <form class="navbar-form" style="display: inline">
+                <label class="col-sm-9 control-label">
+                    <input type="search" name="search_custom" class="form-control" placeholder="搜索客户名称"></label>
+                <label class="col-sm-3 control-label">
+                    <a id="searchCustomB" class="btn btn-primary btn-sm">搜索</a>
+                </label>
+            </form>
+        </label>
+    </div>
+
+
+    <div class="form-group"><!--产权人-->
+        <label for="id_custom" class="col-sm-3 control-label">{{ from_custom_add.custom.label }}：</label>
+        <div class="col-sm-9">
+            <select name="custom" id="id_custom" multiple="" required="" class="form-control">
+                <!--<option value="" selected="">---------</option>-->
+            </select>
+        </div>
+        <label id="e_custom" class="pull-right">{{ from_custom_add.custom.errors }}</label>
+    </div>
+
+    <!--
+    <div class="form-group"><!--被告人
         <label for="id_customt" class="col-sm-3 control-label">{{ from_custom_add.custom.label }}：</label>
         <div class="col-sm-9">{{ from_custom_add.custom }}</div>
         <label id="e_custom" class="pull-right">{{ from_custom_add.custom.errors }}</label>
     </div>
+    -->
 
 </div>

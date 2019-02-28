@@ -3,8 +3,19 @@
     <div class="form-group"><!--动产抵押-->
         <label for="id_sure_chattel"
                class="col-sm-3 control-label">{{ form_lendingchattel_add.sure_chattel.label }}：</label>
+        <div class="col-sm-9">
+            <select name="sure_chattel" id="id_sure_chattel" multiple="" required="" class="form-control search-id">
+                <!--<option value="" selected="">---------</option>-->
+            </select>
+        </div>
+        <label id="e_sure_chattel" class="pull-right">{{ form_lendingchattel_add.sure_chattel.errors }}</label>
+    </div>
+    <!--
+    <div class="form-group">
+        <label for="id_sure_chattel"
+               class="col-sm-3 control-label">{{ form_lendingchattel_add.sure_chattel.label }}：</label>
         <div class="col-sm-9">{{ form_lendingchattel_add.sure_chattel }}</div>
         <label id="e_sure_chattel" class="pull-right">{{ form_lendingchattel_add.sure_chattel.errors }}</label>
     </div>
-
+    -->
 </div>
