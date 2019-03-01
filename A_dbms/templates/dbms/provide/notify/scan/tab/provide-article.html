@@ -1,0 +1,25 @@
+<div class="table-responsive">
+    <table class="table table-bordered table-hover table-condensed active">
+        <thead>
+        <tr style="text-align: center">
+            <th>纪要编号</th>
+            <th>放款次序</th>
+            <th>项目金额</th>
+            <th>担保期限</th>
+            <th>项目经理</th>
+            <th>签批日期</th>
+        </tr>
+        </thead>
+        <tbody id="provide-notify-tb">
+        <tr article-nid="{{ agree_obj.lending.summary.id }}">
+            <td><a target="_blank" href="{% url 'dbms:article_scan_all' article_id=agree_obj.lending.summary.id %}">
+                {{ agree_obj.lending.summary.summary_num }}</a></td>
+            <td>{{ agree_obj.lending.get_order_display }}</td>
+            <td>{{ agree_obj.lending.summary.amount }}</td>
+            <td>{{ agree_obj.lending.summary.credit_term }}</td>
+            <td>{{ agree_obj.lending.summary.director.name }}</td>
+            <td>{{ agree_obj.lending.summary.sign_date }}</td>
+        <tr>
+        </tbody>
+    </table>
+</div>

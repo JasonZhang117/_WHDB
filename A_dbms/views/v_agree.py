@@ -27,7 +27,7 @@ def agree(request, *args, **kwargs):  # 委托合同列表
     search_key = request.GET.get('_s')
     if search_key:
         search_fields = ['agree_num', 'lending__summary__custom__name',
-                         'branch__name', 'branch__short_name','lending__summary__summary_num']
+                         'branch__name', 'branch__short_name', 'lending__summary__summary_num']
         q = Q()
         q.connector = 'OR'
         for field in search_fields:
@@ -68,18 +68,15 @@ def agree_scan(request, agree_id):  # 查看合同
     APPLICATION = 'agree_scan'
     PAGE_TITLE = '合同详情'
     COUNTER_TYP_CUSTOM = [1, 2]
-
     '''COUNTER_TYP_LIST = (
         (1, '企业担保'), (2, '个人保证'),
         (11, '房产抵押'), (12, '土地抵押'), (13, '动产抵押'), (15, '车辆抵押'),
         (31, '应收质押'), (32, '股权质押'), (33, '票据质押'),
         (51, '股权预售'), (52, '房产预售'), (53, '土地预售'))'''
-
     agree_obj = models.Agrees.objects.get(id=agree_id)
     agree_lending_obj = agree_obj.lending
 
     warrant_agree_list = models.Warrants.objects.filter(counter_warrant__counter__agree=agree_obj)
-    print('warrant_agree_list:', warrant_agree_list)
     '''WARRANT_TYP_LIST = [
         (1, '房产'), (2, '土地'), (11, '应收'), (21, '股权'),
         (31, '票据'), (41, '车辆'), (51, '动产'), (99, '他权')]'''
@@ -104,12 +101,10 @@ def agree_scan(request, agree_id):  # 查看合同
     warrants_c_lending_list = models.Warrants.objects.filter(
         lending_warrant__sure__lending=agree_lending_obj, warrant_typ=51).exclude(
         counter_warrant__counter__agree=agree_obj).values_list('id', 'warrant_num').order_by('warrant_num')
-    print(custom_c_lending_list, custom_p_lending_list, warrants_h_lending_list, warrants_g_lending_list,
-          warrants_r_lending_list, warrants_s_lending_list)
+
     from_counter = forms.AddCounterForm()
 
-    today_str = time.strftime("%Y-%m-%d", time.gmtime())
-    form_agree_sign_data = {'agree_sign_date': str(today_str)}
+    form_agree_sign_data = {'agree_sign_date': str(datetime.date.today())}
     form_agree_sign = forms.FormAgreeSign(initial=form_agree_sign_data)
     return render(request, 'dbms/agree/agree-scan.html', locals())
 
@@ -132,7 +127,6 @@ def agree_scan_counter(request, agree_id, counter_id):  # 查看合同
     agree_lending_obj = agree_obj.lending
 
     warrant_agree_list = models.Warrants.objects.filter(counter_warrant__counter__agree=agree_obj)
-    print('warrant_agree_list:', warrant_agree_list)
     '''WARRANT_TYP_LIST = [
         (1, '房产'), (5, '土地'), (11, '应收'), (21, '股权'),
         (31, '票据'), (41, '车辆'), (51, '动产'), (99, '他权')]'''
@@ -157,12 +151,10 @@ def agree_scan_counter(request, agree_id, counter_id):  # 查看合同
     warrants_c_lending_list = models.Warrants.objects.filter(
         lending_warrant__sure__lending=agree_lending_obj, warrant_typ=51).exclude(
         counter_warrant__counter__agree=agree_obj).values_list('id', 'warrant_num').order_by('warrant_num')
-    print(custom_c_lending_list, custom_p_lending_list, warrants_h_lending_list, warrants_g_lending_list,
-          warrants_r_lending_list, warrants_s_lending_list)
+
     from_counter = forms.AddCounterForm()
 
-    today_str = time.strftime("%Y-%m-%d", time.gmtime())
-    form_agree_sign_data = {'agree_sign_date': str(today_str)}
+    form_agree_sign_data = {'agree_sign_date': str(datetime.date.today())}
     form_agree_sign = forms.FormAgreeSign(initial=form_agree_sign_data)
     return render(request, 'dbms/agree/agree-scan.html', locals())
 

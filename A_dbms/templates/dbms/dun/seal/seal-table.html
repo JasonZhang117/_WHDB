@@ -2,8 +2,8 @@
     <table class="table table-bordered table-hover table-condensed active">
         <thead>
         <tr style="text-align: center">
-            <th>追偿项目</th>
             <th>财产</th>
+            <th>追偿项目</th>
             <th>查封状态</th>
             <th>最近查封日</th>
             <th>查封到期日</th>
@@ -13,8 +13,9 @@
         <tbody>
         {% for seal in p_list %}
             <tr>
+                <td><a href="{% url 'dbms:seal_scan' dun_id=seal.dun.id warrant_id=seal.warrant.id %}">
+                    {{ seal.warrant.warrant_num }}</a></td>
                 <td>{{ seal.dun.title }}</td>
-                <td>{{ seal.warrant.warrant_num }}</td>
                 <td>{{ seal.get_seal_state_display }}</td>
                 <td>{{ seal.seal_date }}</td>
                 <td>{{ seal.due_date }}</td>

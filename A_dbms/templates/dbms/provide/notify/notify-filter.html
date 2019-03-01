@@ -1,0 +1,30 @@
+<div>
+    <!--
+    <label>
+        {% if kwargs.provide_status == None %}
+            <a class="btn btn-primary btn-sm active" href="{% url 'dbms:provide_all' %}">全部</a>
+        {% else %}
+            <a class="btn btn-primary btn-sm" href="{% url 'dbms:provide_all' %}">全部</a>
+        {% endif %}
+        {# 方式一：#}
+        {% for provide_status in PROVIDE_STATUS_LIST %}
+            {% if provide_status.0 == kwargs.provide_status %}
+                <a class="btn btn-primary btn-sm active"
+                   href="{% url 'dbms:provide' provide_status=provide_status.0 %}">{{ provide_status.1 }}</a>
+            {% else %}
+                <a class="btn btn-primary btn-sm"
+                   href="{% url 'dbms:provide' provide_status=provide_status.0 %}">{{ provide_status.1 }} </a>
+            {% endif %}
+        {% endfor %}
+    </label>-->
+
+    <label>
+        <form class="navbar-form" style="display: inline">
+            <input type="search" name="_s" class="form-control" placeholder="客户,银行,合同,借款合同，保证合同">
+            <button type="submit" class="btn btn-primary btn-sm">搜索</button>
+        </form>
+    </label>
+    <label>
+        在保余额：{{ balance }}
+    </label>
+</div>

@@ -1,11 +1,24 @@
 <div id="form_chattel_add_eidt" class="warrant-extend" style="display: none">
 
-    <div class="form-group"><!--动产所有人-->
+
+    <div class="form-group"><!--所有者-->
+        <label for="id_chattel_owner"
+               class="col-sm-3 control-label">{{ form_chattel_add_eidt.chattel_owner.label }}：</label>
+        <div class="col-sm-9">
+            <select name="chattel_owner" id="id_chattel_owner" required="" class="form-control search-id">
+                <option value="" selected="">---------</option>
+            </select>
+        </div>
+        <label id="e_chattel_owner" class="pull-right">{{ form_chattel_add_eidt.chattel_owner.errors }}</label>
+    </div>
+
+    <!--
+    <div class="form-group">
         <label for="id_chattel_owner"
                class="col-sm-3 control-label">{{ form_chattel_add_eidt.chattel_owner.label }}：</label>
         <div class="col-sm-9">{{ form_chattel_add_eidt.chattel_owner }}</div>
         <label id="e_chattel_owner" class="pull-right">{{ form_chattel_add_eidt.chattel_owner.errors }}</label>
-    </div>
+    </div>动产所有人-->
 
     <div class="form-group"><!--动产类型-->
         <label for="id_chattel_typ"

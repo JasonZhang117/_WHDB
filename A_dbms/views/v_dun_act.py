@@ -32,6 +32,8 @@ def dun_add_ajax(request):  # 添加参评项目ajax
                 dun_obj = models.Dun.objects.create(title=dun_title, dun_amount=dun_charge_amount, dunor=request.user)
                 for com_obj in dun_com_add_list:
                     dun_obj.compensatory.add(com_obj)
+                '''DUN_STATE_LIST = ((1, '已代偿'), (3, '诉前'), (11, '已起诉'), (21, '已判决'), (31, '已和解'),
+                      (41, '执行中'), (91, '结案'))'''
                 dun_com_add_list.update(dun_state=3)
             response['message'] = '成功创建追偿项目！'
         except Exception as e:
@@ -69,6 +71,9 @@ def clue_add_ajax(request):  #
                 with transaction.atomic():
                     for warrant_obj in dun_clue_add_list:
                         dun_obj.warrant.add(warrant_obj)
+                    '''AUCTION_STATE_LIST = (
+                        (1, '正常'), (2, '查封'), (3, '评估'), (5, '挂网'), (11, '成交'), (21, '流拍'), 
+                        (31, '回转'), (99, '注销'))'''
                     dun_clue_add_list.update(auction_state=2)
                 response['message'] = '成功添加财产线索！'
             except Exception as e:
@@ -111,6 +116,9 @@ def clue_del_ajax(request):  # 取消项目上会ajax
         try:
             with transaction.atomic():
                 dun_obj.warrant.remove(warrant_obj)  # 删除财产线索
+                '''AUCTION_STATE_LIST = (
+                    (1, '正常'), (2, '查封'), (3, '评估'), (5, '挂网'), (11, '成交'), (21, '流拍'), 
+                    (31, '回转'), (99, '注销'))'''
                 warrant_list.update(auction_state=1)
             response['message'] = '%s，删除成功！' % warrant_obj.warrant_num
         except Exception as e:
@@ -125,7 +133,7 @@ def clue_del_ajax(request):  # 取消项目上会ajax
 
 # -----------------------添加被告人ajax-------------------------#
 @login_required
-def defendant_add_ajax(request):  # 添加参评项目ajax
+def defendant_add_ajax(request):  #
     print(__file__, '---->def defendant_add_ajax')
     response = {'status': True, 'message': None, 'forme': None, }
     post_data_str = request.POST.get('postDataStr')
@@ -146,6 +154,7 @@ def defendant_add_ajax(request):  # 添加参评项目ajax
                 with transaction.atomic():
                     for custom_obj in dun_custom_add_list:
                         dun_obj.custom.add(custom_obj)
+                    '''CUSTOM_DUN_LIST = ((1, '正常'), (11, '被告'), (99, '注销'))'''
                     dun_custom_add_list.update(custom_dun_state=11)
                 response['message'] = '成功添加被告人！'
             except Exception as e:
@@ -174,13 +183,13 @@ def defendant_del_ajax(request):  # 删除被告人ajax
     dun_obj = models.Dun.objects.get(id=post_data['dun_id'])
     custom_list = models.Customes.objects.filter(id=post_data['custom_id'])
     custom_obj = custom_list.first()
-
     '''DUN_STAGE_LIST = ((1, '起诉'), (11, '判决'), (21, '执行'), (31, '和解结案'), (41, '终止执行'), (99, '注销'))'''
     dun_stage = dun_obj.dun_stage
     if not dun_stage == 99:
         try:
             with transaction.atomic():
                 dun_obj.custom.remove(custom_obj)  # 删除财产线索
+                '''CUSTOM_DUN_LIST = ((1, '正常'), (11, '被告'), (99, '注销'))'''
                 custom_list.update(custom_dun_state=1)
             response['message'] = '%s，删除成功！' % custom_obj.name
         except Exception as e:
@@ -203,7 +212,8 @@ def sealup_add_ajax(request):  # 修改项目ajax
     post_data = json.loads(post_data_str)
     print('post_data:', post_data)
     dun_obj = models.Dun.objects.get(id=post_data['dun_id'])
-    warrant_obj = models.Warrants.objects.get(id=post_data['warrant_id'])
+    warrant_list = models.Warrants.objects.filter(id=post_data['warrant_id'])
+    warrant_obj = warrant_list.first()
     '''DUN_STAGE_LIST = ((1, '起诉'), (11, '判决'), (21, '执行'), (31, '和解结案'), 
     (41, '终止执行'), (99, '注销'))'''
     dun_stage = dun_obj.dun_stage
@@ -218,23 +228,23 @@ def sealup_add_ajax(request):  # 修改项目ajax
             try:
                 with transaction.atomic():
                     seal_default = {
-                        'dun': dun_obj, 'warrant': warrant_obj,
-                        'seal_state': sealup_type,
-                        'seal_date': sealup_date,
-                        'due_date': due_date,
-                        'seal_remark': sealup_remark,
-                        'sealor': request.user}
+                        'dun': dun_obj, 'warrant': warrant_obj, 'seal_state': sealup_type,
+                        'seal_date': sealup_date, 'due_date': due_date,
+                        'seal_remark': sealup_remark, 'sealor': request.user}
                     seal_obj, created = models.Seal.objects.update_or_create(
                         dun=dun_obj, warrant=warrant_obj, defaults=seal_default)
                     sealup_default = {
-                        'seal': seal_obj,
-                        'sealup_type': sealup_type,
-                        'sealup_date': sealup_date,
-                        'due_date': due_date,
-                        'sealup_remark': sealup_remark,
+                        'seal': seal_obj, 'sealup_type': sealup_type, 'sealup_date': sealup_date,
+                        'due_date': due_date, 'sealup_remark': sealup_remark,
                         'sealupor': request.user}
                     sealup_obj, created = models.Sealup.objects.update_or_create(
                         seal=seal_obj, sealup_type=sealup_type, sealup_date=sealup_date, defaults=sealup_default)
+                    '''SEALUP_TYPE_LIST = ((1, '诉前保全'), (5, '首次首封'), (11, '首次轮封'), (21, '续查封'),
+                        (51, '解除查封'), (99, '注销'))'''
+                    '''AUCTION_STATE_LIST = (
+                        (1, '正常'), (2, '查封'), (3, '评估'), (5, '挂网'), (11, '成交'), 
+                        (21, '流拍'), (31, '回转'), (99, '注销'))'''
+                    warrant_list.update(auction_state=2)
                 if created:
                     response['message'] = '成功创建查封信息！'
                 else:
@@ -282,15 +292,12 @@ def inquiry_add_ajax(request):
                 try:
                     with transaction.atomic():
                         seal_default = {
-                            'dun': dun_obj, 'warrant': warrant_obj,
-                            'inquiry_date': datetime.date.today(),
+                            'dun': dun_obj, 'warrant': warrant_obj, 'inquiry_date': datetime.date.today(),
                             'sealor': request.user}
                         seal_obj, created = models.Seal.objects.update_or_create(
                             dun=dun_obj, warrant=warrant_obj, defaults=seal_default)
                         inquiry_default = {
-                            'seal': seal_obj,
-                            'inquiry_type': inquiry_type,
-                            'inquiry_detail': inquiry_detail,
+                            'seal': seal_obj, 'inquiry_type': inquiry_type, 'inquiry_detail': inquiry_detail,
                             'inquiryor': request.user}
                         inquiry_obj, created = models.Inquiry.objects.update_or_create(
                             seal__warrant=warrant_obj, inquiry_type=inquiry_type, inquiryor_date=datetime.date.today(),
@@ -328,6 +335,12 @@ def inquiry_add_ajax(request):
                             inquiry_obj, created = models.Inquiry.objects.update_or_create(
                                 seal__warrant=warrant_obj, inquiry_type=inquiry_type, evaluate_date=evaluate_date,
                                 defaults=inquiry_default)
+                            ''' INQUIRY_TYPE_LIST = (
+                            (1, '日常跟踪'), (3, '拍卖评估'), (5, '拍卖挂网'), (11, '拍卖成交'), (21, '拍卖流拍'),
+                            (31, '执行回转'), (99, '注销'))'''
+                            '''AUCTION_STATE_LIST = (
+                            (1, '正常'), (2, '查封'), (3, '评估'), (5, '挂网'), (11, '成交'), (21, '流拍'), 
+                            (31, '回转'), (99, '注销'))'''
                             warrant_list.update(
                                 inquiry_date=datetime.date.today(), inquiry_detail=inquiry_detail,
                                 evaluate_state=41, auction_state=3, evaluate_date=evaluate_date,
@@ -367,6 +380,12 @@ def inquiry_add_ajax(request):
                             inquiry_obj, created = models.Inquiry.objects.update_or_create(
                                 seal__warrant=warrant_obj, inquiry_type=inquiry_type, auction_date=auction_date,
                                 defaults=inquiry_default)
+                            ''' INQUIRY_TYPE_LIST = (
+                            (1, '日常跟踪'), (3, '拍卖评估'), (5, '拍卖挂网'), (11, '拍卖成交'), (21, '拍卖流拍'),
+                            (31, '执行回转'), (99, '注销'))'''
+                            '''AUCTION_STATE_LIST = (
+                            (1, '正常'), (2, '查封'), (3, '评估'), (5, '挂网'), (11, '成交'), (21, '流拍'), 
+                            (31, '回转'), (99, '注销'))'''
                             warrant_list.update(
                                 inquiry_date=datetime.date.today(), inquiry_detail=inquiry_detail,
                                 auction_state=5, auction_date=auction_date, listing_price=listing_price)
@@ -390,21 +409,23 @@ def inquiry_add_ajax(request):
                     try:
                         with transaction.atomic():
                             seal_default = {
-                                'dun': dun_obj, 'warrant': warrant_obj,
-                                'inquiry_date': datetime.date.today(),
+                                'dun': dun_obj, 'warrant': warrant_obj, 'inquiry_date': datetime.date.today(),
                                 'sealor': request.user}
                             seal_obj, created = models.Seal.objects.update_or_create(
                                 dun=dun_obj, warrant=warrant_obj, defaults=seal_default)
                             inquiry_default = {
-                                'seal': seal_obj,
-                                'inquiry_type': inquiry_type,
-                                'inquiry_detail': inquiry_detail,
-                                'transaction_date': transaction_date,
-                                'auction_amount': auction_amount,
+                                'seal': seal_obj, 'inquiry_type': inquiry_type, 'inquiry_detail': inquiry_detail,
+                                'transaction_date': transaction_date, 'auction_amount': auction_amount,
                                 'inquiryor': request.user}
                             inquiry_obj, created = models.Inquiry.objects.update_or_create(
                                 seal__warrant=warrant_obj, inquiry_type=inquiry_type, transaction_date=transaction_date,
                                 defaults=inquiry_default)
+                            ''' INQUIRY_TYPE_LIST = (
+                            (1, '日常跟踪'), (3, '拍卖评估'), (5, '拍卖挂网'), (11, '拍卖成交'), (21, '拍卖流拍'),
+                            (31, '执行回转'), (99, '注销'))'''
+                            '''AUCTION_STATE_LIST = (
+                            (1, '正常'), (2, '查封'), (3, '评估'), (5, '挂网'), (11, '成交'), (21, '流拍'), 
+                            (31, '回转'), (99, '注销'))'''
                             warrant_list.update(
                                 inquiry_date=datetime.date.today(), inquiry_detail=inquiry_detail,
                                 auction_state=11, transaction_date=transaction_date, auction_amount=auction_amount)
@@ -435,6 +456,12 @@ def inquiry_add_ajax(request):
                             'inquiryor': request.user}
                         inquiry_obj, created = models.Inquiry.objects.update_or_create(
                             seal__warrant=warrant_obj, inquiry_type=inquiry_type, defaults=inquiry_default)
+                        ''' INQUIRY_TYPE_LIST = (
+                        (1, '日常跟踪'), (3, '拍卖评估'), (5, '拍卖挂网'), (11, '拍卖成交'), (21, '拍卖流拍'),
+                        (31, '执行回转'), (99, '注销'))'''
+                        '''AUCTION_STATE_LIST = (
+                        (1, '正常'), (2, '查封'), (3, '评估'), (5, '挂网'), (11, '成交'), (21, '流拍'), 
+                        (31, '回转'), (99, '注销'))'''
                         warrant_list.update(
                             inquiry_date=datetime.date.today(), inquiry_detail=inquiry_detail,
                             auction_state=21)
@@ -461,6 +488,12 @@ def inquiry_add_ajax(request):
                             'inquiryor': request.user}
                         inquiry_obj, created = models.Inquiry.objects.update_or_create(
                             seal__warrant=warrant_obj, inquiry_type=inquiry_type, defaults=inquiry_default)
+                        ''' INQUIRY_TYPE_LIST = (
+                        (1, '日常跟踪'), (3, '拍卖评估'), (5, '拍卖挂网'), (11, '拍卖成交'), (21, '拍卖流拍'),
+                        (31, '执行回转'), (99, '注销'))'''
+                        '''AUCTION_STATE_LIST = (
+                        (1, '正常'), (2, '查封'), (3, '评估'), (5, '挂网'), (11, '成交'), (21, '流拍'), 
+                        (31, '回转'), (99, '注销'))'''
                         warrant_list.update(
                             inquiry_date=datetime.date.today(), inquiry_detail=inquiry_detail,
                             auction_state=31)
@@ -524,7 +557,7 @@ def standing_add_ajax(request):
 
 # -----------------------删除追偿台账ajax-------------------------#
 @login_required
-def standing_del_ajax(request):  # 取消项目上会ajax
+def standing_del_ajax(request):
     print(__file__, '---->def standing_del_ajax')
     response = {'status': True, 'message': None, 'forme': None, }
     post_data_str = request.POST.get('postDataStr')
@@ -743,7 +776,8 @@ def stage_add_ajax(request):
                        (31, '上诉及再审'), (41, '案外之诉'),
                        (51, '执行资料'), (99, '其他'))'''
             stage_type_count = str(models.Stage.objects.filter(dun=dun_obj, stage_type=stage_type).count() + 1)
-            print('stage_type_count:', stage_type_count)
+            '''DUN_STATE_LIST = ((1, '已代偿'), (3, '诉前'), (11, '一审'), (21, '上诉及再审'), (31, '案外之诉'),
+                      (41, '执行'), (91, '结案'))'''
             stage_remark = ''
             if stage_type == 1:
                 stage_remark = 'A-%s' % stage_type_count
@@ -751,22 +785,30 @@ def stage_add_ajax(request):
                 stage_remark = 'B-%s' % stage_type_count
             elif stage_type == 21:
                 stage_remark = 'C-%s' % stage_type_count
+                dun_state_n = 11
             elif stage_type == 31:
                 stage_remark = 'D-%s' % stage_type_count
+                dun_state_n = 21
             elif stage_type == 41:
                 stage_remark = 'E-%s' % stage_type_count
+                dun_state_n = 31
             elif stage_type == 51:
                 stage_remark = 'F-%s' % stage_type_count
+                dun_state_n = 41
             print('stage_remark:', stage_remark, type(stage_remark))
             try:
                 with transaction.atomic():
-                    charge_obj = models.Stage.objects.create(
-                        dun=dun_obj, stage_type=stage_type,
-                        stage_file=stage_cleaned['stage_file'],
-                        stage_date=stage_cleaned['stage_date'],
-                        stage_state=stage_cleaned['stage_state'],
-                        stage_remark=stage_remark,
-                        stagor=request.user)
+                    stage_obj = models.Stage.objects.create(
+                        dun=dun_obj, stage_type=stage_type, stage_file=stage_cleaned['stage_file'],
+                        stage_date=stage_cleaned['stage_date'], stage_state=stage_cleaned['stage_state'],
+                        stage_remark=stage_remark, stagor=request.user)
+                    '''STAGE_TYPE_LIST = ((1, '证据及财产线索资料'), (11, '诉前资料'), (21, '一审资料'),
+                        (31, '上诉及再审'), (41, '案外之诉'), (51, '执行资料'), (99, '其他'))'''
+                    '''DUN_STATE_LIST = ((1, '已代偿'), (3, '诉前'), (11, '一审'), (21, '上诉及再审'), (31, '案外之诉'),
+                      (41, '执行'), (91, '结案'))'''
+                    if stage_type in [21, 31, 41, 51]:
+                        dun_obj.compensatory.all().update(dun_state=dun_state_n)
+
                 response['message'] = '成功创建资料目录信息！'
             except Exception as e:
                 response['status'] = False

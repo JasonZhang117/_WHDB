@@ -49,7 +49,9 @@ class CustomCAddForm(dform.ModelForm):  # 企业客户
             'capital': dform.TextInput(attrs={'class': 'form-control', 'placeholder': '注册资本'}),
             'registered_addr': dform.TextInput(attrs={'class': 'form-control', 'placeholder': '注册地址'}),
             'representative': dform.TextInput(attrs={'class': 'form-control', 'placeholder': '法人代表'}),
-            'district': dform.Select(attrs={'class': 'form-control'})}
+            # 'idustry': dform.Select(attrs={'class': 'form-control'}),
+            'district': dform.Select(attrs={'class': 'form-control'}),
+        }
 
     def __init__(self, *args, **kwargs):
         super(CustomCAddForm, self).__init__(*args, **kwargs)

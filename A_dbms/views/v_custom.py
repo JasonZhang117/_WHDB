@@ -58,10 +58,10 @@ def custom_scan(request, custom_id):  # 项目预览
         'linkman': custom_obj.linkman,
         'contact_num': custom_obj.contact_num}
     form_custom_edit = forms.CustomEditForm(initial=form_date)
-
+    idustry_id = custom_obj.company_custome.idustry.id
     if custom_obj.genre == 1:
         form_date = {
-            'idustry': custom_obj.company_custome.idustry,
+            'idustry': idustry_id,
             'district': custom_obj.company_custome.district,
             'capital': custom_obj.company_custome.capital,
             'registered_addr': custom_obj.company_custome.registered_addr,

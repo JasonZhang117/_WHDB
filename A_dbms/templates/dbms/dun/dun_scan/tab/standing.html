@@ -9,7 +9,7 @@
         </tr>
         </thead>
         <tbody id="dun-standing-tb">
-        {% for standing in dun_obj.standing_dun.all %}
+        {% for standing in p_list %}
             <tr standing-nid="{{ standing.id }}">
                 <td>{{ standing.standingor_date }}</td>
                 <td>{{ standing.standing_detail }}</td>
@@ -17,7 +17,7 @@
                 <td><a class="btn btn-primary btn-xs delStandingB">删除</a></td>
             <tr>
         {% endfor %}
-
         </tbody>
     </table>
+    {% include 'dbms/board/page.html' %}
 </div>

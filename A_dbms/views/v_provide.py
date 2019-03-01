@@ -139,10 +139,6 @@ def provide_agree_scan(request, agree_id):  # 查看放款
         '''COUNTER_STATE_LIST = ((11, '未签订'), (21, '已签订'), (31, '作废'))'''
         if counter.counter_state == 11:
             counter_agree_str += '%s，' % counter.counter_num  # 合同未签订
-    print('warrant_ypothec_str:', warrant_ypothec_str)
-    print('warrant_storage_str:', warrant_storage_str)
-    print('ypothec_storage_str:', ypothec_storage_str)
-    print('counter_agree_str:', counter_agree_str)
 
     if warrant_ypothec_str != '':
         agree_state_n = 31
@@ -156,17 +152,14 @@ def provide_agree_scan(request, agree_id):  # 查看放款
     if counter_agree_str != '':
         agree_state_n = 31
         ascertain_str += '合同未签订：%s；\r\n' % counter_agree_str
-    print('ascertain_str:', ascertain_str)
     if agree_state_n == 41:
         agree_str = '所有风控措施已落实，可以出具放款通知！'
     else:
         agree_str = '以下风控措施未落实：\r\n' + ascertain_str + '如确定后可以放款，请后续持续跟进，否者点击取消！'
-    print('agree_str:', agree_str)
-
-    form_notify_add = forms.FormNotifyAdd()  # 添加放款通知
+    today_str = str(datetime.date.today())
+    form_notify_add = forms.FormNotifyAdd(initial={'notify_date': today_str})  # 添加放款通知
     form_ascertain_add = forms.FormAscertainAdd()  # 风控落实
-    from_counter_sign = forms.FormCounterSignAdd()  # 反担保合同签订
-    print('form_notify_add:', form_notify_add)
+    from_counter_sign = forms.FormCounterSignAdd(initial={'notify_date': today_str})  # 反担保合同签订
     return render(request, 'dbms/provide/provide-agree-scan.html', locals())
 
 
@@ -174,7 +167,7 @@ def provide_agree_scan(request, agree_id):  # 查看放款
 @login_required
 def provide_agree_notify(request, agree_id, notify_id):  # 查看放款通知
     print(__file__, '---->def provide_agree_notify')
-    PAGE_TITLE = '放款通知'
+    PAGE_TITLE = '风控落实'
     '''COUNTER_TYP_LIST = (
         (1, '企业担保'), (2, '个人保证'),
         (11, '房产抵押'), (12, '土地抵押'), (13, '设备抵押'), (14, '存货抵押'), (15, '车辆抵押'),
@@ -201,11 +194,101 @@ def provide_agree_notify(request, agree_id, notify_id):  # 查看放款通知
     agree_obj = models.Agrees.objects.get(id=agree_id)
     lending_obj = agree_obj.lending
     notify_obj = models.Notify.objects.get(id=notify_id)
-
-    form_provide_add = forms.FormProvideAdd()
-    print('form_provide_add:', form_provide_add)
+    today_str = datetime.date.today()
+    date_th_later = today_str + datetime.timedelta(days=365)
+    form_provide_data = {'provide_date': str(today_str), 'due_date': str(date_th_later)}
+    form_provide_add = forms.FormProvideAdd(initial=form_provide_data)
 
     return render(request, 'dbms/provide/provide-agree-notify.html', locals())
+
+
+# -----------------------通知列表---------------------#
+@login_required
+def notify(request, *args, **kwargs):  #
+    print(__file__, '---->def notify')
+    PAGE_TITLE = '放款通知'
+
+    '''筛选'''
+    notify_list = models.Notify.objects.filter(**kwargs).select_related('agree').order_by('-notify_date')
+
+    '''搜索'''
+    search_key = request.GET.get('_s')
+    if search_key:
+        search_fields = ['agree__lending__summary__custom__name',
+                         'agree__branch__name', 'agree__branch__short_name',
+                         'agree__agree_num', 'contracts_lease', 'contract_guaranty']
+        q = Q()
+        q.connector = 'OR'
+        for field in search_fields:
+            q.children.append(("%s__contains" % field, search_key))
+        notify_list = notify_list.filter(q)
+
+    provide_amount = notify_list.aggregate(Sum('notify_provide_sum'))['notify_provide_sum__sum']  # 放款金额合计
+    repayment_amount = notify_list.aggregate(
+        Sum('notify_repayment_sum'))['notify_repayment_sum__sum']  # 还款金额合计
+    if provide_amount:
+        provide_amount = provide_amount
+    else:
+        provide_amount = 0
+
+    if repayment_amount:
+        repayment_amount = repayment_amount
+    else:
+        repayment_amount = 0
+    balance = provide_amount - repayment_amount
+
+    provide_acount = notify_list.count()
+    '''分页'''
+    paginator = Paginator(notify_list, 19)
+    page = request.GET.get('page')
+    try:
+        p_list = paginator.page(page)
+    except PageNotAnInteger:
+        p_list = paginator.page(1)
+    except EmptyPage:
+        p_list = paginator.page(paginator.num_pages)
+
+    return render(request, 'dbms/provide/provide-notify.html', locals())
+
+
+# -----------------------------查看放款通知------------------------------#
+@login_required
+def notify_scan(request, notify_id):  # 查看放款通知
+    print(__file__, '---->def provide_agree_notify')
+    PAGE_TITLE = '放款通知'
+    '''COUNTER_TYP_LIST = (
+        (1, '企业担保'), (2, '个人保证'),
+        (11, '房产抵押'), (12, '土地抵押'), (13, '设备抵押'), (14, '存货抵押'), (15, '车辆抵押'),
+        (31, '应收质押'), (32, '股权质押'), (33, '票据质押'),
+        (51, '股权预售'), (52, '房产预售'), (53, '土地预售'))'''
+    '''SURE_TYP_LIST = (
+                    (1, '企业保证'), (2, '个人保证'),
+                    (11, '房产抵押'), (12, '土地抵押'), (13, '设备抵押'), (14, '存货抵押'), (15, '车辆抵押'),
+                    (21, '房产顺位'), (22, '土地顺位'),
+                    (31, '应收质押'), (32, '股权质押'), (33, '票据质押'),
+                    (41, '合格证监管'), (42, '房产监管'), (43, '土地监管'),
+                    (51, '股权预售'), (52, '房产预售'), (53, '土地预售'))'''
+    '''WARRANT_TYP_LIST = [
+           (1, '房产'), (2, '土地'), (11, '应收'), (21, '股权'),
+           (31, '票据'), (41, '车辆'), (51, '动产'), (99, '他权')]'''
+    COUNTER_TYP_CUSTOM = [1, 2]
+    SURE_LIST = [1, 2]
+    HOUSE_LIST = [11, 21, 42, 52]
+    GROUND_LIST = [12, 22, 43, 53]
+    RECEIVABLE_LIST = [31]
+    STOCK_LIST = [32]
+    CHATTEL_LIST = [13]
+
+    notify_obj = models.Notify.objects.get(id=notify_id)
+    agree_obj = notify_obj.agree
+    lending_obj = agree_obj.lending
+
+    today_str = datetime.date.today()
+    date_th_later = today_str + datetime.timedelta(days=365)
+    form_provide_data = {'provide_date': str(today_str), 'due_date': str(date_th_later)}
+    form_provide_add = forms.FormProvideAdd(initial=form_provide_data)
+
+    return render(request, 'dbms/provide/provide-notify-scan.html', locals())
 
 
 # -----------------------放款列表---------------------#
@@ -265,9 +348,9 @@ def provide_scan(request, provide_id):  # 查看放款
     PAGE_TITLE = '放款详情'
 
     provide_obj = models.Provides.objects.get(id=provide_id)
-
-    form_repayment_add = forms.FormRepaymentAdd()
-    form_compensatory_add = forms.FormCompensatoryAdd()
+    today_str = str(datetime.date.today())
+    form_repayment_add = forms.FormRepaymentAdd(initial={'repayment_date': today_str})
+    form_compensatory_add = forms.FormCompensatoryAdd(initial={'compensatory_date': today_str})
     return render(request, 'dbms/provide/provide-scan.html', locals())
 
 

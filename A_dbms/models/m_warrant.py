@@ -30,7 +30,7 @@ class Warrants(models.Model):  # 担保物
     listing_price = models.FloatField(verbose_name='挂网价格', blank=True, null=True)
     auction_remark = models.CharField(verbose_name='拍卖情况', max_length=64, blank=True, null=True)
     AUCTION_STATE_LIST = (
-        (1, '正常'), (2, '冻结'), (3, '评估'), (5, '挂网'), (11, '成交'), (21, '流拍'), (31, '回转'), (99, '注销'))
+        (1, '正常'), (2, '查封'), (3, '评估'), (5, '挂网'), (11, '成交'), (21, '流拍'), (31, '回转'), (99, '注销'))
     auction_state = models.IntegerField(verbose_name='_拍卖状态', choices=AUCTION_STATE_LIST, default=1)
     transaction_date = models.DateField(verbose_name='成交日期', blank=True, null=True)
     auction_amount = models.FloatField(verbose_name='成交金额', blank=True, null=True)
@@ -205,7 +205,7 @@ class Stockes(models.Model):  # 股权
                                     on_delete=models.PROTECT,
                                     related_name='stock_owner_custome')
     target = models.CharField(verbose_name='标的公司', max_length=64)
-    share = models.FloatField(verbose_name='数量（万元/万股）')
+    share = models.FloatField(verbose_name='数量（万）')
     stock_buildor = models.ForeignKey(to='Employees', verbose_name="创建者", default=1,
                                       on_delete=models.PROTECT,
                                       related_name='stock_buildor_employee')
@@ -304,7 +304,8 @@ class Chattel(models.Model):  # 动产
     chattel_owner = models.ForeignKey(to='Customes', verbose_name="所有权人",
                                       on_delete=models.PROTECT,
                                       related_name='chattel_custome')
-    CHATTEL_TYP_LIST = ((1, '存货'), (11, '设备'))
+    CHATTEL_TYP_LIST = ((1, '存货'), (11, '设备'), (21, '合格证'), (31, '专利'), (41, '商标'),
+                        (71, '账户'), (99, '其他'))
     chattel_typ = models.IntegerField(verbose_name='动产种类', choices=CHATTEL_TYP_LIST, default=1)
     chattel_detail = models.TextField(verbose_name="动产具体描述")
     chattel_buildor = models.ForeignKey(to='Employees', verbose_name="创建者", default=1,
@@ -313,7 +314,7 @@ class Chattel(models.Model):  # 动产
     chattel_date = models.DateField(verbose_name='创建日期', default=datetime.date.today)
 
     class Meta:
-        verbose_name_plural = '权证-动产'  # 指定显示名称
+        verbose_name_plural = '权证-其他'  # 指定显示名称
         db_table = 'dbms_rchattel'  # 指定数据表的名称
 
     def __str__(self):

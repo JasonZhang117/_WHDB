@@ -11,7 +11,7 @@
         </tr>
         </thead>
         <tbody id="dun-stage-tb">
-        {% for stag in dun_obj.stage_dun.all %}
+        {% for stag in stage_list %}
             <tr stage-nid="{{ stag.id }}">
                 <td>{{ stag.stage_remark }}</td>
                 <td>{{ stag.get_stage_type_display }}</td>

@@ -28,7 +28,7 @@ def review(request, *args, **kwargs):  # 保后列表
     '''搜索'''
     search_key = request.GET.get('_s')
     if search_key:
-        search_fields = ['name', 'short_name','contact_addr', 'linkman', 'contact_num']
+        search_fields = ['name', 'short_name', 'contact_addr', 'linkman', 'contact_num']
         q = Q()
         q.connector = 'OR'
         for field in search_fields:
@@ -72,8 +72,9 @@ def review(request, *args, **kwargs):  # 保后列表
 def review_scan(request, custom_id):  # 保后预览
     print(__file__, '---->def review_scan')
     PAGE_TITLE = '保后管理'
+    date_th_later = datetime.date.today() + datetime.timedelta(days=30)  # 30天后的日期
 
-    form_review_plan = forms.FormRewiewPlanAdd()
+    form_review_plan = forms.FormRewiewPlanAdd(initial={'review_plan_date': str(date_th_later)})
     form_review_add = forms.FormRewiewAdd()
 
     custom_obj = models.Customes.objects.get(id=custom_id)
@@ -95,7 +96,6 @@ def review_plan_ajax(request):
     custom_list = models.Customes.objects.filter(id=post_data['custom_id'])
     custom_obj = custom_list.first()
     review_list_s = custom_obj.review_custom.filter(review_state=1)
-    print('review_list_s:', review_list_s)
     if review_list_s:
         response['status'] = False
         response['message'] = '还有未完成的保后计划，包后计划失败！'

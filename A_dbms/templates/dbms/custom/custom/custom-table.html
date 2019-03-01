@@ -22,11 +22,7 @@
         <tbody>
         {% for custom in p_list %}
             <tr>
-                <td>
-                    <a href="{% url 'dbms:custom_scan' custom_id=custom.id %}">
-                        {{ custom.name }}
-                    </a>
-                </td>
+                <td><a href="{% url 'dbms:custom_scan' custom_id=custom.id %}">{{ custom.name }}</a></td>
                 <td>{{ custom.get_genre_display }}</td>
                 <td>{{ custom.contact_addr }}</td>
                 <td>{{ custom.linkman }}</td>

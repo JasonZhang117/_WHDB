@@ -55,6 +55,10 @@
                     <h3>30天内到期查封：
                         <a href="{% url 'dbms:soondue_seal' %}">{{ soondue_seal_count }}</a></h3>
                     {#                    {% endif %}#}
+                    {#                    {% if overdue_search_count > 0 %}#}
+                    <h3>超过30天未跟踪的查封资产：
+                        <a href="{% url 'dbms:overdue_search' %}">{{ overdue_search_count }}</a></h3>
+                    {#                    {% endif %}#}
                 {% endblock %}
             </div>
         </div>

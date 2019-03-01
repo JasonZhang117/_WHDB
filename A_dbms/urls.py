@@ -91,6 +91,8 @@ urlpatterns = [
     path('provide/agree/scan/<int:agree_id>/', views.provide_agree_scan, name='provide_agree_scan'),
     path('provide/agree/notify/<int:agree_id>/<int:notify_id>/', views.provide_agree_notify,
          name='provide_agree_notify'),
+    path('provide/notify/', views.notify, name='notify_all'),  #
+    path('provide/notify/scan/<int:notify_id>/', views.notify_scan, name='notify_scan'),
     path('provide/counter/sign/', views.counter_sign_ajax),
     path('provide/ascertain/add/', views.ascertain_add_ajax),
     path('provide/notify/add/', views.notify_add_ajax),
@@ -142,6 +144,8 @@ urlpatterns = [
 
     path('dun/seal/', views.seal, name='seal_all'),
     path('dun/seal/<int:seal_state>/', views.seal, name='seal'),
+    path('dun/seal/scan/<int:dun_id>/<int:warrant_id>/', views.seal_scan, name='seal_scan'),
+
     path('dun/standing/add/', views.standing_add_ajax, name='standing_add_ajax'),
     path('dun/standing/del/', views.standing_del_ajax, name='standing_del_ajax'),
     path('dun/charge/add/', views.charge_add_ajax, name='charge_add_ajax'),
@@ -150,6 +154,7 @@ urlpatterns = [
     path('dun/retrieve/del/', views.retrieve_del_ajax, name='retrieve_del_ajax'),
     path('dun/seal/overdue/', views.overdue_seal, name='overdue_seal'),
     path('dun/seal/soondue/', views.soondue_seal, name='soondue_seal'),
+    path('dun/search/overdue/', views.overdue_search, name='overdue_search'),
 
     # -----------------------客户管理-------------------------#
 

@@ -59,8 +59,8 @@ def appraisal_scan(request, article_id):  # 评审项目预览
     '''ARTICLE_STATE_LIST = ((1, '待反馈'), (2, '已反馈'), (3, '待上会'), (4, '已上会'), (5, '已签批'),
                           (51, '已放完'), (61, '待变更'), (99, '已注销'))'''
     if article_obj.article_state in [1, 2, 3, 4]:
-        today_str = time.strftime("%Y-%m-%d", time.gmtime())
-        form_date = {'renewal': article_obj.renewal, 'augment': article_obj.augment, 'sign_date': str(today_str)}
+        form_date = {'renewal': article_obj.renewal, 'augment': article_obj.augment,
+                     'sign_date': str(datetime.date.today())}
         form_article_sign = forms.ArticlesSignForm(initial=form_date)
     else:
         form_date = {
@@ -72,7 +72,7 @@ def appraisal_scan(request, article_id):  # 评审项目预览
     form_comment = forms.CommentsAddForm()
     form_single = forms.SingleQuotaForm()
     form_lending = forms.FormLendingOrder()
-    form_article_change = forms.ArticleChangeForm()
+    form_article_change = forms.ArticleChangeForm(initial={'change_date': str(datetime.date.today())})
     return render(request, 'dbms/appraisal/appraisal-scan.html', locals())
 
 

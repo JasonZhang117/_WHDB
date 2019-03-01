@@ -1,10 +1,22 @@
 <div id="form_draft_add_eidt" class="warrant-extend" style="display: none">
 
     <div class="form-group"><!--所有者-->
+        <label for="id_draft_owner"
+               class="col-sm-3 control-label">{{ form_draft_add_eidt.draft_owner.label }}：</label>
+        <div class="col-sm-9">
+            <select name="draft_owner" id="id_draft_owner" required="" class="form-control search-id">
+                <option value="" selected="">---------</option>
+            </select>
+        </div>
+        <label id="e_draft_owner" class="pull-right">{{ form_draft_add_eidt.draft_owner.errors }}</label>
+    </div>
+
+    <!--
+    <div class="form-group">
         <label for="id_draft_owner" class="col-sm-3 control-label">{{ form_draft_add_eidt.draft_owner.label }}：</label>
         <div class="col-sm-9">{{ form_draft_add_eidt.draft_owner }}</div>
         <label id="e_draft_owner" class="pull-right">{{ form_draft_add_eidt.draft_owner.errors }}</label>
-    </div>
+    </div>所有者-->
 
     <div class="form-group"><!--票据描述-->
         <label for="id_draft_detail"

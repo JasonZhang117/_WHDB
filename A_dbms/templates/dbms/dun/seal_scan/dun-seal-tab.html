@@ -1,0 +1,22 @@
+<div>
+    <!-- Nav tabs -->
+    <ul class="nav nav-tabs" role="tablist" style="background-color: #f5f5f5">
+
+        <li role="presentation">
+            <a href="#seal_up" style="background-color: #f5f5f5"
+               aria-controls="profile" role="tab" data-toggle="tab">查封详情</a></li>
+        <li role="presentation">
+            <a href="#search" style="background-color: #f5f5f5"
+               aria-controls="profile" role="tab" data-toggle="tab">查询详情</a></li>
+
+
+    </ul>
+    <!-- Tab panes -->
+    <div class="tab-content">
+        <div role="tabpanel" class="tab-pane" id="seal_up"> <!--查封详情-->
+            {% include 'dbms/dun/seal_scan/tab/sealup.html' %} </div>
+        <div role="tabpanel" class="tab-pane" id="search"> <!--查询详情-->
+            {% include 'dbms/dun/seal_scan/tab/agent.html' %} </div>
+
+    </div>
+</div>

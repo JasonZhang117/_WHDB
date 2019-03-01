@@ -104,11 +104,11 @@ def warrant_scan(request, warrant_id):  # house_scan房产预览
         form_date = {
             'agree': warrant_obj.ypothec_warrant.agree}
         form_hypothecs_add_eidt = forms.HypothecsAddEidtForm(initial=form_date)
-    form_storage_add_edit = forms.StoragesAddEidtForm()  # 出入库form
+    form_storage_add_edit = forms.StoragesAddEidtForm(initial={'storage_date': str(datetime.date.today())})  # 出入库
     form_owership_add_edit = forms.OwerShipAddForm()  # 所有权证form
     form_housebag_add_edit = forms.HouseBagAddEidtForm()  # 房产包form
     form_draftbag_add_edit = forms.FormDraftExtend()  # 票据包form
-    form_evaluate_add_edit = forms.EvaluateAddEidtForm()  # 评估
+    form_evaluate_add_edit = forms.EvaluateAddEidtForm(initial={'evaluate_date': str(datetime.date.today())})  # 评估
 
     storage_warrant_list = warrant_obj.storage_warrant.all()  # 出入库信息
 
@@ -195,7 +195,7 @@ def warrant_agree_scan(request, agree_id):  # 查看合同
     CHATTEL_LIST = [13]
     DRAFT_LIST = [33]
 
-    form_storage_add_edit = forms.StoragesAddEidtForm()
+    form_storage_add_edit = forms.StoragesAddEidtForm(initial={'storage_date': str(datetime.date.today())})
 
     return render(request, 'dbms/warrant/warrant-agree-scan.html', locals())
 
@@ -326,6 +326,7 @@ def soondue_draft(request, *args, **kwargs):  # 房产列表
         p_list = paginator.page(paginator.num_pages)
 
     return render(request, 'dbms/warrant/overdu-draft.html', locals())
+
 
 # -----------------------即将到期票据列表-------------------------#
 @login_required

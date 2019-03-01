@@ -90,23 +90,39 @@ def dun(request, *args, **kwargs):  # 代偿列表
 def dun_scan(request, dun_id):  # 查看合同
     print(__file__, '---->def dun_scan')
     PAGE_TITLE = '追偿管理'
+    today_str = datetime.date.today()
+    date_th_later = today_str + datetime.timedelta(days=365)
 
     dun_obj = models.Dun.objects.get(id=dun_id)
-
     from_clue_add = forms.FormClueAdd()  # 财产线索
     from_custom_add = forms.FormCustomAdd()  # 被告人
-    from_sealup_add = forms.FormSealupAdd()  # 查封情况
+    from_sealup_data = {'sealup_date': str(today_str), 'due_date': str(date_th_later)}
+    from_sealup_add = forms.FormSealupAdd(initial=from_sealup_data)  # 查封情况
     from_standing_add = forms.FormStandingAdd()  # 添加追偿台账
-    form_charge_add = forms.FormChargeAdd()  # 追偿费用
-    form_retrieve_add = forms.FormRetrieveAdd()  # 案款回收
+    form_charge_add = forms.FormChargeAdd(initial={'charge_date': str(today_str)})  # 追偿费用
+    form_retrieve_add = forms.FormRetrieveAdd(initial={'retrieve_date': str(today_str)})  # 案款回收
     form_inquiry_add = forms.FormInquiryAdd()  # 查询
-    form_evaluate_add = forms.FormInquiryEvaluateAdd()  # 评估
-    form_hanging_add = forms.FormInquiryHangingAdd()  # 挂网
-    form_turn_add = forms.FormInquiryTurnAdd()  # 成交
-    form_stage_add = forms.FormStageAdd()  # 目录
+    form_evaluate_add = forms.FormInquiryEvaluateAdd(initial={'evaluate_date': str(today_str)})  # 评估
+    form_hanging_add = forms.FormInquiryHangingAdd(initial={'auction_date': str(today_str)})  # 挂网
+    form_turn_add = forms.FormInquiryTurnAdd(initial={'transaction_date': str(today_str)})  # 成交
+    form_stage_add = forms.FormStageAdd(initial={'stage_date': str(today_str)})  # 目录
     form_staff_add = forms.FormStaffAdd()  # 联系人
-    form_agent_add = forms.FormAgentAdd()  # 代理合同
-    form_judgment_add = forms.FormJudgmentAdd()  # 判决裁定
+    form_agent_data = {'agent_date': str(today_str), 'due_date': str(today_str + datetime.timedelta(days=365 * 3))}
+    form_agent_add = forms.FormAgentAdd(initial=form_agent_data)  # 代理合同
+    form_judgment_add = forms.FormJudgmentAdd(initial={'judgment_date': str(today_str)})  # 判决裁定
+    standing_list = models.Standing.objects.filter(dun=dun_obj).order_by('-standingor_date')
+    stage_list = models.Stage.objects.filter(dun=dun_obj).order_by('stage_type')
+
+    '''分页'''
+    paginator = Paginator(standing_list, 6)
+    page = request.GET.get('page')
+    try:
+        p_list = paginator.page(page)
+    except PageNotAnInteger:
+        p_list = paginator.page(1)
+    except EmptyPage:
+        p_list = paginator.page(paginator.num_pages)
+
     return render(request, 'dbms/dun/dun-scan.html', locals())
 
 
@@ -141,6 +157,16 @@ def seal(request, *args, **kwargs):  # 代偿列表
         p_list = paginator.page(paginator.num_pages)
 
     return render(request, 'dbms/dun/dun-seal.html', locals())
+
+
+# -----------------------查封资产详情-------------------------#
+@login_required
+def seal_scan(request, dun_id, warrant_id):  # 查看合同
+    print(__file__, '---->def dun_scan')
+    PAGE_TITLE = '查封详情'
+    seal_obj = models.Seal.objects.get(dun_id=dun_id, warrant_id=warrant_id)
+    print('seal_obj:', seal_obj)
+    return render(request, 'dbms/dun/dun-seal-scan.html', locals())
 
 
 # -----------------------代偿添加ajax-------------------------#
@@ -306,6 +332,41 @@ def soondue_seal(request, *args, **kwargs):
     provide_acount = soondue_seal_list.count()
     '''分页'''
     paginator = Paginator(soondue_seal_list, 19)
+    page = request.GET.get('page')
+    try:
+        p_list = paginator.page(page)
+    except PageNotAnInteger:
+        p_list = paginator.page(1)
+    except EmptyPage:
+        p_list = paginator.page(paginator.num_pages)
+
+    return render(request, 'dbms/dun/overdu-seal.html', locals())
+
+
+# -----------------------超过30天未跟踪的查封资产---------------------#
+@login_required
+def overdue_search(request, *args, **kwargs):
+    print(__file__, '---->def overdue_seal')
+    PAGE_TITLE = '超期查询'
+    '''SEAL_STATE_LIST = ((1, '诉前保全'), (5, '首次首封'), (11, '首次轮封'), (21, '续查封'),
+                           (51, '解除查封'), (99, '注销'))'''
+    date_th_befor = datetime.date.today() + datetime.timedelta(days=-30)  # 30天前的日期
+    overdue_search_list = models.Seal.objects.filter(
+        seal_state__in=[1, 5, 11, 21], inquiry_date__lt=date_th_befor)  # 超过30天未查询
+
+    '''搜索'''
+    search_key = request.GET.get('_s')
+    if search_key:
+        search_fields = ['dun__warrant__warrant_num', ]
+        q = Q()
+        q.connector = 'OR'
+        for field in search_fields:
+            q.children.append(("%s__contains" % field, search_key))
+        overdue_search_list = overdue_search_list.filter(q)
+    print("overdue_seal_list:", overdue_search_list)
+    provide_acount = overdue_search_list.count()
+    '''分页'''
+    paginator = Paginator(overdue_search_list, 19)
     page = request.GET.get('page')
     try:
         p_list = paginator.page(page)

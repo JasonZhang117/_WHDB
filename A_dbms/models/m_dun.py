@@ -13,8 +13,11 @@ class Compensatories(models.Model):  #
     compensatory_interest = models.FloatField(verbose_name='代偿利息', default=0)
     default_interest = models.FloatField(verbose_name='代偿罚息', default=0)
     compensatory_amount = models.FloatField(verbose_name='代偿总额')
-    DUN_STATE_LIST = ((1, '已代偿'), (3, '诉前'), (11, '已起诉'), (21, '已判决'), (31, '已和解'),
-                      (41, '执行中'), (91, '结案'))
+    '''STAGE_TYPE_LIST = ((1, '证据及财产线索资料'), (11, '诉前资料'), (21, '一审资料'),
+                           (31, '上诉及再审'), (41, '案外之诉'),
+                           (51, '执行资料'), (99, '其他'))'''
+    DUN_STATE_LIST = ((1, '已代偿'), (3, '诉前'), (11, '一审'), (21, '上诉及再审'), (31, '案外之诉'),
+                      (41, '执行'), (91, '结案'))
     dun_state = models.IntegerField(verbose_name='追偿状态', choices=DUN_STATE_LIST, default=1)
     compensator = models.ForeignKey(to='Employees', verbose_name="创建人", on_delete=models.PROTECT,
                                     related_name='compensator_employee')

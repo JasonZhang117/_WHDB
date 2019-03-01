@@ -77,13 +77,16 @@ class GroundAddEidtForm(dform.ModelForm):
 class FormReceivable(dform.ModelForm):  # 应收帐款
     receive_owner = fields.IntegerField(
         label='所有权人', label_suffix="：", widget=widgets.Select(attrs={'class': 'form-control'}))
+
     class Meta:
         model = models.Receivable
         fields = ['receivable_detail']
         widgets = {'receivable_detail': dform.Textarea(attrs={'class': 'form-control', 'rows': '3'})}
+
     def __init__(self, *args, **kwargs):
         super(FormReceivable, self).__init__(*args, **kwargs)
         self.fields['receive_owner'].widget.choices = models.Customes.objects.values_list('id', 'name').order_by('name')
+
 
 # ------------------------股权FormStockes21--------------------------#
 class FormStockes(dform.ModelForm):  # 股权
@@ -94,7 +97,7 @@ class FormStockes(dform.ModelForm):  # 股权
         model = models.Stockes
         fields = ['target', 'share', 'stock_typ']
         widgets = {'target': dform.TextInput(attrs={'class': 'form-control'}),
-                   'share': dform.NumberInput(attrs={'class': 'form-control', 'placeholder': '土地坐落'}),
+                   'share': dform.NumberInput(attrs={'class': 'form-control', 'placeholder': '万元或万股'}),
                    'stock_typ': dform.Select(attrs={'class': 'form-control'})}
 
     def __init__(self, *args, **kwargs):

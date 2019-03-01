@@ -24,7 +24,7 @@ def meeting(request, *args, **kwargs):  # 评审会
     '''搜索'''
     search_key = request.GET.get('_s')
     if search_key:
-        search_fields = ['num']
+        search_fields = ['num', 'article__article_num', 'article__custom__name', 'article__custom__short_name']
         q = Q()
         q.connector = 'OR'
         for field in search_fields:
