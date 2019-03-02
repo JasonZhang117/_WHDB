@@ -17,13 +17,8 @@ from django.db.models import Avg, Min, Sum, Max, Count
 @login_required
 def article(request, *args, **kwargs):  # 项目列表
     print(__file__, '---->def article')
-    # print('request.path:', request.path)
-    # print('request.get_host:', request.get_host())
-    # print('type(request.user):', type(request.user))
-    # print('request.user:', request.user)
-    # print('request.GET.items():', request.GET.items())
-    # request.GET.items()获取get传递的参数对
-    print('request.GET:', request.GET)
+    print('request.path:', request.path)
+    print('resolve(request.path):', resolve(request.path).url_name)  # 路径转换为url_name、app_name
 
     form_article_add_edit = forms.ArticlesAddForm()
 
@@ -41,7 +36,6 @@ def article(request, *args, **kwargs):  # 项目列表
     '''筛选条件'''
     article_state_list = models.Articles.ARTICLE_STATE_LIST  # 筛选条件
     article_state_list_dic = list(map(lambda x: {'id': x[0], 'name': x[1]}, article_state_list))
-    print('article_state_list_dic:', article_state_list_dic)
     # 列表或元组转换为字典并添加key[{'id': 1, 'name': '待反馈'}, {'id': 2, 'name': '已反馈'}]
     '''筛选'''
     article_list = models.Articles.objects.filter(**kwargs).select_related(

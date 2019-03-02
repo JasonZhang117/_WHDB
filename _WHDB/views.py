@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from A_dbms import models
-import datetime, time
+import datetime, time, re
 from django.urls import resolve, reverse
 
 
@@ -23,41 +23,7 @@ def acc_login(request):
             menu_list = models.Menus.objects.filter(jobs__employees=user).distinct().order_by(
                 'ordery').values('name', 'url_name')
             request.session['menus'] = list(menu_list)
-            '''查询权限并写入session'''
-            authority_list = models.Authorities.objects.filter(
-                jobs__employees=user).distinct().values('name', 'url_name', 'carte')  # 权限列表
-            request.session['authoritis'] = list(authority_list)
-            '''查询菜单本写入session'''
-            yes_carte_list = models.Authorities.objects.filter(
-                jobs__employees=user).distinct().exclude(
-                carte__isnull=True).values('id', 'name', 'url_name', 'carte')  # 有菜单权限列表
-            # [{'id': 2, 'name': '查看项目列表', 'url_name': 'dbms:article_all', 'carte': 1},]
-            yes_carte_dict = {}  # 有菜单权限字典
-            for item in yes_carte_list:
-                item = {
-                    'id': item['id'], 'url': item['url_name'], 'name': item['name'],
-                    'parrent': item['carte'], 'child': []
-                }  # 替换每个字典的键
-                if item['parrent'] in yes_carte_dict:
-                    yes_carte_dict[item['parrent']].append(item)
-                else:
-                    yes_carte_dict[item['parrent']] = [item, ]
-            carte_list = models.Cartes.objects.filter(
-                authority_carte__jobs__employees=user).distinct().values(
-                'id', 'parrent', 'name', 'ordery').order_by('ordery')  # 菜单列表
-            carte_dict = {}  # 菜单字典
-            '''将列表carte_list转换为字典，'''
-            for item in carte_list:  # carte_list为列表，其中的元素为字典，取出列表中的字典元素为item
-                item['child'] = []  # 将每个字典添加一个child键，值设置为一个空列表
-                carte_dict[item['id']] = item  # 将字典carte_dict键设为item字典的id值，值设为item字典
-            for k, v in yes_carte_dict.items():
-                carte_dict[k]['child'] = v  # 将权限挂到菜单上
-            request.session['cartes'] = list(carte_list)
-            '''查询角色并写入session'''
-            job_list = models.Jobs.objects.filter(employees=user).values('name')  # 角色列表
-            request.session['jobs'] = list(job_list)
-            # request.session['menus'] = [{'menu': '评审管理', 'url': 'dbms:article_all'},
-            #                             {'menu': '个人主页', 'url': 'dbms:agree'}]
+
             login(request, user)
             return redirect(request.GET.get('next', 'dbms:index'))
         else:
@@ -79,6 +45,7 @@ def home(request):
     print('resolve(request.path):', resolve(request.path).url_name)  # 路径转换为url_name、app_name
     print('reverse(request.path):', reverse('home'))  # 将路径名转换为路径
     print('request.get_host:', request.get_host())
+    print('request.GET.items():', request.GET.items())  # 获取get传递的参数对
 
     print('acc_login-->request.COOKIES:', request.COOKIES)
     print('acc_login-->request.session:', request.session)
@@ -91,60 +58,64 @@ def home(request):
     no_carte_list = models.Authorities.objects.filter(
         jobs__employees=request.user).distinct().filter(
         carte__isnull=True).values('name', 'url_name', 'carte')  # 无菜单权限列表
-    # [{'id': 2, 'name': '查看项目列表', 'url_name': 'dbms:article_all', 'carte': 1},]
-    yes_carte_list = models.Authorities.objects.filter(
+
+    # 获取菜单的叶子节点，即：菜单的最后一层应该显示的权限
+    menu_leaf_list = list(models.Authorities.objects.filter(
         jobs__employees=request.user).distinct().exclude(
-        carte__isnull=True).values('id', 'name', 'url_name', 'carte')  # 有菜单权限列表
-    # [{'id': 2, 'name': '查看项目列表', 'url_name': 'dbms:article_all', 'carte': 1},]
-    yes_carte_dict = {}  # 有菜单权限字典
-    for item in yes_carte_list:
+        carte__isnull=True).values('id', 'name', 'url_name', 'carte'))  # 有菜单权限列表
+    current_url = request.path_info  # 访问的url
+    menu_leaf_dict = {}  # 有菜单权限字典
+    open_leaf_parent_id = None
+    # 归并所有的叶子节点
+    for item in menu_leaf_list:
         item = {
             'id': item['id'],
             'url': item['url_name'],
-            'name': item['name'],
-            'parrent': item['carte'],
-            'child': []
+            'caption': item['name'],
+            'parent_id': item['carte'],
+            'child': [],
+            'status': True,  # 是否显示
+            'open': False,
         }  # 替换每个字典的键
-        if item['parrent'] in yes_carte_dict:
-            yes_carte_dict[item['parrent']].append(item)
+        if item['parent_id'] in menu_leaf_dict:
+            menu_leaf_dict[item['parent_id']].append(item)
         else:
-            yes_carte_dict[item['parrent']] = [item, ]
-    print('yes_carte_dict:', yes_carte_dict)
+            menu_leaf_dict[item['parent_id']] = [item, ]
+        if re.match(item['url'], current_url):
+            item['open'] = True
+            open_leaf_parent_id = item['parent_id']
 
-    carte_list = models.Cartes.objects.filter(
+    # 获取所有菜单字典
+    menu_list = list(models.Cartes.objects.filter(
         authority_carte__jobs__employees=request.user).distinct().values(
-        'id', 'parrent', 'name', 'ordery')  # 菜单列表
-    print('carte_list:', carte_list)
-    carte_dict = {}  # 菜单字典
-    '''将列表carte_list转换为字典，'''
-    for item in carte_list:  # carte_list为列表，其中的元素为字典，取出列表中的字典元素为item
-        item['child'] = []  # 将每个字典添加一个child键，值设置为一个空列表
-        carte_dict[item['id']] = item  # 将字典carte_dict键设为item字典的id值，值设为item字典
-    print('carte_dict:', carte_dict)
-    for k, v in yes_carte_dict.items():
-        carte_dict[k]['child'] = v  # 将权限挂到菜单上
-    print('carte_list:', carte_list)
-    print('list(carte_list):', list(carte_list))
+        'id', 'caption', 'parent_id', 'ordery'))  # # 获取所有的菜单列表
+    '''将列表menu_list转换为字典，'''
+    menu_dict = {}  # 菜单字典
+    for item in menu_list:  # carte_list为列表，其中的元素为字典，取出列表中的字典元素为item
+        item['child'] = []  # 将carte_list里的每个字典添加一个child键，值设置为一个空列表
+        menu_dict[item['id']] = item  # 将字典carte_dict键设为item字典的id值，值设为item字典
+        item['status'] = False
+        item['open'] = False
+    # 将叶子节点添加到菜单中
+    for k, v in menu_leaf_dict.items():
+        menu_dict[k]['child'] = v  # 将权限挂到菜单上
+        parent_id = k
+        # 将后代中有叶子节点的菜单标记为【显示】
+        while parent_id:
+            menu_dict[parent_id]['status'] = True
+            parent_id = menu_dict[parent_id]['parent_id']
+    # 将已经选中的菜单标记为【展开】
+    while open_leaf_parent_id:
+        menu_dict[open_leaf_parent_id]['open'] = True
+        open_leaf_parent_id = menu_dict[open_leaf_parent_id]['parent_id']
 
-    ''' [
-            {'name': '项目管理', 'parrent': None, 'ordery': 1, 'chaild':[
-                {'name': '评审管理', 'url': 'dbms/meeting/scan'},
-                {'name': '评审管理', 'url': 'dbms/meeting/scan'},]},
-            {'name': '评审管理', 'parrent': None, 'ordery': 2}
-     ]'''
     result = []
-    for row in carte_dict.values():
-        if not row['parrent']:
+    for row in menu_dict.values():
+        if not row['parent_id']:
             result.append(row)
         else:
-            carte_dict[row['parrent']]['child'].append(row)
+            menu_dict[row['parent_id']]['child'].append(row)
+    print('menu_list:', menu_list)
     print('result:', result)
-
-    for item in result:
-        print(item['name'])
-        for r in item['child']:
-            print('----', r['name'])
-            for n in r['child']:
-                print('-------->', n['name'])
 
     return render(request, 'index.html', locals())

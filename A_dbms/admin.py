@@ -239,7 +239,7 @@ admin.site.register(models.Authorities, AuthoritiesAdmin)
 
 
 class CartesAdmin(admin.ModelAdmin):
-    list_display = ('name', 'ordery', 'parrent')  # 显示字段
+    list_display = ('caption', 'ordery', 'parent')  # 显示字段
     list_per_page = 30  # 每页显示条目数
     # filter_horizontal = ("menu", "authority")
 

@@ -13,7 +13,7 @@
                     <span class="icon-bar"></span>
                 </button>
                 <a class="navbar-brand" href="{% url 'dbms:index' %}">
-                    {% block pro_name %}这是一个测试页，请点击进入业务管理系统{% endblock %}
+                    {% block pro_name %}成都武侯中小企业融资担保有限责任公司{% endblock %}
                 </a>
             </div>
             <div id="navbar" class="navbar-collapse collapse">
@@ -54,89 +54,29 @@
                  style="padding-left: 1px;padding-right: 1px;"> <!--主体-->
                 {% block right-content-container %}
                     <h2 class="page-header"><a href="{% url 'dbms:index' %}">测试页，点击进入正式系统</a></h2>
-                    角色列表session：{{ request.session.jobs }}<br>
+
+                    菜单权限字典result：{{ result }}<br>
                     <ul>
-                        {% for job in request.session.jobs %}
-                            <li>name：{{ job.name }}</li>
-                        {% endfor %}
-                    </ul>
-                    权限列表session：{{ request.session.authoritis }}<br>
-                    <ul>
-                        {% for authority in request.session.authoritis %}
+                        {% for carte in result %}
                             <li>
-                                name：{{ authority.name }}-url_name:{{ authority.url_name }}-carte：{{ authority.carte }}
-                            </li>
-                        {% endfor %}
-                    </ul>
-                    菜单列表session：{{ request.session.cartes }}<br>
-                    <ul>
-                        {% for carte in request.session.cartes %}
-                            <li>
-                                id：{{ carte.id }}-name:{{ carte.name }}-ordery：{{ carte.ordery }}-parrent：{{ carte.parrent }}
+                                id:{{ carte.id }}->caption:{{ carte.caption }}->parent_id:{{ carte.parent_id }}->ordery：{{ carte.ordery }}->child：{{ carte.child }}
                                 <ul>
-                                    {% for child in carte.child %}
+                                    {% for ccc in carte.child %}
                                         <li>
-                                            id:{{ child.id }}-url:{{ child.url }}-name:{{ child.name }}-parrent:{{ child.parrent }}</li>
+                                            id:{{ ccc.id }}->caption:{{ ccc.caption }}->parent_id:{{ ccc.parent_id }}->url：{{ ccc.url }}->ordery：
+                                            {{ ccc.ordery }}->open：{{ ccc.open }}->child：{{ ccc.child }}
+                                        </li>
                                     {% endfor %}
+
                                 </ul>
                             </li>
                         {% endfor %}
                     </ul>
-                    权限列表：{{ authority_list }}<br>
-                    <ul>
-                        {% for authority in authority_list %}
-                            <li>
-                                name:{{ authority.name }}-url_name：{{ authority.url_name }}-carte：{{ authority.carte }}
-                            </li>
-                        {% endfor %}
-                    </ul>
 
-                    无菜单权限列表：{{ no_carte_list }}<br>
-                    <ul>
-                        {% for carte in no_carte_list %}
-                            <li>
-                                name:{{ carte.name }}-url_name：{{ carte.url_name }}-carte：{{ carte.carte }}
-                            </li>
-                        {% endfor %}
-                    </ul>
-                    有菜单权限列表：{{ yes_carte_list }}<br>
-                    <ul>
-                        {% for carte in yes_carte_list %}
-                            <li>
-                                name:{{ carte.name }}-url_name：{{ carte.url_name }}-carte：{{ carte.carte }}
-                            </li>
-                        {% endfor %}
-                    </ul>
-                    有菜单权限字典：{{ yes_carte_dict }}<br>
-
-                    菜单列表：{{ carte_list }}<br>
-                    <ul>
-                        {% for carte in carte_list %}
-                            <li>
-                                name:{{ carte.name }}-url_name：{{ carte.url_name }}-carte：{{ carte.carte }}
-                            </li>
-                        {% endfor %}
-                    </ul>
-                    无菜单权限：{{ no_carte_list }}<br>
-                    菜单权限：{{ yes_carte_list }}<br>
-                    菜单字典：{{ carte_dict }}<br>
-                    菜单权限字典：{{ yes_carte_dict }}<br>
-                    菜单权限字典：{{ result }}<br>
-                    {% for item in result %}
-                        {{ item.name }} <br>
-                        {% for r in item.child %}
-                            ---->{{ r.name }}<br>
-                        {% endfor %}
-                    {% endfor %}
                 {% endblock %}
             </div>
         </div>
     </div>
 {% endblock %}
 
-
-{% block extra-js %}
-    {% include 'dbms/js/js-carte-control.html' %}
-
-{% endblock %}
 

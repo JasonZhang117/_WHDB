@@ -39,7 +39,7 @@ class EmployeesManager(BaseUserManager):
 class Employees(AbstractBaseUser, PermissionsMixin):
     email = models.EmailField(
         max_length=150, verbose_name='电子邮箱', unique=True,
-        error_messages={'unique': ("email already exists.")}, )
+        error_messages={'unique': "E-mail已经存在！"}, )
     num = models.CharField(max_length=64, verbose_name="代码")
     name = models.CharField(max_length=64, verbose_name="姓名")
     is_active = models.BooleanField(default=True)
@@ -110,13 +110,13 @@ class Menus(models.Model):
 # -----------------------------菜单模型------------------------------#
 class Cartes(models.Model):
     """动态菜单"""
-    name = models.CharField(verbose_name="菜单名称", max_length=64, unique=True)
+    caption = models.CharField(verbose_name="菜单名称", max_length=64, unique=True)
     # url_name = models.CharField(verbose_name="URL", max_length=128, null=True, blank=True)
+    parent = models.ForeignKey(to="self", verbose_name="母菜单",
+                               on_delete=models.PROTECT,
+                               related_name='carte_parent',
+                               blank=True, null=True)
     ordery = models.IntegerField(verbose_name="优先级")
-    parrent = models.ForeignKey(to="self", verbose_name="母菜单",
-                                on_delete=models.PROTECT,
-                                related_name='carte_parrent',
-                                blank=True, null=True)
 
     class Meta:
         verbose_name_plural = '内部-菜单'
@@ -124,7 +124,7 @@ class Cartes(models.Model):
         # unique_together = ('name', 'url_name')
 
     def __str__(self):
-        return '%s-%s' % (self.name, self.ordery)
+        return '%s-%s' % (self.caption, self.ordery)
 
 
 # -----------------------------权限模型------------------------------#
