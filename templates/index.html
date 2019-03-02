@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 
 {% block body %}
-    <nav class="navbar navbar-inverse navbar-fixed-top">
+    <nav class="navbar navbar-inverse navbar-fixed-top"><!--导航-->
         <div class="container-fluid">
             <div class="navbar-header">
                 <button type="button" class="navbar-toggle collapsed"
@@ -12,8 +12,8 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand" href="#">
-                    {% block pro_name %}武侯中小-担保管理系统-首页{% endblock %}
+                <a class="navbar-brand" href="{% url 'dbms:index' %}">
+                    {% block pro_name %}这是一个测试页，请点击进入业务管理系统{% endblock %}
                 </a>
             </div>
             <div id="navbar" class="navbar-collapse collapse">
@@ -24,51 +24,104 @@
                             {{ request.user.name }} <span class="caret"></span>
                         </a>
                         <ul class="dropdown-menu">
-                            <li><a href="#">个人信息</a></li>
-                            <li><a href="{% url 'logout' %}">Logout</a></li>
+                            <li><a href="/admin/">个人信息</a></li>
+                            <li><a href="{% url 'logout' %}">退出系统</a></li>
                         </ul>
                     </li>
                 </ul>
             </div>
         </div>
     </nav>
-
     <div class="container-fluid">
         <div class="row">
-            <div class="col-sm-3 col-md-2 sidebar">
+            <div class="col-sm-3 col-md-2 sidebar"><!--菜单-->
                 <ul class="nav nav-sidebar">
-                    {#        {{ request.user.userprofile.role.all }}#}
-                    {% for role in  request.user.userprofile.role.select_related %}
-                        {% for menu in role.menus.select_related %}
-                            <li>
-                                <a href="{% if menu.url_type == 0 %}
-                                                {{ menu.url_name }}
-                                         {% else %}
-                                                 {% url menu.url_name %}
-                                         {% endif %}">
-                                    {{ menu.name }}
-                                </a>
-                            </li>
-                        {% endfor %}
+                    {% for carte in request.session.cartes %}
+                        <li class="carte-parrent"><a style="padding-bottom: 5px;padding-top: 5px;">
+                            {{ carte.name }}</a>
+                            <ul class="carte-child" style="display: none">
+                                {% for child in carte.child %}
+                                    <li style="list-style-type:circle"><a href="{{ child.url }}">
+                                        {{ child.name }}</a>
+                                    </li>
+                                {% endfor %}
+                            </ul>
+                        </li>
                     {% endfor %}
                 </ul>
             </div>
-            <div class="col-sm-9 col-sm-offset-3
-            col-md-10 col-md-offset-2 main"
-                 style="padding-left: 1px;padding-right: 1px;">
+            <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main"
+                 style="padding-left: 1px;padding-right: 1px;"> <!--主体-->
                 {% block right-content-container %}
-                    <h2 class="page-header">Dashboard</h2>
+                    <h2 class="page-header"><a href="{% url 'dbms:index' %}">测试页，点击进入正式系统</a></h2>
+                    角色列表session：{{ request.session.jobs }}<br>
+                    <ul>
+                        {% for job in request.session.jobs %}
+                            <li>name：{{ job.name }}</li>
+                        {% endfor %}
+                    </ul>
+                    权限列表session：{{ request.session.authoritis }}<br>
+                    <ul>
+                        {% for authority in request.session.authoritis %}
+                            <li>
+                                name：{{ authority.name }}-url_name:{{ authority.url_name }}-carte：{{ authority.carte }}
+                            </li>
+                        {% endfor %}
+                    </ul>
+                    菜单列表session：{{ request.session.cartes }}<br>
+                    <ul>
+                        {% for carte in request.session.cartes %}
+                            <li>
+                                id：{{ carte.id }}-name:{{ carte.name }}-ordery：{{ carte.ordery }}-parrent：{{ carte.parrent }}
+                                <ul>
+                                    {% for child in carte.child %}
+                                        <li>
+                                            id:{{ child.id }}-url:{{ child.url }}-name:{{ child.name }}-parrent:{{ child.parrent }}</li>
+                                    {% endfor %}
+                                </ul>
+                            </li>
+                        {% endfor %}
+                    </ul>
                     权限列表：{{ authority_list }}<br>
+                    <ul>
+                        {% for authority in authority_list %}
+                            <li>
+                                name:{{ authority.name }}-url_name：{{ authority.url_name }}-carte：{{ authority.carte }}
+                            </li>
+                        {% endfor %}
+                    </ul>
+
+                    无菜单权限列表：{{ no_carte_list }}<br>
+                    <ul>
+                        {% for carte in no_carte_list %}
+                            <li>
+                                name:{{ carte.name }}-url_name：{{ carte.url_name }}-carte：{{ carte.carte }}
+                            </li>
+                        {% endfor %}
+                    </ul>
+                    有菜单权限列表：{{ yes_carte_list }}<br>
+                    <ul>
+                        {% for carte in yes_carte_list %}
+                            <li>
+                                name:{{ carte.name }}-url_name：{{ carte.url_name }}-carte：{{ carte.carte }}
+                            </li>
+                        {% endfor %}
+                    </ul>
+                    有菜单权限字典：{{ yes_carte_dict }}<br>
+
                     菜单列表：{{ carte_list }}<br>
-                    {#                    无菜单权限：{{ no_carte_list }}<br>#}
+                    <ul>
+                        {% for carte in carte_list %}
+                            <li>
+                                name:{{ carte.name }}-url_name：{{ carte.url_name }}-carte：{{ carte.carte }}
+                            </li>
+                        {% endfor %}
+                    </ul>
+                    无菜单权限：{{ no_carte_list }}<br>
                     菜单权限：{{ yes_carte_list }}<br>
                     菜单字典：{{ carte_dict }}<br>
                     菜单权限字典：{{ yes_carte_dict }}<br>
                     菜单权限字典：{{ result }}<br>
-                    <!--    for item in result:
-                                print(item['name'])
-                                for r in item['child']:
-                                    print('----', r['name'])-->
                     {% for item in result %}
                         {{ item.name }} <br>
                         {% for r in item.child %}
@@ -82,4 +135,8 @@
 {% endblock %}
 
 
+{% block extra-js %}
+    {% include 'dbms/js/js-carte-control.html' %}
+
+{% endblock %}
 

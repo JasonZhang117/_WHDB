@@ -17,10 +17,8 @@ from django.db.models import Avg, Min, Sum, Max, Count
 @login_required
 def article(request, *args, **kwargs):  # 项目列表
     print(__file__, '---->def article')
-    print('**kwargs:', kwargs)
     # print('request.path:', request.path)
     # print('request.get_host:', request.get_host())
-    # print('resolve(request.path):', resolve(request.path))
     # print('type(request.user):', type(request.user))
     # print('request.user:', request.user)
     # print('request.GET.items():', request.GET.items())

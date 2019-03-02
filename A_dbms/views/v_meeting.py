@@ -1,8 +1,9 @@
 from django.shortcuts import render, redirect, HttpResponse
 from .. import models
 from .. import forms
-import datetime, time
-import json
+import datetime, time,json
+from django.urls import resolve
+
 from django.contrib.auth.decorators import login_required
 from django.db.models import Sum, Max, Count
 from django.db.models import Q, F
@@ -14,6 +15,7 @@ from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 @login_required
 def meeting(request, *args, **kwargs):  # 评审会
     print(__file__, '---->def meeting')
+    print('request.path_info', request.path_info)  # 当前url
     # print('kwargs:', kwargs)
     '''模态框'''
     form_meeting_add = forms.MeetingAddForm()  # 评审会添加

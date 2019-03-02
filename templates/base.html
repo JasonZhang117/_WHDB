@@ -39,7 +39,9 @@
 <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
 <script src="{% static 'js/ie10-viewport-bug-workaround.js' %}"></script>
 
-{% block extra-js %}{% endblock %}
+{% include 'dbms/js/js-carte-control.html' %}
+
+{% block extra-js %} {% endblock %}
 
 </body>
 </html>
