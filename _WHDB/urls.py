@@ -19,7 +19,7 @@ from _WHDB import views
 
 # app_name = 'home'
 urlpatterns = [
-    path('admin/', admin.site.urls, name="adminn"),
+    path('admin/', admin.site.urls, name="admin"),
     path('login/', views.acc_login, name="login"),
     path('logout/', views.acc_logout, name="logout"),
     path('', views.home, name="home"),

@@ -3,7 +3,9 @@
         <label>项目情况</label>
         <label class="navbar-right">
             {% if  PAGE_TITLE == '查看项目' %}
-                <a class="btn btn-primary btn-sm " id="feedbackArticle">反馈</a><!--#path('article/del/'-->
+                {% if 'article_feedback_ajax' in authority_list %}
+                    <a class="btn btn-primary btn-sm " id="feedbackArticle">反馈</a><!--#path('article/del/'-->
+                {% endif %}
                 <a class="btn btn-primary btn-sm " id="editArticle">修改</a><!--#path('article/del/'-->
                 <a class="btn btn-danger btn-sm " id="delArticle">删除</a><!--#path('article/del/'-->
             {% elif  PAGE_TITLE == '放款次序' %}

@@ -36,12 +36,12 @@
         <div class="row">
             <div class="col-sm-3 col-md-2 sidebar"><!--菜单-->
                 <ul class="nav nav-sidebar">
-                    {% for carte in result %}
+                    {% for menu in menu_result %}
                         <li class="carte-parrent"><a style="padding-bottom: 5px;padding-top: 5px;">
-                            {{ carte.caption }}</a>
-                            {% if carte.open == True %}
+                            {{ menu.caption }}</a>
+                            {% if menu.open == True %}
                                 <ul class="carte-child">
-                                    {% for child in carte.child %}
+                                    {% for child in menu.child %}
                                         {% if child.open == True %}
                                             <li style="list-style-type:disc"><a href="{{ child.url }}">
                                                 {{ child.caption }}</a>
@@ -55,7 +55,7 @@
                                 </ul>
                             {% else %}
                                 <ul class="carte-child" style="display: none">
-                                    {% for child in carte.child %}
+                                    {% for child in menu.child %}
                                         <li style="list-style-type:circle"><a href="{{ child.url }}">
                                             {{ child.caption }}</a>
                                         </li>
@@ -70,14 +70,12 @@
                  style="padding-left: 1px;padding-right: 1px;"> <!--主体-->
                 {% block right-content-container %}
                     <h2 class="page-header"><a href="{% url 'dbms:index' %}">测试页，点击进入正式系统</a></h2>
-
-                    菜单权限字典result：{{ result }}<br>
                     <ul>
-                        {% for carte in result %}
+                        {% for menu in menu_result %}
                             <li>
-                                id:{{ carte.id }}->caption:{{ carte.caption }}->parent_id:{{ carte.parent_id }}->ordery：{{ carte.ordery }}
+                                id:{{ menu.id }}->caption:{{ menu.caption }}->parent_id:{{ menu.parent_id }}->ordery：{{ menu.ordery }}
                                 <ul>
-                                    {% for ccc in carte.child %}
+                                    {% for ccc in menu.child %}
                                         <li>
                                             id:{{ ccc.id }}->caption:{{ ccc.caption }}->parent_id:{{ ccc.parent_id }}->url：{{ ccc.url }}->ordery：
                                             {{ ccc.ordery }}->open：{{ ccc.open }}->child：{{ ccc.child }}

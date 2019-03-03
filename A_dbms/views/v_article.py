@@ -1,8 +1,10 @@
 from django.shortcuts import render, redirect, HttpResponse
 from .. import permissions
+from _WHDB.views import MenuHelper
 from .. import models
 from .. import forms
 import datetime, time
+from _WHDB.views import authority
 from django.contrib.auth.decorators import login_required
 from django.urls import resolve
 from django.db.models import Q, F
@@ -15,10 +17,13 @@ from django.db.models import Avg, Min, Sum, Max, Count
 
 # -----------------------------项目列表------------------------------#
 @login_required
+@authority
 def article(request, *args, **kwargs):  # 项目列表
     print(__file__, '---->def article')
     print('request.path:', request.path)
     print('resolve(request.path):', resolve(request.path).url_name)  # 路径转换为url_name、app_name
+    menu_result = MenuHelper(request).menu_data_list()
+    authority_list = MenuHelper(request).authority_list
 
     form_article_add_edit = forms.ArticlesAddForm()
 
@@ -80,9 +85,13 @@ def article(request, *args, **kwargs):  # 项目列表
 
 # -----------------------------项目预览------------------------------#
 @login_required
+@authority
 def article_scan(request, article_id):  # 项目预览
     print(__file__, '---->def article_scan')
     PAGE_TITLE = '查看项目'
+
+    menu_result = MenuHelper(request).menu_data_list()
+    authority_list = MenuHelper(request).authority_list
 
     article_obj = models.Articles.objects.get(id=article_id)
 
@@ -109,9 +118,14 @@ def article_scan(request, article_id):  # 项目预览
 # -----------------------------项目预览-按合同------------------------------#
 
 @login_required
+@authority
 def article_scan_agree(request, article_id, agree_id):  # 项目预览
     print(__file__, '---->def article_scan_agree')
     PAGE_TITLE = '查看项目'
+
+    menu_result = MenuHelper(request).menu_data_list()
+    authority_list = MenuHelper(request).authority_list
+
 
     SURE_LIST = [1, 2]
     HOUSE_LIST = [11, 21, 42, 52]
@@ -129,9 +143,12 @@ def article_scan_agree(request, article_id, agree_id):  # 项目预览
 # -----------------------------项目预览-按发放次序------------------------------#
 
 @login_required
+@authority
 def article_scan_lending(request, article_id, lending_id):  # 项目预览
     print(__file__, '---->def article_scan_lending')
     PAGE_TITLE = '放款次序'
+    menu_result = MenuHelper(request).menu_data_list()
+    authority_list = MenuHelper(request).authority_list
 
     SURE_LIST = [1, 2]
     HOUSE_LIST = [11, 21, 42, 52]
