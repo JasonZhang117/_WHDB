@@ -131,11 +131,13 @@ class Cartes(models.Model):
 class Authorities(models.Model):
     """权限"""
     name = models.CharField(verbose_name="权限名称", max_length=64)
-    url_name = models.CharField(verbose_name="URL", max_length=128)
+    url = models.CharField(verbose_name="URL", max_length=128, blank=True, null=True)
+    url_name = models.CharField(verbose_name="URL_NAME", max_length=128, unique=True)
     carte = models.ForeignKey(to="Cartes", verbose_name="菜单",
                               on_delete=models.PROTECT,
                               related_name='authority_carte',
                               blank=True, null=True)
+    ordery = models.IntegerField(verbose_name="优先级", blank=True, null=True)
 
     class Meta:
         verbose_name_plural = '内部-权限'

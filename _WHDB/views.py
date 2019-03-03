@@ -53,7 +53,8 @@ def home(request):
     print("request.session.get('authoritis'):", request.session.get('authoritis'))
     print("request.session.get('cartes'):", request.session.get('cartes'))
     authority_list = models.Authorities.objects.filter(
-        jobs__employees=request.user).distinct().values('name', 'url_name', 'carte')  # 权限列表
+        jobs__employees=request.user).distinct().order_by('ordery').values(
+        'name', 'url_name', 'carte')  # 权限列表
     # [{'id': 2, 'name': '查看项目列表', 'url_name': 'dbms:article_all', 'carte': 1},]
     no_carte_list = models.Authorities.objects.filter(
         jobs__employees=request.user).distinct().filter(
@@ -61,16 +62,19 @@ def home(request):
 
     # 获取菜单的叶子节点，即：菜单的最后一层应该显示的权限
     menu_leaf_list = list(models.Authorities.objects.filter(
-        jobs__employees=request.user).distinct().exclude(
-        carte__isnull=True).values('id', 'name', 'url_name', 'carte'))  # 有菜单权限列表
+        jobs__employees=request.user).distinct().order_by('ordery').exclude(
+        carte__isnull=True).values(
+        'id', 'name', 'url', 'url_name', 'carte', 'ordery'))  # 有菜单权限列表
     current_url = request.path_info  # 访问的url
+    current_url_name = resolve(request.path).url_name  # 访问的url
     menu_leaf_dict = {}  # 有菜单权限字典
     open_leaf_parent_id = None
     # 归并所有的叶子节点
     for item in menu_leaf_list:
         item = {
             'id': item['id'],
-            'url': item['url_name'],
+            'url': item['url'],
+            'url_name': item['url_name'],
             'caption': item['name'],
             'parent_id': item['carte'],
             'child': [],
@@ -81,13 +85,15 @@ def home(request):
             menu_leaf_dict[item['parent_id']].append(item)
         else:
             menu_leaf_dict[item['parent_id']] = [item, ]
-        if re.match(item['url'], current_url):
+        # if re.match(item['url'], current_url):
+        print(" item['url_name']:", item['url_name'], 'current_url_name:', current_url_name)
+        if item['url_name'] == current_url_name:
             item['open'] = True
             open_leaf_parent_id = item['parent_id']
 
     # 获取所有菜单字典
     menu_list = list(models.Cartes.objects.filter(
-        authority_carte__jobs__employees=request.user).distinct().values(
+        authority_carte__jobs__employees=request.user).distinct().order_by('ordery').values(
         'id', 'caption', 'parent_id', 'ordery'))  # # 获取所有的菜单列表
     '''将列表menu_list转换为字典，'''
     menu_dict = {}  # 菜单字典

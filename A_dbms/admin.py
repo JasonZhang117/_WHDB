@@ -230,9 +230,10 @@ admin.site.register(models.Jobs, JobsAdmin)
 
 
 class AuthoritiesAdmin(admin.ModelAdmin):
-    list_display = ('name', 'url_name', 'carte')  # 显示字段
+    list_display = ('name', 'url', 'url_name', 'carte', 'ordery')  # 显示字段
     list_per_page = 30  # 每页显示条目数
     # filter_horizontal = ("menu", "authority")
+    ordering = ['ordery', ]  # 排序字段
 
 
 admin.site.register(models.Authorities, AuthoritiesAdmin)
@@ -242,6 +243,8 @@ class CartesAdmin(admin.ModelAdmin):
     list_display = ('caption', 'ordery', 'parent')  # 显示字段
     list_per_page = 30  # 每页显示条目数
     # filter_horizontal = ("menu", "authority")
+    ordering = ['ordery', ]  # 排序字段
+
 
 
 admin.site.register(models.Cartes, CartesAdmin)

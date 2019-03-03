@@ -11,24 +11,24 @@ urlpatterns = [
     path('article/scan/<int:article_id>/', views.article_scan, name='article_scan_all'),
     path('article/agree/<int:article_id>/<int:agree_id>/', views.article_scan_agree, name='article_scan_agree'),
     path('article/lending/<int:article_id>/<int:lending_id>/', views.article_scan_lending, name='article_scan_lending'),
-    path('article/add/', views.article_add_ajax),
-    path('article/del/', views.article_del_ajax),
-    path('article/edit/', views.article_edit_ajax),
-    path('article/feedback/', views.article_feedback_ajax),
+    path('article/add/', views.article_add_ajax, name='article_add_ajax'),
+    path('article/del/', views.article_del_ajax, name='article_del_ajax'),
+    path('article/edit/', views.article_edit_ajax, name='article_edit_ajax'),
+    path('article/feedback/', views.article_feedback_ajax, name='article_feedback_ajax'),
     # -----------------------meeting评审会-------------------------#
     path('meeting/', views.meeting, name='meeting_all'),  # 菜单-评审管理-评审会
     path('meeting/<int:meeting_state>', views.meeting, name='meeting'),
     path('meeting/scan/<int:meeting_id>/', views.meeting_scan, name='meeting_scan'),
     path('meeting/scan/<int:meeting_id>/<int:article_id>/', views.meeting_scan_article, name='meeting_scan_article'),
     path('meeting/notice/<int:meeting_id>/', views.meeting_notice, name='meeting_notice'),
-    path('meeting/add/', views.meeting_add_ajax),
-    path('meeting/allot/add/', views.meeting_allot_add_ajax),
-    path('meeting/allot/del/', views.meeting_allot_del_ajax),
-    path('meeting/edit/', views.meeting_edit_ajax),
-    path('meeting/close/', views.meeting_close_ajax),
-    path('meeting/del/', views.meeting_del_ajax),
-    path('meeting/article/add/', views.meeting_article_add_ajax),
-    path('meeting/article/del/', views.meeting_article_del_ajax),
+    path('meeting/add/', views.meeting_add_ajax, name='meeting_add_ajax'),
+    path('meeting/allot/add/', views.meeting_allot_add_ajax, name='meeting_allot_add_ajax'),
+    path('meeting/allot/del/', views.meeting_allot_del_ajax, name='meeting_allot_del_ajax'),
+    path('meeting/edit/', views.meeting_edit_ajax, name='meeting_edit_ajax'),
+    path('meeting/close/', views.meeting_close_ajax, name='meeting_close_ajax'),
+    path('meeting/del/', views.meeting_del_ajax, name='meeting_del_ajax'),
+    path('meeting/article/add/', views.meeting_article_add_ajax, name='meeting_article_add_ajax'),
+    path('meeting/article/del/', views.meeting_article_del_ajax, name='meeting_article_del_ajax'),
     # -----------------------appraisal评审管理-------------------------#
     path('appraisal/', views.appraisal, name='appraisal_all'),  # 菜单-评审管理-项目评审
     path('appraisal/<int:article_state>/', views.appraisal, name='appraisal'),  # /dbms/article/(0-9)
@@ -67,17 +67,17 @@ urlpatterns = [
     path('warrant/draft/soondue/', views.soondue_draft, name='soondue_draft'),  #
     path('warrant/draft/overdue/', views.overdue_draft, name='overdue_draft'),  #
 
-    path('warrant/add/', views.warrant_add_ajax),
-    path('warrant/del/', views.warrant_del_ajax),
-    path('warrant/edit/', views.warrant_edit_ajax),
-    path('warrant/owership/add/', views.owership_add_ajax),
-    path('warrant/owership/del/', views.owership_del_ajax),
-    path('warrant/housebag/add/', views.housebag_add_ajax),
-    path('warrant/draftbag/add/', views.draftextend_add_ajax),
-    path('warrant/guaranty/add/', views.guaranty_add_ajax),
-    path('warrant/guaranty/del/', views.guaranty_del_ajax),
-    path('warrant/storages/add/', views.storages_add_ajax),
-    path('warrant/evaluate/add/', views.evaluate_add_ajax),
+    path('warrant/add/', views.warrant_add_ajax, name='warrant_add_ajax'),
+    path('warrant/del/', views.warrant_del_ajax, name='warrant_del_ajax'),
+    path('warrant/edit/', views.warrant_edit_ajax, name='warrant_edit_ajax'),
+    path('warrant/owership/add/', views.owership_add_ajax, name='owership_add_ajax'),
+    path('warrant/owership/del/', views.owership_del_ajax, name='owership_del_ajax'),
+    path('warrant/housebag/add/', views.housebag_add_ajax, name='housebag_add_ajax'),
+    path('warrant/draftbag/add/', views.draftextend_add_ajax, name='draftextend_add_ajax'),
+    path('warrant/guaranty/add/', views.guaranty_add_ajax, name='guaranty_add_ajax'),
+    path('warrant/guaranty/del/', views.guaranty_del_ajax, name='guaranty_del_ajax'),
+    path('warrant/storages/add/', views.storages_add_ajax, name='storages_add_ajax'),
+    path('warrant/evaluate/add/', views.evaluate_add_ajax, name='evaluate_add_ajax'),
 
     # -----------------------house房产管理-------------------------#
     path('house/', views.house, name='house_all'),  # 菜单-权证管理-房产列表
@@ -86,7 +86,7 @@ urlpatterns = [
     path('ground/', views.ground, name='ground_all'),  # 菜单-权证管理-土地列表
     path('ground/<int:application>/', views.ground, name='ground'),  # /dbms/ground/(0-9)
     # -----------------------放款管理-------------------------#
-    path('provide/agree/', views.provide_agree, name='provide_agree_all'),  # 菜单-放款管理-放款通知
+    path('provide/agree/', views.provide_agree, name='provide_agree_all'),
     path('provide/agree/<int:agree_state>/', views.provide_agree, name='provide_agree'),  # /dbms/provide/(0-9)
     path('provide/agree/scan/<int:agree_id>/', views.provide_agree_scan, name='provide_agree_scan'),
     path('provide/agree/notify/<int:agree_id>/<int:notify_id>/', views.provide_agree_notify,

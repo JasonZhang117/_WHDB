@@ -296,7 +296,7 @@ def ground(request, *args, **kwargs):  # 房产列表
 
 # -----------------------即将到期票据列表-------------------------#
 @login_required
-def soondue_draft(request, *args, **kwargs):  # 房产列表
+def soondue_draft(request, *args, **kwargs):  #
     print(__file__, '---->def warrant')
     PAGE_TITLE = '票据列表'
 
@@ -330,7 +330,7 @@ def soondue_draft(request, *args, **kwargs):  # 房产列表
 
 # -----------------------即将到期票据列表-------------------------#
 @login_required
-def overdue_draft(request, *args, **kwargs):  # 房产列表
+def overdue_draft(request, *args, **kwargs):  #
     print(__file__, '---->def warrant')
     PAGE_TITLE = '票据列表'
 

@@ -36,16 +36,32 @@
         <div class="row">
             <div class="col-sm-3 col-md-2 sidebar"><!--菜单-->
                 <ul class="nav nav-sidebar">
-                    {% for carte in request.session.cartes %}
+                    {% for carte in result %}
                         <li class="carte-parrent"><a style="padding-bottom: 5px;padding-top: 5px;">
-                            {{ carte.name }}</a>
-                            <ul class="carte-child" style="display: none">
-                                {% for child in carte.child %}
-                                    <li style="list-style-type:circle"><a href="{{ child.url }}">
-                                        {{ child.name }}</a>
-                                    </li>
-                                {% endfor %}
-                            </ul>
+                            {{ carte.caption }}</a>
+                            {% if carte.open == True %}
+                                <ul class="carte-child">
+                                    {% for child in carte.child %}
+                                        {% if child.open == True %}
+                                            <li style="list-style-type:disc"><a href="{{ child.url }}">
+                                                {{ child.caption }}</a>
+                                            </li>
+                                        {% else %}
+                                            <li style="list-style-type:circle"><a href="{{ child.url }}">
+                                                {{ child.caption }}</a>
+                                            </li>
+                                        {% endif %}
+                                    {% endfor %}
+                                </ul>
+                            {% else %}
+                                <ul class="carte-child" style="display: none">
+                                    {% for child in carte.child %}
+                                        <li style="list-style-type:circle"><a href="{{ child.url }}">
+                                            {{ child.caption }}</a>
+                                        </li>
+                                    {% endfor %}
+                                </ul>
+                            {% endif %}
                         </li>
                     {% endfor %}
                 </ul>
@@ -59,7 +75,7 @@
                     <ul>
                         {% for carte in result %}
                             <li>
-                                id:{{ carte.id }}->caption:{{ carte.caption }}->parent_id:{{ carte.parent_id }}->ordery：{{ carte.ordery }}->child：{{ carte.child }}
+                                id:{{ carte.id }}->caption:{{ carte.caption }}->parent_id:{{ carte.parent_id }}->ordery：{{ carte.ordery }}
                                 <ul>
                                     {% for ccc in carte.child %}
                                         <li>
