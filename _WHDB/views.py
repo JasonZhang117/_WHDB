@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect, HttpResponse
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from A_dbms import models
-import datetime, time, re
+import json, datetime, time, re
 from django.urls import resolve, reverse
 
 
@@ -69,7 +69,7 @@ class MenuHelper(object):
 
 def acc_login(request):
     ''':param request::return:'''
-    print(__file__, '-->acc_login')
+    print(request.path, '>', resolve(request.path).url_name, '>', request.user)
     error_msg = ''
     if request.method == "POST":
         username = request.POST.get('username')
@@ -117,7 +117,11 @@ def authority(func):
         current_url_name = resolve(request.path).url_name  # 获取当前URL_NAME
         authority_list = request.session.get('authority_list')  # 获取当前用户的所有权限
         if not current_url_name in authority_list:
-            return HttpResponse('无权限访问')
+            response = {'status': True, 'message': None}
+            response['status'] = False
+            response['message'] = '无权限，请联系管理员！'
+            result = json.dumps(response, ensure_ascii=False)
+            return HttpResponse(result)
         return func(request, *args, **kwargs)
 
     return inner
@@ -131,7 +135,7 @@ def acc_logout(request):
 @login_required
 @authority
 def home(request):
-    print(__file__, '---->def home')
+    print(request.path, '>', resolve(request.path).url_name, '>', request.user)
     print('request.path_info', request.path_info)  # 当前url
     print('request.path:', request.path)
     print('resolve(request.path):', resolve(request.path))  # 路径转换为url_name等

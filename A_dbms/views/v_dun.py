@@ -7,16 +7,22 @@ from django.db import transaction
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q, F
 from django.db.models import Avg, Min, Sum, Max, Count
-
+from django.urls import resolve
+from _WHDB.views import MenuHelper
+from _WHDB.views import authority
 
 # -----------------------代偿列表-------------------------#
 @login_required
 def compensatory(request, *args, **kwargs):  # 代偿列表
-    print(__file__, '---->def compensatory')
+    print(request.path, '>', resolve(request.path).url_name, '>', request.user)
+    current_url_name = resolve(request.path).url_name  # 获取当前URL_NAME
+    authority_list = request.session.get('authority_list')  # 获取当前用户的所有权限
+    menu_result = MenuHelper(request).menu_data_list()
     PAGE_TITLE = '代偿列表'
 
     dun_state_list = models.Compensatories.DUN_STATE_LIST
-    compensatory_list = models.Compensatories.objects.filter(**kwargs).select_related('provide')
+    compensatory_list = models.Compensatories.objects.filter(**kwargs).order_by(
+        '-compensatory_date').select_related('provide')
     '''搜索'''
     search_key = request.GET.get('_s')
     if search_key:
@@ -46,17 +52,23 @@ def compensatory(request, *args, **kwargs):  # 代偿列表
 # -----------------------代偿查看-------------------------#
 @login_required
 def compensatory_scan(request, compensatory_id):
-    pass
+    print(request.path, '>', resolve(request.path).url_name, '>', request.user)
+    current_url_name = resolve(request.path).url_name  # 获取当前URL_NAME
+    authority_list = request.session.get('authority_list')  # 获取当前用户的所有权限
+    menu_result = MenuHelper(request).menu_data_list()
 
 
 # -----------------------追偿列表-------------------------#
 @login_required
 def dun(request, *args, **kwargs):  # 代偿列表
-    print(__file__, '---->def dun')
+    print(request.path, '>', resolve(request.path).url_name, '>', request.user)
+    current_url_name = resolve(request.path).url_name  # 获取当前URL_NAME
+    authority_list = request.session.get('authority_list')  # 获取当前用户的所有权限
+    menu_result = MenuHelper(request).menu_data_list()
     PAGE_TITLE = '追偿列表'
 
     dun_stage_list = models.Dun.DUN_STAGE_LIST
-    dun_list = models.Dun.objects.filter(**kwargs)
+    dun_list = models.Dun.objects.filter(**kwargs).order_by('-dun_amount')
     '''搜索'''
     search_key = request.GET.get('_s')
     if search_key:
@@ -88,7 +100,10 @@ def dun(request, *args, **kwargs):  # 代偿列表
 # -----------------------追偿列表-------------------------#
 @login_required
 def dun_scan(request, dun_id):  # 查看合同
-    print(__file__, '---->def dun_scan')
+    print(request.path, '>', resolve(request.path).url_name, '>', request.user)
+    current_url_name = resolve(request.path).url_name  # 获取当前URL_NAME
+    authority_list = request.session.get('authority_list')  # 获取当前用户的所有权限
+    menu_result = MenuHelper(request).menu_data_list()
     PAGE_TITLE = '追偿管理'
     today_str = datetime.date.today()
     date_th_later = today_str + datetime.timedelta(days=365)
@@ -129,7 +144,10 @@ def dun_scan(request, dun_id):  # 查看合同
 # -----------------------财产线索列表-------------------------#
 @login_required
 def seal(request, *args, **kwargs):  # 代偿列表
-    print(__file__, '---->def seal')
+    print(request.path, '>', resolve(request.path).url_name, '>', request.user)
+    current_url_name = resolve(request.path).url_name  # 获取当前URL_NAME
+    authority_list = request.session.get('authority_list')  # 获取当前用户的所有权限
+    menu_result = MenuHelper(request).menu_data_list()
     PAGE_TITLE = '查封列表'
 
     seal_state_list = models.Seal.SEAL_STATE_LIST
@@ -162,7 +180,10 @@ def seal(request, *args, **kwargs):  # 代偿列表
 # -----------------------查封资产详情-------------------------#
 @login_required
 def seal_scan(request, dun_id, warrant_id):  # 查看合同
-    print(__file__, '---->def dun_scan')
+    print(request.path, '>', resolve(request.path).url_name, '>', request.user)
+    current_url_name = resolve(request.path).url_name  # 获取当前URL_NAME
+    authority_list = request.session.get('authority_list')  # 获取当前用户的所有权限
+    menu_result = MenuHelper(request).menu_data_list()
     PAGE_TITLE = '查封详情'
     seal_obj = models.Seal.objects.get(dun_id=dun_id, warrant_id=warrant_id)
     print('seal_obj:', seal_obj)
@@ -172,7 +193,10 @@ def seal_scan(request, dun_id, warrant_id):  # 查看合同
 # -----------------------代偿添加ajax-------------------------#
 @login_required
 def compensatory_add_ajax(request):  # 代偿添加ajax
-    print(__file__, '---->def compensatory_add_ajax')
+    print(request.path, '>', resolve(request.path).url_name, '>', request.user)
+    current_url_name = resolve(request.path).url_name  # 获取当前URL_NAME
+    authority_list = request.session.get('authority_list')  # 获取当前用户的所有权限
+    menu_result = MenuHelper(request).menu_data_list()
     response = {'status': True, 'message': None, 'forme': None, }
     post_data_str = request.POST.get('postDataStr')
     post_data = json.loads(post_data_str)
@@ -280,7 +304,10 @@ def compensatory_add_ajax(request):  # 代偿添加ajax
 # -----------------------逾期查封列表---------------------#
 @login_required
 def overdue_seal(request, *args, **kwargs):
-    print(__file__, '---->def overdue_seal')
+    print(request.path, '>', resolve(request.path).url_name, '>', request.user)
+    current_url_name = resolve(request.path).url_name  # 获取当前URL_NAME
+    authority_list = request.session.get('authority_list')  # 获取当前用户的所有权限
+    menu_result = MenuHelper(request).menu_data_list()
     PAGE_TITLE = '逾期查封'
     '''SEAL_STATE_LIST = ((1, '诉前保全'), (5, '首次首封'), (11, '首次轮封'), (21, '续查封'),
                            (51, '解除查封'), (99, '注销'))'''
@@ -313,7 +340,10 @@ def overdue_seal(request, *args, **kwargs):
 # -----------------------即将到期查封列表---------------------#
 @login_required
 def soondue_seal(request, *args, **kwargs):
-    print(__file__, '---->def soondue_seal')
+    print(request.path, '>', resolve(request.path).url_name, '>', request.user)
+    current_url_name = resolve(request.path).url_name  # 获取当前URL_NAME
+    authority_list = request.session.get('authority_list')  # 获取当前用户的所有权限
+    menu_result = MenuHelper(request).menu_data_list()
     PAGE_TITLE = '即将到期查封'
     date_th_later = datetime.date.today() - datetime.timedelta(days=-30)  # 30天前的日期
     soondue_seal_list = models.Seal.objects.filter(
@@ -346,7 +376,10 @@ def soondue_seal(request, *args, **kwargs):
 # -----------------------超过30天未跟踪的查封资产---------------------#
 @login_required
 def overdue_search(request, *args, **kwargs):
-    print(__file__, '---->def overdue_seal')
+    print(request.path, '>', resolve(request.path).url_name, '>', request.user)
+    current_url_name = resolve(request.path).url_name  # 获取当前URL_NAME
+    authority_list = request.session.get('authority_list')  # 获取当前用户的所有权限
+    menu_result = MenuHelper(request).menu_data_list()
     PAGE_TITLE = '超期查询'
     '''SEAL_STATE_LIST = ((1, '诉前保全'), (5, '首次首封'), (11, '首次轮封'), (21, '续查封'),
                            (51, '解除查封'), (99, '注销'))'''
@@ -363,7 +396,6 @@ def overdue_search(request, *args, **kwargs):
         for field in search_fields:
             q.children.append(("%s__contains" % field, search_key))
         overdue_search_list = overdue_search_list.filter(q)
-    print("overdue_seal_list:", overdue_search_list)
     provide_acount = overdue_search_list.count()
     '''分页'''
     paginator = Paginator(overdue_search_list, 19)

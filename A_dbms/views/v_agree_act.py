@@ -1,18 +1,19 @@
 from django.shortcuts import render, redirect, HttpResponse
 from .. import models, forms
-import time, json
+import datetime,time, json
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.db.utils import IntegrityError
 from django.db import transaction
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q, F
-import datetime
-
+from django.urls import resolve, reverse
+from _WHDB.views import MenuHelper
+from _WHDB.views import authority
 
 # ---------------------------合同签批ajax----------------------------#
 @login_required
 def agree_sign_ajax(request):  # 添加合同
-    print(__file__, '---->def agree_add_ajax')
+    print(request.path, '>', resolve(request.path).url_name, '>', request.user)
     response = {'status': True, 'message': None, 'forme': None, 'skip': None, }
     post_data_str = request.POST.get('postDataStr')
     post_data = json.loads(post_data_str)
@@ -47,7 +48,7 @@ def agree_sign_ajax(request):  # 添加合同
 # ---------------------------添加合同ajax----------------------------#
 @login_required
 def agree_add_ajax(request):  # 添加合同
-    print(__file__, '---->def agree_add_ajax')
+    print(request.path, '>', resolve(request.path).url_name, '>', request.user)
     response = {'status': True, 'message': None, 'forme': None, 'skip': None, }
     post_data_str = request.POST.get('postDataStr')
     post_data = json.loads(post_data_str)
@@ -140,7 +141,7 @@ def agree_add_ajax(request):  # 添加合同
 # -------------------------添加反担保合同ajax-------------------------#
 @login_required
 def counter_add_ajax(request):
-    print(__file__, '---->def counter_add_ajax')
+    print(request.path, '>', resolve(request.path).url_name, '>', request.user)
     response = {'status': True, 'message': None, 'forme': None, }
     post_data_str = request.POST.get('postDataStr')
     post_data = json.loads(post_data_str)
@@ -261,7 +262,7 @@ def counter_add_ajax(request):
 # -----------------------删除反担保合同ajax-------------------------#
 @login_required
 def counter_del_ajax(request):  # 删除反担保合同ajax
-    print(__file__, '---->def counter_del_ajax')
+    print(request.path, '>', resolve(request.path).url_name, '>', request.user)
     response = {'status': True, 'message': None, 'forme': None, }
     post_data_str = request.POST.get('postDataStr')
     post_data = json.loads(post_data_str)

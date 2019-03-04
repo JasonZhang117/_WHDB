@@ -8,27 +8,31 @@
         {#<caption><h4>项目管理</h4></caption>#}
         <thead>
         <tr style="text-align: center">
-            <th>编号</th>
+            <th>序号</th>
             <th>坐落</th>
             <th>类型</th>
             <th>建筑面积</th>
-            <th>产权证</th>
+            <th>产权人</th>
+
         </tr>
         </thead>
         <tbody>
-        {% for house in house_list %}
+        {% for house in p_list %}
             <tr>
                 <td>
                     <a href="{% url 'dbms:warrant_scan' warrant_id=house.warrant.id %}">
-                        {{ house.warrant.warrant_num }}
+                        {{ forloop.counter }}
+                        {#                        {{ house.warrant.warrant_num }}#}
                     </a>
                 </td>
+
                 <td>{{ house.house_locate }}</td>
                 <td>{{ house.get_house_app_display }}</td>
                 <td>{{ house.house_area }}</td>
                 <td>
                     {% for ownership in house.warrant.ownership_warrant.all %}
-                        {{ ownership.ownership_num }}{% if not forloop.last %}、{% endif %}
+                        {{ ownership.owner.short_name }}（{{ ownership.ownership_num }}）
+                        {% if not forloop.last %}、{% endif %}
                     {% endfor %}
                 </td>
             </tr>

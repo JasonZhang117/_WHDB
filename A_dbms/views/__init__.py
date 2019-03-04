@@ -37,9 +37,11 @@ from .v_provide_act import (
     counter_sign_ajax, ascertain_add_ajax, notify_add_ajax, notify_del_ajax, provide_add_ajax,
     provide_del_ajax, repayment_add_ajax, repayment_del_ajax)
 
-from .v_pigeonhole import pigeonhole, pigeonhole_scan, pigeonhole_add_ajax
+from .v_pigeonhole import pigeonhole, pigeonhole_scan
+from .v_pigeonhole_act import pigeonhole_add_ajax
 # ----------------------v_review保后管理视图--------------------#
-from .v_review import review, review_scan, review_plan_ajax, review_update_ajax
+from .v_review import review, review_scan
+from .v_review_act import review_plan_ajax, review_update_ajax
 # ----------------------v_dun追偿视图--------------------#
 from .v_dun import (compensatory, compensatory_scan, dun, dun_scan, seal, overdue_seal, soondue_seal,
                     overdue_search, seal_scan,

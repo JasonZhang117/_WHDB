@@ -8,13 +8,18 @@ from django.db.models import Sum, Max, Count
 from django.db.models import Q, F
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.db import transaction
-
+from django.urls import resolve, reverse
+from _WHDB.views import MenuHelper
+from _WHDB.views import authority
 
 # -----------------------appraisal评审情况-------------------------#
 @login_required
+@authority
 def appraisal(request, *args, **kwargs):  # 评审情况
-    print(__file__, '---->def appraisal')
-    print('**kwargs:', kwargs)
+    print(request.path, '>', resolve(request.path).url_name, '>', request.user)
+    current_url_name = resolve(request.path).url_name  # 获取当前URL_NAME
+    authority_list = request.session.get('authority_list')  # 获取当前用户的所有权限
+    menu_result = MenuHelper(request).menu_data_list()
     PAGE_TITLE = '评审管理'  # 页面标题
     '''模态框'''
     '''ARTICLE_STATE_LIST = ((1, '待反馈'), (2, '已反馈'), (3, '待上会'), (4, '已上会'), (5, '已签批'),
@@ -48,9 +53,12 @@ def appraisal(request, *args, **kwargs):  # 评审情况
 
 # -----------------------appraisal_scan评审项目-------------------------#
 @login_required
+@authority
 def appraisal_scan(request, article_id):  # 评审项目预览
-    print(__file__, '---->def appraisal_scam')
-
+    print(request.path, '>', resolve(request.path).url_name, '>', request.user)
+    current_url_name = resolve(request.path).url_name  # 获取当前URL_NAME
+    authority_list = request.session.get('authority_list')  # 获取当前用户的所有权限
+    menu_result = MenuHelper(request).menu_data_list()
     PAGE_TITLE = '项目评审'
     single_operate = True
     comment_operate = True
@@ -78,8 +86,12 @@ def appraisal_scan(request, article_id):  # 评审项目预览
 
 # -----------------------appraisal_scan_lending评审项目预览-------------------------#
 @login_required
+@authority
 def appraisal_scan_lending(request, article_id, lending_id):  # 评审项目预览
-    print(__file__, '---->def appraisal_scan_lending')
+    print(request.path, '>', resolve(request.path).url_name, '>', request.user)
+    current_url_name = resolve(request.path).url_name  # 获取当前URL_NAME
+    authority_list = request.session.get('authority_list')  # 获取当前用户的所有权限
+    menu_result = MenuHelper(request).menu_data_list()
     page_title = '放款次序'
     article_obj = models.Articles.objects.get(id=article_id)
     lending_obj = models.LendingOrder.objects.get(id=lending_id)
@@ -121,8 +133,12 @@ def appraisal_scan_lending(request, article_id, lending_id):  # 评审项目预�
 
 # -----------------------summary_scan纪要预览-------------------------#
 @login_required
+@authority
 def summary_scan(request, article_id):  # 评审项目预览
-    print(__file__, '---->def summary_scan')
+    print(request.path, '>', resolve(request.path).url_name, '>', request.user)
+    current_url_name = resolve(request.path).url_name  # 获取当前URL_NAME
+    authority_list = request.session.get('authority_list')  # 获取当前用户的所有权限
+    menu_result = MenuHelper(request).menu_data_list()
     page_title = '纪要预览'
 
     article_obj = models.Articles.objects.get(id=article_id)

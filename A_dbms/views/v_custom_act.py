@@ -7,12 +7,14 @@ from django.db import transaction
 from django.db.models import Sum, Max, Count
 from django.db.models import Q, F
 from django.contrib.auth.decorators import login_required
-
+from django.urls import resolve
+from _WHDB.views import MenuHelper
+from _WHDB.views import authority
 
 # -----------------------客户添加-------------------------#
 @login_required
 def custom_add_ajax(request):
-    print(__file__, '---->def custom_add_ajax')
+    print(request.path, '>', resolve(request.path).url_name, '>', request.user)
     response = {'status': True, 'message': None, 'forme': None, ' skip': None, }
     post_data_str = request.POST.get('postDataStr')
     post_data = json.loads(post_data_str)
@@ -89,7 +91,7 @@ def custom_add_ajax(request):
 # -----------------------股权信息添加-------------------------#
 @login_required
 def shareholder_add_ajax(request):
-    print(__file__, '---->def shareholder_add_ajax')
+    print(request.path, '>', resolve(request.path).url_name, '>', request.user)
     response = {'status': True, 'message': None, 'forme': None, }
     post_data_str = request.POST.get('postDataStr')
     post_data = json.loads(post_data_str)
@@ -136,7 +138,7 @@ def shareholder_add_ajax(request):
 # -----------------------股权信息添加-------------------------#
 @login_required
 def spouse_add_ajax(request):
-    print(__file__, '---->def spouse_add_ajax')
+    print(request.path, '>', resolve(request.path).url_name, '>', request.user)
     response = {'status': True, 'message': None, 'forme': None, }
     post_data_str = request.POST.get('postDataStr')
     post_data = json.loads(post_data_str)
@@ -171,7 +173,7 @@ def spouse_add_ajax(request):
 # -----------------------客户删除-------------------------#
 @login_required
 def custom_del_ajax(request):
-    print(__file__, '---->def custom_del_ajax')
+    print(request.path, '>', resolve(request.path).url_name, '>', request.user)
     response = {'status': True, 'message': None, 'forme': None, }
     post_data_str = request.POST.get('postDataStr')
     post_data = json.loads(post_data_str)
@@ -200,7 +202,7 @@ def custom_del_ajax(request):
 # -----------------------客户修改-------------------------#
 @login_required
 def custom_edit_ajax(request):
-    print(__file__, '---->def custom_edit_ajax')
+    print(request.path, '>', resolve(request.path).url_name, '>', request.user)
     response = {'status': True, 'message': None, 'forme': None, }
     post_data_str = request.POST.get('postDataStr')
     post_data = json.loads(post_data_str)

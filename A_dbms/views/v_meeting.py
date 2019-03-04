@@ -9,13 +9,18 @@ from django.db.models import Sum, Max, Count
 from django.db.models import Q, F
 from django.db import transaction
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
-
+from django.urls import resolve
+from _WHDB.views import MenuHelper
+from _WHDB.views import authority
 
 # -----------------------评审会-------------------------#
 @login_required
+@authority
 def meeting(request, *args, **kwargs):  # 评审会
-    print(__file__, '---->def meeting')
-    print('request.path_info', request.path_info)  # 当前url
+    print(request.path, '>', resolve(request.path).url_name, '>', request.user)
+    current_url_name = resolve(request.path).url_name  # 获取当前URL_NAME
+    authority_list = request.session.get('authority_list')  # 获取当前用户的所有权限
+    menu_result = MenuHelper(request).menu_data_list()
     # print('kwargs:', kwargs)
     '''模态框'''
     form_meeting_add = forms.MeetingAddForm()  # 评审会添加
@@ -47,8 +52,12 @@ def meeting(request, *args, **kwargs):  # 评审会
 
 # -----------------------评审会预览-------------------------#
 @login_required
+@authority
 def meeting_scan(request, meeting_id):  # 评审会预览
-    print(__file__, '---->def meeting_scan')
+    print(request.path, '>', resolve(request.path).url_name, '>', request.user)
+    current_url_name = resolve(request.path).url_name  # 获取当前URL_NAME
+    authority_list = request.session.get('authority_list')  # 获取当前用户的所有权限
+    menu_result = MenuHelper(request).menu_data_list()
     meeting_obj = models.Appraisals.objects.get(id=meeting_id)
     expert_list = models.Experts.objects.filter(article_expert__appraisal_article=meeting_obj).distinct()
     expert_article_count = {}
@@ -73,8 +82,12 @@ def meeting_scan(request, meeting_id):  # 评审会预览
 
 # -----------------------评审会通知-------------------------#
 @login_required
+@authority
 def meeting_notice(request, meeting_id):  # 评审会通知
-    print(__file__, '---->def meeting_scan')
+    print(request.path, '>', resolve(request.path).url_name, '>', request.user)
+    current_url_name = resolve(request.path).url_name  # 获取当前URL_NAME
+    authority_list = request.session.get('authority_list')  # 获取当前用户的所有权限
+    menu_result = MenuHelper(request).menu_data_list()
     meeting_obj = models.Appraisals.objects.get(id=meeting_id)
 
     return render(request, 'dbms/meeting/meeting-notice.html', locals())
@@ -82,8 +95,13 @@ def meeting_notice(request, meeting_id):  # 评审会通知
 
 # -----------------------参评项目预览-------------------------#
 @login_required
+@authority
 def meeting_scan_article(request, meeting_id, article_id):
-    print(__file__, '---->def meeting_scan_article')
+    print(request.path, '>', resolve(request.path).url_name, '>', request.user)
+    current_url_name = resolve(request.path).url_name  # 获取当前URL_NAME
+    authority_list = request.session.get('authority_list')  # 获取当前用户的所有权限
+    menu_result = MenuHelper(request).menu_data_list()
+
     edit_article_state_list = [1, 2, 3]
     article_obj = models.Articles.objects.get(id=article_id)
     meeting_obj = models.Appraisals.objects.get(id=meeting_id)

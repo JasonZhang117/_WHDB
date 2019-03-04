@@ -10,7 +10,8 @@ from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 import json
 from django.db.utils import IntegrityError
 from django.db import transaction
-
+from _WHDB.views import MenuHelper
+from _WHDB.views import authority
 
 # -----------------------------项目管理-------------------------------#
 def creat_article_num(custom_id):
@@ -31,7 +32,7 @@ def creat_article_num(custom_id):
 # -----------------------------添加项目ajax------------------------------#
 @login_required
 def article_add_ajax(request):  # 添加项目
-    print(__file__, '---->def article_add_ajax')
+    print(request.path, '>', resolve(request.path).url_name, '>', request.user)
     response = {'status': True, 'message': None, 'forme': None, }
     post_data_str = request.POST.get('postDataStr')
     post_data = json.loads(post_data_str)
@@ -69,7 +70,7 @@ def article_add_ajax(request):  # 添加项目
 # -----------------------------修改项目ajax------------------------------#
 @login_required
 def article_edit_ajax(request):  # 修改项目ajax
-    print(__file__, '---->def article_edit_ajax')
+    print(request.path, '>', resolve(request.path).url_name, '>', request.user)
     response = {'status': True, 'message': None, 'forme': None, }
     post_data_str = request.POST.get('postDataStr')
     post_data = json.loads(post_data_str)
@@ -114,7 +115,7 @@ def article_edit_ajax(request):  # 修改项目ajax
 # -----------------------------删除项目ajax------------------------------#
 @login_required
 def article_del_ajax(request):
-    print(__file__, '---->def article_del_ajax')
+    print(request.path, '>', resolve(request.path).url_name, '>', request.user)
     response = {'status': True, 'message': None, 'forme': None, }
     post_data_str = request.POST.get('postDataStr')
     post_data = json.loads(post_data_str)
@@ -137,7 +138,7 @@ def article_del_ajax(request):
 # -----------------------------反馈项目ajax------------------------------#
 @login_required
 def article_feedback_ajax(request):
-    print(__file__, '---->def article_feedback_ajax')
+    print(request.path, '>', resolve(request.path).url_name, '>', request.user)
     response = {'status': True, 'message': None, 'forme': None, }
     post_data_str = request.POST.get('postDataStr')
     post_data = json.loads(post_data_str)

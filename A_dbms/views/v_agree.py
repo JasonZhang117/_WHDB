@@ -8,12 +8,19 @@ from django.contrib.auth.decorators import login_required
 from django.db.models import Q, F
 import datetime
 from django.db.models import Avg, Min, Sum, Max, Count
+from django.urls import resolve, reverse
+from _WHDB.views import MenuHelper
+from _WHDB.views import authority
 
 
 # -----------------------委托合同列表---------------------#
 @login_required
+@authority
 def agree(request, *args, **kwargs):  # 委托合同列表
-    print(__file__, '---->def agree')
+    print(request.path, '>', resolve(request.path).url_name, '>', request.user)
+    current_url_name = resolve(request.path).url_name  # 获取当前URL_NAME
+    authority_list = request.session.get('authority_list')  # 获取当前用户的所有权限
+    menu_result = MenuHelper(request).menu_data_list()
     PAGE_TITLE = '合同列表'
     operate_agree_add = True
     '''模态框'''
@@ -63,8 +70,12 @@ def agree(request, *args, **kwargs):  # 委托合同列表
 
 # -----------------------------查看合同------------------------------#
 @login_required
+@authority
 def agree_scan(request, agree_id):  # 查看合同
-    print(__file__, '---->def agree_scan')
+    print(request.path, '>', resolve(request.path).url_name, '>', request.user)
+    current_url_name = resolve(request.path).url_name  # 获取当前URL_NAME
+    authority_list = request.session.get('authority_list')  # 获取当前用户的所有权限
+    menu_result = MenuHelper(request).menu_data_list()
     APPLICATION = 'agree_scan'
     PAGE_TITLE = '合同详情'
     COUNTER_TYP_CUSTOM = [1, 2]
@@ -111,8 +122,12 @@ def agree_scan(request, agree_id):  # 查看合同
 
 # -----------------------------查看合同------------------------------#
 @login_required
+@authority
 def agree_scan_counter(request, agree_id, counter_id):  # 查看合同
-    print(__file__, '---->def agree_scan_counter')
+    print(request.path, '>', resolve(request.path).url_name, '>', request.user)
+    current_url_name = resolve(request.path).url_name  # 获取当前URL_NAME
+    authority_list = request.session.get('authority_list')  # 获取当前用户的所有权限
+    menu_result = MenuHelper(request).menu_data_list()
     APPLICATION = 'agree_scan_counter'
     PAGE_TITLE = '担保合同'
     COUNTER_TYP_CUSTOM = [1, 2]
@@ -161,7 +176,12 @@ def agree_scan_counter(request, agree_id, counter_id):  # 查看合同
 
 # -------------------------合同预览-------------------------#
 @login_required
+@authority
 def agree_preview(request, agree_id):
+    print(request.path, '>', resolve(request.path).url_name, '>', request.user)
+    current_url_name = resolve(request.path).url_name  # 获取当前URL_NAME
+    authority_list = request.session.get('authority_list')  # 获取当前用户的所有权限
+    menu_result = MenuHelper(request).menu_data_list()
     agree_obj = models.Agrees.objects.get(id=agree_id)
 
     return render(request,

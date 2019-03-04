@@ -7,12 +7,14 @@ from django.db import transaction
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q, F
 from django.db.models import Avg, Min, Sum, Max, Count
-
+from django.urls import resolve
+from _WHDB.views import MenuHelper
+from _WHDB.views import authority
 
 # -----------------------------合同签订ajax------------------------------#
 @login_required
 def counter_sign_ajax(request):
-    print(__file__, '---->def counter_sign_ajax')
+    print(request.path, '>', resolve(request.path).url_name, '>', request.user)
     response = {'status': True, 'message': None, 'forme': None, }
     post_data_str = request.POST.get('postDataStr')
     post_data = json.loads(post_data_str)
@@ -52,7 +54,7 @@ def counter_sign_ajax(request):
 # -----------------------------风控落实ajax------------------------------#
 @login_required
 def ascertain_add_ajax(request):
-    print(__file__, '---->def ascertain_add_ajax')
+    print(request.path, '>', resolve(request.path).url_name, '>', request.user)
     response = {'status': True, 'message': None, 'forme': None, }
     post_data_str = request.POST.get('postDataStr')
     post_data = json.loads(post_data_str)
@@ -93,7 +95,7 @@ def ascertain_add_ajax(request):
 # -----------------------------添加放款通知ajax------------------------------#
 @login_required
 def notify_add_ajax(request):
-    print(__file__, '---->def notify_add_ajax')
+    print(request.path, '>', resolve(request.path).url_name, '>', request.user)
     response = {'status': True, 'message': None, 'forme': None, }
     post_data_str = request.POST.get('postDataStr')
     post_data = json.loads(post_data_str)
@@ -185,7 +187,7 @@ def notify_add_ajax(request):
 # -----------------------删除放款通知ajax-------------------------#
 @login_required
 def notify_del_ajax(request):  # 反担保人删除ajax
-    print(__file__, '---->def notify_del_ajax')
+    print(request.path, '>', resolve(request.path).url_name, '>', request.user)
     response = {'status': True, 'message': None, 'forme': None, }
     post_data_str = request.POST.get('postDataStr')
     post_data = json.loads(post_data_str)
@@ -218,7 +220,7 @@ def notify_del_ajax(request):  # 反担保人删除ajax
 # -----------------------------添加放款ajax------------------------------#
 @login_required
 def provide_add_ajax(request):
-    print(__file__, '---->def provide_add_ajax')
+    print(request.path, '>', resolve(request.path).url_name, '>', request.user)
     response = {'status': True, 'message': None, 'forme': None, }
     post_data_str = request.POST.get('postDataStr')
     post_data = json.loads(post_data_str)
@@ -303,7 +305,7 @@ def provide_add_ajax(request):
 # -----------------------删除放款ajax-------------------------#
 @login_required
 def provide_del_ajax(request):  # 删除放款ajax
-    print(__file__, '---->def provide_del_ajax')
+    print(request.path, '>', resolve(request.path).url_name, '>', request.user)
     response = {'status': True, 'message': None, 'forme': None, }
     post_data_str = request.POST.get('postDataStr')
     post_data = json.loads(post_data_str)
@@ -387,7 +389,7 @@ def provide_del_ajax(request):  # 删除放款ajax
 # -----------------------------添加还款ajax------------------------------#
 @login_required
 def repayment_add_ajax(request):
-    print(__file__, '---->def repayment_add_ajax')
+    print(request.path, '>', resolve(request.path).url_name, '>', request.user)
     response = {'status': True, 'message': None, 'forme': None, }
     post_data_str = request.POST.get('postDataStr')
     post_data = json.loads(post_data_str)
@@ -478,7 +480,7 @@ def repayment_add_ajax(request):
 # -----------------------删除还款信息ajax-------------------------#
 @login_required
 def repayment_del_ajax(request):  # 删除还款信息ajax
-    print(__file__, '---->def repayment_del_ajax')
+    print(request.path, '>', resolve(request.path).url_name, '>', request.user)
     response = {'status': True, 'message': None, 'forme': None, }
     post_data_str = request.POST.get('postDataStr')
     post_data = json.loads(post_data_str)

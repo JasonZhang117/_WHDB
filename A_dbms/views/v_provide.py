@@ -7,12 +7,17 @@ from django.db import transaction
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q, F
 from django.db.models import Avg, Min, Sum, Max, Count
-
+from django.urls import resolve
+from _WHDB.views import MenuHelper
+from _WHDB.views import authority
 
 # -----------------------放款管理---------------------#
 @login_required
 def provide_agree(request, *args, **kwargs):  # 放款管理
-    print(__file__, '---->def provide_agree')
+    print(request.path, '>', resolve(request.path).url_name, '>', request.user)
+    current_url_name = resolve(request.path).url_name  # 获取当前URL_NAME
+    authority_list = request.session.get('authority_list')  # 获取当前用户的所有权限
+    menu_result = MenuHelper(request).menu_data_list()
     PAGE_TITLE = '风控落实'
     '''AGREE_STATE_LIST = ((11, '待签批'), (21, '已签批'), (31, '未落实'),
                         (41, '已落实'), (51, '待变更'), (61, '已解保'), (99, '作废'))'''
@@ -64,7 +69,10 @@ def provide_agree(request, *args, **kwargs):  # 放款管理
 # -----------------------------查看放款通知------------------------------#
 @login_required
 def provide_agree_scan(request, agree_id):  # 查看放款
-    print(__file__, '---->def provide_agree_scan')
+    print(request.path, '>', resolve(request.path).url_name, '>', request.user)
+    current_url_name = resolve(request.path).url_name  # 获取当前URL_NAME
+    authority_list = request.session.get('authority_list')  # 获取当前用户的所有权限
+    menu_result = MenuHelper(request).menu_data_list()
     PAGE_TITLE = '风控落实'
     response = {'status': True, 'message': None, 'forme': None, }
 
@@ -166,7 +174,10 @@ def provide_agree_scan(request, agree_id):  # 查看放款
 # -----------------------------查看放款通知------------------------------#
 @login_required
 def provide_agree_notify(request, agree_id, notify_id):  # 查看放款通知
-    print(__file__, '---->def provide_agree_notify')
+    print(request.path, '>', resolve(request.path).url_name, '>', request.user)
+    current_url_name = resolve(request.path).url_name  # 获取当前URL_NAME
+    authority_list = request.session.get('authority_list')  # 获取当前用户的所有权限
+    menu_result = MenuHelper(request).menu_data_list()
     PAGE_TITLE = '风控落实'
     '''COUNTER_TYP_LIST = (
         (1, '企业担保'), (2, '个人保证'),
@@ -205,7 +216,10 @@ def provide_agree_notify(request, agree_id, notify_id):  # 查看放款通知
 # -----------------------通知列表---------------------#
 @login_required
 def notify(request, *args, **kwargs):  #
-    print(__file__, '---->def notify')
+    print(request.path, '>', resolve(request.path).url_name, '>', request.user)
+    current_url_name = resolve(request.path).url_name  # 获取当前URL_NAME
+    authority_list = request.session.get('authority_list')  # 获取当前用户的所有权限
+    menu_result = MenuHelper(request).menu_data_list()
     PAGE_TITLE = '放款通知'
 
     '''筛选'''
@@ -254,7 +268,10 @@ def notify(request, *args, **kwargs):  #
 # -----------------------------查看放款通知------------------------------#
 @login_required
 def notify_scan(request, notify_id):  # 查看放款通知
-    print(__file__, '---->def provide_agree_notify')
+    print(request.path, '>', resolve(request.path).url_name, '>', request.user)
+    current_url_name = resolve(request.path).url_name  # 获取当前URL_NAME
+    authority_list = request.session.get('authority_list')  # 获取当前用户的所有权限
+    menu_result = MenuHelper(request).menu_data_list()
     PAGE_TITLE = '放款通知'
     '''COUNTER_TYP_LIST = (
         (1, '企业担保'), (2, '个人保证'),
@@ -294,7 +311,10 @@ def notify_scan(request, notify_id):  # 查看放款通知
 # -----------------------放款列表---------------------#
 @login_required
 def provide(request, *args, **kwargs):  # 委托合同列表
-    print(__file__, '---->def provide')
+    print(request.path, '>', resolve(request.path).url_name, '>', request.user)
+    current_url_name = resolve(request.path).url_name  # 获取当前URL_NAME
+    authority_list = request.session.get('authority_list')  # 获取当前用户的所有权限
+    menu_result = MenuHelper(request).menu_data_list()
     PAGE_TITLE = '放款管理'
     '''PROVIDE_STATUS_LIST = [(1, '在保'), (11, '解保'), (21, '代偿')]'''
     PROVIDE_STATUS_LIST = models.Provides.PROVIDE_STATUS_LIST  # 筛选条件
@@ -305,6 +325,7 @@ def provide(request, *args, **kwargs):  # 委托合同列表
     search_key = request.GET.get('_s')
     if search_key:
         search_fields = ['notify__agree__lending__summary__custom__name',
+                         'notify__agree__lending__summary__custom__short_name',
                          'notify__agree__branch__name', 'notify__agree__branch__short_name',
                          'notify__agree__agree_num']
         q = Q()
@@ -344,7 +365,10 @@ def provide(request, *args, **kwargs):  # 委托合同列表
 # -----------------------------查看放款------------------------------#
 @login_required
 def provide_scan(request, provide_id):  # 查看放款
-    print(__file__, '---->def provide_scan')
+    print(request.path, '>', resolve(request.path).url_name, '>', request.user)
+    current_url_name = resolve(request.path).url_name  # 获取当前URL_NAME
+    authority_list = request.session.get('authority_list')  # 获取当前用户的所有权限
+    menu_result = MenuHelper(request).menu_data_list()
     PAGE_TITLE = '放款详情'
 
     provide_obj = models.Provides.objects.get(id=provide_id)
@@ -357,7 +381,10 @@ def provide_scan(request, provide_id):  # 查看放款
 # -----------------------逾期列表---------------------#
 @login_required
 def overdue(request, *args, **kwargs):  # 逾期列表
-    print(__file__, '---->def provide')
+    print(request.path, '>', resolve(request.path).url_name, '>', request.user)
+    current_url_name = resolve(request.path).url_name  # 获取当前URL_NAME
+    authority_list = request.session.get('authority_list')  # 获取当前用户的所有权限
+    menu_result = MenuHelper(request).menu_data_list()
     PAGE_TITLE = '逾期项目'
     overdue_list = models.Provides.objects.filter(
         provide_status=1, due_date__lt=datetime.date.today()).order_by('due_date')  # 逾期
@@ -404,7 +431,10 @@ def overdue(request, *args, **kwargs):  # 逾期列表
 # -----------------------即将到期列表---------------------#
 @login_required
 def soondue(request, *args, **kwargs):  # 委托合同列表
-    print(__file__, '---->def provide')
+    print(request.path, '>', resolve(request.path).url_name, '>', request.user)
+    current_url_name = resolve(request.path).url_name  # 获取当前URL_NAME
+    authority_list = request.session.get('authority_list')  # 获取当前用户的所有权限
+    menu_result = MenuHelper(request).menu_data_list()
     PAGE_TITLE = '即将到期（含逾期）'
     date_th_later = datetime.date.today() - datetime.timedelta(days=-30)  # 30天前的日期
     soondue_list = models.Provides.objects.filter(

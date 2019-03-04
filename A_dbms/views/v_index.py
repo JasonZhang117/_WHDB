@@ -3,13 +3,18 @@ from django.contrib.auth.decorators import login_required
 import datetime, time
 from .. import models
 from .. import forms
-
+from django.urls import resolve
+from _WHDB.views import MenuHelper
+from _WHDB.views import authority
 
 # -----------------------首页-------------------------#
 @login_required
 def index(request):
     '''初始化本人权限、菜单，显示本人待处理信息，显示本人业务统计信息'''
-    print(__file__, '-->index')
+    print(request.path, '>', resolve(request.path).url_name, '>', request.user)
+    current_url_name = resolve(request.path).url_name  # 获取当前URL_NAME
+    authority_list = request.session.get('authority_list')  # 获取当前用户的所有权限
+    menu_result = MenuHelper(request).menu_data_list()
     '''ARTICLE_STATE_LIST = ((1, '待反馈'), (2, '已反馈'), (3, '待上会'), (4, '已上会'), (5, '已签批'),
                           (51, '已放完'), (61, '待变更'), (99, '已注销'))'''
     no_feedback_count = models.Articles.objects.filter(article_state=1).count()  # 待反馈

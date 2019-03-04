@@ -1,19 +1,18 @@
-from django.shortcuts import render, redirect, HttpResponse
-from .. import models
-from .. import forms
+from django.shortcuts import HttpResponse, render, redirect
+from .. import models, forms
 from django.contrib.auth.decorators import login_required
 import time, json
-from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.db import transaction
 from django.db.models import Q, F
-
-from django.views import View
+from django.urls import resolve
+from _WHDB.views import MenuHelper
+from _WHDB.views import authority
 
 
 # -----------------------权证添加-------------------------#
 @login_required
 def warrant_add_ajax(request):
-    print(__file__, '---->def warrant_add_ajax')
+    print(request.path, '>', resolve(request.path).url_name, '>', request.user)
     response = {'status': True, 'message': None, 'forme': None, ' skip': None, }
     post_data_str = request.POST.get('postDataStr')
     post_data = json.loads(post_data_str)
@@ -254,7 +253,7 @@ def warrant_add_ajax(request):
 # -----------------------权证删除-------------------------#
 @login_required
 def warrant_del_ajax(request):
-    print(__file__, '---->def warrant_del_ajax')
+    print(request.path, '>', resolve(request.path).url_name, '>', request.user)
     response = {'status': True, 'message': None, 'forme': None}
     post_data_str = request.POST.get('postDataStr')
     post_data = json.loads(post_data_str)
@@ -282,7 +281,7 @@ def warrant_del_ajax(request):
 # -----------------------权证修改-------------------------#
 @login_required
 def warrant_edit_ajax(request):
-    print(__file__, '---->def warrant_edit_ajax')
+    print(request.path, '>', resolve(request.path).url_name, '>', request.user)
     response = {'status': True, 'message': None, 'forme': None, }
     post_data_str = request.POST.get('postDataStr')
     post_data = json.loads(post_data_str)
@@ -362,7 +361,7 @@ def warrant_edit_ajax(request):
 # -----------------------产权证添加ajax-------------------------#
 @login_required
 def owership_add_ajax(request):  # 产权证添加ajax
-    print(__file__, '---->def owership_add_ajax')
+    print(request.path, '>', resolve(request.path).url_name, '>', request.user)
     response = {'status': True, 'message': None, 'forme': None, }
     post_data_str = request.POST.get('postDataStr')
     post_data = json.loads(post_data_str)
@@ -392,7 +391,7 @@ def owership_add_ajax(request):  # 产权证添加ajax
 # -----------------------产权证删除ajax-------------------------#
 @login_required
 def owership_del_ajax(request):  # 产权证删除ajax
-    print(__file__, '---->def owership_del_ajax')
+    print(request.path, '>', resolve(request.path).url_name, '>', request.user)
     response = {'status': True, 'message': None, 'forme': None, }
     post_data_str = request.POST.get('postDataStr')
     post_data = json.loads(post_data_str)
@@ -426,7 +425,7 @@ def owership_del_ajax(request):  # 产权证删除ajax
 # -----------------------产权证添加ajax-------------------------#
 @login_required
 def housebag_add_ajax(request):  # 产权证添加ajax
-    print(__file__, '---->def housebag_add_ajax')
+    print(request.path, '>', resolve(request.path).url_name, '>', request.user)
     response = {'status': True, 'message': None, 'forme': None, }
     post_data_str = request.POST.get('postDataStr')
     post_data = json.loads(post_data_str)
@@ -457,7 +456,7 @@ def housebag_add_ajax(request):  # 产权证添加ajax
 # ----------------------票据添加ajax-------------------------#
 @login_required
 def draftextend_add_ajax(request):  # 产权证添加ajax
-    print(__file__, '---->def draftextend_add_ajax')
+    print(request.path, '>', resolve(request.path).url_name, '>', request.user)
     response = {'status': True, 'message': None, 'forme': None, }
     post_data_str = request.POST.get('postDataStr')
     post_data = json.loads(post_data_str)
@@ -491,7 +490,7 @@ def draftextend_add_ajax(request):  # 产权证添加ajax
 # -----------------------抵押物添加ajax-------------------------#
 @login_required
 def guaranty_add_ajax(request):  # 抵押物添加ajax
-    print(__file__, '---->def guaranty_add_ajax')
+    print(request.path, '>', resolve(request.path).url_name, '>', request.user)
     response = {'status': True, 'message': None, 'forme': None, }
     post_data_str = request.POST.get('postDataStr')
     post_data = json.loads(post_data_str)
@@ -516,7 +515,7 @@ def guaranty_add_ajax(request):  # 抵押物添加ajax
 # -----------------------抵押物删除ajax-------------------------#
 @login_required
 def guaranty_del_ajax(request):  # 抵押物
-    print(__file__, '---->def guaranty_del_ajax')
+    print(request.path, '>', resolve(request.path).url_name, '>', request.user)
     response = {'status': True, 'message': None, 'forme': None, }
     post_data_str = request.POST.get('postDataStr')
     post_data = json.loads(post_data_str)
@@ -546,7 +545,7 @@ def guaranty_del_ajax(request):  # 抵押物
 # -----------------------出入库添加ajax-------------------------#
 @login_required
 def storages_add_ajax(request):  # 出入库添加ajax
-    print(__file__, '---->def storages_add_ajax')
+    print(request.path, '>', resolve(request.path).url_name, '>', request.user)
     response = {'status': True, 'message': None, 'forme': None, }
     post_data_str = request.POST.get('postDataStr')
     post_data = json.loads(post_data_str)
@@ -662,7 +661,7 @@ def storages_add_ajax(request):  # 出入库添加ajax
 # -----------------------评估添加ajax-------------------------#
 @login_required
 def evaluate_add_ajax(request):  # 出入库添加ajax
-    print(__file__, '---->def evaluate_add_ajax')
+    print(request.path, '>', resolve(request.path).url_name, '>', request.user)
     response = {'status': True, 'message': None, 'forme': None, }
     post_data_str = request.POST.get('postDataStr')
     post_data = json.loads(post_data_str)

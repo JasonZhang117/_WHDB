@@ -8,12 +8,14 @@ from django.db import transaction
 from django.db.models import Q, F
 
 from django.views import View
-
+from django.urls import resolve
+from _WHDB.views import MenuHelper
+from _WHDB.views import authority
 
 # -----------------------搜索客户-------------------------#
 # @login_required
 def search_custom_ajax(request):
-    print(__file__, '---->def search_custom_ajax')
+    print(request.path, '>', resolve(request.path).url_name, '>', request.user)
     response = {'status': True, 'message': None, 'forme': None, ' skip': None, 'custom_list': None, }
     post_data_str = request.POST.get('postDataStr')
     post_data = json.loads(post_data_str)
@@ -43,7 +45,7 @@ def search_custom_ajax(request):
 # -----------------------搜索权证-------------------------#
 # @login_required
 def search_warrant_ajax(request):
-    print(__file__, '---->def search_custom_ajax')
+    print(request.path, '>', resolve(request.path).url_name, '>', request.user)
     response = {'status': True, 'message': None, 'forme': None, ' skip': None, 'warrant_list': None, }
     post_data_str = request.POST.get('postDataStr')
     post_data = json.loads(post_data_str)
@@ -68,7 +70,7 @@ def search_warrant_ajax(request):
 # -----------------------搜索权证-------------------------#
 # @login_required
 def guarantee_warrant_ajax(request):
-    print(__file__, '---->def guarantee_warrant_ajax')
+    print(request.path, '>', resolve(request.path).url_name, '>', request.user)
     response = {'status': True, 'message': None, 'forme': None, ' skip': None, 'warrant_list': None, }
     post_data_str = request.POST.get('postDataStr')
     post_data = json.loads(post_data_str)

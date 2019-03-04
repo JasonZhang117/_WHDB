@@ -6,15 +6,18 @@ import datetime, time, json
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.db import transaction
 from django.db.models import Q, F
-
+from django.urls import resolve
+from _WHDB.views import MenuHelper
 from django.views import View
-
+from _WHDB.views import authority
 
 # -----------------------权证列表-------------------------#
 @login_required
 def warrant(request, *args, **kwargs):  # 房产列表
-    print(__file__, '---->def warrant')
-    print('request.GET:', request.GET)
+    print(request.path, '>', resolve(request.path).url_name, '>', request.user)
+    current_url_name = resolve(request.path).url_name  # 获取当前URL_NAME
+    authority_list = request.session.get('authority_list')  # 获取当前用户的所有权限
+    menu_result = MenuHelper(request).menu_data_list()
     PAGE_TITAL = '权证列表'
     add_warrant = '添加权证'
     warrant_typ_n = 0
@@ -66,7 +69,10 @@ def warrant(request, *args, **kwargs):  # 房产列表
 # ---------------------warrant_scan权证预览------------------------#
 @login_required
 def warrant_scan(request, warrant_id):  # house_scan房产预览
-    print(__file__, '---->def warrant_scan')
+    print(request.path, '>', resolve(request.path).url_name, '>', request.user)
+    current_url_name = resolve(request.path).url_name  # 获取当前URL_NAME
+    authority_list = request.session.get('authority_list')  # 获取当前用户的所有权限
+    menu_result = MenuHelper(request).menu_data_list()
     PAGE_TITAL = '权证预览'
     warrant_obj = models.Warrants.objects.get(id=warrant_id)
     warrant_typ_n = warrant_obj.warrant_typ
@@ -118,7 +124,10 @@ def warrant_scan(request, warrant_id):  # house_scan房产预览
 # -----------------------按合同入库---------------------#
 @login_required
 def warrant_agree(request, *args, **kwargs):  # 按合同入库
-    print(__file__, '---->def warrant_agree')
+    print(request.path, '>', resolve(request.path).url_name, '>', request.user)
+    current_url_name = resolve(request.path).url_name  # 获取当前URL_NAME
+    authority_list = request.session.get('authority_list')  # 获取当前用户的所有权限
+    menu_result = MenuHelper(request).menu_data_list()
     PAGE_TITAL = '权证-按合同'
     '''AGREE_STATE_LIST = ((11, '待签批'), (21, '已签批'), (31, '未落实'),
                         (41, '已落实'), (51, '待变更'), (61, '已解保'), (99, '作废'))'''
@@ -154,7 +163,10 @@ def warrant_agree(request, *args, **kwargs):  # 按合同入库
 # --------------------------按合同入库-按合同查看--------------------------#
 @login_required
 def warrant_agree_scan(request, agree_id):  # 查看合同
-    print(__file__, '---->def warrant_agree_scan')
+    print(request.path, '>', resolve(request.path).url_name, '>', request.user)
+    current_url_name = resolve(request.path).url_name  # 获取当前URL_NAME
+    authority_list = request.session.get('authority_list')  # 获取当前用户的所有权限
+    menu_result = MenuHelper(request).menu_data_list()
     PAGE_TITAL = '权证管理'
     '''SURE_TYP_LIST = (
             (1, '企业保证'), (2, '个人保证'),
@@ -203,7 +215,10 @@ def warrant_agree_scan(request, agree_id):  # 查看合同
 # --------------------------按合同入库-按合同查看(没用)--------------------------#
 @login_required
 def warrant_agree_warrant(request, agree_id, warrant_id):  # 查看合同
-    print(__file__, '---->def warrant_agree_scan')
+    print(request.path, '>', resolve(request.path).url_name, '>', request.user)
+    current_url_name = resolve(request.path).url_name  # 获取当前URL_NAME
+    authority_list = request.session.get('authority_list')  # 获取当前用户的所有权限
+    menu_result = MenuHelper(request).menu_data_list()
     page_title = '权证管理'
     '''SURE_TYP_LIST = (
             (1, '企业保证'), (2, '个人保证'),
@@ -239,7 +254,10 @@ def warrant_agree_warrant(request, agree_id, warrant_id):  # 查看合同
 # -----------------------house房产列表-------------------------#
 @login_required
 def house(request, *args, **kwargs):  # 房产列表
-    print(__file__, '---->def warrant')
+    print(request.path, '>', resolve(request.path).url_name, '>', request.user)
+    current_url_name = resolve(request.path).url_name  # 获取当前URL_NAME
+    authority_list = request.session.get('authority_list')  # 获取当前用户的所有权限
+    menu_result = MenuHelper(request).menu_data_list()
     print('**kwargs:', kwargs)
 
     PAGE_TITAL = '权证-房产'
@@ -250,9 +268,8 @@ def house(request, *args, **kwargs):  # 房产列表
     form_house_add_edit = forms.HouseAddEidtForm()
 
     house_app_list = models.Houses.HOUSE_APP_LIST
-    house_list = models.Houses.objects.filter(**kwargs)
-    print('house_list:', house_list)
-    ####分页信息###
+    house_list = models.Houses.objects.filter(**kwargs).order_by('warrant')
+    '''分页'''
     paginator = Paginator(house_list, 19)
     page = request.GET.get('page')
     try:
@@ -268,8 +285,10 @@ def house(request, *args, **kwargs):  # 房产列表
 # -----------------------房产列表-------------------------#
 @login_required
 def ground(request, *args, **kwargs):  # 房产列表
-    print(__file__, '---->def warrant')
-    print('**kwargs:', kwargs)
+    print(request.path, '>', resolve(request.path).url_name, '>', request.user)
+    current_url_name = resolve(request.path).url_name  # 获取当前URL_NAME
+    authority_list = request.session.get('authority_list')  # 获取当前用户的所有权限
+    menu_result = MenuHelper(request).menu_data_list()
 
     PAGE_TITAL = '权证-土地'
     add_warrant = '添加土地'
@@ -279,9 +298,8 @@ def ground(request, *args, **kwargs):  # 房产列表
     form_ground_add_edit = forms.GroundAddEidtForm()
 
     ground_app_list = models.Grounds.GROUND_APP_LIST
-    ground_list = models.Grounds.objects.filter(**kwargs)
-    print('ground_list:', ground_list)
-    ####分页信息###
+    ground_list = models.Grounds.objects.filter(**kwargs).order_by('warrant')
+    '''分页'''
     paginator = Paginator(ground_list, 19)
     page = request.GET.get('page')
     try:
@@ -297,7 +315,10 @@ def ground(request, *args, **kwargs):  # 房产列表
 # -----------------------即将到期票据列表-------------------------#
 @login_required
 def soondue_draft(request, *args, **kwargs):  #
-    print(__file__, '---->def warrant')
+    print(request.path, '>', resolve(request.path).url_name, '>', request.user)
+    current_url_name = resolve(request.path).url_name  # 获取当前URL_NAME
+    authority_list = request.session.get('authority_list')  # 获取当前用户的所有权限
+    menu_result = MenuHelper(request).menu_data_list()
     PAGE_TITLE = '票据列表'
 
     date_th_later = datetime.date.today() - datetime.timedelta(days=-30)  # 30天前的日期
@@ -331,7 +352,10 @@ def soondue_draft(request, *args, **kwargs):  #
 # -----------------------即将到期票据列表-------------------------#
 @login_required
 def overdue_draft(request, *args, **kwargs):  #
-    print(__file__, '---->def warrant')
+    print(request.path, '>', resolve(request.path).url_name, '>', request.user)
+    current_url_name = resolve(request.path).url_name  # 获取当前URL_NAME
+    authority_list = request.session.get('authority_list')  # 获取当前用户的所有权限
+    menu_result = MenuHelper(request).menu_data_list()
     PAGE_TITLE = '票据列表'
 
     overdue_draft_list = models.DraftExtend.objects.filter(

@@ -231,7 +231,7 @@ admin.site.register(models.Jobs, JobsAdmin)
 
 class AuthoritiesAdmin(admin.ModelAdmin):
     list_display = ('name', 'url', 'url_name', 'carte', 'ordery')  # 显示字段
-    list_per_page = 30  # 每页显示条目数
+    # list_per_page = 30  # 每页显示条目数
     # filter_horizontal = ("menu", "authority")
     ordering = ['ordery', ]  # 排序字段
 

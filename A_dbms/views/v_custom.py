@@ -7,12 +7,17 @@ from django.db import transaction
 from django.db.models import Sum, Max, Count
 from django.db.models import Q, F
 from django.contrib.auth.decorators import login_required
-
+from django.urls import resolve
+from _WHDB.views import MenuHelper
+from _WHDB.views import authority
 
 # -----------------------客户管理-------------------------#
 @login_required
 def custom(request, *args, **kwargs):  # 委托合同列表
-    print(__file__, '---->def agree')
+    print(request.path, '>', resolve(request.path).url_name, '>', request.user)
+    current_url_name = resolve(request.path).url_name  # 获取当前URL_NAME
+    authority_list = request.session.get('authority_list')  # 获取当前用户的所有权限
+    menu_result = MenuHelper(request).menu_data_list()
     PAGE_TITLE = '客户管理'
     '''模态框'''
     form_custom_add = forms.CustomAddForm()  # 客户添加
@@ -46,7 +51,10 @@ def custom(request, *args, **kwargs):  # 委托合同列表
 # -----------------------------客户预览------------------------------#
 @login_required
 def custom_scan(request, custom_id):  # 项目预览
-    print(__file__, '---->def custom_scan')
+    print(request.path, '>', resolve(request.path).url_name, '>', request.user)
+    current_url_name = resolve(request.path).url_name  # 获取当前URL_NAME
+    authority_list = request.session.get('authority_list')  # 获取当前用户的所有权限
+    menu_result = MenuHelper(request).menu_data_list()
     PAGE_TITLE = '客户预览'
 
     custom_obj = models.Customes.objects.get(id=custom_id)

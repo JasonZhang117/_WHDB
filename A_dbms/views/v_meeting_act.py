@@ -1,22 +1,26 @@
 from django.shortcuts import render, redirect, HttpResponse
 from .. import models
 from .. import forms
-import datetime, time
-import json
+import datetime, time,json
 from django.contrib.auth.decorators import login_required
 from django.db.models import Sum, Max, Count
 from django.db.models import Q, F
 from django.db import transaction
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
+from django.urls import resolve
+from _WHDB.views import MenuHelper
+from _WHDB.views import authority
+
 
 # -----------------------添加评审会ajax-------------------------#
 @login_required
+@authority
 def meeting_add_ajax(request):
-    print(__file__, '---->def meeting_add_ajax')
+    print(request.path, '>', resolve(request.path).url_name, '>', request.user)
     response = {'status': True, 'message': None, 'forme': None, }
     post_data_str = request.POST.get('postDataStr')
     post_data = json.loads(post_data_str)
-    print('post_data:',post_data)
+    print('post_data:', post_data)
     form = forms.MeetingAddForm(post_data, request.FILES)
 
     if form.is_valid():
@@ -74,8 +78,9 @@ def meeting_add_ajax(request):
 
 # -----------------------取消评审会ajax-------------------------#
 @login_required
+@authority
 def meeting_del_ajax(request):  # 取消评审会
-    print(__file__, '---->def meeting_del_ajax')
+    print(request.path, '>', resolve(request.path).url_name, '>', request.user)
     response = {'status': True, 'message': None, 'forme': None, }
     post_data_str = request.POST.get('postDataStr')
     post_data = json.loads(post_data_str)
@@ -104,8 +109,9 @@ def meeting_del_ajax(request):  # 取消评审会
 
 # -----------------------添加参评项目ajax-------------------------#
 @login_required
+@authority
 def meeting_article_add_ajax(request):  # 添加参评项目ajax
-    print(__file__, '---->def meeting_article_add_ajax')
+    print(request.path, '>', resolve(request.path).url_name, '>', request.user)
     response = {'status': True, 'message': None, 'forme': None, }
     post_data_str = request.POST.get('postDataStr')
     post_data = json.loads(post_data_str)
@@ -146,8 +152,9 @@ def meeting_article_add_ajax(request):  # 添加参评项目ajax
 
 # -----------------------取消项目上会ajax-------------------------#
 @login_required
+@authority
 def meeting_article_del_ajax(request):  # 取消项目上会ajax
-    print(__file__, '---->def meeting_article_del')
+    print(request.path, '>', resolve(request.path).url_name, '>', request.user)
     response = {'status': True, 'message': None, 'forme': None, }
     post_data_str = request.POST.get('postDataStr')
     post_data = json.loads(post_data_str)
@@ -179,8 +186,10 @@ def meeting_article_del_ajax(request):  # 取消项目上会ajax
 
 # -----------------------分配评审委员ajax-------------------------#
 @login_required
+@authority
 def meeting_allot_add_ajax(request):  # 分配评审委员
-    print(__file__, '---->def meeting_allot_ajax')
+    print(request.path, '>', resolve(request.path).url_name, '>', request.user)
+
     response = {'status': True, 'message': None, 'forme': None, }
 
     post_data_str = request.POST.get('postDataStr')
@@ -220,8 +229,10 @@ def meeting_allot_add_ajax(request):  # 分配评审委员
 
 # -----------------------撤销评审委员ajax-------------------------#
 @login_required
+@authority
 def meeting_allot_del_ajax(request):  # 取消项目上会ajax
-    print(__file__, '---->def meeting_article_del')
+    print(request.path, '>', resolve(request.path).url_name, '>', request.user)
+
     response = {'status': True, 'message': None, 'forme': None, }
     post_data_str = request.POST.get('postDataStr')
     post_data = json.loads(post_data_str)
@@ -251,8 +262,10 @@ def meeting_allot_del_ajax(request):  # 取消项目上会ajax
 
 # -----------------------编辑评审会ajax-------------------------#
 @login_required
+@authority
 def meeting_edit_ajax(request):  # 编辑评审会ajax
-    print(__file__, '---->def meeting_edit_ajax')
+    print(request.path, '>', resolve(request.path).url_name, '>', request.user)
+
     response = {'status': True, 'message': None, 'forme': None, }
     post_data_str = request.POST.get('postDataStr')
     post_data = json.loads(post_data_str)
@@ -286,8 +299,10 @@ def meeting_edit_ajax(request):  # 编辑评审会ajax
 
 # -----------------------完成上会ajax-------------------------#
 @login_required
+@authority
 def meeting_close_ajax(request):  # 完成上会ajax
-    print(__file__, '---->def meeting_del_ajax')
+    print(request.path, '>', resolve(request.path).url_name, '>', request.user)
+
     response = {'status': True, 'message': None, 'forme': None, }
     post_data_str = request.POST.get('postDataStr')
     post_data = json.loads(post_data_str)

@@ -8,12 +8,14 @@ from django.db.models import Sum, Max, Count
 from django.db.models import Q, F
 from django.db import transaction
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
-
+from django.urls import resolve
+from _WHDB.views import MenuHelper
+from _WHDB.views import authority
 
 # -----------------------新建追偿项目ajax-------------------------#
 @login_required
 def dun_add_ajax(request):  # 添加参评项目ajax
-    print(__file__, '---->def dun_clue_add_ajax')
+    print(request.path, '>', resolve(request.path).url_name, '>', request.user)
     response = {'status': True, 'message': None, 'forme': None, }
     post_data_str = request.POST.get('postDataStr')
     post_data = json.loads(post_data_str)
@@ -51,7 +53,7 @@ def dun_add_ajax(request):  # 添加参评项目ajax
 # -----------------------添加财产线索ajax-------------------------#
 @login_required
 def clue_add_ajax(request):  #
-    print(__file__, '---->def dun_clue_add_ajax')
+    print(request.path, '>', resolve(request.path).url_name, '>', request.user)
     response = {'status': True, 'message': None, 'forme': None, }
     post_data_str = request.POST.get('postDataStr')
     post_data = json.loads(post_data_str)
@@ -93,7 +95,7 @@ def clue_add_ajax(request):  #
 # -----------------------删除财产线索ajax-------------------------#
 @login_required
 def clue_del_ajax(request):  # 取消项目上会ajax
-    print(__file__, '---->def dun_clue_del_ajax')
+    print(request.path, '>', resolve(request.path).url_name, '>', request.user)
     response = {'status': True, 'message': None, 'forme': None, }
     post_data_str = request.POST.get('postDataStr')
     post_data = json.loads(post_data_str)
@@ -134,7 +136,7 @@ def clue_del_ajax(request):  # 取消项目上会ajax
 # -----------------------添加被告人ajax-------------------------#
 @login_required
 def defendant_add_ajax(request):  #
-    print(__file__, '---->def defendant_add_ajax')
+    print(request.path, '>', resolve(request.path).url_name, '>', request.user)
     response = {'status': True, 'message': None, 'forme': None, }
     post_data_str = request.POST.get('postDataStr')
     post_data = json.loads(post_data_str)
@@ -174,7 +176,7 @@ def defendant_add_ajax(request):  #
 # -----------------------删除被告人ajax-------------------------#
 @login_required
 def defendant_del_ajax(request):  # 删除被告人ajax
-    print(__file__, '---->def defendant_del_ajax')
+    print(request.path, '>', resolve(request.path).url_name, '>', request.user)
     response = {'status': True, 'message': None, 'forme': None, }
     post_data_str = request.POST.get('postDataStr')
     post_data = json.loads(post_data_str)
@@ -205,7 +207,9 @@ def defendant_del_ajax(request):  # 删除被告人ajax
 # -----------------------------查封情况ajax------------------------#
 @login_required
 def sealup_add_ajax(request):  # 修改项目ajax
-    print(__file__, '---->def dun_sealup_ajax')
+    print(request.path, '>', resolve(request.path).url_name, '>', request.user)
+    current_url_name = resolve(request.path).url_name  # 获取当前URL_NAME
+    authority_list = request.session.get('authority_list')  # 获取当前用户的所有权限
     response = {'status': True, 'message': None, 'forme': None, }
 
     post_data_str = request.POST.get('postDataStr')
@@ -267,7 +271,7 @@ def sealup_add_ajax(request):  # 修改项目ajax
 # -----------------------------查询情况ajax------------------------#
 @login_required
 def inquiry_add_ajax(request):
-    print(__file__, '---->def inquiry_add_ajax')
+    print(request.path, '>', resolve(request.path).url_name, '>', request.user)
     response = {'status': True, 'message': None, 'forme': None, }
 
     post_data_str = request.POST.get('postDataStr')
@@ -519,7 +523,9 @@ def inquiry_add_ajax(request):
 # -----------------------------追偿台账添加ajax------------------------#
 @login_required
 def standing_add_ajax(request):
-    print(__file__, '---->def standing_add_ajax')
+    print(request.path, '>', resolve(request.path).url_name, '>', request.user)
+    current_url_name = resolve(request.path).url_name  # 获取当前URL_NAME
+    authority_list = request.session.get('authority_list')  # 获取当前用户的所有权限
     response = {'status': True, 'message': None, 'forme': None, }
 
     post_data_str = request.POST.get('postDataStr')
@@ -558,7 +564,7 @@ def standing_add_ajax(request):
 # -----------------------删除追偿台账ajax-------------------------#
 @login_required
 def standing_del_ajax(request):
-    print(__file__, '---->def standing_del_ajax')
+    print(request.path, '>', resolve(request.path).url_name, '>', request.user)
     response = {'status': True, 'message': None, 'forme': None, }
     post_data_str = request.POST.get('postDataStr')
     post_data = json.loads(post_data_str)
@@ -587,7 +593,7 @@ def standing_del_ajax(request):
 # -----------------------------追偿费用添加ajax------------------------#
 @login_required
 def charge_add_ajax(request):
-    print(__file__, '---->def charge_add_ajax')
+    print(request.path, '>', resolve(request.path).url_name, '>', request.user)
     response = {'status': True, 'message': None, 'forme': None, }
 
     post_data_str = request.POST.get('postDataStr')
@@ -634,7 +640,9 @@ def charge_add_ajax(request):
 # -----------------------删除追偿费用ajax-------------------------#
 @login_required
 def charge_del_ajax(request):
-    print(__file__, '---->def charge_del_ajax')
+    print(request.path, '>', resolve(request.path).url_name, '>', request.user)
+    current_url_name = resolve(request.path).url_name  # 获取当前URL_NAME
+    authority_list = request.session.get('authority_list')  # 获取当前用户的所有权限
     response = {'status': True, 'message': None, 'forme': None, }
     post_data_str = request.POST.get('postDataStr')
     post_data = json.loads(post_data_str)
@@ -671,7 +679,7 @@ def charge_del_ajax(request):
 # -----------------------------案款回收添加ajax------------------------#
 @login_required
 def retrieve_add_ajax(request):
-    print(__file__, '---->def retrieve_add_ajax')
+    print(request.path, '>', resolve(request.path).url_name, '>', request.user)
     response = {'status': True, 'message': None, 'forme': None, }
 
     post_data_str = request.POST.get('postDataStr')
@@ -719,7 +727,7 @@ def retrieve_add_ajax(request):
 # -----------------------删除案款回收ajax-------------------------#
 @login_required
 def retrieve_del_ajax(request):
-    print(__file__, '---->def retrieve_del_ajax')
+    print(request.path, '>', resolve(request.path).url_name, '>', request.user)
     response = {'status': True, 'message': None, 'forme': None, }
     post_data_str = request.POST.get('postDataStr')
     post_data = json.loads(post_data_str)
@@ -756,7 +764,7 @@ def retrieve_del_ajax(request):
 # -----------------------------资料目录添加ajax------------------------#
 @login_required
 def stage_add_ajax(request):
-    print(__file__, '---->def stage_add_ajax')
+    print(request.path, '>', resolve(request.path).url_name, '>', request.user)
     response = {'status': True, 'message': None, 'forme': None, }
 
     post_data_str = request.POST.get('postDataStr')
@@ -828,7 +836,7 @@ def stage_add_ajax(request):
 # -----------------------删除资料目录ajax-------------------------#
 @login_required
 def stage_del_ajax(request):  #
-    print(__file__, '---->def stage_del_ajax')
+    print(request.path, '>', resolve(request.path).url_name, '>', request.user)
     response = {'status': True, 'message': None, 'forme': None, }
     post_data_str = request.POST.get('postDataStr')
     post_data = json.loads(post_data_str)
@@ -857,7 +865,7 @@ def stage_del_ajax(request):  #
 # -----------------------------判决添加ajax------------------------#
 @login_required
 def judgment_add_ajax(request):
-    print(__file__, '---->def judgment_add_ajax')
+    print(request.path, '>', resolve(request.path).url_name, '>', request.user)
     response = {'status': True, 'message': None, 'forme': None, }
 
     post_data_str = request.POST.get('postDataStr')
@@ -900,7 +908,7 @@ def judgment_add_ajax(request):
 # -----------------------删除判决ajax-------------------------#
 @login_required
 def judgment_del_ajax(request):  #
-    print(__file__, '---->def judgment_del_ajax')
+    print(request.path, '>', resolve(request.path).url_name, '>', request.user)
     response = {'status': True, 'message': None, 'forme': None, }
     post_data_str = request.POST.get('postDataStr')
     post_data = json.loads(post_data_str)
@@ -929,7 +937,7 @@ def judgment_del_ajax(request):  #
 # -----------------------------委托代理添加ajax------------------------#
 @login_required
 def agent_add_ajax(request):
-    print(__file__, '---->def agent_add_ajax')
+    print(request.path, '>', resolve(request.path).url_name, '>', request.user)
     response = {'status': True, 'message': None, 'forme': None, }
 
     post_data_str = request.POST.get('postDataStr')
@@ -974,7 +982,7 @@ def agent_add_ajax(request):
 # -----------------------------联系人添加ajax------------------------#
 @login_required
 def staff_add_ajax(request):
-    print(__file__, '---->def staff_add_ajax')
+    print(request.path, '>', resolve(request.path).url_name, '>', request.user)
     response = {'status': True, 'message': None, 'forme': None, }
 
     post_data_str = request.POST.get('postDataStr')

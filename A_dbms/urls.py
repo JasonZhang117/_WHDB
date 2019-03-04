@@ -35,26 +35,25 @@ urlpatterns = [
     path('appraisal/scan/<int:article_id>/', views.appraisal_scan, name='appraisal_scan'),
     path('appraisal/scan/<int:article_id>/<int:lending_id>/', views.appraisal_scan_lending,
          name='appraisal_scan_lending'),
-    path('appraisal/summary/<int:article_id>/', views.summary_scan, name='summary_scan'),
-    path('appraisal/comment/', views.comment_edit_ajax),
-    path('appraisal/single/add/', views.single_quota_ajax),
-    path('appraisal/single/del/', views.single_del_ajax),
-    path('appraisal/lending/add/', views.lending_order_ajax),
-    path('appraisal/lending/del/', views.lending_del_ajax),
-    path('appraisal/sign/', views.article_sign_ajax),
-    path('appraisal/article/change/', views.article_change_ajax),
-
-    path('appraisal/guarantee/add/', views.guarantee_add_ajax),
-    path('appraisal/guarantee/del/', views.guarantee_del_ajax),
+    path('appraisal/summary/<int:article_id>/', views.summary_scan, name='appraisal_summary_scan'),
+    path('appraisal/comment/', views.comment_edit_ajax, name='appraisal_comment_edit_ajax'),
+    path('appraisal/single/add/', views.single_quota_ajax, name='appraisal_single_quota_ajax'),
+    path('appraisal/single/del/', views.single_del_ajax, name='appraisal_single_del_ajax'),
+    path('appraisal/lending/add/', views.lending_order_ajax, name='appraisal_lending_order_ajax'),
+    path('appraisal/lending/del/', views.lending_del_ajax, name='appraisal_lending_del_ajax'),
+    path('appraisal/sign/', views.article_sign_ajax, name='appraisal_article_sign_ajax'),
+    path('appraisal/article/change/', views.article_change_ajax, name='appraisal_article_change_ajax'),
+    path('appraisal/guarantee/add/', views.guarantee_add_ajax, name='appraisal_guarantee_add_ajax'),
+    path('appraisal/guarantee/del/', views.guarantee_del_ajax, name='appraisal_guarantee_del_ajax'),
     # -----------------------agree合同管理-------------------------#
     path('agree/', views.agree, name='agree_all'),  # 菜单-合同管理
     path('agree/<int:agree_state>/', views.agree, name='agree'),  # /dbms/article/(0-9)
     path('agree/scan/<int:agree_id>/', views.agree_scan, name='agree_scan'),
     path('agree/preview/<int:agree_id>/', views.agree_preview, name='agree_preview'),
-    path('agree/add/', views.agree_add_ajax),
-    path('agree/sign/', views.agree_sign_ajax),
-    path('agree/counter/add/', views.counter_add_ajax),
-    path('agree/counter/del/', views.counter_del_ajax),
+    path('agree/add/', views.agree_add_ajax, name='agree_add_ajax'),
+    path('agree/sign/', views.agree_sign_ajax, name='agree_sign_ajax'),
+    path('agree/counter/add/', views.counter_add_ajax, name='agree_counter_add_ajax'),
+    path('agree/counter/del/', views.counter_del_ajax, name='agree_counter_del_ajax'),
     # -----------------------warrant权证管理-------------------------#
     path('warrant/', views.warrant, name='warrant_all'),  # 菜单-权证管理-所有权证
     path('warrant/<int:warrant_typ>/', views.warrant, name='warrant'),  # /dbms/warrant/(0-9)
@@ -64,46 +63,45 @@ urlpatterns = [
     path('warrant/agree/scan/<int:agree_id>/', views.warrant_agree_scan, name='warrant_agree_scan'),
     path('warrant/agree/warrant/<int:agree_id>/<int:warrant_id>/', views.warrant_agree_warrant,
          name='warrant_agree_warrant'),
-    path('warrant/draft/soondue/', views.soondue_draft, name='soondue_draft'),  #
-    path('warrant/draft/overdue/', views.overdue_draft, name='overdue_draft'),  #
-
+    path('warrant/draft/soondue/', views.soondue_draft, name='warrant_soondue_draft'),  #
+    path('warrant/draft/overdue/', views.overdue_draft, name='warrant_overdue_draft'),  #
     path('warrant/add/', views.warrant_add_ajax, name='warrant_add_ajax'),
     path('warrant/del/', views.warrant_del_ajax, name='warrant_del_ajax'),
     path('warrant/edit/', views.warrant_edit_ajax, name='warrant_edit_ajax'),
-    path('warrant/owership/add/', views.owership_add_ajax, name='owership_add_ajax'),
-    path('warrant/owership/del/', views.owership_del_ajax, name='owership_del_ajax'),
-    path('warrant/housebag/add/', views.housebag_add_ajax, name='housebag_add_ajax'),
-    path('warrant/draftbag/add/', views.draftextend_add_ajax, name='draftextend_add_ajax'),
-    path('warrant/guaranty/add/', views.guaranty_add_ajax, name='guaranty_add_ajax'),
-    path('warrant/guaranty/del/', views.guaranty_del_ajax, name='guaranty_del_ajax'),
-    path('warrant/storages/add/', views.storages_add_ajax, name='storages_add_ajax'),
-    path('warrant/evaluate/add/', views.evaluate_add_ajax, name='evaluate_add_ajax'),
+    path('warrant/owership/add/', views.owership_add_ajax, name='warrant_owership_add_ajax'),
+    path('warrant/owership/del/', views.owership_del_ajax, name='warrant_owership_del_ajax'),
+    path('warrant/housebag/add/', views.housebag_add_ajax, name='warrant_housebag_add_ajax'),
+    path('warrant/draftbag/add/', views.draftextend_add_ajax, name='warrant_draftextend_add_ajax'),
+    path('warrant/guaranty/add/', views.guaranty_add_ajax, name='warrant_guaranty_add_ajax'),
+    path('warrant/guaranty/del/', views.guaranty_del_ajax, name='warrant_guaranty_del_ajax'),
+    path('warrant/storages/add/', views.storages_add_ajax, name='warrant_storages_add_ajax'),
+    path('warrant/evaluate/add/', views.evaluate_add_ajax, name='warrant_evaluate_add_ajax'),
 
     # -----------------------house房产管理-------------------------#
-    path('house/', views.house, name='house_all'),  # 菜单-权证管理-房产列表
-    path('house/<int:house_app>/', views.house, name='house'),  # /dbms/house/(0-9)
+    path('house/', views.house, name='warrant_house_all'),  # 菜单-权证管理-房产列表
+    path('house/<int:house_app>/', views.house, name='warrant_house'),  # /dbms/house/(0-9)
     # -----------------------ground土地管理-------------------------#
-    path('ground/', views.ground, name='ground_all'),  # 菜单-权证管理-土地列表
-    path('ground/<int:application>/', views.ground, name='ground'),  # /dbms/ground/(0-9)
+    path('ground/', views.ground, name='warrant_ground_all'),  # 菜单-权证管理-土地列表
+    path('ground/<int:application>/', views.ground, name='warrant_ground'),  # /dbms/ground/(0-9)
     # -----------------------放款管理-------------------------#
     path('provide/agree/', views.provide_agree, name='provide_agree_all'),
     path('provide/agree/<int:agree_state>/', views.provide_agree, name='provide_agree'),  # /dbms/provide/(0-9)
     path('provide/agree/scan/<int:agree_id>/', views.provide_agree_scan, name='provide_agree_scan'),
     path('provide/agree/notify/<int:agree_id>/<int:notify_id>/', views.provide_agree_notify,
          name='provide_agree_notify'),
-    path('provide/notify/', views.notify, name='notify_all'),  #
-    path('provide/notify/scan/<int:notify_id>/', views.notify_scan, name='notify_scan'),
-    path('provide/counter/sign/', views.counter_sign_ajax),
-    path('provide/ascertain/add/', views.ascertain_add_ajax),
-    path('provide/notify/add/', views.notify_add_ajax),
-    path('provide/notify/del/', views.notify_del_ajax),
-    path('provide/add/', views.provide_add_ajax),
-    path('provide/del/', views.provide_del_ajax),
-    path('provide/repayment/add/', views.repayment_add_ajax),
-    path('provide/repayment/del/', views.repayment_del_ajax),
+    path('provide/notify/', views.notify, name='provide_notify_all'),  #
+    path('provide/notify/scan/<int:notify_id>/', views.notify_scan, name='provide_notify_scan'),
+    path('provide/counter/sign/', views.counter_sign_ajax, name='provide_counter_sign_ajax'),
+    path('provide/ascertain/add/', views.ascertain_add_ajax, name='provide_ascertain_add_ajax'),
+    path('provide/notify/add/', views.notify_add_ajax, name='provide_notify_add_ajax'),
+    path('provide/notify/del/', views.notify_del_ajax, name='provide_notify_del_ajax'),
+    path('provide/add/', views.provide_add_ajax, name='provide_add_ajax'),
+    path('provide/del/', views.provide_del_ajax, name='provide_del_ajax'),
+    path('provide/repayment/add/', views.repayment_add_ajax, name='provide_repayment_add_ajax'),
+    path('provide/repayment/del/', views.repayment_del_ajax, name='provide_repayment_del_ajax'),
     path('provide/', views.provide, name='provide_all'),  # 菜单-放款管理-放款
-    path('provide/overdue/', views.overdue, name='overdue'),  # 菜单-放款管理-逾期项目
-    path('provide/soondue/', views.soondue, name='soondue'),  # 菜单-放款管理-即将到期
+    path('provide/overdue/', views.overdue, name='provide_overdue'),  # 菜单-放款管理-逾期项目
+    path('provide/soondue/', views.soondue, name='provide_soondue'),  # 菜单-放款管理-即将到期
 
     path('provide/<int:provide_status>/', views.provide, name='provide'),  # /dbms/grant/(0-9)
     path('provide/scan/<int:provide_id>/', views.provide_scan, name='provide_scan'),
@@ -128,50 +126,50 @@ urlpatterns = [
     path('dun/<int:dun_stage>/', views.dun, name='dun'),
     path('dun/scan/<int:dun_id>/', views.dun_scan, name='dun_scan'),
     path('dun/add/', views.dun_add_ajax, name='dun_add_ajax'),
-    path('dun/clue/add/', views.clue_add_ajax, name='clue_add_ajax'),
-    path('dun/clue/del/', views.clue_del_ajax, name='clue_del_ajax'),
-    path('dun/defendant/add/', views.defendant_add_ajax, name='defendant_add_ajax'),
-    path('dun/defendant/del/', views.defendant_del_ajax, name='defendant_del_ajax'),
-    path('dun/stage/add/', views.stage_add_ajax, name='stage_add_ajax'),
-    path('dun/stage/del/', views.stage_del_ajax, name='stage_del_ajax'),
-    path('dun/judgment/add/', views.judgment_add_ajax, name='judgment_add_ajax'),
-    path('dun/judgment/del/', views.judgment_del_ajax, name='judgment_del_ajax'),
-    path('dun/agent/add/', views.agent_add_ajax, name='agent_add_ajax'),
-    path('dun/staff/add/', views.staff_add_ajax, name='staff_add_ajax'),
+    path('dun/clue/add/', views.clue_add_ajax, name='dun_clue_add_ajax'),
+    path('dun/clue/del/', views.clue_del_ajax, name='dun_clue_del_ajax'),
+    path('dun/defendant/add/', views.defendant_add_ajax, name='dun_defendant_add_ajax'),
+    path('dun/defendant/del/', views.defendant_del_ajax, name='dun_defendant_del_ajax'),
+    path('dun/stage/add/', views.stage_add_ajax, name='dun_stage_add_ajax'),
+    path('dun/stage/del/', views.stage_del_ajax, name='dun_stage_del_ajax'),
+    path('dun/judgment/add/', views.judgment_add_ajax, name='dun_judgment_add_ajax'),
+    path('dun/judgment/del/', views.judgment_del_ajax, name='dun_judgment_del_ajax'),
+    path('dun/agent/add/', views.agent_add_ajax, name='dun_agent_add_ajax'),
+    path('dun/staff/add/', views.staff_add_ajax, name='dun_staff_add_ajax'),
 
-    path('dun/sealup/add/', views.sealup_add_ajax, name='sealup_add_ajax'),
-    path('dun/inquiry/add/', views.inquiry_add_ajax, name='inquiry_add_ajax'),
+    path('dun/sealup/add/', views.sealup_add_ajax, name='dun_sealup_add_ajax'),
+    path('dun/inquiry/add/', views.inquiry_add_ajax, name='dun_inquiry_add_ajax'),
 
-    path('dun/seal/', views.seal, name='seal_all'),
-    path('dun/seal/<int:seal_state>/', views.seal, name='seal'),
-    path('dun/seal/scan/<int:dun_id>/<int:warrant_id>/', views.seal_scan, name='seal_scan'),
+    path('dun/seal/', views.seal, name='dun_seal_all'),
+    path('dun/seal/<int:seal_state>/', views.seal, name='dun_seal'),
+    path('dun/seal/scan/<int:dun_id>/<int:warrant_id>/', views.seal_scan, name='dun_seal_scan'),
 
-    path('dun/standing/add/', views.standing_add_ajax, name='standing_add_ajax'),
-    path('dun/standing/del/', views.standing_del_ajax, name='standing_del_ajax'),
-    path('dun/charge/add/', views.charge_add_ajax, name='charge_add_ajax'),
-    path('dun/charge/del/', views.charge_del_ajax, name='charge_del_ajax'),
-    path('dun/retrieve/add/', views.retrieve_add_ajax, name='retrieve_add_ajax'),
-    path('dun/retrieve/del/', views.retrieve_del_ajax, name='retrieve_del_ajax'),
-    path('dun/seal/overdue/', views.overdue_seal, name='overdue_seal'),
-    path('dun/seal/soondue/', views.soondue_seal, name='soondue_seal'),
-    path('dun/search/overdue/', views.overdue_search, name='overdue_search'),
+    path('dun/standing/add/', views.standing_add_ajax, name='dun_standing_add_ajax'),
+    path('dun/standing/del/', views.standing_del_ajax, name='dun_standing_del_ajax'),
+    path('dun/charge/add/', views.charge_add_ajax, name='dun_charge_add_ajax'),
+    path('dun/charge/del/', views.charge_del_ajax, name='dun_charge_del_ajax'),
+    path('dun/retrieve/add/', views.retrieve_add_ajax, name='dun_retrieve_add_ajax'),
+    path('dun/retrieve/del/', views.retrieve_del_ajax, name='dun_retrieve_del_ajax'),
+    path('dun/seal/overdue/', views.overdue_seal, name='dun_overdue_seal'),
+    path('dun/seal/soondue/', views.soondue_seal, name='dun_soondue_seal'),
+    path('dun/search/overdue/', views.overdue_search, name='dun_overdue_search'),
 
     # -----------------------客户管理-------------------------#
 
     path('custom/', views.custom, name='custom_all'),  # 菜单-客户管理
     path('custom/<int:genre>/', views.custom, name='custom'),  # /dbms/cstom/(0-9)
     path('custom/scan/<int:custom_id>/', views.custom_scan, name='custom_scan'),
-    path('custom/add/', views.custom_add_ajax),
-    path('custom/del/', views.custom_del_ajax),
-    path('custom/edit/', views.custom_edit_ajax),
-    path('custom/shareholder/add/', views.shareholder_add_ajax),
-    path('custom/spouse/add/', views.spouse_add_ajax),
+    path('custom/add/', views.custom_add_ajax, name='custom_add_ajax'),
+    path('custom/del/', views.custom_del_ajax, name='custom_del_ajax'),
+    path('custom/edit/', views.custom_edit_ajax, name='custom_edit_ajax'),
+    path('custom/shareholder/add/', views.shareholder_add_ajax, name='custom_shareholder_add_ajax'),
+    path('custom/spouse/add/', views.spouse_add_ajax, name='custom_spouse_add_ajax'),
 
     # ------------------------------合作机构--------------------------------------#
     path('cooperative/', views.cooperative, name='cooperative_all'),  # 菜单-合作机构
     path('cooperative/<int:cooperator_state>/', views.cooperative, name='cooperative'),  # /dbms/cstom/(0-9)
-    path('cooperative/soondue/', views.soondue_cooperator, name='soondue_cooperator'),
-    path('cooperative/overdue/', views.overdue_cooperator, name='overdue_cooperator'),
+    path('cooperative/soondue/', views.soondue_cooperator, name='cooperative_soondue'),
+    path('cooperative/overdue/', views.overdue_cooperator, name='cooperative_overdue'),
 
     # 员工
     path('employee/', views.employee, name='employee'),
@@ -187,6 +185,6 @@ urlpatterns = [
 
     path('search/custom/', views.search_custom_ajax, name='search_custom_ajax'),
     path('search/warrant/', views.search_warrant_ajax, name='search_warrant_ajax'),
-    path('search/guarantee/', views.guarantee_warrant_ajax, name='guarantee_warrant_ajax'),
+    path('search/guarantee/', views.guarantee_warrant_ajax, name='search_guarantee_ajax'),
 
 ]

@@ -8,12 +8,17 @@ from django.db.models import Sum, Max, Count
 from django.db.models import Q, F
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.db import transaction
-
+from django.urls import resolve, reverse
+from _WHDB.views import MenuHelper
+from _WHDB.views import authority
 
 # -----------------------------反担保措施添加ajax------------------------#
 @login_required
+@authority
 def guarantee_add_ajax(request):  # 反担保措施添加ajax
-    print(__file__, '---->def guarantee_add_ajax')
+    print(request.path, '>', resolve(request.path).url_name, '>', request.user)
+    current_url_name = resolve(request.path).url_name  # 获取当前URL_NAME
+    authority_list = request.session.get('authority_list')  # 获取当前用户的所有权限
     response = {'status': True, 'message': None, 'forme': None, }
     post_data_str = request.POST.get('postDataStr')
     post_data = json.loads(post_data_str)
@@ -193,8 +198,9 @@ def guarantee_add_ajax(request):  # 反担保措施添加ajax
 
 # -----------------------反担保措施删除ajax-------------------------#
 @login_required
+@authority
 def guarantee_del_ajax(request):  # 反担保人删除ajax
-    print(__file__, '---->def guarantee_del_ajax')
+    print(request.path, '>', resolve(request.path).url_name, '>', request.user)
     response = {'status': True, 'message': None, 'forme': None, }
     post_data_str = request.POST.get('postDataStr')
     post_data = json.loads(post_data_str)
@@ -257,8 +263,9 @@ def guarantee_del_ajax(request):  # 反担保人删除ajax
 
 # -----------------------------评审意见ajax------------------------#
 @login_required
+@authority
 def comment_edit_ajax(request):  # 修改项目ajax
-    print(__file__, '---->def article_edit_ajax')
+    print(request.path, '>', resolve(request.path).url_name, '>', request.user)
     response = {'status': True, 'message': None, 'obj_num': None, 'forme': None, }
 
     post_data_str = request.POST.get('postDataStr')
@@ -302,8 +309,9 @@ def comment_edit_ajax(request):  # 修改项目ajax
 
 # -----------------------单项额度ajax-------------------------#
 @login_required
+@authority
 def single_quota_ajax(request):  # 单项额度ajax
-    print(__file__, '---->def single_quota_ajax')
+    print(request.path, '>', resolve(request.path).url_name, '>', request.user)
     response = {'status': True, 'message': None,
                 'obj_num': None, 'forme': None, }
     post_data_str = request.POST.get('postDataStr')
@@ -338,8 +346,9 @@ def single_quota_ajax(request):  # 单项额度ajax
 
 # -----------------------放款次序ajax-------------------------#
 @login_required
+@authority
 def lending_order_ajax(request):  # 放款次序ajax
-    print(__file__, '---->def single_quota_ajax')
+    print(request.path, '>', resolve(request.path).url_name, '>', request.user)
     response = {'status': True, 'message': None, 'forme': None}
     post_data_str = request.POST.get('postDataStr')
     post_data = json.loads(post_data_str)
@@ -375,8 +384,9 @@ def lending_order_ajax(request):  # 放款次序ajax
 
 # -----------------------放款次序删除ajax-------------------------#
 @login_required
+@authority
 def lending_del_ajax(request):  # 放款次序删除ajax
-    print(__file__, '---->def single_del_ajax')
+    print(request.path, '>', resolve(request.path).url_name, '>', request.user)
     response = {'status': True, 'message': None, 'forme': None, }
     post_data_str = request.POST.get('postDataStr')
     post_data = json.loads(post_data_str)
@@ -405,8 +415,9 @@ def lending_del_ajax(request):  # 放款次序删除ajax
 
 # -----------------------单项额度删除ajax-------------------------#
 @login_required
+@authority
 def single_del_ajax(request):  # 单项额度删除ajax
-    print(__file__, '---->def single_del_ajax')
+    print(request.path, '>', resolve(request.path).url_name, '>', request.user)
     response = {'status': True, 'message': None, 'forme': None, }
     post_data_str = request.POST.get('postDataStr')
     post_data = json.loads(post_data_str)
@@ -435,8 +446,9 @@ def single_del_ajax(request):  # 单项额度删除ajax
 
 # -----------------------签批ajax-------------------------#
 @login_required
+@authority
 def article_sign_ajax(request):
-    print(__file__, '---->def article_sign_ajax')
+    print(request.path, '>', resolve(request.path).url_name, '>', request.user)
     response = {'status': True, 'message': None, 'forme': None, }
     post_data_str = request.POST.get('postDataStr')
     post_data = json.loads(post_data_str)
@@ -508,8 +520,9 @@ def article_sign_ajax(request):
 
 # -----------------------项目变更ajax-------------------------#
 @login_required
+@authority
 def article_change_ajax(request):
-    print(__file__, '---->def 项目变更ajax')
+    print(request.path, '>', resolve(request.path).url_name, '>', request.user)
     response = {'status': True, 'message': None, 'forme': None, }
     post_data_str = request.POST.get('postDataStr')
     post_data = json.loads(post_data_str)

@@ -2,19 +2,23 @@ from django.shortcuts import render, redirect, HttpResponse
 from .. import models
 from .. import forms
 import datetime, time, json
-
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q, F
 from django.db.models import Avg, Min, Sum, Max, Count
 from django.db import transaction
 from django.db.models import Sum, Max, Count
-
+from django.urls import resolve
+from _WHDB.views import MenuHelper
+from _WHDB.views import authority
 
 # -----------------------合作机构-------------------------#
 @login_required
 def cooperative(request, *args, **kwargs):  # 合作机构
-    print(__file__, '---->def Cooperative')
+    print(request.path, '>', resolve(request.path).url_name, '>', request.user)
+    current_url_name = resolve(request.path).url_name  # 获取当前URL_NAME
+    authority_list = request.session.get('authority_list')  # 获取当前用户的所有权限
+    menu_result = MenuHelper(request).menu_data_list()
     PAGE_TITLE = '合作机构'
 
     COOPERATOR_STATE_LIST = models.Cooperators.COOPERATOR_STATE_LIST
@@ -36,7 +40,10 @@ def cooperative(request, *args, **kwargs):  # 合作机构
 # -----------------------即将到期合作协议-------------------------#
 @login_required
 def soondue_cooperator(request, *args, **kwargs):
-    print(__file__, '---->def warrant')
+    print(request.path, '>', resolve(request.path).url_name, '>', request.user)
+    current_url_name = resolve(request.path).url_name  # 获取当前URL_NAME
+    authority_list = request.session.get('authority_list')  # 获取当前用户的所有权限
+    menu_result = MenuHelper(request).menu_data_list()
     PAGE_TITLE = '即将到期协议'
 
     date_th_later = datetime.date.today() - datetime.timedelta(days=-30)  # 30天前的日期
@@ -70,7 +77,10 @@ def soondue_cooperator(request, *args, **kwargs):
 # -----------------------逾期合作协议-------------------------#
 @login_required
 def overdue_cooperator(request, *args, **kwargs):
-    print(__file__, '---->def warrant')
+    print(request.path, '>', resolve(request.path).url_name, '>', request.user)
+    current_url_name = resolve(request.path).url_name  # 获取当前URL_NAME
+    authority_list = request.session.get('authority_list')  # 获取当前用户的所有权限
+    menu_result = MenuHelper(request).menu_data_list()
     PAGE_TITLE = '逾期协议'
 
     overdue_cooperator_list = models.Cooperators.objects.filter(
