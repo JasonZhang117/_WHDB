@@ -18,7 +18,7 @@
         <tbody>
         {% for notify in p_list %}
             <tr>
-                <td><a href="{% url 'dbms:notify_scan' notify_id=notify.id %}">{{ notify.agree.agree_num }}</a></td>
+                <td><a href="{% url 'dbms:provide_notify_scan' notify_id=notify.id %}">{{ notify.agree.agree_num }}</a></td>
                 <td>{{ notify.agree.lending.summary.custom.short_name }}</td>
                 <td>{{ notify.agree.branch.short_name }}</td>
                 <td align="right">{{ notify.notify_money }}</td>

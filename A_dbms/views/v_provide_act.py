@@ -13,6 +13,7 @@ from _WHDB.views import authority
 
 # -----------------------------合同签订ajax------------------------------#
 @login_required
+@authority
 def counter_sign_ajax(request):
     print(request.path, '>', resolve(request.path).url_name, '>', request.user)
     response = {'status': True, 'message': None, 'forme': None, }
@@ -53,6 +54,7 @@ def counter_sign_ajax(request):
 
 # -----------------------------风控落实ajax------------------------------#
 @login_required
+@authority
 def ascertain_add_ajax(request):
     print(request.path, '>', resolve(request.path).url_name, '>', request.user)
     response = {'status': True, 'message': None, 'forme': None, }
@@ -94,6 +96,7 @@ def ascertain_add_ajax(request):
 
 # -----------------------------添加放款通知ajax------------------------------#
 @login_required
+@authority
 def notify_add_ajax(request):
     print(request.path, '>', resolve(request.path).url_name, '>', request.user)
     response = {'status': True, 'message': None, 'forme': None, }
@@ -186,6 +189,7 @@ def notify_add_ajax(request):
 
 # -----------------------删除放款通知ajax-------------------------#
 @login_required
+@authority
 def notify_del_ajax(request):  # 反担保人删除ajax
     print(request.path, '>', resolve(request.path).url_name, '>', request.user)
     response = {'status': True, 'message': None, 'forme': None, }
@@ -219,6 +223,7 @@ def notify_del_ajax(request):  # 反担保人删除ajax
 
 # -----------------------------添加放款ajax------------------------------#
 @login_required
+@authority
 def provide_add_ajax(request):
     print(request.path, '>', resolve(request.path).url_name, '>', request.user)
     response = {'status': True, 'message': None, 'forme': None, }
@@ -304,6 +309,7 @@ def provide_add_ajax(request):
 
 # -----------------------删除放款ajax-------------------------#
 @login_required
+@authority
 def provide_del_ajax(request):  # 删除放款ajax
     print(request.path, '>', resolve(request.path).url_name, '>', request.user)
     response = {'status': True, 'message': None, 'forme': None, }
@@ -388,6 +394,7 @@ def provide_del_ajax(request):  # 删除放款ajax
 
 # -----------------------------添加还款ajax------------------------------#
 @login_required
+@authority
 def repayment_add_ajax(request):
     print(request.path, '>', resolve(request.path).url_name, '>', request.user)
     response = {'status': True, 'message': None, 'forme': None, }
@@ -479,6 +486,7 @@ def repayment_add_ajax(request):
 
 # -----------------------删除还款信息ajax-------------------------#
 @login_required
+@authority
 def repayment_del_ajax(request):  # 删除还款信息ajax
     print(request.path, '>', resolve(request.path).url_name, '>', request.user)
     response = {'status': True, 'message': None, 'forme': None, }

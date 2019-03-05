@@ -232,6 +232,7 @@ admin.site.register(models.Jobs, JobsAdmin)
 class AuthoritiesAdmin(admin.ModelAdmin):
     list_display = ('name', 'url', 'url_name', 'carte', 'ordery')  # 显示字段
     # list_per_page = 30  # 每页显示条目数
+    search_fields = ['name', 'url_name']  # 搜索字段
     # filter_horizontal = ("menu", "authority")
     ordering = ['ordery', ]  # 排序字段
 

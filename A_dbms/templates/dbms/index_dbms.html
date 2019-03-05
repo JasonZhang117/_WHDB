@@ -32,35 +32,35 @@
     {% endif %}
     <h3>待保后项目：<a href="{% url 'dbms:pigeonhole' implement=1 %}">{{ no_pigeonhole_count }}</a></h3>
     {% if overdue_count > 0 %}
-        <h3>逾期项目：<a href="{% url 'dbms:provide_overdue' %}">{{ overdue_count }}</a></h3>
+        <h3>逾期项目：<a href="{% url 'dbms:provide_overdue_all' %}">{{ overdue_count }}</a></h3>
     {% endif %}
     {% if soondue_count > 0 %}
-        <h3>30天内到期项目：<a href="{% url 'dbms:provide_soondue' %}">{{ soondue_count }}</a></h3>
+        <h3>30天内到期项目：<a href="{% url 'dbms:provide_soondue_all' %}">{{ soondue_count }}</a></h3>
     {% endif %}
 
     {% if overdue_draft_count > 0 %}
-        <h3>逾期票据：<a href="{% url 'dbms:warrant_overdue_draft' %}">{{ overdue_draft_count }}</a></h3>
+        <h3>逾期票据：<a href="{% url 'dbms:warrant_overdue_draft_all' %}">{{ overdue_draft_count }}</a></h3>
     {% endif %}
     {% if soondue_draft_count > 0 %}
-        <h3>30天内到期票据：<a href="{% url 'dbms:warrant_soondue_draft' %}">{{ soondue_draft_count }}</a></h3>
+        <h3>30天内到期票据：<a href="{% url 'dbms:warrant_soondue_draft_all' %}">{{ soondue_draft_count }}</a></h3>
     {% endif %}
     {% if overdue_draft_count > 0 %}
-        <h3>逾期协议：<a href="{% url 'dbms:cooperative_overdue' %}">{{ overdue_cooperator_count }}</a></h3>
+        <h3>逾期协议：<a href="{% url 'dbms:cooperative_overdue_all' %}">{{ overdue_cooperator_count }}</a></h3>
     {% endif %}
     {% if soondue_draft_count > 0 %}
         <h3>30天内到期协议：
-            <a href="{% url 'dbms:cooperative_soondue' %}">{{ soondue_cooperator_count }}</a></h3>
+            <a href="{% url 'dbms:cooperative_soondue_all' %}">{{ soondue_cooperator_count }}</a></h3>
     {% endif %}
     {% if overdue_seal_count > 0 %}
-        <h3>逾期查封：<a href="{% url 'dbms:dun_overdue_seal' %}">{{ overdue_seal_count }}</a></h3>
+        <h3>逾期查封：<a href="{% url 'dbms:dun_overdue_seal_all' %}">{{ overdue_seal_count }}</a></h3>
     {% endif %}
     {% if soondue_seal_count > 0 %}
         <h3>30天内到期查封：
-            <a href="{% url 'dbms:dun_soondue_seal' %}">{{ soondue_seal_count }}</a></h3>
+            <a href="{% url 'dbms:dun_soondue_seal_all' %}">{{ soondue_seal_count }}</a></h3>
     {% endif %}
     {% if overdue_search_count > 0 %}
         <h3>超过30天未跟踪的查封资产：
-            <a href="{% url 'dbms:dun_overdue_search' %}">{{ overdue_search_count }}</a></h3>
+            <a href="{% url 'dbms:dun_overdue_search_all' %}">{{ overdue_search_count }}</a></h3>
     {% endif %}
 {% endblock %}
 {#            </div>#}

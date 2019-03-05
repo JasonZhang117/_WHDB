@@ -13,6 +13,7 @@ from _WHDB.views import authority
 
 # -----------------------客户管理-------------------------#
 @login_required
+@authority
 def custom(request, *args, **kwargs):  # 委托合同列表
     print(request.path, '>', resolve(request.path).url_name, '>', request.user)
     current_url_name = resolve(request.path).url_name  # 获取当前URL_NAME
@@ -50,6 +51,7 @@ def custom(request, *args, **kwargs):  # 委托合同列表
 
 # -----------------------------客户预览------------------------------#
 @login_required
+@authority
 def custom_scan(request, custom_id):  # 项目预览
     print(request.path, '>', resolve(request.path).url_name, '>', request.user)
     current_url_name = resolve(request.path).url_name  # 获取当前URL_NAME

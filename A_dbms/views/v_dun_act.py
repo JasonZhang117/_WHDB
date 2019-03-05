@@ -14,6 +14,7 @@ from _WHDB.views import authority
 
 # -----------------------新建追偿项目ajax-------------------------#
 @login_required
+@authority
 def dun_add_ajax(request):  # 添加参评项目ajax
     print(request.path, '>', resolve(request.path).url_name, '>', request.user)
     response = {'status': True, 'message': None, 'forme': None, }
@@ -52,6 +53,7 @@ def dun_add_ajax(request):  # 添加参评项目ajax
 
 # -----------------------添加财产线索ajax-------------------------#
 @login_required
+@authority
 def clue_add_ajax(request):  #
     print(request.path, '>', resolve(request.path).url_name, '>', request.user)
     response = {'status': True, 'message': None, 'forme': None, }
@@ -94,6 +96,7 @@ def clue_add_ajax(request):  #
 
 # -----------------------删除财产线索ajax-------------------------#
 @login_required
+@authority
 def clue_del_ajax(request):  # 取消项目上会ajax
     print(request.path, '>', resolve(request.path).url_name, '>', request.user)
     response = {'status': True, 'message': None, 'forme': None, }
@@ -135,6 +138,7 @@ def clue_del_ajax(request):  # 取消项目上会ajax
 
 # -----------------------添加被告人ajax-------------------------#
 @login_required
+@authority
 def defendant_add_ajax(request):  #
     print(request.path, '>', resolve(request.path).url_name, '>', request.user)
     response = {'status': True, 'message': None, 'forme': None, }
@@ -175,6 +179,7 @@ def defendant_add_ajax(request):  #
 
 # -----------------------删除被告人ajax-------------------------#
 @login_required
+@authority
 def defendant_del_ajax(request):  # 删除被告人ajax
     print(request.path, '>', resolve(request.path).url_name, '>', request.user)
     response = {'status': True, 'message': None, 'forme': None, }
@@ -206,6 +211,7 @@ def defendant_del_ajax(request):  # 删除被告人ajax
 
 # -----------------------------查封情况ajax------------------------#
 @login_required
+@authority
 def sealup_add_ajax(request):  # 修改项目ajax
     print(request.path, '>', resolve(request.path).url_name, '>', request.user)
     current_url_name = resolve(request.path).url_name  # 获取当前URL_NAME
@@ -270,6 +276,7 @@ def sealup_add_ajax(request):  # 修改项目ajax
 
 # -----------------------------查询情况ajax------------------------#
 @login_required
+@authority
 def inquiry_add_ajax(request):
     print(request.path, '>', resolve(request.path).url_name, '>', request.user)
     response = {'status': True, 'message': None, 'forme': None, }
@@ -522,6 +529,7 @@ def inquiry_add_ajax(request):
 
 # -----------------------------追偿台账添加ajax------------------------#
 @login_required
+@authority
 def standing_add_ajax(request):
     print(request.path, '>', resolve(request.path).url_name, '>', request.user)
     current_url_name = resolve(request.path).url_name  # 获取当前URL_NAME
@@ -563,6 +571,7 @@ def standing_add_ajax(request):
 
 # -----------------------删除追偿台账ajax-------------------------#
 @login_required
+@authority
 def standing_del_ajax(request):
     print(request.path, '>', resolve(request.path).url_name, '>', request.user)
     response = {'status': True, 'message': None, 'forme': None, }
@@ -592,6 +601,7 @@ def standing_del_ajax(request):
 
 # -----------------------------追偿费用添加ajax------------------------#
 @login_required
+@authority
 def charge_add_ajax(request):
     print(request.path, '>', resolve(request.path).url_name, '>', request.user)
     response = {'status': True, 'message': None, 'forme': None, }
@@ -639,6 +649,7 @@ def charge_add_ajax(request):
 
 # -----------------------删除追偿费用ajax-------------------------#
 @login_required
+@authority
 def charge_del_ajax(request):
     print(request.path, '>', resolve(request.path).url_name, '>', request.user)
     current_url_name = resolve(request.path).url_name  # 获取当前URL_NAME
@@ -678,6 +689,7 @@ def charge_del_ajax(request):
 
 # -----------------------------案款回收添加ajax------------------------#
 @login_required
+@authority
 def retrieve_add_ajax(request):
     print(request.path, '>', resolve(request.path).url_name, '>', request.user)
     response = {'status': True, 'message': None, 'forme': None, }
@@ -726,6 +738,7 @@ def retrieve_add_ajax(request):
 
 # -----------------------删除案款回收ajax-------------------------#
 @login_required
+@authority
 def retrieve_del_ajax(request):
     print(request.path, '>', resolve(request.path).url_name, '>', request.user)
     response = {'status': True, 'message': None, 'forme': None, }
@@ -763,6 +776,7 @@ def retrieve_del_ajax(request):
 
 # -----------------------------资料目录添加ajax------------------------#
 @login_required
+@authority
 def stage_add_ajax(request):
     print(request.path, '>', resolve(request.path).url_name, '>', request.user)
     response = {'status': True, 'message': None, 'forme': None, }
@@ -835,6 +849,7 @@ def stage_add_ajax(request):
 
 # -----------------------删除资料目录ajax-------------------------#
 @login_required
+@authority
 def stage_del_ajax(request):  #
     print(request.path, '>', resolve(request.path).url_name, '>', request.user)
     response = {'status': True, 'message': None, 'forme': None, }
@@ -864,6 +879,7 @@ def stage_del_ajax(request):  #
 
 # -----------------------------判决添加ajax------------------------#
 @login_required
+@authority
 def judgment_add_ajax(request):
     print(request.path, '>', resolve(request.path).url_name, '>', request.user)
     response = {'status': True, 'message': None, 'forme': None, }
@@ -907,6 +923,7 @@ def judgment_add_ajax(request):
 
 # -----------------------删除判决ajax-------------------------#
 @login_required
+@authority
 def judgment_del_ajax(request):  #
     print(request.path, '>', resolve(request.path).url_name, '>', request.user)
     response = {'status': True, 'message': None, 'forme': None, }
@@ -936,6 +953,7 @@ def judgment_del_ajax(request):  #
 
 # -----------------------------委托代理添加ajax------------------------#
 @login_required
+@authority
 def agent_add_ajax(request):
     print(request.path, '>', resolve(request.path).url_name, '>', request.user)
     response = {'status': True, 'message': None, 'forme': None, }
@@ -981,6 +999,7 @@ def agent_add_ajax(request):
 
 # -----------------------------联系人添加ajax------------------------#
 @login_required
+@authority
 def staff_add_ajax(request):
     print(request.path, '>', resolve(request.path).url_name, '>', request.user)
     response = {'status': True, 'message': None, 'forme': None, }

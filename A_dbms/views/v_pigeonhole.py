@@ -14,6 +14,7 @@ from _WHDB.views import authority
 
 # -----------------------归档列表---------------------#
 @login_required
+@authority
 def pigeonhole(request, *args, **kwargs):  # 归档
     print(request.path, '>', resolve(request.path).url_name, '>', request.user)
     current_url_name = resolve(request.path).url_name  # 获取当前URL_NAME
@@ -65,6 +66,7 @@ def pigeonhole(request, *args, **kwargs):  # 归档
 
 # -----------------------------查看归档------------------------------#
 @login_required
+@authority
 def pigeonhole_scan(request, provide_id):  # 查看放款
     print(request.path, '>', resolve(request.path).url_name, '>', request.user)
     current_url_name = resolve(request.path).url_name  # 获取当前URL_NAME

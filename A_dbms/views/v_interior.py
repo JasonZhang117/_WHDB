@@ -31,6 +31,7 @@ class Departments(View):  # 部门列表CBV
 
 
 # -----------------------部门列表-------------------------#
+@authority
 def department(request):  # 部门列表
     department_list = models.Departments.objects.all()
     return render(request,
@@ -39,6 +40,7 @@ def department(request):  # 部门列表
 
 
 # -----------------------部门添加-------------------------#
+@authority
 def department_add(request):  # 部门添加
     if request.method == "GET":
         form = forms.DepartmentForm()
@@ -60,6 +62,7 @@ def department_add(request):  # 部门添加
 
 
 # -----------------------部门添加-------------------------#
+@authority
 def department_edit(request, department_id):  # 部门添加
     if request.method == "GET":
         form_data = models.Departments.objects.get(id=department_id)
@@ -83,6 +86,7 @@ def department_edit(request, department_id):  # 部门添加
 
 
 # -----------------------部门删除-------------------------#
+@authority
 def department_del(request, department_id):  # 部门删除
     models.Departments.objects.get(id=department_id).delete()
     return redirect('dbms:department')

@@ -13,6 +13,7 @@ from _WHDB.views import authority
 
 # -----------------------权证列表-------------------------#
 @login_required
+@authority
 def warrant(request, *args, **kwargs):  # 房产列表
     print(request.path, '>', resolve(request.path).url_name, '>', request.user)
     current_url_name = resolve(request.path).url_name  # 获取当前URL_NAME
@@ -68,6 +69,7 @@ def warrant(request, *args, **kwargs):  # 房产列表
 
 # ---------------------warrant_scan权证预览------------------------#
 @login_required
+@authority
 def warrant_scan(request, warrant_id):  # house_scan房产预览
     print(request.path, '>', resolve(request.path).url_name, '>', request.user)
     current_url_name = resolve(request.path).url_name  # 获取当前URL_NAME
@@ -123,6 +125,7 @@ def warrant_scan(request, warrant_id):  # house_scan房产预览
 
 # -----------------------按合同入库---------------------#
 @login_required
+@authority
 def warrant_agree(request, *args, **kwargs):  # 按合同入库
     print(request.path, '>', resolve(request.path).url_name, '>', request.user)
     current_url_name = resolve(request.path).url_name  # 获取当前URL_NAME
@@ -162,6 +165,7 @@ def warrant_agree(request, *args, **kwargs):  # 按合同入库
 
 # --------------------------按合同入库-按合同查看--------------------------#
 @login_required
+@authority
 def warrant_agree_scan(request, agree_id):  # 查看合同
     print(request.path, '>', resolve(request.path).url_name, '>', request.user)
     current_url_name = resolve(request.path).url_name  # 获取当前URL_NAME
@@ -214,6 +218,7 @@ def warrant_agree_scan(request, agree_id):  # 查看合同
 
 # --------------------------按合同入库-按合同查看(没用)--------------------------#
 @login_required
+@authority
 def warrant_agree_warrant(request, agree_id, warrant_id):  # 查看合同
     print(request.path, '>', resolve(request.path).url_name, '>', request.user)
     current_url_name = resolve(request.path).url_name  # 获取当前URL_NAME
@@ -253,6 +258,7 @@ def warrant_agree_warrant(request, agree_id, warrant_id):  # 查看合同
 
 # -----------------------house房产列表-------------------------#
 @login_required
+@authority
 def house(request, *args, **kwargs):  # 房产列表
     print(request.path, '>', resolve(request.path).url_name, '>', request.user)
     current_url_name = resolve(request.path).url_name  # 获取当前URL_NAME
@@ -284,6 +290,7 @@ def house(request, *args, **kwargs):  # 房产列表
 
 # -----------------------房产列表-------------------------#
 @login_required
+@authority
 def ground(request, *args, **kwargs):  # 房产列表
     print(request.path, '>', resolve(request.path).url_name, '>', request.user)
     current_url_name = resolve(request.path).url_name  # 获取当前URL_NAME
@@ -314,6 +321,7 @@ def ground(request, *args, **kwargs):  # 房产列表
 
 # -----------------------即将到期票据列表-------------------------#
 @login_required
+@authority
 def soondue_draft(request, *args, **kwargs):  #
     print(request.path, '>', resolve(request.path).url_name, '>', request.user)
     current_url_name = resolve(request.path).url_name  # 获取当前URL_NAME
@@ -351,6 +359,7 @@ def soondue_draft(request, *args, **kwargs):  #
 
 # -----------------------即将到期票据列表-------------------------#
 @login_required
+@authority
 def overdue_draft(request, *args, **kwargs):  #
     print(request.path, '>', resolve(request.path).url_name, '>', request.user)
     current_url_name = resolve(request.path).url_name  # 获取当前URL_NAME

@@ -13,6 +13,7 @@ from _WHDB.views import authority
 
 # -----------------------------保后计划ajax------------------------------#
 @login_required
+@authority
 def review_plan_ajax(request):
     print(request.path, '>', resolve(request.path).url_name, '>', request.user)
     response = {'status': True, 'message': None, 'forme': None, }
@@ -62,6 +63,7 @@ def review_plan_ajax(request):
 
 # -----------------------------保后ajax------------------------------#
 @login_required
+@authority
 def review_update_ajax(request):
     print(request.path, '>', resolve(request.path).url_name, '>', request.user)
     response = {'status': True, 'message': None, 'forme': None, }

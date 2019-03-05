@@ -14,6 +14,7 @@ from _WHDB.views import authority
 
 # -----------------------合作机构-------------------------#
 @login_required
+@authority
 def cooperative(request, *args, **kwargs):  # 合作机构
     print(request.path, '>', resolve(request.path).url_name, '>', request.user)
     current_url_name = resolve(request.path).url_name  # 获取当前URL_NAME
@@ -39,6 +40,7 @@ def cooperative(request, *args, **kwargs):  # 合作机构
 
 # -----------------------即将到期合作协议-------------------------#
 @login_required
+@authority
 def soondue_cooperator(request, *args, **kwargs):
     print(request.path, '>', resolve(request.path).url_name, '>', request.user)
     current_url_name = resolve(request.path).url_name  # 获取当前URL_NAME
@@ -76,6 +78,7 @@ def soondue_cooperator(request, *args, **kwargs):
 
 # -----------------------逾期合作协议-------------------------#
 @login_required
+@authority
 def overdue_cooperator(request, *args, **kwargs):
     print(request.path, '>', resolve(request.path).url_name, '>', request.user)
     current_url_name = resolve(request.path).url_name  # 获取当前URL_NAME

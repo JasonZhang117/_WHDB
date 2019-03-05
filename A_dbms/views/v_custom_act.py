@@ -13,6 +13,7 @@ from _WHDB.views import authority
 
 # -----------------------客户添加-------------------------#
 @login_required
+@authority
 def custom_add_ajax(request):
     print(request.path, '>', resolve(request.path).url_name, '>', request.user)
     response = {'status': True, 'message': None, 'forme': None, ' skip': None, }
@@ -90,6 +91,7 @@ def custom_add_ajax(request):
 
 # -----------------------股权信息添加-------------------------#
 @login_required
+@authority
 def shareholder_add_ajax(request):
     print(request.path, '>', resolve(request.path).url_name, '>', request.user)
     response = {'status': True, 'message': None, 'forme': None, }
@@ -137,6 +139,7 @@ def shareholder_add_ajax(request):
 
 # -----------------------股权信息添加-------------------------#
 @login_required
+@authority
 def spouse_add_ajax(request):
     print(request.path, '>', resolve(request.path).url_name, '>', request.user)
     response = {'status': True, 'message': None, 'forme': None, }
@@ -172,6 +175,7 @@ def spouse_add_ajax(request):
 
 # -----------------------客户删除-------------------------#
 @login_required
+@authority
 def custom_del_ajax(request):
     print(request.path, '>', resolve(request.path).url_name, '>', request.user)
     response = {'status': True, 'message': None, 'forme': None, }
@@ -201,6 +205,7 @@ def custom_del_ajax(request):
 
 # -----------------------客户修改-------------------------#
 @login_required
+@authority
 def custom_edit_ajax(request):
     print(request.path, '>', resolve(request.path).url_name, '>', request.user)
     response = {'status': True, 'message': None, 'forme': None, }

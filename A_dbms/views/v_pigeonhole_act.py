@@ -13,6 +13,7 @@ from _WHDB.views import MenuHelper
 from _WHDB.views import authority
 # -------------------------归档ajax-------------------------#
 @login_required
+@authority
 def pigeonhole_add_ajax(request):
     print(request.path, '>', resolve(request.path).url_name, '>', request.user)
     response = {'status': True, 'message': None, 'forme': None, }

@@ -13,6 +13,7 @@ from _WHDB.views import authority
 
 # -----------------------放款管理---------------------#
 @login_required
+@authority
 def provide_agree(request, *args, **kwargs):  # 放款管理
     print(request.path, '>', resolve(request.path).url_name, '>', request.user)
     current_url_name = resolve(request.path).url_name  # 获取当前URL_NAME
@@ -68,6 +69,7 @@ def provide_agree(request, *args, **kwargs):  # 放款管理
 
 # -----------------------------查看放款通知------------------------------#
 @login_required
+@authority
 def provide_agree_scan(request, agree_id):  # 查看放款
     print(request.path, '>', resolve(request.path).url_name, '>', request.user)
     current_url_name = resolve(request.path).url_name  # 获取当前URL_NAME
@@ -173,6 +175,7 @@ def provide_agree_scan(request, agree_id):  # 查看放款
 
 # -----------------------------查看放款通知------------------------------#
 @login_required
+@authority
 def provide_agree_notify(request, agree_id, notify_id):  # 查看放款通知
     print(request.path, '>', resolve(request.path).url_name, '>', request.user)
     current_url_name = resolve(request.path).url_name  # 获取当前URL_NAME
@@ -215,6 +218,7 @@ def provide_agree_notify(request, agree_id, notify_id):  # 查看放款通知
 
 # -----------------------通知列表---------------------#
 @login_required
+@authority
 def notify(request, *args, **kwargs):  #
     print(request.path, '>', resolve(request.path).url_name, '>', request.user)
     current_url_name = resolve(request.path).url_name  # 获取当前URL_NAME
@@ -267,6 +271,7 @@ def notify(request, *args, **kwargs):  #
 
 # -----------------------------查看放款通知------------------------------#
 @login_required
+@authority
 def notify_scan(request, notify_id):  # 查看放款通知
     print(request.path, '>', resolve(request.path).url_name, '>', request.user)
     current_url_name = resolve(request.path).url_name  # 获取当前URL_NAME
@@ -310,6 +315,7 @@ def notify_scan(request, notify_id):  # 查看放款通知
 
 # -----------------------放款列表---------------------#
 @login_required
+@authority
 def provide(request, *args, **kwargs):  # 委托合同列表
     print(request.path, '>', resolve(request.path).url_name, '>', request.user)
     current_url_name = resolve(request.path).url_name  # 获取当前URL_NAME
@@ -364,6 +370,7 @@ def provide(request, *args, **kwargs):  # 委托合同列表
 
 # -----------------------------查看放款------------------------------#
 @login_required
+@authority
 def provide_scan(request, provide_id):  # 查看放款
     print(request.path, '>', resolve(request.path).url_name, '>', request.user)
     current_url_name = resolve(request.path).url_name  # 获取当前URL_NAME
@@ -380,6 +387,7 @@ def provide_scan(request, provide_id):  # 查看放款
 
 # -----------------------逾期列表---------------------#
 @login_required
+@authority
 def overdue(request, *args, **kwargs):  # 逾期列表
     print(request.path, '>', resolve(request.path).url_name, '>', request.user)
     current_url_name = resolve(request.path).url_name  # 获取当前URL_NAME
@@ -430,6 +438,7 @@ def overdue(request, *args, **kwargs):  # 逾期列表
 
 # -----------------------即将到期列表---------------------#
 @login_required
+@authority
 def soondue(request, *args, **kwargs):  # 委托合同列表
     print(request.path, '>', resolve(request.path).url_name, '>', request.user)
     current_url_name = resolve(request.path).url_name  # 获取当前URL_NAME

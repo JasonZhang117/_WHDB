@@ -11,8 +11,10 @@ from django.urls import resolve
 from _WHDB.views import MenuHelper
 from _WHDB.views import authority
 
+
 # -----------------------代偿列表-------------------------#
 @login_required
+@authority
 def compensatory(request, *args, **kwargs):  # 代偿列表
     print(request.path, '>', resolve(request.path).url_name, '>', request.user)
     current_url_name = resolve(request.path).url_name  # 获取当前URL_NAME
@@ -51,6 +53,7 @@ def compensatory(request, *args, **kwargs):  # 代偿列表
 
 # -----------------------代偿查看-------------------------#
 @login_required
+@authority
 def compensatory_scan(request, compensatory_id):
     print(request.path, '>', resolve(request.path).url_name, '>', request.user)
     current_url_name = resolve(request.path).url_name  # 获取当前URL_NAME
@@ -60,6 +63,7 @@ def compensatory_scan(request, compensatory_id):
 
 # -----------------------追偿列表-------------------------#
 @login_required
+@authority
 def dun(request, *args, **kwargs):  # 代偿列表
     print(request.path, '>', resolve(request.path).url_name, '>', request.user)
     current_url_name = resolve(request.path).url_name  # 获取当前URL_NAME
@@ -99,6 +103,7 @@ def dun(request, *args, **kwargs):  # 代偿列表
 
 # -----------------------追偿列表-------------------------#
 @login_required
+@authority
 def dun_scan(request, dun_id):  # 查看合同
     print(request.path, '>', resolve(request.path).url_name, '>', request.user)
     current_url_name = resolve(request.path).url_name  # 获取当前URL_NAME
@@ -143,7 +148,8 @@ def dun_scan(request, dun_id):  # 查看合同
 
 # -----------------------财产线索列表-------------------------#
 @login_required
-def seal(request, *args, **kwargs):  # 代偿列表
+@authority
+def seal(request, *args, **kwargs):
     print(request.path, '>', resolve(request.path).url_name, '>', request.user)
     current_url_name = resolve(request.path).url_name  # 获取当前URL_NAME
     authority_list = request.session.get('authority_list')  # 获取当前用户的所有权限
@@ -179,6 +185,7 @@ def seal(request, *args, **kwargs):  # 代偿列表
 
 # -----------------------查封资产详情-------------------------#
 @login_required
+@authority
 def seal_scan(request, dun_id, warrant_id):  # 查看合同
     print(request.path, '>', resolve(request.path).url_name, '>', request.user)
     current_url_name = resolve(request.path).url_name  # 获取当前URL_NAME
@@ -192,6 +199,7 @@ def seal_scan(request, dun_id, warrant_id):  # 查看合同
 
 # -----------------------代偿添加ajax-------------------------#
 @login_required
+@authority
 def compensatory_add_ajax(request):  # 代偿添加ajax
     print(request.path, '>', resolve(request.path).url_name, '>', request.user)
     current_url_name = resolve(request.path).url_name  # 获取当前URL_NAME
@@ -303,6 +311,7 @@ def compensatory_add_ajax(request):  # 代偿添加ajax
 
 # -----------------------逾期查封列表---------------------#
 @login_required
+@authority
 def overdue_seal(request, *args, **kwargs):
     print(request.path, '>', resolve(request.path).url_name, '>', request.user)
     current_url_name = resolve(request.path).url_name  # 获取当前URL_NAME
@@ -339,6 +348,7 @@ def overdue_seal(request, *args, **kwargs):
 
 # -----------------------即将到期查封列表---------------------#
 @login_required
+@authority
 def soondue_seal(request, *args, **kwargs):
     print(request.path, '>', resolve(request.path).url_name, '>', request.user)
     current_url_name = resolve(request.path).url_name  # 获取当前URL_NAME
@@ -375,6 +385,7 @@ def soondue_seal(request, *args, **kwargs):
 
 # -----------------------超过30天未跟踪的查封资产---------------------#
 @login_required
+@authority
 def overdue_search(request, *args, **kwargs):
     print(request.path, '>', resolve(request.path).url_name, '>', request.user)
     current_url_name = resolve(request.path).url_name  # 获取当前URL_NAME

@@ -31,6 +31,7 @@ def creat_article_num(custom_id):
 
 # -----------------------------添加项目ajax------------------------------#
 @login_required
+@authority
 def article_add_ajax(request):  # 添加项目
     print(request.path, '>', resolve(request.path).url_name, '>', request.user)
     response = {'status': True, 'message': None, 'forme': None, }
@@ -69,6 +70,7 @@ def article_add_ajax(request):  # 添加项目
 
 # -----------------------------修改项目ajax------------------------------#
 @login_required
+@authority
 def article_edit_ajax(request):  # 修改项目ajax
     print(request.path, '>', resolve(request.path).url_name, '>', request.user)
     response = {'status': True, 'message': None, 'forme': None, }
@@ -114,6 +116,7 @@ def article_edit_ajax(request):  # 修改项目ajax
 
 # -----------------------------删除项目ajax------------------------------#
 @login_required
+@authority
 def article_del_ajax(request):
     print(request.path, '>', resolve(request.path).url_name, '>', request.user)
     response = {'status': True, 'message': None, 'forme': None, }
@@ -137,6 +140,7 @@ def article_del_ajax(request):
 
 # -----------------------------反馈项目ajax------------------------------#
 @login_required
+@authority
 def article_feedback_ajax(request):
     print(request.path, '>', resolve(request.path).url_name, '>', request.user)
     response = {'status': True, 'message': None, 'forme': None, }

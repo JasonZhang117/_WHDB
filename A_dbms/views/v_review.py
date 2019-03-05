@@ -13,6 +13,7 @@ from _WHDB.views import authority
 
 # -----------------------保后列表---------------------#
 @login_required
+@authority
 def review(request, *args, **kwargs):  # 保后列表
     print(request.path, '>', resolve(request.path).url_name, '>', request.user)
     current_url_name = resolve(request.path).url_name  # 获取当前URL_NAME
@@ -73,6 +74,7 @@ def review(request, *args, **kwargs):  # 保后列表
 
 # -----------------------------保后预览------------------------------#
 @login_required
+@authority
 def review_scan(request, custom_id):  # 保后预览
     print(request.path, '>', resolve(request.path).url_name, '>', request.user)
     current_url_name = resolve(request.path).url_name  # 获取当前URL_NAME

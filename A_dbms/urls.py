@@ -8,9 +8,10 @@ urlpatterns = [
     # -----------------------article项目管理-------------------------#
     path('article/', views.article, name='article_all'),  # 菜单-项目管理
     path('article/<int:article_state>/', views.article, name='article'),  # /dbms/article/(0-9)
-    path('article/scan/<int:article_id>/', views.article_scan, name='article_scan_all'),
+    path('article/scan/<int:article_id>/', views.article_scan, name='article_scan'),
     path('article/agree/<int:article_id>/<int:agree_id>/', views.article_scan_agree, name='article_scan_agree'),
     path('article/lending/<int:article_id>/<int:lending_id>/', views.article_scan_lending, name='article_scan_lending'),
+
     path('article/add/', views.article_add_ajax, name='article_add_ajax'),
     path('article/del/', views.article_del_ajax, name='article_del_ajax'),
     path('article/edit/', views.article_edit_ajax, name='article_edit_ajax'),
@@ -21,6 +22,7 @@ urlpatterns = [
     path('meeting/scan/<int:meeting_id>/', views.meeting_scan, name='meeting_scan'),
     path('meeting/scan/<int:meeting_id>/<int:article_id>/', views.meeting_scan_article, name='meeting_scan_article'),
     path('meeting/notice/<int:meeting_id>/', views.meeting_notice, name='meeting_notice'),
+
     path('meeting/add/', views.meeting_add_ajax, name='meeting_add_ajax'),
     path('meeting/allot/add/', views.meeting_allot_add_ajax, name='meeting_allot_add_ajax'),
     path('meeting/allot/del/', views.meeting_allot_del_ajax, name='meeting_allot_del_ajax'),
@@ -36,6 +38,7 @@ urlpatterns = [
     path('appraisal/scan/<int:article_id>/<int:lending_id>/', views.appraisal_scan_lending,
          name='appraisal_scan_lending'),
     path('appraisal/summary/<int:article_id>/', views.summary_scan, name='appraisal_summary_scan'),
+
     path('appraisal/comment/', views.comment_edit_ajax, name='appraisal_comment_edit_ajax'),
     path('appraisal/single/add/', views.single_quota_ajax, name='appraisal_single_quota_ajax'),
     path('appraisal/single/del/', views.single_del_ajax, name='appraisal_single_del_ajax'),
@@ -50,6 +53,7 @@ urlpatterns = [
     path('agree/<int:agree_state>/', views.agree, name='agree'),  # /dbms/article/(0-9)
     path('agree/scan/<int:agree_id>/', views.agree_scan, name='agree_scan'),
     path('agree/preview/<int:agree_id>/', views.agree_preview, name='agree_preview'),
+
     path('agree/add/', views.agree_add_ajax, name='agree_add_ajax'),
     path('agree/sign/', views.agree_sign_ajax, name='agree_sign_ajax'),
     path('agree/counter/add/', views.counter_add_ajax, name='agree_counter_add_ajax'),
@@ -63,8 +67,9 @@ urlpatterns = [
     path('warrant/agree/scan/<int:agree_id>/', views.warrant_agree_scan, name='warrant_agree_scan'),
     path('warrant/agree/warrant/<int:agree_id>/<int:warrant_id>/', views.warrant_agree_warrant,
          name='warrant_agree_warrant'),
-    path('warrant/draft/soondue/', views.soondue_draft, name='warrant_soondue_draft'),  #
-    path('warrant/draft/overdue/', views.overdue_draft, name='warrant_overdue_draft'),  #
+    path('warrant/draft/soondue/', views.soondue_draft, name='warrant_soondue_draft_all'),  #
+    path('warrant/draft/overdue/', views.overdue_draft, name='warrant_overdue_draft_all'),  #
+
     path('warrant/add/', views.warrant_add_ajax, name='warrant_add_ajax'),
     path('warrant/del/', views.warrant_del_ajax, name='warrant_del_ajax'),
     path('warrant/edit/', views.warrant_edit_ajax, name='warrant_edit_ajax'),
@@ -91,6 +96,12 @@ urlpatterns = [
          name='provide_agree_notify'),
     path('provide/notify/', views.notify, name='provide_notify_all'),  #
     path('provide/notify/scan/<int:notify_id>/', views.notify_scan, name='provide_notify_scan'),
+    path('provide/', views.provide, name='provide_all'),  # 菜单-放款管理-放款
+    path('provide/<int:provide_status>/', views.provide, name='provide'),  # /dbms/grant/(0-9)
+    path('provide/scan/<int:provide_id>/', views.provide_scan, name='provide_scan'),
+    path('provide/overdue/', views.overdue, name='provide_overdue_all'),  # 菜单-放款管理-逾期项目
+    path('provide/soondue/', views.soondue, name='provide_soondue_all'),  # 菜单-放款管理-即将到期
+
     path('provide/counter/sign/', views.counter_sign_ajax, name='provide_counter_sign_ajax'),
     path('provide/ascertain/add/', views.ascertain_add_ajax, name='provide_ascertain_add_ajax'),
     path('provide/notify/add/', views.notify_add_ajax, name='provide_notify_add_ajax'),
@@ -99,32 +110,35 @@ urlpatterns = [
     path('provide/del/', views.provide_del_ajax, name='provide_del_ajax'),
     path('provide/repayment/add/', views.repayment_add_ajax, name='provide_repayment_add_ajax'),
     path('provide/repayment/del/', views.repayment_del_ajax, name='provide_repayment_del_ajax'),
-    path('provide/', views.provide, name='provide_all'),  # 菜单-放款管理-放款
-    path('provide/overdue/', views.overdue, name='provide_overdue'),  # 菜单-放款管理-逾期项目
-    path('provide/soondue/', views.soondue, name='provide_soondue'),  # 菜单-放款管理-即将到期
-
-    path('provide/<int:provide_status>/', views.provide, name='provide'),  # /dbms/grant/(0-9)
-    path('provide/scan/<int:provide_id>/', views.provide_scan, name='provide_scan'),
     # -----------------------归档管理-------------------------#
     path('pigeonhole/', views.pigeonhole, name='pigeonhole_all'),  # 菜单-放款管理-放款
     path('pigeonhole/<int:implement>/', views.pigeonhole, name='pigeonhole'),  # /dbms/grant/(0-9)
     path('pigeonhole/scan/<int:provide_id>/', views.pigeonhole_scan, name='pigeonhole_scan'),
-    path('pigeonhole/add/', views.pigeonhole_add_ajax, name='pigeonhole_add_ajax'),
 
+    path('pigeonhole/add/', views.pigeonhole_add_ajax, name='pigeonhole_add_ajax'),
     # -----------------------保后管理-------------------------#
     path('review/', views.review, name='review_all'),  # 菜单-保后管理
     path('review/<int:review_state>/', views.review, name='review'),  # 菜单-保后管理
     path('review/scan/<int:custom_id>/', views.review_scan, name='review_scan'),  #
+
     path('review/plan/', views.review_plan_ajax, name='review_plan_ajax'),  #
     path('review/update/', views.review_update_ajax, name='review_update_ajax'),  #
     # -----------------------代偿管理-------------------------#
     path('compensatory/', views.compensatory, name='compensatory_all'),  # 菜单-追偿管理
     path('compensatory/<int:dun_state>/', views.compensatory, name='compensatory'),
     path('compensatory/scan/<int:compensatory_id>/', views.compensatory_scan, name='compensatory_scan'),
+
     path('compensatory/add/', views.compensatory_add_ajax, name='compensatory_add_ajax'),
+    # -----------------------追偿管理-------------------------#
     path('dun/', views.dun, name='dun_all'),  # 菜单-追偿管理
     path('dun/<int:dun_stage>/', views.dun, name='dun'),
     path('dun/scan/<int:dun_id>/', views.dun_scan, name='dun_scan'),
+    path('dun/seal/', views.seal, name='dun_seal_all'),
+    path('dun/seal/<int:seal_state>/', views.seal, name='dun_seal'),
+    path('dun/seal/scan/<int:dun_id>/<int:warrant_id>/', views.seal_scan, name='dun_seal_scan'),
+    path('dun/seal/overdue/', views.overdue_seal, name='dun_overdue_seal_all'),
+    path('dun/seal/soondue/', views.soondue_seal, name='dun_soondue_seal_all'),
+    path('dun/search/overdue/', views.overdue_search, name='dun_overdue_search_all'),
     path('dun/add/', views.dun_add_ajax, name='dun_add_ajax'),
     path('dun/clue/add/', views.clue_add_ajax, name='dun_clue_add_ajax'),
     path('dun/clue/del/', views.clue_del_ajax, name='dun_clue_del_ajax'),
@@ -136,29 +150,20 @@ urlpatterns = [
     path('dun/judgment/del/', views.judgment_del_ajax, name='dun_judgment_del_ajax'),
     path('dun/agent/add/', views.agent_add_ajax, name='dun_agent_add_ajax'),
     path('dun/staff/add/', views.staff_add_ajax, name='dun_staff_add_ajax'),
-
     path('dun/sealup/add/', views.sealup_add_ajax, name='dun_sealup_add_ajax'),
     path('dun/inquiry/add/', views.inquiry_add_ajax, name='dun_inquiry_add_ajax'),
-
-    path('dun/seal/', views.seal, name='dun_seal_all'),
-    path('dun/seal/<int:seal_state>/', views.seal, name='dun_seal'),
-    path('dun/seal/scan/<int:dun_id>/<int:warrant_id>/', views.seal_scan, name='dun_seal_scan'),
-
     path('dun/standing/add/', views.standing_add_ajax, name='dun_standing_add_ajax'),
     path('dun/standing/del/', views.standing_del_ajax, name='dun_standing_del_ajax'),
     path('dun/charge/add/', views.charge_add_ajax, name='dun_charge_add_ajax'),
     path('dun/charge/del/', views.charge_del_ajax, name='dun_charge_del_ajax'),
     path('dun/retrieve/add/', views.retrieve_add_ajax, name='dun_retrieve_add_ajax'),
     path('dun/retrieve/del/', views.retrieve_del_ajax, name='dun_retrieve_del_ajax'),
-    path('dun/seal/overdue/', views.overdue_seal, name='dun_overdue_seal'),
-    path('dun/seal/soondue/', views.soondue_seal, name='dun_soondue_seal'),
-    path('dun/search/overdue/', views.overdue_search, name='dun_overdue_search'),
-
     # -----------------------客户管理-------------------------#
 
     path('custom/', views.custom, name='custom_all'),  # 菜单-客户管理
     path('custom/<int:genre>/', views.custom, name='custom'),  # /dbms/cstom/(0-9)
     path('custom/scan/<int:custom_id>/', views.custom_scan, name='custom_scan'),
+
     path('custom/add/', views.custom_add_ajax, name='custom_add_ajax'),
     path('custom/del/', views.custom_del_ajax, name='custom_del_ajax'),
     path('custom/edit/', views.custom_edit_ajax, name='custom_edit_ajax'),
@@ -168,8 +173,8 @@ urlpatterns = [
     # ------------------------------合作机构--------------------------------------#
     path('cooperative/', views.cooperative, name='cooperative_all'),  # 菜单-合作机构
     path('cooperative/<int:cooperator_state>/', views.cooperative, name='cooperative'),  # /dbms/cstom/(0-9)
-    path('cooperative/soondue/', views.soondue_cooperator, name='cooperative_soondue'),
-    path('cooperative/overdue/', views.overdue_cooperator, name='cooperative_overdue'),
+    path('cooperative/soondue/', views.soondue_cooperator, name='cooperative_soondue_all'),
+    path('cooperative/overdue/', views.overdue_cooperator, name='cooperative_overdue_all'),
 
     # 员工
     path('employee/', views.employee, name='employee'),

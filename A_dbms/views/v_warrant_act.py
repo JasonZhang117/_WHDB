@@ -11,6 +11,7 @@ from _WHDB.views import authority
 
 # -----------------------权证添加-------------------------#
 @login_required
+@authority
 def warrant_add_ajax(request):
     print(request.path, '>', resolve(request.path).url_name, '>', request.user)
     response = {'status': True, 'message': None, 'forme': None, ' skip': None, }
@@ -252,6 +253,7 @@ def warrant_add_ajax(request):
 
 # -----------------------权证删除-------------------------#
 @login_required
+@authority
 def warrant_del_ajax(request):
     print(request.path, '>', resolve(request.path).url_name, '>', request.user)
     response = {'status': True, 'message': None, 'forme': None}
@@ -280,6 +282,7 @@ def warrant_del_ajax(request):
 
 # -----------------------权证修改-------------------------#
 @login_required
+@authority
 def warrant_edit_ajax(request):
     print(request.path, '>', resolve(request.path).url_name, '>', request.user)
     response = {'status': True, 'message': None, 'forme': None, }
@@ -360,6 +363,7 @@ def warrant_edit_ajax(request):
 
 # -----------------------产权证添加ajax-------------------------#
 @login_required
+@authority
 def owership_add_ajax(request):  # 产权证添加ajax
     print(request.path, '>', resolve(request.path).url_name, '>', request.user)
     response = {'status': True, 'message': None, 'forme': None, }
@@ -390,6 +394,7 @@ def owership_add_ajax(request):  # 产权证添加ajax
 
 # -----------------------产权证删除ajax-------------------------#
 @login_required
+@authority
 def owership_del_ajax(request):  # 产权证删除ajax
     print(request.path, '>', resolve(request.path).url_name, '>', request.user)
     response = {'status': True, 'message': None, 'forme': None, }
@@ -424,6 +429,7 @@ def owership_del_ajax(request):  # 产权证删除ajax
 
 # -----------------------产权证添加ajax-------------------------#
 @login_required
+@authority
 def housebag_add_ajax(request):  # 产权证添加ajax
     print(request.path, '>', resolve(request.path).url_name, '>', request.user)
     response = {'status': True, 'message': None, 'forme': None, }
@@ -455,6 +461,7 @@ def housebag_add_ajax(request):  # 产权证添加ajax
 
 # ----------------------票据添加ajax-------------------------#
 @login_required
+@authority
 def draftextend_add_ajax(request):  # 产权证添加ajax
     print(request.path, '>', resolve(request.path).url_name, '>', request.user)
     response = {'status': True, 'message': None, 'forme': None, }
@@ -489,6 +496,7 @@ def draftextend_add_ajax(request):  # 产权证添加ajax
 
 # -----------------------抵押物添加ajax-------------------------#
 @login_required
+@authority
 def guaranty_add_ajax(request):  # 抵押物添加ajax
     print(request.path, '>', resolve(request.path).url_name, '>', request.user)
     response = {'status': True, 'message': None, 'forme': None, }
@@ -514,6 +522,7 @@ def guaranty_add_ajax(request):  # 抵押物添加ajax
 
 # -----------------------抵押物删除ajax-------------------------#
 @login_required
+@authority
 def guaranty_del_ajax(request):  # 抵押物
     print(request.path, '>', resolve(request.path).url_name, '>', request.user)
     response = {'status': True, 'message': None, 'forme': None, }
@@ -544,6 +553,7 @@ def guaranty_del_ajax(request):  # 抵押物
 
 # -----------------------出入库添加ajax-------------------------#
 @login_required
+@authority
 def storages_add_ajax(request):  # 出入库添加ajax
     print(request.path, '>', resolve(request.path).url_name, '>', request.user)
     response = {'status': True, 'message': None, 'forme': None, }
@@ -660,6 +670,7 @@ def storages_add_ajax(request):  # 出入库添加ajax
 
 # -----------------------评估添加ajax-------------------------#
 @login_required
+@authority
 def evaluate_add_ajax(request):  # 出入库添加ajax
     print(request.path, '>', resolve(request.path).url_name, '>', request.user)
     response = {'status': True, 'message': None, 'forme': None, }
