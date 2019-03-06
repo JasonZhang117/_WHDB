@@ -17,7 +17,7 @@
         <tbody>
         {% for article in article_custom_list %}
             <tr>
-                <td><a target="_blank" href="{% url 'dbms:article_scan_all' article_id=article.id %}">
+                <td><a target="_blank" href="{% url 'dbms:article_scan' article_id=article.id %}">
                     {{ article.article_num }}</a>
                 </td>
                 <td>{{ article.amount }}</td>

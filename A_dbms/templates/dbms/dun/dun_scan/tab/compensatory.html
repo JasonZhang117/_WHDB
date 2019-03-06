@@ -17,10 +17,7 @@
         {% for compensatory in dun_obj.compensatory.all %}
             <tr>
                 <td>{{ compensatory.provide.notify.agree.agree_num }}</td>
-                <td>
-                    <a href="{% url 'dbms:compensatory_scan' compensatory_id=compensatory.id %}">
-                        {{ compensatory.provide.notify.agree.lending.summary.custom }}</a>
-                </td>
+                <td>{{ compensatory.provide.notify.agree.lending.summary.custom }}</td>
                 <td>{{ compensatory.provide.notify.agree.branch }}</td>
                 <td>{{ compensatory.compensatory_date }}</td>
                 <td align="right">{{ compensatory.compensatory_capital|floatformat:2 }}</td>

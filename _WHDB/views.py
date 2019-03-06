@@ -79,17 +79,17 @@ def acc_login(request):
         print("acc_login-->request.POST.get('password'):", password)
         print("acc_login-->request.POST.get('code'):", code)
         user = authenticate(username=username, password=password)
+        print('user:', user)
         if user:
-            '''查询菜单并写入session'''
-            menu_list = models.Menus.objects.filter(jobs__employees=user).distinct().order_by(
-                'ordery').values('name', 'url_name')
-            request.session['menus'] = list(menu_list)
+            job_list_d = list(user.job.all().values('name'))  # 角色列表
+            job_list = []
+            for job in job_list_d:
+                job_list.append(job["name"])
+            request.session['job_list'] = job_list
             authority_list_d = list(models.Authorities.objects.filter(
-                jobs__employees=user).distinct().values(
-                'id', 'name', 'url_name'))  # 权限列表
+                jobs__employees=user).distinct().values('url_name'))  # 权限列表
             authority_list = []
             for authority in authority_list_d:
-                print('authority["url_name"]', authority["url_name"])
                 authority_list.append(authority["url_name"])
             request.session['authority_list'] = authority_list
             '''# 获取菜单的叶子节点，即：菜单的最后一层应该显示的权限'''
@@ -150,6 +150,13 @@ def home(request):
     print("request.session.get('authority_list'):", request.session.get('authority_list'))
     print("request.session.get('menu_leaf_list'):", request.session.get('menu_leaf_list'))
 
-    menu_result = MenuHelper(request).menu_data_list()
-    authority_list = MenuHelper(request).authority_list
+    job_list_d = list(request.user.job.all().values('name'))
+    job_list = []
+    for job in job_list_d:
+        job_list.append(job["name"])
+
+    if '项目经理' in job_list:
+        article_list = models.Articles.objects.filter(director=request.user)
+        print("article_list:", article_list)
+
     return render(request, 'index.html', locals())

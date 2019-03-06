@@ -7,6 +7,7 @@ from django.urls import resolve
 from _WHDB.views import MenuHelper
 from _WHDB.views import authority
 
+
 # -----------------------首页-------------------------#
 @login_required
 def index(request):
@@ -63,5 +64,11 @@ def index(request):
     date_th_befor = datetime.date.today() - datetime.timedelta(days=30)  # 30天前的日期
     overdue_search_count = models.Seal.objects.filter(
         seal_state__in=[1, 5, 11, 21], inquiry_date__lt=date_th_befor).count()  # 超过30天未查询
-
+    '''IMPLEMENT_LIST = [(1, '未归档'), (11, '退回'), (21, '暂存风控'), (31, '移交行政'), (41, '已归档')]'''
+    date_15_leter = datetime.date.today() - datetime.timedelta(days=15)  # 15天前
+    pigeonhole_overdue = models.Provides.objects.filter(
+        implement__in=[1, 11], provide_date__lt=date_15_leter).count()  # 逾期归档
+    '''REVIEW_STATE_LIST = ((1, '待保后'), (11, '待报告'), (21, '已完成'))'''
+    review_overdue = models.Customes.objects.filter(
+        review_state=1, review_plan_date__lt=datetime.date.today()).count()  # 逾期保后
     return render(request, 'dbms/index_dbms.html', locals())

@@ -45,9 +45,9 @@ class Dun(models.Model):  #
     custom = models.ManyToManyField(to='Customes', verbose_name="被告人",
                                     related_name='dun_custom',
                                     null=True, blank=True)
-    DUN_STAGE_LIST = ((1, '诉前'), (3, '起诉'), (11, '判决'), (13, '二审'), (15, '再审'),
-                      (21, '执行'), (31, '和解'),
-                      (41, '中止执行'), (51, '终本执行'), (61, '终止执行'), (99, '注销'))
+
+    DUN_STAGE_LIST = ((1, '已代偿'), (3, '诉前'), (11, '一审'), (21, '上诉及再审'), (31, '案外之诉'),
+                      (41, '执行'), (91, '结案'))
     dun_stage = models.IntegerField(verbose_name='追偿状态', choices=DUN_STAGE_LIST, default=1)
     dunor = models.ForeignKey(to='Employees', verbose_name="创建人", on_delete=models.PROTECT,
                               related_name='dunor_employee')

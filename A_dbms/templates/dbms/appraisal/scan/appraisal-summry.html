@@ -4,7 +4,7 @@
         <label class="navbar-right">
             {% if not lending_obj %}
                 <a class="btn btn-primary btn-sm " id="summaryScan" target="_blank"
-                   href="{% url 'dbms:summary_scan' article_id=article_obj.id %}">纪要预览</a><!--#path(' '-->
+                   href="{% url 'dbms:appraisal_summary_scan' article_id=article_obj.id %}">纪要预览</a><!--#path(' '-->
                 <a class="btn btn-primary btn-sm " id="singleQuota">单项额度</a><!--#path('appraisal/single/add/'-->
                 <a class="btn btn-primary btn-sm " id="lendingOrder">放款次序</a><!--#path('appraisal/lending/add/'-->
                 <a class="btn btn-primary btn-sm " id="articleSignB">项目签批</a><!--#path('appraisal/sign/'-->

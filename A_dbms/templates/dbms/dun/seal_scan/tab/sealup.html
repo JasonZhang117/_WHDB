@@ -2,25 +2,25 @@
     <table class="table table-bordered table-hover table-condensed active">
         <thead>
         <tr style="text-align: center">
-            <th>合同编号</th>
-            <th>代理事项</th>
-            <th>收费标准</th>
-            <th>代理日期</th>
+            <th>查封资产</th>
+            <th>查封类型</th>
+            <th>查封日期</th>
             <th>到期日</th>
             <th>备注</th>
-            <th>合同状态</th>
+            <th>创建人</th>
+            <th>创建日期</th>
         </tr>
         </thead>
         <tbody>
-        {% for agent in dun_obj.agent_dun.all %}
+        {% for sealup in seal_obj.sealup_seal.all %}
             <tr>
-                <td>{{ agent.agent_agree }}</td>
-                <td>{{ agent.agent_item }}</td>
-                <td>{{ agent.fee_scale }}</td>
-                <td>{{ agent.agent_date }}</td>
-                <td>{{ agent.due_date }}</td>
-                <td>{{ agent.agent_remark }}</td>
-                <td>{{ agent.get_agent_state_display|default_if_none:"" }}</td>
+                <td>{{ sealup.seal.warrant.warrant_num }}</td>
+                <td>{{ sealup.get_sealup_type_display }}</td>
+                <td>{{ sealup.sealup_date }}</td>
+                <td>{{ sealup.due_date }}</td>
+                <td>{{ sealup.sealup_remark }}</td>
+                <td>{{ sealup.sealupor.name }}</td>
+                <td>{{ sealup.sealupor_date }}</td>
             <tr>
         {% endfor %}
 

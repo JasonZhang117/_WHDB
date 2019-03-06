@@ -14,7 +14,7 @@
         <tbody id="dun-clue-tb">
         {% for warrant in dun_obj.warrant.all %}
             <tr warrant-nid="{{ warrant.id }}" warrant-num="{{ warrant.warrant_num }}">
-                <td><a href="{% url 'dbms:seal_scan' dun_id=dun_obj.id warrant_id=warrant.id %}">
+                <td><a href="{% url 'dbms:dun_seal_scan' dun_id=dun_obj.id warrant_id=warrant.id %}">
                     {{ warrant.warrant_num }}</a></td>
                 <td>
                     {% for seal in dun_obj.seal_dun.all %}

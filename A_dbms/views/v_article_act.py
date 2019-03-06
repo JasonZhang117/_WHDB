@@ -13,6 +13,7 @@ from django.db import transaction
 from _WHDB.views import MenuHelper
 from _WHDB.views import authority
 
+
 # -----------------------------项目管理-------------------------------#
 def creat_article_num(custom_id):
     custom = models.Customes.objects.get(id=custom_id)
@@ -34,7 +35,7 @@ def creat_article_num(custom_id):
 @authority
 def article_add_ajax(request):  # 添加项目
     print(request.path, '>', resolve(request.path).url_name, '>', request.user)
-    response = {'status': True, 'message': None, 'forme': None, }
+    response = {'status': True, 'message': None, 'forme': None, ' skip': None, }
     post_data_str = request.POST.get('postDataStr')
     post_data = json.loads(post_data_str)
     print('post_data:', post_data)
@@ -45,7 +46,6 @@ def article_add_ajax(request):  # 添加项目
         renewal = cleaned_data['renewal']
         augment = cleaned_data['augment']
         article_num = creat_article_num(custom_id)
-        print('article_num:', article_num)
         amount = renewal + augment
         try:
             with transaction.atomic():
@@ -57,6 +57,7 @@ def article_add_ajax(request):  # 添加项目
                 today_str = time.strftime("%Y-%m-%d", time.localtime())  # 元组转换为字符串
                 models.Customes.objects.filter(article_custom=article_obj).update(lately_date=today_str)
             response['message'] = '成功创建项目：%s！' % article_obj.article_num
+            response['skip'] = "/dbms/article/"
         except Exception as e:
             response['status'] = False
             response['message'] = '项目未创建成功：%s' % str(e)

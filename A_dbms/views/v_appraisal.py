@@ -12,6 +12,7 @@ from django.urls import resolve, reverse
 from _WHDB.views import MenuHelper
 from _WHDB.views import authority
 
+
 # -----------------------appraisal评审情况-------------------------#
 @login_required
 @authority
@@ -32,7 +33,8 @@ def appraisal(request, *args, **kwargs):  # 评审情况
     '''搜索'''
     search_key = request.GET.get('_s')
     if search_key:
-        search_fields = ['custom__name', 'director__name', 'assistant__name', 'control__name', 'summary_num']
+        search_fields = ['article_num', 'custom__name', 'director__name', 'assistant__name',
+                         'control__name', 'summary_num']
         q = Q()
         q.connector = 'OR'
         for field in search_fields:

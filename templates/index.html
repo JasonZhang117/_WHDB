@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 
 {% block body %}
-    <nav class="navbar navbar-inverse navbar-fixed-top"><!--导航-->
+    <nav style="background-color: #337ab7" class="navbar navbar-inverse navbar-fixed-top"><!--导航-->
         <div class="container-fluid">
             <div class="navbar-header">
                 <button type="button" class="navbar-toggle collapsed"
@@ -12,7 +12,7 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand" href="{% url 'dbms:index' %}">
+                <a style="color: white" class="navbar-brand" href="{% url 'dbms:index' %}">
                     {% block pro_name %}成都武侯中小企业融资担保有限责任公司{% endblock %}
                 </a>
             </div>

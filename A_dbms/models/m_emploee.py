@@ -81,27 +81,10 @@ class Employees(AbstractBaseUser, PermissionsMixin):
 class Jobs(models.Model):  # 岗位（角色）
     name = models.CharField(verbose_name='岗位名称', max_length=16, unique=True)
     authority = models.ManyToManyField(to="Authorities", verbose_name="权限", null=True, blank=True)
-    menu = models.ManyToManyField(to="Menus", verbose_name="菜单", null=True, blank=True)
 
     class Meta:
         verbose_name_plural = '内部-岗位'  # 指定显示名称
         db_table = 'dbms_jobs'  # 指定数据表的名称
-
-    def __str__(self):
-        return self.name
-
-
-# -----------------------------菜单模型------------------------------#
-class Menus(models.Model):
-    """动态菜单"""
-    name = models.CharField(verbose_name="菜单名称", max_length=64)
-    url_name = models.CharField(verbose_name="URL", max_length=128)
-    ordery = models.IntegerField(verbose_name="优先级")
-
-    class Meta:
-        verbose_name_plural = '内部-动态菜单'
-        db_table = 'dbms_menus'
-        unique_together = ('name', 'url_name')
 
     def __str__(self):
         return self.name

@@ -114,12 +114,14 @@ urlpatterns = [
     path('pigeonhole/', views.pigeonhole, name='pigeonhole_all'),  # 菜单-放款管理-放款
     path('pigeonhole/<int:implement>/', views.pigeonhole, name='pigeonhole'),  # /dbms/grant/(0-9)
     path('pigeonhole/scan/<int:provide_id>/', views.pigeonhole_scan, name='pigeonhole_scan'),
+    path('pigeonhole/overdue/', views.pigeonhole_overdue, name='pigeonhole_overdue_all'),  # 菜单-放款管理-放款
 
     path('pigeonhole/add/', views.pigeonhole_add_ajax, name='pigeonhole_add_ajax'),
     # -----------------------保后管理-------------------------#
     path('review/', views.review, name='review_all'),  # 菜单-保后管理
     path('review/<int:review_state>/', views.review, name='review'),  # 菜单-保后管理
     path('review/scan/<int:custom_id>/', views.review_scan, name='review_scan'),  #
+    path('review/overdue/', views.review_overdue, name='review_overdue_all'),  # 菜单-保后管理
 
     path('review/plan/', views.review_plan_ajax, name='review_plan_ajax'),  #
     path('review/update/', views.review_update_ajax, name='review_update_ajax'),  #

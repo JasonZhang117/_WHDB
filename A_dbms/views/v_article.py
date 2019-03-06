@@ -17,17 +17,18 @@ from _WHDB.views import MenuHelper
 from _WHDB.views import authority
 
 
-
 # -----------------------------项目列表------------------------------#
 @login_required
 @authority
 def article(request, *args, **kwargs):  # 项目列表
     print(request.path, '>', resolve(request.path).url_name, '>', request.user)
     current_url_name = resolve(request.path).url_name  # 获取当前URL_NAME
+    job_list = request.session.get('job_list')  # 获取当前用户的所有角色
     authority_list = request.session.get('authority_list')  # 获取当前用户的所有权限
     menu_result = MenuHelper(request).menu_data_list()
     menu_result = MenuHelper(request).menu_data_list()
     authority_list = MenuHelper(request).authority_list
+    PAGE_TITLE = '项目列表'
 
     form_article_add_edit = forms.ArticlesAddForm()
 
@@ -49,6 +50,8 @@ def article(request, *args, **kwargs):  # 项目列表
     '''筛选'''
     article_list = models.Articles.objects.filter(**kwargs).select_related(
         'custom', 'director', 'assistant', 'control').order_by('-build_date')
+    if '项目经理' in job_list:
+        article_list = article_list.filter(director=request.user)
     '''搜索'''
     search_key = request.GET.get('_s')
     if search_key:
@@ -95,7 +98,7 @@ def article_scan(request, article_id):  # 项目预览
     current_url_name = resolve(request.path).url_name  # 获取当前URL_NAME
     authority_list = request.session.get('authority_list')  # 获取当前用户的所有权限
     menu_result = MenuHelper(request).menu_data_list()
-    PAGE_TITLE = '查看项目'
+    PAGE_TITLE = '项目详情'
 
     menu_result = MenuHelper(request).menu_data_list()
     authority_list = MenuHelper(request).authority_list
@@ -135,7 +138,6 @@ def article_scan_agree(request, article_id, agree_id):  # 项目预览
 
     menu_result = MenuHelper(request).menu_data_list()
     authority_list = MenuHelper(request).authority_list
-
 
     SURE_LIST = [1, 2]
     HOUSE_LIST = [11, 21, 42, 52]

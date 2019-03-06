@@ -40,7 +40,8 @@
                     if (dict.status) {
                         $('#addArticleModal').modal('hide');
                         alert(dict.message);
-                        window.location.reload();
+                        window.location.href = dict.skip;
+                        {#window.location.reload();#}
                     } else {
                         alert(dict.message);
                         $('#e_renewal').text(dict.forme.renewal);

@@ -1,6 +1,5 @@
 from django.shortcuts import render, redirect, HttpResponse
-from .. import models
-from .. import forms
+from .. import models,forms
 import time, json
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.db import transaction
@@ -68,8 +67,8 @@ def custom_scan(request, custom_id):  # 项目预览
         'linkman': custom_obj.linkman,
         'contact_num': custom_obj.contact_num}
     form_custom_edit = forms.CustomEditForm(initial=form_date)
-    idustry_id = custom_obj.company_custome.idustry.id
     if custom_obj.genre == 1:
+        idustry_id = custom_obj.company_custome.idustry.id
         form_date = {
             'idustry': idustry_id,
             'district': custom_obj.company_custome.district,

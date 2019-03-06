@@ -12,6 +12,7 @@ from django.urls import resolve
 from _WHDB.views import MenuHelper
 from _WHDB.views import authority
 
+
 # -----------------------归档列表---------------------#
 @login_required
 @authority
@@ -28,7 +29,9 @@ def pigeonhole(request, *args, **kwargs):  # 归档
     '''搜索'''
     search_key = request.GET.get('_s')
     if search_key:
-        search_fields = ['notify__agree__lending__summary__custom__name', 'notify__agree__branch__name',
+        search_fields = ['notify__agree__lending__summary__custom__name',
+                         'notify__agree__lending__summary__custom__short_name',
+                         'notify__agree__branch__name', 'notify__agree__branch__short_name',
                          'notify__agree__agree_num']
         q = Q()
         q.connector = 'OR'
@@ -82,3 +85,58 @@ def pigeonhole_scan(request, provide_id):  # 查看放款
 
     return render(request, 'dbms/pigeonhole/pigeonhole-scan.html', locals())
 
+
+# -----------------------逾期归档---------------------#
+@login_required
+@authority
+def pigeonhole_overdue(request, *args, **kwargs):
+    print(request.path, '>', resolve(request.path).url_name, '>', request.user)
+    current_url_name = resolve(request.path).url_name  # 获取当前URL_NAME
+    authority_list = request.session.get('authority_list')  # 获取当前用户的所有权限
+    menu_result = MenuHelper(request).menu_data_list()
+    PAGE_TITLE = '逾期归档'
+
+    date_15_leter = datetime.date.today() - datetime.timedelta(days=15)  # 15天前
+    pigeonhole_overdue_list = models.Provides.objects.filter(
+        implement__in=[1, 11], provide_date__lt=date_15_leter)  # 逾期归档
+
+    '''搜索'''
+    search_key = request.GET.get('_s')
+    if search_key:
+        search_fields = ['notify__agree__lending__summary__custom__name',
+                         'notify__agree__lending__summary__custom__short_name',
+                         'notify__agree__branch__name', 'notify__agree__branch__short_name',
+                         'notify__agree__agree_num']
+        q = Q()
+        q.connector = 'OR'
+        for field in search_fields:
+            q.children.append(("%s__contains" % field, search_key))
+        pigeonhole_overdue_list = pigeonhole_overdue_list.filter(q)
+
+    provide_amount = pigeonhole_overdue_list.aggregate(Sum('provide_money'))['provide_money__sum']  # 放款金额合计
+    repayment_amount = pigeonhole_overdue_list.aggregate(
+        Sum('provide_repayment_sum'))['provide_repayment_sum__sum']  # 还款金额合计
+    if provide_amount:
+        provide_amount = provide_amount
+    else:
+        provide_amount = 0
+
+    if repayment_amount:
+        repayment_amount = repayment_amount
+    else:
+        repayment_amount = 0
+    balance = provide_amount - repayment_amount
+
+    provide_acount = pigeonhole_overdue_list.count()  # 信息数目
+
+    '''分页'''
+    paginator = Paginator(pigeonhole_overdue_list, 19)
+    page = request.GET.get('page')
+    try:
+        p_list = paginator.page(page)
+    except PageNotAnInteger:
+        p_list = paginator.page(1)
+    except EmptyPage:
+        p_list = paginator.page(paginator.num_pages)
+
+    return render(request, 'dbms/pigeonhole/pigeonhole.html', locals())

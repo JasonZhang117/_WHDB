@@ -12,6 +12,119 @@ from django.urls import resolve
 from _WHDB.views import MenuHelper
 from _WHDB.views import authority
 
+
+# -----------------------代偿添加ajax-------------------------#
+@login_required
+@authority
+def compensatory_add_ajax(request):  # 代偿添加ajax
+    print(request.path, '>', resolve(request.path).url_name, '>', request.user)
+    current_url_name = resolve(request.path).url_name  # 获取当前URL_NAME
+    authority_list = request.session.get('authority_list')  # 获取当前用户的所有权限
+    menu_result = MenuHelper(request).menu_data_list()
+    response = {'status': True, 'message': None, 'forme': None, }
+    post_data_str = request.POST.get('postDataStr')
+    post_data = json.loads(post_data_str)
+    print('post_data:', post_data)
+
+    provide_list = models.Provides.objects.filter(id=post_data['provide_id'])
+    provide_obj = provide_list.first()
+    print('provide_obj:', provide_obj)
+
+    '''PROVIDE_STATUS_LIST = [(1, '在保'), (11, '解保'), (21, '代偿')]'''
+    form_compensatory_add = forms.FormCompensatoryAdd(post_data)
+    if form_compensatory_add.is_valid():
+        provide_status = provide_obj.provide_status
+        if provide_status in [1, 21]:
+            comp_cleaned = form_compensatory_add.cleaned_data
+            compensatory_capital = round(comp_cleaned['compensatory_capital'], 2)  # 代偿本金金额
+            compensatory_interest = round(comp_cleaned['compensatory_interest'], 2)
+            default_interest = round(comp_cleaned['default_interest'], 2)
+            compensatory_amount = round(compensatory_capital + compensatory_interest + default_interest, 2)
+            provide_money = provide_obj.provide_money  # 放款金额
+            provide_repayment_sum = provide_obj.provide_repayment_sum  # 还款总额
+            provide_repayment_amount = provide_repayment_sum + compensatory_capital  # 累计还款额+代偿本金金额
+            residual_amount = provide_money - provide_repayment_sum
+            if compensatory_capital > residual_amount:
+                response['status'] = False
+                response['message'] = '代偿本金(%s)超过剩余未偿还本金(%s)，代偿失败!' % (compensatory_capital, residual_amount)
+            else:
+                costom_agree_num = provide_obj.notify.agree.agree_num
+                costom_short_name = provide_obj.notify.agree.lending.summary.custom.short_name
+                title = '%s_%s_%s' % (costom_short_name, costom_agree_num, compensatory_amount)
+                try:
+                    compensatory_date = comp_cleaned['compensatory_date']
+                    with transaction.atomic():
+                        compensatorye_obj = models.Compensatories.objects.create(
+                            provide=provide_obj, title=title, compensatory_date=compensatory_date,
+                            compensatory_capital=compensatory_capital, compensatory_interest=compensatory_interest,
+                            default_interest=default_interest,
+                            compensatory_amount=compensatory_amount, dun_state=1, compensator=request.user)
+                        provide_list.update(provide_status=21)
+
+                        repayment_obj = models.Repayments.objects.create(
+                            provide=provide_obj, repayment_money=compensatory_capital, repaymentor=request.user,
+                            repayment_date=compensatory_date)  # 创建还款记录
+
+                        '''provide_repayment_sum，更新放款还款情况'''
+                        provide_list.update(provide_repayment_sum=provide_repayment_amount)  # 放款，更新还款总额
+                        '''notify_repayment_sum，更新放款通知还款情况'''
+                        notify_list = models.Notify.objects.filter(provide_notify=provide_obj)  # 放款通知
+                        notify_obj = notify_list.first()
+                        notify_repayment_amount = \
+                            models.Repayments.objects.filter(provide__notify=notify_obj).aggregate(
+                                Sum('repayment_money'))['repayment_money__sum']  # 通知项下还款合计
+                        notify_list.update(notify_repayment_sum=round(notify_repayment_amount, 2))  # 放款通知，更新还款总额
+                        '''agree_repayment_sum，更新合同还款信息'''
+                        agree_list = models.Agrees.objects.filter(notify_agree=notify_obj)  # 合同
+                        agree_obj = agree_list.first()
+                        agree_repayment_amount = models.Repayments.objects.filter(
+                            provide__notify__agree=agree_obj).aggregate(
+                            Sum('repayment_money'))['repayment_money__sum']  # 合同项下还款合计
+                        agree_list.update(agree_repayment_sum=round(agree_repayment_amount, 2))  # 合同，更新还款总额
+                        '''lending_repayment_sum，更新放款次序还款信息'''
+                        lending_list = models.LendingOrder.objects.filter(agree_lending=agree_obj)  # 放款次序
+                        lending_obj = lending_list.first()
+                        lending_repayment_amount = models.Repayments.objects.filter(
+                            provide__notify__agree__lending=lending_obj).aggregate(
+                            Sum('repayment_money'))['repayment_money__sum']
+                        lending_list.update(lending_repayment_sum=round(lending_repayment_amount, 2))  # 放款次序，更新还款总额
+                        '''article_repayment_sum，更新项目还款信息'''
+                        article_list = models.Articles.objects.filter(lending_summary=lending_obj)  # 项目
+                        article_obj = article_list.first()
+                        article_repayment_amount = models.Repayments.objects.filter(
+                            provide__notify__agree__lending__summary=article_obj).aggregate(
+                            Sum('repayment_money'))['repayment_money__sum']
+                        article_list.update(article_repayment_sum=round(article_repayment_amount, 2))  # 项目，更新还款总额
+                        '''更新客户余额信息,custom_flow,custom_accept,custom_back'''
+                        '''更新银行余额信息,branch_flow,branch_accept,branch_back'''
+                        custom_list = models.Customes.objects.filter(article_custom=article_obj)
+                        branch_list = models.Branches.objects.filter(agree_branch=agree_obj)
+                        provide_typ = provide_obj.provide_typ
+                        if provide_typ == 1:
+                            custom_list.update(custom_flow=F('custom_flow') - compensatory_capital)  # 客户，更新流贷余额
+                            branch_list.update(branch_flow=F('branch_flow') - compensatory_capital)  # 放款银行，更新流贷余额
+                        elif provide_typ == 11:
+                            custom_list.update(custom_accept=F('custom_accept') - compensatory_capital)  # 客户，更新承兑余额
+                            branch_list.update(branch_accept=F('branch_accept') - compensatory_capital)  # 放款银行，更新承兑余额
+                        else:
+                            custom_list.update(custom_back=F('custom_back') - compensatory_capital)  # 客户，更新保函余额
+                            branch_list.update(branch_back=F('branch_back') - compensatory_capital)  # 放款银行，更新保函余额
+
+                    response['message'] = '代偿添加成功！'
+                except Exception as e:
+                    response['status'] = False
+                    response['message'] = '代偿添加失败：%s' % str(e)
+        else:
+            response['status'] = False
+            response['message'] = '状态为：%s，代偿添加失败' % provide_status
+    else:
+        response['status'] = False
+        response['message'] = '表单信息有误！！！'
+        response['forme'] = form_compensatory_add.errors
+    result = json.dumps(response, ensure_ascii=False)
+    return HttpResponse(result)
+
+
 # -----------------------新建追偿项目ajax-------------------------#
 @login_required
 @authority
@@ -26,13 +139,15 @@ def dun_add_ajax(request):  # 添加参评项目ajax
         dun_cleaned = form_dun_add.cleaned_data
         dun_add_list = dun_cleaned['cmpensatory']
         dun_com_add_list = models.Compensatories.objects.filter(id__in=dun_add_list)
-        print('dun_com_add_list:', dun_com_add_list)
         costom_short_name = dun_com_add_list.first().provide.notify.agree.lending.summary.custom.short_name
         dun_charge_amount = dun_com_add_list.aggregate(Sum('compensatory_amount'))['compensatory_amount__sum']
-        dun_title = '追偿-%s-%s' % (costom_short_name, dun_charge_amount)
+        dun_title = '%s-%s' % (costom_short_name, dun_charge_amount)
         try:
             with transaction.atomic():
-                dun_obj = models.Dun.objects.create(title=dun_title, dun_amount=dun_charge_amount, dunor=request.user)
+                '''DUN_STAGE_LIST = ((1, '已代偿'), (3, '诉前'), (11, '一审'), (21, '上诉及再审'), (31, '案外之诉'),
+                      (41, '执行'), (91, '结案'), (99, '注销'))'''
+                dun_obj = models.Dun.objects.create(title=dun_title, dun_stage=3,
+                                                    dun_amount=dun_charge_amount, dunor=request.user)
                 for com_obj in dun_com_add_list:
                     dun_obj.compensatory.add(com_obj)
                 '''DUN_STATE_LIST = ((1, '已代偿'), (3, '诉前'), (11, '已起诉'), (21, '已判决'), (31, '已和解'),
@@ -787,7 +902,7 @@ def stage_add_ajax(request):
     dun_list = models.Dun.objects.filter(id=post_data['dun_id'])
     dun_obj = dun_list.first()
     '''DUN_STAGE_LIST = ((1, '起诉'), (11, '判决'), (21, '执行'), (31, '和解结案'), 
-    (41, '终止执行'), (99, '注销'))'''
+    (41, '终止执行'))'''
     dun_stage = dun_obj.dun_stage
     if not dun_stage == 99:
         form_stage_add = forms.FormStageAdd(post_data)  # 目录
@@ -805,6 +920,7 @@ def stage_add_ajax(request):
                 stage_remark = 'A-%s' % stage_type_count
             elif stage_type == 11:
                 stage_remark = 'B-%s' % stage_type_count
+                dun_state_n = 3
             elif stage_type == 21:
                 stage_remark = 'C-%s' % stage_type_count
                 dun_state_n = 11
@@ -817,7 +933,6 @@ def stage_add_ajax(request):
             elif stage_type == 51:
                 stage_remark = 'F-%s' % stage_type_count
                 dun_state_n = 41
-            print('stage_remark:', stage_remark, type(stage_remark))
             try:
                 with transaction.atomic():
                     stage_obj = models.Stage.objects.create(
@@ -828,9 +943,12 @@ def stage_add_ajax(request):
                         (31, '上诉及再审'), (41, '案外之诉'), (51, '执行资料'), (99, '其他'))'''
                     '''DUN_STATE_LIST = ((1, '已代偿'), (3, '诉前'), (11, '一审'), (21, '上诉及再审'), (31, '案外之诉'),
                       (41, '执行'), (91, '结案'))'''
-                    if stage_type in [21, 31, 41, 51]:
+                    '''DUN_STAGE_LIST = ((1, '诉前'), (3, '起诉'), (11, '判决'), (13, '二审'), (15, '再审'),
+                      (21, '执行'), (31, '和解'),
+                      (41, '中止执行'), (51, '终本执行'), (61, '终止执行'))'''
+                    if stage_type in [11, 21, 31, 41, 51]:
                         dun_obj.compensatory.all().update(dun_state=dun_state_n)
-
+                        dun_list.update(dun_state=dun_state_n)
                 response['message'] = '成功创建资料目录信息！'
             except Exception as e:
                 response['status'] = False
