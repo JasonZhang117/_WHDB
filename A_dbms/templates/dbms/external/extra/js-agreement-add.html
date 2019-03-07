@@ -1,0 +1,54 @@
+<script>
+    $(function () {
+        bindAddAgreementB();
+        bindAddAgreementModalOk();
+    });
+
+    function bindAddAgreementB() {
+        $('#addAgreementB').click(function () {
+            {#console.log("bindAddCounterB")#}
+            $('#addAgreementModal').modal('show');
+        })
+    }
+
+    function bindAddAgreementModalOk() {
+        $('#addAgreementModalOk').click(function () {
+            var postData = {};
+            $('#addAgreementModal').find('input,select').each(function () {
+                var v = $(this).val();
+                var n = $(this).attr('name');
+                postData[n] = v;
+            });
+            var postDataStr = JSON.stringify(postData);
+            console.log(postDataStr);
+            $.ajax({
+                url: '/dbms/cooperative/agreement/add/',
+                type: 'POST',
+                data: {'postDataStr': postDataStr},
+                dataType: 'JSON',
+                success: function (arg) {
+                    console.log(arg);
+                    if (arg.status) {
+                        $('#addAgreementModal').modal('hide');
+                        alert(arg.message);
+                        window.location.reload();
+                    } else {
+                        alert(arg.message);
+                        $('#e_flow_credit').text(arg.forme.flow_credit);
+                        $('#e_flow_limit').text(arg.forme.flow_limit);
+                        $('#e_back_credit').text(arg.forme.back_credit);
+                        $('#e_back_limit').text(arg.forme.back_limit);
+                        $('#e_credit_date').text(arg.forme.credit_date);
+                        $('#e_due_date').text(arg.forme.due_date);
+                    }
+                }
+            })
+        })
+    }
+</script>
+
+
+
+
+
+

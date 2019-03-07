@@ -11,6 +11,7 @@ from django.urls import resolve
 from _WHDB.views import MenuHelper
 from _WHDB.views import authority
 
+
 # -----------------------放款管理---------------------#
 @login_required
 @authority
@@ -31,7 +32,7 @@ def provide_agree(request, *args, **kwargs):  # 放款管理
     '''搜索'''
     search_key = request.GET.get('_s')
     if search_key:
-        search_fields = ['agree_num', 'lending__summary__custom__name',
+        search_fields = ['agree_num', 'lending__summary__custom__name', 'lending__summary__custom__short_name',
                          'branch__name', 'branch__short_name', 'lending__summary__summary_num']
         q = Q()
         q.connector = 'OR'

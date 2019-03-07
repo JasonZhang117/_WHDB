@@ -22,3 +22,4 @@ from .f_dun import (FormDunAdd, FormCompensatoryAdd, FormClueAdd, FormSealupAdd,
                     FormInquiryHangingAdd,
                     FormInquiryTurnAdd, FormStandingAdd, FormChargeAdd, FormRetrieveAdd,
                     FormInquiryAdd, FormCustomAdd, FormStageAdd, FormStaffAdd, FormAgentAdd, FormJudgmentAdd)
+from .f_external import FormAgreementAdd

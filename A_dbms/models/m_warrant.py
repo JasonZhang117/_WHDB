@@ -362,9 +362,10 @@ class Storages(models.Model):  # 出入库
     STORAGE_TYP_LIST = ((1, '入库'), (2, '续抵出库'), (11, '借出'), (12, '归还'), (31, '解保出库'))
     storage_typ = models.IntegerField(verbose_name='出入库', choices=STORAGE_TYP_LIST, default=1)
     storage_explain = models.CharField(verbose_name='出入库说明', max_length=128, blank=True, null=True)
-
+    '''EMPLOYEE_STATUS_LIST = [(1, '在职'), (11, '离职')]'''
     transfer = models.ForeignKey(to='Employees', verbose_name="移交/接收者",
                                  on_delete=models.PROTECT,
+                                 limit_choices_to={'employee_status': 1},
                                  related_name='transfer_employee')
     conservator = models.ForeignKey(to='Employees', verbose_name="权证管理岗",
                                     on_delete=models.PROTECT,

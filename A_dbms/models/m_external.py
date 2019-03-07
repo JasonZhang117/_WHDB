@@ -8,15 +8,18 @@ class Cooperators(models.Model):  # 授信银行
     short_name = models.CharField(verbose_name='机构简称', max_length=32, unique=True)
     COOPERATOR_TYPE_LIST = ((1, '金融机构'), (11, '律师事务所'), (21, '评估事务所'))
     cooperator_type = models.IntegerField(verbose_name='机构类型', choices=COOPERATOR_TYPE_LIST, default=1)
-    flow_credit = models.FloatField(verbose_name='综合额度', default=100000000)
-    flow_limit = models.FloatField(verbose_name='单笔限额（综合）', default=10000000)
-    back_credit = models.FloatField(verbose_name='保函额度', default=0)
-    back_limit = models.FloatField(verbose_name='单笔限额（保函）', default=0)
-    credit_date = models.DateField(verbose_name='合作日期', default=datetime.date.today)
-    due_date = models.DateField(verbose_name='到期日', default=datetime.date.today)
+    flow_credit = models.FloatField(verbose_name='综合额度', blank=True, null=True)
+    flow_limit = models.FloatField(verbose_name='单笔限额（综合）', blank=True, null=True)
+    back_credit = models.FloatField(verbose_name='保函额度', blank=True, null=True)
+    back_limit = models.FloatField(verbose_name='单笔限额（保函）', blank=True, null=True)
+    credit_date = models.DateField(verbose_name='合作日期', blank=True, null=True)
+    due_date = models.DateField(verbose_name='到期日', blank=True, null=True)
     up_scale = models.FloatField(verbose_name='最高额上浮比例', default=0)
     COOPERATOR_STATE_LIST = ((1, '正常'), (11, '注销'))
     cooperator_state = models.IntegerField(verbose_name='状态', choices=COOPERATOR_STATE_LIST, default=1)
+    cooperat = models.ForeignKey(to='Employees', verbose_name="创建人", on_delete=models.PROTECT,
+                                 related_name='cooperat_employee')
+    cooperat_date = models.DateField(verbose_name='创建日期', default=datetime.date.today)
 
     # Cancellation = models.BooleanField('注销', default=False)
     class Meta:
@@ -25,6 +28,31 @@ class Cooperators(models.Model):  # 授信银行
 
     def __str__(self):
         return self.name
+
+
+# -----------------------合作协议-------------------------#
+class Agreements(models.Model):  #
+    cooperator = models.ForeignKey(to='Cooperators', verbose_name="合作机构",
+                                   on_delete=models.CASCADE,
+                                   limit_choices_to={'cooperator_state': 1},
+                                   related_name='agreement_cooperator')
+    flow_credit = models.FloatField(verbose_name='综合额度', default=100000000)
+    flow_limit = models.FloatField(verbose_name='单笔（综合）', default=10000000)
+    back_credit = models.FloatField(verbose_name='保函额度', default=0)
+    back_limit = models.FloatField(verbose_name='单笔（保函）', default=0)
+    credit_date = models.DateField(verbose_name='合作日期', default=datetime.date.today)
+    due_date = models.DateField(verbose_name='到期日', default=datetime.date.today)
+    agreementor = models.ForeignKey(to='Employees', verbose_name="创建人", on_delete=models.PROTECT,
+                                    related_name='agreementor_employee')
+    agreementor_date = models.DateField(verbose_name='创建日期', default=datetime.date.today)
+
+    # Cancellation = models.BooleanField('注销', default=False)
+    class Meta:
+        verbose_name_plural = '外部-合作协议'  # 指定显示名称
+        db_table = 'dbms_agreements'  # 指定数据表的名称
+
+    def __str__(self):
+        return self.cooperator.name
 
 
 # -----------------------放款银行-------------------------#
@@ -40,6 +68,9 @@ class Branches(models.Model):  # 放款银行
     branch_flow = models.FloatField(verbose_name='_流贷余额', default=0)
     branch_accept = models.FloatField(verbose_name='_承兑余额', default=0)
     branch_back = models.FloatField(verbose_name='_保函余额', default=0)
+    branchor = models.ForeignKey(to='Employees', verbose_name="创建人", on_delete=models.PROTECT,
+                                 related_name='branchor_employee')
+    branchor_date = models.DateField(verbose_name='创建日期', default=datetime.date.today)
 
     # Cancellation = models.BooleanField('注销', default=False)
     class Meta:
@@ -63,6 +94,9 @@ class Experts(models.Model):  # 评审专家
     ordery = models.IntegerField(verbose_name='优先级')
     EXPERT_STATE_LIST = ((1, '正常'), (2, '注销'))
     expert_state = models.IntegerField(verbose_name='评审状态', choices=EXPERT_STATE_LIST, default=1)
+    expertor = models.ForeignKey(to='Employees', verbose_name="创建人", on_delete=models.PROTECT,
+                                 related_name='expertor_employee')
+    expertor_date = models.DateField(verbose_name='创建日期', default=datetime.date.today)
 
     # Cancellation = models.BooleanField('注销', default=False)
     class Meta:

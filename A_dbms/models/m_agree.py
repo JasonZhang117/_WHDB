@@ -56,29 +56,6 @@ class Agrees(models.Model):  # 委托合同
         return "%s_%s_(%s)" % (self.agree_num, self.agree_amount, self.lending)
 
 
-# 合同变更-----********
-
-
-class AgreeesExtend(models.Model):
-    agree = models.OneToOneField(to='Agrees', verbose_name="委托合同",
-                                 limit_choices_to={'counter_only': 0},
-                                 on_delete=models.PROTECT,
-                                 related_name='extend_agree')
-    contact_addr = models.CharField(verbose_name='联系地址', max_length=64)
-    linkman = models.CharField(verbose_name='联系人', max_length=16)
-    contact_num = models.CharField(verbose_name='联系电话', max_length=13)
-    registered_addr = models.CharField(verbose_name='注册地址', max_length=64, null=True, blank=True)
-    representative = models.CharField(verbose_name='法人代表', max_length=16, null=True, blank=True)
-    license_num = models.CharField(verbose_name='身份证号码', max_length=18, null=True, blank=True)
-
-    class Meta:
-        verbose_name_plural = '合同-委托合同扩展信息'  # 指定显示名称
-        db_table = 'dbms_greeeExtend'  # 指定数据表的名称
-
-    def __str__(self):
-        return "%s_%s" % (self.agree.agree_num, 'extend')
-
-
 # -----------------------反担保合同模型-------------------------#
 class Counters(models.Model):  # 反担保合同
     counter_num = models.CharField(verbose_name='_合同编号', max_length=32, unique=True)

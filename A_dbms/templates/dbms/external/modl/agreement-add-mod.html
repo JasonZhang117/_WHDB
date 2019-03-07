@@ -1,0 +1,25 @@
+<div class="modal fade" id="addAgreementModal" tabindex="-1"
+     role="dialog" aria-labelledby="addAgreementModal">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title" id="addAgreementModalLabel">添加合作协议
+                    <input name="cooperator_id" value="{{ cooperator_obj.id }}" style="display: none">
+                </h4>
+            </div>
+            <div class="modal-body">
+                <form class="form-horizontal">
+                    {% include 'dbms/external/modl/mod_form/agreement-add.html' %}
+                </form>
+            </div>
+            <label id="formErrors"></label>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                <button type="button" class="btn btn-primary" id="addAgreementModalOk">确定</button>
+            </div>
+        </div>
+    </div>
+</div>

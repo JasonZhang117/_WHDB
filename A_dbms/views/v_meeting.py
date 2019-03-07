@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect, HttpResponse
 from .. import models
 from .. import forms
-import datetime, time,json
+import datetime, time, json
 from django.urls import resolve
 
 from django.contrib.auth.decorators import login_required
@@ -12,6 +12,7 @@ from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.urls import resolve
 from _WHDB.views import MenuHelper
 from _WHDB.views import authority
+
 
 # -----------------------评审会-------------------------#
 @login_required
@@ -66,12 +67,8 @@ def meeting_scan(request, meeting_id):  # 评审会预览
         article_count = models.Articles.objects.filter(expert=expert_obj, appraisal_article=meeting_obj).count()
         expert_article_count['id'] = expert_obj.id
         expert_article_count['count'] = article_count
-        print("article_count:", expert_obj.name, article_count)
-        print("expert_article_count:", expert_article_count)
-    print("article_count:", article_count)
 
     expert_ll = models.Experts.objects.filter(article_expert__appraisal_article=meeting_obj).count()
-    print('expert_ll:', expert_ll)
     form_meeting_article_add = forms.MeetingArticleAddForm()
 
     meeting_edit_form_data = {'review_model': meeting_obj.review_model, 'review_date': str(meeting_obj.review_date)}
@@ -115,3 +112,29 @@ def meeting_scan_article(request, meeting_id, article_id):
         form_allot_expert = forms.MeetingAllotForm()
 
     return render(request, 'dbms/meeting/meeting-scan-article.html', locals())
+
+
+# -----------------------评委列表-------------------------#
+@login_required
+@authority
+def experts(request, *args, **kwargs):  #
+    print(request.path, '>', resolve(request.path).url_name, '>', request.user)
+    current_url_name = resolve(request.path).url_name  # 获取当前URL_NAME
+    authority_list = request.session.get('authority_list')  # 获取当前用户的所有权限
+    menu_result = MenuHelper(request).menu_data_list()
+    PAGE_TITLE = '合作机构'
+
+    COOPERATOR_TYPE_LIST = models.Cooperators.COOPERATOR_TYPE_LIST
+    cooperator_list = models.Cooperators.objects.filter(**kwargs).order_by('-flow_credit', '-flow_limit')
+
+    ####分页信息###
+    paginator = Paginator(cooperator_list, 19)
+    page = request.GET.get('page')
+    try:
+        p_list = paginator.page(page)
+    except PageNotAnInteger:
+        p_list = paginator.page(1)
+    except EmptyPage:
+        p_list = paginator.page(paginator.num_pages)
+
+    return render(request, 'dbms/external/cooperative.html', locals())

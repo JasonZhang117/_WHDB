@@ -7,7 +7,7 @@ from .v_article_act import (
     article_add_ajax, article_feedback_ajax, article_edit_ajax, article_del_ajax)
 # ----------------------v_meeting评审会视图--------------------#
 from .v_meeting import (
-    meeting, meeting_scan, meeting_notice, meeting_scan_article)
+    meeting, meeting_scan, meeting_notice, meeting_scan_article, experts)
 from .v_meeting_act import (
     meeting_article_del_ajax, meeting_article_add_ajax, meeting_edit_ajax,
     meeting_del_ajax, meeting_close_ajax, meeting_add_ajax, meeting_allot_add_ajax,
@@ -56,7 +56,8 @@ from .v_dun_act import (
 # ----------------------v_custom客户管理视图--------------------#
 from .v_custom import (custom, custom_scan)
 from .v_custom_act import (custom_add_ajax, custom_del_ajax, custom_edit_ajax, shareholder_add_ajax, spouse_add_ajax)
-from .v_external import cooperative, soondue_cooperator, overdue_cooperator
+from .v_external import cooperative, cooperative_scan, soondue_cooperator, overdue_cooperator
+from .v_external_act import agreement_add_ajax
 
 # 部门、员工
 from .v_interior import department, department_add, department_edit

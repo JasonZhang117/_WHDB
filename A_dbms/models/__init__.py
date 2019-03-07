@@ -6,7 +6,7 @@ from .m_appraisal import (
     LendingCustoms, LendingWarrants, )
 # -----------------------m_agree合同模型---------------------#
 from .m_agree import (
-    Agrees, AgreeesExtend, Counters, CountersAssure, CountersWarrants)
+    Agrees, Counters, CountersAssure, CountersWarrants)
 # -------------------v_warrant担保物模型---------------------#
 from .m_warrant import (
     Warrants, Ownership, Houses, HouseBag, Grounds, Stockes, Receivable, ReceiveExtend, Draft, DraftExtend,
@@ -27,7 +27,7 @@ from .m_interior import Departments
 from .m_emploee import Jobs, Employees, Authorities, Cartes
 # ---------------------v_external外部信息----------------------#
 # 授信银行、放款机构、评审
-from .m_external import Cooperators, Branches, Experts
+from .m_external import Cooperators, Branches, Experts, Agreements
 
 # 区域、行业
 from .m_custom import Districtes, Industries

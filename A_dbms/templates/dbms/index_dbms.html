@@ -53,11 +53,11 @@
         <h3>30天内到期票据：<a href="{% url 'dbms:warrant_soondue_draft_all' %}">{{ soondue_draft_count }}</a></h3>
     {% endif %}
 
-    {% if overdue_draft_count > 0 %}
+    {% if overdue_cooperator_count > 0 %}
         <h3>逾期协议：<a href="{% url 'dbms:cooperative_overdue_all' %}">{{ overdue_cooperator_count }}</a></h3>
     {% endif %}
 
-    {% if soondue_draft_count > 0 %}
+    {% if soondue_cooperator_count > 0 %}
         <h3>30天内到期协议：
             <a href="{% url 'dbms:cooperative_soondue_all' %}">{{ soondue_cooperator_count }}</a></h3>
     {% endif %}

@@ -133,7 +133,7 @@ def acc_logout(request):
 
 
 @login_required
-@authority
+# @authority
 def home(request):
     print(request.path, '>', resolve(request.path).url_name, '>', request.user)
     print('request.path_info', request.path_info)  # 当前url

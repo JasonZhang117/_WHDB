@@ -46,7 +46,7 @@ class Employees(AbstractBaseUser, PermissionsMixin):
     is_staff = models.BooleanField(default=True)
     # is_admin = models.BooleanField(default=False)
     EMPLOYEE_STATUS_LIST = [(1, '在职'), (11, '离职')]
-    employee_status = models.IntegerField(verbose_name='_放款状态', choices=EMPLOYEE_STATUS_LIST, default=1)
+    employee_status = models.IntegerField(verbose_name='_员工状态', choices=EMPLOYEE_STATUS_LIST, default=1)
     job = models.ManyToManyField("Jobs", blank=True, null=True)
     department = models.ForeignKey(to="Departments", verbose_name="部门",
                                    on_delete=models.PROTECT,
@@ -65,7 +65,7 @@ class Employees(AbstractBaseUser, PermissionsMixin):
         return self.email
 
     def __str__(self):  # __unicode__ on Python 2
-        return '%s(%s)' % (self.name, self.email)
+        return '%s' % self.name
 
     class Meta:
         verbose_name_plural = '内部-员工'  # 指定显示名称

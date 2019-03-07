@@ -50,8 +50,10 @@ def article(request, *args, **kwargs):  # 项目列表
     '''筛选'''
     article_list = models.Articles.objects.filter(**kwargs).select_related(
         'custom', 'director', 'assistant', 'control').order_by('-build_date')
+
     if '项目经理' in job_list:
         article_list = article_list.filter(director=request.user)
+
     '''搜索'''
     search_key = request.GET.get('_s')
     if search_key:

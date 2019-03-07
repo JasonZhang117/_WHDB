@@ -22,6 +22,7 @@ urlpatterns = [
     path('meeting/scan/<int:meeting_id>/', views.meeting_scan, name='meeting_scan'),
     path('meeting/scan/<int:meeting_id>/<int:article_id>/', views.meeting_scan_article, name='meeting_scan_article'),
     path('meeting/notice/<int:meeting_id>/', views.meeting_notice, name='meeting_notice'),
+    path('meeting/experts/', views.experts, name='meeting_experts'),
 
     path('meeting/add/', views.meeting_add_ajax, name='meeting_add_ajax'),
     path('meeting/allot/add/', views.meeting_allot_add_ajax, name='meeting_allot_add_ajax'),
@@ -174,9 +175,11 @@ urlpatterns = [
 
     # ------------------------------合作机构--------------------------------------#
     path('cooperative/', views.cooperative, name='cooperative_all'),  # 菜单-合作机构
-    path('cooperative/<int:cooperator_state>/', views.cooperative, name='cooperative'),  # /dbms/cstom/(0-9)
+    path('cooperative/<int:cooperator_type>/', views.cooperative, name='cooperative'),  # /dbms/cstom/(0-9)
+    path('cooperative/scan/<int:cooperator_id>/', views.cooperative_scan, name='cooperative_scan'),
     path('cooperative/soondue/', views.soondue_cooperator, name='cooperative_soondue_all'),
     path('cooperative/overdue/', views.overdue_cooperator, name='cooperative_overdue_all'),
+    path('cooperative/agreement/add/', views.agreement_add_ajax, name='cooperative_agreement_add_ajax'),
 
     # 员工
     path('employee/', views.employee, name='employee'),

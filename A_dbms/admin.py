@@ -53,7 +53,6 @@ class AgreesAdmin(admin.ModelAdmin):
 
 
 admin.site.register(models.Agrees, AgreesAdmin)  # 合同
-admin.site.register(models.AgreeesExtend)  # 合同扩展
 admin.site.register(models.Counters)  # 反担保合同
 admin.site.register(models.CountersAssure)  # 保证反担保合同
 admin.site.register(models.CountersWarrants)  # 抵质押押反担保合同
@@ -185,6 +184,7 @@ class CooperatorsAdmin(admin.ModelAdmin):
 
 
 admin.site.register(models.Cooperators, CooperatorsAdmin)  # 合作机构
+admin.site.register(models.Agreements)  # 合作机构
 
 
 class BranchesAdmin(admin.ModelAdmin):
@@ -250,5 +250,3 @@ class CartesAdmin(admin.ModelAdmin):
 admin.site.register(models.Cartes, CartesAdmin)
 # 员工
 admin.site.register(models.Employees, EmployeesAdmin)
-
-

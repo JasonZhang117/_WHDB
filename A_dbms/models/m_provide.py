@@ -114,6 +114,7 @@ class Pigeonholes(models.Model):  # 归档
     pigeonhole_explain = models.CharField(verbose_name='归档说明', max_length=128, null=True, blank=True)
     pigeonhole_transfer = models.ForeignKey(to='Employees', verbose_name="移交人",
                                             on_delete=models.PROTECT,
+                                            limit_choices_to={'employee_status': 1},
                                             related_name='pigeonhole_transfer_employee')
     pigeonholor = models.ForeignKey(to='Employees', verbose_name="_创建者",
                                     on_delete=models.PROTECT,

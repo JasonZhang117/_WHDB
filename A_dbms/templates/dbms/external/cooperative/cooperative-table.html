@@ -2,10 +2,9 @@
     <table class="table table-bordered table-hover table-condensed active">
         <thead>
         <tr style="text-align: center">
-            <th>序号</th>
             <th>机构名称</th>
             <th>类型</th>
-            <th>额度</th>
+            <th>综合额度</th>
             <th>单笔限额</th>
             <th>保函额度</th>
             <th>单笔限额</th>
@@ -16,13 +15,13 @@
         <tbody>
         {% for cooperator in p_list %}
             <tr>
-                <td>{{ forloop.counter }}</td>
-                <td>{{ cooperator.name }}</td>
-                <td>{{ cooperator.get_cooperator_state_display }}</td>
-                <td>{{ cooperator.flow_credit }}</td>
-                <td>{{ cooperator.flow_limit }}</td>
-                <td>{{ cooperator.back_credit }}</td>
-                <td>{{ cooperator.back_limit }}</td>
+                <td><a href="{% url 'dbms:cooperative_scan' cooperator_id=cooperator.id %}">{{ cooperator.name }}</a>
+                </td>
+                <td>{{ cooperator.get_cooperator_type_display }}</td>
+                <td align="right">{{ cooperator.flow_credit }}</td>
+                <td align="right">{{ cooperator.flow_limit }}</td>
+                <td align="right">{{ cooperator.back_credit }}</td>
+                <td align="right">{{ cooperator.back_limit }}</td>
                 <td>{{ cooperator.credit_date }}</td>
                 <td>{{ cooperator.due_date }}</td>
             </tr>

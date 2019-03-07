@@ -1,34 +1,35 @@
 <div>
     {% if PAGE_TITLE == '合作机构' %}
         <label>
-            {% if kwargs.cooperator_state == None %}
+            {% if kwargs.cooperator_type == None %}
                 <a class="active btn btn-primary btn-sm" href="{% url 'dbms:cooperative_all' %}">全部</a>
             {% else %}
                 <a class="btn btn btn-primary btn-sm" href="{% url 'dbms:cooperative_all' %}">全部</a>
             {% endif %}
             {# 方式一：#}
-            {% for item in COOPERATOR_STATE_LIST %}
+            {% for item in COOPERATOR_TYPE_LIST %}
                 {% if item.0 == kwargs.cooperator_state %}
                     <a class="active btn btn-primary btn-sm"
-                       href="{% url 'dbms:cooperative' cooperator_state=item.0 %}">{{ item.1 }}</a>
+                       href="{% url 'dbms:cooperative' cooperator_type=item.0 %}">{{ item.1 }}</a>
                 {% else %}
                     <a class="btn btn-primary btn-sm"
-                       href="{% url 'dbms:cooperative' cooperator_state=item.0 %}">{{ item.1 }}</a>
+                       href="{% url 'dbms:cooperative' cooperator_type=item.0 %}">{{ item.1 }}</a>
                 {% endif %}
             {% endfor %}
         </label>
     {% endif %}
     <label>
         <form class="navbar-form" style="display: inline">
-            <input type="text" class="form-control" placeholder="搜索机构名称">
+            <input type="search" name="_s" class="form-control" placeholder="机构名称">
             <button type="submit" class="btn btn-primary btn-sm">搜索</button>
         </form>
     </label>
-
     {% if PAGE_TITLE == '合作机构' %}
         <label class="pull-right">
-            <a class="btn btn-success btn-sm" id="addCooperativeB">添加</a>
+            <a class="btn btn-primary btn-sm" id="addCooperativeB">添加</a>
         </label>
     {% endif %}
-
+    <label>
+        综合额度：{{ flow_credit_amount }}，保函额度：{{ back_credit_amount }}
+    </label>
 </div>
