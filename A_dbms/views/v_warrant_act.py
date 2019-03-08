@@ -23,11 +23,9 @@ def warrant_add_ajax(request):
         warrant_typ = int(post_data['warrant_typ'])
     else:
         warrant_typ = warrant_typ_n
-    print('warrant_typ:', warrant_typ)
     form_warrant_add = forms.WarrantAddForm(post_data)
     if form_warrant_add.is_valid():
         warrant_add_clean = form_warrant_add.cleaned_data
-        print('warrant_add_clean:', warrant_add_clean)
         '''WARRANT_TYP_LIST = [
         (1, '房产'), (2, '房产包'), (5, '土地'), (11, '应收'), (21, '股权'),
         (31, '票据'), (41, '车辆'), (51, '动产'), (99, '他权')]'''

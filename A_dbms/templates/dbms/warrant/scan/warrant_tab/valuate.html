@@ -13,18 +13,19 @@
         </tr>
         </thead>
         <tbody>
-        <tr>
-            {% for evaluate in warrant_obj.evaluate_warrant.all %}
+
+        {% for evaluate in warrant_obj.evaluate_warrant.all %}
+            <tr>
                 <td>{{ forloop.counter }}</td>
                 <td>{{ evaluate.get_evaluate_state_display }}</td>
                 <td>{{ evaluate.evaluate_value }}</td>
                 <td>{{ evaluate.evaluate_date }}</td>
                 <td>{{ evaluate.evaluate_explain }}</td>
                 {% if  PAGE_TITAL == '权证预览' %}
-                    <th><a class="btn btn-danger btn-xs delEvaluateB">删除</a></th>
+                    <td><a class="btn btn-danger btn-xs delEvaluateB">删除</a></td>
+                    </tr>
                 {% endif %}
-            {% endfor %}
-        </tr>
+        {% endfor %}
         </tbody>
     </table>
 </div>

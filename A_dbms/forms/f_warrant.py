@@ -154,6 +154,7 @@ class FormVehicle(dform.ModelForm):  # 车辆FormVehicle41
 class FormChattel(dform.ModelForm):  # 动产FormChattel51
     chattel_owner = fields.IntegerField(
         label='所有权人', label_suffix="：", widget=widgets.Select(attrs={'class': 'form-control'}))
+
     class Meta:
         model = models.Chattel
         fields = ['chattel_typ', 'chattel_detail']
@@ -176,8 +177,6 @@ class HypothecsAddEidtForm(dform.ModelForm):
 
 # -----------------------StoragesAddEidtForm出入库-------------------------#
 class StoragesAddEidtForm(dform.ModelForm):
-    chattel_owner = fields.IntegerField(
-        label='所有权人', label_suffix="：", widget=widgets.Select(attrs={'class': 'form-control'}))
     class Meta:
         model = models.Storages
         fields = ['storage_typ', 'storage_date', 'transfer', 'storage_explain']

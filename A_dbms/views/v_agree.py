@@ -184,5 +184,4 @@ def agree_preview(request, agree_id):
     menu_result = MenuHelper(request).menu_data_list()
     agree_obj = models.Agrees.objects.get(id=agree_id)
 
-    return render(request,
-                  'dbms/agree/agree-preview.html', locals())
+    return render(request, 'dbms/agree/agree-preview.html', locals())

@@ -76,6 +76,7 @@ admin.site.register(models.Stockes)  # 股权
 admin.site.register(models.Receivable)  # 应收账款
 admin.site.register(models.Draft)  # 票据
 admin.site.register(models.DraftExtend)  # 票据列表
+admin.site.register(models.Chattel)  # 动产
 admin.site.register(models.Evaluate)  # 出入库
 admin.site.register(models.Storages)  # 评估
 # -----------------------放款-------------------------#

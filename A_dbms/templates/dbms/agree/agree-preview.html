@@ -5,8 +5,12 @@
     <title>{{ agree_obj.agree_num }}</title>
 </head>
 <body>
-
-{% include 'dbms/board/agree/maximum-agree.html' %}
+<!--AGREE_TYP_LIST = ((1, '单笔'), (2, '最高额'), (3, '保函'))-->
+{% if agree_obj.agree_typ == 1 %}
+    {% include 'dbms/board/agree/maximum-agree.html' %}
+{% elif agree_obj.agree_typ == 2 %}
+    {% include 'dbms/board/agree/maximum-agree.html' %}
+{% endif %}
 
 </body>
 </html>
