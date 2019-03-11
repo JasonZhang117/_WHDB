@@ -1,0 +1,35 @@
+<div>
+    {% if PAGE_TITLE == '放款机构' %}
+        <label>
+            {% if kwargs.branch_state == None %}
+                <a class="active btn btn-primary btn-sm" href="{% url 'dbms:branch_all' %}">全部</a>
+            {% else %}
+                <a class="btn btn btn-primary btn-sm" href="{% url 'dbms:branch_all' %}">全部</a>
+            {% endif %}
+            {# 方式一：#}
+            {% for item in BRANCH_STATE_LIST %}
+                {% if item.0 == kwargs.branch_state %}
+                    <a class="active btn btn-primary btn-sm"
+                       href="{% url 'dbms:branch' branch_state=item.0 %}">{{ item.1 }}</a>
+                {% else %}
+                    <a class="btn btn-primary btn-sm"
+                       href="{% url 'dbms:branch' branch_state=item.0 %}">{{ item.1 }}</a>
+                {% endif %}
+            {% endfor %}
+        </label>
+    {% endif %}
+    <label>
+        <form class="navbar-form" style="display: inline">
+            <input type="search" name="_s" class="form-control" placeholder="机构名称">
+            <button type="submit" class="btn btn-primary btn-sm">搜索</button>
+        </form>
+    </label>
+    {#    {% if PAGE_TITLE == '放款机构' %}#}
+    {#        <label class="pull-right">#}
+    {#            <a class="btn btn-primary btn-sm" id="addCooperativeB">添加</a>#}
+    {#        </label>#}
+    {#    {% endif %}#}
+    <label>
+        在保余额：{{ balance }}（流贷：{{ flow_amount }}，承兑：{{ accept_amount }}，保函：{{ back_amount }}）
+    </label>
+</div>

@@ -1,0 +1,26 @@
+<div class="table-responsive">
+    <table class="table table-bordered table-hover table-condensed active">
+        <thead>
+        <tr style="text-align: center">
+            <th>名称</th>
+            <th>授信机构</th>
+            <th>流贷余额</th>
+            <th>承兑余额</th>
+            <th>保函余额</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for branch in p_list %}
+            <tr>
+                <td><a href="#">{{ branch.name }}</a>
+                </td>
+                <td>{{ branch.cooperator.short_name }}</td>
+                <td align="right">{{ branch.branch_flow }}</td>
+                <td align="right">{{ branch.branch_accept }}</td>
+                <td align="right">{{ branch.branch_back }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    {% include 'dbms/board/page.html' %}
+</div>

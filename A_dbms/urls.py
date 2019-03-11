@@ -180,6 +180,8 @@ urlpatterns = [
     path('cooperative/soondue/', views.soondue_cooperator, name='cooperative_soondue_all'),
     path('cooperative/overdue/', views.overdue_cooperator, name='cooperative_overdue_all'),
     path('cooperative/agreement/add/', views.agreement_add_ajax, name='cooperative_agreement_add_ajax'),
+    path('branch/', views.branches, name='branch_all'),
+    path('branch/<int:branch_state>/', views.branches, name='branch'),
 
     # 员工
     path('employee/', views.employee, name='employee'),

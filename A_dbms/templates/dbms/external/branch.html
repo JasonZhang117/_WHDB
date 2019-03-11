@@ -1,0 +1,13 @@
+{% extends 'dbms/index_dbms.html' %}
+
+{% block title %}{{ PAGE_TITLE }}{% endblock %}
+
+
+{% block right-content-container %}
+    {% include 'dbms/external/branch/branch-filter.html' %}
+    {% include 'dbms/external/branch/branch-table.html' %}
+{% endblock %}
+
+{% block extra-js %}
+
+{% endblock %}

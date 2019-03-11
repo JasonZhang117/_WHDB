@@ -86,7 +86,7 @@ def pigeonhole_overdue(request, *args, **kwargs):
 
     date_15_leter = datetime.date.today() - datetime.timedelta(days=15)  # 15天前
     pigeonhole_overdue_list = models.Provides.objects.filter(
-        implement__in=[1, 11], provide_date__lt=date_15_leter)  # 逾期归档
+        implement__in=[1, 11], provide_date__lt=date_15_leter).order_by('provide_date')  # 逾期归档
 
     '''搜索'''
     search_key = request.GET.get('_s')
