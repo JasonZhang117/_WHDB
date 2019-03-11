@@ -15,6 +15,10 @@ class Cooperators(models.Model):  # 授信银行
     credit_date = models.DateField(verbose_name='合作日期', blank=True, null=True)
     due_date = models.DateField(verbose_name='到期日', blank=True, null=True)
     up_scale = models.FloatField(verbose_name='最高额上浮比例', default=0)
+    cooperator_flow = models.FloatField(verbose_name='_流贷余额', default=0)
+    cooperator_accept = models.FloatField(verbose_name='_承兑余额', default=0)
+    cooperator_back = models.FloatField(verbose_name='_保函余额', default=0)
+
     COOPERATOR_STATE_LIST = ((1, '正常'), (11, '注销'))
     cooperator_state = models.IntegerField(verbose_name='状态', choices=COOPERATOR_STATE_LIST, default=1)
     cooperat = models.ForeignKey(to='Employees', verbose_name="创建人", on_delete=models.PROTECT,

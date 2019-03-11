@@ -37,6 +37,7 @@ class Notify(models.Model):  # Notify放款通知
     weighting = models.FloatField(verbose_name='加权金额')
     notify_provide_sum = models.FloatField(verbose_name='_放款金额', default=0)
     notify_repayment_sum = models.FloatField(verbose_name='_还款金额', default=0)
+    notify_balance = models.FloatField(verbose_name='_在保余额', default=0)
 
     notifyor = models.ForeignKey(to='Employees', verbose_name="_创建者",
                                  on_delete=models.PROTECT, default=1,
@@ -68,6 +69,7 @@ class Provides(models.Model):  # 放款
     PROVIDE_STATUS_LIST = [(1, '在保'), (11, '解保'), (21, '代偿')]
     provide_status = models.IntegerField(verbose_name='_放款状态', choices=PROVIDE_STATUS_LIST, default=1)
     provide_repayment_sum = models.FloatField(verbose_name='_还款总额', default=0)
+    provide_balance = models.FloatField(verbose_name='_在保余额')
     providor = models.ForeignKey(to='Employees', verbose_name="_创建者",
                                  on_delete=models.PROTECT,
                                  related_name='providor_employee')

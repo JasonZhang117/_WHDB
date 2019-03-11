@@ -39,19 +39,7 @@ def pigeonhole(request, *args, **kwargs):  # 归档
             q.children.append(("%s__contains" % field, search_key))
         provide_list = provide_list.filter(q)
 
-    provide_amount = provide_list.aggregate(Sum('provide_money'))['provide_money__sum']  # 放款金额合计
-    repayment_amount = provide_list.aggregate(
-        Sum('provide_repayment_sum'))['provide_repayment_sum__sum']  # 还款金额合计
-    if provide_amount:
-        provide_amount = provide_amount
-    else:
-        provide_amount = 0
-
-    if repayment_amount:
-        repayment_amount = repayment_amount
-    else:
-        repayment_amount = 0
-    balance = provide_amount - repayment_amount
+    balance = provide_list.aggregate(Sum('provide_balance'))['provide_balance__sum']  # 在保余额
 
     provide_acount = provide_list.count()  # 信息数目
     '''分页'''

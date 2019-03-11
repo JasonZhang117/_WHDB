@@ -13,6 +13,7 @@
                 <th>加权通知金额</th>
                 <th>放款金额</th>
                 <th>还款金额</th>
+                <th>在保余额</th>
             {% endif %}
             <th>纪要编号</th>
             <th>合同状态</th>
@@ -36,6 +37,7 @@
                     <td align="right">{{ agree.agree_notify_sum }}</td>
                     <td align="right">{{ agree.agree_provide_sum }}</td>
                     <td align="right">{{ agree.agree_repayment_sum }}</td>
+                    <td align="right">{{ agree.agree_balance }}</td>
                 {% endif %}
                 <td>{{ agree.lending }}</td>
                 <td>{{ agree.get_agree_state_display }}</td>

@@ -4,6 +4,8 @@ from django.contrib.auth.decorators import login_required
 from A_dbms import models
 import json, datetime, time, re
 from django.urls import resolve, reverse
+from django.db.models import Avg, Min, Sum, Max, Count
+from django.db import transaction
 
 
 class MenuHelper(object):
@@ -150,13 +152,34 @@ def home(request):
     print("request.session.get('authority_list'):", request.session.get('authority_list'))
     print("request.session.get('menu_leaf_list'):", request.session.get('menu_leaf_list'))
 
-    job_list_d = list(request.user.job.all().values('name'))
-    job_list = []
-    for job in job_list_d:
-        job_list.append(job["name"])
+    cooperator_list = models.Cooperators.objects.all()
 
-    if '项目经理' in job_list:
-        article_list = models.Articles.objects.filter(director=request.user)
-        print("article_list:", article_list)
+    for cooperator_obj in cooperator_list:
+        cooperator_branch_flow_balance = models.Branches.objects.filter(
+            cooperator=cooperator_obj).aggregate(
+            Sum('branch_flow'))['branch_flow__sum']  # 授信银行项下，流贷余额
+        print('cooperator_branch_flow_balance:',cooperator_branch_flow_balance)
+        if cooperator_branch_flow_balance:
+            models.Cooperators.objects.filter(id=cooperator_obj.id).update(cooperator_flow=round(cooperator_branch_flow_balance, 2))
+        else:
+            models.Cooperators.objects.filter(id=cooperator_obj.id).update(cooperator_flow=0)
+        cooperator_branch_accept_balance = models.Branches.objects.filter(
+            cooperator=cooperator_obj).aggregate(
+            Sum('branch_accept'))['branch_accept__sum']  # 授信银行项下，流贷余额
+        print('cooperator_branch_accept_balance:',cooperator_branch_accept_balance)
+        if cooperator_branch_accept_balance:
+            models.Cooperators.objects.filter(id=cooperator_obj.id).update(cooperator_accept=round(cooperator_branch_accept_balance, 2))
+        else:
+            models.Cooperators.objects.filter(id=cooperator_obj.id).update(cooperator_accept=0)
+
+        cooperator_branch_back_balance = models.Branches.objects.filter(
+            cooperator=cooperator_obj).aggregate(
+            Sum('branch_back'))['branch_back__sum']  # 授信银行项下，流贷余额
+        print('cooperator_branch_back_balance:',cooperator_branch_back_balance)
+
+        if cooperator_branch_back_balance:
+            models.Cooperators.objects.filter(id=cooperator_obj.id).update(cooperator_back=round(cooperator_branch_back_balance, 2))
+        else:
+            models.Cooperators.objects.filter(id=cooperator_obj.id).update(cooperator_back=0)
 
     return render(request, 'index.html', locals())

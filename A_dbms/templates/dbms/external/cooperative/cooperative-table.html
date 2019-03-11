@@ -6,10 +6,13 @@
             <th>类型</th>
             <th>综合额度</th>
             <th>单笔限额</th>
-            <th>保函额度</th>
-            <th>单笔限额</th>
+{#            <th>保函额度</th>#}
+{#            <th>单笔限额</th>#}
             <th>合作日期</th>
             <th>到期日</th>
+            <th>流贷余额</th>
+            <th>承兑余额</th>
+            <th>保函余额</th>
         </tr>
         </thead>
         <tbody>
@@ -18,12 +21,15 @@
                 <td><a href="{% url 'dbms:cooperative_scan' cooperator_id=cooperator.id %}">{{ cooperator.name }}</a>
                 </td>
                 <td>{{ cooperator.get_cooperator_type_display }}</td>
-                <td align="right">{{ cooperator.flow_credit }}</td>
-                <td align="right">{{ cooperator.flow_limit }}</td>
-                <td align="right">{{ cooperator.back_credit }}</td>
-                <td align="right">{{ cooperator.back_limit }}</td>
-                <td>{{ cooperator.credit_date }}</td>
-                <td>{{ cooperator.due_date }}</td>
+                <td align="right">{{ cooperator.flow_credit|default_if_none:"" }}</td>
+                <td align="right">{{ cooperator.flow_limit|default_if_none:"" }}</td>
+{#                <td align="right">{{ cooperator.back_credit|default_if_none:"" }}</td>#}
+{#                <td align="right">{{ cooperator.back_limit|default_if_none:"" }}</td>#}
+                <td>{{ cooperator.credit_date|default_if_none:"" }}</td>
+                <td>{{ cooperator.due_date|default_if_none:"" }}</td>
+                <td align="right">{{ cooperator.cooperator_flow|default_if_none:"" }}</td>
+                <td align="right">{{ cooperator.cooperator_accept|default_if_none:"" }}</td>
+                <td align="right">{{ cooperator.cooperator_back|default_if_none:"" }}</td>
             </tr>
         {% endfor %}
         </tbody>

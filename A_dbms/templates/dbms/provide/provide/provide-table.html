@@ -14,15 +14,15 @@
                 <th>档案编号</th>
             {% else %}
                 <th>还款金额</th>
+                <th>在保余额</th>
             {% endif %}
-            <th>归档情况</th>
             <th>在保状态</th>
         </tr>
         </thead>
         <tbody>
         {% for provide in p_list %}
             <tr>
-                {% if PAGE_TITLE == '归档管理' or PAGE_TITLE == '逾期归档'%}
+                {% if PAGE_TITLE == '归档管理' or PAGE_TITLE == '逾期归档' %}
                     <td><a href="{% url 'dbms:pigeonhole_scan' provide_id=provide.id %}">
                         {{ provide.notify.agree.agree_num }} </a></td>
                 {% else %}
@@ -41,8 +41,8 @@
                     <td>{{ provide.file_num|default_if_none:"" }}</td>
                 {% else %}
                     <td align="right">{{ provide.provide_repayment_sum }}</td>
+                    <td align="right">{{ provide.provide_balance }}</td>
                 {% endif %}
-                <td>{{ provide.get_implement_display }}</td>
                 <td>{{ provide.get_provide_status_display }}</td>
             <tr>
         {% endfor %}

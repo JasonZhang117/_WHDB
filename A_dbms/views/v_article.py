@@ -65,19 +65,8 @@ def article(request, *args, **kwargs):  # 项目列表
         article_list = article_list.filter(q)
     article_acount = article_list.count()  # 信息数目
 
-    provide_amount = article_list.aggregate(Sum('article_provide_sum'))['article_provide_sum__sum']  # 放款金额合计
-    repayment_amount = article_list.aggregate(
-        Sum('article_repayment_sum'))['article_repayment_sum__sum']  # 还款金额合计
-    if provide_amount:
-        provide_amount = provide_amount
-    else:
-        provide_amount = 0
+    balance = article_list.aggregate(Sum('article_balance'))['article_balance__sum']  # 在保余额
 
-    if repayment_amount:
-        repayment_amount = repayment_amount
-    else:
-        repayment_amount = 0
-    balance = provide_amount - repayment_amount
 
     '''分页'''
     paginator = Paginator(article_list, 19)

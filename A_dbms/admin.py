@@ -7,7 +7,7 @@ from .usera import EmployeesAdmin
 class ArticlesAdmin(admin.ModelAdmin):
     list_display = (
         'article_num', 'custom', 'amount', 'article_provide_sum', 'director', 'article_state', 'build_date',
-        'article_date')  # 显示字段
+        'article_date','article_balance','article_state')  # 显示字段
     # list_per_page = 20  # 每页显示条目数
     search_fields = ['article_num']  # 搜索字段
     ordering = ['-build_date']  # 排序字段
@@ -46,7 +46,8 @@ admin.site.register(models.LendingWarrants)  # 抵质押反担保
 # -----------------------合同-------------------------#
 class AgreesAdmin(admin.ModelAdmin):
     list_display = ('agree_num', 'agree_typ', 'agree_amount', 'agree_term', 'agree_sign_date', 'ascertain_date',
-                    'agree_date', 'agree_notify_sum', 'agree_provide_sum', 'agree_repayment_sum')  # 显示字段
+                    'agree_date', 'agree_notify_sum', 'agree_provide_sum', 'agree_repayment_sum','agree_balance',
+                    'agree_state')  # 显示字段
     list_per_page = 20  # 每页显示条目数
     search_fields = ['agree_num']  # 搜索字段
     ordering = ['-agree_date']  # 排序字段
@@ -84,9 +85,10 @@ admin.site.register(models.Charges)  # 收费
 
 
 class ProvidesAdmin(admin.ModelAdmin):
-    list_display = ('notify', 'provide_typ', 'provide_money', 'provide_date', 'due_date', 'implement')
+    list_display = ('notify', 'provide_typ', 'provide_money', 'provide_date', 'due_date', 'implement',
+                    'provide_repayment_sum', 'provide_balance', 'provide_status')
     # list_per_page = 20  # 每页显示条目数
-    # search_fields = ['warrant_num']  # 搜索字段
+    # search_fields = ['notify']  # 搜索字段
     ordering = ['-provide_date']  # 排序字段
 
 

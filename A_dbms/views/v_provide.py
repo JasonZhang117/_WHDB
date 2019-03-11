@@ -28,7 +28,7 @@ def provide_agree(request, *args, **kwargs):  # 放款管理
     AGREE_STATE_LIST = models.Agrees.AGREE_STATE_LIST  # 筛选条件
     '''筛选'''
     agree_list = models.Agrees.objects.filter(**kwargs).select_related('lending', 'branch').order_by('-agree_num')
-    agree_list = agree_list.filter(agree_state__in=[21, 31, 41, 51], lending__summary__article_state__in=[5, 51, 61])
+    # agree_list = agree_list.filter(agree_state__in=[21, 31, 41, 51], lending__summary__article_state__in=[5, 51, 61])
     '''搜索'''
     search_key = request.GET.get('_s')
     if search_key:
@@ -40,19 +40,7 @@ def provide_agree(request, *args, **kwargs):  # 放款管理
             q.children.append(("%s__contains" % field, search_key))
         agree_list = agree_list.filter(q)
 
-    provide_amount = agree_list.aggregate(Sum('agree_provide_sum'))['agree_provide_sum__sum']  # 放款金额合计
-    repayment_amount = agree_list.aggregate(
-        Sum('agree_repayment_sum'))['agree_repayment_sum__sum']  # 还款金额合计
-    if provide_amount:
-        provide_amount = provide_amount
-    else:
-        provide_amount = 0
-
-    if repayment_amount:
-        repayment_amount = repayment_amount
-    else:
-        repayment_amount = 0
-    balance = provide_amount - repayment_amount
+    balance = agree_list.aggregate(Sum('agree_balance'))['agree_balance__sum']  # 在保余额
 
     agree_amount = agree_list.count()  # 信息数目
     '''分页'''
@@ -242,19 +230,7 @@ def notify(request, *args, **kwargs):  #
             q.children.append(("%s__contains" % field, search_key))
         notify_list = notify_list.filter(q)
 
-    provide_amount = notify_list.aggregate(Sum('notify_provide_sum'))['notify_provide_sum__sum']  # 放款金额合计
-    repayment_amount = notify_list.aggregate(
-        Sum('notify_repayment_sum'))['notify_repayment_sum__sum']  # 还款金额合计
-    if provide_amount:
-        provide_amount = provide_amount
-    else:
-        provide_amount = 0
-
-    if repayment_amount:
-        repayment_amount = repayment_amount
-    else:
-        repayment_amount = 0
-    balance = provide_amount - repayment_amount
+    balance = notify_list.aggregate(Sum('notify_balance'))['notify_balance__sum']  # 在保余额
 
     provide_acount = notify_list.count()
     '''分页'''
@@ -341,19 +317,7 @@ def provide(request, *args, **kwargs):  # 委托合同列表
             q.children.append(("%s__contains" % field, search_key))
         provide_list = provide_list.filter(q)
 
-    provide_amount = provide_list.aggregate(Sum('provide_money'))['provide_money__sum']  # 放款金额合计
-    repayment_amount = provide_list.aggregate(
-        Sum('provide_repayment_sum'))['provide_repayment_sum__sum']  # 还款金额合计
-    if provide_amount:
-        provide_amount = provide_amount
-    else:
-        provide_amount = 0
-
-    if repayment_amount:
-        repayment_amount = repayment_amount
-    else:
-        repayment_amount = 0
-    balance = provide_amount - repayment_amount
+    balance = provide_list.aggregate(Sum('provide_balance'))['provide_balance__sum']  # 在保余额
 
     provide_acount = provide_list.count()
     '''分页'''

@@ -40,19 +40,8 @@ def agree(request, *args, **kwargs):  # 委托合同列表
         for field in search_fields:
             q.children.append(("%s__contains" % field, search_key))
         agree_list = agree_list.filter(q)
-    provide_amount = agree_list.aggregate(Sum('agree_provide_sum'))['agree_provide_sum__sum']  # 放款金额合计
-    repayment_amount = agree_list.aggregate(
-        Sum('agree_repayment_sum'))['agree_repayment_sum__sum']  # 还款金额合计
-    if provide_amount:
-        provide_amount = provide_amount
-    else:
-        provide_amount = 0
 
-    if repayment_amount:
-        repayment_amount = repayment_amount
-    else:
-        repayment_amount = 0
-    balance = provide_amount - repayment_amount
+    balance = agree_list.aggregate(Sum('agree_balance'))['agree_balance__sum']  # 在保余额
 
     agree_amount = agree_list.count()  # 信息数目
     '''分页'''

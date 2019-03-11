@@ -37,6 +37,7 @@ def cooperative(request, *args, **kwargs):  # 合作机构
         for field in search_fields:
             q.children.append(("%s__contains" % field, search_key))
         cooperator_list = cooperator_list.filter(q)
+
     flow_credit_amount = cooperator_list.aggregate(Sum('flow_credit'))['flow_credit__sum']  # 综合额度
     if flow_credit_amount:
         flow_credit_amount = round(flow_credit_amount, 2)
@@ -47,6 +48,25 @@ def cooperative(request, *args, **kwargs):  # 合作机构
         back_credit_amount = round(back_credit_amount, 2)
     else:
         back_credit_amount = 0
+
+    flow_amount = cooperator_list.aggregate(Sum('cooperator_flow'))['cooperator_flow__sum']  # 流贷余额
+    accept_amount = cooperator_list.aggregate(Sum('cooperator_accept'))['cooperator_accept__sum']  # 承兑余额
+    back_amount = cooperator_list.aggregate(Sum('cooperator_back'))['cooperator_back__sum']  # 保函余额
+
+    if flow_amount:
+        flow_amount = flow_amount
+    else:
+        flow_amount = 0
+    if accept_amount:
+        accept_amount = accept_amount
+    else:
+        accept_amount = 0
+    if back_amount:
+        back_amount = back_amount
+    else:
+        back_amount = 0
+
+    balance = flow_amount + accept_amount + back_amount
 
     compensatory_amount = cooperator_list.count()  # 信息数目
 
