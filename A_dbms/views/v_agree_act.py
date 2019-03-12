@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect, HttpResponse
 from .. import models, forms
-import datetime,time, json
+import datetime, time, json
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.db.utils import IntegrityError
 from django.db import transaction
@@ -9,6 +9,7 @@ from django.db.models import Q, F
 from django.urls import resolve, reverse
 from _WHDB.views import MenuHelper
 from _WHDB.views import authority
+
 
 # ---------------------------合同签批ajax----------------------------#
 @login_required
@@ -57,8 +58,8 @@ def agree_add_ajax(request):  # 添加合同
     article_state_lending = lending_obj.summary.article_state
     print('article_state_lending:', article_state_lending)
     '''ARTICLE_STATE_LIST = ((1, '待反馈'), (2, '已反馈'), (3, '待上会'), (4, '已上会'), (5, '已签批'),
-                          (51, '已放完'), (61, '待变更'), (99, '已注销'))'''
-    if article_state_lending in [4, 5, 61]:
+                          (51, '已放款'), (52, '已放完'), (55, '已解保'), (61, '待变更'), (99, '已注销'))'''
+    if article_state_lending in [4, 5, 51, 61]:
 
         # form_agree_add = forms.AgreeAddForm(post_data, request.FILES)
         form_agree_add = forms.ArticleAgreeAddForm(post_data, request.FILES)

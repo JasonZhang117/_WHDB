@@ -10,12 +10,12 @@
             <th>放款日期</th>
             <th>到期日</th>
             {% if PAGE_TITLE == '归档管理' %}
-                <th>归档状态</th>
                 <th>档案编号</th>
             {% else %}
                 <th>还款金额</th>
                 <th>在保余额</th>
             {% endif %}
+            <th>归档状态</th>
             <th>在保状态</th>
         </tr>
         </thead>
@@ -37,12 +37,12 @@
                 <td>{{ provide.provide_date }}</td>
                 <td>{{ provide.due_date }}</td>
                 {% if PAGE_TITLE == '归档管理' %}
-                    <td>{{ provide.get_implement_display }}</td>
                     <td>{{ provide.file_num|default_if_none:"" }}</td>
                 {% else %}
                     <td align="right">{{ provide.provide_repayment_sum }}</td>
                     <td align="right">{{ provide.provide_balance }}</td>
                 {% endif %}
+                <td>{{ provide.get_implement_display }}</td>
                 <td>{{ provide.get_provide_status_display }}</td>
             <tr>
         {% endfor %}

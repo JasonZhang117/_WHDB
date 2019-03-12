@@ -664,12 +664,13 @@ def repayment_del_ajax(request):  # 删除还款信息ajax
                 '''provide_repayment_sum，更新放款记录还款情况'''
                 provide_repayment_amount = models.Repayments.objects.filter(provide=provide_obj).aggregate(
                     Sum('repayment_money'))['repayment_money__sum']  # 放款项下还款合计
-                provide_balance = round(provide_obj.provide_money - provide_repayment_amount, 2)
                 if provide_repayment_amount:
+                    provide_balance = round(provide_obj.provide_money - provide_repayment_amount, 2)
                     provide_list.update(provide_repayment_sum=round(provide_repayment_amount, 2),
                                         provide_balance=provide_balance)  # 放款，更新还款总额
                 else:
-                    provide_list.update(provide_repayment_sum=0)  # 放款，更新还款总额
+                    provide_balance = round(provide_obj.provide_money, 2)
+                    provide_list.update(provide_repayment_sum=0, provide_balance=provide_balance)  # 放款，更新还款总额
                 '''notify_repayment_sum，更新放款通知还款情况'''
                 notify_list = models.Notify.objects.filter(provide_notify=provide_obj)  # 放款通知
                 notify_obj = notify_list.first()
