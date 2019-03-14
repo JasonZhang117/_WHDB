@@ -148,7 +148,8 @@ def notify_add_ajax(request):
                     response['message'] = '加权放款通知金额合计（%s）大于合同放款限额（%s）' % (amount, amount_limit)
                 elif agree_balance_notify > amount_limit:
                     response['status'] = False
-                    response['message'] = '担保余额与通知金额合计（%s）大于合同放款限额（%s）' % (agree_balance_notify, amount_limit)
+                    response['message'] = '担保余额与通知金额合计（%s）大于合同放款限额（%s）' % (agree_balance_notify,
+                                                                           amount_limit)
                 else:
                     try:
                         with transaction.atomic():
@@ -230,10 +231,8 @@ def provide_add_ajax(request):
     notify_list = models.Notify.objects.filter(id=post_data['notify_id'])
     notify_obj = notify_list.first()
     form_provide_add = forms.FormProvideAdd(post_data)
-
     if form_provide_add.is_valid():
         form_provide_cleaned = form_provide_add.cleaned_data
-
         provide_money = round(form_provide_cleaned['provide_money'], 2)
         notify_provide_amount = models.Provides.objects.filter(notify=notify_obj).aggregate(Sum('provide_money'))
         notify_provide_sum = notify_provide_amount['provide_money__sum']
@@ -325,7 +324,6 @@ def provide_add_ajax(request):
                             cooperator=cooperator_obj).aggregate(
                             Sum('branch_accept'))['branch_accept__sum']  # 授信银行项下，流贷余额
                         cooperator_list.update(cooperator_accept=round(cooperator_branch_accept_balance, 2))
-
                     else:
                         custom_list.update(custom_back=round(custom_provide_balance, 2))  # 客户，更新保函余额
                         branch_list.update(branch_back=round(branch_provide_balance, 2))  # 放款银行，更新保函余额
@@ -333,7 +331,6 @@ def provide_add_ajax(request):
                             cooperator=cooperator_obj).aggregate(
                             Sum('branch_back'))['branch_back__sum']  # 授信银行项下，流贷余额
                         cooperator_list.update(cooperator_back=round(cooperator_branch_back_balance, 2))
-
                 response['message'] = '成功放款！'
             except Exception as e:
                 response['status'] = False
@@ -412,7 +409,7 @@ def provide_del_ajax(request):  # 删除放款ajax
                 article_list.update(article_provide_sum=round(article_provide_amount, 2),
                                     article_balance=round(article_provide_balance, 2), article_state=51)  # 项目，更新放款总额
             else:
-                article_list.update(article_provide_sum=0, article_balance=0)  # 项目，更新放款总额
+                article_list.update(article_provide_sum=0, article_balance=0, article_state=5)  # 项目，更新放款总额
             '''更新客户余额信息,custom_flow,custom_accept,custom_back'''
             '''更新银行余额信息,branch_flow,branch_accept,branch_back'''
             custom_list = models.Customes.objects.filter(article_custom=article_obj)
@@ -424,9 +421,6 @@ def provide_del_ajax(request):  # 删除放款ajax
             custom_provide_balance = models.Provides.objects.filter(
                 notify__agree__lending__summary__custom=custom_obj, provide_typ=provide_typ).aggregate(
                 Sum('provide_balance'))['provide_balance__sum']  # 客户及放款品种项下，在保余额
-            branch_provide_balance = models.Provides.objects.filter(
-                notify__agree__branch=branch_obj, provide_typ=provide_typ).aggregate(
-                Sum('provide_balance'))['provide_balance__sum']  # 放款银行及放款品种项下，在保余额
             if custom_provide_balance:
                 if provide_typ == 1:
                     custom_list.update(custom_flow=custom_provide_balance)  # 客户，更新流贷余额
@@ -441,6 +435,10 @@ def provide_del_ajax(request):  # 删除放款ajax
                     custom_list.update(custom_accept=0)  # 客户，更新承兑余额
                 else:
                     custom_list.update(custom_back=0)  # 客户，更新保函余额
+
+            branch_provide_balance = models.Provides.objects.filter(
+                notify__agree__branch=branch_obj, provide_typ=provide_typ).aggregate(
+                Sum('provide_balance'))['provide_balance__sum']  # 放款银行及放款品种项下，在保余额
             if branch_provide_balance:
                 if provide_typ == 1:
                     branch_list.update(branch_flow=branch_provide_balance)  # 放款银行，更新流贷余额
@@ -482,7 +480,6 @@ def provide_del_ajax(request):  # 删除放款ajax
                     cooperator_list.update(cooperator_back=round(cooperator_branch_back_balance, 2))
                 else:
                     cooperator_list.update(cooperator_back=0)
-
         response['message'] = '借款信息删除成功！'
     except Exception as e:
         response['status'] = False
@@ -513,7 +510,7 @@ def repayment_add_ajax(request):
             amount = round(repayment_money_sum + repayment_money, 2)
         else:
             amount = repayment_money
-        if amount > provide_obj.provide_money:
+        if amount > round(provide_obj.provide_money, 2):
             response['status'] = False
             response['message'] = '还款金额合计（%s）大于放款金额（%s）' % (amount, provide_obj.provide_money)
         else:
@@ -523,8 +520,11 @@ def repayment_add_ajax(request):
                         provide=provide_obj, repayment_money=repayment_money, repaymentor=request.user,
                         repayment_date=repayment_cleaned['repayment_date'])  # 创建还款记录
                     '''provide_repayment_sum，更新放款还款情况'''
-                    provide_balance = round(provide_obj.provide_money - amount, 2)  # 在保余额
-                    provide_list.update(provide_repayment_sum=amount, provide_balance=provide_balance)  # 放款，更新还款总额，在保余额
+                    provide_repayment_amount = models.Repayments.objects.filter(provide=provide_obj).aggregate(
+                        Sum('repayment_money'))['repayment_money__sum']  # 放款项下还款合计
+                    provide_balance = round(provide_obj.provide_money - provide_repayment_amount, 2)  # 在保余额
+                    provide_list.update(provide_repayment_sum=round(provide_repayment_amount, 2),
+                                        provide_balance=provide_balance)  # 放款，更新还款总额，在保余额
                     if provide_balance == 0:  # 在保余额为0
                         '''PROVIDE_STATUS_LIST = [(1, '在保'), (11, '解保'), (21, '代偿')]'''
                         provide_list.update(provide_status=11)  # 放款解保
@@ -601,7 +601,6 @@ def repayment_add_ajax(request):
                         Sum('provide_balance'))['provide_balance__sum']  # 放款银行及放款品种项下，在保余额
                     cooperator_list = models.Cooperators.objects.filter(branch_cooperator=branch_obj)
                     cooperator_obj = cooperator_list.first()
-
                     if provide_typ == 1:
                         custom_list.update(custom_flow=custom_provide_balance)  # 客户，更新流贷余额
                         branch_list.update(branch_flow=branch_provide_balance)  # 放款银行，更新流贷余额
@@ -653,7 +652,6 @@ def repayment_del_ajax(request):  # 删除还款信息ajax
     if provide_obj.provide_status == 1:
         try:
             with transaction.atomic():
-                repayment_m = repayment_obj.repayment_money
                 repayment_obj.delete()  # 删除还款信息
                 '''provide_repayment_sum，更新放款记录还款情况'''
                 provide_repayment_amount = models.Repayments.objects.filter(provide=provide_obj).aggregate(

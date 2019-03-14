@@ -54,7 +54,9 @@
                 <td>{{ counter.get_counter_state_display }}</td>
                 {% if PAGE_TITLE == '合同详情' %}
                     <td><a class="btn btn-primary btn-xs delCounterB">删除</a>
-                        <a class="btn btn-primary btn-xs scanCounterB">预览</a></td>
+                        <a class="btn btn-primary btn-xs" target="_blank"
+                           href="{% url 'dbms:agree_counter_preview' agree_id=agree_obj.id counter_id=counter.id %}">
+                            预览</a></td>
                 {% elif PAGE_TITLE == '风控落实' %}
                     <td>{{ counter.counter_sign_date }}</td>
                     <td>{{ counter.counter_remark }}</td>

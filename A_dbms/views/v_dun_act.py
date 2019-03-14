@@ -64,27 +64,24 @@ def compensatory_add_ajax(request):  # 代偿添加ajax
                             provide=provide_obj, repayment_money=repayment_money,
                             repayment_date=compensatory_date, repaymentor=request.user)  # 创建还款记录
 
-                        repayment_amount = models.Repayments.objects.filter(provide=provide_obj).aggregate(
-                            Sum('repayment_money'))
-                        repayment_money_sum = repayment_amount['repayment_money__sum']
-                        if repayment_money_sum:
-                            amount = round(repayment_money_sum + repayment_money, 2)
-                        else:
-                            amount = repayment_money
-                        provide_balance = round(provide_money - amount, 2)  # 在保余额
-                        provide_list.update(provide_repayment_sum=amount, provide_status=21,
+                        '''provide_repayment_sum，更新放款还款情况'''
+                        provide_repayment_amount = models.Repayments.objects.filter(provide=provide_obj).aggregate(
+                            Sum('repayment_money'))['repayment_money__sum']  # 放款项下还款合计
+                        provide_balance = round(provide_obj.provide_money - provide_repayment_amount, 2)  # 在保余额
+                        provide_list.update(provide_repayment_sum=round(provide_repayment_amount, 2),
                                             provide_balance=provide_balance)  # 放款，更新还款总额，在保余额
                         if provide_balance == 0:  # 在保余额为0
                             '''PROVIDE_STATUS_LIST = [(1, '在保'), (11, '解保'), (21, '代偿')]'''
-                            response['message'] = '代偿成功,本次放款已全部结清！'
+                            provide_list.update(provide_status=11)  # 放款解保
+                            response['message'] = '成功还款,本次放款已全部结清！'
                         else:
-                            response['message'] = '成功代偿！'
+                            response['message'] = '成功还款！'
                         '''notify_repayment_sum，更新放款通知还款情况'''
                         notify_list = models.Notify.objects.filter(provide_notify=provide_obj)  # 放款通知
                         notify_obj = notify_list.first()
                         notify_repayment_amount = \
-                            models.Repayments.objects.filter(provide__notify=notify_obj).aggregate(
-                                Sum('repayment_money'))['repayment_money__sum']  # 通知项下还款合计
+                        models.Repayments.objects.filter(provide__notify=notify_obj).aggregate(
+                            Sum('repayment_money'))['repayment_money__sum']  # 通知项下还款合计
                         notify_provide_balance = models.Provides.objects.filter(notify=notify_obj).aggregate(
                             Sum('provide_balance'))['provide_balance__sum']
                         notify_list.update(notify_repayment_sum=round(notify_repayment_amount, 2),
@@ -133,7 +130,7 @@ def compensatory_add_ajax(request):  # 代偿添加ajax
                             article_list.update(article_repayment_sum=round(article_repayment_amount, 2),
                                                 article_state=55,
                                                 article_balance=round(article_provide_balance, 2))  # 项目，更新还款总额
-                            response['message'] = '成功代偿,项目项下放款已全部结清，项目解保！'
+                            response['message'] = '成功还款,项目项下放款已全部结清，项目解保！'
                         else:
                             article_list.update(article_repayment_sum=round(article_repayment_amount, 2),
                                                 article_balance=round(article_provide_balance, 2))  # 项目，更新还款总额
@@ -153,7 +150,6 @@ def compensatory_add_ajax(request):  # 代偿添加ajax
                             Sum('provide_balance'))['provide_balance__sum']  # 放款银行及放款品种项下，在保余额
                         cooperator_list = models.Cooperators.objects.filter(branch_cooperator=branch_obj)
                         cooperator_obj = cooperator_list.first()
-
                         if provide_typ == 1:
                             custom_list.update(custom_flow=custom_provide_balance)  # 客户，更新流贷余额
                             branch_list.update(branch_flow=branch_provide_balance)  # 放款银行，更新流贷余额

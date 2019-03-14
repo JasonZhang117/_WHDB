@@ -18,7 +18,7 @@ from .v_appraisal_act import (
     article_sign_ajax, guarantee_add_ajax, guarantee_del_ajax, single_del_ajax, comment_edit_ajax,
     single_quota_ajax, lending_del_ajax, lending_order_ajax, article_change_ajax)
 # ----------------------v_agree合同管理视图--------------------#
-from .v_agree import (agree, agree_scan, agree_preview)
+from .v_agree import (agree, agree_scan, agree_preview, counter_preview)
 from .v_agree_act import (agree_add_ajax, counter_add_ajax, agree_sign_ajax, counter_del_ajax)
 # ----------------------v_warrant权证管理视图--------------------#
 from .v_warrant import (
@@ -56,7 +56,7 @@ from .v_dun_act import (
 # ----------------------v_custom客户管理视图--------------------#
 from .v_custom import (custom, custom_scan)
 from .v_custom_act import (custom_add_ajax, custom_del_ajax, custom_edit_ajax, shareholder_add_ajax, spouse_add_ajax)
-from .v_external import cooperative, cooperative_scan, soondue_cooperator, overdue_cooperator,branches
+from .v_external import cooperative, cooperative_scan, soondue_cooperator, overdue_cooperator, branches
 from .v_external_act import agreement_add_ajax
 
 # 部门、员工

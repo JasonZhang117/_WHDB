@@ -54,7 +54,7 @@ urlpatterns = [
     path('agree/<int:agree_state>/', views.agree, name='agree'),  # /dbms/article/(0-9)
     path('agree/scan/<int:agree_id>/', views.agree_scan, name='agree_scan'),
     path('agree/preview/<int:agree_id>/', views.agree_preview, name='agree_preview'),
-
+    path('agree/counter/preview/<int:agree_id>/<int:counter_id>/', views.counter_preview, name='agree_counter_preview'),
     path('agree/add/', views.agree_add_ajax, name='agree_add_ajax'),
     path('agree/sign/', views.agree_sign_ajax, name='agree_sign_ajax'),
     path('agree/counter/add/', views.counter_add_ajax, name='agree_counter_add_ajax'),

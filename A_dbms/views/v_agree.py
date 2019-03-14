@@ -174,3 +174,21 @@ def agree_preview(request, agree_id):
     agree_obj = models.Agrees.objects.get(id=agree_id)
 
     return render(request, 'dbms/agree/agree-preview.html', locals())
+
+
+# -------------------------反担保合同预览-------------------------#
+@login_required
+@authority
+def counter_preview(request, agree_id, counter_id):
+    print(request.path, '>', resolve(request.path).url_name, '>', request.user)
+    current_url_name = resolve(request.path).url_name  # 获取当前URL_NAME
+    authority_list = request.session.get('authority_list')  # 获取当前用户的所有权限
+    menu_result = MenuHelper(request).menu_data_list()
+    agree_obj = models.Agrees.objects.get(id=agree_id)
+    counter_obj = models.Counters.objects.get(id=counter_id)
+    assure_counter_obj = counter_obj.assure_counter
+    print('assure_counter_obj:', assure_counter_obj, type(assure_counter_obj))
+    custom_obj = assure_counter_obj.custome
+    print('custom_obj:', custom_obj, type(custom_obj))
+
+    return render(request, 'dbms/agree/agree-counter-preview.html', locals())
