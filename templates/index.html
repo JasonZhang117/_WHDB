@@ -67,7 +67,8 @@
                     {% endfor %}
                 </ul>
             </div>
-            <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main" style="padding-left: 1px;padding-right: 1px;"> <!--主体-->
+            <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main"
+                 style="padding-left: 1px;padding-right: 1px;"> <!--主体-->
                 {% block right-content-container %}<!--右侧内容-->
                     <h2 class="page-header"><a href="{% url 'dbms:index' %}">测试页，点击进入正式系统</a></h2>
                     <ul>
@@ -86,7 +87,6 @@
                             </li>
                         {% endfor %}
                     </ul>
-
                 {% endblock %}
             </div>
         </div>

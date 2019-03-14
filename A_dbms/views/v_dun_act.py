@@ -28,7 +28,6 @@ def compensatory_add_ajax(request):  # 代偿添加ajax
 
     provide_list = models.Provides.objects.filter(id=post_data['provide_id'])
     provide_obj = provide_list.first()
-    print('provide_obj:', provide_obj)
 
     '''PROVIDE_STATUS_LIST = [(1, '在保'), (11, '解保'), (21, '代偿')]'''
     form_compensatory_add = forms.FormCompensatoryAdd(post_data)
@@ -59,56 +58,123 @@ def compensatory_add_ajax(request):  # 代偿添加ajax
                             compensatory_capital=compensatory_capital, compensatory_interest=compensatory_interest,
                             default_interest=default_interest,
                             compensatory_amount=compensatory_amount, dun_state=1, compensator=request.user)
-                        provide_list.update(provide_status=21)
 
+                        repayment_money = compensatory_capital
                         repayment_obj = models.Repayments.objects.create(
-                            provide=provide_obj, repayment_money=compensatory_capital, repaymentor=request.user,
-                            repayment_date=compensatory_date)  # 创建还款记录
+                            provide=provide_obj, repayment_money=repayment_money,
+                            repayment_date=compensatory_date, repaymentor=request.user)  # 创建还款记录
 
-                        '''provide_repayment_sum，更新放款还款情况'''
-                        provide_list.update(provide_repayment_sum=provide_repayment_amount)  # 放款，更新还款总额
+                        repayment_amount = models.Repayments.objects.filter(provide=provide_obj).aggregate(
+                            Sum('repayment_money'))
+                        repayment_money_sum = repayment_amount['repayment_money__sum']
+                        if repayment_money_sum:
+                            amount = round(repayment_money_sum + repayment_money, 2)
+                        else:
+                            amount = repayment_money
+                        provide_balance = round(provide_money - amount, 2)  # 在保余额
+                        provide_list.update(provide_repayment_sum=amount, provide_status=21,
+                                            provide_balance=provide_balance)  # 放款，更新还款总额，在保余额
+                        if provide_balance == 0:  # 在保余额为0
+                            '''PROVIDE_STATUS_LIST = [(1, '在保'), (11, '解保'), (21, '代偿')]'''
+                            response['message'] = '代偿成功,本次放款已全部结清！'
+                        else:
+                            response['message'] = '成功代偿！'
                         '''notify_repayment_sum，更新放款通知还款情况'''
                         notify_list = models.Notify.objects.filter(provide_notify=provide_obj)  # 放款通知
                         notify_obj = notify_list.first()
                         notify_repayment_amount = \
                             models.Repayments.objects.filter(provide__notify=notify_obj).aggregate(
                                 Sum('repayment_money'))['repayment_money__sum']  # 通知项下还款合计
-                        notify_list.update(notify_repayment_sum=round(notify_repayment_amount, 2))  # 放款通知，更新还款总额
+                        notify_provide_balance = models.Provides.objects.filter(notify=notify_obj).aggregate(
+                            Sum('provide_balance'))['provide_balance__sum']
+                        notify_list.update(notify_repayment_sum=round(notify_repayment_amount, 2),
+                                           notify_balance=round(notify_provide_balance, 2))  # 放款通知，更新还款总额
                         '''agree_repayment_sum，更新合同还款信息'''
                         agree_list = models.Agrees.objects.filter(notify_agree=notify_obj)  # 合同
                         agree_obj = agree_list.first()
                         agree_repayment_amount = models.Repayments.objects.filter(
                             provide__notify__agree=agree_obj).aggregate(
                             Sum('repayment_money'))['repayment_money__sum']  # 合同项下还款合计
-                        agree_list.update(agree_repayment_sum=round(agree_repayment_amount, 2))  # 合同，更新还款总额
+                        agree_provide_balance = models.Provides.objects.filter(
+                            notify__agree=agree_obj).aggregate(Sum('provide_balance'))[
+                            'provide_balance__sum']  # 合同项下在保余额合计
+                        if round(agree_provide_balance) == 0:  # 在保余额为0
+                            '''AGREE_STATE_LIST = ((11, '待签批'), (21, '已签批'), (31, '未落实'),
+                                                (41, '已落实'), (51, '待变更'), (61, '已解保'), (99, '作废'))'''
+                            agree_list.update(agree_repayment_sum=round(agree_repayment_amount, 2), agree_state=61,
+                                              agree_balance=round(agree_provide_balance, 2))  # 合同，更新还款总额
+                            response['message'] = '成功还款,合同项下放款已全部结清，合同解保！'
+                        else:
+                            agree_list.update(agree_repayment_sum=round(agree_repayment_amount, 2),
+                                              agree_balance=round(agree_provide_balance, 2))  # 合同，更新还款总额
                         '''lending_repayment_sum，更新放款次序还款信息'''
                         lending_list = models.LendingOrder.objects.filter(agree_lending=agree_obj)  # 放款次序
                         lending_obj = lending_list.first()
                         lending_repayment_amount = models.Repayments.objects.filter(
                             provide__notify__agree__lending=lending_obj).aggregate(
                             Sum('repayment_money'))['repayment_money__sum']
-                        lending_list.update(lending_repayment_sum=round(lending_repayment_amount, 2))  # 放款次序，更新还款总额
+                        lending_provide_balance = models.Provides.objects.filter(
+                            notify__agree__lending=lending_obj).aggregate(Sum('provide_balance'))[
+                            'provide_balance__sum']
+                        lending_list.update(lending_repayment_sum=round(lending_repayment_amount, 2),
+                                            lending_balance=round(lending_provide_balance, 2))  # 放款次序，更新还款总额
                         '''article_repayment_sum，更新项目还款信息'''
                         article_list = models.Articles.objects.filter(lending_summary=lending_obj)  # 项目
                         article_obj = article_list.first()
                         article_repayment_amount = models.Repayments.objects.filter(
                             provide__notify__agree__lending__summary=article_obj).aggregate(
                             Sum('repayment_money'))['repayment_money__sum']
-                        article_list.update(article_repayment_sum=round(article_repayment_amount, 2))  # 项目，更新还款总额
+                        article_provide_balance = models.Provides.objects.filter(
+                            notify__agree__lending__summary=article_obj).aggregate(
+                            Sum('provide_balance'))['provide_balance__sum']
+                        if round(article_provide_balance) == 0:  # 在保余额为0
+                            '''ARTICLE_STATE_LIST = ((1, '待反馈'), (2, '已反馈'), (3, '待上会'), (4, '已上会'), (5, '已签批'),
+                              (51, '已放款'), (52, '已放完'), (55, '已解保'), (61, '待变更'), (99, '已注销'))'''
+                            article_list.update(article_repayment_sum=round(article_repayment_amount, 2),
+                                                article_state=55,
+                                                article_balance=round(article_provide_balance, 2))  # 项目，更新还款总额
+                            response['message'] = '成功代偿,项目项下放款已全部结清，项目解保！'
+                        else:
+                            article_list.update(article_repayment_sum=round(article_repayment_amount, 2),
+                                                article_balance=round(article_provide_balance, 2))  # 项目，更新还款总额
                         '''更新客户余额信息,custom_flow,custom_accept,custom_back'''
                         '''更新银行余额信息,branch_flow,branch_accept,branch_back'''
                         custom_list = models.Customes.objects.filter(article_custom=article_obj)
+                        custom_obj = custom_list.first()
                         branch_list = models.Branches.objects.filter(agree_branch=agree_obj)
+                        branch_obj = branch_list.first()
                         provide_typ = provide_obj.provide_typ
+                        '''PROVIDE_TYP_LIST = ((1, '流贷'), (11, '承兑'), (21, '保函'))'''
+                        custom_provide_balance = models.Provides.objects.filter(
+                            notify__agree__lending__summary__custom=custom_obj, provide_typ=provide_typ).aggregate(
+                            Sum('provide_balance'))['provide_balance__sum']  # 客户及放款品种项下，在保余额
+                        branch_provide_balance = models.Provides.objects.filter(
+                            notify__agree__branch=branch_obj, provide_typ=provide_typ).aggregate(
+                            Sum('provide_balance'))['provide_balance__sum']  # 放款银行及放款品种项下，在保余额
+                        cooperator_list = models.Cooperators.objects.filter(branch_cooperator=branch_obj)
+                        cooperator_obj = cooperator_list.first()
+
                         if provide_typ == 1:
-                            custom_list.update(custom_flow=F('custom_flow') - compensatory_capital)  # 客户，更新流贷余额
-                            branch_list.update(branch_flow=F('branch_flow') - compensatory_capital)  # 放款银行，更新流贷余额
+                            custom_list.update(custom_flow=custom_provide_balance)  # 客户，更新流贷余额
+                            branch_list.update(branch_flow=branch_provide_balance)  # 放款银行，更新流贷余额
+                            cooperator_branch_flow_balance = models.Branches.objects.filter(
+                                cooperator=cooperator_obj).aggregate(
+                                Sum('branch_flow'))['branch_flow__sum']  # 授信银行项下，流贷余额
+                            cooperator_list.update(cooperator_flow=round(cooperator_branch_flow_balance, 2))
                         elif provide_typ == 11:
-                            custom_list.update(custom_accept=F('custom_accept') - compensatory_capital)  # 客户，更新承兑余额
-                            branch_list.update(branch_accept=F('branch_accept') - compensatory_capital)  # 放款银行，更新承兑余额
+                            custom_list.update(custom_accept=custom_provide_balance)  # 客户，更新承兑余额
+                            branch_list.update(branch_accept=branch_provide_balance)  # 放款银行，更新承兑余额
+                            cooperator_branch_accept_balance = models.Branches.objects.filter(
+                                cooperator=cooperator_obj).aggregate(
+                                Sum('branch_accept'))['branch_accept__sum']  # 授信银行项下，流贷余额
+                            cooperator_list.update(cooperator_accept=round(cooperator_branch_accept_balance, 2))
                         else:
-                            custom_list.update(custom_back=F('custom_back') - compensatory_capital)  # 客户，更新保函余额
-                            branch_list.update(branch_back=F('branch_back') - compensatory_capital)  # 放款银行，更新保函余额
+                            custom_list.update(custom_back=custom_provide_balance)  # 客户，更新保函余额
+                            branch_list.update(branch_back=branch_provide_balance)  # 放款银行，更新保函余额
+                            cooperator_branch_back_balance = models.Branches.objects.filter(
+                                cooperator=cooperator_obj).aggregate(
+                                Sum('branch_back'))['branch_back__sum']  # 授信银行项下，流贷余额
+                            cooperator_list.update(cooperator_back=round(cooperator_branch_back_balance, 2))
 
                     response['message'] = '代偿添加成功！'
                 except Exception as e:

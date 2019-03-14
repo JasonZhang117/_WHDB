@@ -1,16 +1,53 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>{{ agree_obj.agree_num }}</title>
-</head>
-<body>
-<!--AGREE_TYP_LIST = ((1, '单笔'), (2, '最高额'), (3, '保函'))-->
-{% if agree_obj.agree_typ == 1 %}
-    {% include 'dbms/board/agree/maximum-agree.html' %}
-{% elif agree_obj.agree_typ == 2 %}
-    {% include 'dbms/board/agree/maximum-agree.html' %}
-{% endif %}
+{% extends 'base.html' %}
+{% block title %}{{ agree_obj.agree_num }}{% endblock %}
+{% block extra-css %}
+    <style>
+        .container {
+            width: 210mm;
+            margin-left: auto;
+            margin-right: auto;
+            font-size: 14px;
+        }
 
-</body>
-</html>
+        p {
+            text-indent: 32px;
+        }
+
+        .split {
+
+            page-break-after: always;
+
+        }
+
+        .agree-title {
+            text-align: center;
+            font-size: 22px;
+            padding-top: 50px;
+            padding-bottom: 50px;
+        }
+
+        .page-table > p {
+            padding-top: 25px;
+        }
+
+        .page-table-1 {
+            font-size: 14px;
+            padding-top: 50px;
+            padding-bottom: 50px;
+        }
+
+        .page-table-2 {
+            font-size: 14px;
+            padding-top: 50px;
+        }
+
+    </style>
+{% endblock %}
+{% block body %}
+    <!--AGREE_TYP_LIST = ((1, '单笔'), (2, '最高额'), (3, '保函'))-->
+    {% if agree_obj.agree_typ == 1 %}
+        {% include 'dbms/board/agree/entrust-single.html' %}
+    {% elif agree_obj.agree_typ == 2 %}
+        {% include 'dbms/board/agree/entrust-maximum.html' %}
+    {% endif %}
+{% endblock %}

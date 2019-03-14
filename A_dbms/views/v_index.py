@@ -35,7 +35,6 @@ def index(request):
     print("date_th_later.strftime('%Y-%m-%d'):", date_th_later.strftime('%Y-%m-%d'))
     '''
     date_th_later = datetime.date.today() + datetime.timedelta(days=30)  # 30天后的日期
-    print("date_th_later:", date_th_later)
     '''PROVIDE_STATUS_LIST = [(1, '在保'), (11, '解保'), (21, '代偿')]'''
     overdue_count = models.Provides.objects.filter(
         provide_status=1, due_date__lt=datetime.date.today()).count()  # 逾期（到期日小于今天的日期）

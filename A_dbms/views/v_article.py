@@ -64,10 +64,7 @@ def article(request, *args, **kwargs):  # 项目列表
             q.children.append(("%s__contains" % field, search_key))
         article_list = article_list.filter(q)
     article_acount = article_list.count()  # 信息数目
-
     balance = article_list.aggregate(Sum('article_balance'))['article_balance__sum']  # 在保余额
-
-
     '''分页'''
     paginator = Paginator(article_list, 19)
     page = request.GET.get('page')
@@ -152,7 +149,7 @@ def article_scan_lending(request, article_id, lending_id):  # 项目预览
     current_url_name = resolve(request.path).url_name  # 获取当前URL_NAME
     authority_list = request.session.get('authority_list')  # 获取当前用户的所有权限
     menu_result = MenuHelper(request).menu_data_list()
-    PAGE_TITLE = '放款次序'
+    PAGE_TITLE = '项目次序'
     menu_result = MenuHelper(request).menu_data_list()
     authority_list = MenuHelper(request).authority_list
 

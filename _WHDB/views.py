@@ -152,5 +152,63 @@ def home(request):
     print("request.session.get('authority_list'):", request.session.get('authority_list'))
     print("request.session.get('menu_leaf_list'):", request.session.get('menu_leaf_list'))
 
+    # cooperator_list = models.Cooperators.objects.all()
+    # for cooperator_obj in cooperator_list:
+    #     cooperator_branch_flow_balance = models.Branches.objects.filter(
+    #         cooperator=cooperator_obj).aggregate(
+    #         Sum('branch_flow'))['branch_flow__sum']  # 授信银行项下，流贷余额
+    #     if cooperator_branch_flow_balance:
+    #         cooperator_list = models.Cooperators.objects.filter(id=cooperator_obj.id)
+    #         cooperator_list.update(cooperator_flow=round(cooperator_branch_flow_balance, 2))
+    #
+    #     cooperator_branch_accept_balance = models.Branches.objects.filter(
+    #         cooperator=cooperator_obj).aggregate(
+    #         Sum('branch_accept'))['branch_accept__sum']  # 授信银行项下，流贷余额
+    #     if cooperator_branch_accept_balance:
+    #         cooperator_list = models.Cooperators.objects.filter(id=cooperator_obj.id)
+    #         cooperator_list.update(cooperator_accept=round(cooperator_branch_accept_balance, 2))
+    #
+    #     cooperator_branch_back_balance = models.Branches.objects.filter(
+    #         cooperator=cooperator_obj).aggregate(
+    #         Sum('branch_back'))['branch_back__sum']  # 授信银行项下，流贷余额
+    #     if cooperator_branch_back_balance:
+    #         cooperator_list = models.Cooperators.objects.filter(id=cooperator_obj.id)
+    #         cooperator_list.update(cooperator_back=round(cooperator_branch_back_balance, 2))
+
+    # branch_list = models.Branches.objects.all()
+    # for branch_obj in branch_list:
+    #     '''PROVIDE_TYP_LIST = ((1, '流贷'), (11, '承兑'), (21, '保函'))'''
+    #     branch_provide_1 = models.Provides.objects.filter(
+    #         notify__agree__branch=branch_obj, provide_typ=1).aggregate(
+    #         Sum('provide_balance'))['provide_balance__sum']  # 放款银行及放款品种项下，在保余额
+    #     if branch_provide_1:
+    #         branch_list = models.Branches.objects.filter(id=branch_obj.id)
+    #         branch_list.update(branch_flow=branch_provide_1)
+    #
+    #     branch_provide_11 = models.Provides.objects.filter(
+    #         notify__agree__branch=branch_obj, provide_typ=11).aggregate(
+    #         Sum('provide_balance'))['provide_balance__sum']  # 放款银行及放款品种项下，在保余额
+    #     if branch_provide_11:
+    #         branch_list = models.Branches.objects.filter(id=branch_obj.id)
+    #         branch_list.update(branch_accept=branch_provide_11)
+    #
+    #     branch_provide_21 = models.Provides.objects.filter(
+    #         notify__agree__branch=branch_obj, provide_typ=21).aggregate(
+    #         Sum('provide_balance'))['provide_balance__sum']  # 放款银行及放款品种项下，在保余额
+    #     if branch_provide_21:
+    #         branch_list = models.Branches.objects.filter(id=branch_obj.id)
+    #         branch_list.update(branch_back=branch_provide_21)
+
+    # agree_list = models.Agrees.objects.all()  # 合同
+    # for agree_obj in agree_list:
+    #     agree_provide_balance = models.Provides.objects.filter(
+    #         notify__agree=agree_obj).aggregate(Sum('provide_balance'))['provide_balance__sum']  # 合同项下在保余额合计
+    #     if agree_provide_balance:
+    #         print('agree_provide_balance:', agree_provide_balance)
+    #         agree_list_l = models.Agrees.objects.filter(id=agree_obj.id)
+    #         agree_list_l.update(agree_balance=round(agree_provide_balance, 2))  # 合同，更新放款总额
+    #     else:
+    #         agree_list_l = models.Agrees.objects.filter(id=agree_obj.id)
+    #         agree_list_l.update(agree_balance=0)  # 合同，更新放款总额
 
     return render(request, 'index.html', locals())

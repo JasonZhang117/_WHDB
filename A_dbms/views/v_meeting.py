@@ -27,6 +27,7 @@ def meeting(request, *args, **kwargs):  # 评审会
     form_meeting_add = forms.MeetingAddForm()  # 评审会添加
     '''MEETING_STATE_LIST = ((1, '待上会'), (2, '已上会'))'''
     meeting_state_list = models.Appraisals.MEETING_STATE_LIST  # 筛选条件
+    review_model_list = models.Appraisals.REVIEW_MODEL_LIST
     '''筛选'''
     meeting_list = models.Appraisals.objects.filter(**kwargs).order_by('-review_date')
     '''搜索'''

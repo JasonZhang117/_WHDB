@@ -78,7 +78,7 @@ def dun(request, *args, **kwargs):  # 代偿列表
     PAGE_TITLE = '追偿列表'
 
     dun_stage_list = models.Dun.DUN_STAGE_LIST
-    dun_list = models.Dun.objects.filter(**kwargs).order_by('-dun_amount')
+    dun_list = models.Dun.objects.filter(**kwargs).order_by('title')
     '''搜索'''
     search_key = request.GET.get('_s')
     if search_key:

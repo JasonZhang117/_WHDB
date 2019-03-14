@@ -158,7 +158,7 @@ def provide_agree_scan(request, agree_id):  # 查看放款
     today_str = str(datetime.date.today())
     form_notify_add = forms.FormNotifyAdd(initial={'notify_date': today_str})  # 添加放款通知
     form_ascertain_add = forms.FormAscertainAdd()  # 风控落实
-    from_counter_sign = forms.FormCounterSignAdd(initial={'notify_date': today_str})  # 反担保合同签订
+    from_counter_sign = forms.FormCounterSignAdd(initial={'counter_sign_date': today_str})  # 反担保合同签订
     return render(request, 'dbms/provide/provide-agree-scan.html', locals())
 
 

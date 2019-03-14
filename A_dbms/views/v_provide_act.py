@@ -24,12 +24,10 @@ def counter_sign_ajax(request):
 
     counter_list = models.Counters.objects.filter(id=post_data['counter_id'])
     counter_obj = counter_list.first()
-    print('counter_list:', counter_list)
     from_counter_sign = forms.FormCounterSignAdd(post_data)
 
     if from_counter_sign.is_valid():
         counter_sign_cleaned = from_counter_sign.cleaned_data
-        print('counter_sign_cleaned:', counter_sign_cleaned)
         '''COUNTER_STATE_LIST = ((11, '未签订'), (21, '已签订'), (31, '已作废'))'''
         if counter_obj.counter_state in [31]:
             response['status'] = False
@@ -64,7 +62,6 @@ def ascertain_add_ajax(request):
     print('post_data:', post_data)
     agree_list = models.Agrees.objects.filter(id=post_data['agree_id'])
     agree_obj = agree_list.first()
-    print('agree_obj:', agree_obj)
     '''AGREE_STATE_LIST = ((11, '待签批'), (21, '已签批'), (31, '未落实'),
                         (41, '已落实'), (51, '待变更'), (61, '已解保'), (99, '作废'))'''
     form_ascertain_add = forms.FormAscertainAdd(post_data)
@@ -170,7 +167,6 @@ def notify_add_ajax(request):
                             article_notify_amount = models.Notify.objects.filter(
                                 agree__lending__summary=article_obj).aggregate(
                                 Sum('weighting'))['weighting__sum']
-                            print('article_notify_amount:', article_notify_amount)
                             article_list.update(article_notify_sum=round(article_notify_amount, 2))
 
                         response['message'] = '成功添加放款通知！'
@@ -479,8 +475,6 @@ def provide_del_ajax(request):  # 删除放款ajax
                 else:
                     cooperator_list.update(cooperator_accept=0)
             else:
-                custom_list.update(custom_back=round(custom_provide_balance, 2))  # 客户，更新保函余额
-                branch_list.update(branch_back=round(branch_provide_balance, 2))  # 放款银行，更新保函余额
                 cooperator_branch_back_balance = models.Branches.objects.filter(
                     cooperator=cooperator_obj).aggregate(
                     Sum('branch_back'))['branch_back__sum']  # 授信银行项下，流贷余额
