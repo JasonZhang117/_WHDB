@@ -15,7 +15,7 @@
                 <td>{{ charge.get_charge_type_display }}</td>
                 <td>{{ charge.charge_amount }}</td>
                 <td>{{ charge.charge_date }}</td>
-                <td>{{ charge.charge_remark }}</td>
+                <td>{{ charge.charge_remark|default_if_none:"" }}</td>
                 <td><a class="btn btn-primary btn-xs delChargeB">删除</a></td>
             <tr>
         {% endfor %}

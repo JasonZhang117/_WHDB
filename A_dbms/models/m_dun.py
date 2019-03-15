@@ -39,13 +39,13 @@ class Dun(models.Model):  #
     dun_amount = models.FloatField(verbose_name='追偿金额', default=0)
     dun_retrieve_sun = models.FloatField(verbose_name='_回收金额', default=0)
     dun_charge_sun = models.FloatField(verbose_name='_追偿费用', default=0)
+    dun_balance = models.FloatField(verbose_name='_剩余金额', default=0)
     warrant = models.ManyToManyField(to='Warrants', verbose_name="资产线索",
                                      related_name='dun_warrant',
                                      null=True, blank=True)
     custom = models.ManyToManyField(to='Customes', verbose_name="被告人",
                                     related_name='dun_custom',
                                     null=True, blank=True)
-
     DUN_STAGE_LIST = ((1, '已代偿'), (3, '诉前'), (11, '一审'), (21, '上诉及再审'), (31, '案外之诉'),
                       (41, '执行'), (91, '结案'))
     dun_stage = models.IntegerField(verbose_name='追偿状态', choices=DUN_STAGE_LIST, default=1)
@@ -114,7 +114,7 @@ class Charge(models.Model):  #
     dun = models.ForeignKey(to='Dun', verbose_name="追偿项目", on_delete=models.PROTECT,
                             related_name='charge_dun')
 
-    CHARGE_TYPE_LIST = ((1, '律师代理费'), (11, '案件受理费'), (21, '财产保全费'), (31, '执行费'),
+    CHARGE_TYPE_LIST = ((1, '律师代理费'), (11, '案件受理费'), (21, '财产保全费'),(25, '评估费'), (31, '执行费'),
                         (41, '公告费'), (99, '其他费用'))
     charge_type = models.IntegerField(verbose_name='费用类型', choices=CHARGE_TYPE_LIST)
     charge_amount = models.FloatField(verbose_name='金额')
@@ -235,9 +235,9 @@ class Seal(models.Model):
     warrant = models.ForeignKey(to='Warrants', verbose_name="财产",
                                 on_delete=models.PROTECT,
                                 related_name='seal_warrant')
-    SEAL_STATE_LIST = ((1, '诉前保全'), (5, '首次首封'), (11, '首次轮封'), (21, '续查封'),
+    SEAL_STATE_LIST = ((1, '查询跟踪'), (3, '诉前保全'), (5, '首次首封'), (11, '首次轮封'), (21, '续查封'),
                        (51, '解除查封'), (99, '注销'))
-    seal_state = models.IntegerField(verbose_name='查封状态', choices=SEAL_STATE_LIST)
+    seal_state = models.IntegerField(verbose_name='查封状态', choices=SEAL_STATE_LIST, default=1)
     seal_date = models.DateField(verbose_name='_最近查封日', blank=True, null=True)
     due_date = models.DateField(verbose_name='_查封到期日', blank=True, null=True)
     inquiry_date = models.DateField(verbose_name='_最近查询日', blank=True, null=True)

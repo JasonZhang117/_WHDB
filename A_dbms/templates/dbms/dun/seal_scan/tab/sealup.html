@@ -2,7 +2,6 @@
     <table class="table table-bordered table-hover table-condensed active">
         <thead>
         <tr style="text-align: center">
-            <th>查封资产</th>
             <th>查封类型</th>
             <th>查封日期</th>
             <th>到期日</th>
@@ -14,7 +13,6 @@
         <tbody>
         {% for sealup in seal_obj.sealup_seal.all %}
             <tr>
-                <td>{{ sealup.seal.warrant.warrant_num }}</td>
                 <td>{{ sealup.get_sealup_type_display }}</td>
                 <td>{{ sealup.sealup_date }}</td>
                 <td>{{ sealup.due_date }}</td>

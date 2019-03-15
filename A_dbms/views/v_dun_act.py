@@ -80,8 +80,8 @@ def compensatory_add_ajax(request):  # 代偿添加ajax
                         notify_list = models.Notify.objects.filter(provide_notify=provide_obj)  # 放款通知
                         notify_obj = notify_list.first()
                         notify_repayment_amount = \
-                        models.Repayments.objects.filter(provide__notify=notify_obj).aggregate(
-                            Sum('repayment_money'))['repayment_money__sum']  # 通知项下还款合计
+                            models.Repayments.objects.filter(provide__notify=notify_obj).aggregate(
+                                Sum('repayment_money'))['repayment_money__sum']  # 通知项下还款合计
                         notify_provide_balance = models.Provides.objects.filter(notify=notify_obj).aggregate(
                             Sum('provide_balance'))['provide_balance__sum']
                         notify_list.update(notify_repayment_sum=round(notify_repayment_amount, 2),
@@ -545,7 +545,7 @@ def inquiry_add_ajax(request):
                     response['message'] = '表单信息有误！！！'
                     response['forme'] = form_evaluate_add.errors
             elif inquiry_type == 5:  # (5, '拍卖挂网')
-                form_hanging_add = forms.FormInquiryHangingAdd()  # 挂网
+                form_hanging_add = forms.FormInquiryHangingAdd(post_data)  # 挂网
                 if form_hanging_add.is_valid():
                     hanging_cleaned = form_hanging_add.cleaned_data
                     auction_date = hanging_cleaned['auction_date']
@@ -589,11 +589,11 @@ def inquiry_add_ajax(request):
                     response['message'] = '表单信息有误！！！'
                     response['forme'] = form_hanging_add.errors
             elif inquiry_type == 11:  # (11, '拍卖成交')
-                form_turn_add = forms.FormInquiryTurnAdd()  # 成交
+                form_turn_add = forms.FormInquiryTurnAdd(post_data)  # 成交
                 if form_turn_add.is_valid():
                     turn_cleaned = form_turn_add.cleaned_data
                     transaction_date = turn_cleaned['transaction_date']
-                    auction_amount = turn_cleaned['auction_date']
+                    auction_amount = turn_cleaned['auction_amount']
                     try:
                         with transaction.atomic():
                             seal_default = {
@@ -625,6 +625,8 @@ def inquiry_add_ajax(request):
                         response['status'] = False
                         response['message'] = '查询信息创建失败：%s！' % str(e)
                 else:
+                    print('form_turn_add:', form_turn_add.errors)
+
                     response['status'] = False
                     response['message'] = '表单信息有误！！！'
                     response['forme'] = form_turn_add.errors
@@ -693,6 +695,8 @@ def inquiry_add_ajax(request):
                     response['status'] = False
                     response['message'] = '查询信息创建失败：%s！' % str(e)
         else:
+            print('form_inquiry_add.errors:', form_inquiry_add.errors)
+
             response['status'] = False
             response['message'] = '表单信息有误！！！'
             response['forme'] = form_inquiry_add.errors
@@ -807,7 +811,9 @@ def charge_add_ajax(request):
                     '''dun_charge_sun，更新追偿项目追偿费用息'''
                     dun_charge_amount = models.Charge.objects.filter(
                         dun=dun_obj).aggregate(Sum('charge_amount'))['charge_amount__sum']  # 追偿项目项下费用合计
-                    dun_list.update(dun_charge_sun=round(dun_charge_amount, 2))  # 追偿项目，更新追偿费用总额
+                    dun_balance = round(dun_obj.dun_amount - dun_obj.dun_retrieve_sun + dun_charge_amount, 2)
+                    dun_list.update(dun_charge_sun=round(dun_charge_amount, 2),
+                                    dun_balance=dun_balance)  # 追偿项目，更新追偿费用总额
                 response['message'] = '成功创建追偿费用信息！'
             except Exception as e:
                 response['status'] = False
@@ -850,9 +856,12 @@ def charge_del_ajax(request):
                 dun_charge_amount = models.Charge.objects.filter(
                     dun=dun_obj).aggregate(Sum('charge_amount'))['charge_amount__sum']  # 追偿项目项下费用合计
                 if dun_charge_amount:
-                    dun_list.update(dun_charge_sun=round(dun_charge_amount, 2))  # 追偿项目，更新追偿费用总额
+                    dun_balance = round(dun_obj.dun_amount - dun_obj.dun_retrieve_sun + dun_charge_amount, 2)
+                    dun_list.update(dun_charge_sun=round(dun_charge_amount, 2),
+                                    dun_balance=dun_balance)  # 追偿项目，更新追偿费用总额
                 else:
-                    dun_list.update(dun_charge_sun=0)  # 追偿项目，更新追偿费用总额
+                    dun_balance = round(dun_obj.dun_amount - dun_obj.dun_retrieve_sun + 0, 2)
+                    dun_list.update(dun_charge_sun=0, dun_balance=dun_balance)  # 追偿项目，更新追偿费用总额
             response['message'] = '追偿费用删除成功！'
         except Exception as e:
             response['status'] = False
@@ -896,7 +905,9 @@ def retrieve_add_ajax(request):
                     '''dun_retrieve_sun，更新追偿项目案款回收'''
                     dun_retrieve_amount = models.Retrieve.objects.filter(
                         dun=dun_obj).aggregate(Sum('retrieve_amount'))['retrieve_amount__sum']  # 追偿项目项下回款合计
-                    dun_list.update(dun_retrieve_sun=round(dun_retrieve_amount, 2))  # 追偿项目，更新回款总额
+                    dun_balance = round(dun_obj.dun_amount - dun_retrieve_amount + dun_obj.dun_charge_sun, 2)
+                    dun_list.update(dun_retrieve_sun=round(dun_retrieve_amount, 2),
+                                    dun_balance=dun_balance)  # 追偿项目，更新回款总额
                 response['message'] = '成功创建案款回收信息！'
             except Exception as e:
                 response['status'] = False
@@ -937,9 +948,12 @@ def retrieve_del_ajax(request):
                 dun_retrieve_amount = models.Retrieve.objects.filter(
                     dun=dun_obj).aggregate(Sum('retrieve_amount'))['retrieve_amount__sum']  # 追偿项目项下回款合计
                 if dun_retrieve_amount:
-                    dun_list.update(dun_retrieve_sun=round(dun_retrieve_amount, 2))  # 追偿项目，更新追偿费用总额
+                    dun_balance = round(dun_obj.dun_amount - dun_retrieve_amount + dun_obj.dun_charge_sun, 2)
+                    dun_list.update(dun_retrieve_sun=round(dun_retrieve_amount, 2),
+                                    dun_balance=dun_balance)  # 追偿项目，更新追偿费用总额
                 else:
-                    dun_list.update(dun_retrieve_sun=0)  # 追偿项目，更新追偿费用总额
+                    dun_balance = round(dun_obj.dun_amount - 0 + dun_obj.dun_charge_sun, 2)
+                    dun_list.update(dun_retrieve_sun=0, dun_balance=dun_balance)  # 追偿项目，更新追偿费用总额
             response['message'] = '案款回收信息删除成功！'
         except Exception as e:
             response['status'] = False

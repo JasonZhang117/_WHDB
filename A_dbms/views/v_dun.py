@@ -122,7 +122,6 @@ def dun(request, *args, **kwargs):  # 代偿列表
         p_list = paginator.page(paginator.num_pages)
 
     form_dun_add = forms.FormDunAdd()  # 联系人
-
     return render(request, 'dbms/dun/dun.html', locals())
 
 

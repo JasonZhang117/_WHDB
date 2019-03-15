@@ -211,4 +211,10 @@ def home(request):
     #         agree_list_l = models.Agrees.objects.filter(id=agree_obj.id)
     #         agree_list_l.update(agree_balance=0)  # 合同，更新放款总额
 
+    # dun_list = models.Dun.objects.all()
+    # for dun_obj in dun_list:
+    #     dun_list_o = models.Dun.objects.filter(id=dun_obj.id)
+    #     dun_balance = round(dun_obj.dun_amount - dun_obj.dun_retrieve_sun + dun_obj.dun_charge_sun, 2)
+    #     dun_list_o.update(dun_balance=dun_balance)
+
     return render(request, 'index.html', locals())
