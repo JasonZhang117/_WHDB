@@ -217,4 +217,10 @@ def home(request):
     #     dun_balance = round(dun_obj.dun_amount - dun_obj.dun_retrieve_sun + dun_obj.dun_charge_sun, 2)
     #     dun_list_o.update(dun_balance=dun_balance)
 
+    # seal_list = models.Seal.objects.filter(dun_id=6)
+    # for seal_obj in seal_list:
+    #     seal_list_l = models.Seal.objects.filter(id=seal_obj.id)
+    #     seal_list_l.update(seal_state=21)
+    #     sealup_list = models.Sealup.objects.filter(seal=seal_obj).update(sealup_type=21)
+
     return render(request, 'index.html', locals())

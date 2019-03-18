@@ -114,7 +114,7 @@ class Charge(models.Model):  #
     dun = models.ForeignKey(to='Dun', verbose_name="追偿项目", on_delete=models.PROTECT,
                             related_name='charge_dun')
 
-    CHARGE_TYPE_LIST = ((1, '律师代理费'), (11, '案件受理费'), (21, '财产保全费'),(25, '评估费'), (31, '执行费'),
+    CHARGE_TYPE_LIST = ((1, '律师代理费'), (11, '案件受理费'), (21, '财产保全费'), (25, '评估费'), (31, '执行费'),
                         (41, '公告费'), (99, '其他费用'))
     charge_type = models.IntegerField(verbose_name='费用类型', choices=CHARGE_TYPE_LIST)
     charge_amount = models.FloatField(verbose_name='金额')
@@ -264,8 +264,8 @@ class Sealup(models.Model):
     SEALUP_TYPE_LIST = ((1, '诉前保全'), (5, '首次首封'), (11, '首次轮封'), (21, '续查封'),
                         (51, '解除查封'), (99, '注销'))
     sealup_type = models.IntegerField(verbose_name='查封类型', choices=SEALUP_TYPE_LIST, default=1)
-    sealup_date = models.DateField(verbose_name='查封日期')
-    due_date = models.DateField(verbose_name='到期日')
+    sealup_date = models.DateField(verbose_name='查封日期', blank=True, null=True)
+    due_date = models.DateField(verbose_name='到期日', blank=True, null=True)
     sealup_remark = models.CharField(verbose_name='备注', max_length=64, null=True, blank=True)
 
     sealupor = models.ForeignKey(to='Employees', verbose_name="创建人", on_delete=models.PROTECT,

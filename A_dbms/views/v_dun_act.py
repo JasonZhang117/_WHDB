@@ -420,18 +420,26 @@ def sealup_add_ajax(request):  # 修改项目ajax
                         'seal_remark': sealup_remark, 'sealor': request.user}
                     seal_obj, created = models.Seal.objects.update_or_create(
                         dun=dun_obj, warrant=warrant_obj, defaults=seal_default)
-                    sealup_default = {
-                        'seal': seal_obj, 'sealup_type': sealup_type, 'sealup_date': sealup_date,
-                        'due_date': due_date, 'sealup_remark': sealup_remark,
-                        'sealupor': request.user}
-                    sealup_obj, created = models.Sealup.objects.update_or_create(
-                        seal=seal_obj, sealup_type=sealup_type, sealup_date=sealup_date, defaults=sealup_default)
+                    if sealup_type in [1, 5, 11, 21]:
+                        sealup_default = {
+                            'seal': seal_obj, 'sealup_type': sealup_type, 'sealup_date': sealup_date,
+                            'due_date': due_date, 'sealup_remark': sealup_remark,
+                            'sealupor': request.user}
+                        sealup_obj, created = models.Sealup.objects.update_or_create(
+                            seal=seal_obj, sealup_type=sealup_type, sealup_date=sealup_date, defaults=sealup_default)
+                        warrant_list.update(auction_state=2)
+                    else:
+                        sealup_default = {
+                            'seal': seal_obj, 'sealup_type': sealup_type, 'sealup_remark': sealup_remark,
+                            'sealupor': request.user}
+                        sealup_obj, created = models.Sealup.objects.update_or_create(
+                            seal=seal_obj, sealup_type=sealup_type, defaults=sealup_default)
+                        warrant_list.update(auction_state=1)
                     '''SEALUP_TYPE_LIST = ((1, '诉前保全'), (5, '首次首封'), (11, '首次轮封'), (21, '续查封'),
                         (51, '解除查封'), (99, '注销'))'''
                     '''AUCTION_STATE_LIST = (
                         (1, '正常'), (2, '查封'), (3, '评估'), (5, '挂网'), (11, '成交'), 
                         (21, '流拍'), (31, '回转'), (99, '注销'))'''
-                    warrant_list.update(auction_state=2)
                 if created:
                     response['message'] = '成功创建查封信息！'
                 else:
@@ -523,6 +531,18 @@ def inquiry_add_ajax(request):
                             inquiry_obj, created = models.Inquiry.objects.update_or_create(
                                 seal__warrant=warrant_obj, inquiry_type=inquiry_type, evaluate_date=evaluate_date,
                                 defaults=inquiry_default)
+                            evaluate_default = {
+                                'warrant': warrant_obj,
+                                'evaluate_state': 41,
+                                'evaluate_value': evaluate_value,
+                                'evaluate_date': evaluate_date,
+                                'evaluate_explain': inquiry_detail,
+                                'evaluator': request.user}
+                            '''EVALUATE_STATE_LIST = ((1, '机构评估'), (11, '机构预估'), (21, '综合询价'), 
+                            (31, '购买成本'), (41, '拍卖评估'))'''
+                            evaluate_obj, created = models.Evaluate.objects.update_or_create(
+                                warrant=warrant_obj, evaluate_state=41, evaluate_date=evaluate_date,
+                                defaults=evaluate_default)
                             ''' INQUIRY_TYPE_LIST = (
                             (1, '日常跟踪'), (3, '拍卖评估'), (5, '拍卖挂网'), (11, '拍卖成交'), (21, '拍卖流拍'),
                             (31, '执行回转'), (99, '注销'))'''

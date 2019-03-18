@@ -84,7 +84,7 @@ class Houses(models.Model):  # 房产
     HOUSE_APP_LIST = ((1, '住宅'), (11, '商业'), (21, '办公'), (31, '公寓'), (41, '生产性工业用房'),
                       (42, '非生产性工业用房'),
                       (51, '科研'), (52, '车间'), (53, '消防通道'), (61, '车库'), (71, '仓储'),
-                      (81, '在建工程'),(91, '其他'), (99, '期房'))
+                      (81, '在建工程'), (91, '其他'), (99, '期房'))
     house_app = models.IntegerField(verbose_name='房产用途', choices=HOUSE_APP_LIST, default=1)
     house_area = models.FloatField(verbose_name='建筑面积')
     house_name = models.CharField(verbose_name='楼盘名称', max_length=64, null=True, blank=True)
@@ -386,7 +386,7 @@ class Evaluate(models.Model):  # 评估
     warrant = models.ForeignKey(to='Warrants', verbose_name="权证",
                                 on_delete=models.PROTECT,
                                 related_name='evaluate_warrant')
-    EVALUATE_STATE_LIST = ((1, '机构评估'), (11, '机构预估'), (21, '综合询价'), (31, '购买成本'))
+    EVALUATE_STATE_LIST = ((1, '机构评估'), (11, '机构预估'), (21, '综合询价'), (31, '购买成本'), (41, '拍卖评估'))
     evaluate_state = models.IntegerField(verbose_name='评估方式', choices=EVALUATE_STATE_LIST, default=1)
     evaluate_value = models.FloatField(verbose_name='评估价值')
     evaluate_date = models.DateField(verbose_name='评估日期')
