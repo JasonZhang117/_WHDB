@@ -244,7 +244,7 @@ class Seal(models.Model):
     seal_remark = models.CharField(verbose_name='备注', max_length=64, blank=True, null=True)
 
     sealor = models.ForeignKey(to='Employees', verbose_name="创建人",
-                               on_delete=models.PROTECT, default=1,
+                               on_delete=models.PROTECT,
                                related_name='sealor_employee')
     sealor_date = models.DateField(verbose_name='创建日期', default=datetime.date.today)
 

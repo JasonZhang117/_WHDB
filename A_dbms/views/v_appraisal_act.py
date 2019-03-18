@@ -12,6 +12,7 @@ from django.urls import resolve, reverse
 from _WHDB.views import MenuHelper
 from _WHDB.views import authority
 
+
 # -----------------------------反担保措施添加ajax------------------------#
 @login_required
 @authority
@@ -266,7 +267,7 @@ def guarantee_del_ajax(request):  # 反担保人删除ajax
 @authority
 def comment_edit_ajax(request):  # 修改项目ajax
     print(request.path, '>', resolve(request.path).url_name, '>', request.user)
-    response = {'status': True, 'message': None, 'obj_num': None, 'forme': None, }
+    response = {'status': True, 'message': None, 'forme': None, }
 
     post_data_str = request.POST.get('postDataStr')
     post_data = json.loads(post_data_str)
@@ -282,16 +283,11 @@ def comment_edit_ajax(request):  # 修改项目ajax
             cleaned_data = form.cleaned_data
             expert_id = post_data['expert_id']
             try:
-                default = {
-                    'summary_id': article_id, 'expert_id': expert_id, 'comment_type': cleaned_data['comment_type'],
-                    'concrete': cleaned_data['concrete'], 'comment_buildor': request.user}
-                comment, created = models.Comments.objects.update_or_create(
-                    summary_id=article_id, expert_id=expert_id, defaults=default)
-                response['obj_id'] = comment.id
-                if created:
-                    response['message'] = '成功创建评审意见！'
-                else:
-                    response['message'] = '成功更新评审意见！'
+                today_str = str(datetime.date.today())
+                comment_obj = models.Comments.objects.filter(summary_id=article_id, expert_id=expert_id).update(
+                    comment_type=cleaned_data['comment_type'],
+                    concrete=cleaned_data['concrete'], comment_buildor=request.user, comment_date=today_str)
+                response['message'] = '成功创建评审意见！'
             except Exception as e:
                 response['status'] = False
                 response['message'] = '评审意见修改失败：%s！' % str(e)
@@ -470,7 +466,8 @@ def article_sign_ajax(request):
             if form.is_valid():
                 cleaned_data = form.cleaned_data
                 article_expert_amount = aritcle_obj.expert.all().count()
-                article_comment_amount = aritcle_obj.comment_summary.all().count()
+                '''COMMENT_TYPE_LIST = ((0, ''), (1, '同意'), (2, '复议'), (3, '不同意'))'''
+                article_comment_amount = aritcle_obj.comment_summary.exclude(comment_type=0).count()  # 发表意见的评委数
                 if article_expert_amount == article_comment_amount:
                     renewal = cleaned_data['renewal']
                     augment = cleaned_data['augment']
@@ -481,7 +478,6 @@ def article_sign_ajax(request):
                     lending_amount = models.LendingOrder.objects.filter(
                         summary__id=article_id).aggregate(Sum('order_amount'))
                     lending_amount = lending_amount['order_amount__sum']
-                    print('lending_amount:', lending_amount)
                     if single_quota_amount == article_amount and lending_amount == article_amount:
                         try:
                             with transaction.atomic():

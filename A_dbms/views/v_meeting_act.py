@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect, HttpResponse
 from .. import models
 from .. import forms
-import datetime, time,json
+import datetime, time, json
 from django.contrib.auth.decorators import login_required
 from django.db.models import Sum, Max, Count
 from django.db.models import Q, F
@@ -124,7 +124,6 @@ def meeting_article_add_ajax(request):  # 添加参评项目ajax
             meeting_article_cleaned = form_meeting_article_add.cleaned_data
             article_add_list = meeting_article_cleaned['article']
             meeting_article_add_list = models.Articles.objects.filter(id__in=article_add_list)
-            print('meeting_article_add_list:', meeting_article_add_list)
             try:
                 with transaction.atomic():
                     for article_obj in meeting_article_add_list:
@@ -170,6 +169,7 @@ def meeting_article_del_ajax(request):  # 取消项目上会ajax
     if article_obj.article_state in [1, 2, 3]:
         try:
             with transaction.atomic():
+                article_obj.comment_summary.all().delete()  # 删除评委意见
                 article_obj.expert.clear()  # 清除评审委员
                 article_lis.update(article_state=2)  # 更新项目状态
                 meeting_obj.article.remove(article_lis[0])  # 取消项目上会
@@ -189,7 +189,6 @@ def meeting_article_del_ajax(request):  # 取消项目上会ajax
 @authority
 def meeting_allot_add_ajax(request):  # 分配评审委员
     print(request.path, '>', resolve(request.path).url_name, '>', request.user)
-
     response = {'status': True, 'message': None, 'forme': None, }
 
     post_data_str = request.POST.get('postDataStr')
@@ -207,11 +206,12 @@ def meeting_allot_add_ajax(request):  # 分配评审委员
             meeting_allot_cleaned = form_meeting_allot.cleaned_data
             expert_add_list = meeting_allot_cleaned['expert']
             expert_add_obj_list = models.Experts.objects.filter(id__in=expert_add_list)
-            print('expert_add_list:', expert_add_list)
             try:
                 with transaction.atomic():
                     for expert_obj in expert_add_obj_list:
                         article_obj.expert.add(expert_obj)
+                        models.Comments.objects.create(summary=article_obj, expert=expert_obj,
+                                                       comment_buildor=request.user)
                 response['message'] = '成功为项目：%s分配评委！' % article_obj.article_num
             except Exception as e:
                 response['status'] = False
@@ -248,6 +248,7 @@ def meeting_allot_del_ajax(request):  # 取消项目上会ajax
     if article_obj.article_state in [1, 2, 3]:
         try:
             with transaction.atomic():
+                models.Comments.objects.filter(summary=article_obj, expert=expert_obj).delete()
                 article_obj.expert.remove(expert_obj)  # 撤销评委
             response['message'] = '评委：%s撤销成功' % expert_obj.name
         except Exception as e:

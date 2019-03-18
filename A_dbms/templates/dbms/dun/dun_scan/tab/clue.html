@@ -12,52 +12,22 @@
         </tr>
         </thead>
         <tbody id="dun-clue-tb">
-        {% for warrant in dun_obj.warrant.all %}
-            <tr warrant-nid="{{ warrant.id }}" warrant-num="{{ warrant.warrant_num }}">
-                <td><a href="{% url 'dbms:dun_seal_scan' dun_id=dun_obj.id warrant_id=warrant.id %}">
-                    {{ warrant.warrant_num }}</a></td><!--资产-->
-                <td>
-                    {% for seal in dun_obj.seal_dun.all %}
-                        {% if seal.warrant.id == warrant.id %}
-                            {{ seal.get_seal_state_display }}
-                        {% endif %}
-                    {% endfor %}
-                </td><!--查封状态-->
-                <td>
-                    {% for seal in dun_obj.seal_dun.all %}
-                        {% if seal.warrant.id == warrant.id %}
-                            {{ seal.seal_date|default_if_none:"" }}
-                        {% endif %}
-                    {% endfor %}
-                </td><!--最近查封日-->
-                <td>
-                    {% for seal in dun_obj.seal_dun.all %}
-                        {% if seal.warrant.id == warrant.id %}
-                            {{ seal.due_date|default_if_none:"" }}
-                        {% endif %}
-                    {% endfor %}
-                </td><!--查封到期日-->
-                <td>
-                    {% for seal in dun_obj.seal_dun.all %}
-                        {% if seal.warrant.id == warrant.id %}
-                            {{ seal.inquiry_date|default_if_none:"" }}
-                        {% endif %}
-                    {% endfor %}
-                </td><!--最近查询日-->
-                <td>
-                    {% for seal in dun_obj.seal_dun.all %}
-                        {% if seal.warrant.id == warrant.id %}
-                            {{ seal.seal_remark|default_if_none:""  }}
-                        {% endif %}
-                    {% endfor %}
-                </td><!--备注-->
-                {% if PAGE_TITLE == '追偿管理' %}
-                    <td>
-                        <a class="btn btn-primary btn-xs sealUpB">查封</a>
-                        <a class="btn btn-primary btn-xs inquiryB">查询</a>
-                        <a class="btn btn-primary btn-xs delClueB">删除</a>
-                    </td>
-                {% endif %}
+        {% for seal in dun_obj.seal_dun.all %}
+            <tr warrant-nid="{{ seal.warrant.id }}" warrant-num="{{ seal.warrant.warrant_num }}">
+                <td><a href="{% url 'dbms:dun_seal_scan' dun_id=dun_obj.id warrant_id=seal.warrant.id %}">
+                    {{ seal.warrant.warrant_num }}</a></td><!--资产-->
+                <td>{{ seal.get_seal_state_display }}</td><!--查封状态-->
+                <td>{{ seal.seal_date|default_if_none:"" }}</td><!--最近查封日-->
+                <td>{{ seal.due_date|default_if_none:"" }}</td><!--查封到期日-->
+                <td>{{ seal.inquiry_date|default_if_none:"" }}</td><!--最近查询日-->
+                <td>{{ seal.seal_remark|default_if_none:"" }}</td><!--备注-->
+                    {% if PAGE_TITLE == '追偿管理' %}
+                        <td>
+                            <a class="btn btn-primary btn-xs sealUpB">查封</a>
+                            <a class="btn btn-primary btn-xs inquiryB">查询</a>
+                            <a class="btn btn-primary btn-xs delClueB">删除</a>
+                        </td>
+                    {% endif %}
             <tr>
         {% endfor %}
         </tbody>

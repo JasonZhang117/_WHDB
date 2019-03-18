@@ -56,7 +56,6 @@ def agree_add_ajax(request):  # 添加合同
     print('post_data:', post_data)
     lending_obj = models.LendingOrder.objects.get(id=post_data['lending'])
     article_state_lending = lending_obj.summary.article_state
-    print('article_state_lending:', article_state_lending)
     '''ARTICLE_STATE_LIST = ((1, '待反馈'), (2, '已反馈'), (3, '待上会'), (4, '已上会'), (5, '已签批'),
                           (51, '已放款'), (52, '已放完'), (55, '已解保'), (61, '待变更'), (99, '已注销'))'''
     if article_state_lending in [4, 5, 51, 61]:
@@ -80,7 +79,6 @@ def agree_add_ajax(request):  # 添加合同
                 order_amount_up = order_amount * (1 + cooperator_up_scale)  # 最高允许的合同金额
             else:
                 order_amount_up = order_amount
-            print('order_amount_up:', order_amount_up)
             amount_limit = agree_add_cleaned['amount_limit']
             ###判断合同金额情况：
             if agree_amount > order_amount_up:
@@ -111,9 +109,7 @@ def agree_add_ajax(request):  # 添加合同
             ###评审会编号拼接
             '''成武担[2016]018④W6-1'''
             agree_num_prefix = "成武担[%s]%s%s" % (agree_year, agree_order, guarantee_typ)
-            print('agree_num_prefix', agree_num_prefix)
             agree_num = "%sW%s-1" % (agree_num_prefix, agree_copies)
-            print('agree_num', agree_num)
             try:
                 agree_obj = models.Agrees.objects.create(
                     agree_num=agree_num, num_prefix=agree_num_prefix, lending=lending_obj,

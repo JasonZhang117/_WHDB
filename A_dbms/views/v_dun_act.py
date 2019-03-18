@@ -247,11 +247,12 @@ def clue_add_ajax(request):  #
             clue_cleaned = form_clue_add.cleaned_data
             clue_add_list = clue_cleaned['warrant']
             dun_clue_add_list = models.Warrants.objects.filter(id__in=clue_add_list)
-            print('dun_clue_add_list:', dun_clue_add_list)
             try:
                 with transaction.atomic():
                     for warrant_obj in dun_clue_add_list:
                         dun_obj.warrant.add(warrant_obj)
+                        models.Seal.objects.create(dun=dun_obj, warrant=warrant_obj, seal_state=1,
+                                                   sealor=request.user, )
                     '''AUCTION_STATE_LIST = (
                         (1, '正常'), (2, '查封'), (3, '评估'), (5, '挂网'), (11, '成交'), (21, '流拍'), 
                         (31, '回转'), (99, '注销'))'''
@@ -284,19 +285,14 @@ def clue_del_ajax(request):  # 取消项目上会ajax
     dun_obj = models.Dun.objects.get(id=post_data['dun_id'])
     warrant_list = models.Warrants.objects.filter(id=post_data['warrant_id'])
     warrant_obj = warrant_list.first()
-
     seal_list = models.Seal.objects.filter(dun=dun_obj, warrant=warrant_obj)
-    if seal_list:
-        response['status'] = False
-        response['message'] = '财产线索已有查封信息，无法删除！！！'
-        result = json.dumps(response, ensure_ascii=False)
-        return HttpResponse(result)
 
     '''DUN_STAGE_LIST = ((1, '起诉'), (11, '判决'), (21, '执行'), (31, '和解结案'), (41, '终止执行'), (99, '注销'))'''
     dun_stage = dun_obj.dun_stage
     if not dun_stage == 99:
         try:
             with transaction.atomic():
+                seal_list.delete()
                 dun_obj.warrant.remove(warrant_obj)  # 删除财产线索
                 '''AUCTION_STATE_LIST = (
                     (1, '正常'), (2, '查封'), (3, '评估'), (5, '挂网'), (11, '成交'), (21, '流拍'), 

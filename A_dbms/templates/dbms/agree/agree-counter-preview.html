@@ -54,7 +54,7 @@
         {% if counter_obj.counter_typ == 1 %}<!--企业保证-->
             {% include 'dbms/agree/agree_board/counter-single-sure-c.html' %}
         {% endif %}
-    {% elif agree_obj.agree_typ == 2 %}
+    {% elif agree_obj.agree_typ == 2 %}<!--个人保证-->
         {% include 'dbms/agree/agree_board/entrust-maximum.html' %}
     {% endif %}
 {% endblock %}

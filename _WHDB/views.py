@@ -223,4 +223,23 @@ def home(request):
     #     seal_list_l.update(seal_state=21)
     #     sealup_list = models.Sealup.objects.filter(seal=seal_obj).update(sealup_type=21)
 
+    # dun_list = models.Dun.objects.all()
+    # for dun_obj in dun_list:
+    #     for warrant_obj in dun_obj.warrant.all():
+    #         seal_list = models.Seal.objects.filter(dun=dun_obj, warrant=warrant_obj)
+    #         if not seal_list:
+    #             models.Seal.objects.create(dun=dun_obj, warrant=warrant_obj, seal_state=1,
+    #                                        sealor=request.user, )
+    # article_list = models.Articles.objects.all()
+    # for article_obj in article_list:
+    #     for expert_obj in article_obj.expert.all():
+    #         comment_list = models.Comments.objects.filter(summary=article_obj, expert=expert_obj)
+    #         if not comment_list:
+    #             models.Comments.objects.create(summary=article_obj, expert=expert_obj,
+    #                                            comment_buildor=request.user)
+
+    # aritcle_obj = models.Articles.objects.get(article_num='众诚瑞丰-201903-1')
+    # article_comment_amount = aritcle_obj.comment_summary.exclude(comment_type=0).count()
+    # print(aritcle_obj, article_comment_amount)
+
     return render(request, 'index.html', locals())
