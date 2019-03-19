@@ -12,6 +12,7 @@ from django.urls import resolve
 from _WHDB.views import MenuHelper
 from _WHDB.views import authority
 
+
 # -----------------------搜索客户-------------------------#
 # @login_required
 def search_custom_ajax(request):
@@ -79,10 +80,10 @@ def guarantee_warrant_ajax(request):
     sure_typ = int(post_data['sure_typ'])
     '''SURE_TYP_LIST = (
         (1, '企业保证'), (2, '个人保证'),
-        (11, '房产抵押'), (12, '土地抵押'), (13, '动产抵押'), (15, '车辆抵押'),
-        (21, '房产顺位'), (22, '土地顺位'),
-        (31, '应收质押'), (32, '股权质押'), (33, '票据质押'),
-        (41, '合格证监管'), (42, '房产监管'), (43, '土地监管'),
+        (11, '房产抵押'), (12, '土地抵押'), (13, '动产抵押'), (14, '在建工程抵押'), (15, '车辆抵押'),
+        (21, '房产顺位'), (22, '土地顺位'), (23, '在建工程顺位'),(24, '动产顺位'),
+        (31, '应收质押'), (32, '股权质押'), (33, '票据质押'), (34, '动产质押'), (39, '其他权利质押'),
+        (42, '房产监管'), (43, '土地监管'), (44, '票据监管'), (47, '动产监管'), (49, '其他监管'),
         (51, '股权预售'), (52, '房产预售'), (53, '土地预售'))'''
     if sure_typ == 1:  # 企业
         search_typ = 1
@@ -92,7 +93,9 @@ def guarantee_warrant_ajax(request):
         search_typ = [1, 2]
     elif sure_typ in [12, 22, 43, 53]:  # 土地
         search_typ = 5
-    elif sure_typ == 13:  # 动产
+    elif sure_typ in [14, 23]:  # 在建工程
+        search_typ = 6
+    elif sure_typ in [13, 24, 34, 47]:  # 动产
         search_typ = 51
     elif sure_typ == 15:  # 车辆
         search_typ = 41
@@ -100,15 +103,15 @@ def guarantee_warrant_ajax(request):
         search_typ = 11
     elif sure_typ in [32, 51]:  # 股权
         search_typ = 21
-    elif sure_typ == 33:  # 票据
+    elif sure_typ in [33, 44]:  # 票据
         search_typ = 31
-    elif sure_typ == 41:  # 合格证
-        search_typ = ''
+    elif sure_typ in [39, 49]:  # 其他
+        search_typ = 55
     else:
         search_typ = ''
     '''WARRANT_TYP_LIST = [
-        (1, '房产'), (2, '房产包'), (5, '土地'), (11, '应收'), (21, '股权'),
-        (31, '票据'), (41, '车辆'), (51, '动产'), (99, '他权')]'''
+        (1, '房产'), (2, '房产包'), (5, '土地'), (6, '在建工程'), (11, '应收账款'),
+        (21, '股权'), (31, '票据'), (41, '车辆'), (51, '动产'), (55, '其他'), (99, '他权')]'''
     search_key = post_data['search_guarantee']
     print('search_key:', search_key, 'sure_typ:', sure_typ)
     if sure_typ in [1, 2]:

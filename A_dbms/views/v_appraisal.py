@@ -98,24 +98,28 @@ def appraisal_scan_lending(request, article_id, lending_id):  # 评审项目预�
     article_obj = models.Articles.objects.get(id=article_id)
     lending_obj = models.LendingOrder.objects.get(id=lending_id)
     '''ARTICLE_STATE_LIST = ((1, '待反馈'), (2, '已反馈'), (3, '待上会'), (4, '已上会'), (5, '已签批'),
-                          (51, '已放完'), (61, '待变更'), (99, '已注销'))'''
+                          (51, '已放款'), (52, '已放完'), (55, '已解保'), (61, '待变更'), (99, '已注销'))'''
     '''SURE_TYP_LIST = (
         (1, '企业保证'), (2, '个人保证'),
-        (11, '房产抵押'), (12, '土地抵押'), (13, '动产抵押'), (15, '车辆抵押'),
-        (21, '房产顺位'), (22, '土地顺位'),
-        (31, '应收质押'), (32, '股权质押'), (33, '票据质押'),
-        (41, '合格证监管'), (42, '房产监管'), (43, '土地监管'),
+        (11, '房产抵押'), (12, '土地抵押'), (13, '动产抵押'), (14, '在建工程抵押'), (15, '车辆抵押'),
+        (21, '房产顺位'), (22, '土地顺位'), (23, '在建工程顺位'), (24, '动产顺位'),
+        (31, '应收质押'), (32, '股权质押'), (33, '票据质押'), (34, '动产质押'), (39, '其他权利质押'),
+        (42, '房产监管'), (43, '土地监管'), (44, '票据监管'), (47, '动产监管'), (49, '其他监管'),
         (51, '股权预售'), (52, '房产预售'), (53, '土地预售'))'''
     '''WARRANT_TYP_LIST = [
-        (1, '房产'), (5, '土地'), (11, '应收'), (21, '股权'),
-        (31, '票据'), (41, '车辆'), (51, '动产'), (99, '他权')]'''
-    SURE_LIST = [1, 2]
-    HOUSE_LIST = [11, 21, 42, 52]
-    GROUND_LIST = [12, 22, 43, 53]
-    RECEIVABLE_LIST = [31]
-    STOCK_LIST = [32, 51]
-    CHATTEL_LIST = [13]
-    DRAFT_LIST = [33]
+        (1, '房产'), (2, '房产包'), (5, '土地'), (6, '在建工程'), (11, '应收账款'),
+        (21, '股权'), (31, '票据'), (41, '车辆'), (51, '动产'), (55, '其他'), (99, '他权')]'''
+    SURE_LIST = [1, 2]  # 保证类
+    HOUSE_LIST = [11, 21, 42, 52]  # 房产类
+    GROUND_LIST = [12, 22, 43, 53]  # 土地类
+    COUNSTRUCT_LIST = [14, 23]  # 在建工程类
+    RECEIVABLE_LIST = [31, ]  # 应收账款类
+    STOCK_LIST = [32, 51]  # 股权类
+    DRAFT_LIST = [33, 44]  # 票据类
+    VEHICLE_LIST = [15, ]  # 车辆类
+    CHATTEL_LIST = [13, 24, 34, 47]  # 动产类
+    OTHER_LIST = [39, 49]  # 其他类
+
     form_lendingcustoms_c_add = models.Customes.objects.exclude(
         id=article_obj.custom.id).filter(genre=1).values_list('id', 'name')
     form_lendingcustoms_p_add = models.Customes.objects.exclude(
@@ -125,10 +129,13 @@ def appraisal_scan_lending(request, article_id, lending_id):  # 评审项目预�
     # form_lendingcustoms_p_add = forms.LendingCustomsPForm()
     form_lendinghouse_add = forms.LendingHouseForm()  # 房产
     form_lendingground_add = forms.LendingGroundForm()  # 土地
+    form_lendingconstruct_add = forms.LendingConstructForm()  # 在建工程
     form_lendinggreceivable_add = forms.LendinReceivableForm()  # 应收账款
     form_lendingstock_add = forms.LendinStockForm()  # 股权
-    form_lendingchattel_add = forms.LendinChattelForm()  # 动产
     form_lendingdraft_add = forms.LendinDraftForm()  # 票据
+    form_lendingvehicle_add = forms.LendinVehicleForm()  # 车辆
+    form_lendingchattel_add = forms.LendinChattelForm()  # 动产
+    form_lendingother_add = forms.LendinOtherForm()  # 其他
 
     return render(request, 'dbms/appraisal/appraisal-scan-lending.html', locals())
 

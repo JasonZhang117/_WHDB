@@ -1,0 +1,17 @@
+<div id="form_counter_other" class="extend" style="display: none">
+
+    <div class="form-group"><!--其他资产-->
+        <label for="id_chattel" class="col-sm-3 control-label">其他资产：</label>
+        <div class="col-sm-9">
+            <select name="other" class="form-control" multiple="" id="id_other" required="">
+                {% for other in warrants_o_lending_list %}
+                    <option value="{{ other.0 }}">{{ other.1 }}</option>
+                {% endfor %}
+            </select></div>
+        <label id="e_other" class="pull-right"></label>
+    </div>
+
+</div>
+
+
+

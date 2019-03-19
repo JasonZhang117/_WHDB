@@ -6,10 +6,10 @@
 
     function bindDelGuaranteeB() {
         $('.guarantee-tb').on('click', '.delGuaranteeB', function () {
-            console.log("bindDelGuaranteeB")
+            console.log("bindDelGuaranteeB");
             delSureTypNid = $(this).parent().parent().attr('sure-typ-nid');
             delGuaranteeNid = $(this).parent().parent().attr('guarantee-nid');
-            console.log(delSureTypNid, delGuaranteeNid)
+            console.log(delSureTypNid, delGuaranteeNid);
             $('#delSureTypId').val(delSureTypNid);
             $('#delGuaranteeId').val(delGuaranteeNid);
             $('#delGuaranteeModal').modal('show');
@@ -26,7 +26,7 @@
                 postData[n] = v;
             });
             var postDataStr = JSON.stringify(postData);
-            console.log(postDataStr)
+            console.log(postDataStr);
             $.ajax({
                 url: '/dbms/appraisal/guarantee/del/',
                 type: 'POST',

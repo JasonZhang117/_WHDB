@@ -7,7 +7,7 @@ from .usera import EmployeesAdmin
 class ArticlesAdmin(admin.ModelAdmin):
     list_display = (
         'article_num', 'custom', 'amount', 'article_provide_sum', 'director', 'article_state', 'build_date',
-        'article_date','article_balance','article_state')  # 显示字段
+        'article_date', 'article_balance', 'article_state')  # 显示字段
     # list_per_page = 20  # 每页显示条目数
     search_fields = ['article_num']  # 搜索字段
     ordering = ['-build_date']  # 排序字段
@@ -38,7 +38,16 @@ admin.site.register(models.Appraisals, AppraisalsAdmin)  # 评审会
 admin.site.register(models.SingleQuota)  # 单项额度
 admin.site.register(models.Comments)  # 评审意见
 admin.site.register(models.LendingOrder)  # 发放次序
-admin.site.register(models.LendingSures)  # 反担保
+
+
+class LendingSuresAdmin(admin.ModelAdmin):
+    list_display = ('lending', 'sure_typ',)  # 显示字段
+    # list_per_page = 20  # 每页显示条目数
+    # search_fields = ['lending']  # 搜索字段
+    # ordering = ['num']  # 排序字段
+
+
+admin.site.register(models.LendingSures, LendingSuresAdmin)  # 反担保
 admin.site.register(models.LendingCustoms)  # 保证反担保
 admin.site.register(models.LendingWarrants)  # 抵质押反担保
 
@@ -46,7 +55,7 @@ admin.site.register(models.LendingWarrants)  # 抵质押反担保
 # -----------------------合同-------------------------#
 class AgreesAdmin(admin.ModelAdmin):
     list_display = ('agree_num', 'agree_typ', 'agree_amount', 'agree_term', 'agree_sign_date', 'ascertain_date',
-                    'agree_date', 'agree_notify_sum', 'agree_provide_sum', 'agree_repayment_sum','agree_balance',
+                    'agree_date', 'agree_notify_sum', 'agree_provide_sum', 'agree_repayment_sum', 'agree_balance',
                     'agree_state')  # 显示字段
     list_per_page = 20  # 每页显示条目数
     search_fields = ['agree_num']  # 搜索字段
@@ -73,11 +82,13 @@ admin.site.register(models.Hypothecs)  # 他权
 admin.site.register(models.Houses)  # 房产
 admin.site.register(models.HouseBag)  # 房产包
 admin.site.register(models.Grounds)  # 土地
+admin.site.register(models.Construction)  # 在建工程
 admin.site.register(models.Stockes)  # 股权
 admin.site.register(models.Receivable)  # 应收账款
 admin.site.register(models.Draft)  # 票据
 admin.site.register(models.DraftExtend)  # 票据列表
 admin.site.register(models.Chattel)  # 动产
+admin.site.register(models.Others)  # 动产
 admin.site.register(models.Evaluate)  # 出入库
 admin.site.register(models.Storages)  # 评估
 # -----------------------放款-------------------------#

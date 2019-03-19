@@ -52,9 +52,12 @@
     AGREE_TYP_LIST = ((1, '单笔'), (2, '最高额'), (3, '保函'))-->
     {% if agree_obj.agree_typ == 1 %} <!--单笔-->
         {% if counter_obj.counter_typ == 1 %}<!--企业保证-->
-            {% include 'dbms/agree/agree_board/counter-single-sure-c.html' %}
+            {% include 'dbms/agree/agree_board/counter-s-x.html' %}
+            {% elif counter_obj.counter_typ == 2 %}<!--个人保证-->
+            {% include 'dbms/agree/agree_board/counter-s-g.html' %}
+
+            {% elif counter_obj.counter_typ == 11 %}<!--房产抵押-->
+            {% include 'dbms/agree/agree_board/counter-s-d.html' %}
         {% endif %}
-    {% elif agree_obj.agree_typ == 2 %}<!--个人保证-->
-        {% include 'dbms/agree/agree_board/entrust-maximum.html' %}
     {% endif %}
 {% endblock %}

@@ -1,0 +1,17 @@
+<div id="form_counter_receivable" class="extend" style="display: none">
+
+    <div class="form-group"><!--反担保票据-->
+        <label for="id_draft" class="col-sm-3 control-label">反担保票据：</label>
+        <div class="col-sm-9">
+            <select name="draft" class="form-control" multiple="" id="id_draft" required="">
+                {% for draft in warrants_d_lending_list %}
+                    <option value="{{ draft.0 }}">{{ draft.1 }}</option>
+                {% endfor %}
+            </select></div>
+        <label id="e_draft" class="pull-right"></label>
+    </div>
+
+</div>
+
+
+

@@ -15,6 +15,9 @@
                     <a href="{% url 'dbms:warrant_scan' warrant_id=warrant.id %}">{{ warrant.warrant_num }}</a>
                 </td>
                 <td>{{ warrant.get_warrant_typ_display }}</td>
+                {#WARRANT_TYP_LIST = [#}
+                {#(1, '房产'), (2, '房产包'), (5, '土地'), (6, '在建工程'), (11, '应收账款'),#}
+                {#(21, '股权'), (31, '票据'), (41, '车辆'), (51, '动产'), (55, '其他'), (99, '他权')]#}
                 <td>
                     {% if warrant.warrant_typ == 1 %}
                         {{ warrant.house_warrant.house_locate }}
@@ -30,6 +33,8 @@
                         {{ warrant.vehicle_warrant.frame_num }}
                     {% elif warrant.warrant_typ == 51 %}
                         {{ warrant.chattel_warrant.chattel_detail }}
+                    {% elif warrant.warrant_typ == 55 %}
+                        {{ warrant.other_warrant.other_detail }}
                     {% endif %}
                 </td>
                 <td>{{ warrant.get_warrant_state_display }}</td>

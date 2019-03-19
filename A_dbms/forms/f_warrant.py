@@ -46,7 +46,7 @@ class HouseAddEidtForm(dform.ModelForm):
                    'house_name': dform.TextInput(attrs={'class': 'form-control', 'placeholder': '楼盘名称'})}
 
 
-# -----------------------房产包modelform1-------------------------#
+# -----------------------房产包modelform2-------------------------#
 class HouseBagAddEidtForm(dform.ModelForm):
     housebag_locate = fields.CharField(
         label="房产坐落", label_suffix="：", max_length=64,
@@ -59,7 +59,7 @@ class HouseBagAddEidtForm(dform.ModelForm):
                    'housebag_area': dform.NumberInput(attrs={'class': 'form-control', 'placeholder': '面积（平方米'})}
 
 
-# -----------------------土地modelform2-------------------------#
+# -----------------------土地modelform5-------------------------#
 class GroundAddEidtForm(dform.ModelForm):
     ground_locate = fields.CharField(
         label="土地坐落", label_suffix="：", max_length=64,
@@ -71,6 +71,20 @@ class GroundAddEidtForm(dform.ModelForm):
         fields = ['ground_app', 'ground_area']
         widgets = {'ground_app': dform.Select(attrs={'class': 'form-control'}),
                    'ground_area': dform.NumberInput(attrs={'class': 'form-control'})}
+
+
+# -----------------------在建工程modelform6-------------------------#
+class ConstructionAddForm(dform.ModelForm):
+    coustruct_locate = fields.CharField(
+        label="工程地址", label_suffix="：", max_length=64,
+        widget=widgets.TextInput(
+            attrs={'class': 'form-control', 'placeholder': '工程地址'}))
+
+    class Meta:
+        model = models.Construction
+        fields = ['coustruct_app', 'coustruct_area']
+        widgets = {'coustruct_app': dform.Select(attrs={'class': 'form-control'}),
+                   'coustruct_area': dform.NumberInput(attrs={'class': 'form-control'})}
 
 
 # ------------------------应收帐款FormReceivable11--------------------------#
@@ -165,6 +179,23 @@ class FormChattel(dform.ModelForm):  # 动产FormChattel51
     def __init__(self, *args, **kwargs):
         super(FormChattel, self).__init__(*args, **kwargs)
         self.fields['chattel_owner'].widget.choices = models.Customes.objects.values_list('id', 'name').order_by('name')
+
+
+# ------------------------其他FormOthers55--------------------------#
+class FormOthers(dform.ModelForm):  #
+    other_owner = fields.IntegerField(
+        label='所有权人', label_suffix="：", widget=widgets.Select(attrs={'class': 'form-control'}))
+
+    class Meta:
+        model = models.Others
+        fields = ['other_typ', 'other_detail']
+        widgets = {'other_typ': dform.Select(attrs={'class': 'form-control'}),
+                   'other_detail': dform.Textarea(
+                       attrs={'class': 'form-control', 'rows': '3', 'placeholder': '详细情况'})}
+
+    def __init__(self, *args, **kwargs):
+        super(FormOthers, self).__init__(*args, **kwargs)
+        self.fields['other_owner'].widget.choices = models.Customes.objects.values_list('id', 'name').order_by('name')
 
 
 # -----------------------HypothecsAddEidtForm他权-------------------------#

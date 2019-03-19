@@ -19,6 +19,13 @@
             var selected_sure_typ = $('#id_sure_typ').val();
             console.log(selected_sure_typ);
             $('.guarantee-extend').hide();
+            {#    SURE_TYP_LIST = (#}
+            {#(1, '企业保证'), (2, '个人保证'),#}
+            {#(11, '房产抵押'), (12, '土地抵押'), (13, '动产抵押'), (14, '在建工程抵押'), (15, '车辆抵押'),#}
+            {#(21, '房产顺位'), (22, '土地顺位'), (23, '在建工程顺位'),(24, '动产顺位'),#}
+            {#(31, '应收质押'), (32, '股权质押'), (33, '票据质押'), (34, '动产质押'), (39, '其他权利质押'),#}
+            {#(42, '房产监管'), (43, '土地监管'), (44, '票据监管'), (47, '动产监管'), (49, '其他监管'),#}
+            {#(51, '股权预售'), (52, '房产预售'), (53, '土地预售'))#}
             switch (selected_sure_typ) {
                 case ('1'):{#<--企业保证-->#}
                     $('#form_lendingcustoms_c_add').show();
@@ -50,17 +57,44 @@
                 case ('53'):{#<--土地预售-->#}
                     $('#form_lendingground_add').show();
                     break;
+                case ('14'):{#<--在建工程抵押-->#}
+                    $('#form_lendingconstruct_add').show();
+                    break;
+                case ('23'):{#<--在建工程顺位-->#}
+                    $('#form_lendingconstruct_add').show();
+                    break;
                 case ('31'):{#<--应收质押-->#}
                     $('#form_lendinggreceivable_add').show();
                     break;
                 case ('32'):{#<--股权质押-->#}
                     $('#form_lendingstock_add').show();
                     break;
+                case ('15'):{#<--车辆抵押-->#}
+                    $('#form_lendingvehicle_add').show();
+                    break;
                 case ('13'): {#<--动产抵押-->#}
+                    $('#form_lendingchattel_add').show();
+                    break;
+                case ('24'): {#<--动产抵押-->#}
+                    $('#form_lendingchattel_add').show();
+                    break;
+                case ('34'): {#<--动产质押-->#}
+                    $('#form_lendingchattel_add').show();
+                    break;
+                case ('47'): {#<--动产监管-->#}
                     $('#form_lendingchattel_add').show();
                     break;
                 case ('33'): {#<--票据质押-->#}
                     $('#form_lendingdraft_add').show();
+                    break;
+                case ('44'): {#<--票据质押-->#}
+                    $('#form_lendingdraft_add').show();
+                    break;
+                case ('39'): {#<--其他质押-->#}
+                    $('#form_lendingother_add').show();
+                    break;
+                case ('49'): {#<--其他监管-->#}
+                    $('#form_lendingother_add').show();
                     break;
                 default:
                     $('.guarantee-extend').hide()

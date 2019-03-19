@@ -11,6 +11,7 @@ from _WHDB.views import MenuHelper
 from django.views import View
 from _WHDB.views import authority
 
+
 # -----------------------权证列表-------------------------#
 @login_required
 @authority
@@ -23,24 +24,24 @@ def warrant(request, *args, **kwargs):  # 房产列表
     add_warrant = '添加权证'
     warrant_typ_n = 0
     '''WARRANT_STATE_LIST = (
-           (1, '未入库'), (2, '已入库'), (6, '无需入库'), (11, '续抵出库'), (21, '已借出'), 
-           (31, '解保出库'), (99, '已注销'))'''
+        (1, '未入库'), (2, '已入库'), (6, '无需入库'), (11, '续抵出库'), (21, '已借出'), (31, '解保出库'),
+        (99, '已注销'))'''
     ''' WARRANT_TYP_LIST = [
-        (1, '房产'), (5, '土地'), (11, '应收'), (21, '股权'),
-        (31, '票据'), (41, '车辆'), (51, '动产'), (99, '他权')]'''
+        (1, '房产'), (2, '房产包'), (5, '土地使用权'), (6, '在建工程'), (11, '应收账款'),
+        (21, '股权'), (31, '票据'), (41, '车辆'), (51, '动产'), (55, '其他'), (99, '他权')]'''
     '''模态框'''
     form_warrant_add = forms.WarrantAddForm()  # 权证添加
     form_house_add_edit = forms.HouseAddEidtForm()  # 房产添加
     form_ground_add_edit = forms.GroundAddEidtForm()  # 土地添加
+    form_construct_add_edit = forms.ConstructionAddForm()  # 在建工程
     form_receivable_add_edit = forms.FormReceivable()  # 应收添加
     form_stockes_add_edit = forms.FormStockes()  # 21股权添加
     form_draft_add_eidt = forms.FormDraft()  # 31票据添加
     form_vehicle_add_eidt = forms.FormVehicle()  # 41车辆添加
     form_chattel_add_eidt = forms.FormChattel()  # 51动产添加
+    form_other_add_eidt = forms.FormOthers()  # 55其他添加
     form_hypothecs_add_eidt = forms.HypothecsAddEidtForm()  # 99他权添加
-    '''WARRANT_TYP_LIST = [
-        (1, '房产'), (5, '土地'), (11, '应收'), (21, '股权'),
-        (31, '票据'), (41, '车辆'), (51, '动产'), (99, '他权')]'''
+
     warrant_typ_list = models.Warrants.WARRANT_TYP_LIST  # 筛选条件
     '''筛选'''
     warrant_list = models.Warrants.objects.filter(**kwargs).order_by('warrant_num')
@@ -78,10 +79,10 @@ def warrant_scan(request, warrant_id):  # house_scan房产预览
     PAGE_TITAL = '权证预览'
     warrant_obj = models.Warrants.objects.get(id=warrant_id)
     warrant_typ_n = warrant_obj.warrant_typ
-    HOUSE_GROUND_TYP_LIST = [1, 5]
+    HOUSE_GROUND_TYP_LIST = [1, 5, 6]
     '''WARRANT_TYP_LIST = [
-                    (1, '房产'), (2, '房产'), (5, '土地'), (11, '应收'), (21, '股权'),
-                    (31, '票据'), (41, '车辆'), (51, '动产'), (99, '他权')]'''
+        (1, '房产'), (2, '房产包'), (5, '土地'), (6, '在建工程'), (11, '应收账款'),
+        (21, '股权'), (31, '票据'), (41, '车辆'), (51, '动产'), (55, '其他'), (99, '他权')]'''
     if warrant_typ_n == 99:
         agree_lending_obj = warrant_obj.ypothec_warrant.agree.lending
         warrants_lending_list = models.Warrants.objects.filter(

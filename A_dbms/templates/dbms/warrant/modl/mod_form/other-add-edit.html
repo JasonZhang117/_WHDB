@@ -1,0 +1,37 @@
+<div id="form_other_add_eidt" class="warrant-extend" style="display: none">
+
+
+    <div class="form-group"><!--所有者-->
+        <label for="id_other_owner"
+               class="col-sm-3 control-label">{{ form_other_add_eidt.other_owner.label }}：</label>
+        <div class="col-sm-9">
+            <select name="other_owner" id="id_other_owner" required="" class="form-control search-id">
+                <option value="" selected="">---------</option>
+            </select>
+        </div>
+        <label id="e_other_owner" class="pull-right">{{ form_other_add_eidt.other_owner.errors }}</label>
+    </div>
+
+    <!--
+    <div class="form-group">
+        <label for="id_chattel_owner"
+               class="col-sm-3 control-label">{{ form_chattel_add_eidt.chattel_owner.label }}：</label>
+        <div class="col-sm-9">{{ form_chattel_add_eidt.chattel_owner }}</div>
+        <label id="e_chattel_owner" class="pull-right">{{ form_chattel_add_eidt.chattel_owner.errors }}</label>
+    </div>动产所有人-->
+
+    <div class="form-group"><!--动产类型-->
+        <label for="id_other_typ"
+               class="col-sm-3 control-label">{{ form_other_add_eidt.other_typ.label }}：</label>
+        <div class="col-sm-9">{{ form_other_add_eidt.other_typ }}</div>
+        <label id="e_other_typ" class="pull-right">{{ form_other_add_eidt.other_typ.errors }}</label>
+    </div>
+
+    <div class="form-group"><!--动产描述-->
+        <label for="id_other_detail"
+               class="col-sm-3 control-label">{{ form_other_add_eidt.other_detail.label }}：</label>
+        <div class="col-sm-9">{{ form_other_add_eidt.other_detail }}</div>
+        <label id="e_other_detail" class="pull-right">{{ form_other_add_eidt.other_detail.errors }}</label>
+    </div>
+
+</div>

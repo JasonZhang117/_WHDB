@@ -70,38 +70,50 @@ def agree_scan(request, agree_id):  # 查看合同
     COUNTER_TYP_CUSTOM = [1, 2]
     '''COUNTER_TYP_LIST = (
         (1, '企业担保'), (2, '个人保证'),
-        (11, '房产抵押'), (12, '土地抵押'), (13, '动产抵押'), (15, '车辆抵押'),
-        (31, '应收质押'), (32, '股权质押'), (33, '票据质押'),
+        (11, '房产抵押'), (12, '土地抵押'), (13, '动产抵押'), (14, '在建工程抵押'), (15, '车辆抵押'),
+        (31, '应收质押'), (32, '股权质押'), (33, '票据质押'), (34, '动产质押'),
+        (41, '其他权利质押'),
         (51, '股权预售'), (52, '房产预售'), (53, '土地预售'))'''
     agree_obj = models.Agrees.objects.get(id=agree_id)
     agree_lending_obj = agree_obj.lending
 
     warrant_agree_list = models.Warrants.objects.filter(counter_warrant__counter__agree=agree_obj)
     '''WARRANT_TYP_LIST = [
-        (1, '房产'), (2, '土地'), (11, '应收'), (21, '股权'),
-        (31, '票据'), (41, '车辆'), (51, '动产'), (99, '他权')]'''
+        (1, '房产'), (2, '房产包'), (5, '土地'), (6, '在建工程'), (11, '应收账款'),
+        (21, '股权'), (31, '票据'), (41, '车辆'), (51, '动产'), (55, '其他'), (99, '他权')]'''
     custom_c_lending_list = models.Customes.objects.filter(
         lending_custom__sure__lending=agree_lending_obj, genre=1).exclude(
-        counter_custome__counter__agree=agree_obj).values_list('id', 'name')
+        counter_custome__counter__agree=agree_obj).values_list('id', 'name').order_by('name')
     custom_p_lending_list = models.Customes.objects.filter(
         lending_custom__sure__lending=agree_lending_obj, genre=2).exclude(
-        counter_custome__counter__agree=agree_obj).values_list('id', 'name')
+        counter_custome__counter__agree=agree_obj).values_list('id', 'name').order_by('name')
     warrants_h_lending_list = models.Warrants.objects.filter(
-        lending_warrant__sure__lending=agree_lending_obj, warrant_typ=1).exclude(
-        counter_warrant__counter__agree=agree_obj).values_list('id', 'warrant_num')
+        lending_warrant__sure__lending=agree_lending_obj, warrant_typ__in=[1, 5]).exclude(
+        counter_warrant__counter__agree=agree_obj).values_list('id', 'warrant_num').order_by('warrant_num')
     warrants_g_lending_list = models.Warrants.objects.filter(
         lending_warrant__sure__lending=agree_lending_obj, warrant_typ=5).exclude(
-        counter_warrant__counter__agree=agree_obj).values_list('id', 'warrant_num')
+        counter_warrant__counter__agree=agree_obj).values_list('id', 'warrant_num').order_by('warrant_num')
+    warrants_6_lending_list = models.Warrants.objects.filter(
+        lending_warrant__sure__lending=agree_lending_obj, warrant_typ=6).exclude(
+        counter_warrant__counter__agree=agree_obj).values_list('id', 'warrant_num').order_by('warrant_num')
     warrants_r_lending_list = models.Warrants.objects.filter(
         lending_warrant__sure__lending=agree_lending_obj, warrant_typ=11).exclude(
-        counter_warrant__counter__agree=agree_obj).values_list('id', 'warrant_num')
+        counter_warrant__counter__agree=agree_obj).values_list('id', 'warrant_num').order_by('warrant_num')
     warrants_s_lending_list = models.Warrants.objects.filter(
         lending_warrant__sure__lending=agree_lending_obj, warrant_typ=21).exclude(
-        counter_warrant__counter__agree=agree_obj).values_list('id', 'warrant_num')
+        counter_warrant__counter__agree=agree_obj).values_list('id', 'warrant_num').order_by('warrant_num')
+    warrants_d_lending_list = models.Warrants.objects.filter(
+        lending_warrant__sure__lending=agree_lending_obj, warrant_typ=31).exclude(
+        counter_warrant__counter__agree=agree_obj).values_list('id', 'warrant_num').order_by('warrant_num')
+    warrants_v_lending_list = models.Warrants.objects.filter(
+        lending_warrant__sure__lending=agree_lending_obj, warrant_typ=41).exclude(
+        counter_warrant__counter__agree=agree_obj).values_list('id', 'warrant_num').order_by('warrant_num')
     warrants_c_lending_list = models.Warrants.objects.filter(
         lending_warrant__sure__lending=agree_lending_obj, warrant_typ=51).exclude(
         counter_warrant__counter__agree=agree_obj).values_list('id', 'warrant_num').order_by('warrant_num')
-
+    warrants_o_lending_list = models.Warrants.objects.filter(
+        lending_warrant__sure__lending=agree_lending_obj, warrant_typ=55).exclude(
+        counter_warrant__counter__agree=agree_obj).values_list('id', 'warrant_num').order_by('warrant_num')
     from_counter = forms.AddCounterForm()
 
     form_agree_sign_data = {'agree_sign_date': str(datetime.date.today())}
@@ -123,8 +135,9 @@ def agree_scan_counter(request, agree_id, counter_id):  # 查看合同
 
     '''COUNTER_TYP_LIST = (
         (1, '企业担保'), (2, '个人保证'),
-        (11, '房产抵押'), (12, '土地抵押'), (13, '动产抵押'), (15, '车辆抵押'),
-        (31, '应收质押'), (32, '股权质押'), (33, '票据质押'),
+        (11, '房产抵押'), (12, '土地抵押'), (13, '动产抵押'), (14, '在建工程抵押'), (15, '车辆抵押'),
+        (31, '应收质押'), (32, '股权质押'), (33, '票据质押'), (34, '动产质押'),
+        (41, '其他权利质押'),
         (51, '股权预售'), (52, '房产预售'), (53, '土地预售'))'''
 
     agree_obj = models.Agrees.objects.get(id=agree_id)
@@ -186,9 +199,21 @@ def counter_preview(request, agree_id, counter_id):
     menu_result = MenuHelper(request).menu_data_list()
     agree_obj = models.Agrees.objects.get(id=agree_id)
     counter_obj = models.Counters.objects.get(id=counter_id)
-    assure_counter_obj = counter_obj.assure_counter
-    print('assure_counter_obj:', assure_counter_obj, type(assure_counter_obj))
-    custom_obj = assure_counter_obj.custome
-    print('custom_obj:', custom_obj, type(custom_obj))
+    '''COUNTER_TYP_LIST = (
+        (1, '企业担保'), (2, '个人保证'),
+        (11, '房产抵押'), (12, '土地抵押'), (13, '动产抵押'), (14, '在建工程抵押'), (15, '车辆抵押'),
+        (31, '应收质押'), (32, '股权质押'), (33, '票据质押'), (34, '动产质押'),
+        (41, '其他权利质押'),
+        (51, '股权预售'), (52, '房产预售'), (53, '土地预售'))'''
+    if counter_obj.counter_typ in [1, 2]:
+        assure_counter_obj = counter_obj.assure_counter
+        custom_obj = assure_counter_obj.custome
+
+    MORTGAGE_COUNTER_TYP_LIST = [11, 12, 13, 15, ]
+
+    '''WARRANT_TYP_LIST = [
+        (1, '房产'), (2, '房产包'), (5, '土地'), (6, '在建工程'), (11, '应收账款'),
+        (21, '股权'), (31, '票据'), (41, '车辆'), (51, '动产'), (55, '其他'), (99, '他权')]'''
+    OWER_SHIP_LIST = [1, 2, 5, ]
 
     return render(request, 'dbms/agree/agree-counter-preview.html', locals())

@@ -1,0 +1,38 @@
+<div id="form_construct_add_edit" class="warrant-extend" style="display: none">
+    <div class="form-group"><!--土地坐落-->
+        <label for="id_coustruct_locate" class="col-sm-3 control-label">{{ form_construct_add_edit.coustruct_locate.label }}：
+        </label>
+        <div class="col-sm-9">
+            {{ form_construct_add_edit.coustruct_locate }}
+        </div>
+        <label id="e_coustruct_locate" class="pull-right">
+            {{ form_construct_add_edit.coustruct_locate.errors }}
+        </label>
+    </div>
+
+
+    <div class="form-group"><!--土地用途-->
+        <label for="id_coustruct_app" class="col-sm-3 control-label">
+            {{ form_construct_add_edit.coustruct_app.label }}：
+        </label>
+        <div class="col-sm-9">
+            {{ form_construct_add_edit.coustruct_app }}
+        </div>
+        <label id="e_coustruct_app" class="pull-right">
+            {{ form_construct_add_edit.coustruct_app.errors }}
+        </label>
+    </div>
+
+    <div class="form-group"><!--土地面积（平方米)-->
+        <label for="id_coustruct_area" class="col-sm-3 control-label">
+            {{ form_construct_add_edit.coustruct_area.label }}：
+        </label>
+        <div class="col-sm-9">
+            {{ form_construct_add_edit.coustruct_area }}
+        </div>
+        <label id="e_coustruct_area" class="pull-right">
+            {{ form_construct_add_edit.coustruct_area.errors }}
+        </label>
+    </div>
+
+</div>

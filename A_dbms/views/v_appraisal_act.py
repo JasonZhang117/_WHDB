@@ -30,14 +30,14 @@ def guarantee_add_ajax(request):  # 反担保措施添加ajax
 
     form_lendingsures = forms.LendingSuresForm(post_data)
     '''ARTICLE_STATE_LIST = ((1, '待反馈'), (2, '已反馈'), (3, '待上会'), (4, '已上会'), (5, '已签批'),
-                          (51, '已放完'), (61, '待变更'), (99, '已注销'))'''
+                          (51, '已放款'), (52, '已放完'), (55, '已解保'), (61, '待变更'), (99, '已注销'))'''
     article_state = lending_obj.summary.article_state
     ''' SURE_TYP_LIST = (
         (1, '企业保证'), (2, '个人保证'),
-        (11, '房产抵押'), (12, '土地抵押'), (13, '动产抵押'),  (15, '车辆抵押'),
-        (21, '房产顺位'), (22, '土地顺位'),
-        (31, '应收质押'), (32, '股权质押'), (33, '票据质押'),
-        (41, '合格证监管'), (42, '房产监管'), (43, '土地监管'),
+        (11, '房产抵押'), (12, '土地抵押'), (13, '动产抵押'), (14, '在建工程抵押'), (15, '车辆抵押'),
+        (21, '房产顺位'), (22, '土地顺位'), (23, '在建工程顺位'), (24, '动产顺位'),
+        (31, '应收质押'), (32, '股权质押'), (33, '票据质押'), (34, '动产质押'), (39, '其他权利质押'),
+        (42, '房产监管'), (43, '土地监管'), (44, '票据监管'), (47, '动产监管'), (49, '其他监管'),
         (51, '股权预售'), (52, '房产预售'), (53, '土地预售'))'''
     if article_state in [1, 2, 3, 4, 61]:
         if form_lendingsures.is_valid():
@@ -48,7 +48,6 @@ def guarantee_add_ajax(request):  # 反担保措施添加ajax
                 form_lendingcustoms_c_add = forms.LendingCustomsCForm(post_data)
                 if form_lendingcustoms_c_add.is_valid():
                     lendingcustoms_c_clean = form_lendingcustoms_c_add.cleaned_data
-                    print('lendingcustoms_c_clean:', lendingcustoms_c_clean)
                     try:
                         with transaction.atomic():
                             lendingsure_obj, created = models.LendingSures.objects.update_or_create(
@@ -114,6 +113,23 @@ def guarantee_add_ajax(request):  # 反担保措施添加ajax
                 except Exception as e:
                     response['status'] = False
                     response['message'] = '反担保设置失败：%s' % str(e)
+            elif sure_typ in [14, 23]:  # 在建工程
+                form_lendingconstruct_add = forms.LendingConstructForm(post_data)  # 在建工程
+                if form_lendingconstruct_add.is_valid():
+                    lendingwarrant_clean = form_lendingconstruct_add.cleaned_data
+                try:
+                    with transaction.atomic():
+                        lendingsure_obj, created = models.LendingSures.objects.update_or_create(
+                            lending=lending_obj, sure_typ=sure_typ, defaults=default_sure)
+                        default = {'sure': lendingsure_obj, 'lending_w_buildor': request.user}
+                        lendingwarrant_obj, created = models.LendingWarrants.objects.update_or_create(
+                            sure=lendingsure_obj, defaults=default)
+                        for warrant in lendingwarrant_clean['sure_construct']:
+                            lendingwarrant_obj.warrant.add(warrant)
+                    response['message'] = '反担保设置成功！'
+                except Exception as e:
+                    response['status'] = False
+                    response['message'] = '反担保设置失败：%s' % str(e)
             elif sure_typ == 31:  # 应收质押
                 form_lendinggreceivable_add = forms.LendinReceivableForm(post_data)
                 if form_lendinggreceivable_add.is_valid():
@@ -148,7 +164,41 @@ def guarantee_add_ajax(request):  # 反担保措施添加ajax
                 except Exception as e:
                     response['status'] = False
                     response['message'] = '反担保设置失败：%s' % str(e)
-            elif sure_typ == 13:  # 动产抵押
+            elif sure_typ in [33, 44]:  # 票据质押
+                form_lendingdraft_add = forms.LendinDraftForm(post_data)
+                if form_lendingdraft_add.is_valid():
+                    lendingwarrant_clean = form_lendingdraft_add.cleaned_data
+                try:
+                    with transaction.atomic():
+                        lendingsure_obj, created = models.LendingSures.objects.update_or_create(
+                            lending=lending_obj, sure_typ=sure_typ, defaults=default_sure)
+                        default = {'sure': lendingsure_obj, 'lending_w_buildor': request.user}
+                        lendingdraft_obj, created = models.LendingWarrants.objects.update_or_create(
+                            sure=lendingsure_obj, defaults=default)
+                        for warrant in lendingwarrant_clean['sure_draft']:
+                            lendingdraft_obj.warrant.add(warrant)
+                    response['message'] = '反担保设置成功！'
+                except Exception as e:
+                    response['status'] = False
+                    response['message'] = '反担保设置失败：%s' % str(e)
+            elif sure_typ == 15:  # 车辆抵押
+                form_lendingvehicle_add = forms.LendinVehicleForm(post_data)  # 车辆
+                if form_lendingvehicle_add.is_valid():
+                    lendingwarrant_clean = form_lendingvehicle_add.cleaned_data
+                try:
+                    with transaction.atomic():
+                        lendingsure_obj, created = models.LendingSures.objects.update_or_create(
+                            lending=lending_obj, sure_typ=sure_typ, defaults=default_sure)
+                        default = {'sure': lendingsure_obj, 'lending_w_buildor': request.user}
+                        lendingdraft_obj, created = models.LendingWarrants.objects.update_or_create(
+                            sure=lendingsure_obj, defaults=default)
+                        for warrant in lendingwarrant_clean['sure_vehicle']:
+                            lendingdraft_obj.warrant.add(warrant)
+                    response['message'] = '反担保设置成功！'
+                except Exception as e:
+                    response['status'] = False
+                    response['message'] = '反担保设置失败：%s' % str(e)
+            elif sure_typ in [13, 24, 34, 47]:  # 动产抵押
                 form_lendingchattel_add = forms.LendinChattelForm(post_data)
                 if form_lendingchattel_add.is_valid():
                     lendingwarrant_clean = form_lendingchattel_add.cleaned_data
@@ -165,19 +215,19 @@ def guarantee_add_ajax(request):  # 反担保措施添加ajax
                 except Exception as e:
                     response['status'] = False
                     response['message'] = '反担保设置失败：%s' % str(e)
-            elif sure_typ == 33:  # 票据质押
-                form_lendingdraft_add = forms.LendinDraftForm(post_data)
-                if form_lendingdraft_add.is_valid():
-                    lendingwarrant_clean = form_lendingdraft_add.cleaned_data
+            elif sure_typ in [39, 49]:  # 其他
+                form_lendingother_add = forms.LendinOtherForm(post_data)
+                if form_lendingother_add.is_valid():
+                    lendingwarrant_clean = form_lendingother_add.cleaned_data
                 try:
                     with transaction.atomic():
                         lendingsure_obj, created = models.LendingSures.objects.update_or_create(
                             lending=lending_obj, sure_typ=sure_typ, defaults=default_sure)
                         default = {'sure': lendingsure_obj, 'lending_w_buildor': request.user}
-                        lendingdraft_obj, created = models.LendingWarrants.objects.update_or_create(
+                        lendingchattel_obj, created = models.LendingWarrants.objects.update_or_create(
                             sure=lendingsure_obj, defaults=default)
-                        for warrant in lendingwarrant_clean['sure_draft']:
-                            lendingdraft_obj.warrant.add(warrant)
+                        for warrant in lendingwarrant_clean['sure_other']:
+                            lendingchattel_obj.warrant.add(warrant)
                     response['message'] = '反担保设置成功！'
                 except Exception as e:
                     response['status'] = False
@@ -249,7 +299,7 @@ def guarantee_del_ajax(request):  # 反担保人删除ajax
                     if not lendingwarrant_list:
                         lendingsure_obj.warrant_sure.delete()
                         lendingsure_obj.delete()
-                    msg = '放担保物删除成功！'
+                    msg = '反担保物删除成功！'
                     response['message'] = msg
             except Exception as e:
                 response['status'] = False

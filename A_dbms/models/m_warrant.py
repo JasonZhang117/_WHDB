@@ -6,8 +6,8 @@ import datetime
 class Warrants(models.Model):  # 担保物
     warrant_num = models.CharField(verbose_name='权证编码', max_length=128, unique=True)
     WARRANT_TYP_LIST = [
-        (1, '房产'), (2, '房产包'), (5, '土地'), (11, '应收'), (21, '股权'),
-        (31, '票据'), (41, '车辆'), (51, '动产'), (99, '他权')]
+        (1, '房产'), (2, '房产包'), (5, '土地'), (6, '在建工程'), (11, '应收账款'),
+        (21, '股权'), (31, '票据'), (41, '车辆'), (51, '动产'), (55, '其他'), (99, '他权')]
     '''其他-存货、设备、合格证、'''
     warrant_typ = models.IntegerField(verbose_name='权证类型', choices=WARRANT_TYP_LIST, default=1)
 
@@ -52,7 +52,7 @@ class Warrants(models.Model):  # 担保物
 class Ownership(models.Model):  # 产权证
     ownership_num = models.CharField(verbose_name='产权证编号', max_length=32, unique=True)
     warrant = models.ForeignKey(to='Warrants', verbose_name="权证",
-                                on_delete=models.PROTECT,
+                                on_delete=models.CASCADE,
                                 related_name='ownership_warrant')
     owner = models.ForeignKey(to='Customes', verbose_name="所有权人",
                               on_delete=models.PROTECT,
@@ -77,7 +77,7 @@ class Houses(models.Model):  # 房产
             (1, '房产'), (5, '土地'), (11, '应收'), (21, '股权'),
             (31, '票据'), (41, '车辆'), (51, '动产'), (99, '他权')]'''
     warrant = models.OneToOneField(to='Warrants', verbose_name="权证",
-                                   on_delete=models.PROTECT,
+                                   on_delete=models.CASCADE,
                                    limit_choices_to={'warrant_typ': 1},
                                    related_name='house_warrant')
     house_locate = models.CharField(verbose_name='房产坐落', max_length=128, unique=True)
@@ -101,13 +101,13 @@ class Houses(models.Model):  # 房产
         return '%s-%s-%s-%s' % (self.warrant.warrant_num, self.house_locate, self.house_area, self.house_app)
 
 
-# ------------------------产权证--------------------------#
+# ------------------------房产包2--------------------------#
 class HouseBag(models.Model):  # 产权证
     '''WARRANT_TYP_LIST = [
         (1, '房产'), (2, '房产包'), (5, '土地'), (11, '应收'), (21, '股权'),
         (31, '票据'), (41, '车辆'), (51, '动产'), (99, '他权')]'''
     warrant = models.ForeignKey(to='Warrants', verbose_name="权证",
-                                on_delete=models.PROTECT,
+                                on_delete=models.CASCADE,
                                 limit_choices_to={'warrant_typ': 1},
                                 related_name='housebag_warrant')
     housebag_locate = models.CharField(verbose_name='房产坐落', max_length=64, unique=True)
@@ -127,13 +127,13 @@ class HouseBag(models.Model):  # 产权证
         return '%s-%s' % (self.warrant.warrant_num, self.housebag_locate)
 
 
-# ------------------------土地2--------------------------#
+# ------------------------土地使用权5--------------------------#
 class Grounds(models.Model):  # 土地
     ''' WARRANT_TYP_LIST = [
                 (1, '房产'), (5, '土地'), (11, '应收'), (21, '股权'),
                 (31, '票据'), (41, '车辆'), (51, '动产'), (99, '他权')]'''
     warrant = models.OneToOneField(to='Warrants', verbose_name="权证",
-                                   on_delete=models.PROTECT,
+                                   on_delete=models.CASCADE,
                                    limit_choices_to={'warrant_typ': 5},
                                    related_name='ground_warrant')
     ground_locate = models.CharField(verbose_name='土地坐落', max_length=64)
@@ -153,10 +153,37 @@ class Grounds(models.Model):  # 土地
         return '%s-%s-%s-%s' % (self.warrant.warrant_num, self.ground_locate, self.ground_area, self.ground_app)
 
 
+# ------------------------在建工程6--------------------------#
+class Construction(models.Model):  #
+    ''' WARRANT_TYP_LIST = [
+        (1, '房产'), (2, '房产包'), (5, '土地使用权'), (6, '在建工程'), (11, '应收账款'),
+        (21, '股权'), (31, '票据'), (41, '车辆'), (45, '动产'), (51, '其他'), (99, '他权')]'''
+    warrant = models.OneToOneField(to='Warrants', verbose_name="权证",
+                                   on_delete=models.CASCADE,
+                                   limit_choices_to={'warrant_typ': 6},
+                                   related_name='coustruct_warrant')
+    coustruct_locate = models.CharField(verbose_name='工程地址', max_length=64)
+    COUSTRUCT_APP_LIST = ((91, '在建工程'),)
+    coustruct_app = models.IntegerField(verbose_name='工程类别', choices=COUSTRUCT_APP_LIST, default=91)
+    coustruct_area = models.FloatField(verbose_name='工程面积')
+    coustructor = models.ForeignKey(to='Employees', verbose_name="创建者", default=1,
+                                    on_delete=models.PROTECT,
+                                    related_name='coustructor_employee')
+    coustructor_date = models.DateField(verbose_name='创建日期', default=datetime.date.today)
+
+    class Meta:
+        verbose_name_plural = '权证-在建工程'  # 指定显示名称
+        db_table = 'dbms_construction'  # 指定数据表的名称
+
+    def __str__(self):
+        return '%s-%s-%s-%s' % (
+            self.warrant.warrant_num, self.coustruct_locate, self.coustruct_area, self.coustruct_app)
+
+
 # ------------------------应收帐款11--------------------------#
 class Receivable(models.Model):  # 应收帐款
     warrant = models.OneToOneField(to='Warrants', verbose_name="权证",
-                                   on_delete=models.PROTECT,
+                                   on_delete=models.CASCADE,
                                    limit_choices_to={'warrant_typ': 11},
                                    related_name='receive_warrant')
     receive_owner = models.ForeignKey(to='Customes', verbose_name="所有权人",
@@ -178,7 +205,7 @@ class Receivable(models.Model):  # 应收帐款
 
 class ReceiveExtend(models.Model):  # 应收列表
     receivable = models.ForeignKey(to='Receivable', verbose_name="应收账款",
-                                   on_delete=models.PROTECT,
+                                   on_delete=models.CASCADE,
                                    related_name='extend_receiveable')
     receive_unit = models.CharField(verbose_name="应收单位名称", max_length=64)
     receiv_e_buildor = models.ForeignKey(to='Employees', verbose_name="创建者", default=1,
@@ -197,7 +224,7 @@ class ReceiveExtend(models.Model):  # 应收列表
 # ------------------------股权21--------------------------#
 class Stockes(models.Model):  # 股权
     warrant = models.OneToOneField(to='Warrants', verbose_name="权证",
-                                   on_delete=models.PROTECT,
+                                   on_delete=models.CASCADE,
                                    limit_choices_to={'warrant_typ': 21},
                                    related_name='stock_warrant')
     STOCK_TYP_LIST = ((1, '有限公司股权'), (11, '股份公司股份'), (21, '举办者权益'))
@@ -223,7 +250,7 @@ class Stockes(models.Model):  # 股权
 # ------------------------应收票据31--------------------------#
 class Draft(models.Model):  # 应收票据
     warrant = models.OneToOneField(to='Warrants', verbose_name="权证",
-                                   on_delete=models.PROTECT,
+                                   on_delete=models.CASCADE,
                                    limit_choices_to={'warrant_typ': 31},
                                    related_name='draft_warrant')
     draft_owner = models.ForeignKey(to='Customes', verbose_name="所有权人",
@@ -246,7 +273,7 @@ class Draft(models.Model):  # 应收票据
 
 class DraftExtend(models.Model):  # 票据列表
     draft = models.ForeignKey(to='Draft', verbose_name="票据",
-                              on_delete=models.PROTECT,
+                              on_delete=models.CASCADE,
                               related_name='extend_draft')
     DRAFT_TYP_LIST = ((1, '电子银行承兑汇票'), (2, '普通银行承兑汇票'), (11, '电子商业承兑汇票'),
                       (12, '普通商业承兑汇票'), (21, '支票'))
@@ -275,7 +302,7 @@ class DraftExtend(models.Model):  # 票据列表
 # ------------------------车辆41--------------------------#
 class Vehicle(models.Model):  # 车辆
     warrant = models.OneToOneField(to='Warrants', verbose_name="权证",
-                                   on_delete=models.PROTECT,
+                                   on_delete=models.CASCADE,
                                    limit_choices_to={'warrant_typ': 41},
                                    related_name='vehicle_warrant')
     vehicle_owner = models.ForeignKey(to='Customes', verbose_name="所有权人",
@@ -299,13 +326,13 @@ class Vehicle(models.Model):  # 车辆
 # ------------------------动产51--------------------------#
 class Chattel(models.Model):  # 动产
     warrant = models.OneToOneField(to='Warrants', verbose_name="权证",
-                                   on_delete=models.PROTECT,
+                                   on_delete=models.CASCADE,
                                    limit_choices_to={'warrant_typ': 51},
                                    related_name='chattel_warrant')
     chattel_owner = models.ForeignKey(to='Customes', verbose_name="所有权人",
                                       on_delete=models.PROTECT,
                                       related_name='chattel_custome')
-    CHATTEL_TYP_LIST = ((1, '存货'), (11, '设备'), (21, '合格证'), (31, '专利'), (41, '商标'),
+    CHATTEL_TYP_LIST = ((1, '存货'), (11, '机器设备'), (21, '合格证'), (31, '专利'), (41, '商标'),
                         (71, '账户'), (99, '其他'))
     chattel_typ = models.IntegerField(verbose_name='动产种类', choices=CHATTEL_TYP_LIST, default=1)
     chattel_detail = models.TextField(verbose_name="动产具体描述")
@@ -315,11 +342,40 @@ class Chattel(models.Model):  # 动产
     chattel_date = models.DateField(verbose_name='创建日期', default=datetime.date.today)
 
     class Meta:
-        verbose_name_plural = '权证-其他'  # 指定显示名称
+        verbose_name_plural = '权证-动产'  # 指定显示名称
         db_table = 'dbms_rchattel'  # 指定数据表的名称
 
     def __str__(self):
         return '%s' % self.warrant.warrant_num
+
+
+# ------------------------其他55--------------------------#
+class Others(models.Model):  #
+    '''WARRANT_TYP_LIST = [
+        (1, '房产'), (2, '房产包'), (5, '土地使用权'), (6, '在建工程'), (11, '应收账款'),
+        (21, '股权'), (31, '票据'), (41, '车辆'), (51, '动产'), (55, '其他'), (99, '他权')]'''
+    warrant = models.OneToOneField(to='Warrants', verbose_name="权证",
+                                   on_delete=models.CASCADE,
+                                   limit_choices_to={'warrant_typ': 55},
+                                   related_name='other_warrant')
+    other_owner = models.ForeignKey(to='Customes', verbose_name="所有权人",
+                                    on_delete=models.PROTECT,
+                                    related_name='other_custome')
+    OTHER_TYP_LIST = ((11, '购房合同'), (21, '合格证'), (31, '专利'), (41, '商标'), (71, '账户'),
+                      (99, '其他'))
+    other_typ = models.IntegerField(verbose_name='资产总类', choices=OTHER_TYP_LIST, default=99)
+    other_detail = models.TextField(verbose_name="具体描述")
+    otheror = models.ForeignKey(to='Employees', verbose_name="创建者", default=1,
+                                on_delete=models.PROTECT,
+                                related_name='otheror_employee')
+    otheror_date = models.DateField(verbose_name='创建日期', default=datetime.date.today)
+
+    class Meta:
+        verbose_name_plural = '权证-其他'  # 指定显示名称
+        db_table = 'dbms_others'  # 指定数据表的名称
+
+    def __str__(self):
+        return '%s_%s' % (self.warrant.warrant_num, self.other_typ)
 
 
 # ------------------------他权模型99--------------------------#
@@ -331,11 +387,11 @@ def limit_agree_choices():
 
 class Hypothecs(models.Model):  # 他权
     warrant = models.OneToOneField(to='Warrants', verbose_name="他权证",
-                                   on_delete=models.PROTECT,
+                                   on_delete=models.CASCADE,
                                    limit_choices_to={'warrant_typ': 99},
                                    related_name='ypothec_warrant')
     agree = models.ForeignKey(to='Agrees', verbose_name="委托合同",
-                              on_delete=models.PROTECT,
+                              on_delete=models.CASCADE,
                               limit_choices_to=limit_agree_choices,
                               related_name='ypothec_agree')
     warrant_m = models.ManyToManyField(to='Warrants', verbose_name="权证", related_name='ypothec_m_agree')

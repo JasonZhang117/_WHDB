@@ -1,0 +1,50 @@
+<div class="table-responsive">
+    {#"table-responsive":表格响应式布局#}
+    <table class="table table-bordered table-hover table-condensed active">
+        {#"table-bordered":表格表格边框#}
+        {#"table-hover":表格悬停变色#}
+        {#"table-condensed":表格紧缩#}
+        {#<caption><h4>项目管理</h4></caption>#}
+        <thead>
+        <tr style="text-align: center">
+            <th>编号</th>
+            <th>担保方式</th>
+            <th>所有权人</th>
+            <th>工程地址</th>
+            <th>工程面积</th>
+            <th>产权证</th>
+            {% if page_title == '放款次序' %}
+                <th>操作</th>
+            {% endif %}
+        </tr>
+        </thead>
+        <tbody class="guarantee-tb">
+        {% for lending_sure in lending_obj.sure_lending.all %}
+            {% if lending_sure.sure_typ in COUNSTRUCT_LIST %}
+                {% for warrant in lending_sure.warrant_sure.warrant.all %}
+                    <tr guarantee-nid={{ warrant.id }} sure-typ-nid={{ lending_sure.sure_typ }}>
+                        <td><a target="_blank" href="{% url 'dbms:warrant_scan' warrant_id=warrant.id %}">
+                            {{ forloop.counter }}</a></td>
+                        <td>{{ lending_sure.get_sure_typ_display }}</td>
+                        <td>
+                            {% for ownership in warrant.ownership_warrant.all %}
+                                {{ ownership.owner }}{% if not forloop.last %}、{% endif %}
+                            {% endfor %}
+                        </td>
+                        <td>{{ warrant.coustruct_warrant.coustruct_locate }}</td>
+                        <td>{{ warrant.coustruct_warrant.coustruct_area }}</td>
+                        <td>
+                            {% for ownership in warrant.ownership_warrant.all %}
+                                {{ ownership.ownership_num }}{% if not forloop.last %}、{% endif %}
+                            {% endfor %}
+                        </td>
+                        {% if page_title == '放款次序' %}
+                            <td><a class="btn btn-danger btn-xs delGuaranteeB">删除</a></td>
+                        {% endif %}
+                    </tr>
+                {% endfor %}
+            {% endif %}
+        {% endfor %}
+        </tbody>
+    </table>
+</div>

@@ -6,13 +6,15 @@
                 <a class="btn btn-primary btn-sm " id="addGuarantyB">添加抵押物</a><!--#path('warrant/storages/'-->
             {% elif warrant_typ in HOUSE_GROUND_TYP_LIST %}
                 <a class="btn btn-primary btn-sm " id="addOwerShip">添加产权证</a><!--#path('warrant/storages/'-->
-{#                <a class="btn btn-primary btn-sm " id="addPartOwer">共有人</a><!--#path('warrant/storages/'-->#}
+                {#                <a class="btn btn-primary btn-sm " id="addPartOwer">共有人</a><!--#path('warrant/storages/'-->#}
                 <a class="btn btn-primary btn-sm " id="addEvaluateB">评估</a><!--#path('warrant/evaluate/'-->
             {% elif warrant_typ == 2 %}
                 <a class="btn btn-primary btn-sm " id="addOwerShip">添加产权证</a><!--#path('warrant/storages/'-->
                 <a class="btn btn-primary btn-sm " id="addPartOwer">共有人</a><!--#path('warrant/storages/'-->
                 <a class="btn btn-primary btn-sm " id="addEvaluateB">评估</a><!--#path('warrant/evaluate/'-->
                 <a class="btn btn-primary btn-sm " id="addHouseBagB">添加房产包</a><!--#path('warrant/storages/'-->
+            {% elif warrant_typ == 6 %}
+                <a class="btn btn-primary btn-sm " id="addOwerShip">添加产权证</a><!--#path('warrant/storages/'-->
             {% elif warrant_typ == 31 %}
                 <a class="btn btn-primary btn-sm " id="addDraftBagB">添加票据</a><!--#path('warrant/storages/'-->
             {% endif %}

@@ -1,0 +1,17 @@
+<div id="form_counter_vehicle" class="extend" style="display: none">
+
+    <div class="form-group"><!--抵押车辆-->
+        <label for="id_vehicle" class="col-sm-3 control-label">抵押车辆：</label>
+        <div class="col-sm-9">
+            <select name="vehicle" class="form-control" multiple="" id="id_vehicle" required="">
+                {% for vehicle in warrants_v_lending_list %}
+                    <option value="{{ vehicle.0 }}">{{ vehicle.1 }}</option>
+                {% endfor %}
+            </select></div>
+        <label id="e_vehicle" class="pull-right"></label>
+    </div>
+
+</div>
+
+
+

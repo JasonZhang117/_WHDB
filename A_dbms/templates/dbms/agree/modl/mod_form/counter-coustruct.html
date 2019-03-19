@@ -1,0 +1,17 @@
+<div id="form_counter_coustruct" class="extend" style="display: none">
+
+    <div class="form-group"><!--反担在建工程-->
+        <label for="id_ground" class="col-sm-3 control-label">在建工程：</label>
+        <div class="col-sm-9">
+            <select name="coustruct" class="form-control" multiple="" id="id_coustruct" required="">
+                {% for coustruct in warrants_6_lending_list %}
+                    <option value="{{ coustruct.0 }}">{{ coustruct.1 }}</option>
+                {% endfor %}
+            </select></div>
+        <label id="e_coustruct" class="pull-right"></label>
+    </div>
+
+</div>
+
+
+

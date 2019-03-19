@@ -37,6 +37,9 @@
             case ('5'):{#土地#}
                 $('#form_ground_add_edit').show();
                 break;
+            case ('6'):{#在建工程#}
+                $('#form_construct_add_edit').show();
+                break;
             case ('11'):{#应收#}
                 $('#form_receivable_add_edit').show();
                 break;
@@ -51,6 +54,9 @@
                 break;
             case ('51'):{#动产#}
                 $('#form_chattel_add_eidt').show();
+                break;
+            case ('55'):{#其他#}
+                $('#form_other_add_eidt').show();
                 break;
             case ('99'):{#他权#}
                 $('#form_hypothecs_add_eidt').show();
@@ -80,6 +86,9 @@
                 case ('5'):{#土地#}
                     $('#form_ground_add_edit').show();
                     break;
+                case ('6'):{#在建工程#}
+                    $('#form_construct_add_edit').show();
+                    break;
                 case ('11'):{#应收#}
                     $('#form_receivable_add_edit').show();
                     $('#id_search_custom').show();
@@ -100,6 +109,10 @@
                     $('#form_chattel_add_eidt').show();
                     $('#id_search_custom').show();
                     break;
+                case ('55'):{#其他#}
+                    $('#form_other_add_eidt').show();
+                    $('#id_search_custom').show();
+                    break;
                 case ('99'):{#他权#}
                     $('#form_hypothecs_add_eidt').show();
                     break;
@@ -118,16 +131,17 @@
                 var n = $(this).attr('name');
                 postData[n] = v;
             });
-            var ttt = $('#id_receivable_detail').val()
+            var ttt = $('#id_receivable_detail').val();
             postData['receivable_detail'] = ttt;
-            var ttt = $('#id_draft_detail').val()
+            var ttt = $('#id_draft_detail').val();
             postData['draft_detail'] = ttt;
-            var ttt = $('#id_chattel_detail').val()
+            var ttt = $('#id_chattel_detail').val();
             postData['chattel_detail'] = ttt;
-
+            var ttt = $('#id_other_detail').val();
+            postData['other_detail'] = ttt;
             var postDataStr = JSON.stringify(postData);
 
-            console.log(postDataStr)
+            console.log(postDataStr);
 
             $.ajax({
                 url: '/dbms/warrant/add/',
@@ -155,6 +169,10 @@
                         $('#e_house_app').text(arg.forme.house_app);
                         $('#e_house_area').text(arg.forme.house_area);
 
+                        $('#e_coustruct_locate').text(arg.forme.coustruct_locate);
+                        $('#e_coustruct_app').text(arg.forme.coustruct_app);
+                        $('#e_coustruct_area').text(arg.forme.coustruct_area);
+
                         $('#e_ground_locate').text(arg.forme.ground_locate);
                         $('#e_ground_app').text(arg.forme.ground_app);
                         $('#e_ground_area').text(arg.forme.ground_area);
@@ -179,6 +197,9 @@
                         $('#e_chattel_typ').text(arg.forme.chattel_typ);
                         $('#e_chattel_detail').text(arg.forme.chattel_detail);
 
+                        $('#e_other_owner').text(arg.forme.other_owner);
+                        $('#e_other_typ').text(arg.forme.other_typ);
+                        $('#e_other_detail').text(arg.forme.other_detail);
 
                         $('#e_agree').text(arg.forme.agree);
                     }
