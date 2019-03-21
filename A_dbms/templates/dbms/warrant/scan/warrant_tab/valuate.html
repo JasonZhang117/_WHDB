@@ -7,6 +7,7 @@
             <th>评估价值</th>
             <th>评估日期</th>
             <th>评估说明</th>
+            <th>创建人</th>
             {% if  PAGE_TITAL == '权证预览' %}
                 <th>操作</th>
             {% endif %}
@@ -21,6 +22,7 @@
                 <td>{{ evaluate.evaluate_value }}</td>
                 <td>{{ evaluate.evaluate_date }}</td>
                 <td>{{ evaluate.evaluate_explain }}</td>
+                <td>{{ evaluate.evaluator.name }}</td>
                 {% if  PAGE_TITAL == '权证预览' %}
                     <td><a class="btn btn-danger btn-xs delEvaluateB">删除</a></td>
                     </tr>

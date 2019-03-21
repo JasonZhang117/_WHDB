@@ -66,34 +66,54 @@ def provide_agree_scan(request, agree_id):  # 查看放款
     menu_result = MenuHelper(request).menu_data_list()
     PAGE_TITLE = '风控落实'
     response = {'status': True, 'message': None, 'forme': None, }
-
     COUNTER_TYP_CUSTOM = [1, 2]
-
-    '''WARRANT_TYP_LIST = [
-            (1, '房产'), (5, '土地'), (11, '应收'), (21, '股权'),
-            (31, '票据'), (41, '车辆'), (51, '动产'), (99, '他权')]'''
-    '''COUNTER_TYP_LIST = (
-        (1, '企业担保'), (2, '个人保证'),
-        (11, '房产抵押'), (12, '土地抵押'), (13, '动产抵押'), (15, '车辆抵押'),
-        (31, '应收质押'), (32, '股权质押'), (33, '票据质押'),
-        (51, '股权预售'), (52, '房产预售'), (53, '土地预售'))'''
-    '''SURE_TYP_LIST = (
-        (1, '企业保证'), (2, '个人保证'),
-        (11, '房产抵押'), (12, '土地抵押'), (13, '动产抵押'), (15, '车辆抵押'),
-        (21, '房产顺位'), (22, '土地顺位'),
-        (31, '应收质押'), (32, '股权质押'), (33, '票据质押'),
-        (41, '合格证监管'), (42, '房产监管'), (43, '土地监管'),
-        (51, '股权预售'), (52, '房产预售'), (53, '土地预售'))'''
-    SURE_LIST = [1, 2]
-    HOUSE_LIST = [11, 21, 42, 52]
-    GROUND_LIST = [12, 22, 43, 53]
-    RECEIVABLE_LIST = [31]
-    STOCK_LIST = [32, 51]
-    CHATTEL_LIST = [13]
-    DRAFT_LIST = [33]
-
     agree_obj = models.Agrees.objects.get(id=agree_id)
     lending_obj = agree_obj.lending
+    '''ARTICLE_STATE_LIST = ((1, '待反馈'), (2, '已反馈'), (3, '待上会'), (4, '已上会'), (5, '已签批'),
+                          (51, '已放款'), (52, '已放完'), (55, '已解保'), (61, '待变更'), (99, '已注销'))'''
+    '''SURE_TYP_LIST = (
+        (1, '企业保证'), (2, '个人保证'),
+        (11, '房产抵押'), (12, '土地抵押'), (13, '动产抵押'), (14, '在建工程抵押'), (15, '车辆抵押'),
+        (21, '房产顺位'), (22, '土地顺位'), (23, '在建工程顺位'), (24, '动产顺位'),
+        (31, '应收质押'), (32, '股权质押'), (33, '票据质押'), (34, '动产质押'), (39, '其他权利质押'),
+        (42, '房产监管'), (43, '土地监管'), (44, '票据监管'), (47, '动产监管'), (49, '其他监管'),
+        (51, '股权预售'), (52, '房产预售'), (53, '土地预售'))'''
+    '''WARRANT_TYP_LIST = [
+        (1, '房产'), (2, '房产包'), (5, '土地'), (6, '在建工程'), (11, '应收账款'),
+        (21, '股权'), (31, '票据'), (41, '车辆'), (51, '动产'), (55, '其他'), (99, '他权')]'''
+    SURE_LIST = [1, 2]  # 保证类
+    HOUSE_LIST = [11, 21, 42, 52]  # 房产类
+    GROUND_LIST = [12, 22, 43, 53]  # 土地类
+    COUNSTRUCT_LIST = [14, 23]  # 在建工程类
+    RECEIVABLE_LIST = [31, ]  # 应收账款类
+    STOCK_LIST = [32, 51]  # 股权类
+    DRAFT_LIST = [33, 44]  # 票据类
+    VEHICLE_LIST = [15, ]  # 车辆类
+    CHATTEL_LIST = [13, 24, 34, 47]  # 动产类
+    OTHER_LIST = [39, 49]  # 其他类
+    '''反担保情况'''
+    custom_lending_list = models.Customes.objects.filter(lending_custom__sure__lending=lending_obj)
+    warrant_lending_h_list = models.Warrants.objects.filter(lending_warrant__sure__lending=lending_obj,
+                                                            warrant_typ__in=[1, 2])
+    warrant_lending_g_list = models.Warrants.objects.filter(lending_warrant__sure__lending=lending_obj,
+                                                            warrant_typ=5)
+    warrant_lending_6_list = models.Warrants.objects.filter(lending_warrant__sure__lending=lending_obj,
+                                                            warrant_typ=6)
+    warrant_lending_r_list = models.Warrants.objects.filter(lending_warrant__sure__lending=lending_obj,
+                                                            warrant_typ=11)
+    warrant_lending_s_list = models.Warrants.objects.filter(lending_warrant__sure__lending=lending_obj,
+                                                            warrant_typ=21)
+    warrant_lending_d_list = models.Warrants.objects.filter(lending_warrant__sure__lending=lending_obj,
+                                                            warrant_typ=31)
+    warrant_lending_v_list = models.Warrants.objects.filter(lending_warrant__sure__lending=lending_obj,
+                                                            warrant_typ=41)
+    warrant_lending_c_list = models.Warrants.objects.filter(lending_warrant__sure__lending=lending_obj,
+                                                            warrant_typ=51)
+    warrant_lending_o_list = models.Warrants.objects.filter(lending_warrant__sure__lending=lending_obj,
+                                                            warrant_typ=55)
+    '''他权情况'''
+    hypothec_agree_list = models.Hypothecs.objects.filter(agree=agree_obj)
+    '''检查风控落实情况'''
     warrant_storage_str = ''  # 未入库权证
     warrant_ypothec_str = ''  # 缺他权
     ypothec_storage_str = ''  # 他权未入库
@@ -170,33 +190,55 @@ def provide_agree_notify(request, agree_id, notify_id):  # 查看放款通知
     current_url_name = resolve(request.path).url_name  # 获取当前URL_NAME
     authority_list = request.session.get('authority_list')  # 获取当前用户的所有权限
     menu_result = MenuHelper(request).menu_data_list()
-    PAGE_TITLE = '风控落实'
-    '''COUNTER_TYP_LIST = (
-        (1, '企业担保'), (2, '个人保证'),
-        (11, '房产抵押'), (12, '土地抵押'), (13, '设备抵押'), (14, '存货抵押'), (15, '车辆抵押'),
-        (31, '应收质押'), (32, '股权质押'), (33, '票据质押'),
-        (51, '股权预售'), (52, '房产预售'), (53, '土地预售'))'''
-    '''SURE_TYP_LIST = (
-                    (1, '企业保证'), (2, '个人保证'),
-                    (11, '房产抵押'), (12, '土地抵押'), (13, '设备抵押'), (14, '存货抵押'), (15, '车辆抵押'),
-                    (21, '房产顺位'), (22, '土地顺位'),
-                    (31, '应收质押'), (32, '股权质押'), (33, '票据质押'),
-                    (41, '合格证监管'), (42, '房产监管'), (43, '土地监管'),
-                    (51, '股权预售'), (52, '房产预售'), (53, '土地预售'))'''
-    '''WARRANT_TYP_LIST = [
-           (1, '房产'), (2, '土地'), (11, '应收'), (21, '股权'),
-           (31, '票据'), (41, '车辆'), (51, '动产'), (99, '他权')]'''
-    COUNTER_TYP_CUSTOM = [1, 2]
-    SURE_LIST = [1, 2]
-    HOUSE_LIST = [11, 21, 42, 52]
-    GROUND_LIST = [12, 22, 43, 53]
-    RECEIVABLE_LIST = [31]
-    STOCK_LIST = [32]
-    CHATTEL_LIST = [13]
-
+    PAGE_TITLE = '放款通知'
     agree_obj = models.Agrees.objects.get(id=agree_id)
     lending_obj = agree_obj.lending
     notify_obj = models.Notify.objects.get(id=notify_id)
+    '''ARTICLE_STATE_LIST = ((1, '待反馈'), (2, '已反馈'), (3, '待上会'), (4, '已上会'), (5, '已签批'),
+                              (51, '已放款'), (52, '已放完'), (55, '已解保'), (61, '待变更'), (99, '已注销'))'''
+    '''SURE_TYP_LIST = (
+        (1, '企业保证'), (2, '个人保证'),
+        (11, '房产抵押'), (12, '土地抵押'), (13, '动产抵押'), (14, '在建工程抵押'), (15, '车辆抵押'),
+        (21, '房产顺位'), (22, '土地顺位'), (23, '在建工程顺位'), (24, '动产顺位'),
+        (31, '应收质押'), (32, '股权质押'), (33, '票据质押'), (34, '动产质押'), (39, '其他权利质押'),
+        (42, '房产监管'), (43, '土地监管'), (44, '票据监管'), (47, '动产监管'), (49, '其他监管'),
+        (51, '股权预售'), (52, '房产预售'), (53, '土地预售'))'''
+    '''WARRANT_TYP_LIST = [
+        (1, '房产'), (2, '房产包'), (5, '土地'), (6, '在建工程'), (11, '应收账款'),
+        (21, '股权'), (31, '票据'), (41, '车辆'), (51, '动产'), (55, '其他'), (99, '他权')]'''
+    SURE_LIST = [1, 2]  # 保证类
+    HOUSE_LIST = [11, 21, 42, 52]  # 房产类
+    GROUND_LIST = [12, 22, 43, 53]  # 土地类
+    COUNSTRUCT_LIST = [14, 23]  # 在建工程类
+    RECEIVABLE_LIST = [31, ]  # 应收账款类
+    STOCK_LIST = [32, 51]  # 股权类
+    DRAFT_LIST = [33, 44]  # 票据类
+    VEHICLE_LIST = [15, ]  # 车辆类
+    CHATTEL_LIST = [13, 24, 34, 47]  # 动产类
+    OTHER_LIST = [39, 49]  # 其他类
+    '''反担保情况'''
+    custom_lending_list = models.Customes.objects.filter(lending_custom__sure__lending=lending_obj)
+    warrant_lending_h_list = models.Warrants.objects.filter(lending_warrant__sure__lending=lending_obj,
+                                                            warrant_typ__in=[1, 2])
+    warrant_lending_g_list = models.Warrants.objects.filter(lending_warrant__sure__lending=lending_obj,
+                                                            warrant_typ=5)
+    warrant_lending_6_list = models.Warrants.objects.filter(lending_warrant__sure__lending=lending_obj,
+                                                            warrant_typ=6)
+    warrant_lending_r_list = models.Warrants.objects.filter(lending_warrant__sure__lending=lending_obj,
+                                                            warrant_typ=11)
+    warrant_lending_s_list = models.Warrants.objects.filter(lending_warrant__sure__lending=lending_obj,
+                                                            warrant_typ=21)
+    warrant_lending_d_list = models.Warrants.objects.filter(lending_warrant__sure__lending=lending_obj,
+                                                            warrant_typ=31)
+    warrant_lending_v_list = models.Warrants.objects.filter(lending_warrant__sure__lending=lending_obj,
+                                                            warrant_typ=41)
+    warrant_lending_c_list = models.Warrants.objects.filter(lending_warrant__sure__lending=lending_obj,
+                                                            warrant_typ=51)
+    warrant_lending_o_list = models.Warrants.objects.filter(lending_warrant__sure__lending=lending_obj,
+                                                            warrant_typ=55)
+    '''他权情况'''
+    hypothec_agree_list = models.Hypothecs.objects.filter(agree=agree_obj)
+
     today_str = datetime.date.today()
     date_th_later = today_str + datetime.timedelta(days=365)
     form_provide_data = {'provide_date': str(today_str), 'due_date': str(date_th_later)}
@@ -254,33 +296,55 @@ def notify_scan(request, notify_id):  # 查看放款通知
     current_url_name = resolve(request.path).url_name  # 获取当前URL_NAME
     authority_list = request.session.get('authority_list')  # 获取当前用户的所有权限
     menu_result = MenuHelper(request).menu_data_list()
-    PAGE_TITLE = '放款通知'
-    '''COUNTER_TYP_LIST = (
-        (1, '企业担保'), (2, '个人保证'),
-        (11, '房产抵押'), (12, '土地抵押'), (13, '设备抵押'), (14, '存货抵押'), (15, '车辆抵押'),
-        (31, '应收质押'), (32, '股权质押'), (33, '票据质押'),
-        (51, '股权预售'), (52, '房产预售'), (53, '土地预售'))'''
-    '''SURE_TYP_LIST = (
-                    (1, '企业保证'), (2, '个人保证'),
-                    (11, '房产抵押'), (12, '土地抵押'), (13, '设备抵押'), (14, '存货抵押'), (15, '车辆抵押'),
-                    (21, '房产顺位'), (22, '土地顺位'),
-                    (31, '应收质押'), (32, '股权质押'), (33, '票据质押'),
-                    (41, '合格证监管'), (42, '房产监管'), (43, '土地监管'),
-                    (51, '股权预售'), (52, '房产预售'), (53, '土地预售'))'''
-    '''WARRANT_TYP_LIST = [
-           (1, '房产'), (2, '土地'), (11, '应收'), (21, '股权'),
-           (31, '票据'), (41, '车辆'), (51, '动产'), (99, '他权')]'''
-    COUNTER_TYP_CUSTOM = [1, 2]
-    SURE_LIST = [1, 2]
-    HOUSE_LIST = [11, 21, 42, 52]
-    GROUND_LIST = [12, 22, 43, 53]
-    RECEIVABLE_LIST = [31]
-    STOCK_LIST = [32]
-    CHATTEL_LIST = [13]
+    PAGE_TITLE = '通知详情'
 
     notify_obj = models.Notify.objects.get(id=notify_id)
     agree_obj = notify_obj.agree
     lending_obj = agree_obj.lending
+    '''ARTICLE_STATE_LIST = ((1, '待反馈'), (2, '已反馈'), (3, '待上会'), (4, '已上会'), (5, '已签批'),
+                              (51, '已放款'), (52, '已放完'), (55, '已解保'), (61, '待变更'), (99, '已注销'))'''
+    '''SURE_TYP_LIST = (
+        (1, '企业保证'), (2, '个人保证'),
+        (11, '房产抵押'), (12, '土地抵押'), (13, '动产抵押'), (14, '在建工程抵押'), (15, '车辆抵押'),
+        (21, '房产顺位'), (22, '土地顺位'), (23, '在建工程顺位'), (24, '动产顺位'),
+        (31, '应收质押'), (32, '股权质押'), (33, '票据质押'), (34, '动产质押'), (39, '其他权利质押'),
+        (42, '房产监管'), (43, '土地监管'), (44, '票据监管'), (47, '动产监管'), (49, '其他监管'),
+        (51, '股权预售'), (52, '房产预售'), (53, '土地预售'))'''
+    '''WARRANT_TYP_LIST = [
+        (1, '房产'), (2, '房产包'), (5, '土地'), (6, '在建工程'), (11, '应收账款'),
+        (21, '股权'), (31, '票据'), (41, '车辆'), (51, '动产'), (55, '其他'), (99, '他权')]'''
+    SURE_LIST = [1, 2]  # 保证类
+    HOUSE_LIST = [11, 21, 42, 52]  # 房产类
+    GROUND_LIST = [12, 22, 43, 53]  # 土地类
+    COUNSTRUCT_LIST = [14, 23]  # 在建工程类
+    RECEIVABLE_LIST = [31, ]  # 应收账款类
+    STOCK_LIST = [32, 51]  # 股权类
+    DRAFT_LIST = [33, 44]  # 票据类
+    VEHICLE_LIST = [15, ]  # 车辆类
+    CHATTEL_LIST = [13, 24, 34, 47]  # 动产类
+    OTHER_LIST = [39, 49]  # 其他类
+    '''反担保情况'''
+    custom_lending_list = models.Customes.objects.filter(lending_custom__sure__lending=lending_obj)
+    warrant_lending_h_list = models.Warrants.objects.filter(lending_warrant__sure__lending=lending_obj,
+                                                            warrant_typ__in=[1, 2])
+    warrant_lending_g_list = models.Warrants.objects.filter(lending_warrant__sure__lending=lending_obj,
+                                                            warrant_typ=5)
+    warrant_lending_6_list = models.Warrants.objects.filter(lending_warrant__sure__lending=lending_obj,
+                                                            warrant_typ=6)
+    warrant_lending_r_list = models.Warrants.objects.filter(lending_warrant__sure__lending=lending_obj,
+                                                            warrant_typ=11)
+    warrant_lending_s_list = models.Warrants.objects.filter(lending_warrant__sure__lending=lending_obj,
+                                                            warrant_typ=21)
+    warrant_lending_d_list = models.Warrants.objects.filter(lending_warrant__sure__lending=lending_obj,
+                                                            warrant_typ=31)
+    warrant_lending_v_list = models.Warrants.objects.filter(lending_warrant__sure__lending=lending_obj,
+                                                            warrant_typ=41)
+    warrant_lending_c_list = models.Warrants.objects.filter(lending_warrant__sure__lending=lending_obj,
+                                                            warrant_typ=51)
+    warrant_lending_o_list = models.Warrants.objects.filter(lending_warrant__sure__lending=lending_obj,
+                                                            warrant_typ=55)
+    '''他权情况'''
+    hypothec_agree_list = models.Hypothecs.objects.filter(agree=agree_obj)
 
     today_str = datetime.date.today()
     date_th_later = today_str + datetime.timedelta(days=365)

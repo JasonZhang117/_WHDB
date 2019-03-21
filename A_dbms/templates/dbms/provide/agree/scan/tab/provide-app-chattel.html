@@ -1,0 +1,49 @@
+<div class="table-responsive">
+    <table class="table table-bordered table-hover table-condensed active">
+        <thead>
+        <tr style="text-align: center">
+            <th>序号</th>
+            <th>担保方式</th>
+            <th>所有人</th>
+            <th>动产类型</th>
+            <th>详情</th>
+            <th>他权情况</th>
+            <th>入库情况</th>
+            {% if PAGE_TITLE == '放款次序' or PAGE_TITLE == '权证管理' %}
+                <td>操作</td>
+            {% endif %}
+
+        </tr>
+        </thead>
+        <tbody class="provide-guarantee-tb">
+        {% for lending_sure in lending_obj.sure_lending.all %}
+            {% if lending_sure.sure_typ in CHATTEL_LIST %}
+                {% for warrant in lending_sure.warrant_sure.warrant.all %}
+                    <tr guarantee-nid={{ warrant.id }} sure-typ-nid={{ lending_sure.sure_typ }}>
+                        <td><a target="_blank" href="{% url 'dbms:warrant_scan' warrant_id=warrant.id %}">
+                            {{ forloop.counter }}</a></td>
+                        <td>{{ lending_sure.get_sure_typ_display }}</td>
+                        <td>{{ warrant.chattel_warrant.chattel_owner.short_name }}</td>
+                        <td>{{ warrant.chattel_warrant.get_chattel_typ_display }}</td>
+                        <td>{{ warrant.chattel_warrant.chattel_detail }}</td>
+                        <td>
+                            {% for ypothec in warrant.ypothec_m_agree.all %}
+                                {% if ypothec.agree.id == agree_obj.id %}
+                                    {{ ypothec.warrant }}
+                                {% endif %}
+                            {% endfor %}
+                        </td>
+                        <td>{{ warrant.get_warrant_state_display }}</td>
+                        {% if PAGE_TITLE == '放款次序' %}
+                            <td><a class="btn btn-primary btn-xs delGuaranteeB">删除</a></td>
+                        {% endif %}
+                        {% if PAGE_TITLE == '权证管理' %}
+                            <td><a class="btn btn-primary btn-xs addStoragesAgreeB">出入库</a></td>
+                        {% endif %}
+                    </tr>
+                {% endfor %}
+            {% endif %}
+        {% endfor %}
+        </tbody>
+    </table>
+</div>

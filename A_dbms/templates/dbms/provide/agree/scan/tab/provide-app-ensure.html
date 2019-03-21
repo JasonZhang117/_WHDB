@@ -1,7 +1,6 @@
 <div class="table-responsive">
     {#"table-responsive":表格响应式布局#}
-    <table class="table table-bordered table-hover
-                table-condensed active">
+    <table class="table table-bordered table-hover table-condensed active">
         {#"table-bordered":表格表格边框#}
         {#"table-hover":表格悬停变色#}
         {#"table-condensed":表格紧缩#}
@@ -15,13 +14,12 @@
             <th>联系地址</th>
             <th>联系人</th>
             <th>联系电话</th>
-            {% if page_title == '放款次序' %}
+            {% if PAGE_TITLE == '放款次序' %}
                 <th>操作</th>
             {% endif %}
-
         </tr>
         </thead>
-        <tbody class="guarantee-tb">
+        <tbody class="provide-guarantee-tb">
         {% for lending_sure in lending_obj.sure_lending.all %}
             {% if lending_sure.sure_typ in SURE_LIST %}
                 {% for custom in lending_sure.custom_sure.custome.all %}
@@ -40,8 +38,8 @@
                         <td>{{ custom.contact_addr }}</td>
                         <td>{{ custom.linkman }}</td>
                         <td>{{ custom.contact_num }}</td>
-                        {% if page_title == '放款次序' %}
-                            <td><a class="btn btn-danger btn-xs delGuaranteeB">删除</a></td>
+                        {% if PAGE_TITLE == '放款次序' %}
+                            <td><a class="btn btn-primary btn-xs delGuaranteeB">删除</a></td>
                         {% endif %}
                     </tr>
                 {% endfor %}

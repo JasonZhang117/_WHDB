@@ -5,39 +5,26 @@
             <th>序号</th>
             <th>担保方式</th>
             <th>所有权人</th>
-            <th>房产地址</th>
-            <th>房产面积</th>
-            <th>房产用途</th>
-            <th>产权证</th>
+            <th>车架号</th>
+            <th>车牌号</th>
             <th>他权情况</th>
             <th>入库情况</th>
-            {% if PAGE_TITAL == '权证管理' %}
-                <th>操作</th>
+            {% if PAGE_TITLE == '放款次序' or PAGE_TITLE == '权证管理' %}
+                <td>操作</td>
             {% endif %}
-
         </tr>
         </thead>
-        <tbody class="agree-warrant-tb">
+        <tbody class="provide-guarantee-tb">
         {% for lending_sure in lending_obj.sure_lending.all %}
-            {% if lending_sure.sure_typ in HOUSE_LIST %}
+            {% if lending_sure.sure_typ in VEHICLE_LIST %}
                 {% for warrant in lending_sure.warrant_sure.warrant.all %}
-                    <tr warrant-nid={{ warrant.id }}>
+                    <tr guarantee-nid={{ warrant.id }} sure-typ-nid={{ lending_sure.sure_typ }}>
                         <td><a target="_blank" href="{% url 'dbms:warrant_scan' warrant_id=warrant.id %}">
                             {{ forloop.counter }}</a></td>
                         <td>{{ lending_sure.get_sure_typ_display }}</td>
-                        <td>
-                            {% for ownership in warrant.ownership_warrant.all %}
-                                {{ ownership.owner.short_name }}{% if not forloop.last %}、{% endif %}
-                            {% endfor %}
-                        </td>
-                        <td>{{ warrant.house_warrant.house_locate }}</td>
-                        <td>{{ warrant.house_warrant.house_area }}</td>
-                        <td>{{ warrant.house_warrant.get_house_app_display }}</td>
-                        <td>
-                            {% for ownership in warrant.ownership_warrant.all %}
-                                {{ ownership.ownership_num }}{% if not forloop.last %}、{% endif %}
-                            {% endfor %}
-                        </td>
+                        <td>{{ warrant.vehicle_warrant.vehicle_owner.short_name }}</td>
+                        <td>{{ warrant.vehicle_warrant.frame_num }}</td>
+                        <td>{{ warrant.vehicle_warrant.plate_num }}</td>
                         <td>
                             {% for ypothec in warrant.ypothec_m_agree.all %}
                                 {% if ypothec.agree.id == agree_obj.id %}
@@ -46,8 +33,11 @@
                             {% endfor %}
                         </td>
                         <td>{{ warrant.get_warrant_state_display }}</td>
-                        {% if PAGE_TITAL == '权证管理' %}
-                            <td><a class="btn btn-danger btn-xs addStoragesAgreeB">出入库</a></td>
+                        {% if PAGE_TITLE == '放款次序' %}
+                            <td><a class="btn btn-primary btn-xs delGuaranteeB">删除</a></td>
+                        {% endif %}
+                        {% if PAGE_TITLE == '权证管理' %}
+                            <td><a class="btn btn-primary btn-xs addStoragesAgreeB">出入库</a></td>
                         {% endif %}
                     </tr>
                 {% endfor %}

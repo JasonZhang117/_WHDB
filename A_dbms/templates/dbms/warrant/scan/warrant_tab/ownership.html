@@ -4,6 +4,7 @@
         <tr style="text-align: center">
             <th>产权证</th>
             <th>权利人</th>
+            <th>创建人</th>
             <th>删除</th>
         </tr>
         </thead>
@@ -12,6 +13,7 @@
             <tr ownership-nid="{{ ownership.id }}">
                 <td>{{ ownership.ownership_num }}</td>
                 <td>{{ ownership.owner }}</td>
+                <td>{{ ownership.ownership_buildor.name }}</td>
                 <td><a class="btn btn-danger btn-xs delOwershipB">删除</a></td>
             </tr>
         {% endfor %}

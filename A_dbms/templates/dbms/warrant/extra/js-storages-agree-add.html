@@ -6,9 +6,9 @@
 
     function bindAddStoragesAgreeB() {
         console.log("bindAddStoragesAgreeB");
-        $('#agree-warrant').on('click', '.addStoragesAgreeB', function () {
+        $('.provide-guarantee-tb').on('click', '.addStoragesAgreeB', function () {
             console.log("bindAddStoragesAgreeB");
-            var addStoragesWarrantNid = $(this).parent().parent().attr('warrant-nid');
+            var addStoragesWarrantNid = $(this).parent().parent().attr('guarantee-nid');
             console.log(addStoragesWarrantNid);
             $('#addStoragesAgreeModalId').val(addStoragesWarrantNid);
             $('#addStoragesAgreeModal').modal('show');
@@ -25,7 +25,7 @@
             });
             var postDataStr = JSON.stringify(postData);
 
-            console.log(postDataStr)
+            console.log(postDataStr);
 
             $.ajax({
                 url: '/dbms/warrant/storages/add/',

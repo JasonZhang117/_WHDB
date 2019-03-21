@@ -575,18 +575,18 @@ def article_change_ajax(request):
     print('post_data:', post_data)
 
     '''((1, '同意'), (2, '不同意'))'''
-    article_id = post_data['article_id']
-    article_list = models.Articles.objects.filter(id=article_id)
+    article_list = models.Articles.objects.filter(id=post_data['article_id'])
     article_obj = article_list.first()
     '''ARTICLE_STATE_LIST = ((1, '待反馈'), (2, '已反馈'), (3, '待上会'), (4, '已上会'), (5, '已签批'),
-                          (51, '已放完'), (61, '待变更'), (99, '已注销'))'''
+                          (51, '已放款'), (52, '已放完'), (55, '已解保'), (61, '待变更'), (99, '已注销'))'''
     form_article_change = forms.ArticleChangeForm(post_data)
     if form_article_change.is_valid():
         change_cleaned = form_article_change.cleaned_data
         change_view = change_cleaned['change_view']
         '''CHANGE_VIEW_LIST = ((1, '变更申请'), (11, '同意变更'), (21, '否决变更'))'''
         article_state = article_obj.article_state
-        if article_state in [5, 51, 61]:
+        if article_state in [5, 51, 52, 61]:
+            print('article_state in [5, 51, 52, 61]')
             if change_view == 11:
                 try:
                     with transaction.atomic():
@@ -598,6 +598,9 @@ def article_change_ajax(request):
                 except Exception as e:
                     response['status'] = False
                     response['message'] = '项目变更失败：%s' % str(e)
+            else:
+                response['status'] = False
+                response['message'] = '变更选项为：%s，变更失败！' % change_view
         else:
             response['status'] = False
             response['message'] = '项目状态为：%s，本次变更失败！！！' % article_obj.article_state
@@ -605,6 +608,5 @@ def article_change_ajax(request):
         response['status'] = False
         response['message'] = '表单信息有误！！！'
         response['forme'] = form_article_change.errors
-
     result = json.dumps(response, ensure_ascii=False)
     return HttpResponse(result)

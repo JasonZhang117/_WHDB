@@ -4,9 +4,9 @@
         <tr style="text-align: center">
             <th>出/入库类别</th>
             <th>出/入库时间</th>
-            <th>权证管理岗</th>
             <th>移交/出库/借出人</th>
             <th>备注</th>
+            <th>权证管理岗</th>
             <th>操作</th>
         </tr>
         </thead>
@@ -15,9 +15,9 @@
             <tr storage-nid="{{ storage.id }}">
                 <td>{{ storage.get_storage_typ_display }}</td>
                 <td>{{ storage.storage_date }}</td>
-                <td>{{ storage.conservator.name }}</td>
                 <td>{{ storage.transfer.name }}</td>
                 <td>{{ storage.storage_explain }}</td>
+                <td>{{ storage.conservator.name }}</td>
                 <td><a class="btn btn-danger btn-xs delStorageB">删除</a></td>
             </tr>
         {% endfor %}

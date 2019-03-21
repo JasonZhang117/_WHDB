@@ -1,76 +1,11 @@
 <div>
     <!-- Nav tabs -->
     <ul class="nav nav-tabs" role="tablist" style="background-color: #f5f5f5">
-        <li role="presentation">
-            <a href="#provide-article" style="background-color: #f5f5f5"
-               aria-controls="messages" role="tab" data-toggle="tab">项目情况</a></li>
-        <li role="presentation">
-            <a href="#agree" style="background-color: #f5f5f5"
-               aria-controls="messages" role="tab" data-toggle="tab">合同</a></li>
-        <li role="presentation">
-            <a href="#provide-hypothec" style="background-color: #f5f5f5"
-               aria-controls="messages" role="tab" data-toggle="tab">他权</a></li>
-        <li role="presentation">
-            <a href="#provide-house" style="background-color: #f5f5f5"
-               aria-controls="messages" role="tab" data-toggle="tab">房产</a></li>
-        <li role="presentation">
-            <a href="#provide-ground" style="background-color: #f5f5f5"
-               aria-controls="messages" role="tab" data-toggle="tab">土地</a></li>
-        <li role="presentation">
-            <a href="#provide-receive" style="background-color: #f5f5f5"
-               aria-controls="settings" role="tab" data-toggle="tab">应收</a></li>
-        <li role="presentation">
-            <a href="#provide-stock " style="background-color: #f5f5f5"
-               aria-controls="home" role="tab" data-toggle="tab">股权</a></li>
-        <li role="presentation">
-            <a href="#provide-draft" style="background-color: #f5f5f5"
-               aria-controls="home" role="tab" data-toggle="tab">票据</a></li>
-        <li role="presentation">
-            <a href="#provide-chattel" style="background-color: #f5f5f5"
-               aria-controls="home" role="tab" data-toggle="tab">其他</a></li>
-        {% if PAGE_TITLE == '风控落实' %}
-            <li role="presentation" class="active">
-                <a href="#loan-notice " style="background-color: #f5f5f5"
-                   aria-controls="home" role="tab" data-toggle="tab">放款通知</a></li>
-        {% endif %}
-
-        {% if PAGE_TITLE == '放款通知' %}
-            <li role="presentation" class="active">
-                <a href="#provide" style="background-color: #f5f5f5"
-                   aria-controls="home" role="tab" data-toggle="tab">放款</a></li>
-        {% endif %}
-
+        {% include 'dbms/provide/agree/scan/provide-agree-tab-tit.html' %}
     </ul>
 
     <!-- Tab panes -->
     <div class="tab-content" id="provide-agree">
-        <div role="tabpanel" class="tab-pane" id="provide-article"><!--项目情况-->
-            {% include 'dbms/provide/agree/scan/tab/provide-article.html' %}</div>
-        <div role="tabpanel" class="tab-pane" id="agree"><!--合同-->
-            {% include 'dbms/agree/scan/tab/agree-counters.html' %}</div>
-
-        <div role="tabpanel" class="tab-pane" id="provide-hypothec"><!--他权-->
-            {% include 'dbms/warrant/agree/scan/tab/agree-hypothec.html' %}</div>
-        <div role="tabpanel" class="tab-pane" id="provide-house"><!--房产反担保-->
-            {% include 'dbms/warrant/agree/scan/tab/agree-house.html' %}</div>
-        <div role="tabpanel" class="tab-pane" id="provide-ground"><!--土地反担保-->
-            {% include 'dbms/warrant/agree/scan/tab/agree-ground.html' %}</div>
-        <div role="tabpanel" class="tab-pane" id="provide-receive"><!--应收质押-->
-            {% include 'dbms/warrant/agree/scan/tab/agree-receive.html' %}</div>
-        <div role="tabpanel" class="tab-pane" id="provide-stock"><!--股权质押-->
-            {% include 'dbms/warrant/agree/scan/tab/agree-stock.html' %}</div>
-        <div role="tabpanel" class="tab-pane" id="provide-draft"><!--票据质押-->
-            {% include 'dbms/warrant/agree/scan/tab/agree-draft.html' %}</div>
-        <div role="tabpanel" class="tab-pane" id="provide-chattel"><!--动产抵押-->
-            {% include 'dbms/warrant/agree/scan/tab/agree-chattel.html' %}</div>
-        {% if PAGE_TITLE == '风控落实' %}
-            <div role="tabpanel" class="tab-pane active" id="loan-notice"><!--放款通知-->
-                {% include 'dbms/provide/agree/scan/tab/loan-notice.html' %}</div>
-        {% endif %}
-        {% if PAGE_TITLE == '放款通知' %}
-            <div role="presentation" class="tab-pane active" id="provide"> <!--放款-->
-                {% include 'dbms/provide/agree/notify/tab/notify-provide.html' %} </div>
-        {% endif %}
-
+        {% include 'dbms/provide/agree/scan/provide-agree-tab-con.html' %}
     </div>
 </div>

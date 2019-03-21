@@ -6,7 +6,7 @@
 
     function bindAddStoragesB() {
         $('#addStoragesB').click(function () {
-            console.log("bindStoragesB")
+            console.log("bindStoragesB");
             $('#addStoragesModal').modal('show');
         })
     }
@@ -21,7 +21,7 @@
             });
             var postDataStr = JSON.stringify(postData);
 
-            console.log(postDataStr)
+            console.log(postDataStr);
 
             $.ajax({
                 url: '/dbms/warrant/storages/add/',

@@ -94,7 +94,7 @@ def appraisal_scan_lending(request, article_id, lending_id):  # 评审项目预�
     current_url_name = resolve(request.path).url_name  # 获取当前URL_NAME
     authority_list = request.session.get('authority_list')  # 获取当前用户的所有权限
     menu_result = MenuHelper(request).menu_data_list()
-    page_title = '放款次序'
+    PAGE_TITLE = '放款次序'
     article_obj = models.Articles.objects.get(id=article_id)
     lending_obj = models.LendingOrder.objects.get(id=lending_id)
     '''ARTICLE_STATE_LIST = ((1, '待反馈'), (2, '已反馈'), (3, '待上会'), (4, '已上会'), (5, '已签批'),
@@ -119,7 +119,25 @@ def appraisal_scan_lending(request, article_id, lending_id):  # 评审项目预�
     VEHICLE_LIST = [15, ]  # 车辆类
     CHATTEL_LIST = [13, 24, 34, 47]  # 动产类
     OTHER_LIST = [39, 49]  # 其他类
-
+    custom_lending_list = models.Customes.objects.filter(lending_custom__sure__lending=lending_obj)
+    warrant_lending_h_list = models.Warrants.objects.filter(lending_warrant__sure__lending=lending_obj,
+                                                            warrant_typ__in=[1,2])
+    warrant_lending_g_list = models.Warrants.objects.filter(lending_warrant__sure__lending=lending_obj,
+                                                            warrant_typ=5)
+    warrant_lending_6_list = models.Warrants.objects.filter(lending_warrant__sure__lending=lending_obj,
+                                                            warrant_typ=6)
+    warrant_lending_r_list = models.Warrants.objects.filter(lending_warrant__sure__lending=lending_obj,
+                                                            warrant_typ=11)
+    warrant_lending_s_list = models.Warrants.objects.filter(lending_warrant__sure__lending=lending_obj,
+                                                            warrant_typ=21)
+    warrant_lending_d_list = models.Warrants.objects.filter(lending_warrant__sure__lending=lending_obj,
+                                                            warrant_typ=31)
+    warrant_lending_v_list = models.Warrants.objects.filter(lending_warrant__sure__lending=lending_obj,
+                                                            warrant_typ=41)
+    warrant_lending_c_list = models.Warrants.objects.filter(lending_warrant__sure__lending=lending_obj,
+                                                            warrant_typ=51)
+    warrant_lending_o_list = models.Warrants.objects.filter(lending_warrant__sure__lending=lending_obj,
+                                                            warrant_typ=55)
     form_lendingcustoms_c_add = models.Customes.objects.exclude(
         id=article_obj.custom.id).filter(genre=1).values_list('id', 'name')
     form_lendingcustoms_p_add = models.Customes.objects.exclude(

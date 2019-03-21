@@ -8,19 +8,21 @@
         {#<caption><h4>项目管理</h4></caption>#}
         <thead>
         <tr style="text-align: center">
-            <th>编号</th>
+            <th>序号</th>
             <th>担保方式</th>
             <th>所有权人</th>
             <th>土地地址</th>
             <th>土地面积</th>
             <th>土地用途</th>
             <th>产权证</th>
-            {% if page_title == '放款次序' %}
-                <th>操作</th>
+            <th>他权情况</th>
+            <th>入库情况</th>
+            {% if PAGE_TITLE == '放款次序' or PAGE_TITLE == '权证管理' %}
+                <td>操作</td>
             {% endif %}
         </tr>
         </thead>
-        <tbody class="guarantee-tb">
+        <tbody class="provide-guarantee-tb">
         {% for lending_sure in lending_obj.sure_lending.all %}
             {% if lending_sure.sure_typ in GROUND_LIST %}
                 {% for warrant in lending_sure.warrant_sure.warrant.all %}
@@ -30,7 +32,7 @@
                         <td>{{ lending_sure.get_sure_typ_display }}</td>
                         <td>
                             {% for ownership in warrant.ownership_warrant.all %}
-                                {{ ownership.owner }}{% if not forloop.last %}、{% endif %}
+                                {{ ownership.owner.short_name }}{% if not forloop.last %}、{% endif %}
                             {% endfor %}
                         </td>
                         <td>{{ warrant.ground_warrant.ground_locate }}</td>
@@ -41,8 +43,19 @@
                                 {{ ownership.ownership_num }}{% if not forloop.last %}、{% endif %}
                             {% endfor %}
                         </td>
-                        {% if page_title == '放款次序' %}
-                            <td><a class="btn btn-danger btn-xs delGuaranteeB">删除</a></td>
+                        <td>
+                            {% for ypothec in warrant.ypothec_m_agree.all %}
+                                {% if ypothec.agree.id == agree_obj.id %}
+                                    {{ ypothec.warrant }}
+                                {% endif %}
+                            {% endfor %}
+                        </td>
+                        <td>{{ warrant.get_warrant_state_display }}</td>
+                        {% if PAGE_TITLE == '放款次序' %}
+                            <td><a class="btn btn-primary btn-xs delGuaranteeB">删除</a></td>
+                        {% endif %}
+                        {% if PAGE_TITLE == '权证管理' %}
+                            <td><a class="btn btn-primary btn-xs addStoragesAgreeB">出入库</a></td>
                         {% endif %}
                     </tr>
                 {% endfor %}
