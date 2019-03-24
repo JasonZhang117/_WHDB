@@ -120,6 +120,7 @@ class LendingSures(models.Model):
     class Meta:
         verbose_name_plural = '反担保'  # 指定显示名称
         db_table = 'dbms_lendingsure'  # 指定数据表的名称
+        ordering = ['sure_typ']  # 默认排序方式
 
     def __str__(self):
         return "%s_%s" % (self.lending, self.sure_typ)

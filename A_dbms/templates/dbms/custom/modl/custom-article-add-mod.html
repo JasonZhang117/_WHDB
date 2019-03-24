@@ -11,6 +11,7 @@
             </div>
             <div class="modal-body">
                 <form class="form-horizontal">
+                    {% csrf_token %}
                     {% include 'dbms/custom/modl/mod_form/article-add.html' %}
                 </form>
             </div>

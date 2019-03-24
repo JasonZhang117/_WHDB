@@ -8,10 +8,8 @@ from A_dbms.models import Employees
 class UserCreationForm(forms.ModelForm):
     """A form for creating new users. Includes all the required
     fields, plus a repeated password."""
-    password1 = forms.CharField(label='Password',
-                                widget=forms.PasswordInput)
-    password2 = forms.CharField(label='Password confirmation',
-                                widget=forms.PasswordInput)
+    password1 = forms.CharField(label='Password', widget=forms.PasswordInput)
+    password2 = forms.CharField(label='Password confirmation', widget=forms.PasswordInput)
 
     class Meta:
         model = Employees
@@ -67,7 +65,7 @@ class EmployeesAdmin(BaseUserAdmin):
         ('Personal info', {'fields': ('name',)}),
         ('Permissions',
          {'fields': ('is_active', 'is_staff',
-                     'is_superuser', 'job',
+                     'is_superuser', 'job', 'employee_status',
                      'user_permissions', 'groups')}),)
     '''add_fieldsets is not a standard ModelAdmin attribute.
     UserAdmin overrides get_fieldsets to use this attribute when creating a user.'''

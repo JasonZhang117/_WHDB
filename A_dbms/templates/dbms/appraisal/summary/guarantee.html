@@ -1,0 +1,131 @@
+<tr style="border: 1px solid black"> {#详细放担保措施#}
+    <th style="border: 1px solid black"></th>
+    <td style="border: 1px solid black">
+        {% if lending_count > 1 %}
+            {% for lending in lending_list %}
+                {{ forloop.counter }}、{{ lending.get_order_display }}发放
+                {% for order_amount_dic in order_amount_dic_list %}
+                    {% if order_amount_dic.order == lending.order %}
+                        {{ order_amount_dic.order_amount }}
+                    {% endif %}
+                {% endfor %}
+                万元，并落实以下担保措施<br>
+                {% for sure_lending in lending.sure_lending.all %}
+                    {% if sure_lending.sure_typ == 1 %} <!--企业保证-->
+                        （{{ forloop.counter }}）{{ sure_lending.get_sure_typ_display }}：
+                        {% for custom_c in custom_c_list %}
+                            {{ custom_c }}{% if not forloop.last %}、{% endif %}
+                        {% endfor %}提供企业连带责任保证反担保。
+                    {% endif %}
+                    {% if sure_lending.sure_typ == 2 %}<!--个人保证-->
+                        （{{ forloop.counter }}）{{ sure_lending.get_sure_typ_display }}：
+                        {% for custom_p in custom_p_list %}
+                            {{ custom_p }}
+                            {% if custom_p.person_custome.spouses %}
+                                、{{ custom_p.person_custome.spouses }}夫妇
+                            {% endif %}{% if not forloop.last %}，{% endif %}
+                        {% endfor %}提供个人连带责任保证反担保。
+                    {% endif %}
+                    {% if sure_lending.sure_typ == 11 %}<!--房产抵押-->
+                        （{{ forloop.counter }}）{{ sure_lending.get_sure_typ_display }}：
+                        以下房产抵押给我公司，签订抵押反担保合同并办理抵押登记
+                    {% endif %}
+                    {% if sure_lending.sure_typ == 12 %}<!--土地抵押-->
+                        （{{ forloop.counter }}）{{ sure_lending.get_sure_typ_display }}：
+                        以下国有土地使用权抵押给我公司，签订抵押反担保合同并办理抵押登记
+                    {% endif %}
+                    {% if sure_lending.sure_typ == 13 %}<!--动产抵押-->
+                        （{{ forloop.counter }}）{{ sure_lending.get_sure_typ_display }}：
+                        {% for warrant_c in warrant_c_13_list %}
+                            {{ warrant_c }}
+                        {% endfor %}
+                    {% endif %}
+                    {% if sure_lending.sure_typ == 14 %}<!--在建工程抵押-->
+                        （{{ forloop.counter }}）{{ sure_lending.get_sure_typ_display }}：
+                        以下在建工程抵押给我公司，签订抵押反担保合同并办理抵押登记
+                    {% endif %}
+                    {% if sure_lending.sure_typ == 15 %}<!--车辆抵押-->
+                        （{{ forloop.counter }}）{{ sure_lending.get_sure_typ_display }}：
+                        车辆抵押
+                    {% endif %}
+                    {% if sure_lending.sure_typ == 21 %}<!--房产顺位-->
+                        （{{ forloop.counter }}）{{ sure_lending.get_sure_typ_display }}：
+                        以下房产抵押给我公司，签订抵押反担保合同并办理顺位抵押登记
+                    {% endif %}
+                    {% if sure_lending.sure_typ == 22 %}<!--土地顺位-->
+                        （{{ forloop.counter }}）{{ sure_lending.get_sure_typ_display }}：
+                        以下国有土地使用权抵押给我公司，签订抵押反担保合同并办理顺位抵押登记
+                    {% endif %}
+                    {% if sure_lending.sure_typ == 23 %}<!--在建工程顺位-->
+                        （{{ forloop.counter }}）{{ sure_lending.get_sure_typ_display }}：
+                        以下在建工程抵押给我公司，签订抵押反担保合同并办理顺位抵押登记
+                    {% endif %}
+                    {% if sure_lending.sure_typ == 24 %}<!--动产顺位-->
+                        （{{ forloop.counter }}）{{ sure_lending.get_sure_typ_display }}：
+                        以下国有土地使用权抵押给我公司，签订抵押反担保合同并办理顺位抵押登记
+                    {% endif %}
+                    {% if sure_lending.sure_typ == 31 %}<!--应收质押-->
+                        （{{ forloop.counter }}）{{ sure_lending.get_sure_typ_display }}：
+                        应收质押
+                    {% endif %}
+                    {% if sure_lending.sure_typ == 32 %}<!--股权质押-->
+                        （{{ forloop.counter }}）{{ sure_lending.get_sure_typ_display }}：
+                        股权质押
+                    {% endif %}
+                    {% if sure_lending.sure_typ == 33 %}<!--票据质押-->
+                        （{{ forloop.counter }}）{{ sure_lending.get_sure_typ_display }}：
+                        票据质押
+                    {% endif %}
+                    {% if sure_lending.sure_typ == 34 %}<!--动产质押-->
+                        （{{ forloop.counter }}）{{ sure_lending.get_sure_typ_display }}：
+                        动产质押
+                    {% endif %}
+                    {% if sure_lending.sure_typ == 39 %}<!--其他权利质押-->
+                        （{{ forloop.counter }}）{{ sure_lending.get_sure_typ_display }}：
+                        其他权利质押
+                    {% endif %}
+                    {% if sure_lending.sure_typ == 42 %}<!--房产监管-->
+                        （{{ forloop.counter }}）{{ sure_lending.get_sure_typ_display }}：
+                        房产监管
+                    {% endif %}
+                    {% if sure_lending.sure_typ == 43 %}<!--土地监管-->
+                        （{{ forloop.counter }}）{{ sure_lending.get_sure_typ_display }}：
+                        土地监管
+                    {% endif %}
+                    {% if sure_lending.sure_typ == 44 %}<!--票据监管-->
+                        （{{ forloop.counter }}）{{ sure_lending.get_sure_typ_display }}：
+                        票据监管
+                    {% endif %}
+                    {% if sure_lending.sure_typ == 47 %}<!--动产监管-->
+                        （{{ forloop.counter }}）{{ sure_lending.get_sure_typ_display }}：
+                        动产监管
+                    {% endif %}
+                    {% if sure_lending.sure_typ == 49 %}<!--其他监管-->
+                        （{{ forloop.counter }}）{{ sure_lending.get_sure_typ_display }}：
+                        其他监管
+                    {% endif %}
+                    {% if sure_lending.sure_typ == 51 %}<!--股权预售-->
+                        （{{ forloop.counter }}）{{ sure_lending.get_sure_typ_display }}：
+                        其他监管
+                    {% endif %}
+                    {% if sure_lending.sure_typ == 52 %}<!--房产预售-->
+                        （{{ forloop.counter }}）{{ sure_lending.get_sure_typ_display }}：
+                        其他监管
+                    {% endif %}
+                    {% if sure_lending.sure_typ == 53 %}<!--土地预售-->
+                        （{{ forloop.counter }}）{{ sure_lending.get_sure_typ_display }}：
+                        其他监管
+                    {% endif %}
+                    <br>
+                {% endfor %}
+            {% endfor %}
+        {% else %}
+            {% for lending in lending_list %}
+                {% for sure_lending in lending.sure_lending.all %}
+                    {{ forloop.counter }}、{{ sure_lending.get_sure_typ_display }}
+                    <br>
+                {% endfor %}
+            {% endfor %}
+        {% endif %}
+    </td>
+</tr>

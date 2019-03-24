@@ -121,7 +121,7 @@ def appraisal_scan_lending(request, article_id, lending_id):  # 评审项目预�
     OTHER_LIST = [39, 49]  # 其他类
     custom_lending_list = models.Customes.objects.filter(lending_custom__sure__lending=lending_obj)
     warrant_lending_h_list = models.Warrants.objects.filter(lending_warrant__sure__lending=lending_obj,
-                                                            warrant_typ__in=[1,2])
+                                                            warrant_typ__in=[1, 2])
     warrant_lending_g_list = models.Warrants.objects.filter(lending_warrant__sure__lending=lending_obj,
                                                             warrant_typ=5)
     warrant_lending_6_list = models.Warrants.objects.filter(lending_warrant__sure__lending=lending_obj,
@@ -170,7 +170,7 @@ def summary_scan(request, article_id):  # 评审项目预览
 
     article_obj = models.Articles.objects.get(id=article_id)
 
-    credit_term = article_obj.credit_term
+    credit_term = article_obj.credit_term  # 授信期限（月）
     renewal_str = str(article_obj.renewal / 10000).rstrip('0').rstrip('.')  # 续贷（万元）
     augment_str = str(article_obj.augment / 10000).rstrip('0').rstrip('.')  # 新增（万元）
     amount_str = str(article_obj.amount / 10000).rstrip('0').rstrip('.')  # 总额（万元）
@@ -178,13 +178,10 @@ def summary_scan(request, article_id):  # 评审项目预览
     single_list = article_obj.single_quota_summary.values_list('credit_model', 'credit_amount')  # 单项额度
     single_dic_list = list(
         map(lambda x: {'credit_model': x[0], 'credit_amount': str(x[1] / 10000).rstrip('0').rstrip('.')}, single_list))
-    print('single_dic_list:', single_dic_list)  # 单项额度
-
-    order_amount_list = article_obj.lending_summary.values_list('order', 'order_amount')
+    order_amount_list = article_obj.lending_summary.values_list('order', 'order_amount')  # 发放次序
     order_amount_dic_list = list(
         map(lambda x: {'order': x[0], 'order_amount': str(x[1] / 10000).rstrip('0').rstrip('.')},
             order_amount_list))
-    print('order_amount_dic_list:', order_amount_dic_list)  # 放款次序
 
     review_model = article_obj.appraisal_article.all().first().review_model  # ((1, '内审'), (2, '外审'))
     expert_amount = article_obj.expert.count()  # 评委个数
@@ -194,9 +191,18 @@ def summary_scan(request, article_id):  # 评审项目预览
     comment_type_3 = article_obj.comment_summary.filter(comment_type=3).count()  # 不同意票数
     lending_count = article_obj.lending_summary.count()  # 放款笔数
     lending_list = article_obj.lending_summary.all()  # 放款次序列表
-
     for lending in lending_list:
-        sure_lending_list = lending.sure_lending.all()
-        print('sure_lending_list:', sure_lending_list)
-    print('comment_type_1:', comment_type_1)
+        sure_list = lending.sure_lending.all()
+        custom_c_list = models.Customes.objects.filter(lending_custom__sure__lending=lending, genre=1)  # 个人
+        custom_p_list = models.Customes.objects.filter(lending_custom__sure__lending=lending, genre=2)  # 企业
+        warrant_list = models.Warrants.objects.filter(lending_warrant__sure__lending=lending)
+        warrant_h_11_list = models.Warrants.objects.filter(
+            lending_warrant__sure__lending=lending, lending_warrant__sure__sure_typ=11)  # 抵押房产
+        warrant_g_12_list = models.Warrants.objects.filter(
+            lending_warrant__sure__lending=lending, lending_warrant__sure__sure_typ=12)  # 抵押土地
+        warrant_c_13_list = models.Warrants.objects.filter(
+            lending_warrant__sure__lending=lending, lending_warrant__sure__sure_typ=13)  # 抵押动产
+        warrant_h_21_list = models.Warrants.objects.filter(
+            lending_warrant__sure__lending=lending, lending_warrant__sure__sure_typ=21)  # 顺位房产
+
     return render(request, 'dbms/appraisal/appraisal-summary-scan.html', locals())

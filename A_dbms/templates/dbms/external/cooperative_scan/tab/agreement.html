@@ -2,24 +2,30 @@
     <table class="table table-bordered table-hover table-condensed active">
         <thead>
         <tr style="text-align: center">
-            <th>归档状态</th>
-            <th>归档日期</th>
-            <th>归档说明</th>
-            <th>归档人</th>
-            {% if PAGE_TITLE == '归档管理' %}
+            <th>综合额度</th>
+            <th>单笔限额(综合)</th>
+            <th>保函额度</th>
+            <th>单笔限额（保函）</th>
+            <th>合作日期</th>
+            <th>到期日</th>
+            <th>创建人</th>
+            {% if PAGE_TITLE == '机构详情' %}
                 <th>操作</th>
             {% endif %}
         </tr>
         </thead>
-        <tbody id="provide-pigeonhole-tb">
-        {% for pigeonhole in provide_obj.pigeonhole_provide.all %}
-            <tr pigeonhole-nid="{{ pigeonhole.id }}">
-                <td>{{ pigeonhole.get_implement_display }}</td>
-                <td>{{ pigeonhole.pigeonhole_date }}</td>
-                <td>{{ pigeonhole.pigeonhole_explain }}</td>
-                <td>{{ pigeonhole.pigeonhole_transfer.name }}</td>
-                {% if PAGE_TITLE == '归档管理' %}
-                    <td><a class="btn btn-danger btn-xs delPigeonholeB">删除</a></td>
+        <tbody id="agreement-tb">
+        {% for agreement in cooperator_obj.agreement_cooperator.all %}
+            <tr agreement-nid="{{ agreement.id }}">
+                <td>{{ agreement.flow_credit }}</td>
+                <td>{{ agreement.flow_limit }}</td>
+                <td>{{ agreement.back_credit }}</td>
+                <td>{{ agreement.back_limit }}</td>
+                <td>{{ agreement.credit_date }}</td>
+                <td>{{ agreement.due_date }}</td>
+                <td>{{ agreement.agreementor }}</td>
+                {% if PAGE_TITLE == '机构详情' %}
+                    <td><a class="btn btn-danger btn-xs delAgreementB">删除</a></td>
                 {% endif %}
             <tr>
         {% endfor %}

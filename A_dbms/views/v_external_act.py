@@ -16,7 +16,7 @@ from _WHDB.views import authority
 # -----------------------添加合作协议ajax-------------------------#
 @login_required
 @authority
-def agreement_add_ajax(request):  # 代偿添加ajax
+def agreement_add_ajax(request):  # 合作协议ajax
     print(request.path, '>', resolve(request.path).url_name, '>', request.user)
     current_url_name = resolve(request.path).url_name  # 获取当前URL_NAME
     authority_list = request.session.get('authority_list')  # 获取当前用户的所有权限
@@ -27,7 +27,6 @@ def agreement_add_ajax(request):  # 代偿添加ajax
     print('post_data:', post_data)
     cooperator_list = models.Cooperators.objects.filter(id=post_data['cooperator_id'])
     cooperator_obj = cooperator_list.first()
-    print('cooperator_obj:', cooperator_obj)
     cooperator_state = cooperator_obj.cooperator_state
     '''COOPERATOR_STATE_LIST = ((1, '正常'), (11, '注销'))'''
     form_agreement_add = forms.FormAgreementAdd(post_data)
@@ -38,8 +37,8 @@ def agreement_add_ajax(request):  # 代偿添加ajax
             flow_limit = round(agreement_cleaned['flow_limit'], 2)
             back_credit = round(agreement_cleaned['back_credit'], 2)
             back_limit = round(agreement_cleaned['back_limit'], 2)
-            credit_date = round(agreement_cleaned['credit_date'], 2)
-            due_date = round(agreement_cleaned['due_date'], 2)
+            credit_date = agreement_cleaned['credit_date']
+            due_date = agreement_cleaned['due_date']
             try:
                 with transaction.atomic():
                     agreement_obj = models.Agreements.objects.create(
