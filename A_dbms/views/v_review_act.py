@@ -77,7 +77,6 @@ def review_update_ajax(request):
     review_obj = review_list.first()
 
     review_list_s = custom_obj.review_custom.filter(review_state=1)
-    print('review_list_s:', review_list_s)
     '''REVIEW_STATE_LIST = ((1, '待保后'), (11, '待报告'), (21, '已完成'))'''
     if review_obj.review_state != 1:
         response['status'] = False

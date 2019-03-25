@@ -1,0 +1,42 @@
+<div class="table-responsive">
+    <table class="table table-bordered table-hover table-condensed active">
+        <thead>
+        <tr style="text-align: center">
+            <th>序号</th>
+            <th>客户名称</th>
+            <th>担保种类</th>
+            <th>发放额度</th>
+            <th>期限(月)</th>
+            <th>合作银行</th>
+            <th>所属行业</th>
+            <th>所在区域</th>
+            <th>项目经理A</th>
+            <th>项目经理B</th>
+            <th>放款时间</th>
+            <th>还款时间</th>
+            <th>回款金额</th>
+            <th>责任余额</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for provide in provide_list %}
+            <tr>
+                <td>{{ forloop.counter }}</td>
+                <td>{{ provide.notify.agree.lending.summary.custom.name }}</td>
+                <td>{{ provide.get_provide_typ_display }}</td>
+                <td>{{ provide.provide_money }}</td>
+                <td>{{ provide.notify.time_limit }}</td>
+                <td>{{ provide.notify.agree.branch.short_name }}</td>
+                <td>{{ provide.notify.agree.lending.summary.custom.company_custome.idustry }}</td>
+                <td>{{ provide.notify.agree.lending.summary.custom.company_custome.district }}</td>
+                <td>{{ provide.notify.agree.lending.summary.director.name }}</td>
+                <td>{{ provide.notify.agree.lending.summary.assistant.name }}</td>
+                <td>{{ provide.provide_date }}</td>
+                <td>{{ provide.due_date }}</td>
+                <td>{{ provide.provide_repayment_sum }}</td>
+                <td>{{ provide.provide_balance }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>

@@ -9,7 +9,8 @@
             <th>到期日</th>
             <th>还款金额</th>
             <th>归档状态</th>
-            <th>放款状态</th>
+            <th>状态</th>
+            <th>记录人</th>
             <th>操作</th>
         </tr>
         </thead>
@@ -25,6 +26,7 @@
                 <td>{{ provide.provide_repayment_sum }}</td>
                 <td>{{ provide.get_implement_display }}</td>
                 <td>{{ provide.get_provide_status_display }}</td>
+                <td>{{ provide.providor.name }}</td>
                 <td><a class="btn btn-primary btn-xs delProvideB">删除</a></td>
             <tr>
         {% endfor %}

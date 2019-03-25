@@ -59,6 +59,8 @@ from .v_custom_act import (custom_add_ajax, custom_del_ajax, custom_edit_ajax, s
 from .v_external import cooperative, cooperative_scan, soondue_cooperator, overdue_cooperator, branches
 from .v_external_act import agreement_add_ajax
 
+
+from .v_report import report_provide_list
 # 部门、员工
 from .v_interior import department, department_add, department_edit
 from .v_interior import department_del

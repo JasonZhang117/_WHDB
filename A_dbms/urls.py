@@ -183,6 +183,8 @@ urlpatterns = [
     path('branch/', views.branches, name='branch_all'),
     path('branch/<int:branch_state>/', views.branches, name='branch'),
 
+    # ------------------------------报表--------------------------------------#
+    path('report/provide/list/', views.report_provide_list, name='report_provide_list'),  # 菜单-合作机构
     # 员工
     path('employee/', views.employee, name='employee'),
     path('employee/add/', views.employee_add, name='employee_add'),
