@@ -18,7 +18,8 @@ class Cooperators(models.Model):  # 授信银行
     cooperator_flow = models.FloatField(verbose_name='_流贷余额', default=0)
     cooperator_accept = models.FloatField(verbose_name='_承兑余额', default=0)
     cooperator_back = models.FloatField(verbose_name='_保函余额', default=0)
-
+    entrusted_loan = models.FloatField(verbose_name='_委贷余额', default=0)
+    petty_loan = models.FloatField(verbose_name='_小贷余额', default=0)
     COOPERATOR_STATE_LIST = ((1, '正常'), (11, '注销'))
     cooperator_state = models.IntegerField(verbose_name='状态', choices=COOPERATOR_STATE_LIST, default=1)
     cooperat = models.ForeignKey(to='Employees', verbose_name="创建人", on_delete=models.PROTECT,
@@ -72,6 +73,8 @@ class Branches(models.Model):  # 放款银行
     branch_flow = models.FloatField(verbose_name='_流贷余额', default=0)
     branch_accept = models.FloatField(verbose_name='_承兑余额', default=0)
     branch_back = models.FloatField(verbose_name='_保函余额', default=0)
+    entrusted_loan = models.FloatField(verbose_name='_委贷余额', default=0)
+    petty_loan = models.FloatField(verbose_name='_小贷余额', default=0)
     branchor = models.ForeignKey(to='Employees', verbose_name="创建人", on_delete=models.PROTECT,
                                  related_name='branchor_employee')
     branchor_date = models.DateField(verbose_name='创建日期', default=datetime.date.today)

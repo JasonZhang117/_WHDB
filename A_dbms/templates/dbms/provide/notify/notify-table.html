@@ -2,36 +2,31 @@
     <table class="table table-bordered table-hover table-condensed active">
         <thead>
         <tr style="text-align: center">
-            <th>合同编号({{ provide_acount }})</th>
+            <th>合同编号</th>
             <th>客户名称</th>
             <th>放款银行</th>
             <th>通知金额</th>
             <th>期限(月)</th>
-            {#            <th>加权金额</th>#}
             <th>通知日期</th>
             <th>放款金额</th>
             <th>还款金额</th>
             <th>在保余额</th>
-            {#            <th>借款合同</th>#}
-            {#            <th>保证合同</th>#}
         </tr>
         </thead>
         <tbody>
         {% for notify in p_list %}
             <tr>
-                <td><a href="{% url 'dbms:provide_notify_scan' notify_id=notify.id %}">{{ notify.agree.agree_num }}</a></td>
+                <td><a href="{% url 'dbms:provide_notify_scan' notify_id=notify.id %}">{{ notify.agree.agree_num }}</a>
+                </td>
                 <td>{{ notify.agree.lending.summary.custom.short_name }}</td>
                 <td>{{ notify.agree.branch.short_name }}</td>
                 <td align="right">{{ notify.notify_money }}</td>
                 <td align="right">{{ notify.time_limit }}</td>
-                {#                <td>{{ notify.weighting }}</td>#}
                 <td>{{ notify.notify_date }}</td>
                 <td align="right">{{ notify.notify_provide_sum }}</td>
                 <td align="right">{{ notify.notify_repayment_sum }}</td>
                 <td align="right">{{ notify.notify_balance }}</td>
-                {#                <td>{{ notify.contracts_lease }}</td>#}
-                {#                <td>{{ notify.contract_guaranty }}</td>#}
-            <tr>
+            </tr>
         {% endfor %}
         </tbody>
     </table>

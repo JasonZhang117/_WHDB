@@ -145,7 +145,6 @@ def home(request):
     print('reverse(request.path):', reverse('home'))  # 将路径名转换为路径
     print('request.get_host:', request.get_host())
     print('request.GET.items():', request.GET.items())  # 获取get传递的参数对
-
     print('acc_login-->request.COOKIES:', request.COOKIES)
     print('acc_login-->request.session:', request.session)
     print('acc_login-->request.GET:', request.GET)
@@ -237,9 +236,27 @@ def home(request):
     #         if not comment_list:
     #             models.Comments.objects.create(summary=article_obj, expert=expert_obj,
     #                                            comment_buildor=request.user)
-
     # aritcle_obj = models.Articles.objects.get(article_num='众诚瑞丰-201903-1')
     # article_comment_amount = aritcle_obj.comment_summary.exclude(comment_type=0).count()
     # print(aritcle_obj, article_comment_amount)
+
+    provide_groups_director = models.Provides.objects.filter(provide_status=1).values(
+        'notify__agree__lending__summary__director__name').annotate(
+        con=Count('provide_money'), sum=Sum('provide_money')).values(
+        'notify__agree__lending__summary__director__name', 'con', 'sum').order_by('-sum')
+    provide_groups_idustry = models.Provides.objects.filter(provide_status=1).values(
+        'notify__agree__lending__summary__custom__company_custome__idustry__name').annotate(
+        con=Count('provide_money'), sum=Sum('provide_money')).values(
+        'notify__agree__lending__summary__custom__company_custome__idustry__name', 'con', 'sum').order_by('-sum')
+    provide_groups_district = models.Provides.objects.filter(provide_status=1).values(
+        'notify__agree__lending__summary__custom__company_custome__district__name').annotate(
+        con=Count('provide_money'), sum=Sum('provide_money')).values(
+        'notify__agree__lending__summary__custom__company_custome__district__name', 'con', 'sum').order_by('-sum')
+    provide_groups_bank = models.Provides.objects.filter(provide_status=1).values(
+        'notify__agree__branch__cooperator__short_name').annotate(
+        con=Count('provide_money'), sum=Sum('provide_money')).values(
+        'notify__agree__branch__cooperator__short_name', 'con', 'sum').order_by('-sum')
+    provide_accrual = models.Provides.objects.filter(
+        provide_date__year=2018).aggregate(Sum('provide_money'))['provide_money__sum']  # 发生额
 
     return render(request, 'index.html', locals())

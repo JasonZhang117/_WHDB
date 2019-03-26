@@ -71,22 +71,70 @@
                  style="padding-left: 1px;padding-right: 1px;"> <!--主体-->
                 {% block right-content-container %}<!--右侧内容-->
                     <h2 class="page-header"><a href="{% url 'dbms:index' %}">测试页，点击进入正式系统</a></h2>
-                    <ul>
-                        {% for menu in menu_result %}
-                            <li>
-                                id:{{ menu.id }}->caption:{{ menu.caption }}->parent_id:{{ menu.parent_id }}->ordery：{{ menu.ordery }}
-                                <ul>
-                                    {% for ccc in menu.child %}
-                                        <li>
-                                            id:{{ ccc.id }}->caption:{{ ccc.caption }}->parent_id:{{ ccc.parent_id }}->url：{{ ccc.url }}->ordery：
-                                            {{ ccc.ordery }}->open：{{ ccc.open }}->child：{{ ccc.child }}
-                                        </li>
-                                    {% endfor %}
-
-                                </ul>
-                            </li>
+                    <table>
+                        <tr>
+                            <th>项目经理</th>
+                            <th>项目个数</th>
+                            <th>担保余额(万)</th>
+                            <th>担保余额</th>
+                        </tr>
+                        {% for provide in provide_groups_director %}
+                            <tr>
+                                <td>{{ provide.notify__agree__lending__summary__director__name }}</td>
+                                <td align="right">{{ provide.con }}</td>
+                                <td align="right">{% widthratio provide.sum 10000 1 %}</td>
+                                <td align="right">{{ provide.sum }}</td>
+                            </tr>
                         {% endfor %}
-                    </ul>
+                    </table>
+                    <table>
+                        <tr>
+                            <th>行业</th>
+                            <th>项目个数</th>
+                            <th>担保余额(万)</th>
+                            <th>担保余额</th>
+                        </tr>
+                        {% for provide in provide_groups_idustry %}
+                            <tr>
+                                <td>{{ provide.notify__agree__lending__summary__custom__company_custome__idustry__name }}</td>
+                                <td align="right">{{ provide.con }}</td>
+                                <td align="right">{% widthratio provide.sum 10000 1 %}</td>
+                                <td align="right">{{ provide.sum }}</td>
+                            </tr>
+                        {% endfor %}
+                    </table>
+                    <table>
+                        <tr>
+                            <th>区域</th>
+                            <th>项目个数</th>
+                            <th>担保余额(万)</th>
+                            <th>担保余额</th>
+                        </tr>
+                        {% for provide in provide_groups_district %}
+                            <tr>
+                                <td>{{ provide.notify__agree__lending__summary__custom__company_custome__district__name }}</td>
+                                <td align="right">{{ provide.con }}</td>
+                                <td align="right">{% widthratio provide.sum 10000 1 %}</td>
+                                <td align="right">{{ provide.sum }}</td>
+                            </tr>
+                        {% endfor %}
+                    </table>
+                    <table>
+                        <tr>
+                            <th>银行</th>
+                            <th>项目个数</th>
+                            <th>担保余额(万)</th>
+                            <th>担保余额</th>
+                        </tr>
+                        {% for provide in provide_groups_bank %}
+                            <tr>
+                                <td>{{ provide.notify__agree__branch__cooperator__short_name }}</td>
+                                <td align="right">{{ provide.con }}</td>
+                                <td align="right">{% widthratio provide.sum 10000 1 %}</td>
+                                <td align="right">{{ provide.sum }}</td>
+                            </tr>
+                        {% endfor %}
+                    </table>
                 {% endblock %}
             </div>
         </div>

@@ -1,27 +1,32 @@
 <div class="panel panel-default">
     <div class="panel-heading">
         <label>产权情况</label>
+        {#        WARRANT_TYP_LIST = [#}
+        {#        (1, '房产'), (2, '房产包'), (5, '土地'), (6, '在建工程'), (11, '应收账款'),#}
+        {#        (21, '股权'), (31, '票据'), (41, '车辆'), (51, '动产'), (55, '其他'), (99, '他权')]#}
         <label class="navbar-right">
             {% if warrant_typ == 99 %}
                 <a class="btn btn-primary btn-sm " id="addGuarantyB">添加抵押物</a><!--#path('warrant/storages/'-->
+                <a class="btn btn-primary btn-sm " id="addStoragesB">出入库</a><!--#path('warrant/storages/'-->
             {% elif warrant_typ in HOUSE_GROUND_TYP_LIST %}
                 <a class="btn btn-primary btn-sm " id="addOwerShip">添加产权证</a><!--#path('warrant/storages/'-->
                 {#                <a class="btn btn-primary btn-sm " id="addPartOwer">共有人</a><!--#path('warrant/storages/'-->#}
                 <a class="btn btn-primary btn-sm " id="addEvaluateB">评估</a><!--#path('warrant/evaluate/'-->
+                <a class="btn btn-primary btn-sm " id="addStoragesB">出入库</a><!--#path('warrant/storages/'-->
             {% elif warrant_typ == 2 %}
                 <a class="btn btn-primary btn-sm " id="addOwerShip">添加产权证</a><!--#path('warrant/storages/'-->
                 <a class="btn btn-primary btn-sm " id="addPartOwer">共有人</a><!--#path('warrant/storages/'-->
                 <a class="btn btn-primary btn-sm " id="addEvaluateB">评估</a><!--#path('warrant/evaluate/'-->
                 <a class="btn btn-primary btn-sm " id="addHouseBagB">添加房产包</a><!--#path('warrant/storages/'-->
-            {% elif warrant_typ == 6 %}
-                <a class="btn btn-primary btn-sm " id="addOwerShip">添加产权证</a><!--#path('warrant/storages/'-->
+                <a class="btn btn-primary btn-sm " id="addStoragesB">出入库</a><!--#path('warrant/storages/'-->
             {% elif warrant_typ == 31 %}
                 <a class="btn btn-primary btn-sm " id="addDraftBagB">添加票据</a><!--#path('warrant/storages/'-->
+                <a class="btn btn-primary btn-sm " id="addStoragesB">出入库</a><!--#path('warrant/storages/'-->
+            {% elif warrant_typ == 41 %}
+                <a class="btn btn-primary btn-sm " id="addStoragesB">出入库</a><!--#path('warrant/storages/'-->
             {% endif %}
             <a class="btn btn-primary btn-sm " id="editWarrant">修改</a><!--#path('warrant/edit/'-->
-            <a class="btn btn-primary btn-sm " id="addStoragesB">出入库</a><!--#path('warrant/storages/'-->
             <a class="btn btn-danger btn-sm " id="delWarrant">删除</a><!--#path('warrant/del/'-->
-
         </label>
     </div>
 
@@ -32,6 +37,8 @@
             {% include 'dbms/warrant/scan/warrant-summry-housebag.html' %}
         {% elif  warrant_typ == 5 %}
             {% include 'dbms/warrant/scan/warrant-summry-ground.html' %}
+        {% elif  warrant_typ == 6 %}
+            {% include 'dbms/warrant/scan/warrant-summry-coustruct.html' %}
         {% elif  warrant_typ == 11 %}
             {% include 'dbms/warrant/scan/warrant-summry-receiveable.html' %}
         {% elif  warrant_typ == 99 %}

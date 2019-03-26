@@ -256,7 +256,6 @@ class Draft(models.Model):  # 应收票据
     draft_owner = models.ForeignKey(to='Customes', verbose_name="所有权人",
                                     on_delete=models.PROTECT,
                                     related_name='draft_custome')
-
     draft_detail = models.TextField(verbose_name="票据描述")
     draft_buildor = models.ForeignKey(to='Employees', verbose_name="创建者", default=1,
                                       on_delete=models.PROTECT,

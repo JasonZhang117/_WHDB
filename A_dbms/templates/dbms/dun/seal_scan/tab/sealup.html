@@ -14,9 +14,9 @@
         {% for sealup in seal_obj.sealup_seal.all %}
             <tr>
                 <td>{{ sealup.get_sealup_type_display }}</td>
-                <td>{{ sealup.sealup_date }}</td>
-                <td>{{ sealup.due_date }}</td>
-                <td>{{ sealup.sealup_remark }}</td>
+                <td>{{ sealup.sealup_date|default_if_none:"" }}</td>
+                <td>{{ sealup.due_date|default_if_none:"" }}</td>
+                <td>{{ sealup.sealup_remark|default_if_none:"" }}</td>
                 <td>{{ sealup.sealupor.name }}</td>
                 <td>{{ sealup.sealupor_date }}</td>
             <tr>

@@ -333,25 +333,20 @@ def warrant_edit_ajax(request):
     post_data_str = request.POST.get('postDataStr')
     post_data = json.loads(post_data_str)
     print('post_data:', post_data)
-
     warrant_id = int(post_data['warrant_id'])
     warrant_list = models.Warrants.objects.filter(id=warrant_id)
-    warrant_obj = warrant_list[0]
+    warrant_obj = warrant_list.first()
     warrant_typ = warrant_obj.warrant_typ
-
     form_warrant_edit = forms.WarrantEditForm(post_data)
-
     if form_warrant_edit.is_valid():
         warrant_edit_clean = form_warrant_edit.cleaned_data
         '''WARRANT_TYP_LIST = [
-                    (1, '房产'), (2, '房产'), (5, '土地'), (11, '应收'), (21, '股权'),
-                    (31, '票据'), (41, '车辆'), (51, '动产'), (99, '他权')]'''
-        if warrant_typ == 1:
-            print('warrant_typ == 1')
+        (1, '房产'), (2, '房产包'), (5, '土地'), (6, '在建工程'), (11, '应收账款'),
+        (21, '股权'), (31, '票据'), (41, '车辆'), (51, '动产'), (55, '其他'), (99, '他权')]'''
+        if warrant_typ == 1:  # (1, '房产')
             form_house_add_edit = forms.HouseAddEidtForm(post_data)
             if form_house_add_edit.is_valid():
                 house_add_edit_clean = form_house_add_edit.cleaned_data
-                print('house_add_edit_clean:', house_add_edit_clean)
                 try:
                     with transaction.atomic():
                         warrant_list.update(warrant_num=warrant_edit_clean['warrant_num'])
@@ -359,7 +354,7 @@ def warrant_edit_ajax(request):
                             house_locate=house_add_edit_clean['house_locate'],
                             house_app=house_add_edit_clean['house_app'],
                             house_area=house_add_edit_clean['house_area'])
-                    response['message'] = '房产修改成功！！！，请继续创建产权证信息。'
+                    response['message'] = '房产修改成功！！！'
                 except Exception as e:
                     response['status'] = False
                     response['message'] = '房产修改失败：%s' % str(e)
@@ -367,12 +362,10 @@ def warrant_edit_ajax(request):
                 response['status'] = False
                 response['message'] = '表单信息有误！！！'
                 response['forme'] = form_house_add_edit.errors
-        elif warrant_typ == 5:
-            print('warrant_typ == 5')
+        elif warrant_typ == 5:  # (5, '土地')
             form_ground_add_edit = forms.GroundAddEidtForm(post_data)
             if form_ground_add_edit.is_valid():
                 ground_add_edit_clean = form_ground_add_edit.cleaned_data
-                print('ground_add_edit_clean:', ground_add_edit_clean)
                 try:
                     with transaction.atomic():
                         warrant_list.update(
@@ -381,7 +374,7 @@ def warrant_edit_ajax(request):
                             ground_locate=ground_add_edit_clean['ground_locate'],
                             ground_app=ground_add_edit_clean['ground_app'],
                             ground_area=ground_add_edit_clean['ground_area'])
-                        response['message'] = '土地创建成功！！！，请继续创建产权证信息。'
+                        response['message'] = '土地信息修改该成功！！！'
                 except Exception as e:
                     response['status'] = False
                     response['message'] = '土地创建失败：%s' % str(e)
@@ -389,14 +382,40 @@ def warrant_edit_ajax(request):
                 response['status'] = False
                 response['message'] = '表单信息有误！！！'
                 response['forme'] = form_ground_add_edit.errors
-        elif warrant_typ == 99:
-            print('warrant_typ == 99')
+        elif warrant_typ == 6:  # (6, '在建工程')
+            form_construct_add_edit = forms.ConstructionAddForm(post_data)
+            if form_construct_add_edit.is_valid():
+                construct_add_edit_clean = form_construct_add_edit.cleaned_data
+                try:
+                    with transaction.atomic():
+                        warrant_list.update(
+                            warrant_num=warrant_edit_clean['warrant_num'])
+                        models.Construction.objects.filter(warrant=warrant_obj).update(
+                            coustruct_locate=construct_add_edit_clean['coustruct_locate'],
+                            coustruct_app=construct_add_edit_clean['coustruct_app'],
+                            coustruct_area=construct_add_edit_clean['coustruct_area'])
+                        response['message'] = '在建工程信息修改该成功！！！'
+                except Exception as e:
+                    response['status'] = False
+                    response['message'] = '在建工程创建失败：%s' % str(e)
+            else:
+                response['status'] = False
+                response['message'] = '表单信息有误！！！'
+                response['forme'] = form_construct_add_edit.errors
+        elif warrant_typ == 99:  # (99, '他权')
             try:
                 warrant_list.update(warrant_num=warrant_edit_clean['warrant_num'])
                 response['message'] = '他权信息修改该成功！！！'
             except Exception as e:
                 response['status'] = False
                 response['message'] = '他权信息修改失败：%s' % str(e)
+        else:
+            try:
+                warrant_list.update(warrant_num=warrant_edit_clean['warrant_num'])
+                response['message'] = '权证信息修改该成功！！！'
+            except Exception as e:
+                response['status'] = False
+                response['message'] = '权证信息修改失败：%s' % str(e)
     else:
         response['status'] = False
         response['message'] = '表单信息有误！！！'
@@ -549,7 +568,6 @@ def guaranty_add_ajax(request):  # 抵押物添加ajax
     print('post_data:', post_data)
     warrant_id = post_data['warrant_id']
     warrant_obj = models.Warrants.objects.get(id=warrant_id)
-
     try:
         with transaction.atomic():
             warrant_hypothec_obj = models.Hypothecs.objects.get(warrant=warrant_obj)

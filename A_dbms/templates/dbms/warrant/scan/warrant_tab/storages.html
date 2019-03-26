@@ -16,7 +16,7 @@
                 <td>{{ storage.get_storage_typ_display }}</td>
                 <td>{{ storage.storage_date }}</td>
                 <td>{{ storage.transfer.name }}</td>
-                <td>{{ storage.storage_explain }}</td>
+                <td>{{ storage.storage_explain|default_if_none:"" }}</td>
                 <td>{{ storage.conservator.name }}</td>
                 <td><a class="btn btn-danger btn-xs delStorageB">删除</a></td>
             </tr>

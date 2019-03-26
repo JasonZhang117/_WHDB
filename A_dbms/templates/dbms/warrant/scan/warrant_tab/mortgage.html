@@ -1,7 +1,6 @@
 <div class="table-responsive">
     {#"table-responsive":表格响应式布局#}
-    <table class="table table-bordered table-hover
-                table-condensed active">
+    <table class="table table-bordered table-hover table-condensed active">
         {#"table-bordered":表格表格边框#}
         {#"table-hover":表格悬停变色#}
         {#"table-condensed":表格紧缩#}
@@ -17,18 +16,20 @@
         </tr>
         </thead>
         <tbody>
-        {% for lendingwarrant in p_list %}
+        {% for lendwarrant in in_article_list %}
             <tr>
-                <td>{{ forloop.counter }}</td>
-                <td>{{ lendingwarrant.sure.lending.summary.custom }}</td>
-                <td>{{ lendingwarrant.sure.lending.summary }}</td>
-                <td>{{ lendingwarrant.sure.lending.summary.summary_num  }}</td>
-                <td>{{ lendingwarrant.sure.lending.get_order_display  }}</td>
-                <td>{{ lendingwarrant.sure.lending.order_amount }}</td>
+                <td><a target="_blank"
+                       href="{% url 'dbms:article_scan_lending' article_id=lendwarrant.sure.lending.summary.id lending_id=lendwarrant.sure.lending.id %}">
+                    {{ forloop.counter }}</a>
+                </td>
+                <td>{{ lendwarrant.sure.lending.summary.custom.short_name }}</td>
+                <td>{{ lendwarrant.sure.lending.summary }}</td>
+                <td>{{ lendwarrant.sure.lending.summary.summary_num }}</td>
+                <td>{{ lendwarrant.sure.lending.get_order_display }}</td>
+                <td>{{ lendwarrant.sure.lending.order_amount }}</td>
             </tr>
         {% endfor %}
         </tbody>
     </table>
-    {% include 'dbms/board/page.html' %}
 
 </div>

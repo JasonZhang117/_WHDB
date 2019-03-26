@@ -9,7 +9,9 @@
             <th>房产面积</th>
             <th>房产用途</th>
             <th>产权证</th>
-            <th>他权情况</th>
+            {% if PAGE_TITLE == '权证管理' or PAGE_TITLE == '风控落实' %}
+                <th>他权情况</th>
+            {% endif %}
             <th>入库情况</th>
             {% if PAGE_TITLE == '放款次序' or PAGE_TITLE == '权证管理' %}
                 <td>操作</td>
@@ -38,13 +40,15 @@
                                 {{ ownership.ownership_num }}{% if not forloop.last %}、{% endif %}
                             {% endfor %}
                         </td>
-                        <td>
-                            {% for ypothec in warrant.ypothec_m_agree.all %}
-                                {% if ypothec.agree.id == agree_obj.id %}
-                                    {{ ypothec.warrant }}
-                                {% endif %}
-                            {% endfor %}
-                        </td>
+                        {% if PAGE_TITLE == '权证管理' or PAGE_TITLE == '风控落实' %}
+                            <td>
+                                {% for ypothec in warrant.ypothec_m_agree.all %}
+                                    {% if ypothec.agree.id == agree_obj.id %}
+                                        {{ ypothec.warrant }}
+                                    {% endif %}
+                                {% endfor %}
+                            </td>
+                        {% endif %}
                         <td>{{ warrant.get_warrant_state_display }}</td>
                         {% if PAGE_TITLE == '放款次序' %}
                             <td><a class="btn btn-primary btn-xs delGuaranteeB">删除</a></td>

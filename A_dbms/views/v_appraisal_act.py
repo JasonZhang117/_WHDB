@@ -39,7 +39,7 @@ def guarantee_add_ajax(request):  # 反担保措施添加ajax
         (31, '应收质押'), (32, '股权质押'), (33, '票据质押'), (34, '动产质押'), (39, '其他权利质押'),
         (42, '房产监管'), (43, '土地监管'), (44, '票据监管'), (47, '动产监管'), (49, '其他监管'),
         (51, '股权预售'), (52, '房产预售'), (53, '土地预售'))'''
-    if article_state in [1, 2, 3, 4, 61]:
+    if article_state in [1, 2, 3, 4, 5, 61]:
         if form_lendingsures.is_valid():
             lendingsures_clean = form_lendingsures.cleaned_data
             sure_typ = lendingsures_clean['sure_typ']

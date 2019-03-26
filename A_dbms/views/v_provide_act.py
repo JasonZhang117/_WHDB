@@ -134,13 +134,11 @@ def notify_add_ajax(request):
                     agree_provide_amount = 0
                 '''#合同项下还款合计'''
                 agree_repayment_amount = models.Repayments.objects.filter(
-                    provide__notify__agree=agree_obj).aggregate(
-                    Sum('repayment_money'))['repayment_money__sum']
+                    provide__notify__agree=agree_obj).aggregate(Sum('repayment_money'))['repayment_money__sum']
                 if agree_repayment_amount:
                     agree_repayment_amount = agree_repayment_amount
                 else:
                     agree_repayment_amount = 0
-
                 agree_balance = agree_provide_amount - agree_repayment_amount
                 agree_balance_notify = agree_balance + notify_money
                 if amount > amount_limit:
@@ -166,10 +164,9 @@ def notify_add_ajax(request):
                                 lending_summary__agree_lending=agree_obj)  # 项目
                             article_obj = article_list.first()
                             article_notify_amount = models.Notify.objects.filter(
-                                agree__lending__summary=article_obj).aggregate(
-                                Sum('weighting'))['weighting__sum']
+                                agree__lending__summary=article_obj).aggregate(Sum('weighting'))['weighting__sum']
+                            print('article_notify_amount:',article_notify_amount)
                             article_list.update(article_notify_sum=round(article_notify_amount, 2))
-
                         response['message'] = '成功添加放款通知！'
                     except Exception as e:
                         response['status'] = False
@@ -194,11 +191,9 @@ def notify_del_ajax(request):  # 反担保人删除ajax
     post_data_str = request.POST.get('postDataStr')
     post_data = json.loads(post_data_str)
     print('post_data:', post_data)
-
     notify_id = post_data['notify_id']
     notify_obj = models.Notify.objects.get(id=notify_id)
     provide_notify_list = notify_obj.provide_notify.all()
-
     if provide_notify_list:
         response['status'] = False
         response['message'] = '该放款通知已经放款，删除失败！！！'
@@ -301,7 +296,6 @@ def provide_add_ajax(request):
                     branch_list = models.Branches.objects.filter(agree_branch=agree_obj)
                     branch_obj = branch_list.first()
                     provide_typ = provide_obj.provide_typ
-                    '''PROVIDE_TYP_LIST = ((1, '流贷'), (11, '承兑'), (21, '保函'))'''
                     custom_provide_balance = models.Provides.objects.filter(
                         notify__agree__lending__summary__custom=custom_obj, provide_typ=provide_typ).aggregate(
                         Sum('provide_balance'))['provide_balance__sum']  # 客户及放款品种项下，在保余额
@@ -310,6 +304,7 @@ def provide_add_ajax(request):
                         Sum('provide_balance'))['provide_balance__sum']  # 放款银行及放款品种项下，在保余额
                     cooperator_list = models.Cooperators.objects.filter(branch_cooperator=branch_obj)
                     cooperator_obj = cooperator_list.first()
+                    '''PROVIDE_TYP_LIST = ((1, '流贷'), (11, '承兑'), (21, '保函'), (31, '委贷'), (42, '小贷'))'''
                     if provide_typ == 1:
                         custom_list.update(custom_flow=round(custom_provide_balance, 2))  # 客户，更新流贷余额
                         branch_list.update(branch_flow=round(branch_provide_balance, 2))  # 放款银行，更新流贷余额
@@ -324,13 +319,27 @@ def provide_add_ajax(request):
                             cooperator=cooperator_obj).aggregate(
                             Sum('branch_accept'))['branch_accept__sum']  # 授信银行项下，流贷余额
                         cooperator_list.update(cooperator_accept=round(cooperator_branch_accept_balance, 2))
-                    else:
+                    elif provide_typ == 21:
                         custom_list.update(custom_back=round(custom_provide_balance, 2))  # 客户，更新保函余额
                         branch_list.update(branch_back=round(branch_provide_balance, 2))  # 放款银行，更新保函余额
                         cooperator_branch_back_balance = models.Branches.objects.filter(
                             cooperator=cooperator_obj).aggregate(
-                            Sum('branch_back'))['branch_back__sum']  # 授信银行项下，流贷余额
+                            Sum('branch_back'))['branch_back__sum']  # 授信银行项下，保函余额
                         cooperator_list.update(cooperator_back=round(cooperator_branch_back_balance, 2))
+                    elif provide_typ == 31:
+                        custom_list.update(entrusted_loan=round(custom_provide_balance, 2))  # 客户，更新委贷余额
+                        branch_list.update(entrusted_loan=round(branch_provide_balance, 2))  # 放款银行，更新委贷余额
+                        cooperator_entrusted_loan_balance = models.Branches.objects.filter(
+                            cooperator=cooperator_obj).aggregate(
+                            Sum('entrusted_loan'))['entrusted_loan__sum']  # 授信银行项下，委贷余额
+                        cooperator_list.update(entrusted_loan=round(cooperator_entrusted_loan_balance, 2))
+                    elif provide_typ == 41:
+                        custom_list.update(petty_loan=round(custom_provide_balance, 2))  # 客户，更新委贷余额
+                        branch_list.update(petty_loan=round(branch_provide_balance, 2))  # 放款银行，更新委贷余额
+                        cooperator_petty_loan_balance = models.Branches.objects.filter(
+                            cooperator=cooperator_obj).aggregate(
+                            Sum('petty_loan'))['petty_loan__sum']  # 授信银行项下，小贷余额
+                        cooperator_list.update(petty_loan=round(cooperator_petty_loan_balance, 2))
                 response['message'] = '成功放款！'
             except Exception as e:
                 response['status'] = False
@@ -417,7 +426,7 @@ def provide_del_ajax(request):  # 删除放款ajax
             branch_list = models.Branches.objects.filter(agree_branch=agree_obj)
             branch_obj = branch_list.first()
             provide_typ = provide_obj.provide_typ
-            '''PROVIDE_TYP_LIST = ((1, '流贷'), (11, '承兑'), (21, '保函'))'''
+            '''PROVIDE_TYP_LIST = ((1, '流贷'), (11, '承兑'), (21, '保函'), (31, '委贷'), (42, '小贷'))'''
             custom_provide_balance = models.Provides.objects.filter(
                 notify__agree__lending__summary__custom=custom_obj, provide_typ=provide_typ).aggregate(
                 Sum('provide_balance'))['provide_balance__sum']  # 客户及放款品种项下，在保余额
@@ -426,15 +435,23 @@ def provide_del_ajax(request):  # 删除放款ajax
                     custom_list.update(custom_flow=custom_provide_balance)  # 客户，更新流贷余额
                 elif provide_typ == 11:
                     custom_list.update(custom_accept=custom_provide_balance)  # 客户，更新承兑余额
-                else:
+                elif provide_typ == 21:
                     custom_list.update(custom_back=custom_provide_balance)  # 客户，更新保函余额
+                elif provide_typ == 31:
+                    custom_list.update(entrusted_loan=custom_provide_balance)  # 客户，更新委贷余额
+                elif provide_typ == 41:
+                    custom_list.update(petty_loan=custom_provide_balance)  # 客户，更新小贷余额
             else:
                 if provide_typ == 1:
                     custom_list.update(custom_flow=0)  # 客户，更新流贷余额
                 elif provide_typ == 11:
                     custom_list.update(custom_accept=0)  # 客户，更新承兑余额
-                else:
+                elif provide_typ == 21:
                     custom_list.update(custom_back=0)  # 客户，更新保函余额
+                elif provide_typ == 31:
+                    custom_list.update(entrusted_loan=0)  # 客户，更新委贷余额
+                elif provide_typ == 41:
+                    custom_list.update(petty_loan=0)  # 客户，更新小贷余额
 
             branch_provide_balance = models.Provides.objects.filter(
                 notify__agree__branch=branch_obj, provide_typ=provide_typ).aggregate(
@@ -444,15 +461,23 @@ def provide_del_ajax(request):  # 删除放款ajax
                     branch_list.update(branch_flow=branch_provide_balance)  # 放款银行，更新流贷余额
                 elif provide_typ == 11:
                     branch_list.update(branch_accept=branch_provide_balance)  # 放款银行，更新承兑余额
-                else:
+                elif provide_typ == 21:
                     branch_list.update(branch_back=branch_provide_balance)  # 放款银行，更新保函余额
+                elif provide_typ == 31:
+                    branch_list.update(entrusted_loan=branch_provide_balance)  # 放款银行，更新委贷余额
+                elif provide_typ == 41:
+                    branch_list.update(petty_loan=branch_provide_balance)  # 放款银行，更新小贷余额
             else:
                 if provide_typ == 1:
                     branch_list.update(branch_flow=0)  # 放款银行，更新流贷余额
                 elif provide_typ == 11:
                     branch_list.update(branch_accept=0)  # 放款银行，更新承兑余额
-                else:
+                elif provide_typ == 21:
                     branch_list.update(branch_back=0)  # 放款银行，更新保函余额
+                elif provide_typ == 31:
+                    branch_list.update(entrusted_loan=0)  # 放款银行，更新委贷余额
+                elif provide_typ == 41:
+                    branch_list.update(petty_loan=0)  # 放款银行，更新小贷余额
             '''更新授信银行余额信息,branch_flow,branch_accept,branch_back'''
             cooperator_list = models.Cooperators.objects.filter(branch_cooperator=branch_obj)
             cooperator_obj = cooperator_list.first()
@@ -472,7 +497,7 @@ def provide_del_ajax(request):  # 删除放款ajax
                     cooperator_list.update(cooperator_accept=round(cooperator_branch_accept_balance, 2))
                 else:
                     cooperator_list.update(cooperator_accept=0)
-            else:
+            elif provide_typ == 21:
                 cooperator_branch_back_balance = models.Branches.objects.filter(
                     cooperator=cooperator_obj).aggregate(
                     Sum('branch_back'))['branch_back__sum']  # 授信银行项下，流贷余额
@@ -480,6 +505,22 @@ def provide_del_ajax(request):  # 删除放款ajax
                     cooperator_list.update(cooperator_back=round(cooperator_branch_back_balance, 2))
                 else:
                     cooperator_list.update(cooperator_back=0)
+            elif provide_typ == 31:
+                cooperator_entrusted_loan_balance = models.Branches.objects.filter(
+                    cooperator=cooperator_obj).aggregate(
+                    Sum('entrusted_loan'))['entrusted_loan__sum']  # 授信银行项下，委贷余额
+                if cooperator_entrusted_loan_balance:
+                    cooperator_list.update(entrusted_loan=round(cooperator_entrusted_loan_balance, 2))
+                else:
+                    cooperator_list.update(entrusted_loan=0)
+            elif provide_typ == 41:
+                cooperator_petty_loan_balance = models.Branches.objects.filter(
+                    cooperator=cooperator_obj).aggregate(
+                    Sum('petty_loan'))['petty_loan__sum']  # 授信银行项下，小贷余额
+                if cooperator_petty_loan_balance:
+                    cooperator_list.update(petty_loan=round(cooperator_petty_loan_balance, 2))
+                else:
+                    cooperator_list.update(petty_loan=0)
         response['message'] = '借款信息删除成功！'
     except Exception as e:
         response['status'] = False
@@ -592,7 +633,7 @@ def repayment_add_ajax(request):
                     branch_list = models.Branches.objects.filter(agree_branch=agree_obj)
                     branch_obj = branch_list.first()
                     provide_typ = provide_obj.provide_typ
-                    '''PROVIDE_TYP_LIST = ((1, '流贷'), (11, '承兑'), (21, '保函'))'''
+                    '''PROVIDE_TYP_LIST = ((1, '流贷'), (11, '承兑'), (21, '保函'), (31, '委贷'), (42, '小贷'))'''
                     custom_provide_balance = models.Provides.objects.filter(
                         notify__agree__lending__summary__custom=custom_obj, provide_typ=provide_typ).aggregate(
                         Sum('provide_balance'))['provide_balance__sum']  # 客户及放款品种项下，在保余额
@@ -613,15 +654,29 @@ def repayment_add_ajax(request):
                         branch_list.update(branch_accept=branch_provide_balance)  # 放款银行，更新承兑余额
                         cooperator_branch_accept_balance = models.Branches.objects.filter(
                             cooperator=cooperator_obj).aggregate(
-                            Sum('branch_accept'))['branch_accept__sum']  # 授信银行项下，流贷余额
+                            Sum('branch_accept'))['branch_accept__sum']  # 授信银行项下，承兑余额
                         cooperator_list.update(cooperator_accept=round(cooperator_branch_accept_balance, 2))
-                    else:
+                    elif provide_typ == 21:
                         custom_list.update(custom_back=custom_provide_balance)  # 客户，更新保函余额
                         branch_list.update(branch_back=branch_provide_balance)  # 放款银行，更新保函余额
                         cooperator_branch_back_balance = models.Branches.objects.filter(
                             cooperator=cooperator_obj).aggregate(
-                            Sum('branch_back'))['branch_back__sum']  # 授信银行项下，流贷余额
+                            Sum('branch_back'))['branch_back__sum']  # 授信银行项下，保函余额
                         cooperator_list.update(cooperator_back=round(cooperator_branch_back_balance, 2))
+                    elif provide_typ == 31:
+                        custom_list.update(entrusted_loan=custom_provide_balance)  # 客户，更新委贷余额
+                        branch_list.update(entrusted_loan=branch_provide_balance)  # 放款银行，更新委贷余额
+                        cooperator_entrusted_loan_balance = models.Branches.objects.filter(
+                            cooperator=cooperator_obj).aggregate(
+                            Sum('entrusted_loan'))['entrusted_loan__sum']  # 授信银行项下，委贷余额
+                        cooperator_list.update(entrusted_loan=round(cooperator_entrusted_loan_balance, 2))
+                    elif provide_typ == 41:
+                        custom_list.update(petty_loan=custom_provide_balance)  # 客户，更新小贷余额
+                        branch_list.update(petty_loan=branch_provide_balance)  # 放款银行，更新小贷余额
+                        cooperator_petty_loan_balance = models.Branches.objects.filter(
+                            cooperator=cooperator_obj).aggregate(
+                            Sum('petty_loan'))['petty_loan__sum']  # 授信银行项下，小贷余额
+                        cooperator_list.update(petty_loan=round(cooperator_petty_loan_balance, 2))
             except Exception as e:
                 response['status'] = False
                 response['message'] = '还款失败：%s' % str(e)
@@ -729,7 +784,7 @@ def repayment_del_ajax(request):  # 删除还款信息ajax
                 branch_list = models.Branches.objects.filter(agree_branch=agree_obj)
                 branch_obj = branch_list.first()
                 provide_typ = provide_obj.provide_typ
-                '''PROVIDE_TYP_LIST = ((1, '流贷'), (11, '承兑'), (21, '保函'))'''
+                '''PROVIDE_TYP_LIST = ((1, '流贷'), (11, '承兑'), (21, '保函'), (31, '委贷'), (42, '小贷'))'''
                 custom_provide_balance = models.Provides.objects.filter(
                     notify__agree__lending__summary__custom=custom_obj, provide_typ=provide_typ).aggregate(
                     Sum('provide_balance'))['provide_balance__sum']  # 客户及放款品种项下，在保余额
@@ -738,7 +793,6 @@ def repayment_del_ajax(request):  # 删除还款信息ajax
                     Sum('provide_balance'))['provide_balance__sum']  # 放款银行及放款品种项下，在保余额
                 cooperator_list = models.Cooperators.objects.filter(branch_cooperator=branch_obj)
                 cooperator_obj = cooperator_list.first()
-
                 if provide_typ == 1:
                     custom_list.update(custom_flow=custom_provide_balance)  # 客户，更新流贷余额
                     branch_list.update(branch_flow=branch_provide_balance)  # 放款银行，更新流贷余额
@@ -753,13 +807,27 @@ def repayment_del_ajax(request):  # 删除还款信息ajax
                         cooperator=cooperator_obj).aggregate(
                         Sum('branch_accept'))['branch_accept__sum']  # 授信银行项下，承兑余额
                     cooperator_list.update(cooperator_accept=round(cooperator_branch_accept_balance, 2))
-                else:
+                elif provide_typ == 21:
                     custom_list.update(custom_back=custom_provide_balance)  # 客户，更新保函余额
                     branch_list.update(branch_back=branch_provide_balance)  # 放款银行，更新保函余额
                     cooperator_branch_back_balance = models.Branches.objects.filter(
                         cooperator=cooperator_obj).aggregate(
                         Sum('branch_back'))['branch_back__sum']  # 授信银行项下，保函余额
                     cooperator_list.update(cooperator_back=round(cooperator_branch_back_balance, 2))
+                elif provide_typ == 31:
+                    custom_list.update(entrusted_loan=custom_provide_balance)  # 客户，更新委贷余额
+                    branch_list.update(entrusted_loan=branch_provide_balance)  # 放款银行，更新委贷余额
+                    cooperator_entrusted_loan_balance = models.Branches.objects.filter(
+                        cooperator=cooperator_obj).aggregate(
+                        Sum('entrusted_loan'))['entrusted_loan__sum']  # 授信银行项下，委贷余额
+                    cooperator_list.update(entrusted_loan=round(cooperator_entrusted_loan_balance, 2))
+                elif provide_typ == 41:
+                    custom_list.update(petty_loan=custom_provide_balance)  # 客户，更新小贷余额
+                    branch_list.update(petty_loan=branch_provide_balance)  # 放款银行，更新小贷余额
+                    cooperator_petty_loan_balance = models.Branches.objects.filter(
+                        cooperator=cooperator_obj).aggregate(
+                        Sum('petty_loan'))['petty_loan__sum']  # 授信银行项下，小贷余额
+                    cooperator_list.update(petty_loan=round(cooperator_petty_loan_balance, 2))
             response['message'] = '还款信息删除成功！'
         except Exception as e:
             response['status'] = False

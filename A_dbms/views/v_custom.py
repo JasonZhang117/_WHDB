@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect, HttpResponse
-from .. import models,forms
+from .. import models, forms
 import time, json
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.db import transaction
@@ -9,6 +9,7 @@ from django.contrib.auth.decorators import login_required
 from django.urls import resolve
 from _WHDB.views import MenuHelper
 from _WHDB.views import authority
+
 
 # -----------------------客户管理-------------------------#
 @login_required

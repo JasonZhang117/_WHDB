@@ -13,6 +13,8 @@
             <th>流贷余额</th>
             <th>承兑余额</th>
             <th>保函余额</th>
+            <th>委贷余额</th>
+            <th>小贷余额</th>
         </tr>
         </thead>
         <tbody>
@@ -30,6 +32,8 @@
                 <td align="right">{{ cooperator.cooperator_flow|default_if_none:"" }}</td>
                 <td align="right">{{ cooperator.cooperator_accept|default_if_none:"" }}</td>
                 <td align="right">{{ cooperator.cooperator_back|default_if_none:"" }}</td>
+                <td align="right">{{ cooperator.entrusted_loan|default_if_none:"" }}</td>
+                <td align="right">{{ cooperator.petty_loan|default_if_none:"" }}</td>
             </tr>
         {% endfor %}
         </tbody>

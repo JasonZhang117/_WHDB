@@ -30,6 +30,8 @@ class Customes(models.Model):  # 客户
     custom_flow = models.FloatField(verbose_name='_流贷余额', default=0)
     custom_accept = models.FloatField(verbose_name='_承兑余额', default=0)
     custom_back = models.FloatField(verbose_name='_保函余额', default=0)
+    entrusted_loan = models.FloatField(verbose_name='_委贷余额', default=0)
+    petty_loan = models.FloatField(verbose_name='_小贷余额', default=0)
     CUSTOM_STATE_LIST = ((1, '正常'), (99, '注销'))
     custom_state = models.IntegerField(verbose_name='_风险分类', choices=CUSTOM_STATE_LIST, default=1)
     custom_buildor = models.ForeignKey(to='Employees', verbose_name="_创建者",

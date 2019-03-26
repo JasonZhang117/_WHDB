@@ -5,10 +5,10 @@
 <label class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
     查封情况：{{ seal_obj.get_seal_state_display }}</label>
 <label class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
-    最近查封日：{{ seal_obj.seal_date }}</label>
+    最近查封日：{{ seal_obj.seal_date|default_if_none:"" }}</label>
 <label class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
-    查封到期日：{{ seal_obj.due_date }}</label>
+    查封到期日：{{ seal_obj.due_date|default_if_none:"" }}</label>
 <label class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
-    最近查询日：{{ seal_obj.inquiry_date }}</label>
+    最近查询日：{{ seal_obj.inquiry_date|default_if_none:"" }}</label>
 <label class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
-    备注：{{ seal_obj.seal_remark }}</label>
+    备注：{{ seal_obj.seal_remark|default_if_none:"" }}</label>

@@ -7,6 +7,8 @@
             <th>流贷余额</th>
             <th>承兑余额</th>
             <th>保函余额</th>
+            <th>委贷余额</th>
+            <th>小贷余额</th>
         </tr>
         </thead>
         <tbody>
@@ -18,6 +20,8 @@
                 <td align="right">{{ branch.branch_flow }}</td>
                 <td align="right">{{ branch.branch_accept }}</td>
                 <td align="right">{{ branch.branch_back }}</td>
+                <td align="right">{{ branch.entrusted_loan }}</td>
+                <td align="right">{{ branch.petty_loan }}</td>
             </tr>
         {% endfor %}
         </tbody>

@@ -87,11 +87,12 @@ def warrant_scan(request, warrant_id):  # house_scan房产预览
         agree_lending_obj = warrant_obj.ypothec_warrant.agree.lending
         warrants_lending_list = models.Warrants.objects.filter(
             lending_warrant__sure__lending=agree_lending_obj).values_list('id', 'warrant_num')
-
     form_warrant_edit_date = {'warrant_num': warrant_obj.warrant_num}
     form_warrant_edit = forms.WarrantEditForm(initial=form_warrant_edit_date)  # 权证编辑form
     warrant_typ = warrant_obj.warrant_typ
-    print('warrant_typ:', warrant_typ)
+    '''WARRANT_TYP_LIST = [
+        (1, '房产'), (2, '房产包'), (5, '土地'), (6, '在建工程'), (11, '应收账款'),
+        (21, '股权'), (31, '票据'), (41, '车辆'), (51, '动产'), (55, '其他'), (99, '他权')]'''
     if warrant_typ == 1:  # 房产
         form_date = {
             'house_locate': warrant_obj.house_warrant.house_locate,
@@ -104,7 +105,13 @@ def warrant_scan(request, warrant_id):  # house_scan房产预览
             'ground_app': warrant_obj.ground_warrant.ground_app,
             'ground_area': warrant_obj.ground_warrant.ground_area}
         form_ground_add_edit = forms.GroundAddEidtForm(form_date)
-    elif warrant_typ == 11:
+    elif warrant_typ == 6:  # 在建工程
+        form_date = {
+            'coustruct_locate': warrant_obj.coustruct_warrant.coustruct_locate,
+            'coustruct_app': warrant_obj.coustruct_warrant.coustruct_app,
+            'coustruct_area': warrant_obj.coustruct_warrant.coustruct_area}
+        form_construct_add_edit = forms.ConstructionAddForm(form_date)
+    elif warrant_typ == 11:  # 应收账款
         form_date = {
             'receive_owner': warrant_obj.receive_warrant.receive_owner,
             'receivable_detail': warrant_obj.receive_warrant.receivable_detail}
@@ -118,8 +125,10 @@ def warrant_scan(request, warrant_id):  # house_scan房产预览
     form_housebag_add_edit = forms.HouseBagAddEidtForm()  # 房产包form
     form_draftbag_add_edit = forms.FormDraftExtend()  # 票据包form
     form_evaluate_add_edit = forms.EvaluateAddEidtForm(initial={'evaluate_date': str(datetime.date.today())})  # 评估
-
     storage_warrant_list = warrant_obj.storage_warrant.all()  # 出入库信息
+    '''ARTICLE_STATE_LIST = ((1, '待反馈'), (2, '已反馈'), (3, '待上会'), (4, '已上会'), (5, '已签批'),
+                          (51, '已放款'), (52, '已放完'), (55, '已解保'), (61, '待变更'), (99, '已注销'))'''
+    in_article_list = warrant_obj.lending_warrant.all().filter(sure__lending__summary__article_state__in=[4, 5, 51, 52])
 
     return render(request, 'dbms/warrant/warrant-scan.html', locals())
 

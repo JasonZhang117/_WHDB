@@ -20,12 +20,11 @@ def report_provide_list(request, *args, **kwargs):  #
     current_url_name = resolve(request.path).url_name  # 获取当前URL_NAME
     authority_list = request.session.get('authority_list')  # 获取当前用户的所有权限
     menu_result = MenuHelper(request).menu_data_list()
-    PAGE_TITLE = '在保列表'
-    '''PROVIDE_STATUS_LIST = [(1, '在保'), (11, '解保'), (21, '代偿')]'''
-    PROVIDE_STATUS_LIST = models.Provides.PROVIDE_STATUS_LIST  # 筛选条件
+    PAGE_TITLE = '在保明细'
+    PROVIDE_TYP_LIST = models.Provides.PROVIDE_TYP_LIST  # 筛选条件
     '''筛选'''
-    provide_list = models.Provides.objects.filter(provide_status=1).select_related('notify').order_by('-provide_date')
-
+    provide_list = models.Provides.objects.filter(provide_status=1).filter(
+        **kwargs).select_related('notify').order_by('-provide_date')
     '''搜索'''
     search_key = request.GET.get('_s')
     if search_key:
@@ -40,7 +39,5 @@ def report_provide_list(request, *args, **kwargs):  #
         provide_list = provide_list.filter(q)
 
     balance = provide_list.aggregate(Sum('provide_balance'))['provide_balance__sum']  # 在保余额
-
-    provide_acount = provide_list.count()
 
     return render(request, 'dbms/report/provide_list.html', locals())
