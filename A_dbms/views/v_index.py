@@ -3,6 +3,7 @@ from django.contrib.auth.decorators import login_required
 import datetime, time
 from .. import models
 from .. import forms
+from django.db.models import Q, F
 from django.urls import resolve
 from _WHDB.views import MenuHelper
 from _WHDB.views import authority
@@ -16,14 +17,27 @@ def index(request):
     current_url_name = resolve(request.path).url_name  # 获取当前URL_NAME
     authority_list = request.session.get('authority_list')  # 获取当前用户的所有权限
     menu_result = MenuHelper(request).menu_data_list()
+    job_list = request.session.get('job_list')  # 获取当前用户的所有角色
     '''ARTICLE_STATE_LIST = ((1, '待反馈'), (2, '已反馈'), (3, '待上会'), (4, '已上会'), (5, '已签批'),
                           (51, '已放完'), (61, '待变更'), (99, '已注销'))'''
-    no_feedback_count = models.Articles.objects.filter(article_state=1).count()  # 待反馈
+    no_feedback_list = models.Articles.objects.filter(article_state=1)  # 待反馈
+    if '项目经理' in job_list:
+        no_feedback_list = no_feedback_list.filter(Q(director=request.user) | Q(assistant=request.user))
+    no_feedback_count = no_feedback_list.count()  # 待反馈
     '''IMPLEMENT_LIST = [(1, '未归档'), (11, '退回'), (21, '暂存风控'), (31, '移交行政'), (41, '已归档')]'''
-    no_pigeonhole_count = models.Provides.objects.filter(implement__in=[1, 11]).count()  # 未归档
+    no_pigeonhole_list = models.Provides.objects.filter(implement__in=[1, 11])  # 未归档
+    if '项目经理' in job_list:
+        no_pigeonhole_list = no_pigeonhole_list.filter(
+            Q(notify__agree__lending__summary__director=request.user) | Q(
+                notify__agree__lending__summary__director=request.user))
+    no_pigeonhole_count = no_pigeonhole_list.count()  # 未归档
     '''AGREE_STATE_LIST = ((11, '待签批'), (21, '已签批'), (31, '未落实'),
                         (41, '已落实'), (51, '待变更'), (61, '已解保'), (99, '作废'))'''
-    no_ascertain_count = models.Agrees.objects.filter(agree_state=31).count()  # 未落实
+    no_ascertain_list = models.Agrees.objects.filter(agree_state=31)  # 未落实
+    if '项目经理' in job_list:
+        no_ascertain_list = no_ascertain_list.filter(
+            Q(lending__summary__director=request.user) | Q(lending__summary__assistant=request.user))
+    no_ascertain_count = no_ascertain_list.count()  # 未落实
     '''
     today_str = time.strftime("%Y-%m-%d", time.gmtime())  # 元祖>>>字符窜
     print('time.strftime("%Y-%m-%d", time.gmtime()):', today_str)
@@ -36,11 +50,21 @@ def index(request):
     '''
     date_th_later = datetime.date.today() + datetime.timedelta(days=30)  # 30天后的日期
     '''PROVIDE_STATUS_LIST = [(1, '在保'), (11, '解保'), (21, '代偿')]'''
-    overdue_count = models.Provides.objects.filter(
-        provide_status=1, due_date__lt=datetime.date.today()).count()  # 逾期（到期日小于今天的日期）
-    soondue_count = models.Provides.objects.filter(
-        provide_status=1, due_date__gte=datetime.date.today(), due_date__lt=date_th_later).count()  # 30天内到期
+    overdue_list = models.Provides.objects.filter(
+        provide_status=1, due_date__lt=datetime.date.today())  # 逾期（到期日小于今天的日期）
+    if '项目经理' in job_list:
+        overdue_list = overdue_list.filter(
+            Q(notify__agree__lending__summary__director=request.user) | Q(
+                notify__agree__lending__summary__director=request.user))
+    overdue_count = overdue_list.count()
+    soondue_list = models.Provides.objects.filter(
+        provide_status=1, due_date__gte=datetime.date.today(), due_date__lt=date_th_later)  # 30天内到期
     # 到期日大于今天的日期，小于30天后的日期
+    if '项目经理' in job_list:
+        soondue_list = soondue_list.filter(
+            Q(notify__agree__lending__summary__director=request.user) | Q(
+                notify__agree__lending__summary__director=request.user))
+    soondue_count = soondue_list.count()
     '''DRAFT_STATE_LIST = (
         (1, '未入库'), (2, '已入库'), (21, '置换出库'), (31, '解保出库'), (41, '托收出库'), (99, '已注销'))'''
     soondue_draft_count = models.DraftExtend.objects.filter(
@@ -59,15 +83,21 @@ def index(request):
         due_date__lt=date_th_later).count()  # 30天内到期查封
     overdue_seal_count = models.Seal.objects.filter(
         seal_state__in=[3, 5, 11, 21], due_date__lt=datetime.date.today()).count()  # 逾期查封
-
     date_th_befor = datetime.date.today() - datetime.timedelta(days=30)  # 30天前的日期
     overdue_search_count = models.Seal.objects.filter(
         seal_state__in=[1, 5, 11, 21], inquiry_date__lt=date_th_befor).count()  # 超过30天未查询
     '''IMPLEMENT_LIST = [(1, '未归档'), (11, '退回'), (21, '暂存风控'), (31, '移交行政'), (41, '已归档')]'''
     date_15_leter = datetime.date.today() - datetime.timedelta(days=15)  # 15天前
-    pigeonhole_overdue = models.Provides.objects.filter(
-        implement__in=[1, 11], provide_date__lt=date_15_leter).count()  # 逾期归档
+    pigeonhole_overdue = models.Provides.objects.filter(implement__in=[1, 11], provide_date__lt=date_15_leter)  # 逾期归档
+    if '项目经理' in job_list:
+        pigeonhole_overdue = pigeonhole_overdue.filter(
+            Q(notify__agree__lending__summary__director=request.user) | Q(
+                notify__agree__lending__summary__director=request.user))
+    pigeonhole_overdue = pigeonhole_overdue.count()  # 逾期归档
     '''REVIEW_STATE_LIST = ((1, '待保后'), (11, '待报告'), (21, '已完成'))'''
     review_overdue = models.Customes.objects.filter(
-        review_state=1, review_plan_date__lt=datetime.date.today()).count()  # 逾期保后
+        review_state=1, review_plan_date__lt=datetime.date.today())  # 逾期保后
+    if '项目经理' in job_list:
+        review_overdue = review_overdue.filter(managementor=request.user)
+    review_overdue = review_overdue.count()
     return render(request, 'dbms/index_dbms.html', locals())

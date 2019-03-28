@@ -1,0 +1,20 @@
+<div class="panel-body row">
+    <label class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
+        权证类型：{{ warrant_obj.get_warrant_typ_display }}
+    </label>
+    <label class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
+        股权性质：{{ warrant_obj.stock_warrant.get_stock_typ_display }}
+    </label>
+    <label class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
+        所有权人：{{ warrant_obj.stock_warrant.stock_owner.short_name }}
+    </label>
+    <label class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
+        标的公司：{{ warrant_obj.stock_warrant.target }}
+    </label>
+    <label class="col-lg-3 col-md-4 col-sm-12 col-xs-12">
+        数量（万）：{{ warrant_obj.stock_warrant.share }}
+    </label>
+    <label class="col-lg-3 col-md-4 col-sm-12 col-xs-12">
+        比例（%）：{{ warrant_obj.stock_warrant.ratio }}
+    </label>
+</div>

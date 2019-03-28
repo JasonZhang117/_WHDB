@@ -34,8 +34,11 @@ class Customes(models.Model):  # 客户
     petty_loan = models.FloatField(verbose_name='_小贷余额', default=0)
     CUSTOM_STATE_LIST = ((1, '正常'), (99, '注销'))
     custom_state = models.IntegerField(verbose_name='_风险分类', choices=CUSTOM_STATE_LIST, default=1)
+    managementor = models.ForeignKey(to='Employees', verbose_name="管护经理",
+                                     on_delete=models.PROTECT, default=28,
+                                     related_name='manage_employee')
     custom_buildor = models.ForeignKey(to='Employees', verbose_name="_创建者",
-                                       on_delete=models.PROTECT, default=1,
+                                       on_delete=models.PROTECT, default=28,
                                        related_name='custom_buildor_employee')
     custom_date = models.DateField(verbose_name='创建日期', default=datetime.date.today)
 

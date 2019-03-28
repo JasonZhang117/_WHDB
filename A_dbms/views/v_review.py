@@ -20,10 +20,13 @@ def review(request, *args, **kwargs):  # 保后列表
     current_url_name = resolve(request.path).url_name  # 获取当前URL_NAME
     authority_list = request.session.get('authority_list')  # 获取当前用户的所有权限
     menu_result = MenuHelper(request).menu_data_list()
+    job_list = request.session.get('job_list')  # 获取当前用户的所有角色
     PAGE_TITLE = '保后管理'
 
     REVIEW_STATE_LIST = models.Customes.REVIEW_STATE_LIST
     custom_list = models.Customes.objects.filter(**kwargs)
+    if '项目经理' in job_list:
+        custom_list = custom_list.filter(managementor=request.user)
     '''
     custom_flow = models.FloatField(verbose_name='_流贷余额', default=0)
     custom_accept = models.FloatField(verbose_name='_承兑余额', default=0)
@@ -67,7 +70,7 @@ def review(request, *args, **kwargs):  # 保后列表
     balance = flow_amount + accept_amount + back_amount
 
     custom_acount = custom_list.count()
-    paginator = Paginator(custom_list, 190)
+    paginator = Paginator(custom_list, 19)
     page = request.GET.get('page')
     try:
         p_list = paginator.page(page)
@@ -87,13 +90,19 @@ def review_scan(request, custom_id):  #
     current_url_name = resolve(request.path).url_name  # 获取当前URL_NAME
     authority_list = request.session.get('authority_list')  # 获取当前用户的所有权限
     menu_result = MenuHelper(request).menu_data_list()
+    job_list = request.session.get('job_list')  # 获取当前用户的所有角色
     PAGE_TITLE = '保后详情'
-    date_th_later = datetime.date.today() + datetime.timedelta(days=30)  # 30天后的日期
+    custom_obj = models.Customes.objects.get(id=custom_id)
 
+    if '项目经理' in job_list:
+        user_list = models.Employees.objects.filter(manage_employee=custom_obj).distinct()
+        if not request.user in user_list:
+            return HttpResponse('你无权访问该客户')
+
+    date_th_later = datetime.date.today() + datetime.timedelta(days=30)  # 30天后的日期
     form_review_plan = forms.FormRewiewPlanAdd(initial={'review_plan_date': str(date_th_later)})
     form_review_add = forms.FormRewiewAdd()
 
-    custom_obj = models.Customes.objects.get(id=custom_id)
     review_custom_list = custom_obj.review_custom.all().order_by('-review_date', '-review_plan_date')
     article_custom_list = custom_obj.article_custom.all().order_by('-build_date')
 
@@ -108,11 +117,13 @@ def review_overdue(request, *args, **kwargs):
     current_url_name = resolve(request.path).url_name  # 获取当前URL_NAME
     authority_list = request.session.get('authority_list')  # 获取当前用户的所有权限
     menu_result = MenuHelper(request).menu_data_list()
+    job_list = request.session.get('job_list')  # 获取当前用户的所有角色
     PAGE_TITLE = '逾期保后'
 
     review_overdue_list = models.Customes.objects.filter(
         review_state=1, review_plan_date__lt=datetime.date.today()).order_by('review_plan_date')  # 逾期保后
-
+    if '项目经理' in job_list:
+        review_overdue_list = review_overdue_list.filter(managementor=request.user)
     '''搜索'''
     search_key = request.GET.get('_s')
     if search_key:

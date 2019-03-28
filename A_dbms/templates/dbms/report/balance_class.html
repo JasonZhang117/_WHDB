@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+{% block title %}{{ PAGE_TITLE }}{% endblock %}
+{% block  body %}
+    <div style="width: 210mm; margin-left: auto; margin-right: auto;">
+        {% include 'dbms/report/balance/balance-class-director.html' %}
+        {% include 'dbms/report/balance/balance-class-assistant.html' %}
+        {% include 'dbms/report/balance/balance-class-control.html' %}
+        {% include 'dbms/report/balance/balance-class-idustry.html' %}
+        {% include 'dbms/report/balance/balance-class-district.html' %}
+        {% include 'dbms/report/balance/balance-class-bank.html' %}
+        {% include 'dbms/report/balance/balance-class-branch.html' %}
+    </div>
+{% endblock %}
+
+
+

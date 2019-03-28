@@ -41,6 +41,8 @@
             {% include 'dbms/warrant/scan/warrant-summry-coustruct.html' %}
         {% elif  warrant_typ == 11 %}
             {% include 'dbms/warrant/scan/warrant-summry-receiveable.html' %}
+        {% elif  warrant_typ == 21 %}
+            {% include 'dbms/warrant/scan/warrant-summry-stock.html' %}
         {% elif  warrant_typ == 99 %}
             {% include 'dbms/warrant/scan/warrant-summry-hypothec.html' %}
         {% else %}

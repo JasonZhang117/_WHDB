@@ -1,0 +1,23 @@
+<div class="table-responsive">
+    <table class="table table-bordered table-hover table-condensed active">
+        <caption>成都武侯中小企业融资担保有限责任公司在保项目分类统计表（按区域）</caption>
+        <thead>
+        <tr style="text-align: center">
+            <th>序号</th>
+            <th>区域</th>
+            <th>项目笔数</th>
+            <th>担保余额</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for district in provide_groups_district %}
+            <tr>
+                <td>{{ forloop.counter }}</td>
+                <td>{{ district.notify__agree__lending__summary__custom__company_custome__district__name }}</td>
+                <td align="right">{{ district.con }}</td>
+                <td align="right">{{ district.sum }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>

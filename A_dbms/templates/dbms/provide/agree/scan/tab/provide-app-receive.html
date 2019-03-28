@@ -21,7 +21,8 @@
             {% if lending_sure.sure_typ in RECEIVABLE_LIST %}
                 {% for warrant in lending_sure.warrant_sure.warrant.all %}
                     <tr guarantee-nid={{ warrant.id }} sure-typ-nid={{ lending_sure.sure_typ }}>
-                        <td>{{ forloop.counter }}</td>
+                        <td><a target="_blank" href="{% url 'dbms:warrant_scan' warrant_id=warrant.id %}">
+                            {{ forloop.counter }}</a></td>
                         <td>{{ lending_sure.get_sure_typ_display }}</td>
                         <td>{{ warrant.receive_warrant.receive_owner.short_name }}</td>
                         <td>{{ warrant.receive_warrant.receivable_detail }}</td>

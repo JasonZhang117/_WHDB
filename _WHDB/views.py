@@ -102,7 +102,7 @@ def acc_login(request):
             request.session['menu_leaf_list'] = menu_leaf_list
             menu_list = list(models.Cartes.objects.filter(
                 authority_carte__jobs__employees=user).distinct().order_by('ordery').values(
-                'id', 'caption', 'parent_id', 'ordery'))  # # 获取所有的菜单列表
+                'ordery', 'id', 'caption', 'parent_id'))  # # 获取所有的菜单列表
             request.session['menu_list'] = menu_list
 
             login(request, user)
@@ -240,23 +240,12 @@ def home(request):
     # article_comment_amount = aritcle_obj.comment_summary.exclude(comment_type=0).count()
     # print(aritcle_obj, article_comment_amount)
 
-    provide_groups_director = models.Provides.objects.filter(provide_status=1).values(
-        'notify__agree__lending__summary__director__name').annotate(
-        con=Count('provide_money'), sum=Sum('provide_money')).values(
-        'notify__agree__lending__summary__director__name', 'con', 'sum').order_by('-sum')
-    provide_groups_idustry = models.Provides.objects.filter(provide_status=1).values(
-        'notify__agree__lending__summary__custom__company_custome__idustry__name').annotate(
-        con=Count('provide_money'), sum=Sum('provide_money')).values(
-        'notify__agree__lending__summary__custom__company_custome__idustry__name', 'con', 'sum').order_by('-sum')
-    provide_groups_district = models.Provides.objects.filter(provide_status=1).values(
-        'notify__agree__lending__summary__custom__company_custome__district__name').annotate(
-        con=Count('provide_money'), sum=Sum('provide_money')).values(
-        'notify__agree__lending__summary__custom__company_custome__district__name', 'con', 'sum').order_by('-sum')
-    provide_groups_bank = models.Provides.objects.filter(provide_status=1).values(
-        'notify__agree__branch__cooperator__short_name').annotate(
-        con=Count('provide_money'), sum=Sum('provide_money')).values(
-        'notify__agree__branch__cooperator__short_name', 'con', 'sum').order_by('-sum')
-    provide_accrual = models.Provides.objects.filter(
-        provide_date__year=2018).aggregate(Sum('provide_money'))['provide_money__sum']  # 发生额
+    # provide_accrual = models.Provides.objects.filter(
+    #     provide_date__year=2018).aggregate(Sum('provide_money'))['provide_money__sum']  # 发生额
 
+    # custom_list = models.Customes.objects.all()
+    # for custom_obj in custom_list:
+    #     custom_article = models.Articles.objects.filter(custom=custom_obj).order_by('-id').first()
+    #     if custom_article:
+    #         models.Customes.objects.filter(id=custom_obj.id).update(managementor=custom_article.director)
     return render(request, 'index.html', locals())

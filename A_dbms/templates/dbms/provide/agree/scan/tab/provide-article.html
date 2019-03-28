@@ -6,6 +6,10 @@
             <th>放款次序</th>
             <th>项目金额</th>
             <th>担保期限</th>
+            <th>加权通知额</th>
+            <th>放款金额</th>
+            <th>还款金额</th>
+            <th>担保余额</th>
             <th>项目经理</th>
             <th>签批日期</th>
         </tr>
@@ -15,8 +19,12 @@
             <td><a target="_blank" href="{% url 'dbms:article_scan' article_id=agree_obj.lending.summary.id %}">
                 {{ agree_obj.lending.summary.summary_num }}</a></td>
             <td>{{ agree_obj.lending.get_order_display }}</td>
-            <td>{{ agree_obj.lending.summary.amount }}</td>
-            <td>{{ agree_obj.lending.summary.credit_term }}</td>
+            <td align="right">{{ agree_obj.lending.summary.amount }}</td>
+            <td align="right">{{ agree_obj.lending.summary.credit_term }}</td>
+            <td align="right">{{ agree_obj.lending.summary.article_notify_sum }}</td>
+            <td align="right">{{ agree_obj.lending.summary.article_provide_sum }}</td>
+            <td align="right">{{ agree_obj.lending.summary.article_repayment_sum }}</td>
+            <td align="right">{{ agree_obj.lending.summary.article_balance }}</td>
             <td>{{ agree_obj.lending.summary.director.name }}</td>
             <td>{{ agree_obj.lending.summary.sign_date }}</td>
         <tr>

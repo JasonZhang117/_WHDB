@@ -55,7 +55,8 @@ def article_add_ajax(request):  # 添加项目
                     director_id=cleaned_data['director_id'], assistant_id=cleaned_data['assistant_id'],
                     control_id=cleaned_data['control_id'], article_buildor=request.user)
                 today_str = time.strftime("%Y-%m-%d", time.localtime())  # 元组转换为字符串
-                models.Customes.objects.filter(article_custom=article_obj).update(lately_date=today_str)
+                models.Customes.objects.filter(article_custom=article_obj).update(
+                    lately_date=today_str, managementor_id=cleaned_data['director_id'])
             response['message'] = '成功创建项目：%s！' % article_obj.article_num
             response['skip'] = "/dbms/article/"
         except Exception as e:
@@ -87,7 +88,6 @@ def article_edit_ajax(request):  # 修改项目ajax
         form = forms.ArticlesAddForm(post_data, request.FILES)
         if form.is_valid():
             cleaned_data = form.cleaned_data
-            print('cleaned_data:', cleaned_data)
             renewal = cleaned_data['renewal']
             augment = cleaned_data['augment']
             amount = renewal + augment
@@ -98,6 +98,8 @@ def article_edit_ajax(request):  # 修改项目ajax
                     augment=augment, amount=amount, credit_term=cleaned_data['credit_term'],
                     director_id=cleaned_data['director_id'], assistant_id=cleaned_data['assistant_id'],
                     control_id=cleaned_data['control_id'], article_buildor=request.user)
+                models.Customes.objects.filter(article_custom=article_obj).update(
+                    managementor_id=cleaned_data['director_id'])
                 response['message'] = '成功修改项目：%s！' % article_obj.article_num
             except Exception as e:
                 response['status'] = False

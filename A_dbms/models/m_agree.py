@@ -23,7 +23,8 @@ class Agrees(models.Model):  # 委托合同
                                # limit_choices_to={'branch_state': 1},
                                related_name='agree_branch')
     agree_term = models.IntegerField(verbose_name='合同期限（月）')
-    AGREE_TYP_LIST = ((1, '单笔'), (2, '最高额'), (3, '保函'))
+    AGREE_TYP_LIST = [(1, '单笔'), (2, '最高额'), (3, '保函'), (7, '小贷'),
+                      (41, '单笔(公证)'), (42, '最高额(公证)'), (47, '小贷(公证)')]
     agree_typ = models.IntegerField(verbose_name='合同种类', choices=AGREE_TYP_LIST)
     GUARANTEE_TYP_LIST = (('①', '①'), ('②', '②'), ('③', '③'), ('④', '④'),
                           ('⑤', '⑤'), ('⑥', '⑥'), ('⑦', '⑦'), ('⑧', '⑧'),)

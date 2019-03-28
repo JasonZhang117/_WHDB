@@ -234,6 +234,7 @@ class Stockes(models.Model):  # 股权
                                     related_name='stock_owner_custome')
     target = models.CharField(verbose_name='标的公司', max_length=64)
     share = models.FloatField(verbose_name='数量（万）')
+    ratio = models.FloatField(verbose_name='比例（%）')
     stock_buildor = models.ForeignKey(to='Employees', verbose_name="创建者", default=1,
                                       on_delete=models.PROTECT,
                                       related_name='stock_buildor_employee')

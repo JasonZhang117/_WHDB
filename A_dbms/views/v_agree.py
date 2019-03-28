@@ -176,6 +176,33 @@ def agree_scan_counter(request, agree_id, counter_id):  # 查看合同
     return render(request, 'dbms/agree/agree-scan.html', locals())
 
 
+def convert(n):
+    units = ['', '万', '亿']
+    nums = ['零', '壹', '贰', '叁', '肆', '伍', '陆', '柒', '捌', '玖']
+    decimal_label = ['角', '分']
+    small_int_label = ['', '拾', '佰', '仟']
+    int_part, decimal_part = str(int(n)), str(round(n - int(n), 2))[2:]  # 分离整数和小数部分
+    res = []
+    if decimal_part:
+        res.append(''.join([nums[int(x)] + y for x, y in list(zip(decimal_part, decimal_label)) if x != '0']))
+    if int_part != '0':
+        res.append('元')
+        while int_part:
+            small_int_part, int_part = int_part[-4:], int_part[:-4]
+            tmp = ''.join(
+                [nums[int(x)] + (y if x != '0' else '') for x, y in
+                 list(zip(small_int_part[::-1], small_int_label))[::-1]])
+            tmp = tmp.rstrip('零').replace('零零零', '零').replace('零零', '零')
+            unit = units.pop(0)
+            if tmp:
+                tmp += unit
+                res.append(tmp)
+    result = ''.join(res[::-1])
+    if not result[-1] == '分':
+        result += '整'
+    return result
+
+
 # -------------------------合同预览-------------------------#
 @login_required
 @authority
@@ -185,6 +212,9 @@ def agree_preview(request, agree_id):
     authority_list = request.session.get('authority_list')  # 获取当前用户的所有权限
     menu_result = MenuHelper(request).menu_data_list()
     agree_obj = models.Agrees.objects.get(id=agree_id)
+    agree_amount = agree_obj.agree_amount
+    agree_amount_cn = convert(agree_amount)
+    agree_amount_str = str(agree_amount / 10000).rstrip('0').rstrip('.')  # 续贷（万元）
 
     return render(request, 'dbms/agree/agree-preview.html', locals())
 

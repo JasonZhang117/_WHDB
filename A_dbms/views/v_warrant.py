@@ -80,9 +80,6 @@ def warrant_scan(request, warrant_id):  # house_scan房产预览
     warrant_obj = models.Warrants.objects.get(id=warrant_id)
     warrant_typ_n = warrant_obj.warrant_typ
     HOUSE_GROUND_TYP_LIST = [1, 5, 6]
-    '''WARRANT_TYP_LIST = [
-        (1, '房产'), (2, '房产包'), (5, '土地'), (6, '在建工程'), (11, '应收账款'),
-        (21, '股权'), (31, '票据'), (41, '车辆'), (51, '动产'), (55, '其他'), (99, '他权')]'''
     if warrant_typ_n == 99:
         agree_lending_obj = warrant_obj.ypothec_warrant.agree.lending
         warrants_lending_list = models.Warrants.objects.filter(

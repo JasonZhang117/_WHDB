@@ -109,9 +109,10 @@ class FormStockes(dform.ModelForm):  # 股权
 
     class Meta:
         model = models.Stockes
-        fields = ['target', 'share', 'stock_typ']
+        fields = ['target', 'share',  'ratio', 'stock_typ']
         widgets = {'target': dform.TextInput(attrs={'class': 'form-control'}),
                    'share': dform.NumberInput(attrs={'class': 'form-control', 'placeholder': '万元或万股'}),
+                   'ratio': dform.NumberInput(attrs={'class': 'form-control', 'placeholder': '占比'}),
                    'stock_typ': dform.Select(attrs={'class': 'form-control'})}
 
     def __init__(self, *args, **kwargs):

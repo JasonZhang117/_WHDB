@@ -20,6 +20,7 @@ def provide_agree(request, *args, **kwargs):  # 放款管理
     current_url_name = resolve(request.path).url_name  # 获取当前URL_NAME
     authority_list = request.session.get('authority_list')  # 获取当前用户的所有权限
     menu_result = MenuHelper(request).menu_data_list()
+    job_list = request.session.get('job_list')  # 获取当前用户的所有角色
     PAGE_TITLE = '风控落实'
     '''AGREE_STATE_LIST = ((11, '待签批'), (21, '已签批'), (31, '未落实'),
                         (41, '已落实'), (51, '待变更'), (61, '已解保'), (99, '作废'))'''
@@ -28,6 +29,9 @@ def provide_agree(request, *args, **kwargs):  # 放款管理
     AGREE_STATE_LIST = models.Agrees.AGREE_STATE_LIST  # 筛选条件
     '''筛选'''
     agree_list = models.Agrees.objects.filter(**kwargs).select_related('lending', 'branch').order_by('-agree_num')
+    if '项目经理' in job_list:
+        agree_list = agree_list.filter(
+            Q(lending__summary__director=request.user) | Q(lending__summary__assistant=request.user))
     # agree_list = agree_list.filter(agree_state__in=[21, 31, 41, 51], lending__summary__article_state__in=[5, 51, 61])
     '''搜索'''
     search_key = request.GET.get('_s')
@@ -44,7 +48,7 @@ def provide_agree(request, *args, **kwargs):  # 放款管理
 
     agree_amount = agree_list.count()  # 信息数目
     '''分页'''
-    paginator = Paginator(agree_list, 18)
+    paginator = Paginator(agree_list, 19)
     page = request.GET.get('page')
     try:
         p_list = paginator.page(page)
@@ -64,11 +68,18 @@ def provide_agree_scan(request, agree_id):  # 查看放款
     current_url_name = resolve(request.path).url_name  # 获取当前URL_NAME
     authority_list = request.session.get('authority_list')  # 获取当前用户的所有权限
     menu_result = MenuHelper(request).menu_data_list()
+    job_list = request.session.get('job_list')  # 获取当前用户的所有角色
     PAGE_TITLE = '风控落实'
     response = {'status': True, 'message': None, 'forme': None, }
     COUNTER_TYP_CUSTOM = [1, 2]
     agree_obj = models.Agrees.objects.get(id=agree_id)
     lending_obj = agree_obj.lending
+    if '项目经理' in job_list:
+        user_list = models.Employees.objects.filter(
+            Q(director_employee__lending_summary__agree_lending=agree_obj) | Q(
+                assistant_employee__lending_summary__agree_lending=agree_obj)).distinct()
+        if not request.user in user_list:
+            return HttpResponse('你无权访问该项目')
     '''ARTICLE_STATE_LIST = ((1, '待反馈'), (2, '已反馈'), (3, '待上会'), (4, '已上会'), (5, '已签批'),
                           (51, '已放款'), (52, '已放完'), (55, '已解保'), (61, '待变更'), (99, '已注销'))'''
     '''SURE_TYP_LIST = (
@@ -190,10 +201,17 @@ def provide_agree_notify(request, agree_id, notify_id):  # 查看放款通知
     current_url_name = resolve(request.path).url_name  # 获取当前URL_NAME
     authority_list = request.session.get('authority_list')  # 获取当前用户的所有权限
     menu_result = MenuHelper(request).menu_data_list()
+    job_list = request.session.get('job_list')  # 获取当前用户的所有角色
     PAGE_TITLE = '放款通知'
     agree_obj = models.Agrees.objects.get(id=agree_id)
     lending_obj = agree_obj.lending
     notify_obj = models.Notify.objects.get(id=notify_id)
+    if '项目经理' in job_list:
+        user_list = models.Employees.objects.filter(
+            Q(director_employee__lending_summary__agree_lending__notify_agree=notify_obj) | Q(
+                director_employee__lending_summary__agree_lending__notify_agree=notify_obj)).distinct()
+        if not request.user in user_list:
+            return HttpResponse('你无权访问该项目')
     '''ARTICLE_STATE_LIST = ((1, '待反馈'), (2, '已反馈'), (3, '待上会'), (4, '已上会'), (5, '已签批'),
                               (51, '已放款'), (52, '已放完'), (55, '已解保'), (61, '待变更'), (99, '已注销'))'''
     '''SURE_TYP_LIST = (
@@ -255,11 +273,15 @@ def notify(request, *args, **kwargs):  #
     current_url_name = resolve(request.path).url_name  # 获取当前URL_NAME
     authority_list = request.session.get('authority_list')  # 获取当前用户的所有权限
     menu_result = MenuHelper(request).menu_data_list()
+    job_list = request.session.get('job_list')  # 获取当前用户的所有角色
     PAGE_TITLE = '放款通知'
 
     '''筛选'''
     notify_list = models.Notify.objects.filter(**kwargs).select_related('agree').order_by('-notify_date')
-
+    if '项目经理' in job_list:
+        notify_list = notify_list.filter(
+            Q(agree__lending__summary__director=request.user) | Q(
+                agree__lending__summary__director=request.user))
     '''搜索'''
     search_key = request.GET.get('_s')
     if search_key:
@@ -296,11 +318,18 @@ def notify_scan(request, notify_id):  # 查看放款通知
     current_url_name = resolve(request.path).url_name  # 获取当前URL_NAME
     authority_list = request.session.get('authority_list')  # 获取当前用户的所有权限
     menu_result = MenuHelper(request).menu_data_list()
+    job_list = request.session.get('job_list')  # 获取当前用户的所有角色
     PAGE_TITLE = '通知详情'
 
     notify_obj = models.Notify.objects.get(id=notify_id)
     agree_obj = notify_obj.agree
     lending_obj = agree_obj.lending
+    if '项目经理' in job_list:
+        user_list = models.Employees.objects.filter(
+            Q(director_employee__lending_summary__agree_lending__notify_agree=notify_obj) | Q(
+                director_employee__lending_summary__agree_lending__notify_agree=notify_obj)).distinct()
+        if not request.user in user_list:
+            return HttpResponse('你无权访问该项目')
     '''ARTICLE_STATE_LIST = ((1, '待反馈'), (2, '已反馈'), (3, '待上会'), (4, '已上会'), (5, '已签批'),
                               (51, '已放款'), (52, '已放完'), (55, '已解保'), (61, '待变更'), (99, '已注销'))'''
     '''SURE_TYP_LIST = (
@@ -362,12 +391,16 @@ def provide(request, *args, **kwargs):  # 委托合同列表
     current_url_name = resolve(request.path).url_name  # 获取当前URL_NAME
     authority_list = request.session.get('authority_list')  # 获取当前用户的所有权限
     menu_result = MenuHelper(request).menu_data_list()
+    job_list = request.session.get('job_list')  # 获取当前用户的所有角色
     PAGE_TITLE = '放款列表'
     '''PROVIDE_STATUS_LIST = [(1, '在保'), (11, '解保'), (21, '代偿')]'''
     PROVIDE_STATUS_LIST = models.Provides.PROVIDE_STATUS_LIST  # 筛选条件
     '''筛选'''
     provide_list = models.Provides.objects.filter(**kwargs).select_related('notify').order_by('-provide_date')
-
+    if '项目经理' in job_list:
+        provide_list = provide_list.filter(
+            Q(notify__agree__lending__summary__director=request.user) | Q(
+                notify__agree__lending__summary__director=request.user))
     '''搜索'''
     search_key = request.GET.get('_s')
     if search_key:
@@ -405,9 +438,16 @@ def provide_scan(request, provide_id):  # 查看放款
     current_url_name = resolve(request.path).url_name  # 获取当前URL_NAME
     authority_list = request.session.get('authority_list')  # 获取当前用户的所有权限
     menu_result = MenuHelper(request).menu_data_list()
+    job_list = request.session.get('job_list')  # 获取当前用户的所有角色
     PAGE_TITLE = '放款详情'
 
     provide_obj = models.Provides.objects.get(id=provide_id)
+    if '项目经理' in job_list:
+        user_list = models.Employees.objects.filter(
+            Q(director_employee__lending_summary__agree_lending__notify_agree__provide_notify=provide_obj) | Q(
+                director_employee__lending_summary__agree_lending__notify_agree__provide_notify=provide_obj)).distinct()
+        if not request.user in user_list:
+            return HttpResponse('你无权访问该项目')
     today_str = str(datetime.date.today())
     form_repayment_add = forms.FormRepaymentAdd(initial={'repayment_date': today_str})
     form_compensatory_add = forms.FormCompensatoryAdd(initial={'compensatory_date': today_str})
@@ -422,9 +462,14 @@ def overdue(request, *args, **kwargs):  # 逾期列表
     current_url_name = resolve(request.path).url_name  # 获取当前URL_NAME
     authority_list = request.session.get('authority_list')  # 获取当前用户的所有权限
     menu_result = MenuHelper(request).menu_data_list()
+    job_list = request.session.get('job_list')  # 获取当前用户的所有角色
     PAGE_TITLE = '逾期项目'
     overdue_list = models.Provides.objects.filter(
         provide_status=1, due_date__lt=datetime.date.today()).order_by('due_date')  # 逾期
+    if '项目经理' in job_list:
+        overdue_list = overdue_list.filter(
+            Q(notify__agree__lending__summary__director=request.user) | Q(
+                notify__agree__lending__summary__director=request.user))
     '''搜索'''
     search_key = request.GET.get('_s')
     if search_key:
@@ -473,10 +518,15 @@ def soondue(request, *args, **kwargs):  # 委托合同列表
     current_url_name = resolve(request.path).url_name  # 获取当前URL_NAME
     authority_list = request.session.get('authority_list')  # 获取当前用户的所有权限
     menu_result = MenuHelper(request).menu_data_list()
+    job_list = request.session.get('job_list')  # 获取当前用户的所有角色
     PAGE_TITLE = '即将到期（含逾期）'
     date_th_later = datetime.date.today() - datetime.timedelta(days=-30)  # 30天前的日期
     soondue_list = models.Provides.objects.filter(
         provide_status=1, due_date__lte=date_th_later).order_by('due_date')  # 30天内到期
+    if '项目经理' in job_list:
+        soondue_list = soondue_list.filter(
+            Q(notify__agree__lending__summary__director=request.user) | Q(
+                notify__agree__lending__summary__director=request.user))
     '''搜索'''
     search_key = request.GET.get('_s')
     if search_key:

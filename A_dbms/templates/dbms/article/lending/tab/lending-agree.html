@@ -6,6 +6,7 @@
             <th>放款银行</th>
             <th>合同类型</th>
             <th>合同金额</th>
+            <th>期限(月)</th>
             <th>通知金额</th>
             <th>放款金额</th>
             <th>还款金额</th>
@@ -22,13 +23,13 @@
                 <td><a target="_blank" href="{% url 'dbms:provide_agree_scan' agree_id=agree.id %}">
                     {{ agree.agree_num }}</a>
                 </td>
-
                 <td>{{ agree.branch }}</td>
                 <td>{{ agree.get_agree_typ_display }}</td>
-                <td>{{ agree.agree_amount }}</td>
-                <td>{{ agree.agree_notify_sum }}</td>
-                <td>{{ agree.agree_provide_sum }}</td>
-                <td>{{ agree.agree_repayment_sum }}</td>
+                <td align="right">{{ agree.agree_amount }}</td>
+                <td align="right">{{ agree.agree_term }}</td>
+                <td align="right">{{ agree.agree_notify_sum }}</td>
+                <td align="right">{{ agree.agree_provide_sum }}</td>
+                <td align="right">{{ agree.agree_repayment_sum }}</td>
                 <td>{{ agree.get_agree_state_display }}</td>
                 {% if lending_operate %}
                     <td><a class="btn btn-danger btn-xs delGuaranteeB">删除</a></td>

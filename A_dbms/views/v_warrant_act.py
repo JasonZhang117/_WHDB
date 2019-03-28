@@ -154,7 +154,8 @@ def warrant_add_ajax(request):
                             stock_typ=stocke_clean['stock_typ'],
                             stock_owner_id=stocke_clean['stock_owner'],
                             target=stocke_clean['target'],
-                            share=stocke_clean['share'])
+                            share=round(stocke_clean['share'], 2),
+                            ratio=round(stocke_clean['ratio'], 2))
                     response['message'] = '股权创建成功！！！'
                     response['skip'] = "/dbms/warrant/scan/%s/" % warrant_obj.id
                 except Exception as e:

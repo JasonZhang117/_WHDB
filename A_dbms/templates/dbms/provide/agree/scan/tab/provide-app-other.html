@@ -3,6 +3,7 @@
 
         <thead>
         <tr style="text-align: center">
+            <th>序号</th>
             <th>担保方式</th>
             <th>所有人</th>
             <th>资产类型</th>
@@ -21,6 +22,8 @@
             {% if lending_sure.sure_typ in OTHER_LIST %}
                 {% for warrant in lending_sure.warrant_sure.warrant.all %}
                     <tr guarantee-nid={{ warrant.id }} sure-typ-nid={{ lending_sure.sure_typ }}>
+                        <td><a target="_blank" href="{% url 'dbms:warrant_scan' warrant_id=warrant.id %}">
+                            {{ forloop.counter }}</a></td>
                         <td>{{ lending_sure.get_sure_typ_display }}</td>
                         <td>{{ warrant.other_warrant.other_owner.short_name }}</td>
                         <td>{{ warrant.other_warrant.get_other_typ_display }}</td>
