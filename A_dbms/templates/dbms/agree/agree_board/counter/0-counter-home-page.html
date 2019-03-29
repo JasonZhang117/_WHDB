@@ -1,21 +1,31 @@
 <p align="right">合同编号：<u>{{ counter_obj.counter_num }}</u></p>
 <p class="agree-title">
-    <!--COUNTER_TYP_LIST = (
-            (1, '企业担保'), (2, '个人保证'),
-            (11, '房产抵押'), (12, '土地抵押'), (13, '动产抵押'), (15, '车辆抵押'),
-            (31, '应收质押'), (32, '股权质押'), (33, '票据质押'),
-            (51, '股权预售'), (52, '房产预售'), (53, '土地预售'))
-        AGREE_TYP_LIST = ((1, '单笔'), (2, '最高额'), (3, '保函'))-->
-    {% if agree_obj.agree_typ == 1 %} <!--单笔-->
-        {% if counter_obj.counter_typ == 1 %}<!--保证合同-->
+    <!-- COUNTER_TYP_LIST = (
+        (1, '企业担保'), (2, '个人保证'),
+        (11, '房产抵押'), (12, '土地抵押'), (13, '动产抵押'), (14, '在建工程抵押'), (15, '车辆抵押'),
+        (31, '应收质押'), (32, '股权质押'), (33, '票据质押'), (34, '动产质押'),
+        (41, '其他权利质押'),
+        (51, '股权预售'), (52, '房产预售'), (53, '土地预售'))
+        AGREE_TYP_LIST = [(1, '单笔'), (2, '最高额'), (3, '保函'), (7, '小贷'),
+                      (41, '单笔(公证)'), (42, '最高额(公证)'), (47, '小贷(公证)')]-->
+    <!--单笔-->
+    {% if agree_obj.agree_typ == 1 %}
+        {% if counter_obj.counter_typ == 1 %}
             保证反担保合同
         {% elif counter_obj.counter_typ == 2 %}
             不可撤销的反担保函
         {% elif counter_obj.counter_typ in MORTGAGE_COUNTER_TYP_LIST %}
             抵押反担保合同
         {% endif %}
-        {% elif agree_obj.agree_typ == 2 %}<!--最高额-->
-        最高额保证反担保合同
+        <!--最高额-->
+    {% elif agree_obj.agree_typ == 2 %}
+        {% if counter_obj.counter_typ == 1 %}
+            最高额保证反担保合同
+        {% elif counter_obj.counter_typ == 2 %}
+            不可撤销的反担保函
+        {% elif counter_obj.counter_typ in MORTGAGE_COUNTER_TYP_LIST %}
+            抵押反担保合同
+        {% endif %}
     {% endif %}
 
 </p>
@@ -27,10 +37,11 @@
             <p>法定代表人：何长见</p>
         </div>
     </div>
-    <!--COUNTER_TYP_LIST = (
+    <!-- COUNTER_TYP_LIST = (
         (1, '企业担保'), (2, '个人保证'),
-        (11, '房产抵押'), (12, '土地抵押'), (13, '动产抵押'), (15, '车辆抵押'),
-        (31, '应收质押'), (32, '股权质押'), (33, '票据质押'),
+        (11, '房产抵押'), (12, '土地抵押'), (13, '动产抵押'), (14, '在建工程抵押'), (15, '车辆抵押'),
+        (31, '应收质押'), (32, '股权质押'), (33, '票据质押'), (34, '动产质押'),
+        (41, '其他权利质押'),
         (51, '股权预售'), (52, '房产预售'), (53, '土地预售'))-->
     <div class="page-table-1">
         {% if counter_obj.counter_typ == 1 %}

@@ -187,7 +187,8 @@ urlpatterns = [
     path('report/', views.report, name='report'),  #
     path('report/provide/list/', views.report_provide_list, name='report_provide_list_all'),  # 菜单-合作机构
     path('report/provide/list/<int:provide_typ>/', views.report_provide_list, name='report_provide_list'),
-    path('report//provide/balance/class/', views.report_balance_class, name='report_balance_class'),  # 菜单-合作机构
+    path('report/provide/balance/class/', views.report_balance_class, name='report_balance_class_all'),  # 菜单-合作机构
+    path('report/provide/balance/class/<int:class_typ>/', views.report_balance_class, name='report_balance_class'),
     # 员工
     path('employee/', views.employee, name='employee'),
     path('employee/add/', views.employee_add, name='employee_add'),

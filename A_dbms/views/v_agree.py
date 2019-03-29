@@ -239,7 +239,7 @@ def counter_preview(request, agree_id, counter_id):
         assure_counter_obj = counter_obj.assure_counter
         custom_obj = assure_counter_obj.custome
 
-    MORTGAGE_COUNTER_TYP_LIST = [11, 12, 13, 15, ]
+    MORTGAGE_COUNTER_TYP_LIST = [11, 12, 13, 14, 15, ]
 
     '''WARRANT_TYP_LIST = [
         (1, '房产'), (2, '房产包'), (5, '土地'), (6, '在建工程'), (11, '应收账款'),

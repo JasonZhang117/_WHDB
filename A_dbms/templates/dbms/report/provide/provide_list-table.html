@@ -25,8 +25,8 @@
                 <td>{{ forloop.counter }}</td>
                 <td>{{ provide.notify.agree.lending.summary.custom.name }}</td>
                 <td>{{ provide.get_provide_typ_display }}</td>
-                <td>{{ provide.provide_money }}</td>
-                <td>{{ provide.notify.time_limit }}</td>
+                <td align="right">{{ provide.provide_money }}</td>
+                <td align="right">{{ provide.notify.time_limit }}</td>
                 <td>{{ provide.notify.agree.branch.short_name }}</td>
                 <td>{{ provide.notify.agree.lending.summary.custom.company_custome.idustry }}</td>
                 <td>{{ provide.notify.agree.lending.summary.custom.company_custome.district }}</td>
@@ -34,10 +34,14 @@
                 <td>{{ provide.notify.agree.lending.summary.assistant.name }}</td>
                 <td>{{ provide.provide_date }}</td>
                 <td>{{ provide.due_date }}</td>
-                <td>{{ provide.provide_repayment_sum }}</td>
-                <td>{{ provide.provide_balance }}</td>
+                <td align="right">{{ provide.provide_repayment_sum }}</td>
+                <td align="right">{{ provide.provide_balance }}</td>
             </tr>
         {% endfor %}
+        <tr>
+            <td colspan="13">合计</td>
+            <td align="right">{{ provide_balance }}</td>
+        </tr>
         </tbody>
     </table>
 </div>
