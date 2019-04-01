@@ -3,7 +3,7 @@ from .f_meeting import (
     MeetingAddForm, MeetingEditForm, MeetingAllotForm, SingleQuotaForm, MeetingArticleAddForm,
     SingleQuotaForm, FormLendingOrder)
 from .f_appraisal import (
-    CommentsAddForm, LendingSuresForm, LendingCustomsCForm, LendingCustomsPForm,LendinVehicleForm,
+    CommentsAddForm, LendingSuresForm, LendingCustomsCForm, LendingCustomsPForm, LendinVehicleForm,
     LendingHouseForm, LendingGroundForm, LendingConstructForm, ArticlesSignForm, LendinReceivableForm,
     LendinStockForm, LendinChattelForm, LendinOtherForm, LendinDraftForm)
 from .f_warrant import (

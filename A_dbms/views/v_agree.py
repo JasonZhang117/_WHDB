@@ -246,4 +246,9 @@ def counter_preview(request, agree_id, counter_id):
         (21, '股权'), (31, '票据'), (41, '车辆'), (51, '动产'), (55, '其他'), (99, '他权')]'''
     OWER_SHIP_LIST = [1, 2, 5, ]
 
+    agree_amount = agree_obj.agree_amount
+    agree_amount_cn = convert(agree_amount)
+    agree_amount_str = str(agree_amount / 10000).rstrip('0').rstrip('.')  # 续贷（万元）
+
+
     return render(request, 'dbms/agree/agree-counter-preview.html', locals())
