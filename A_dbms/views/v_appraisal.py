@@ -66,8 +66,8 @@ def appraisal_scan(request, article_id):  # 评审项目预览
     comment_operate = True
     lending_operate = True
     article_obj = models.Articles.objects.get(id=article_id)
-    '''ARTICLE_STATE_LIST = ((1, '待反馈'), (2, '已反馈'), (3, '待上会'), (4, '已上会'), (5, '已签批'),
-                          (51, '已放完'), (61, '待变更'), (99, '已注销'))'''
+    '''ARTICLE_STATE_LIST = [(1, '待反馈'), (2, '已反馈'), (3, '待上会'), (4, '已上会'), (5, '已签批'),
+                          (51, '已放款'), (52, '已放完'), (55, '已解保'), (61, '待变更'), (99, '已注销')]'''
     if article_obj.article_state in [1, 2, 3, 4]:
         form_date = {'renewal': article_obj.renewal, 'augment': article_obj.augment,
                      'sign_date': str(datetime.date.today())}
@@ -75,7 +75,8 @@ def appraisal_scan(request, article_id):  # 评审项目预览
     else:
         form_date = {
             'summary_num': article_obj.summary_num, 'sign_type': article_obj.sign_type, 'renewal': article_obj.renewal,
-            'augment': article_obj.augment, 'rcd_opinion': article_obj.rcd_opinion,
+            'augment': article_obj.augment, 'credit_amount': article_obj.custom.credit_amount,
+            'rcd_opinion': article_obj.rcd_opinion,
             'convenor_opinion': article_obj.convenor_opinion, 'sign_detail': article_obj.sign_detail,
             'sign_date': str(article_obj.sign_date)}
         form_article_sign = forms.ArticlesSignForm(initial=form_date)
@@ -154,6 +155,9 @@ def appraisal_scan_lending(request, article_id, lending_id):  # 评审项目预�
     form_lendingvehicle_add = forms.LendinVehicleForm()  # 车辆
     form_lendingchattel_add = forms.LendinChattelForm()  # 动产
     form_lendingother_add = forms.LendinOtherForm()  # 其他
+
+    form_lending = forms.FormLendingOrder(
+        initial={'order': lending_obj.order, 'order_amount': lending_obj.order_amount})
 
     return render(request, 'dbms/appraisal/appraisal-scan-lending.html', locals())
 

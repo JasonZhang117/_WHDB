@@ -248,4 +248,11 @@ def home(request):
     #     custom_article = models.Articles.objects.filter(custom=custom_obj).order_by('-id').first()
     #     if custom_article:
     #         models.Customes.objects.filter(id=custom_obj.id).update(managementor=custom_article.director)
+
+    # provide_list = models.Provides.objects.all().order_by('provide_date')
+    # for provide_obj in provide_list:
+    #     custom_list = models.Customes.objects.filter(
+    #         article_custom__lending_summary__agree_lending__notify_agree__provide_notify=provide_obj)
+    #     custom_list.update(lately_date=provide_obj.provide_date)
+
     return render(request, 'index.html', locals())

@@ -165,7 +165,7 @@ def notify_add_ajax(request):
                             article_obj = article_list.first()
                             article_notify_amount = models.Notify.objects.filter(
                                 agree__lending__summary=article_obj).aggregate(Sum('weighting'))['weighting__sum']
-                            print('article_notify_amount:',article_notify_amount)
+                            print('article_notify_amount:', article_notify_amount)
                             article_list.update(article_notify_sum=round(article_notify_amount, 2))
                         response['message'] = '成功添加放款通知！'
                     except Exception as e:
@@ -246,6 +246,7 @@ def provide_add_ajax(request):
                         provide_money=provide_money, provide_date=form_provide_cleaned['provide_date'],
                         due_date=form_provide_cleaned['due_date'], provide_balance=provide_money,
                         providor=request.user)
+
                     '''notify_provide_sum，更新放款通知放款情况'''
                     notify_provide_balance = models.Provides.objects.filter(
                         notify=notify_obj).aggregate(Sum('provide_balance'))['provide_balance__sum']
@@ -320,21 +321,24 @@ def provide_add_ajax(request):
                             Sum('branch_accept'))['branch_accept__sum']  # 授信银行项下，流贷余额
                         cooperator_list.update(cooperator_accept=round(cooperator_branch_accept_balance, 2))
                     elif provide_typ == 21:
-                        custom_list.update(custom_back=round(custom_provide_balance, 2))  # 客户，更新保函余额
+                        custom_list.update(custom_back=round(custom_provide_balance, 2),
+                                           lately_date=form_provide_cleaned['provide_date'])  # 客户，更新保函余额
                         branch_list.update(branch_back=round(branch_provide_balance, 2))  # 放款银行，更新保函余额
                         cooperator_branch_back_balance = models.Branches.objects.filter(
                             cooperator=cooperator_obj).aggregate(
                             Sum('branch_back'))['branch_back__sum']  # 授信银行项下，保函余额
                         cooperator_list.update(cooperator_back=round(cooperator_branch_back_balance, 2))
                     elif provide_typ == 31:
-                        custom_list.update(entrusted_loan=round(custom_provide_balance, 2))  # 客户，更新委贷余额
+                        custom_list.update(entrusted_loan=round(custom_provide_balance, 2),
+                                           lately_date=form_provide_cleaned['provide_date'])  # 客户，更新委贷余额
                         branch_list.update(entrusted_loan=round(branch_provide_balance, 2))  # 放款银行，更新委贷余额
                         cooperator_entrusted_loan_balance = models.Branches.objects.filter(
                             cooperator=cooperator_obj).aggregate(
                             Sum('entrusted_loan'))['entrusted_loan__sum']  # 授信银行项下，委贷余额
                         cooperator_list.update(entrusted_loan=round(cooperator_entrusted_loan_balance, 2))
                     elif provide_typ == 41:
-                        custom_list.update(petty_loan=round(custom_provide_balance, 2))  # 客户，更新委贷余额
+                        custom_list.update(petty_loan=round(custom_provide_balance, 2),
+                                           lately_date=form_provide_cleaned['provide_date'])  # 客户，更新委贷余额
                         branch_list.update(petty_loan=round(branch_provide_balance, 2))  # 放款银行，更新委贷余额
                         cooperator_petty_loan_balance = models.Branches.objects.filter(
                             cooperator=cooperator_obj).aggregate(

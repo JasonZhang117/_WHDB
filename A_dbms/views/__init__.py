@@ -16,9 +16,9 @@ from .v_meeting_act import (
 from .v_appraisal import (appraisal, appraisal_scan, appraisal_scan_lending, summary_scan)
 from .v_appraisal_act import (
     article_sign_ajax, guarantee_add_ajax, guarantee_del_ajax, single_del_ajax, comment_edit_ajax,
-    single_quota_ajax, lending_del_ajax, lending_order_ajax, article_change_ajax)
+    single_quota_ajax, lending_change_ajax, lending_del_ajax, lending_order_ajax, article_change_ajax)
 # ----------------------v_agree合同管理视图--------------------#
-from .v_agree import (agree, agree_scan, agree_preview, counter_preview)
+from .v_agree import (agree, agree_scan, agree_preview, counter_preview, agree_sign_preview)
 from .v_agree_act import (agree_add_ajax, counter_add_ajax, agree_sign_ajax, counter_del_ajax)
 # ----------------------v_warrant权证管理视图--------------------#
 from .v_warrant import (
@@ -41,7 +41,7 @@ from .v_pigeonhole import pigeonhole, pigeonhole_scan, pigeonhole_overdue
 from .v_pigeonhole_act import pigeonhole_add_ajax
 # ----------------------v_review保后管理视图--------------------#
 from .v_review import review, review_scan, review_overdue
-from .v_review_act import review_plan_ajax, review_update_ajax
+from .v_review_act import review_plan_ajax, review_update_ajax, review_del_ajax
 # ----------------------v_dun追偿视图--------------------#
 from .v_dun import (
     compensatory, compensatory_scan, dun, dun_scan, seal, overdue_seal, soondue_seal,
@@ -59,7 +59,7 @@ from .v_custom_act import (custom_add_ajax, custom_del_ajax, custom_edit_ajax, s
 from .v_external import cooperative, cooperative_scan, soondue_cooperator, overdue_cooperator, branches
 from .v_external_act import agreement_add_ajax
 # ----------------------v_report报表管理视图--------------------#
-from .v_report import report, report_provide_list,report_balance_class
+from .v_report import report, report_provide_list, report_balance_class
 
 # 部门、员工
 from .v_interior import department, department_add, department_edit

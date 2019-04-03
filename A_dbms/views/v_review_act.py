@@ -129,3 +129,34 @@ def review_update_ajax(request):
             response['forme'] = form_review_add.errors
     result = json.dumps(response, ensure_ascii=False)
     return HttpResponse(result)
+
+
+# -----------------------取消保后ajax-------------------------#
+@login_required
+@authority
+def review_del_ajax(request):
+    print(request.path, '>', resolve(request.path).url_name, '>', request.user)
+    response = {'status': True, 'message': None, 'forme': None, }
+    post_data_str = request.POST.get('postDataStr')
+    post_data = json.loads(post_data_str)
+    print('post_data:', post_data)
+
+    custom_list = models.Customes.objects.filter(id=post_data['custom_id'])
+    review_list = models.Review.objects.filter(id=post_data['review_id'])
+    review_obj = review_list.first()
+    '''REVIEW_STATE_LIST = [(1, '待保后'), (11, '待报告'), (21, '已完成'), (81, '自主保后')]'''
+    review_state = review_obj.review_state
+    if review_state == 1:
+        try:
+            with transaction.atomic():
+                review_list.delete()
+                custom_list.update(review_plan_date=None, review_state=21)
+            response['message'] = '保后计划删除成功！'
+        except Exception as e:
+            response['status'] = False
+            response['message'] = '删除失败：%s' % str(e)
+    else:
+        response['status'] = False
+        response['message'] = '状态为：%s，无法取消！！！' % review_state
+    result = json.dumps(response, ensure_ascii=False)
+    return HttpResponse(result)

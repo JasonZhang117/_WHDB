@@ -24,13 +24,7 @@ def index(request):
     if '项目经理' in job_list:
         no_feedback_list = no_feedback_list.filter(Q(director=request.user) | Q(assistant=request.user))
     no_feedback_count = no_feedback_list.count()  # 待反馈
-    '''IMPLEMENT_LIST = [(1, '未归档'), (11, '退回'), (21, '暂存风控'), (31, '移交行政'), (41, '已归档')]'''
-    no_pigeonhole_list = models.Provides.objects.filter(implement__in=[1, 11])  # 未归档
-    if '项目经理' in job_list:
-        no_pigeonhole_list = no_pigeonhole_list.filter(
-            Q(notify__agree__lending__summary__director=request.user) | Q(
-                notify__agree__lending__summary__director=request.user))
-    no_pigeonhole_count = no_pigeonhole_list.count()  # 未归档
+
     '''AGREE_STATE_LIST = ((11, '待签批'), (21, '已签批'), (31, '未落实'),
                         (41, '已落实'), (51, '待变更'), (61, '已解保'), (99, '作废'))'''
     no_ascertain_list = models.Agrees.objects.filter(agree_state=31)  # 未落实
@@ -87,6 +81,13 @@ def index(request):
     overdue_search_count = models.Seal.objects.filter(
         seal_state__in=[1, 5, 11, 21], inquiry_date__lt=date_th_befor).count()  # 超过30天未查询
     '''IMPLEMENT_LIST = [(1, '未归档'), (11, '退回'), (21, '暂存风控'), (31, '移交行政'), (41, '已归档')]'''
+    no_pigeonhole_list = models.Provides.objects.filter(implement=21)  # 未归档
+    if '项目经理' in job_list:
+        no_pigeonhole_list = no_pigeonhole_list.filter(
+            Q(notify__agree__lending__summary__director=request.user) | Q(
+                notify__agree__lending__summary__director=request.user))
+    no_pigeonhole_count = no_pigeonhole_list.count()  # 未归档
+
     date_15_leter = datetime.date.today() - datetime.timedelta(days=15)  # 15天前
     pigeonhole_overdue = models.Provides.objects.filter(implement__in=[1, 11], provide_date__lt=date_15_leter)  # 逾期归档
     if '项目经理' in job_list:

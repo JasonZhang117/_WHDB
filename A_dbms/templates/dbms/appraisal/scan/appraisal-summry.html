@@ -11,12 +11,14 @@
                 <a class="btn btn-primary btn-sm " id="articleChangeB">项目变更</a><!--#path('appraisal/sign/'-->
             {% else %}
                 <a class="btn btn-primary btn-sm " id="guaranteeB">反担保</a><!--#path('appraisal/guarantee/add/'-->
+                <a class="btn btn-primary btn-sm " id="changeLendingOrderB">变更</a>
+                <!--#path('appraisal/guarantee/add/'-->
             {% endif %}
         </label>
     </div>
 
     <div class="panel-body row" style="padding: 1px;">
-        <label class="col-lg-3 col-md-4 col-sm-6 col-xs-12">客户名称：{{ article_obj.custom }}</label>
+        <label class="col-lg-3 col-md-4 col-sm-6 col-xs-12">客户名称：{{ article_obj.custom.short_name }}</label>
         <label class="col-lg-3 col-md-4 col-sm-6 col-xs-12">项目编号：{{ article_obj.article_num }}</label>
         <label class="col-lg-3 col-md-4 col-sm-6 col-xs-12">纪要编号：{{ article_obj.summary_num }}</label>
         <label class="col-lg-3 col-md-4 col-sm-6 col-xs-12">金额合计：{{ article_obj.amount }}</label>

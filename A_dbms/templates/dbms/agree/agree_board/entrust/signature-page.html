@@ -1,10 +1,7 @@
 <p>(此页无正文)</p>
 <div class="sign-page">
     <div class="sign-page-j">
-        <p>甲方（公章或合同专用章）：成都武侯中小企业融资担保有限责任公司</p>
-        <p>法定代表人（或授权代理人）：何长见</p>
-        <p>（签字或盖章）</p>
-        <p class="sign-date">&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp年&nbsp&nbsp&nbsp月&nbsp&nbsp&nbsp日</p>
+        {% include 'dbms/agree/agree_board/sign-j.html' %}
     </div>
     <div class="sign-page-y">
         <p>乙方（公章或合同专用章）：<strong><u>{{ agree_obj.lending.summary.custom.name }}</u></strong></p>

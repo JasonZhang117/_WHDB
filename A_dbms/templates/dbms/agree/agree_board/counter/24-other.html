@@ -1,0 +1,44 @@
+<p>1、本合同未尽事宜，甲、乙、丙三方可另行达成书面协议，作为本合同附件。</p>
+<p>2、本合同的任何附件、修改或补充均构成本合同不可分割的一部分，与本合同具有同等的法律效力。</p>
+<p>3、本合同独立于主合同、主债权合同和其他关联合同，主合同、主债权合同和其他关联合同的无效
+    并不导致本合同无效，乙方仍需对丙方的赔偿责任或返还责任承担担保。关联合同中有关本反担保
+    的内容与本合同约定相冲突的，以本合同约定为准。</p>
+<p><strong>声明：乙丙双方已阅读本合同所有条款。应乙丙双方要求，甲方已经就本合同作了相应的说
+    明。乙丙双方对本合同条款的含义及相应的法律后果已全部通晓并充分理解。</strong></p>
+<div class="row">
+    <div class="col-lg-6 col-xs-6">
+        <p><strong>乙方确认签章：</strong></p>
+        <p>
+            {% if counter_obj.counter_typ == 1 %}
+                {% for custom in counter_obj.assure_counter.custome.all %}
+                    <strong><u>{{ custom.name }}</u></strong>
+                {% endfor %}
+                {#MORTGAGE_COUNTER_TYP_LIST = [11, 12, 13, 14, 15, ]#}
+            {% elif counter_obj.counter_typ in MORTGAGE_COUNTER_TYP_LIST %}
+                <!--WARRANT_TYP_LIST = [
+                    (1, '房产'), (2, '房产包'), (5, '土地'), (6, '在建工程'), (11, '应收账款'),
+                    (21, '股权'), (31, '票据'), (41, '车辆'), (51, '动产'), (55, '其他'), (99, '他权')]-->
+                {% for warrant in counter_obj.warrant_counter.warrant.all %}
+                    {% if forloop.first %}
+                        {#(1, '房产'), (2, '房产包'), (5, '土地'), (6, '在建工程')#}
+                        {% if warrant.ownership_warrant.all %}
+                            <strong><u>{% for ownership in warrant.ownership_warrant.all %}
+                                {{ ownership.owner.name }}{% if not forloop.last %}、{% endif %}
+                            {% endfor %}</u></strong>
+                            {#(41, '车辆')#}
+                        {% elif warrant.warrant_typ == 41 %}
+                            <strong><u>{{ warrant.vehicle_owner.name }}</u></strong>
+                            {#(51, '动产')#}
+                        {% elif warrant.warrant_typ == 51 %}
+                            <strong><u>{{ warrant.chattel_owner.name }}</u></strong>
+                        {% endif %}
+                    {% endif %}
+                {% endfor %}
+            {% endif %}
+        </p>
+    </div>
+    <div class="col-lg-6 col-xs-6">
+        <p><strong>丙方确认签章：</strong></p>
+        <p><strong><u>{{ agree_obj.lending.summary.custom.name }}</u></strong></p>
+    </div>
+</div>

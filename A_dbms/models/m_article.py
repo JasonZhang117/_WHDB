@@ -37,8 +37,8 @@ class Articles(models.Model):  # 项目、纪要
     sign_detail = models.TextField(verbose_name='签批人意见', null=True, blank=True)
     sign_date = models.DateField(verbose_name='签批日期', null=True, blank=True)
 
-    ARTICLE_STATE_LIST = ((1, '待反馈'), (2, '已反馈'), (3, '待上会'), (4, '已上会'), (5, '已签批'),
-                          (51, '已放款'), (52, '已放完'), (55, '已解保'), (61, '待变更'), (99, '已注销'))
+    ARTICLE_STATE_LIST = [(1, '待反馈'), (2, '已反馈'), (3, '待上会'), (4, '已上会'), (5, '已签批'),
+                          (51, '已放款'), (52, '已放完'), (55, '已解保'), (61, '待变更'), (99, '已注销')]
     article_state = models.IntegerField(verbose_name='_项目状态', choices=ARTICLE_STATE_LIST, default=1)
     CLASSIFICATION_LIST = ((1, '正常'), (11, '关注'), (21, '次级'), (31, '可疑'), (41, '损失'))
     classification = models.IntegerField(verbose_name='_风险分类', choices=CLASSIFICATION_LIST, default=1)

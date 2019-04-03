@@ -72,6 +72,7 @@ def provide_agree_scan(request, agree_id):  # 查看放款
     PAGE_TITLE = '风控落实'
     response = {'status': True, 'message': None, 'forme': None, }
     COUNTER_TYP_CUSTOM = [1, 2]
+    WARRANT_TYP_OWN_LIST = [1, 2, 5, 6]
     agree_obj = models.Agrees.objects.get(id=agree_id)
     lending_obj = agree_obj.lending
     if '项目经理' in job_list:

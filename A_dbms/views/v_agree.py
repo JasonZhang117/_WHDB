@@ -68,6 +68,7 @@ def agree_scan(request, agree_id):  # 查看合同
     APPLICATION = 'agree_scan'
     PAGE_TITLE = '合同详情'
     COUNTER_TYP_CUSTOM = [1, 2]
+    WARRANT_TYP_OWN_LIST = [1, 2, 5, 6]
     '''COUNTER_TYP_LIST = (
         (1, '企业担保'), (2, '个人保证'),
         (11, '房产抵押'), (12, '土地抵押'), (13, '动产抵押'), (14, '在建工程抵押'), (15, '车辆抵押'),
@@ -88,7 +89,7 @@ def agree_scan(request, agree_id):  # 查看合同
         lending_custom__sure__lending=agree_lending_obj, genre=2).exclude(
         counter_custome__counter__agree=agree_obj).values_list('id', 'name').order_by('name')
     warrants_h_lending_list = models.Warrants.objects.filter(
-        lending_warrant__sure__lending=agree_lending_obj, warrant_typ__in=[1, 5]).exclude(
+        lending_warrant__sure__lending=agree_lending_obj, warrant_typ__in=[1, 2]).exclude(
         counter_warrant__counter__agree=agree_obj).values_list('id', 'warrant_num').order_by('warrant_num')
     warrants_g_lending_list = models.Warrants.objects.filter(
         lending_warrant__sure__lending=agree_lending_obj, warrant_typ=5).exclude(
@@ -132,6 +133,10 @@ def agree_scan_counter(request, agree_id, counter_id):  # 查看合同
     APPLICATION = 'agree_scan_counter'
     PAGE_TITLE = '担保合同'
     COUNTER_TYP_CUSTOM = [1, 2]
+    '''WARRANT_TYP_LIST = [
+        (1, '房产'), (2, '房产包'), (5, '土地'), (6, '在建工程'), (11, '应收账款'),
+        (21, '股权'), (31, '票据'), (41, '车辆'), (51, '动产'), (55, '其他'), (99, '他权')]'''
+    WARRANT_TYP_OWN_LIST = [1, 2, 5, 6]
 
     '''COUNTER_TYP_LIST = (
         (1, '企业担保'), (2, '个人保证'),
@@ -216,7 +221,7 @@ def agree_preview(request, agree_id):
     agree_amount_cn = convert(agree_amount)
     agree_amount_str = str(agree_amount / 10000).rstrip('0').rstrip('.')  # 续贷（万元）
 
-    return render(request, 'dbms/agree/agree-preview.html', locals())
+    return render(request, 'dbms/agree/preview-agree.html', locals())
 
 
 # -------------------------反担保合同预览-------------------------#
@@ -249,6 +254,29 @@ def counter_preview(request, agree_id, counter_id):
     agree_amount = agree_obj.agree_amount
     agree_amount_cn = convert(agree_amount)
     agree_amount_str = str(agree_amount / 10000).rstrip('0').rstrip('.')  # 续贷（万元）
+    if not counter_obj.counter_typ in [1, 2]:
+        warrant_list = counter_obj.warrant_counter.warrant.count()
+
+    return render(request, 'dbms/agree/preview-counter.html', locals())
 
 
-    return render(request, 'dbms/agree/agree-counter-preview.html', locals())
+# -------------------------审签表预览-------------------------#
+@login_required
+@authority
+def agree_sign_preview(request, agree_id):
+    print(request.path, '>', resolve(request.path).url_name, '>', request.user)
+    current_url_name = resolve(request.path).url_name  # 获取当前URL_NAME
+    authority_list = request.session.get('authority_list')  # 获取当前用户的所有权限
+    menu_result = MenuHelper(request).menu_data_list()
+    agree_obj = models.Agrees.objects.get(id=agree_id)
+    '''COUNTER_TYP_LIST = [
+        (1, '企业担保'), (2, '个人保证'),
+        (11, '房产抵押'), (12, '土地抵押'), (13, '动产抵押'), (14, '在建工程抵押'), (15, '车辆抵押'),
+        (31, '应收质押'), (32, '股权质押'), (33, '票据质押'), (34, '动产质押'),
+        (41, '其他权利质押'),
+        (51, '股权预售'), (52, '房产预售'), (53, '土地预售')]'''
+
+    agree_amount = agree_obj.agree_amount
+    agree_amount_str = str(agree_amount / 10000).rstrip('0').rstrip('.')  # 续贷（万元）
+
+    return render(request, 'dbms/agree/preview-sign.html', locals())

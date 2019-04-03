@@ -1,0 +1,18 @@
+<div class="modal fade bs-example-modal-sm" id="delReviewModal"
+     tabindex="-1" role="dialog" aria-labelledby="delReviewModal">
+    <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="delReviewModalLabel">取消保后计划
+                    <input style="display: none" name="custom_id" value="{{ custom_obj.id }}">
+                    <input style="display: none" name="review_id" id="delReviewId">
+                </h4>
+            </div>
+            <div class="modal-body">是否确定取消本次保后计划？</div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                <button type="button" class="btn btn-primary" id="delReviewModalOk">确定</button>
+            </div>
+        </div>
+    </div>
+</div>

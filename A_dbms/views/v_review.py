@@ -70,7 +70,7 @@ def review(request, *args, **kwargs):  # 保后列表
     balance = flow_amount + accept_amount + back_amount
 
     custom_acount = custom_list.count()
-    paginator = Paginator(custom_list, 19)
+    paginator = Paginator(custom_list, 119)
     page = request.GET.get('page')
     try:
         p_list = paginator.page(page)

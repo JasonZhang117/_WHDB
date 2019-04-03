@@ -428,6 +428,45 @@ def lending_order_ajax(request):  # 放款次序ajax
     return HttpResponse(result)
 
 
+# -----------------------变更放款次序ajax-------------------------#
+@login_required
+@authority
+def lending_change_ajax(request):  # 放款次序ajax
+    print(request.path, '>', resolve(request.path).url_name, '>', request.user)
+    response = {'status': True, 'message': None, 'forme': None}
+    post_data_str = request.POST.get('postDataStr')
+    post_data = json.loads(post_data_str)
+
+    article_list = models.Articles.objects.filter(id=post_data['article_id'])
+    article_obj = article_list.first()
+    lending_list = models.LendingOrder.objects.filter(id=post_data['lending_id'])
+
+    '''ARTICLE_STATE_LIST = [(1, '待反馈'), (2, '已反馈'), (3, '待上会'), (4, '已上会'), (5, '已签批'),
+                          (51, '已放款'), (52, '已放完'), (55, '已解保'), (61, '待变更'), (99, '已注销')]'''
+    if article_obj.article_state in [4, 61]:
+        form_lending_change = forms.FormLendingOrder(post_data)
+        if form_lending_change.is_valid():
+            lending_change_data = form_lending_change.cleaned_data
+            try:
+                lending_list.update(order=lending_change_data['order'],
+                                    order_amount=lending_change_data['order_amount'], lending_buildor=request.user)
+                response['message'] = '放款次序变更成功！'
+            except Exception as e:
+                response['status'] = False
+                response['message'] = '放款次序变更失败：%s' % str(e)
+        else:
+            response['status'] = False
+            response['message'] = '表单信息有误！！！'
+            response['forme'] = form_lending_change.errors
+
+    else:
+        msg = '项目状态为：%s，无法变更放款次序！！！' % article_obj.article_state
+        response['status'] = False
+        response['message'] = msg
+    result = json.dumps(response, ensure_ascii=False)
+    return HttpResponse(result)
+
+
 # -----------------------放款次序删除ajax-------------------------#
 @login_required
 @authority
@@ -443,8 +482,8 @@ def lending_del_ajax(request):  # 放款次序删除ajax
     lending_obj = models.LendingOrder.objects.get(id=lending_id)
     article_obj = models.Articles.objects.get(id=article_id)
     print('lending_obj:', lending_obj)
-    '''ARTICLE_STATE_LIST = ((1, '待反馈'), (2, '已反馈'), (3, '待上会'), (4, '已上会'), (5, '已签批'),
-                          (51, '已放完'), (61, '待变更'), (99, '已注销'))'''
+    '''ARTICLE_STATE_LIST = [(1, '待反馈'), (2, '已反馈'), (3, '待上会'), (4, '已上会'), (5, '已签批'),
+                          (51, '已放款'), (52, '已放完'), (55, '已解保'), (61, '待变更'), (99, '已注销')]'''
     if article_obj.article_state in [1, 2, 3, 4, 61]:
         try:
             lending_obj.delete()  # 删除单项额度
@@ -474,8 +513,8 @@ def single_del_ajax(request):  # 单项额度删除ajax
     single_obj = models.SingleQuota.objects.get(id=single_id)
     article_obj = models.Articles.objects.get(id=article_id)
     print('single_obj:', single_obj)
-    '''ARTICLE_STATE_LIST = ((1, '待反馈'), (2, '已反馈'), (3, '待上会'), (4, '已上会'), (5, '已签批'),
-                          (51, '已放完'), (61, '待变更'), (99, '已注销'))'''
+    '''ARTICLE_STATE_LIST = [(1, '待反馈'), (2, '已反馈'), (3, '待上会'), (4, '已上会'), (5, '已签批'),
+                          (51, '已放款'), (52, '已放完'), (55, '已解保'), (61, '待变更'), (99, '已注销')]'''
     if article_obj.article_state in [1, 2, 3, 4, 61]:
         single_obj.delete()  # 删除单项额度
         response['obj_id'] = single_obj.id
@@ -504,9 +543,9 @@ def article_sign_ajax(request):
     sign_type = int(post_data['sign_type'])
     article_id = post_data['article_id']
     aritcle_obj = models.Articles.objects.get(id=article_id)
-    '''ARTICLE_STATE_LIST = ((1, '待反馈'), (2, '已反馈'), (3, '待上会'), (4, '已上会'), (5, '已签批'),
-                          (51, '已放完'), (61, '待变更'), (99, '已注销'))'''
-    if aritcle_obj.article_state == 4:
+    '''ARTICLE_STATE_LIST = [(1, '待反馈'), (2, '已反馈'), (3, '待上会'), (4, '已上会'), (5, '已签批'),
+                          (51, '已放款'), (52, '已放完'), (55, '已解保'), (61, '待变更'), (99, '已注销')]'''
+    if aritcle_obj.article_state in [4, 61]:
         if sign_type == 2:
             models.Articles.objects.filter(id=article_id).update(
                 sign_type=sign_type, sign_date=post_data['sign_date'], article_state=6)
@@ -541,7 +580,7 @@ def article_sign_ajax(request):
                                 # 更新客户授信总额
                                 custom_id = aritcle_obj.custom.id
                                 models.Customes.objects.filter(id=custom_id).update(
-                                    credit_amount=F('credit_amount') + augment)
+                                    credit_amount=cleaned_data['credit_amount'])
                             response['message'] = '成功签批项目：%s！' % aritcle_obj.article_num
                         except Exception as e:
                             response['status'] = False
@@ -577,8 +616,8 @@ def article_change_ajax(request):
     '''((1, '同意'), (2, '不同意'))'''
     article_list = models.Articles.objects.filter(id=post_data['article_id'])
     article_obj = article_list.first()
-    '''ARTICLE_STATE_LIST = ((1, '待反馈'), (2, '已反馈'), (3, '待上会'), (4, '已上会'), (5, '已签批'),
-                          (51, '已放款'), (52, '已放完'), (55, '已解保'), (61, '待变更'), (99, '已注销'))'''
+    '''ARTICLE_STATE_LIST = [(1, '待反馈'), (2, '已反馈'), (3, '待上会'), (4, '已上会'), (5, '已签批'),
+                          (51, '已放款'), (52, '已放完'), (55, '已解保'), (61, '待变更'), (99, '已注销')]'''
     form_article_change = forms.ArticleChangeForm(post_data)
     if form_article_change.is_valid():
         change_cleaned = form_article_change.cleaned_data
@@ -589,7 +628,7 @@ def article_change_ajax(request):
             if change_view == 11:
                 try:
                     with transaction.atomic():
-                        # article_list.update(article_state=61)
+                        article_list.update(article_state=61)
                         models.ArticleChange.objects.create(
                             article=article_obj, change_view=change_view, change_detail=change_cleaned['change_detail'],
                             change_date=change_cleaned['change_date'], change_buildor=request.user)

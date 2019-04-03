@@ -39,11 +39,11 @@ urlpatterns = [
     path('appraisal/scan/<int:article_id>/<int:lending_id>/', views.appraisal_scan_lending,
          name='appraisal_scan_lending'),
     path('appraisal/summary/<int:article_id>/', views.summary_scan, name='appraisal_summary_scan'),
-
     path('appraisal/comment/', views.comment_edit_ajax, name='appraisal_comment_edit_ajax'),
     path('appraisal/single/add/', views.single_quota_ajax, name='appraisal_single_quota_ajax'),
     path('appraisal/single/del/', views.single_del_ajax, name='appraisal_single_del_ajax'),
     path('appraisal/lending/add/', views.lending_order_ajax, name='appraisal_lending_order_ajax'),
+    path('appraisal/lending/change/', views.lending_change_ajax, name='appraisal_lending_change_ajax'),
     path('appraisal/lending/del/', views.lending_del_ajax, name='appraisal_lending_del_ajax'),
     path('appraisal/sign/', views.article_sign_ajax, name='appraisal_article_sign_ajax'),
     path('appraisal/article/change/', views.article_change_ajax, name='appraisal_article_change_ajax'),
@@ -55,6 +55,7 @@ urlpatterns = [
     path('agree/scan/<int:agree_id>/', views.agree_scan, name='agree_scan'),
     path('agree/preview/<int:agree_id>/', views.agree_preview, name='agree_preview'),
     path('agree/counter/preview/<int:agree_id>/<int:counter_id>/', views.counter_preview, name='agree_counter_preview'),
+    path('agree/sign/preview/<int:agree_id>/', views.agree_sign_preview, name='agree_sign_preview'),
     path('agree/add/', views.agree_add_ajax, name='agree_add_ajax'),
     path('agree/sign/', views.agree_sign_ajax, name='agree_sign_ajax'),
     path('agree/counter/add/', views.counter_add_ajax, name='agree_counter_add_ajax'),
@@ -126,6 +127,8 @@ urlpatterns = [
 
     path('review/plan/', views.review_plan_ajax, name='review_plan_ajax'),  #
     path('review/update/', views.review_update_ajax, name='review_update_ajax'),  #
+    path('review/del/', views.review_del_ajax, name='review_del_ajax'),  #
+
     # -----------------------代偿管理-------------------------#
     path('compensatory/', views.compensatory, name='compensatory_all'),  # 菜单-追偿管理
     path('compensatory/<int:dun_state>/', views.compensatory, name='compensatory'),

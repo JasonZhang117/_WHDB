@@ -30,7 +30,6 @@
     {% if pigeonhole_overdue > 0 %}
         <h3>逾期归档：
             <a href="{% url 'dbms:pigeonhole_overdue_all' %}">{{ pigeonhole_overdue }}</a></h3>
-
     {% endif %}
 
     {% if no_pigeonhole_count > 0 %}

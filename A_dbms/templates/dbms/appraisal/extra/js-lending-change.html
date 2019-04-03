@@ -1,0 +1,51 @@
+<script>
+    $(function () {
+        bindChangeLendingOrderB();
+        bindLendingOrderChangeModalOk();
+
+    });
+
+    function bindChangeLendingOrderB() {
+        $('#changeLendingOrderB').click(function () {
+            console.log("bindChangeLendingOrderB");
+            $('#lendingOrderChangeModal').modal('show');
+        })
+    }
+
+    function bindLendingOrderChangeModalOk() {
+        $('#lendingOrderChangeModalOk').click(function () {
+            var postData = {};
+            $('#lendingOrderChangeModal').find('input,select').each(function () {
+                var v = $(this).val();
+                var n = $(this).attr('name');
+                postData[n] = v;
+            });
+
+            var postDataStr = JSON.stringify(postData);
+            console.log(postDataStr);
+            $.ajax({
+                url: '/dbms/appraisal/lending/change/',
+                type: 'POST',
+                data: {'postDataStr': postDataStr},
+                dataType: 'JSON',
+                success: function (arg) {
+                    if (arg.status) {
+                        $('#lendingOrderChangeModal').modal('hide');
+                        alert(arg.message);
+                        window.location.reload();
+                    } else {
+                        alert(arg.message);
+                        $('#e_order').text(arg.forme.e_order);
+                        $('#e_order_amount').text(arg.forme.e_order_amount);
+                    }
+                }
+            })
+        })
+    }
+</script>
+
+
+
+
+
+

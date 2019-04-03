@@ -25,7 +25,8 @@
                 <td>{{ review.review_date|default_if_none:"" }}</td>
                 <td>{{ review.get_classification_display|default_if_none:"" }}</td>
                 {% if PAGE_TITLE == '保后详情' %}
-                    <td><a class="btn btn-primary btn-xs reviewB">保后</a></td>
+                    <td><a class="btn btn-primary btn-xs reviewB">保后</a>
+                        <a class="btn btn-primary btn-xs delReviewB">取消保后</a></td>
                 {% endif %}
             </tr>
         {% endfor %}

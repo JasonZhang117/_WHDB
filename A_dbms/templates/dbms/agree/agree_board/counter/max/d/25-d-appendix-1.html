@@ -1,0 +1,168 @@
+<p><u>{{ counter_obj.counter_num }}</u>《{% include 'dbms/agree/agree_board/counter/counter-home-title.html' %}》项下</p>
+<p align="center"><strong>抵押财产清单</strong></p>
+<p style="float: right">单位：万元</p>
+{#WARRANT_TYP_LIST = [#}
+{#        (1, '房产'), (2, '房产包'), (5, '土地'), (6, '在建工程'), (11, '应收账款'),#}
+{#        (21, '股权'), (31, '票据'), (41, '车辆'), (51, '动产'), (55, '其他'), (99, '他权')]#}
+<table>
+    {% for warrant in counter_obj.warrant_counter.warrant.all %}
+        {% if warrant.warrant_typ == 1 %}
+            {% if forloop.counter == 1 %}
+                <tr>
+                    <td align="center">所有权人</td>
+                    <td align="center">抵押财产名称</td>
+                    <td align="center">规划用途</td>
+                    <td align="center">面积(平方米)</td>
+                    <td align="center">权利证书名称及编号</td>
+                    <td align="center">处所</td>
+                    <td align="center">被担保债权数额</td>
+                    <td align="center">评估价值备注</td>
+                </tr>
+                <tr>
+                    <td rowspan="{{ counter_obj.warrant_counter.warrant.count }}">
+                        {% for ownership in warrant.ownership_warrant.all %}
+                            {{ ownership.owner.name }}{% if not forloop.last %}、{% endif %}
+                        {% endfor %}
+                    </td>
+                    <td rowspan="{{ counter_obj.warrant_counter.warrant.count }}">房产</td>
+                    <td>{{ warrant.house_warrant.get_house_app_display }}</td>
+                    <td align="right">{{ warrant.house_warrant.house_area }}</td>
+                    <td>
+                        {% for ownership in warrant.ownership_warrant.all %}
+                            {{ ownership.ownership_num }}{% if not forloop.last %}、{% endif %}
+                        {% endfor %}
+                    </td>
+                    <td>{{ warrant.house_warrant.house_locate }}</td>
+                    <td></td>
+                    <td></td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td>{{ warrant.house_warrant.get_house_app_display }}</td>
+                    <td align="right">{{ warrant.house_warrant.house_area }}</td>
+                    <td>
+                        {% for ownership in warrant.ownership_warrant.all %}
+                            {{ ownership.ownership_num }}{% if not forloop.last %}、{% endif %}
+                        {% endfor %}
+                    </td>
+                    <td>{{ warrant.house_warrant.house_locate }}</td>
+                    <td></td>
+                    <td></td>
+                </tr>
+            {% endif %}
+        {% elif warrant.warrant_typ == 5 %}
+            {% if forloop.counter == 1 %}
+                <tr>
+                    <td align="center">所有权人</td>
+                    <td align="center">抵押财产名称</td>
+                    <td align="center">规划用途</td>
+                    <td align="center">面积(平方米)</td>
+                    <td align="center">权利证书名称及编号</td>
+                    <td align="center">处所</td>
+                    <td align="center">被担保债权数额</td>
+                    <td align="center">评估价值备注</td>
+                </tr>
+                <tr>
+                    <td rowspan="{{ counter_obj.warrant_counter.warrant.count }}">
+                        {% for ownership in warrant.ownership_warrant.all %}
+                            {{ ownership.owner.name }}{% if not forloop.last %}、{% endif %}
+                        {% endfor %}
+                    </td>
+                    <td rowspan="{{ counter_obj.warrant_counter.warrant.count }}">土地使用权</td>
+                    <td>{{ warrant.ground_warrant.get_ground_app_display }}</td>
+                    <td align="right">{{ warrant.ground_warrant.ground_area }}</td>
+                    <td>
+                        {% for ownership in warrant.ownership_warrant.all %}
+                            {{ ownership.ownership_num }}{% if not forloop.last %}、{% endif %}
+                        {% endfor %}
+                    </td>
+                    <td>{{ warrant.ground_warrant.ground_locate }}</td>
+                    <td></td>
+                    <td></td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td>{{ warrant.house_warrant.get_house_app_display }}</td>
+                    <td align="right">{{ warrant.house_warrant.house_area }}</td>
+                    <td>
+                        {% for ownership in warrant.ownership_warrant.all %}
+                            {{ ownership.ownership_num }}{% if not forloop.last %}、{% endif %}
+                        {% endfor %}
+                    </td>
+                    <td>{{ warrant.house_warrant.house_locate }}</td>
+                    <td></td>
+                    <td></td>
+                </tr>
+            {% endif %}
+        {% endif %}
+    {% endfor %}
+</table>
+<br>
+<table>
+    <tr style="height: 36pt">
+        <td style="border: 0pt; width: 15%" align="right" valign="top">抵押人：</td>
+        <td style="border: 0pt; width: 35%" valign="top">
+            {% if counter_obj.counter_typ in MORTGAGE_COUNTER_TYP_LIST %}
+                <!--WARRANT_TYP_LIST = [
+                    (1, '房产'), (2, '房产包'), (5, '土地'), (6, '在建工程'), (11, '应收账款'),
+                    (21, '股权'), (31, '票据'), (41, '车辆'), (51, '动产'), (55, '其他'), (99, '他权')]-->
+                {% for warrant in counter_obj.warrant_counter.warrant.all %}
+                    {% if forloop.first %}
+                        {#(1, '房产'), (2, '房产包'), (5, '土地'), (6, '在建工程')#}
+                        {% if warrant.ownership_warrant.all %}
+                            <strong><u>{% for ownership in warrant.ownership_warrant.all %}
+                                {{ ownership.owner.name }}{% if not forloop.last %}、{% endif %}
+                            {% endfor %}</u></strong>
+                            {#(41, '车辆')#}
+                        {% elif warrant.warrant_typ == 41 %}
+                            <strong><u>{{ warrant.vehicle_owner.name }}</u></strong>
+                            {#(51, '动产')#}
+                        {% elif warrant.warrant_typ == 51 %}
+                            <strong><u>{{ warrant.chattel_owner.name }}</u></strong>
+                        {% endif %}
+                    {% endif %}
+                {% endfor %}
+            {% endif %}
+        </td>
+        <td style="border: 0pt; width: 15%" align="right" valign="top">抵押权人：</td>
+        <td style="border: 0pt; width: 35%" valign="top">成都武侯中小企业融资担保有限责任公司</td>
+    </tr>
+    <tr style="height: 32pt">
+        <td style="border: 0pt" align="right">法定代表人：</td>
+        <td style="border: 0pt">
+            {% if counter_obj.counter_typ in MORTGAGE_COUNTER_TYP_LIST %}
+                <!--WARRANT_TYP_LIST = [
+                    (1, '房产'), (2, '房产包'), (5, '土地'), (6, '在建工程'), (11, '应收账款'),
+                    (21, '股权'), (31, '票据'), (41, '车辆'), (51, '动产'), (55, '其他'), (99, '他权')]-->
+                {% for warrant in counter_obj.warrant_counter.warrant.all %}
+                    {% if forloop.first %}
+                        {#(1, '房产'), (2, '房产包'), (5, '土地'), (6, '在建工程')#}
+                        {% if warrant.ownership_warrant.all %}
+                            <strong><u>{% for ownership in warrant.ownership_warrant.all %}
+                                {% if ownership.owner.company_custome %}
+                                    {{ ownership.owner.company_custome.representative }}
+                                {% endif %}
+                            {% endfor %}</u></strong>
+                            {#(41, '车辆')#}
+                        {% elif warrant.warrant_typ == 41 %}
+                            {% if warrant.vehicle_owner.company_custome %}
+                                <strong><u>{{ warrant.vehicle_owner.company_custome.representative }}</u></strong>
+                            {% endif %}
+                            {#(51, '动产')#}
+                        {% elif warrant.warrant_typ == 51 %}
+                            {% if warrant.chattel_owner.company_custome %}
+                                <strong><u>{{ warrant.chattel_owner.company_custome.representative }}</u></strong>
+                            {% endif %}
+                        {% endif %}
+                    {% endif %}
+                {% endfor %}
+            {% endif %}
+        </td>
+        <td style="border: 0pt" align="right">法定代表人：</td>
+        <td style="border: 0pt">何长见</td>
+    </tr>
+    <tr style="height: 32pt">
+        <td style="border: 0pt" colspan="2">（授权代理人）签字：</td>
+        <td style="border: 0pt" colspan="2">（授权代理人）签字：</td>
+    </tr>
+</table>

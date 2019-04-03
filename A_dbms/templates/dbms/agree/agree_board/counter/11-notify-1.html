@@ -21,6 +21,35 @@
             <p>收件人：<strong><u>{{ custom.linkman }}</u></strong></p>
         </div>
     {% endfor %}
+    {#MORTGAGE_COUNTER_TYP_LIST = [11, 12, 13, 14, 15, ]#}
+{% elif counter_obj.counter_typ in MORTGAGE_COUNTER_TYP_LIST %}
+    <!--WARRANT_TYP_LIST = [
+        (1, '房产'), (2, '房产包'), (5, '土地'), (6, '在建工程'), (11, '应收账款'),
+        (21, '股权'), (31, '票据'), (41, '车辆'), (51, '动产'), (55, '其他'), (99, '他权')]-->
+    {% for warrant in counter_obj.warrant_counter.warrant.all %}
+        <div>
+            {% if forloop.first %}
+                {#(1, '房产'), (2, '房产包'), (5, '土地'), (6, '在建工程')#}
+                {% if warrant.ownership_warrant.all %}
+                    {% for ownership in warrant.ownership_warrant.all %}
+                        <p>地址：<strong><u>{{ ownership.owner.name }}</u></strong></p>
+                        <p>电话：<strong><u>{{ ownership.owner.contact_num }}</u></strong></p>
+                        <p>收件人：<strong><u>{{ ownership.owner.linkman }}</u></strong></p>
+                    {% endfor %}
+                    {#(41, '车辆')#}
+                {% elif warrant.warrant_typ == 41 %}
+                    <p>地址：<strong><u>{{ warrant.vehicle_owner.name }}</u></strong></p>
+                    <p>电话：<strong><u>{{ warrant.vehicle_owner.contact_num }}</u></strong></p>
+                    <p>收件人：<strong><u>{{ warrant.vehicle_owner.linkman }}</u></strong></p>
+                    {#(51, '动产')#}
+                {% elif warrant.warrant_typ == 51 %}
+                    <p>地址：<strong><u>{{ warrant.chattel_owner.name }}</u></strong></p>
+                    <p>电话：<strong><u>{{ warrant.chattel_owner.contact_num }}</u></strong></p>
+                    <p>收件人：<strong><u>{{ warrant.chattel_owner.linkman }}</u></strong></p>
+                {% endif %}
+            {% endif %}
+        </div>
+    {% endfor %}
 {% endif %}
 <p>如至丙方</p>
 <div>
@@ -32,7 +61,7 @@
     书的送达，同时包括在争议进入仲裁、民事诉讼程序后的一审、二审、再审和执行程序。</p>
 <p>（三）三方的送达地址需要变更时应向对方履行书面的通知义务；仲裁及民事诉讼阶段当事人地址变更时应当向仲裁机构、
     人民法院履行送达地址变更通知义务。未履行以上通知义务的，三方确认的送达地址仍视为有效送达地址。</p>
-    <p>任何一方未按前述方式履行通知义务，三方所确认的送达地址仍视为有效送达地址。</p>
+<p>任何一方未按前述方式履行通知义务，三方所确认的送达地址仍视为有效送达地址。</p>
 <p>（四）三方按如下规定确定的通知送达日期将被视为正式的通知送达日期：</p>
 <p>1、直接送达：以专人直接递送的，接收人(包括本合同指定收件人、法定代表人及其指定的接收人）签收之日视为送达。</p>
 <p>2、邮寄送达：</p>
