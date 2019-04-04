@@ -15,7 +15,7 @@
                 <td>{{ forloop.counter }}</td>
                 <td>{{ bank.notify__agree__branch__cooperator__short_name }}</td>
                 <td align="right">{{ bank.con }}</td>
-                <td align="right">{{ bank.sum }}</td>
+                <td align="right">{{ bank.sum|floatformat:2 }}</td>
             </tr>
         {% endfor %}
         {% include 'dbms/report/balance/balance-class.html' %}

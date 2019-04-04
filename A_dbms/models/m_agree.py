@@ -11,6 +11,7 @@ def limit_agree_choices():
 
 class Agrees(models.Model):  # 委托合同
     agree_num = models.CharField(verbose_name='_合同编号', max_length=32, unique=True)
+    agree_name = models.CharField(verbose_name='_合同名称', max_length=16)
     num_prefix = models.CharField(verbose_name='_编号前缀', max_length=32)
     lending = models.ForeignKey(to='LendingOrder', verbose_name="放款纪要",
                                 on_delete=models.PROTECT,
@@ -38,8 +39,8 @@ class Agrees(models.Model):  # 委托合同
     ascertain_date = models.DateField(verbose_name='落实日期', null=True, blank=True)
     agree_remark = models.TextField(verbose_name='落实情况', null=True, blank=True)
 
-    AGREE_STATE_LIST = ((11, '待签批'), (21, '已签批'), (31, '未落实'),
-                        (41, '已落实'), (51, '待变更'), (61, '已解保'), (99, '已注销'))
+    AGREE_STATE_LIST = [(11, '待签批'), (21, '已签批'), (31, '未落实'),
+                        (41, '已落实'), (51, '待变更'), (61, '已解保'), (99, '已注销')]
     agree_state = models.IntegerField(verbose_name='合同状态', choices=AGREE_STATE_LIST, default=11)
     agree_notify_sum = models.FloatField(verbose_name='_通知金额', default=0)
     agree_provide_sum = models.FloatField(verbose_name='_放款金额', default=0)
@@ -61,6 +62,7 @@ class Agrees(models.Model):  # 委托合同
 # -----------------------反担保合同模型-------------------------#
 class Counters(models.Model):  # 反担保合同
     counter_num = models.CharField(verbose_name='_合同编号', max_length=32, unique=True)
+    counter_name = models.CharField(verbose_name='_合同名称', max_length=32, null=True, blank=True)
     agree = models.ForeignKey(to='Agrees', verbose_name="委托保证合同",
                               on_delete=models.PROTECT, related_name='counter_agree')
     '''SURE_TYP_LIST = (

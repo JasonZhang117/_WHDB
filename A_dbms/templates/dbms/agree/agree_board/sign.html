@@ -1,0 +1,62 @@
+<tr>
+    <td align="center">公司名称</td>
+    <td colspan="5" align="center">{{ agree_obj.lending.summary.custom.name }}</td>
+</tr>
+<tr>
+    <td align="center">贷款银行</td>
+    <td align="center">{{ agree_obj.branch }}</td>
+    <td>贷款金额</td>
+    <td align="center">{{ agree_amount_str }}万元</td>
+    <td align="center">期限</td>
+    <td align="center">{{ agree_obj.agree_term }}个月</td>
+</tr>
+<tr>
+    <td align="center" rowspan="{{ counter_count }}">合同</td>
+    <td align="center">{{ agree_obj.agree_name }}</td>
+    <td align="center" colspan="3">{{ agree_obj.agree_num }}</td>
+    <td align="center">{{ agree_obj.agree_copies }}份</td>
+</tr>
+{% for counter in counter_list %}
+    {% if counter.counter_typ == 2 %}
+        <tr>
+            <td align="center">{{ counter.counter_name }}
+                {% for custom in counter.assure_counter.custome.all %}
+                    ({{ custom }}
+                    {% if custom.person_custome.spouses %}
+                        、{{ custom.person_custome.spouses.name }}夫妇
+                    {% endif %}
+                    )
+                {% endfor %}
+            </td>
+            <td align="center" colspan="3"></td>
+            <td align="center">{{ counter.counter_copies }}份</td>
+        </tr>
+    {% else %}
+        <tr>
+            <td align="center">{{ counter.counter_name }}</td>
+            <td align="center" colspan="3">{{ counter.counter_num }}</td>
+            <td align="center">{{ counter.counter_copies }}份</td>
+        </tr>
+    {% endif %}
+{% endfor %}
+<tr>
+    <td align="center" colspan="6">评审信息</td>
+</tr>
+<tr>
+    <td align="center">意见书编号：</td>
+    <td align="center">{{ agree_obj.lending.summary.summary_num }}</td>
+    <td align="center" colspan="2">授信金额：</td>
+    <td align="center" colspan="2">{{ article_amount_str }}万</td>
+</tr>
+<tr>
+    <td align="center">累计已签订额：</td>
+    <td align="center">{{ article_agree_amount_ar_str }}
+        {% if article_agree_amount_ar_str == '0' %}
+
+        {% else %}
+            万元
+        {% endif %}
+    </td>
+    <td align="center" colspan="2">本次金额：</td>
+    <td align="center" colspan="2">{{ agree_amount_str }}万</td>
+</tr>

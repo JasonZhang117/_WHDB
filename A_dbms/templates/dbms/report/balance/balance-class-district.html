@@ -15,7 +15,7 @@
                 <td>{{ forloop.counter }}</td>
                 <td>{{ district.notify__agree__lending__summary__custom__company_custome__district__name }}</td>
                 <td align="right">{{ district.con }}</td>
-                <td align="right">{{ district.sum }}</td>
+                <td align="right">{{ district.sum|floatformat:2 }}</td>
             </tr>
         {% endfor %}
         {% include 'dbms/report/balance/balance-class.html' %}

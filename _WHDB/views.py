@@ -255,4 +255,69 @@ def home(request):
     #         article_custom__lending_summary__agree_lending__notify_agree__provide_notify=provide_obj)
     #     custom_list.update(lately_date=provide_obj.provide_date)
 
+    # agree_list = models.Agrees.objects.all()
+    # for agree_obj in agree_list:
+    # agree_typ = agree_obj.agree_typ
+    # agree_name = ''
+    # if agree_typ in [1, 41]:
+    #     agree_name = '委托担保合同'
+    # elif agree_typ in [2, 42]:
+    #     agree_name = '最高额委托担保合同'
+    # elif agree_typ == 3:
+    #     agree_name = '委托出具分离式保函合同'
+    # elif agree_typ in [7, 47]:
+    #     agree_name = '借款合同'
+    # agree_ll = models.Agrees.objects.filter(id=agree_obj.id).update(agree_name=agree_name)
+    # agree_type = agree_obj.agree_typ
+    # counter_list = agree_obj.counter_agree.all()
+    # for counter_obj in counter_list:
+    #     counter_typ = counter_obj.counter_typ
+    #     counter_name = ''
+    #     if agree_type in [1, 41]:
+    #         if counter_typ == 1:
+    #             counter_name = '保证反担保合同'
+    #         elif counter_typ == 2:
+    #             counter_name = '不可撤销的反担保函'
+    #         elif counter_typ in [11, 12, 13, 14, 15]:
+    #             counter_name = '抵押反担保合同'
+    #         elif counter_typ == 31:
+    #             counter_name = '应收账款质押反担保合同'
+    #         elif counter_typ == 32:
+    #             counter_name = '股权质押反担保合同'
+    #         elif counter_typ in [33, 41]:
+    #             counter_name = '权利质押反担保合同'
+    #         elif counter_typ in [51, 52, 53]:
+    #             counter_name = '预售合同'
+    #     elif agree_type in [2, 42]:
+    #         if counter_typ == 1:
+    #             counter_name = '最高额保证反担保合同'
+    #         elif counter_typ == 2:
+    #             counter_name = '不可撤销的反担保函'
+    #         elif counter_typ in [11, 12, 13, 14, 15]:
+    #             counter_name = '最高额抵押反担保合同'
+    #         elif counter_typ == 31:
+    #             counter_name = '最高额应收账款质押反担保合同'
+    #         elif counter_typ == 32:
+    #             counter_name = '最高额股权质押反担保合同'
+    #         elif counter_typ in [33, 41]:
+    #             counter_name = '最高额权利质押反担保合同'
+    #         elif counter_typ in [51, 52, 53]:
+    #             counter_name = '预售合同'
+    #     elif agree_type in [7, 47]:
+    #         if counter_typ == 1:
+    #             counter_name = '保证合同'
+    #         elif counter_typ == 2:
+    #             counter_name = '不可撤销的担保函'
+    #         elif counter_typ in [11, 12, 13, 14, 15]:
+    #             counter_name = '抵押合同'
+    #         elif counter_typ == 31:
+    #             counter_name = '应收账款质押合同'
+    #         elif counter_typ == 32:
+    #             counter_name = '股权质押合同'
+    #         elif counter_typ in [33, 41]:
+    #             counter_name = '权利质押合同'
+    #         elif counter_typ in [51, 52, 53]:
+    #             counter_name = '预售合同'
+    #     counter_ll = models.Counters.objects.filter(id=counter_obj.id).update(counter_name=counter_name)
+
     return render(request, 'index.html', locals())

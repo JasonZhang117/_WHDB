@@ -1,112 +1,82 @@
 {% extends 'base.html' %}
 {% block title %}{{ agree_obj.agree_num }}{% endblock %}
 {% block extra-css %}
-    <style>
-        {#页面整体设置#}
-        .container {
-        {#宽度#} width: 210mm;
-        {#左空白#} margin-left: auto;
-        {#又空白#} margin-right: auto;
-        {#字体大小#} font-size: 12pt;
-        {#背景色#} background-color: #dddddd;
-        {#字间距#} letter-spacing: 1pt;
-        {#行间距#} line-height: 20.5pt;
-        }
-
-        {#段前缩进#}
-        p {
-            text-indent: 26pt;
-        }
-
-        {#换页打印#}
-        .split {
-            page-break-after: always;
-        }
-
-        {#收紧#}
-        .frap {
-        {#字间距#} letter-spacing: 0pt;
-        }
-
-        {#合同标题#}
-        .agree-title {
-            text-align: center;
-            font-size: 21pt;
-            padding-top: 25mm;
-            padding-bottom: 25mm;
-        }
-
-        .page-home p {
-            padding-top: 12pt;
-        }
-
-        {#合同封面-甲方#}
-        .page-home-j {
-            font-size: 13.75pt;
-            padding-top: 20mm;
-            padding-bottom: 20mm;
-        }
-
-        {#合同封面-乙方#}
-        .page-home-y {
-            font-size: 13.75pt;
-            padding-top: 20mm;
-            padding-bottom: 20mm;
-        }
-
-        {#合同封面-丙方#}
-        .page-home-b {
-            font-size: 13.75pt;
-            padding-top: 20mm;
-            padding-bottom: 20mm;
-        }
-
-        {#合同签字页#}
-        .sign-page {
-            padding-top: 24pt;
-        }
-
-        .sign-page > div {
-            padding-bottom: 124pt;
-        }
-
-        .sign-page p {
-            padding-bottom: 10pt;
-        }
-
-        .sign-date {
-            padding-left: 150pt;
-        }
-
-        table {
-            width: 100%;
-        }
-
-        tr td {
-            border: 1px solid black;
-            height: 24pt;
-
-        }
-    </style>
+    {% include 'dbms/agree/agree_board/style.html' %}
 {% endblock %}
 {% block body %}
-    <div class="container">
-        <p align="center"><strong>成都武侯中小企业融资担保有限责任公司</strong></p>
-        <p align="center"><strong>合 同 审 签 表</strong></p>
+    <div class="sing-tab">
+        <div class="split">
+            <div style="font-size: 18pt">
+                <p align="center"><strong>成都武侯中小企业融资担保有限责任公司</strong></p>
+                <p align="center"><strong>合 同 内 部 审 签 表</strong></p>
+            </div>
+            <table>
+                {% include 'dbms/agree/agree_board/sign.html' %}
+                <tr>
+                    <td colspan="6">法务专员意见：<br><br><br>
+                        <span style="padding-left: 400pt">签名：</span><br><br>
+                        <span style="padding-left: 400pt">时间：</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="6">风控专员意见：<br><br><br>
+                        <span style="padding-left: 400pt">签名：</span><br><br>
+                        <span style="padding-left: 400pt">时间：</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="6">项目经理意见：<br><br><br>
+                        <span style="padding-left: 400pt">签名：</span><br><br>
+                        <span style="padding-left: 400pt">时间：</span>
+                    </td>
+                </tr>
+            </table>
+        </div>
 
-        <table>
-            <tr>
-                <td>公司名称</td>
-                <td colspan="5">{{ agree_obj.lending.summary.custom.name }}</td>
-            </tr>
-            <tr>
-                <td>贷款银行</td>
-                <td>{{ agree_obj.branch }}</td>
-                <td>贷款金额</td>
-                <td>{{ agree_amount_str }}万元</td>
-                <td>期限</td>
-                <td>{{ agree_obj.agree_term }}个月</td>
-            </tr>
-        </table>
+        <div class="split">
+            <div style="font-size: 18pt">
+                <p align="center"><strong>成都武侯中小企业融资担保有限责任公司</strong></p>
+                <p align="center"><strong>合 同 外 部 审 签 表</strong></p>
+            </div>
+            <table>
+                {% include 'dbms/agree/agree_board/sign.html' %}
+                <tr>
+                    <td colspan="6">项目经理确认：<br><br><br>
+                        <span style="padding-left: 400pt">签名：</span><br><br>
+                        <span style="padding-left: 400pt">时间：</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="6">业务部意见：<br><br><br>
+                        <span style="padding-left: 400pt">签名：</span><br><br>
+                        <span style="padding-left: 400pt">时间：</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="6">财务部意见：<br><br><br>
+                        <span style="padding-left: 400pt">签名：</span><br><br>
+                        <span style="padding-left: 400pt">时间：</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="6">风控部意见：<br><br><br>
+                        <span style="padding-left: 400pt">签名：</span><br><br>
+                        <span style="padding-left: 400pt">时间：</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="6">分管风控副总经理意见：<br><br><br>
+                        <span style="padding-left: 400pt">签名：</span><br><br>
+                        <span style="padding-left: 400pt">时间：</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="6">董事长意见：<br><br><br>
+                        <span style="padding-left: 400pt">签名：</span><br><br>
+                        <span style="padding-left: 400pt">时间：</span>
+                    </td>
+                </tr>
+            </table>
+        </div>
     </div>
 {% endblock %}

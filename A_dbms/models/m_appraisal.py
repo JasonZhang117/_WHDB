@@ -104,13 +104,13 @@ class LendingSures(models.Model):
     lending = models.ForeignKey(to='LendingOrder', verbose_name="放款次序",
                                 on_delete=models.PROTECT,
                                 related_name='sure_lending')
-    SURE_TYP_LIST = (
+    SURE_TYP_LIST = [
         (1, '企业保证'), (2, '个人保证'),
         (11, '房产抵押'), (12, '土地抵押'), (13, '动产抵押'), (14, '在建工程抵押'), (15, '车辆抵押'),
         (21, '房产顺位'), (22, '土地顺位'), (23, '在建工程顺位'), (24, '动产顺位'),
         (31, '应收质押'), (32, '股权质押'), (33, '票据质押'), (34, '动产质押'), (39, '其他权利质押'),
         (42, '房产监管'), (43, '土地监管'), (44, '票据监管'), (47, '动产监管'), (49, '其他监管'),
-        (51, '股权预售'), (52, '房产预售'), (53, '土地预售'))
+        (51, '股权预售'), (52, '房产预售'), (53, '土地预售')]
     sure_typ = models.IntegerField(verbose_name='担保类型', choices=SURE_TYP_LIST)
     sure_buildor = models.ForeignKey(to='Employees', verbose_name="创建人",
                                      on_delete=models.PROTECT, default=1,

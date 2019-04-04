@@ -55,16 +55,27 @@ admin.site.register(models.LendingWarrants)  # 抵质押反担保
 
 # -----------------------合同-------------------------#
 class AgreesAdmin(admin.ModelAdmin):
-    list_display = ('agree_num', 'agree_typ', 'agree_amount', 'agree_term', 'agree_sign_date', 'ascertain_date',
-                    'agree_date', 'agree_notify_sum', 'agree_provide_sum', 'agree_repayment_sum', 'agree_balance',
-                    'agree_state')  # 显示字段
+    list_display = (
+        'agree_num', 'agree_name', 'agree_typ', 'agree_amount', 'agree_term', 'agree_sign_date', 'ascertain_date',
+        'agree_date', 'agree_notify_sum', 'agree_provide_sum', 'agree_repayment_sum', 'agree_balance',
+        'agree_state')  # 显示字段
     list_per_page = 20  # 每页显示条目数
     search_fields = ['agree_num']  # 搜索字段
     ordering = ['-agree_date']  # 排序字段
 
 
 admin.site.register(models.Agrees, AgreesAdmin)  # 合同
-admin.site.register(models.Counters)  # 反担保合同
+
+
+class CountersAdmin(admin.ModelAdmin):
+    list_display = (
+        'counter_num', 'counter_name', 'agree', 'counter_typ', 'counter_copies')  # 显示字段
+    # list_per_page = 20  # 每页显示条目数
+    # search_fields = ['counter_num']  # 搜索字段
+    # ordering = ['-agree_date']  # 排序字段
+
+
+admin.site.register(models.Counters, CountersAdmin)  # 反担保合同
 admin.site.register(models.CountersAssure)  # 保证反担保合同
 admin.site.register(models.CountersWarrants)  # 抵质押押反担保合同
 

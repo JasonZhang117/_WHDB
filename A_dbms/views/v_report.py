@@ -65,9 +65,9 @@ def report_balance_class(request, *args, **kwargs):  #
     authority_list = request.session.get('authority_list')  # 获取当前用户的所有权限
     menu_result = MenuHelper(request).menu_data_list()
     PAGE_TITLE = '在保分类'
-    print('kwargs:', kwargs,kwargs['class_typ'],type(kwargs['class_typ']))
-    CLASS_LIST = [(1, '按品种'), (11, '按银行'), (21, '按区域'), (31, '按行业'), (41, '按项目经理'),
-                  (51, '按项目助理'), (61, '按风控专员'), (71, '按支行'), ]
+    print('kwargs:', kwargs, kwargs['class_typ'], type(kwargs['class_typ']))
+    CLASS_LIST = [(1, '按品种'), (11, '按银行'), (21, '按区域'), (31, '按行业'), (35, '按项部门'),
+                  (41, '按项目经理'),(51, '按项目助理'), (61, '按风控专员'), (71, '按支行'), ]
     provide_typ_list = models.Provides.PROVIDE_TYP_LIST  # 筛选条件
     provide_typ_dic = {}
     for provide_typ in provide_typ_list:
@@ -107,5 +107,9 @@ def report_balance_class(request, *args, **kwargs):  #
         'notify__agree__branch__short_name').annotate(
         con=Count('provide_balance'), sum=Sum('provide_balance')).values(
         'notify__agree__branch__short_name', 'con', 'sum').order_by('-sum')
+    provide_groups_depart = provide_groups.values(
+        'notify__agree__lending__summary__director__department__name').annotate(
+        con=Count('provide_balance'), sum=Sum('provide_balance')).values(
+        'notify__agree__lending__summary__director__department__name', 'con', 'sum').order_by('-sum')
 
     return render(request, 'dbms/report/balance_class.html', locals())

@@ -2,8 +2,8 @@
 {% block title %}{{ PAGE_TITLE }}{% endblock %}
 {% block  body %}
 
-    {#    CLASS_LIST = [(1, '按品种'), (11, '按银行'), (21, '按区域'), (31, '按行业'), (41, '按项目经理'),#}
-    {#                  (51, '按项目助理'), (61, '按风控专员'), (71, '按支行'), ]#}
+    {#    CLASS_LIST = [(1, '按品种'), (11, '按银行'), (21, '按区域'), (31, '按行业'), (35, '按项部门'),#}
+    {#                  (41, '按项目经理'),(51, '按项目助理'), (61, '按风控专员'), (71, '按支行'), ]#}
     <div style="width: 210mm; margin-left: auto; margin-right: auto;">
         {% include 'dbms/report/balance/balance-class-filter.html' %}
         {% if kwargs.class_typ == 1 %}
@@ -14,6 +14,8 @@
             {% include 'dbms/report/balance/balance-class-district.html' %}
         {% elif  kwargs.class_typ == 31 %}
             {% include 'dbms/report/balance/balance-class-idustry.html' %}
+        {% elif  kwargs.class_typ == 35 %}
+            {% include 'dbms/report/balance/balance-class-depart.html' %}
         {% elif  kwargs.class_typ == 41 %}
             {% include 'dbms/report/balance/balance-class-director.html' %}
         {% elif  kwargs.class_typ == 51 %}

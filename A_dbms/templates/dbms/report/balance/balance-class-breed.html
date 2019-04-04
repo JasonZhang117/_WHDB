@@ -26,7 +26,7 @@
                     <td>{{ provide_typ_dic.41 }}</td>
                 {% endif %}
                 <td align="right">{{ breed.con }}</td>
-                <td align="right">{{ breed.sum }}</td>
+                <td align="right">{{ breed.sum|floatformat:2 }}</td>
             </tr>
         {% endfor %}
         {% include 'dbms/report/balance/balance-class.html' %}

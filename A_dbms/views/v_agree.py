@@ -278,5 +278,15 @@ def agree_sign_preview(request, agree_id):
 
     agree_amount = agree_obj.agree_amount
     agree_amount_str = str(agree_amount / 10000).rstrip('0').rstrip('.')  # 续贷（万元）
+    article_amount = agree_obj.lending.summary.amount
+    article_amount_str = str(article_amount / 10000).rstrip('0').rstrip('.')  # 续贷（万元）
 
+    agree_article = agree_obj.lending.summary
+    article_agree_list = models.Agrees.objects.filter(lending__summary=agree_article)
+    article_agree_amount = article_agree_list.aggregate(Sum('agree_amount'))['agree_amount__sum']
+    article_agree_amount_ar = round(article_agree_amount - agree_amount, 2)
+    article_agree_amount_ar_str = str(article_agree_amount_ar / 10000).rstrip('0').rstrip('.')  # 续贷（万元）
+
+    counter_list = agree_obj.counter_agree.all()
+    counter_count = counter_list.count() + 1
     return render(request, 'dbms/agree/preview-sign.html', locals())
