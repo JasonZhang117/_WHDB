@@ -1,18 +1,16 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>{{ agree_obj.agree_num }}</title>
+{% extends 'base.html' %}
+{% block title %}{{ agree_obj.agree_num }}{% endblock %}
+{% block extra-css %}
     {% include 'dbms/agree/agree_board/style.html' %}
-</head>
-<body>
-<div class="contain">
-    <!--AGREE_TYP_LIST = ((1, '单笔'), (2, '最高额'), (3, '保函'))-->
-    {% if agree_obj.agree_typ == 1 %}
-        {% include 'dbms/agree/agree_board/entrust-single.html' %}
-    {% elif agree_obj.agree_typ == 2 %}
-        {% include 'dbms/agree/agree_board/entrust-maximum.html' %}
-    {% endif %}
-</div>
-</body>
-</html>
+{% endblock %}
+{% block body %}
+    <div class="contain">
+        <!--AGREE_TYP_LIST = [(1, '单笔'), (2, '最高额'), (3, '保函'), (7, '小贷'),
+                      (41, '单笔(公证)'), (42, '最高额(公证)'), (47, '小贷(公证)')]-->
+        {% if agree_obj.agree_typ == 1 %}
+            {% include 'dbms/agree/agree_board/entrust-single.html' %}
+        {% elif agree_obj.agree_typ == 2 %}
+            {% include 'dbms/agree/agree_board/entrust-maximum.html' %}
+        {% endif %}
+    </div>
+{% endblock %}

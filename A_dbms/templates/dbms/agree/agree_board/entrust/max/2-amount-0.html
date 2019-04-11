@@ -1,5 +1,5 @@
-甲方同意为乙方自<u>&nbsp&nbsp&nbsp&nbsp</u>年<u>&nbsp&nbsp</u>月<u>&nbsp&nbsp</u>日
-至<u>&nbsp&nbsp&nbsp&nbsp</u>年<u>&nbsp&nbsp</u>月<u>&nbsp&nbsp</u>日期间，
+甲方同意为乙方自{% include 'dbms/agree/agree_board/date-period.html' %}
+至{% include 'dbms/agree/agree_board/date-period.html' %}期间，
 向债权人（或受益人）<span class="str-p"><strong><u>{{ agree_obj.branch.name }}</u></strong></span>申请限额（即最高
 额限额）为<span class="str-p"><strong><u>人民币{{ agree_amount_str }}万元</u></strong></span>（大
 写：<span class="str-p"><strong><u>{{ agree_amount_cn }}</u></strong></span>）

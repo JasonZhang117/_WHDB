@@ -1,0 +1,30 @@
+<div id="form_receivable_add" class="warrant-extend" style="display: none">
+
+    <div class="form-group"><!--所有者-->
+        <label for="id_receive_owner"
+               class="col-sm-3 control-label">{{ form_receivable_add.receive_owner.label }}：</label>
+        <div class="col-sm-9">
+            <select name="receive_owner" id="id_receive_owner" required="" class="form-control search-id">
+                <option value="" selected="">---------</option>
+            </select>
+        </div>
+        <label id="e_receive_owner" class="pull-right">{{ form_receivable_add.receive_owner.errors }}</label>
+    </div>
+
+    <!--
+    <div class="form-group">
+        <label for="id_receive_owner"
+               class="col-sm-3 control-label">{{ form_receivable_add.receive_owner.label }}：</label>
+        <div class="col-sm-9">{{ form_receivable_add.receive_owner }}</div>
+        <label id="e_receive_owner" class="pull-right">{{ form_receivable_add.receive_owner.errors }}</label>
+    </div>所有者-->
+
+    <div class="form-group"><!--应收详情-->
+        <label for="id_receivable_detail"
+               class="col-sm-3 control-label">{{ form_receivable_add.receivable_detail.label }}：</label>
+        <div class="col-sm-9">{{ form_receivable_add.receivable_detail }}</div>
+        <label id="e_receivable_detail" class="pull-right">
+            {{ form_receivable_add.receivable_detail.errors }}</label>
+    </div>
+
+</div>

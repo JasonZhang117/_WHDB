@@ -257,17 +257,17 @@ def home(request):
 
     # agree_list = models.Agrees.objects.all()
     # for agree_obj in agree_list:
-    # agree_typ = agree_obj.agree_typ
-    # agree_name = ''
-    # if agree_typ in [1, 41]:
-    #     agree_name = '委托担保合同'
-    # elif agree_typ in [2, 42]:
-    #     agree_name = '最高额委托担保合同'
-    # elif agree_typ == 3:
-    #     agree_name = '委托出具分离式保函合同'
-    # elif agree_typ in [7, 47]:
-    #     agree_name = '借款合同'
-    # agree_ll = models.Agrees.objects.filter(id=agree_obj.id).update(agree_name=agree_name)
+    #     agree_typ = agree_obj.agree_typ
+    #     agree_name = 0
+    #     if agree_typ in [1, 41]:
+    #         agree_name = 1
+    #     elif agree_typ in [2, 42]:
+    #         agree_name = 11
+    #     elif agree_typ == 3:
+    #         agree_name = 21
+    #     elif agree_typ in [7, 47]:
+    #         agree_name = 31
+    #     agree_ll = models.Agrees.objects.filter(id=agree_obj.id).update(agree_name=agree_name)
     # agree_type = agree_obj.agree_typ
     # counter_list = agree_obj.counter_agree.all()
     # for counter_obj in counter_list:
@@ -319,5 +319,69 @@ def home(request):
     #         elif counter_typ in [51, 52, 53]:
     #             counter_name = '预售合同'
     #     counter_ll = models.Counters.objects.filter(id=counter_obj.id).update(counter_name=counter_name)
+
+    # agree_list = models.Agrees.objects.all()
+    # for agree_obj in agree_list:
+    #     agree_type = agree_obj.agree_typ
+    #     '''COUNTER_NAME_LIST = [(1, '保证反担保合同'), (2, '不可撤销的反担保函'),
+    #                          (3, '抵押反担保合同'), (4, '应收账款质押反担保合同'),
+    #                          (5, '股权质押反担保合同'), (6, '质押反担保合同'), (9, '预售合同'),
+    #                          (21, '最高额保证反担保合同'),
+    #                          (23, '最高额抵押反担保合同'), (24, '最高额应收账款质押反担保合同'),
+    #                          (25, '最高额股权质押反担保合同'), (26, '最高额质押反担保合同'),
+    #                          (41, '保证合同'),
+    #                          (43, '抵押合同'), (44, '应收账款质押合同'),
+    #                          (45, '股权质押合同'), (46, '质押合同')]'''
+    #     counter_list = agree_obj.counter_agree.all()
+    #     for counter_obj in counter_list:
+    #         counter_typ = counter_obj.counter_typ
+    #         counter_name = ''
+    #         if agree_type in [1, 41]:
+    #             if counter_typ == 1:
+    #                 counter_name = 1
+    #             elif counter_typ == 2:
+    #                 counter_name = 2
+    #             elif counter_typ in [11, 12, 13, 14, 15]:
+    #                 counter_name = 3
+    #             elif counter_typ == 31:
+    #                 counter_name = 4
+    #             elif counter_typ == 32:
+    #                 counter_name = 5
+    #             elif counter_typ in [33, 34, 39, 41]:
+    #                 counter_name = 6
+    #             elif counter_typ in [51, 52, 53]:
+    #                 counter_name = 9
+    #         elif agree_type in [2, 42]:
+    #             if counter_typ == 1:
+    #                 counter_name = 21
+    #             elif counter_typ == 2:
+    #                 counter_name = 2
+    #             elif counter_typ in [11, 12, 13, 14, 15]:
+    #                 counter_name = 23
+    #             elif counter_typ == 31:
+    #                 counter_name = 24
+    #             elif counter_typ == 32:
+    #                 counter_name = 25
+    #             elif counter_typ in [33, 34, 39, 41]:
+    #                 counter_name = 26
+    #             elif counter_typ in [51, 52, 53]:
+    #                 counter_name = 9
+    #         elif agree_type in [7, 47]:
+    #             if counter_typ == 1:
+    #                 counter_name = 41
+    #             elif counter_typ == 2:
+    #                 counter_name = 2
+    #             elif counter_typ in [11, 12, 13, 14, 15]:
+    #                 counter_name = 43
+    #             elif counter_typ == 31:
+    #                 counter_name = 44
+    #             elif counter_typ == 32:
+    #                 counter_name = 45
+    #             elif counter_typ in [33, 34, 39, 41]:
+    #                 counter_name = 46
+    #             elif counter_typ in [51, 52, 53]:
+    #                 counter_name = 9
+    #         counter_l = models.Counters.objects.filter(id=counter_obj.id)
+    #         counter_l.update(counter_name=counter_name)
 
     return render(request, 'index.html', locals())

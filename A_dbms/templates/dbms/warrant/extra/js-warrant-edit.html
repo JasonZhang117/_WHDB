@@ -7,13 +7,12 @@
 
     function bindEditWarrant() {
         $('#editWarrant').click(function () {
-            console.log("bindEditWarrant")
+            console.log("bindEditWarrant");
             $('#editWarrantModal').modal('show');
         })
     }
 
     function bind_id_warrant_typ_n() {
-        console.log("bind_id_warrant_typ_n");
         var selected_warrant_typ_n = $('#id_warrant_typ_n').val();
         $('.warrant-extend').hide();
         console.log(selected_warrant_typ_n);
@@ -28,11 +27,26 @@
             case ('5'):
                 $('#form_ground_add_edit').show();
                 break;
-             case ('6'):
+            case ('6'):
                 $('#form_construct_add_edit').show();
                 break;
             case ('11'):
-                $('#form_receivable_add_edit').show();
+                $('#form_receivable_edit').show();
+                break;
+            case ('21'):{#股权#}
+                $('#form_stockes_edit').show();
+                break;
+            case ('31'):{#票据#}
+                $('#form_draft_eidt').show();
+                break;
+            case ('41'):{#车辆#}
+                $('#form_vehicle_eidt').show();
+                break;
+            case ('51'):{#动产#}
+                $('#form_chattel_eidt').show();
+                break;
+            case ('55'):{#其他#}
+                $('#form_other_eidt').show();
                 break;
             case ('99'):
                 $('#form_hypothecs_add_eidt').show();
@@ -51,9 +65,15 @@
                 var n = $(this).attr('name');
                 postData[n] = v;
             });
+            var ttt = $('#id_receivable_detail').val();
+            postData['receivable_detail'] = ttt;
+            var ttt = $('#id_draft_detail').val();
+            postData['draft_detail'] = ttt;
+            var ttt = $('#id_chattel_detail').val();
+            postData['chattel_detail'] = ttt;
+            var ttt = $('#id_other_detail').val();
+            postData['other_detail'] = ttt;
             var postDataStr = JSON.stringify(postData);
-
-            console.log(postDataStr)
 
             $.ajax({
                 url: '/dbms/warrant/edit/',
@@ -64,16 +84,11 @@
                 success: function (arg) {
                     console.log(arg);
                     if (arg.status) {
-                        $('#addWarrantModal').modal('hide');
+                        $('#editWarrantModal').modal('hide');
                         alert(arg.message);
                         window.location.reload();
                     } else {
                         alert(arg.message);
-                        console.log(arg.forme.house_locate);
-                        console.log(arg.forme.house_app);
-                        console.log(arg.forme.house_area);
-                        console.log(arg.forme.house_locate);
-
                         $('#e_warrant_num').text(arg.forme.warrant_num);
 
                         $('#e_house_locate').text(arg.forme.house_locate);
@@ -83,6 +98,30 @@
                         $('#e_ground_locate').text(arg.forme.ground_locate);
                         $('#e_ground_app').text(arg.forme.ground_app);
                         $('#e_ground_area').text(arg.forme.ground_area);
+
+                        $('#e_coustruct_locate').text(arg.forme.coustruct_locate);
+                        $('#e_coustruct_app').text(arg.forme.coustruct_app);
+                        $('#e_coustruct_area').text(arg.forme.coustruct_area);
+
+                        $('#e_receivable_detail').text(arg.forme.receivable_detail);
+
+                        $('#e_target').text(arg.forme.target);
+                        $('#e_share').text(arg.forme.share);
+                        $('#e_stock_typ').text(arg.forme.stock_typ);
+
+                        $('#e_draft_typ').text(arg.forme.draft_typ);
+                        $('#e_draft_detaile').text(arg.forme.draft_detaile);
+
+                        $('#e_frame_num').text(arg.forme.frame_num);
+                        $('#e_plate_num').text(arg.forme.plate_num);
+
+                        $('#e_chattel_typ').text(arg.forme.chattel_typ);
+                        $('#e_chattel_detail').text(arg.forme.chattel_detail);
+
+                        $('#e_other_typ').text(arg.forme.other_typ);
+                        $('#e_other_detail').text(arg.forme.other_detail);
+
+                        $('#e_agree').text(arg.forme.agree);
                     }
                 }
             })

@@ -55,6 +55,14 @@
                                 <a target="_blank"
                                    href="{% url 'dbms:custom_scan' custom_id=warrant.stock_warrant.stock_owner.id %}">
                                     {{ warrant.stock_warrant.stock_owner }}</a>
+                            {% elif warrant.warrant_typ == 51 %}
+                                <a target="_blank"
+                                   href="{% url 'dbms:custom_scan' custom_id=warrant.chattel_warrant.chattel_owner.id %}">
+                                    {{ warrant.chattel_warrant.chattel_owner }}</a>
+                            {% elif warrant.warrant_typ == 55 %}
+                                <a target="_blank"
+                                   href="{% url 'dbms:custom_scan' custom_id=warrant.other_warrant.other_owner.id %}">
+                                    {{ warrant.other_warrant.other_owner }}</a>
                             {% else %}
 
                             {% endif %}

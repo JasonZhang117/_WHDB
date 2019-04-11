@@ -1,15 +1,37 @@
+
+
+
 {% extends 'base.html' %}
-{% block title %}{{ agree_obj.agree_num }}{% endblock %}
+{% block title %}{{ counter_obj.counter_num }}{% endblock %}
 {% block extra-css %}
     {% include 'dbms/agree/agree_board/style.html' %}
 {% endblock %}
 {% block body %}
-    <div class="contain">
-        <!--AGREE_TYP_LIST = ((1, '单笔'), (2, '最高额'), (3, '保函'))-->
-        {% if agree_obj.agree_typ == 1 %}
-            {% include 'dbms/agree/agree_board/entrust-single.html' %}
-        {% elif agree_obj.agree_typ == 2 %}
-            {% include 'dbms/agree/agree_board/entrust-maximum.html' %}
+    <!-- COUNTER_TYP_LIST = (
+            (1, '企业担保'), (2, '个人保证'),
+            (11, '房产抵押'), (12, '土地抵押'), (13, '动产抵押'), (14, '在建工程抵押'), (15, '车辆抵押'),
+            (31, '应收质押'), (32, '股权质押'), (33, '票据质押'), (34, '动产质押'),
+            (41, '其他权利质押'),
+            (51, '股权预售'), (52, '房产预售'), (53, '土地预售'))
+            AGREE_TYP_LIST = [(1, '单笔'), (2, '最高额'), (3, '保函'), (7, '小贷'),
+                          (41, '单笔(公证)'), (42, '最高额(公证)'), (47, '小贷(公证)')]-->
+    {#单笔#}
+    {% if agree_obj.agree_typ == 1 %}
+        {% if counter_obj.counter_typ == 1 %}
+            {% include 'dbms/agree/agree_board/counter/counter-s-x.html' %}
+        {% elif counter_obj.counter_typ == 2 %}
+            {% include 'dbms/agree/agree_board/counter/counter-s-g.html' %}
+        {% elif counter_obj.counter_typ == 11 %}
+            {% include 'dbms/agree/agree_board/counter/counter-s-d.html' %}
         {% endif %}
-    </div>
+        {#最高额#}
+    {% elif agree_obj.agree_typ == 2 %}
+        {% if counter_obj.counter_typ == 1 %}
+            {% include 'dbms/agree/agree_board/counter/counter-m-x.html' %}
+        {% elif counter_obj.counter_typ == 2 %}
+            {% include 'dbms/agree/agree_board/counter/counter-m-g.html' %}
+        {% elif counter_obj.counter_typ in MORTGAGE_COUNTER_TYP_LIST %}
+            {% include 'dbms/agree/agree_board/counter/counter-m-d.html' %}
+        {% endif %}
+    {% endif %}
 {% endblock %}

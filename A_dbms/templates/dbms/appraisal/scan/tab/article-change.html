@@ -8,13 +8,13 @@
         </tr>
         </thead>
         <tbody>
-        <tr>
-            {% for change in article_obj.change_article.all %}
+        {% for change in article_obj.change_article.all %}
+            <tr>
                 <td>{{ change.get_change_view_display }}</td>
                 <td>{{ change.change_date }}</td>
                 <td>{{ change.change_detail }}</td>
-            {% endfor %}
-        <tr>
+            <tr>
+        {% endfor %}
         </tbody>
     </table>
 </div>

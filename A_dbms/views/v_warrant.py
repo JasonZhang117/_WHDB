@@ -34,7 +34,7 @@ def warrant(request, *args, **kwargs):  # 房产列表
     form_house_add_edit = forms.HouseAddEidtForm()  # 房产添加
     form_ground_add_edit = forms.GroundAddEidtForm()  # 土地添加
     form_construct_add_edit = forms.ConstructionAddForm()  # 在建工程
-    form_receivable_add_edit = forms.FormReceivable()  # 应收添加
+    form_receivable_add = forms.FormReceivable()  # 应收添加
     form_stockes_add_edit = forms.FormStockes()  # 21股权添加
     form_draft_add_eidt = forms.FormDraft()  # 31票据添加
     form_vehicle_add_eidt = forms.FormVehicle()  # 41车辆添加
@@ -109,10 +109,33 @@ def warrant_scan(request, warrant_id):  # house_scan房产预览
             'coustruct_area': warrant_obj.coustruct_warrant.coustruct_area}
         form_construct_add_edit = forms.ConstructionAddForm(form_date)
     elif warrant_typ == 11:  # 应收账款
+        form_date = {'receivable_detail': warrant_obj.receive_warrant.receivable_detail}
+        form_receivable_edit = forms.FormReceivableEdit(form_date)
+    elif warrant_typ == 21:  # 股权
         form_date = {
-            'receive_owner': warrant_obj.receive_warrant.receive_owner,
-            'receivable_detail': warrant_obj.receive_warrant.receivable_detail}
-        form_receivable_add_edit = forms.FormReceivable(form_date)
+            'target': warrant_obj.stock_warrant.target,
+            'share': warrant_obj.stock_warrant.share,
+            'ratio': warrant_obj.stock_warrant.ratio,
+            'stock_typ': warrant_obj.stock_warrant.stock_typ}
+        form_stockes_edit = forms.FormStockesEdit(form_date)
+    elif warrant_typ == 31:  # 31票据添加
+        form_date = {'draft_detail': warrant_obj.draft_warrant.draft_detail}
+        form_draft_eidt = forms.FormDraftEdit(form_date)  # 31票据添加
+    elif warrant_typ == 41:  # 41车辆添加
+        form_date = {
+            'frame_num': warrant_obj.vehicle_warrant.frame_num,
+            'plate_num': warrant_obj.vehicle_warrant.plate_num}
+        form_vehicle_eidt = forms.FormVehicleEdit(form_date)  # 41车辆添加
+    elif warrant_typ == 51:  # 51动产添加
+        form_date = {
+            'chattel_typ': warrant_obj.chattel_warrant.chattel_typ,
+            'chattel_detail': warrant_obj.chattel_warrant.chattel_detail}
+        form_chattel_eidt = forms.FormChattelEdit(form_date)  # 51动产添加
+    elif warrant_typ == 55:  # 55其他添加
+        form_date = {
+            'other_typ': warrant_obj.other_warrant.other_typ,
+            'other_detail': warrant_obj.other_warrant.other_detail}
+        form_other_eidt = forms.FormOthersEdit(form_date)  # 55其他添加
     elif warrant_typ == 99:  # 他权form
         form_date = {
             'agree': warrant_obj.ypothec_warrant.agree}

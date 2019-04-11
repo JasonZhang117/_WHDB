@@ -111,15 +111,17 @@ def agree_add_ajax(request):  # 添加合同
             agree_num = "%sW%s-1" % (agree_num_prefix, agree_copies)
             '''AGREE_TYP_LIST = [(1, '单笔'), (2, '最高额'), (3, '保函'), (7, '小贷'),
                                  (41, '单笔(公证)'), (42, '最高额(公证)'), (47, '小贷(公证)')]'''
+            ''' AGREE_NAME_LIST = [(1, '委托保证合同'), (11, '最高额委托保证合同'),
+                       (21, '委托出具分离式保函合同'), (31, '借款合同')]'''
             agree_name = ''
             if agree_typ in [1, 41]:
-                agree_name = '委托担保合同'
+                agree_name = 1
             elif agree_typ in [2, 42]:
-                agree_name = '最高额委托担保合同'
+                agree_name = 11
             elif agree_typ == 3:
-                agree_name = '委托出具分离式保函合同'
+                agree_name = 21
             elif agree_typ in [7, 47]:
-                agree_name = '借款合同'
+                agree_name = 31
             try:
                 agree_obj = models.Agrees.objects.create(
                     agree_num=agree_num, agree_name=agree_name, num_prefix=agree_num_prefix,
@@ -175,52 +177,61 @@ def counter_add_ajax(request):
         (41, '其他权利质押'),
         (51, '股权预售'), (52, '房产预售'), (53, '土地预售')]'''
     agree_type = agree_obj.agree_typ
+    '''COUNTER_NAME_LIST = [(1, '保证反担保合同'), (2, '不可撤销的反担保函'),
+                         (3, '抵押反担保合同'), (4, '应收账款质押反担保合同'),
+                         (5, '股权质押反担保合同'), (6, '质押反担保合同'), (9, '预售合同'),
+                         (21, '最高额保证反担保合同'),
+                         (23, '最高额抵押反担保合同'), (24, '最高额应收账款质押反担保合同'),
+                         (25, '最高额股权质押反担保合同'), (26, '最高额质押反担保合同'),
+                         (41, '保证合同'),
+                         (43, '抵押合同'), (44, '应收账款质押合同'),
+                         (45, '股权质押合同'), (46, '质押合同')]'''
     counter_name = ''
     if agree_type in [1, 41]:
         if counter_typ == 1:
-            counter_name = '保证反担保合同'
+            counter_name = 1
         elif counter_typ == 2:
-            counter_name = '不可撤销的反担保函'
+            counter_name = 2
         elif counter_typ in [11, 12, 13, 14, 15]:
-            counter_name = '抵押反担保合同'
+            counter_name = 3
         elif counter_typ == 31:
-            counter_name = '应收账款质押反担保合同'
+            counter_name = 4
         elif counter_typ == 32:
-            counter_name = '股权质押反担保合同'
-        elif counter_typ in [33, 41]:
-            counter_name = '权利质押反担保合同'
+            counter_name = 5
+        elif counter_typ in [33, 34, 39, 41]:
+            counter_name = 6
         elif counter_typ in [51, 52, 53]:
-            counter_name = '预售合同'
+            counter_name = 9
     elif agree_type in [2, 42]:
         if counter_typ == 1:
-            counter_name = '最高额保证反担保合同'
+            counter_name = 21
         elif counter_typ == 2:
-            counter_name = '不可撤销的反担保函'
+            counter_name = 2
         elif counter_typ in [11, 12, 13, 14, 15]:
-            counter_name = '最高额抵押反担保合同'
+            counter_name = 23
         elif counter_typ == 31:
-            counter_name = '最高额应收账款质押反担保合同'
+            counter_name = 24
         elif counter_typ == 32:
-            counter_name = '最高额股权质押反担保合同'
-        elif counter_typ in [33, 41]:
-            counter_name = '最高额权利质押反担保合同'
+            counter_name = 25
+        elif counter_typ in [33, 34, 39, 41]:
+            counter_name = 26
         elif counter_typ in [51, 52, 53]:
-            counter_name = '预售合同'
+            counter_name = 9
     elif agree_type in [7, 47]:
         if counter_typ == 1:
-            counter_name = '保证合同'
+            counter_name = 41
         elif counter_typ == 2:
-            counter_name = '不可撤销的担保函'
+            counter_name = 2
         elif counter_typ in [11, 12, 13, 14, 15]:
-            counter_name = '抵押合同'
+            counter_name = 43
         elif counter_typ == 31:
-            counter_name = '应收账款质押合同'
+            counter_name = 44
         elif counter_typ == 32:
-            counter_name = '股权质押合同'
-        elif counter_typ in [33, 41]:
-            counter_name = '权利质押合同'
+            counter_name = 45
+        elif counter_typ in [33, 34, 39, 41]:
+            counter_name = 46
         elif counter_typ in [51, 52, 53]:
-            counter_name = '预售合同'
+            counter_name = 9
 
     if counter_typ == 1:
         counter_typ_n = 'X'

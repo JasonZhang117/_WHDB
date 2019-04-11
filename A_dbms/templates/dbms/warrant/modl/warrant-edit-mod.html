@@ -12,6 +12,9 @@
                 </h4>
             </div>
             <div class="modal-body">
+                {#WARRANT_TYP_LIST = [#}
+                {#(1, '房产'), (2, '房产包'), (5, '土地'), (6, '在建工程'), (11, '应收账款'),#}
+                {#(21, '股权'), (31, '票据'), (41, '车辆'), (51, '动产'), (55, '其他'), (99, '他权')]#}
                 <form class="form-horizontal">
                     {% include 'dbms/warrant/modl/mod_form/warrant-edit.html' %}
                     {% if warrant_typ_n == 1 %}
@@ -21,7 +24,17 @@
                     {% elif warrant_typ_n == 6 %}
                         {% include 'dbms/warrant/modl/mod_form/construct-add-edit.html' %}
                     {% elif warrant_typ_n == 11 %}
-                        {% include 'dbms/warrant/modl/mod_form/receivable-add-edit.html' %}
+                        {% include 'dbms/warrant/modl/mod_form/receivable-edit.html' %}
+                    {% elif warrant_typ_n == 21 %}
+                        {% include 'dbms/warrant/modl/mod_form/stockes-edit.html' %}
+                    {% elif warrant_typ_n == 31 %}
+                        {% include 'dbms/warrant/modl/mod_form/draft-edit.html' %}
+                    {% elif warrant_typ_n == 41 %}
+                        {% include 'dbms/warrant/modl/mod_form/vehicle-edit.html' %}
+                    {% elif warrant_typ_n == 51 %}
+                        {% include 'dbms/warrant/modl/mod_form/chattel-edit.html' %}
+                    {% elif warrant_typ_n == 55 %}
+                        {% include 'dbms/warrant/modl/mod_form/other-edit.html' %}
                     {% elif warrant_typ_n == 99 %}
                         {% include 'dbms/warrant/modl/mod_form/hypothec-add-edit.html' %}
                     {% endif %}

@@ -9,8 +9,9 @@ from .f_appraisal import (
 from .f_warrant import (
     WarrantAddForm, WarrantEditForm, HouseBagAddEidtForm, OwerShipAddForm, HouseAddEidtForm, GroundAddEidtForm,
     ConstructionAddForm,
-    HypothecsAddEidtForm, StoragesAddEidtForm, FormReceivable, FormStockes, FormDraft, FormDraftExtend,
-    FormVehicle, FormChattel, FormOthers, EvaluateAddEidtForm)
+    HypothecsAddEidtForm, StoragesAddEidtForm, FormReceivable, FormReceivableEdit,
+    FormStockes, FormStockesEdit, FormDraft, FormDraftEdit, FormDraftExtend,
+    FormVehicle, FormVehicleEdit, FormChattel, FormChattelEdit, FormOthers, FormOthersEdit, EvaluateAddEidtForm)
 from .f_agree import (AgreeAddForm, AddCounterForm, FormAgreeSign)
 from .f_provide import (FormCounterSignAdd, FormAscertainAdd, FormNotifyAdd, FormProvideAdd, FormPigeonholeAdd,
                         FormImplementAdd, FormPigeonholeNumAdd, FormRepaymentAdd)

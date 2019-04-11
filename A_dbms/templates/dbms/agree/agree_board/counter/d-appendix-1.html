@@ -1,0 +1,26 @@
+<p><u>{{ counter_obj.counter_num }}</u>《{{ counter_obj.get_counter_name_display }}》项下</p>
+<p align="center"><strong>
+    {% if counter_typ in D_COUNTER_TYP_LIST %}
+        抵押财产
+    {% elif counter_typ in Z_COUNTER_TYP_LIST %}
+        质押权利
+    {% endif %}
+    清单
+</strong></p>
+<p style="float: right">单位：万元</p>
+{#WARRANT_TYP_LIST = [#}
+{#        (1, '房产'), (2, '房产包'), (5, '土地'), (6, '在建工程'), (11, '应收账款'),#}
+{#        (21, '股权'), (31, '票据'), (41, '车辆'), (51, '动产'), (55, '其他'), (99, '他权')]#}
+<table>
+    {% for warrant in counter_obj.warrant_counter.warrant.all %}
+        {% if warrant.warrant_typ == 1 %}
+            {% include 'dbms/agree/agree_board/counter/appendix/warrant-typ-1.html' %}
+        {% elif warrant.warrant_typ == 5 %}
+            {% include 'dbms/agree/agree_board/counter/appendix/warrant-typ-5.html' %}
+        {% elif warrant.warrant_typ == 51 %}
+            {% include 'dbms/agree/agree_board/counter/appendix/warrant-typ-51.html' %}
+        {% endif %}
+    {% endfor %}
+</table>
+<br>
+{% include 'dbms/agree/agree_board/counter/appendix/warrant-sign.html' %}

@@ -4,11 +4,13 @@
         {% include 'dbms/agree/agree_board/sign-j.html' %}
     </div>
     <div class="sign-page-y">
-        <p>乙方（公章或合同专用章）：<span class="str-p"><strong><u>{{ agree_obj.lending.summary.custom.name }}</u></strong></span></p>
+        <p>乙方（公章或合同专用章）：<span class="str-p"><strong><u>{{ agree_obj.lending.summary.custom.name }}</u></strong></span>
+        </p>
         <p>
-            法定代表人（或授权代理人）：<span class="str-p"><strong><u>{{ agree_obj.lending.summary.custom.company_custome.representative }}</u></strong></span>
+            法定代表人（或授权代理人）：<span
+                class="str-p"><strong><u>{{ agree_obj.lending.summary.custom.company_custome.representative }}</u></strong></span>
         </p>
         <p>（签字或盖章）</p>
-        <p class="sign-date">&nbsp&nbsp&nbsp年&nbsp&nbsp月&nbsp&nbsp日</p>
+        {% include 'dbms/agree/agree_board/sign-date.html' %}
     </div>
 </div>

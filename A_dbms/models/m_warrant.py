@@ -11,7 +11,8 @@ class Warrants(models.Model):  # 担保物
     '''其他-存货、设备、合格证、'''
     warrant_typ = models.IntegerField(verbose_name='权证类型', choices=WARRANT_TYP_LIST, default=1)
 
-    EVALUATE_STATE_LIST = ((1, '机构评估'), (11, '机构预估'), (21, '综合询价'), (31, '购买成本'), (41, '拍卖评估'))
+    EVALUATE_STATE_LIST = [(1, '机构评估'), (11, '机构预估'), (21, '综合询价'), (31, '购买成本'),
+                           (41, '拍卖评估'), (99, '无需评估')]
     evaluate_state = models.IntegerField(verbose_name='评估方式', choices=EVALUATE_STATE_LIST, null=True, blank=True)
     evaluate_value = models.FloatField(verbose_name='评估价值', null=True, blank=True)
     evaluate_date = models.DateField(verbose_name='评估日期', null=True, blank=True)
@@ -283,8 +284,8 @@ class DraftExtend(models.Model):  # 票据列表
     draft_amount = models.FloatField(verbose_name="票面金额")
     issue_date = models.DateField(verbose_name="出票日期")
     due_date = models.DateField(verbose_name="到期日")
-    DRAFT_STATE_LIST = (
-        (1, '未入库'), (2, '已入库'), (21, '置换出库'), (31, '解保出库'), (41, '托收出库'), (99, '已注销'))
+    DRAFT_STATE_LIST = [
+        (1, '未入库'), (2, '已入库'), (21, '置换出库'), (31, '解保出库'), (41, '托收出库'), (99, '已注销')]
     draft_state = models.IntegerField(verbose_name='_票据状态', choices=DRAFT_STATE_LIST, default=1)
     draft_e_buildor = models.ForeignKey(to='Employees', verbose_name="创建者", default=1,
                                         on_delete=models.PROTECT,
@@ -332,8 +333,8 @@ class Chattel(models.Model):  # 动产
     chattel_owner = models.ForeignKey(to='Customes', verbose_name="所有权人",
                                       on_delete=models.PROTECT,
                                       related_name='chattel_custome')
-    CHATTEL_TYP_LIST = ((1, '存货'), (11, '机器设备'), (21, '合格证'), (31, '专利'), (41, '商标'),
-                        (71, '账户'), (99, '其他'))
+    CHATTEL_TYP_LIST = [(1, '存货'), (11, '机器设备'), (21, '合格证'), (31, '专利'), (41, '商标'),
+                        (71, '账户'), (99, '其他')]
     chattel_typ = models.IntegerField(verbose_name='动产种类', choices=CHATTEL_TYP_LIST, default=1)
     chattel_detail = models.TextField(verbose_name="动产具体描述")
     chattel_buildor = models.ForeignKey(to='Employees', verbose_name="创建者", default=1,
@@ -442,7 +443,8 @@ class Evaluate(models.Model):  # 评估
     warrant = models.ForeignKey(to='Warrants', verbose_name="权证",
                                 on_delete=models.PROTECT,
                                 related_name='evaluate_warrant')
-    EVALUATE_STATE_LIST = ((1, '机构评估'), (11, '机构预估'), (21, '综合询价'), (31, '购买成本'), (41, '拍卖评估'))
+    EVALUATE_STATE_LIST = [(1, '机构评估'), (11, '机构预估'), (21, '综合询价'), (31, '购买成本'),
+                           (41, '拍卖评估'), (99, '无需评估')]
     evaluate_state = models.IntegerField(verbose_name='评估方式', choices=EVALUATE_STATE_LIST, default=1)
     evaluate_value = models.FloatField(verbose_name='评估价值')
     evaluate_date = models.DateField(verbose_name='评估日期')

@@ -208,6 +208,28 @@ def convert(n):
     return result
 
 
+def convert_num(n):
+    units = ['', '万', '亿']
+    nums = ['零', '壹', '贰', '叁', '肆', '伍', '陆', '柒', '捌', '玖']
+    small_int_label = ['', '拾', '佰', '仟']
+    int_part, decimal_part = str(int(n)), str(round(n - int(n), 2))[2:]  # 分离整数和小数部分
+    res = []
+    if int_part != '0':
+        while int_part:
+            small_int_part, int_part = int_part[-4:], int_part[:-4]
+            tmp = ''.join(
+                [nums[int(x)] + (y if x != '0' else '') for x, y in
+                 list(zip(small_int_part[::-1], small_int_label))[::-1]])
+            tmp = tmp.rstrip('零').replace('零零零', '零').replace('零零', '零')
+            unit = units.pop(0)
+            if tmp:
+                tmp += unit
+                res.append(tmp)
+    result = ''.join(res[::-1])
+
+    return result
+
+
 # -------------------------合同预览-------------------------#
 @login_required
 @authority
@@ -220,7 +242,11 @@ def agree_preview(request, agree_id):
     agree_amount = agree_obj.agree_amount
     agree_amount_cn = convert(agree_amount)
     agree_amount_str = str(agree_amount / 10000).rstrip('0').rstrip('.')  # 续贷（万元）
-
+    agree_copy_cn = convert_num(agree_obj.agree_copies)
+    agree_copy_jy_cn = convert_num(agree_obj.agree_copies - 2)
+    single_quota_rate = agree_obj.lending.summary.single_quota_summary.first().flow_rate
+    charge = round(agree_amount * single_quota_rate / 100, 2)
+    charge_cn = convert(charge)
     return render(request, 'dbms/agree/preview-agree.html', locals())
 
 
@@ -232,30 +258,52 @@ def counter_preview(request, agree_id, counter_id):
     current_url_name = resolve(request.path).url_name  # 获取当前URL_NAME
     authority_list = request.session.get('authority_list')  # 获取当前用户的所有权限
     menu_result = MenuHelper(request).menu_data_list()
-    agree_obj = models.Agrees.objects.get(id=agree_id)
-    counter_obj = models.Counters.objects.get(id=counter_id)
-    '''COUNTER_TYP_LIST = (
-        (1, '企业担保'), (2, '个人保证'),
-        (11, '房产抵押'), (12, '土地抵押'), (13, '动产抵押'), (14, '在建工程抵押'), (15, '车辆抵押'),
-        (31, '应收质押'), (32, '股权质押'), (33, '票据质押'), (34, '动产质押'),
-        (41, '其他权利质押'),
-        (51, '股权预售'), (52, '房产预售'), (53, '土地预售'))'''
-    if counter_obj.counter_typ in [1, 2]:
-        assure_counter_obj = counter_obj.assure_counter
-        custom_obj = assure_counter_obj.custome
-
-    MORTGAGE_COUNTER_TYP_LIST = [11, 12, 13, 14, 15, ]
+    agree_obj = models.Agrees.objects.get(id=agree_id)  # 委托合同
+    counter_obj = models.Counters.objects.get(id=counter_id)  # 反担保合同
 
     '''WARRANT_TYP_LIST = [
-        (1, '房产'), (2, '房产包'), (5, '土地'), (6, '在建工程'), (11, '应收账款'),
-        (21, '股权'), (31, '票据'), (41, '车辆'), (51, '动产'), (55, '其他'), (99, '他权')]'''
-    OWER_SHIP_LIST = [1, 2, 5, ]
+           (1, '房产'), (2, '房产包'), (5, '土地'), (6, '在建工程'), (11, '应收账款'),
+           (21, '股权'), (31, '票据'), (41, '车辆'), (51, '动产'), (55, '其他'), (99, '他权')]'''
+    '''CHATTEL_TYP_LIST = [(1, '存货'), (11, '机器设备'), (21, '合格证'), (31, '专利'), (41, '商标'),
+                        (71, '账户'), (99, '其他')]'''
+    '''OTHER_TYP_LIST = ((11, '购房合同'), (21, '合格证'), (31, '专利'), (41, '商标'), (71, '账户'),
+                      (99, '其他'))'''
+    counter_typ = counter_obj.counter_typ
+    if counter_typ in [1, 2]:
+        assure_counter_obj = counter_obj.assure_counter
+        custom_obj = assure_counter_obj.custome
+    else:
+        warrant_counter_obj = counter_obj.warrant_counter  # 抵质押反担保合同
+        counter_warrant_count = warrant_counter_obj.warrant.count()  # 反担保合同项下抵质押物数量
+        counter_warrant_list = warrant_counter_obj.warrant.all()  # 反担保合同项下抵质押物列表
+        counter_warrant_obj = counter_warrant_list.first()  # 反担保合同项下抵质押物（首个）
+        counter_warrant_typ = counter_warrant_obj.warrant_typ  # 反担保合同项下抵质押物种类
+
+        counter_property_type = ''
+        if counter_warrant_typ in [1, 2]:
+            counter_property_type = '房产'
+        elif counter_warrant_typ == 5:
+            counter_property_type = '土地使用权'
+        elif counter_warrant_typ == 6:
+            counter_property_type = '在建工程'
+        elif counter_warrant_typ == 51:
+            chattel_typ = counter_warrant_obj.chattel_warrant.chattel_typ  # 动产种类
+            if chattel_typ == 1:
+                counter_property_type = '存货'
+            elif chattel_typ == 11:
+                counter_property_type = '机器设备'
+    '''COUNTER_TYP_LIST = [
+            (1, '企业担保'), (2, '个人保证'),
+            (11, '房产抵押'), (12, '土地抵押'), (13, '动产抵押'), (14, '在建工程抵押'), (15, '车辆抵押'),
+            (31, '应收质押'), (32, '股权质押'), (33, '票据质押'), (34, '动产质押'),
+            (41, '其他权利质押'),
+            (51, '股权预售'), (52, '房产预售'), (53, '土地预售')]'''
+    D_COUNTER_TYP_LIST = [11, 12, 13, 14, 15, ]
+    Z_COUNTER_TYP_LIST = [31, 32, 33, 34, 41, ]
 
     agree_amount = agree_obj.agree_amount
     agree_amount_cn = convert(agree_amount)
     agree_amount_str = str(agree_amount / 10000).rstrip('0').rstrip('.')  # 续贷（万元）
-    if not counter_obj.counter_typ in [1, 2]:
-        warrant_list = counter_obj.warrant_counter.warrant.count()
 
     return render(request, 'dbms/agree/preview-counter.html', locals())
 

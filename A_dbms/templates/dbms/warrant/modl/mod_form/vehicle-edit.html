@@ -1,0 +1,16 @@
+<div id="form_vehicle_eidt" class="warrant-extend" style="display: none">
+
+    <div class="form-group"><!--车架号-->
+        <label for="id_frame_num" class="col-sm-3 control-label">{{ form_vehicle_eidt.frame_num.label }}：</label>
+        <div class="col-sm-9">{{ form_vehicle_eidt.frame_num }}</div>
+        <label id="e_frame_num" class="pull-right">{{ form_vehicle_eidt.frame_num.errors }}</label>
+    </div>
+
+    <div class="form-group"><!--车票号-->
+        <label for="id_plate_num" class="col-sm-3 control-label">
+            {{ form_vehicle_eidt.plate_num.label }}：</label>
+        <div class="col-sm-9">{{ form_vehicle_eidt.plate_num }}</div>
+        <label id="e_plate_num" class="pull-right">{{ form_vehicle_eidt.plate_num.errors }}</label>
+    </div>
+
+</div>

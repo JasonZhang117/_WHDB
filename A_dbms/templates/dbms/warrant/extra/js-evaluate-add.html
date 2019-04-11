@@ -36,11 +36,11 @@
                         alert(arg.message);
                         window.location.reload();
                     } else {
-                        alert(arg.message);
-                        $('#e_vehicle_owner').text(arg.forme.vehicle_owner);
-                        $('#e_frame_num').text(arg.forme.frame_num);
-                        $('#e_plate_num').text(arg.forme.plate_num);
+                        $('#e_evaluate_state').text(arg.forme.evaluate_state);
+                        $('#e_evaluate_value').text(arg.forme.evaluate_value);
+                        $('#e_evaluate_date').text(arg.forme.evaluate_date);
                         $('#e_evaluate_explain').text(arg.forme.evaluate_explain);
+                        alert(arg.message);
                     }
                 }
             })

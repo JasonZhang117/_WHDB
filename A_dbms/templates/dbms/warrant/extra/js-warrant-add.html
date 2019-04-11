@@ -41,7 +41,7 @@
                 $('#form_construct_add_edit').show();
                 break;
             case ('11'):{#应收#}
-                $('#form_receivable_add_edit').show();
+                $('#form_receivable_add').show();
                 break;
             case ('21'):{#股权#}
                 $('#form_stockes_add_edit').show();
@@ -90,7 +90,7 @@
                     $('#form_construct_add_edit').show();
                     break;
                 case ('11'):{#应收#}
-                    $('#form_receivable_add_edit').show();
+                    $('#form_receivable_add').show();
                     $('#id_search_custom').show();
                     break;
                 case ('21'):{#股权#}
@@ -158,11 +158,6 @@
                         {#window.location.reload();#}
                     } else {
                         alert(arg.message);
-                        console.log(arg.forme.house_locate);
-                        console.log(arg.forme.house_app);
-                        console.log(arg.forme.house_area);
-                        console.log(arg.forme.house_locate);
-
                         $('#e_warrant_num').text(arg.forme.warrant_num);
 
                         $('#e_house_locate').text(arg.forme.house_locate);

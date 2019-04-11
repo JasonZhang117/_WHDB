@@ -378,7 +378,7 @@ def warrant_edit_ajax(request):
                         response['message'] = '土地信息修改该成功！！！'
                 except Exception as e:
                     response['status'] = False
-                    response['message'] = '土地创建失败：%s' % str(e)
+                    response['message'] = '土地修改失败：%s' % str(e)
             else:
                 response['status'] = False
                 response['message'] = '表单信息有误！！！'
@@ -398,11 +398,119 @@ def warrant_edit_ajax(request):
                         response['message'] = '在建工程信息修改该成功！！！'
                 except Exception as e:
                     response['status'] = False
-                    response['message'] = '在建工程创建失败：%s' % str(e)
+                    response['message'] = '在建工程修改失败：%s' % str(e)
             else:
                 response['status'] = False
                 response['message'] = '表单信息有误！！！'
                 response['forme'] = form_construct_add_edit.errors
+        elif warrant_typ == 11:  # (11, '应收账款')
+            form_receivable_edit = forms.FormReceivableEdit(post_data)
+            if form_receivable_edit.is_valid():
+                receivable_edit_clean = form_receivable_edit.cleaned_data
+                try:
+                    with transaction.atomic():
+                        warrant_list.update(
+                            warrant_num=warrant_edit_clean['warrant_num'])
+                        models.Receivable.objects.filter(warrant=warrant_obj).update(
+                            receivable_detail=receivable_edit_clean['receivable_detail'])
+                        response['message'] = '应收账款信息修改该成功！！！'
+                except Exception as e:
+                    response['status'] = False
+                    response['message'] = '应收账款修改失败：%s' % str(e)
+            else:
+                response['status'] = False
+                response['message'] = '表单信息有误！！！'
+                response['forme'] = form_receivable_edit.errors
+        elif warrant_typ == 11:  # (11, '应收账款')
+            form_receivable_edit = forms.FormReceivableEdit(post_data)
+            if form_receivable_edit.is_valid():
+                receivable_edit_clean = form_receivable_edit.cleaned_data
+                try:
+                    with transaction.atomic():
+                        warrant_list.update(
+                            warrant_num=warrant_edit_clean['warrant_num'])
+                        models.Receivable.objects.filter(warrant=warrant_obj).update(
+                            receivable_detail=receivable_edit_clean['receivable_detail'])
+                        response['message'] = '应收账款信息修改该成功！！！'
+                except Exception as e:
+                    response['status'] = False
+                    response['message'] = '应收账款修改失败：%s' % str(e)
+            else:
+                response['status'] = False
+                response['message'] = '表单信息有误！！！'
+                response['forme'] = form_receivable_edit.errors
+        elif warrant_typ == 11:  # (11, '应收账款')
+            form_receivable_edit = forms.FormReceivableEdit(post_data)
+            if form_receivable_edit.is_valid():
+                receivable_edit_clean = form_receivable_edit.cleaned_data
+                try:
+                    with transaction.atomic():
+                        warrant_list.update(
+                            warrant_num=warrant_edit_clean['warrant_num'])
+                        models.Receivable.objects.filter(warrant=warrant_obj).update(
+                            receivable_detail=receivable_edit_clean['receivable_detail'])
+                        response['message'] = '应收账款信息修改该成功！！！'
+                except Exception as e:
+                    response['status'] = False
+                    response['message'] = '应收账款修改失败：%s' % str(e)
+            else:
+                response['status'] = False
+                response['message'] = '表单信息有误！！！'
+                response['forme'] = form_receivable_edit.errors
+        elif warrant_typ == 11:  # (11, '应收账款')
+            form_receivable_edit = forms.FormReceivableEdit(post_data)
+            if form_receivable_edit.is_valid():
+                receivable_edit_clean = form_receivable_edit.cleaned_data
+                try:
+                    with transaction.atomic():
+                        warrant_list.update(
+                            warrant_num=warrant_edit_clean['warrant_num'])
+                        models.Receivable.objects.filter(warrant=warrant_obj).update(
+                            receivable_detail=receivable_edit_clean['receivable_detail'])
+                        response['message'] = '应收账款信息修改该成功！！！'
+                except Exception as e:
+                    response['status'] = False
+                    response['message'] = '应收账款修改失败：%s' % str(e)
+            else:
+                response['status'] = False
+                response['message'] = '表单信息有误！！！'
+                response['forme'] = form_receivable_edit.errors
+        elif warrant_typ == 11:  # (11, '应收账款')
+            form_receivable_edit = forms.FormReceivableEdit(post_data)
+            if form_receivable_edit.is_valid():
+                receivable_edit_clean = form_receivable_edit.cleaned_data
+                try:
+                    with transaction.atomic():
+                        warrant_list.update(
+                            warrant_num=warrant_edit_clean['warrant_num'])
+                        models.Receivable.objects.filter(warrant=warrant_obj).update(
+                            receivable_detail=receivable_edit_clean['receivable_detail'])
+                        response['message'] = '应收账款信息修改该成功！！！'
+                except Exception as e:
+                    response['status'] = False
+                    response['message'] = '应收账款修改失败：%s' % str(e)
+            else:
+                response['status'] = False
+                response['message'] = '表单信息有误！！！'
+                response['forme'] = form_receivable_edit.errors
+        elif warrant_typ == 11:  # (11, '应收账款')
+            form_receivable_edit = forms.FormReceivableEdit(post_data)
+            if form_receivable_edit.is_valid():
+                receivable_edit_clean = form_receivable_edit.cleaned_data
+                try:
+                    with transaction.atomic():
+                        warrant_list.update(
+                            warrant_num=warrant_edit_clean['warrant_num'])
+                        models.Receivable.objects.filter(warrant=warrant_obj).update(
+                            receivable_detail=receivable_edit_clean['receivable_detail'])
+                        response['message'] = '应收账款信息修改该成功！！！'
+                except Exception as e:
+                    response['status'] = False
+                    response['message'] = '应收账款修改失败：%s' % str(e)
+            else:
+                response['status'] = False
+                response['message'] = '表单信息有误！！！'
+                response['forme'] = form_receivable_edit.errors
         elif warrant_typ == 99:  # (99, '他权')
             try:
                 warrant_list.update(warrant_num=warrant_edit_clean['warrant_num'])
@@ -471,7 +579,7 @@ def owership_del_ajax(request):  # 产权证删除ajax
     warrant_obj = models.Warrants.objects.get(id=warrant_id)
     owership_obj = models.Ownership.objects.get(id=owership_id)
 
-    lending_warrant_list = warrant_obj.lending_warrant.all()
+    lending_warrant_list = ''  # warrant_obj.lending_warrant.all()
 
     '''((1, '待反馈'), (2, '已反馈'), (3, '待上会'),
        (4, '已上会'), (5, '已签批'), (6, '已注销'))'''

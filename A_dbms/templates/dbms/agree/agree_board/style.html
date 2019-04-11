@@ -1,4 +1,5 @@
 <style>
+    {#合同总体样式#}
     .contain {
     {#宽度#} width: 210mm;
     {#左空白#} margin-left: auto;
@@ -7,21 +8,7 @@
     {#背景色 #} background-color: #dddddd;
     {#字间距 #} letter-spacing: 0pt;
     {#行间距#} line-height: 25pt;
-    {#字体#}
-    {#    font-family: "宋体";#}
-        background-image: url(./daisies.jpg);
-        background-size: 100% 100%;
-    }
-
-    .sing-tab {
-    {#宽度#} width: 210mm;
-    {#左空白#} margin-left: auto;
-    {#又空白#} margin-right: auto;
-    {#字体大小#} font-size: 12pt;
-    {#背景色#} background-color: #dddddd;
-    {#字间距 #} letter-spacing: 0pt;
-    {#行间距#} line-height: 20.5pt;
-    {#字体#} font-family: "宋体";
+    {#字体#}{#    font-family: "宋体";#}
     }
 
     {#段前缩进#}
@@ -50,23 +37,22 @@
     }
 
     .page-home-p {
-        {#padding-top: 0pt;#}
-        text-indent: 0pt;
+    {#padding-top: 0pt;#} text-indent: 0pt;
     }
 
     {#合同封面-甲方#}
     .page-home-j {
         font-size: 15.75pt;
-        padding-top: 25mm;
-        padding-bottom: 25mm;
+        padding-top: 20mm;
+        padding-bottom: 20mm;
         text-indent: 0pt;
     }
 
     {#合同封面-乙方#}
     .page-home-y {
         font-size: 15.75pt;
-        padding-top: 25mm;
-        padding-bottom: 25mm;
+        padding-top: 20mm;
+        padding-bottom: 20mm;
         text-indent: 0pt;
     }
 
@@ -80,11 +66,11 @@
 
     {#合同签字页#}
     .sign-page {
-        padding-top: 24pt;
+        padding-top: 20pt;
     }
 
     .sign-page > div {
-        padding-bottom: 124pt;
+        padding-bottom: 100pt;
     }
 
     .sign-page p {
@@ -104,6 +90,46 @@
         border: 1px solid black;
         height: 24pt;
     }
+
+    {#合同审签表样式#}
+    .sing-tab {
+    {#宽度#} width: 210mm;
+    {#左空白#} margin-left: auto;
+    {#又空白#} margin-right: auto;
+    {#字体大小#} font-size: 12pt;
+    {#背景色#} background-color: #dddddd;
+    {#字间距 #} letter-spacing: 0pt;
+    {#行间距#} line-height: 20.5pt;
+    {#字体#} font-family: "宋体";
+    }
+
+    .sing-tab p {
+        margin-top: 0pt;
+        margin-bottom: 0pt;
+        text-indent: 20pt;
+    }
+
+    {#应收账款质押登记表样式#}
+    .receive-tab {
+    {#宽度#} width: 210mm;
+    {#左空白#} margin-left: auto;
+    {#又空白#} margin-right: auto;
+    {#字体大小#} font-size: 12pt;
+    {#背景色#} background-color: #dddddd;
+    {#字间距 #} letter-spacing: 0pt;
+    {#行间距#} line-height: 17pt;
+    }
+
+    .receive-tab p {
+        margin-top: 0pt;
+        margin-bottom: 0pt;
+        text-indent: 16pt;
+    }
+
+    .pro-tab tr td {
+        border: 0px solid black;
+    }
+
 </style>
 
 <style media="print">
