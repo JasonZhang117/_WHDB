@@ -82,7 +82,8 @@ admin.site.register(models.CountersWarrants)  # 抵质押押反担保合同
 
 # ------------------------担保物--------------------------#
 class WarrantsAdmin(admin.ModelAdmin):
-    list_display = ('warrant_num', 'warrant_typ', 'evaluate_state', 'evaluate_value', 'evaluate_date', 'warrant_state')
+    list_display = ('warrant_num', 'warrant_typ', 'meeting_date','evaluate_state', 'evaluate_value',
+                    'evaluate_date', 'warrant_state')
     list_per_page = 20  # 每页显示条目数
     search_fields = ['warrant_num']  # 搜索字段
     ordering = ['warrant_num']  # 排序字段
@@ -102,7 +103,16 @@ admin.site.register(models.DraftExtend)  # 票据列表
 admin.site.register(models.Chattel)  # 动产
 admin.site.register(models.Others)  # 动产
 admin.site.register(models.Evaluate)  # 出入库
-admin.site.register(models.Storages)  # 评估
+
+
+class StoragesAdmin(admin.ModelAdmin):
+    list_display = ('warrant', 'storage_typ', 'storage_explain', 'transfer', 'conservator', 'storage_date')
+    # list_per_page = 20  # 每页显示条目数
+    # search_fields = ['notify']  # 搜索字段
+    ordering = ['-storage_date']  # 排序字段
+
+
+admin.site.register(models.Storages, StoragesAdmin)  # 评估
 # -----------------------放款-------------------------#
 admin.site.register(models.Charges)  # 收费
 

@@ -4,6 +4,7 @@ from django.contrib.auth.decorators import login_required
 from A_dbms import models
 import json, datetime, time, re
 from django.urls import resolve, reverse
+from django.db.models import Q, F
 from django.db.models import Avg, Min, Sum, Max, Count
 from django.db import transaction
 
@@ -384,4 +385,62 @@ def home(request):
     #         counter_l = models.Counters.objects.filter(id=counter_obj.id)
     #         counter_l.update(counter_name=counter_name)
 
+    # warrant_list = models.Warrants.objects.all()
+    # for warrant in warrant_list:
+    #     warrant_typ = warrant.warrant_typ
+    #     evaluate_state = warrant.evaluate_state
+    #     '''WARRANT_TYP_LIST = [
+    #     (1, '房产'), (2, '房产包'), (5, '土地'), (6, '在建工程'), (11, '应收账款'),
+    #     (21, '股权'), (31, '票据'), (41, '车辆'), (51, '动产'), (55, '其他'), (99, '他权')]'''
+    #     # if warrant_typ in [6, 11, 21, 31, 41, 51, 55, 99]:
+    #     #     '''EVALUATE_STATE_LIST = [(0, '待评估'), (11, '机构预估'), (21, '综合询价'), (31, '购买成本'),
+    #     #                    (41, '拍卖评估'), (99, '无需评估')]'''
+    #     #     models.Warrants.objects.filter(id=warrant.id).update(evaluate_state=99)
+    #     if evaluate_state ==11:
+    #         models.Warrants.objects.filter(id=warrant.id).update(evaluate_state=5)
+
+    # article_list = models.Articles.objects.all().order_by('review_date')
+    # for article in article_list:
+    #     warrant_list = models.Warrants.objects.filter(
+    #         lending_warrant__sure__lending__summary=article).update(
+    #         meeting_date=article.review_date)
+    # '''EVALUATE_STATE_LIST = [(0, '待评估'), (1, '机构评估'), (11, '机构预估'), (21, '综合询价'), (31, '购买成本'),
+    #                        (41, '拍卖评估'), (99, '无需评估')]'''
+    # '''ARTICLE_STATE_LIST = [(1, '待反馈'), (2, '已反馈'), (3, '待上会'), (4, '已上会'), (5, '已签批'),
+    #                       (51, '已放款'), (52, '已放完'), (55, '已解保'), (61, '待变更'), (99, '已注销')]'''
+    # warrant_list = models.Warrants.objects.exclude(
+    #     Q(evaluate_state=99) | Q(evaluate_state=41)).order_by('evaluate_date')
+    # '''EVALUATE_STATE_LIST = [(0, '待评估'), (5, '机构评估'), (11, '机构预估'), (21, '综合询价'), (31, '购买成本'),
+    #                            (41, '拍卖评估'), (99, '无需评估')]'''
+    # warrant_list = warrant_list.filter(lending_warrant__sure__lending__summary__article_state__in=[4, 5, 51, 52, 61])
+    # ddd = []
+    # for warrant in warrant_list:
+    #     if warrant.evaluate_state == 0:
+    #         ddd.append(warrant.id)
+    #     else:
+    #         cccc = warrant.meeting_date - warrant.evaluate_date
+    #         if cccc.days > 365:
+    #             ddd.append(warrant.id)
+    # warrant_list = models.Warrants.objects.filter(id__in=ddd)
+    # warrant_list = models.Warrants.objects.all()
+    # for warrant in warrant_list:
+    #     evaluate_state = warrant.evaluate_state
+    #     if evaluate_state == 5:
+    #         models.Warrants.objects.filter(id=warrant.id).update(evaluate_state=1)
+
     return render(request, 'index.html', locals())
+
+
+def Caltime(date1, date2):
+    # %Y-%m-%d为日期格式，其中的-可以用其他代替或者不写，但是要统一，同理后面的时分秒也一样；可以只计算日期，不计算时间。
+    # date1=time.strptime(date1,"%Y-%m-%d %H:%M:%S")
+    # date2=time.strptime(date2,"%Y-%m-%d %H:%M:%S")
+    date1 = time.strptime(date1, "%Y-%m-%d")
+    date2 = time.strptime(date2, "%Y-%m-%d")
+    # 根据上面需要计算日期还是日期时间，来确定需要几个数组段。下标0表示年，小标1表示月，依次类推...
+    # date1=datetime.datetime(date1[0],date1[1],date1[2],date1[3],date1[4],date1[5])
+    # date2=datetime.datetime(date2[0],date2[1],date2[2],date2[3],date2[4],date2[5])
+    date1 = datetime.datetime(date1[0], date1[1], date1[2])
+    date2 = datetime.datetime(date2[0], date2[1], date2[2])
+    # 返回两个变量相差的值，就是相差天数
+    return date2 - date1

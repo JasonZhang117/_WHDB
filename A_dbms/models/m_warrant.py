@@ -11,16 +11,16 @@ class Warrants(models.Model):  # 担保物
     '''其他-存货、设备、合格证、'''
     warrant_typ = models.IntegerField(verbose_name='权证类型', choices=WARRANT_TYP_LIST, default=1)
 
-    EVALUATE_STATE_LIST = [(1, '机构评估'), (11, '机构预估'), (21, '综合询价'), (31, '购买成本'),
+    EVALUATE_STATE_LIST = [(0, '待评估'), (1, '机构评估'), (11, '机构预估'), (21, '综合询价'), (31, '购买成本'),
                            (41, '拍卖评估'), (99, '无需评估')]
-    evaluate_state = models.IntegerField(verbose_name='评估方式', choices=EVALUATE_STATE_LIST, null=True, blank=True)
+    evaluate_state = models.IntegerField(verbose_name='评估方式', choices=EVALUATE_STATE_LIST, default=0)
     evaluate_value = models.FloatField(verbose_name='评估价值', null=True, blank=True)
     evaluate_date = models.DateField(verbose_name='评估日期', null=True, blank=True)
     evaluate_explain = models.CharField(verbose_name='评估说明', max_length=128, null=True, blank=True)
-
-    WARRANT_STATE_LIST = (
+    meeting_date = models.DateField(verbose_name='最近上会日', blank=True, null=True)
+    WARRANT_STATE_LIST = [
         (1, '未入库'), (2, '已入库'), (6, '无需入库'), (11, '续抵出库'), (21, '已借出'), (31, '解保出库'),
-        (99, '已注销'))
+        (99, '已注销')]
     warrant_state = models.IntegerField(verbose_name='_权证状态', choices=WARRANT_STATE_LIST, default=1)
     storage_explain = models.CharField(verbose_name='出入库说明', max_length=128, blank=True, null=True)
 
@@ -66,7 +66,7 @@ class Ownership(models.Model):  # 产权证
     class Meta:
         verbose_name_plural = '权证-产权证'  # 指定显示名称
         db_table = 'dbms_ownership'  # 指定数据表的名称
-        unique_together = [('warrant', 'owner'), ]
+        unique_together = ('warrant', 'owner')
 
     def __str__(self):
         return '%s-%s-%s' % (self.ownership_num, self.owner.name, self.warrant)
@@ -88,7 +88,7 @@ class Houses(models.Model):  # 房产
                       (81, '在建工程'), (91, '其他'), (99, '期房'))
     house_app = models.IntegerField(verbose_name='房产用途', choices=HOUSE_APP_LIST, default=1)
     house_area = models.FloatField(verbose_name='建筑面积')
-    house_name = models.CharField(verbose_name='楼盘名称', max_length=64, null=True, blank=True)
+    house_name = models.CharField(verbose_name='备注', max_length=64, null=True, blank=True)
     house_buildor = models.ForeignKey(to='Employees', verbose_name="创建者",
                                       on_delete=models.PROTECT,
                                       related_name='house_buildor_employee')
@@ -414,10 +414,11 @@ class Storages(models.Model):  # 出入库
     warrant = models.ForeignKey(to='Warrants', verbose_name="权证",
                                 on_delete=models.PROTECT,
                                 related_name='storage_warrant')
-    '''WARRANT_STATE_LIST = (
-        (1, '未入库'), (2, '已入库'), (6, '无需入库'), (11, '续抵出库'), (21, '已借出'), 
-        (31, '解保出库'), (99, '已注销'))'''
-    STORAGE_TYP_LIST = ((1, '入库'), (2, '续抵出库'), (11, '借出'), (12, '归还'), (31, '解保出库'))
+    ''' WARRANT_STATE_LIST = (
+        (1, '未入库'), (2, '已入库'), (6, '无需入库'), (11, '续抵出库'), (21, '已借出'), (31, '解保出库'),
+        (99, '已注销'))'''
+
+    STORAGE_TYP_LIST = [(1, '入库'), (2, '续抵出库'), (6, '无需入库'), (11, '借出'), (12, '归还'), (31, '解保出库')]
     storage_typ = models.IntegerField(verbose_name='出入库', choices=STORAGE_TYP_LIST, default=1)
     storage_explain = models.CharField(verbose_name='出入库说明', max_length=128, blank=True, null=True)
     '''EMPLOYEE_STATUS_LIST = [(1, '在职'), (11, '离职')]'''
@@ -443,8 +444,9 @@ class Evaluate(models.Model):  # 评估
     warrant = models.ForeignKey(to='Warrants', verbose_name="权证",
                                 on_delete=models.PROTECT,
                                 related_name='evaluate_warrant')
-    EVALUATE_STATE_LIST = [(1, '机构评估'), (11, '机构预估'), (21, '综合询价'), (31, '购买成本'),
-                           (41, '拍卖评估'), (99, '无需评估')]
+    EVALUATE_STATE_LIST = Warrants.EVALUATE_STATE_LIST
+    # EVALUATE_STATE_LIST = [(0, '待评估'), (1, '机构评估'), (11, '机构预估'), (21, '综合询价'), (31, '购买成本'),
+    #                        (41, '拍卖评估'), (99, '无需评估')]
     evaluate_state = models.IntegerField(verbose_name='评估方式', choices=EVALUATE_STATE_LIST, default=1)
     evaluate_value = models.FloatField(verbose_name='评估价值')
     evaluate_date = models.DateField(verbose_name='评估日期')

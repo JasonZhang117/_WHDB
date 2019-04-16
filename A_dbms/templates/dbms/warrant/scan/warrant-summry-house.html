@@ -8,6 +8,9 @@
     <label class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
         建面面积(㎡)：{{ warrant_obj.house_warrant.house_area }}
     </label>
+    <label class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
+        备注：{{ warrant_obj.house_warrant.house_name|default_if_none:'' }}
+    </label>
     <label class="col-lg-3 col-md-4 col-sm-12 col-xs-12">
         库存状态：{{ warrant_obj.get_warrant_state_display }}
     </label>

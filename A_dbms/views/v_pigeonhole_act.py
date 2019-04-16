@@ -11,6 +11,8 @@ from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.urls import resolve
 from _WHDB.views import MenuHelper
 from _WHDB.views import authority
+
+
 # -------------------------归档ajax-------------------------#
 @login_required
 @authority
@@ -35,8 +37,9 @@ def pigeonhole_add_ajax(request):
             implement_cleaned = form_implement_add.cleaned_data
             implement = implement_cleaned['implement']
             print('implement:', implement)
-            '''IMPLEMENT_LIST = [(1, '未归档'), (11, '退回'), (21, '暂存风控'), (31, '移交行政'), (41, '已归档')]'''
-            if implement in [1, 11, 21, 31]:
+            '''IMPLEMENT_LIST = [(1, '未归档'), (11, '退回'), (21, '暂存风控'), (31, '移交行政'), 
+            (41, '已归档'), (99, '无需归档')]'''
+            if implement in [1, 11, 21, 31, 99]:
                 form_pigeonhole_add = forms.FormPigeonholeAdd(post_data)
                 if form_pigeonhole_add.is_valid():
                     pigeonhole_cleaned = form_pigeonhole_add.cleaned_data
@@ -58,10 +61,8 @@ def pigeonhole_add_ajax(request):
                     response['forme'] = form_implement_add.errors
             else:
                 form_pigeonhole_num = forms.FormPigeonholeNumAdd(post_data)
-                print('form_pigeonhole_num:', form_pigeonhole_num)
                 if form_pigeonhole_num.is_valid():
                     num_cleaned = form_pigeonhole_num.cleaned_data
-                    print('num_cleaned:', num_cleaned)
                     try:
                         provide_list.update(implement=implement, file_num=num_cleaned['file_num'])
                         response['message'] = '完成归档！！！'

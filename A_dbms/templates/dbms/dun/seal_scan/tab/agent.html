@@ -18,14 +18,14 @@
         {% for inquiry in seal_obj.inquiry_seal.all %}
             <tr>
                 <td>{{ inquiry.get_inquiry_type_display }}</td>
-                <td>{{ inquiry.evaluate_date }}</td>
+                <td>{{ inquiry.evaluate_date|default_if_none:'' }}</td>
                 <td align="right">{{ inquiry.evaluate_value|floatformat:2 }}</td>
-                <td>{{ inquiry.auction_date }}</td>
+                <td>{{ inquiry.auction_date|default_if_none:'' }}</td>
                 <td align="right">{{ inquiry.listing_price|floatformat:2 }}</td>
-                <td>{{ inquiry.transaction_date }}</td>
+                <td>{{ inquiry.transaction_date|default_if_none:'' }}</td>
                 <td align="right">{{ inquiry.auction_amount|floatformat:2 }}</td>
-                <td>{{ inquiry.inquiry_detail }}</td>
-                <td>{{ inquiry.inquiryor_date }}</td>
+                <td>{{ inquiry.inquiry_detail|default_if_none:'' }}</td>
+                <td>{{ inquiry.inquiryor_date|default_if_none:'' }}</td>
                 <td>{{ inquiry.inquiryor }}</td>
             </tr>
         {% endfor %}

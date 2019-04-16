@@ -7,6 +7,7 @@
     <div class="container-fluid" style="padding-left: 1px;">
         {% include 'dbms/agree/scan/agree-summry.html' %}
         {% include 'dbms/agree/scan/agree-tab.html' %}
+        {% include 'dbms/agree/modl/agree-edit-mod.html' %}
         {% include 'dbms/agree/modl/counter-add-mod.html' %}
         {% include 'dbms/agree/modl/counter-del-mod.html' %}
         {% include 'dbms/agree/modl/agree-sign-mod.html' %}
@@ -14,6 +15,7 @@
 {% endblock %}
 
 {% block extra-js %}
+    {% include 'dbms/agree/extra/js-agree-edit.html' %}
     {% include 'dbms/agree/extra/js-counter-add.html' %}
     {% include 'dbms/agree/extra/js-counter-del.html' %}
     {% include 'dbms/agree/extra/js-agree-sign.html' %}

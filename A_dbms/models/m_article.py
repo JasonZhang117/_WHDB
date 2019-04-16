@@ -54,6 +54,7 @@ class Articles(models.Model):  # 项目、纪要
     class Meta:
         verbose_name_plural = '项目'  # 指定显示名称
         db_table = 'dbms_articles'  # 指定数据表的名称
+        ordering = ['-build_date', '-id']
 
     def __str__(self):
         return '%s' % (self.article_num)

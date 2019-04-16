@@ -43,6 +43,14 @@
             {% include 'dbms/warrant/scan/warrant-summry-receiveable.html' %}
         {% elif  warrant_typ == 21 %}
             {% include 'dbms/warrant/scan/warrant-summry-stock.html' %}
+        {% elif  warrant_typ == 31 %}
+            {% include 'dbms/warrant/scan/warrant-summry-draft.html' %}
+        {% elif  warrant_typ == 41 %}
+            {% include 'dbms/warrant/scan/warrant-summry-vehicle.html' %}
+        {% elif  warrant_typ == 51 %}
+            {% include 'dbms/warrant/scan/warrant-summry-chattel.html' %}
+        {% elif  warrant_typ == 55 %}
+            {% include 'dbms/warrant/scan/warrant-summry-other.html' %}
         {% elif  warrant_typ == 99 %}
             {% include 'dbms/warrant/scan/warrant-summry-hypothec.html' %}
         {% else %}

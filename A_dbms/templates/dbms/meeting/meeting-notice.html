@@ -4,10 +4,11 @@
 {% block extra-css %}
     <style>
         body {
-            width: 210mm;
+            width: 297mm;
             margin-left: auto;
             margin-right: auto;
         }
+
         .headline {
             text-align: center
         }
@@ -21,7 +22,7 @@
         }
 
         .amount {
-            width: 10%
+            width: 10%;
         }
 
         .directior {
@@ -34,11 +35,23 @@
 
         thead {
             border: 1px solid black;
-        }
-
-        thead {
             text-align: center;
         }
+
+        tr {
+            border: 1px solid black;
+            height: 31pt;
+        }
+
+        th {
+            border: 1px solid black;
+
+        }
+
+        td {
+            border: 1px solid black;
+        }
+
     </style>
 {% endblock %}
 
@@ -65,7 +78,7 @@
                     {% for article in meeting_obj.article.all %}
                         <tr>
                             <td class="custom">{{ article.custom }}</td>
-                            <td class="amount">{{ article.amount }}</td>
+                            <td class="amount" align="right">{{ article.amount }}</td>
                             <td class="directior">{{ article.director.name }}</td>
                             <td class="expert">
                                 {% for expert in article.expert.all %}

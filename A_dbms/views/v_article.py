@@ -45,8 +45,7 @@ def article(request, *args, **kwargs):  # 项目列表
     article_state_list_dic = list(map(lambda x: {'id': x[0], 'name': x[1]}, article_state_list))
     # 列表或元组转换为字典并添加key[{'id': 1, 'name': '待反馈'}, {'id': 2, 'name': '已反馈'}]
     '''筛选'''
-    article_list = models.Articles.objects.filter(**kwargs).select_related(
-        'custom', 'director', 'assistant', 'control').order_by('-build_date')
+    article_list = models.Articles.objects.filter(**kwargs).select_related('custom', 'director', 'assistant', 'control')
     if '项目经理' in job_list:
         article_list = article_list.filter(Q(director=request.user) | Q(assistant=request.user))
     '''搜索'''

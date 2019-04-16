@@ -43,7 +43,7 @@ class HouseAddEidtForm(dform.ModelForm):
         fields = ['house_app', 'house_area', 'house_name']
         widgets = {'house_app': dform.Select(attrs={'class': 'form-control'}),
                    'house_area': dform.NumberInput(attrs={'class': 'form-control'}),
-                   'house_name': dform.TextInput(attrs={'class': 'form-control', 'placeholder': '楼盘名称'})}
+                   'house_name': dform.TextInput(attrs={'class': 'form-control', 'placeholder': '楼盘名称等'})}
 
 
 # -----------------------房产包modelform2-------------------------#
@@ -193,12 +193,13 @@ class FormVehicle(dform.ModelForm):  # 车辆FormVehicle41
 
 
 # ------------------------车辆FormVehicleEdit41--------------------------#
-class FormVehicleEdit(dform.ModelForm):  # 车辆FormVehicle41
-    class Meta:
-        model = models.Vehicle
-        fields = ['frame_num', 'plate_num']
-        widgets = {'frame_num': dform.TextInput(attrs={'class': 'form-control', 'placeholder': '车架号'}),
-                   'plate_num': dform.TextInput(attrs={'class': 'form-control', 'placeholder': '车牌号'})}
+class FormVehicleEdit(dform.Form):  # 车辆FormVehicle41
+    frame_num = fields.CharField(
+        label='车架号', label_suffix="：",
+        widget=widgets.TextInput(attrs={'class': 'form-control', 'placeholder': '车架号'}))
+    plate_num = fields.CharField(
+        label='车牌号', label_suffix="：",
+        widget=widgets.TextInput(attrs={'class': 'form-control', 'placeholder': '车牌号'}))
 
 
 # ------------------------动产FormChattel51--------------------------#

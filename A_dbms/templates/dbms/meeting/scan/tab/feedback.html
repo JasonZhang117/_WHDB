@@ -1,0 +1,30 @@
+<div class="table-responsive">
+    <table class="table table-bordered table-hover table-condensed active">
+        <thead>
+        <tr style="text-align: center">
+            <th>客户名称</th>
+            <th>申请金额</th>
+            <th>上会建议</th>
+            <th>风险分析</th>
+            <th>风控建议</th>
+            <th>反馈日期</th>
+            <th>反馈人</th>
+        </tr>
+        </thead>
+        <tbody id="feedback-article-tb">
+        {% for article in meeting_obj.article.all %}
+            <tr article-nid="{{ article.id }}">
+                <td>{{ article.custom.short_name }}</td>
+                <td align="right">{{ article.amount }}</td>
+                {% for feedback in article.feedback_article.all %}
+                    <td>{{ feedback.get_propose_display }}</td>
+                    <td>{{ feedback.analysis }}</td>
+                    <td>{{ feedback.suggestion }}</td>
+                    <td>{{ feedback.feedback_date }}</td>
+                    <td>{{ feedback.feedback_buildor }}</td>
+                {% endfor %}
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>

@@ -119,6 +119,16 @@ def agree_scan(request, agree_id):  # 查看合同
 
     form_agree_sign_data = {'agree_sign_date': str(datetime.date.today())}
     form_agree_sign = forms.FormAgreeSign(initial=form_agree_sign_data)
+    form_agree_edit_date = {
+        'branch': agree_obj.branch,
+        'agree_typ': agree_obj.agree_typ,
+        'agree_amount': agree_obj.agree_amount,
+        'amount_limit': agree_obj.amount_limit,
+        'agree_term': agree_obj.agree_term,
+        'guarantee_typ': agree_obj.guarantee_typ,
+        'agree_copies': agree_obj.agree_copies}
+    form_agree_edit = forms.AgreeEditForm(initial=form_agree_edit_date)
+
     return render(request, 'dbms/agree/agree-scan.html', locals())
 
 

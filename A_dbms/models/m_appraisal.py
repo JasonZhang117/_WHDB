@@ -164,6 +164,7 @@ class LendingWarrants(models.Model):
     class Meta:
         verbose_name_plural = '反担保-抵质押'  # 指定显示名称
         db_table = 'dbms_lendingwarrant'  # 指定数据表的名称
+        ordering = ['lending_w_date', ]
 
     def __str__(self):
         return "%s_%s" % (self.sure, self.warrant)

@@ -1,0 +1,14 @@
+<div class="panel-body row">
+    <label class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
+        权证类型：{{ warrant_obj.get_warrant_typ_display }}
+    </label>
+    <label class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
+        所有权人：{{ warrant_obj.chattel_warrant.chattel_owner.short_name }}
+    </label>
+    <label class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
+        动产种类：{{ warrant_obj.chattel_warrant.get_chattel_typ_display }}
+    </label>
+    <label class="col-lg-3 col-md-4 col-sm-12 col-xs-12">
+        详情：{{ warrant_obj.chattel_warrant.chattel_detail }}
+    </label>
+</div>

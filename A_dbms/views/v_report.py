@@ -56,7 +56,7 @@ def report_provide_list(request, *args, **kwargs):  #
     return render(request, 'dbms/report/provide_list.html', locals())
 
 
-# -----------------------在保列表---------------------#
+# -----------------------在保分类---------------------#
 @login_required
 @authority
 def report_balance_class(request, *args, **kwargs):  #
@@ -67,7 +67,7 @@ def report_balance_class(request, *args, **kwargs):  #
     PAGE_TITLE = '在保分类'
     print('kwargs:', kwargs, kwargs['class_typ'], type(kwargs['class_typ']))
     CLASS_LIST = [(1, '按品种'), (11, '按银行'), (21, '按区域'), (31, '按行业'), (35, '按项部门'),
-                  (41, '按项目经理'),(51, '按项目助理'), (61, '按风控专员'), (71, '按支行'), ]
+                  (41, '按项目经理'), (51, '按项目助理'), (61, '按风控专员'), (71, '按支行'), ]
     provide_typ_list = models.Provides.PROVIDE_TYP_LIST  # 筛选条件
     provide_typ_dic = {}
     for provide_typ in provide_typ_list:
@@ -112,4 +112,56 @@ def report_balance_class(request, *args, **kwargs):  #
         con=Count('provide_balance'), sum=Sum('provide_balance')).values(
         'notify__agree__lending__summary__director__department__name', 'con', 'sum').order_by('-sum')
 
-    return render(request, 'dbms/report/balance_class.html', locals())
+    return render(request, 'dbms/report/balance-class-provide.html', locals())
+
+
+# -----------------------在保分类---------------------#
+@login_required
+@authority
+def report_article_class(request, *args, **kwargs):  #
+    print(request.path, '>', resolve(request.path).url_name, '>', request.user)
+    current_url_name = resolve(request.path).url_name  # 获取当前URL_NAME
+    authority_list = request.session.get('authority_list')  # 获取当前用户的所有权限
+    menu_result = MenuHelper(request).menu_data_list()
+    PAGE_TITLE = '在保分类'
+    CLASS_LIST = [(11, '按银行'), (21, '按区域'), (31, '按行业'), (35, '按项部门'),
+                  (41, '按项目经理'), (51, '按项目助理'), (61, '按风控专员'), (71, '按支行'), ]
+
+    article_groups = models.Articles.objects.filter(article_balance__gt=0)
+    provide_balance = article_groups.aggregate(Sum('article_balance'))['article_balance__sum']  # 在保余额
+    provide_count = article_groups.aggregate(Count('article_provide_sum'))['article_provide_sum__count']  # 在保项目数
+
+    article_groups_director = article_groups.values(
+        'director__name').annotate(
+        con=Count('article_balance'), sum=Sum('article_balance')).values(
+        'director__name', 'con', 'sum').order_by('-sum')
+    article_groups_assistant = article_groups.values(
+        'assistant__name').annotate(
+        con=Count('article_balance'), sum=Sum('article_balance')).values(
+        'assistant__name', 'con', 'sum').order_by('-sum')
+    article_groups_control = article_groups.values(
+        'control__name').annotate(
+        con=Count('article_balance'), sum=Sum('article_balance')).values(
+        'control__name', 'con', 'sum').order_by('-sum')
+    article_groups_idustry = article_groups.values(
+        'custom__company_custome__idustry__name').annotate(
+        con=Count('article_balance'), sum=Sum('article_balance')).values(
+        'custom__company_custome__idustry__name', 'con', 'sum').order_by('-sum')
+    article_groups_district = article_groups.values(
+        'custom__company_custome__district__name').annotate(
+        con=Count('article_balance'), sum=Sum('article_balance')).values(
+        'custom__company_custome__district__name', 'con', 'sum').order_by('-sum')
+    article_groups_bank = article_groups.values(
+        'lending_summary__agree_lending__branch__cooperator__short_name').annotate(
+        con=Count('article_balance'), sum=Sum('article_balance')).values(
+        'lending_summary__agree_lending__branch__cooperator__short_name', 'con', 'sum').order_by('-sum')
+    article_groups_branch = article_groups.values(
+        'lending_summary__agree_lending__branch__short_name').annotate(
+        con=Count('article_balance'), sum=Sum('article_balance')).values(
+        'lending_summary__agree_lending__branch__short_name', 'con', 'sum').order_by('-sum')
+    article_groups_depart = article_groups.values(
+        'director__department__name').annotate(
+        con=Count('article_balance'), sum=Sum('article_balance')).values(
+        'director__department__name', 'con', 'sum').order_by('-sum')
+
+    return render(request, 'dbms/report/balance-class-article.html', locals())

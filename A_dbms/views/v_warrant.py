@@ -148,7 +148,8 @@ def warrant_scan(request, warrant_id):  # house_scan房产预览
     storage_warrant_list = warrant_obj.storage_warrant.all()  # 出入库信息
     '''ARTICLE_STATE_LIST = ((1, '待反馈'), (2, '已反馈'), (3, '待上会'), (4, '已上会'), (5, '已签批'),
                           (51, '已放款'), (52, '已放完'), (55, '已解保'), (61, '待变更'), (99, '已注销'))'''
-    in_article_list = warrant_obj.lending_warrant.all().filter(sure__lending__summary__article_state__in=[4, 5, 51, 52])
+    in_article_list = warrant_obj.lending_warrant.all().filter(
+        sure__lending__summary__article_state__in=[1, 2, 3, 4, 5, 51, 52, 61])
 
     return render(request, 'dbms/warrant/warrant-scan.html', locals())
 
@@ -431,3 +432,110 @@ def overdue_draft(request, *args, **kwargs):  #
         p_list = paginator.page(paginator.num_pages)
 
     return render(request, 'dbms/warrant/overdu-draft.html', locals())
+
+
+# -----------------------评估跟踪列表-------------------------#
+@login_required
+@authority
+def overdue_evaluate(request, *args, **kwargs):  #
+    print(request.path, '>', resolve(request.path).url_name, '>', request.user)
+    current_url_name = resolve(request.path).url_name  # 获取当前URL_NAME
+    authority_list = request.session.get('authority_list')  # 获取当前用户的所有权限
+    menu_result = MenuHelper(request).menu_data_list()
+    PAGE_TITLE = '评估跟踪'
+    warrant_typ_n = 0
+    '''WARRANT_STATE_LIST = (
+        (1, '未入库'), (2, '已入库'), (6, '无需入库'), (11, '续抵出库'), (21, '已借出'), (31, '解保出库'),
+        (99, '已注销'))'''
+    ''' WARRANT_TYP_LIST = [
+        (1, '房产'), (2, '房产包'), (5, '土地使用权'), (6, '在建工程'), (11, '应收账款'),
+        (21, '股权'), (31, '票据'), (41, '车辆'), (51, '动产'), (55, '其他'), (99, '他权')]'''
+
+    EVALUATE_STATE_LIST = models.Warrants.EVALUATE_STATE_LIST  # 筛选条件
+    '''筛选'''
+    warrant_list = models.Warrants.objects.filter(**kwargs).exclude(
+        evaluate_state__in=[41, 99]).order_by('evaluate_date')
+    '''EVALUATE_STATE_LIST = [(0, '待评估'), (5, '机构评估'), (11, '机构预估'), (21, '综合询价'), (31, '购买成本'),
+                               (41, '拍卖评估'), (99, '无需评估')]'''
+    '''ARTICLE_STATE_LIST = [(1, '待反馈'), (2, '已反馈'), (3, '待上会'), (4, '已上会'), (5, '已签批'),
+                          (51, '已放款'), (52, '已放完'), (55, '已解保'), (61, '待变更'), (99, '已注销')]'''
+    warrant_list = warrant_list.filter(
+        lending_warrant__sure__lending__summary__article_state__in=[4, 5, 51, 52, 61]).distinct()
+    ddd = []
+    for warrant in warrant_list:
+        if warrant.evaluate_state == 0:
+            ddd.append(warrant.id)
+        else:
+            cccc = warrant.meeting_date - warrant.evaluate_date
+            if cccc.days > 365:
+                ddd.append(warrant.id)
+    warrant_list = models.Warrants.objects.filter(id__in=ddd)
+
+    '''搜索'''
+    search_key = request.GET.get('_s')
+    if search_key:
+        search_fields = ['warrant_num']
+        q = Q()
+        q.connector = 'OR'
+        for field in search_fields:
+            q.children.append(("%s__contains" % field, search_key))
+        warrant_list = warrant_list.filter(q)
+    warrant_acount = warrant_list.count()
+    '''分页'''
+    paginator = Paginator(warrant_list, 119)
+    page = request.GET.get('page')
+    try:
+        p_list = paginator.page(page)
+    except PageNotAnInteger:
+        p_list = paginator.page(1)
+    except EmptyPage:
+        p_list = paginator.page(paginator.num_pages)
+
+    return render(request, 'dbms/warrant/overdu-evaluate.html', locals())
+
+
+# -----------------------未入库列表-------------------------#
+@login_required
+@authority
+def overdue_storage(request, *args, **kwargs):  #
+    print(request.path, '>', resolve(request.path).url_name, '>', request.user)
+    current_url_name = resolve(request.path).url_name  # 获取当前URL_NAME
+    authority_list = request.session.get('authority_list')  # 获取当前用户的所有权限
+    menu_result = MenuHelper(request).menu_data_list()
+    PAGE_TITLE = '入库跟踪'
+    warrant_typ_n = 0
+    '''WARRANT_STATE_LIST = [
+        (1, '未入库'), (2, '已入库'), (6, '无需入库'), (11, '续抵出库'), (21, '已借出'), (31, '解保出库'),
+        (99, '已注销')]'''
+    ''' WARRANT_TYP_LIST = [
+        (1, '房产'), (2, '房产包'), (5, '土地使用权'), (6, '在建工程'), (11, '应收账款'),
+        (21, '股权'), (31, '票据'), (41, '车辆'), (51, '动产'), (55, '其他'), (99, '他权')]'''
+    '''STORAGE_TYP_LIST = [(1, '入库'), (2, '续抵出库'), (6, '无需入库'), (11, '借出'), (12, '归还'), (31, '解保出库')]'''
+    WARRANT_STATE_LIST = models.Warrants.WARRANT_STATE_LIST  # 筛选条件
+    '''筛选'''
+    warrant_list = models.Warrants.objects.filter(**kwargs).filter(warrant_state__in=[1, 11, 21])
+    '''ARTICLE_STATE_LIST = [(1, '待反馈'), (2, '已反馈'), (3, '待上会'), (4, '已上会'), (5, '已签批'),
+                              (51, '已放款'), (52, '已放完'), (55, '已解保'), (61, '待变更'), (99, '已注销')]'''
+    warrant_list = warrant_list.filter(
+        lending_warrant__sure__lending__summary__article_state__in=[51, 52, 61]).distinct()
+    '''搜索'''
+    search_key = request.GET.get('_s')
+    if search_key:
+        search_fields = ['warrant_num']
+        q = Q()
+        q.connector = 'OR'
+        for field in search_fields:
+            q.children.append(("%s__contains" % field, search_key))
+        warrant_list = warrant_list.filter(q)
+    warrant_acount = warrant_list.count()
+    '''分页'''
+    paginator = Paginator(warrant_list, 119)
+    page = request.GET.get('page')
+    try:
+        p_list = paginator.page(page)
+    except PageNotAnInteger:
+        p_list = paginator.page(1)
+    except EmptyPage:
+        p_list = paginator.page(paginator.num_pages)
+
+    return render(request, 'dbms/warrant/overdu-storage.html', locals())

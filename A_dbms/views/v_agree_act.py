@@ -13,6 +13,7 @@ from _WHDB.views import authority
 
 # ---------------------------合同签批ajax----------------------------#
 @login_required
+@authority
 def agree_sign_ajax(request):  # 添加合同
     print(request.path, '>', resolve(request.path).url_name, '>', request.user)
     response = {'status': True, 'message': None, 'forme': None, 'skip': None, }
@@ -48,6 +49,7 @@ def agree_sign_ajax(request):  # 添加合同
 
 # ---------------------------添加合同ajax----------------------------#
 @login_required
+@authority
 def agree_add_ajax(request):  # 添加合同
     print(request.path, '>', resolve(request.path).url_name, '>', request.user)
     response = {'status': True, 'message': None, 'forme': None, 'skip': None, }
@@ -65,7 +67,7 @@ def agree_add_ajax(request):  # 添加合同
         if form_agree_add.is_valid():
             agree_add_cleaned = form_agree_add.cleaned_data
             # lending_obj = agree_add_cleaned['lending']
-            agree_amount = agree_add_cleaned['agree_amount']
+            agree_amount = round(agree_add_cleaned['agree_amount'], 2)
             guarantee_typ = agree_add_cleaned['guarantee_typ']
             agree_copies = agree_add_cleaned['agree_copies']
             branch_id = agree_add_cleaned['branch']
@@ -73,9 +75,9 @@ def agree_add_ajax(request):  # 添加合同
             branche_obj = models.Branches.objects.get(id=branch_id)
             cooperator_up_scale = branche_obj.cooperator.up_scale
             '''AGREE_TYP_LIST = ((1, '单笔'), (2, '最高额'), (3, '保函'))'''
-            order_amount = lending_obj.order_amount  # 放款次序金额
+            order_amount = round(lending_obj.order_amount, 2)  # 放款次序金额
             if agree_typ == 2:  # (2, '最高额')
-                order_amount_up = order_amount * (1 + cooperator_up_scale)  # 最高允许的合同金额
+                order_amount_up = round(order_amount * (1 + cooperator_up_scale), 2)  # 最高允许的合同金额
             else:
                 order_amount_up = order_amount
             amount_limit = agree_add_cleaned['amount_limit']
@@ -147,8 +149,142 @@ def agree_add_ajax(request):  # 添加合同
     return HttpResponse(result)
 
 
+# ---------------------------修改合同ajax----------------------------#
+@login_required
+@authority
+def agree_edit_ajax(request):  #
+    print(request.path, '>', resolve(request.path).url_name, '>', request.user)
+    response = {'status': True, 'message': None, 'forme': None, 'skip': None, }
+    post_data_str = request.POST.get('postDataStr')
+    post_data = json.loads(post_data_str)
+    print('post_data:', post_data)
+    agree_list = models.Agrees.objects.filter(id=post_data['agree_id'])
+    agree_obj = agree_list.first()
+    agree_state = agree_obj.agree_state
+    lending_obj = agree_obj.lending
+    '''AGREE_STATE_LIST = [(11, '待签批'), (21, '已签批'), (31, '未落实'),
+                        (41, '已落实'), (51, '待变更'), (61, '已解保'), (99, '已注销')]'''
+    if agree_state in [11, 51]:
+        # form_agree_add = forms.AgreeAddForm(post_data, request.FILES)
+        form_agree_add = forms.ArticleAgreeAddForm(post_data, request.FILES)
+        if form_agree_add.is_valid():
+            agree_add_cleaned = form_agree_add.cleaned_data
+            # lending_obj = agree_add_cleaned['lending']
+            agree_amount = round(agree_add_cleaned['agree_amount'], 2)
+            guarantee_typ = agree_add_cleaned['guarantee_typ']
+            agree_copies = agree_add_cleaned['agree_copies']
+            branch_id = agree_add_cleaned['branch']
+            agree_typ = agree_add_cleaned['agree_typ']
+            branche_obj = models.Branches.objects.get(id=branch_id)
+            cooperator_up_scale = branche_obj.cooperator.up_scale
+            '''AGREE_TYP_LIST = ((1, '单笔'), (2, '最高额'), (3, '保函'))'''
+            order_amount = round(lending_obj.order_amount, 2)  # 放款次序金额
+            if agree_typ == 2:  # (2, '最高额')
+                order_amount_up = round(order_amount * (1 + cooperator_up_scale), 2)  # 最高允许的合同金额
+            else:
+                order_amount_up = order_amount
+            amount_limit = agree_add_cleaned['amount_limit']
+            ###判断合同金额情况：
+            if agree_amount > order_amount_up:
+                response['status'] = False
+                response['message'] = '合同金额（%s）超过审批额度（%s）！' % (agree_amount, order_amount)
+                result = json.dumps(response, ensure_ascii=False)
+                return HttpResponse(result)
+            elif amount_limit > order_amount:
+                response['status'] = False
+                response['message'] = '放款限额（%s）超过审批额度（%s）！' % (amount_limit, order_amount,)
+                result = json.dumps(response, ensure_ascii=False)
+                return HttpResponse(result)
+
+            '''AGREE_TYP_LIST = [(1, '单笔'), (2, '最高额'), (3, '保函'), (7, '小贷'),
+                                 (41, '单笔(公证)'), (42, '最高额(公证)'), (47, '小贷(公证)')]'''
+            '''AGREE_NAME_LIST = [(1, '委托保证合同'), (11, '最高额委托保证合同'),
+                       (21, '委托出具分离式保函合同'), (31, '借款合同')]'''
+            agree_name = ''
+            if agree_typ in [1, 41]:
+                agree_name = 1
+            elif agree_typ in [2, 42]:
+                agree_name = 11
+            elif agree_typ == 3:
+                agree_name = 21
+            elif agree_typ in [7, 47]:
+                agree_name = 31
+            try:
+                with transaction.atomic():
+                    agree_list.update(
+                        agree_name=agree_name, branch_id=branch_id, agree_typ=agree_typ,
+                        agree_term=agree_add_cleaned['agree_term'],
+                        amount_limit=amount_limit,
+                        agree_amount=agree_amount, guarantee_typ=guarantee_typ, agree_copies=agree_copies,
+                        agree_buildor=request.user)
+                    for counter in agree_obj.counter_agree.all():
+                        counter_typ = counter.counter_typ
+                        counter_name = ''
+                        if agree_typ in [1, 41]:
+                            if counter_typ == 1:
+                                counter_name = 1
+                            elif counter_typ == 2:
+                                counter_name = 2
+                            elif counter_typ in [11, 12, 13, 14, 15]:
+                                counter_name = 3
+                            elif counter_typ == 31:
+                                counter_name = 4
+                            elif counter_typ == 32:
+                                counter_name = 5
+                            elif counter_typ in [33, 34, 39, 41]:
+                                counter_name = 6
+                            elif counter_typ in [51, 52, 53]:
+                                counter_name = 9
+                        elif agree_typ in [2, 42]:
+                            if counter_typ == 1:
+                                counter_name = 21
+                            elif counter_typ == 2:
+                                counter_name = 2
+                            elif counter_typ in [11, 12, 13, 14, 15]:
+                                counter_name = 23
+                            elif counter_typ == 31:
+                                counter_name = 24
+                            elif counter_typ == 32:
+                                counter_name = 25
+                            elif counter_typ in [33, 34, 39, 41]:
+                                counter_name = 26
+                            elif counter_typ in [51, 52, 53]:
+                                counter_name = 9
+                        elif agree_typ in [7, 47]:
+                            if counter_typ == 1:
+                                counter_name = 41
+                            elif counter_typ == 2:
+                                counter_name = 2
+                            elif counter_typ in [11, 12, 13, 14, 15]:
+                                counter_name = 43
+                            elif counter_typ == 31:
+                                counter_name = 44
+                            elif counter_typ == 32:
+                                counter_name = 45
+                            elif counter_typ in [33, 34, 39, 41]:
+                                counter_name = 46
+                            elif counter_typ in [51, 52, 53]:
+                                counter_name = 9
+                        models.Counters.objects.filter(id=counter.id).update(counter_name=counter_name)
+                response['skip'] = "/dbms/agree/scan/%s" % agree_obj.id
+                response['message'] = '成功修改合同：%s！' % agree_obj.agree_num
+            except Exception as e:
+                response['status'] = False
+                response['message'] = '委托合同修改失败：%s' % str(e)
+        else:
+            response['status'] = False
+            response['message'] = '表单信息有误！！！'
+            response['forme'] = form_agree_add.errors
+    else:
+        response['status'] = False
+        response['message'] = '合同状态为：%s，合同修改失败！！！' % agree_state
+    result = json.dumps(response, ensure_ascii=False)
+    return HttpResponse(result)
+
+
 # -------------------------添加反担保合同ajax-------------------------#
 @login_required
+@authority
 def counter_add_ajax(request):
     print(request.path, '>', resolve(request.path).url_name, '>', request.user)
     response = {'status': True, 'message': None, 'forme': None, }
@@ -176,7 +312,7 @@ def counter_add_ajax(request):
         (31, '应收质押'), (32, '股权质押'), (33, '票据质押'), (34, '动产质押'),
         (41, '其他权利质押'),
         (51, '股权预售'), (52, '房产预售'), (53, '土地预售')]'''
-    agree_type = agree_obj.agree_typ
+    agree_typ = agree_obj.agree_typ
     '''COUNTER_NAME_LIST = [(1, '保证反担保合同'), (2, '不可撤销的反担保函'),
                          (3, '抵押反担保合同'), (4, '应收账款质押反担保合同'),
                          (5, '股权质押反担保合同'), (6, '质押反担保合同'), (9, '预售合同'),
@@ -187,7 +323,7 @@ def counter_add_ajax(request):
                          (43, '抵押合同'), (44, '应收账款质押合同'),
                          (45, '股权质押合同'), (46, '质押合同')]'''
     counter_name = ''
-    if agree_type in [1, 41]:
+    if agree_typ in [1, 41]:
         if counter_typ == 1:
             counter_name = 1
         elif counter_typ == 2:
@@ -202,7 +338,7 @@ def counter_add_ajax(request):
             counter_name = 6
         elif counter_typ in [51, 52, 53]:
             counter_name = 9
-    elif agree_type in [2, 42]:
+    elif agree_typ in [2, 42]:
         if counter_typ == 1:
             counter_name = 21
         elif counter_typ == 2:
@@ -217,7 +353,7 @@ def counter_add_ajax(request):
             counter_name = 26
         elif counter_typ in [51, 52, 53]:
             counter_name = 9
-    elif agree_type in [7, 47]:
+    elif agree_typ in [7, 47]:
         if counter_typ == 1:
             counter_name = 41
         elif counter_typ == 2:
@@ -335,6 +471,7 @@ def counter_add_ajax(request):
 
 # -----------------------删除反担保合同ajax-------------------------#
 @login_required
+@authority
 def counter_del_ajax(request):  # 删除反担保合同ajax
     print(request.path, '>', resolve(request.path).url_name, '>', request.user)
     response = {'status': True, 'message': None, 'forme': None, }

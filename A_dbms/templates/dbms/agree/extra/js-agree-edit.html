@@ -1,0 +1,54 @@
+<script>
+    $(function () {
+        bindEditAgreeB();
+        bindAddAgreeModalOk();
+    });
+
+    function bindEditAgreeB() {
+        $('#editAgreeB').click(function () {
+            console.log("bindAddAgree");
+            $('#editAgreeModal').modal('show');
+        })
+    }
+
+    function bindAddAgreeModalOk() {
+        $('#editAgreeModalOk').click(function () {
+            var postData = {};
+            $('#editAgreeModal').find('input,select').each(function () {
+                var v = $(this).val();
+                var n = $(this).attr('name');
+                postData[n] = v;
+            });
+            var postDataStr = JSON.stringify(postData);
+
+            console.log(postDataStr);
+
+            $.ajax({
+                url: '/dbms/agree/edit/',
+                type: 'POST',
+                traditional: true,
+                data: {'postDataStr': postDataStr},
+                dataType: 'JSON',
+                success: function (arg) {
+                    console.log(arg);
+                    if (arg.status) {
+                        $('#editAgreeModal').modal('hide');
+                        alert(arg.message);
+                        {#window.location.href = arg.skip;#}
+                        window.location.reload();
+                    } else {
+                        alert(arg.message);
+                        $('#e_agree_amount').text(arg.forme.agree_amount);
+                        $('#e_amount_limit').text(arg.forme.amount_limit);
+                    }
+                }
+            })
+        })
+    }
+</script>
+
+
+
+
+
+

@@ -1,0 +1,28 @@
+
+
+
+<div>
+    <label>
+        {% if kwargs.warrant_state == None %}
+            <a class="btn btn-primary btn-sm active" href="{% url 'dbms:warrant_overdue_storage_all' %}">全部</a>
+        {% else %}
+            <a class="btn btn-primary btn-sm" href="{% url 'dbms:warrant_overdue_storage_all' %}">全部</a>
+        {% endif %}
+        {# 方式一：#}
+        {% for item in WARRANT_STATE_LIST %}
+            {% if item.0 == kwargs.warrant_state %}
+                <a class="btn btn-primary btn-sm active"
+                   href="{% url 'dbms:warrant_overdue_storage' warrant_state=item.0 %}">{{ item.1 }}</a>
+            {% else %}
+                <a class="btn btn-primary btn-sm"
+                   href="{% url 'dbms:warrant_overdue_storage' warrant_state=item.0 %}">{{ item.1 }}</a>
+            {% endif %}
+        {% endfor %}
+    </label>
+    <label>
+        <form class="navbar-form" style="display: inline">
+            <input type="search" name="_s" class="form-control" placeholder="搜索权证编码">
+            <button type="submit" class="btn btn-primary btn-sm">搜索</button>
+        </form>
+    </label>
+</div>

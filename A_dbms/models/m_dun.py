@@ -235,8 +235,8 @@ class Seal(models.Model):
     warrant = models.ForeignKey(to='Warrants', verbose_name="财产",
                                 on_delete=models.PROTECT,
                                 related_name='seal_warrant')
-    SEAL_STATE_LIST = ((1, '查询跟踪'), (3, '诉前保全'), (5, '首次首封'), (11, '首次轮封'), (21, '续查封'),
-                       (51, '解除查封'), (99, '注销'))
+    SEAL_STATE_LIST = [(1, '查询跟踪'), (3, '诉前保全'), (5, '首次首封'), (11, '首次轮封'), (21, '续查封'),
+                       (51, '解除查封'), (99, '注销')]
     seal_state = models.IntegerField(verbose_name='查封状态', choices=SEAL_STATE_LIST, default=1)
     seal_date = models.DateField(verbose_name='_最近查封日', blank=True, null=True)
     due_date = models.DateField(verbose_name='_查封到期日', blank=True, null=True)
@@ -252,6 +252,7 @@ class Seal(models.Model):
         verbose_name_plural = '追偿-查封现状'  # 指定显示名称
         db_table = 'dbms_seal'  # 指定数据表的名称
         unique_together = ('dun', 'warrant')
+        ordering = ['-seal_date']
 
     def __str__(self):
         return "%s_%s_%s" % (self.dun.title, self.warrant.warrant_num, self.seal_state)
@@ -261,8 +262,7 @@ class Seal(models.Model):
 class Sealup(models.Model):
     seal = models.ForeignKey(to='Seal', verbose_name="财产线索", on_delete=models.PROTECT,
                              related_name='sealup_seal')
-    SEALUP_TYPE_LIST = ((1, '诉前保全'), (5, '首次首封'), (11, '首次轮封'), (21, '续查封'),
-                        (51, '解除查封'), (99, '注销'))
+    SEALUP_TYPE_LIST = Seal.SEAL_STATE_LIST
     sealup_type = models.IntegerField(verbose_name='查封类型', choices=SEALUP_TYPE_LIST, default=1)
     sealup_date = models.DateField(verbose_name='查封日期', blank=True, null=True)
     due_date = models.DateField(verbose_name='到期日', blank=True, null=True)

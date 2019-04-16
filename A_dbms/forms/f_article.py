@@ -82,5 +82,4 @@ class ArticleAgreeAddForm(dform.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super(ArticleAgreeAddForm, self).__init__(*args, **kwargs)
-        self.fields['branch'].choices = models.Branches.objects.filter(branch_state=1).values_list(
-            'id', 'name').order_by('name')
+        self.fields['branch'].choices = models.Branches.objects.filter(branch_state=1).values_list('id', 'name')

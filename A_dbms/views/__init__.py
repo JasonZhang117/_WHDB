@@ -18,12 +18,12 @@ from .v_appraisal_act import (
     article_sign_ajax, guarantee_add_ajax, guarantee_del_ajax, single_del_ajax, comment_edit_ajax,
     single_quota_ajax, lending_change_ajax, lending_del_ajax, lending_order_ajax, article_change_ajax)
 # ----------------------v_agree合同管理视图--------------------#
-from .v_agree import (agree, agree_scan, agree_preview, counter_preview, agree_sign_preview)
-from .v_agree_act import (agree_add_ajax, counter_add_ajax, agree_sign_ajax, counter_del_ajax)
+from .v_agree import (agree, agree_scan, agree_preview, counter_preview, agree_sign_preview, )
+from .v_agree_act import (agree_add_ajax, counter_add_ajax, agree_sign_ajax, counter_del_ajax, agree_edit_ajax)
 # ----------------------v_warrant权证管理视图--------------------#
 from .v_warrant import (
     warrant, warrant_scan, warrant_agree, warrant_agree_scan, warrant_agree_warrant, house, ground,
-    soondue_draft, overdue_draft)
+    soondue_draft, overdue_draft, overdue_evaluate, overdue_storage)
 from .v_warrant_act import (
     warrant_add_ajax, warrant_del_ajax, warrant_edit_ajax, owership_add_ajax, owership_del_ajax,
     guaranty_add_ajax, guaranty_del_ajax, storages_add_ajax, housebag_add_ajax, draftextend_add_ajax,
@@ -32,7 +32,7 @@ from .v_warrant_act import (
 # ----------------------v_provide放款管理视图--------------------#
 from .v_provide import (
     provide_agree, provide_agree_scan, provide_agree_notify, provide, provide_scan, overdue, soondue, notify,
-    notify_scan)
+    notify_scan,provide_follow)
 from .v_provide_act import (
     counter_sign_ajax, ascertain_add_ajax, notify_add_ajax, notify_del_ajax, provide_add_ajax,
     provide_del_ajax, repayment_add_ajax, repayment_del_ajax)
@@ -59,7 +59,7 @@ from .v_custom_act import (custom_add_ajax, custom_del_ajax, custom_edit_ajax, s
 from .v_external import cooperative, cooperative_scan, soondue_cooperator, overdue_cooperator, branches
 from .v_external_act import agreement_add_ajax
 # ----------------------v_report报表管理视图--------------------#
-from .v_report import report, report_provide_list, report_balance_class
+from .v_report import report, report_provide_list, report_balance_class, report_article_class
 
 # 部门、员工
 from .v_interior import department, department_add, department_edit

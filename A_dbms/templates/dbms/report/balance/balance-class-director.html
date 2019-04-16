@@ -10,10 +10,10 @@
         </tr>
         </thead>
         <tbody>
-        {% for director in provide_groups_director %}
+        {% for director in article_groups_director %}
             <tr>
                 <td>{{ forloop.counter }}</td>
-                <td>{{ director.notify__agree__lending__summary__director__name }}</td>
+                <td>{{ director.director__name }}</td>
                 <td align="right">{{ director.con }}</td>
                 <td align="right">{{ director.sum|floatformat:2 }}</td>
             </tr>

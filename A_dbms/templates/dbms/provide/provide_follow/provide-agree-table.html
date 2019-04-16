@@ -1,0 +1,28 @@
+<div class="table-responsive">
+    <table class="table table-bordered table-hover table-condensed active">
+        <thead>
+        <tr style="text-align: center">
+            <th>合同编号({{ agree_amount }})</th>
+            <th>客户名称</th>
+            <th>放款银行</th>
+            <th>合同金额</th>
+            <th>落实情况</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for agree in p_list %}
+            <tr>
+                <td><a href="{% url 'dbms:provide_agree_scan' agree_id=agree.id %}">{{ agree.agree_num }}</a></td>
+                <td>{{ agree.lending.summary.custom.short_name }}</td>
+                <td>{{ agree.branch.short_name }}</td>
+                <td>{{ agree.agree_amount }}</td>
+                <td>{{ agree.agree_remark }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    {% include 'dbms/board/page.html' %}
+
+
+</div>

@@ -1,5 +1,7 @@
 <div>
-    <!-- Nav tabs -->
+    {#WARRANT_TYP_LIST = [#}
+    {#(1, '房产'), (2, '房产包'), (5, '土地'), (6, '在建工程'), (11, '应收账款'),#}
+    {#(21, '股权'), (31, '票据'), (41, '车辆'), (51, '动产'), (55, '其他'), (99, '他权')]#}
     <ul class="nav nav-tabs" role="tablist" style="background-color: #f5f5f5">
         {% if warrant_typ == 99 %} <!--他权-->
             <li role="presentation">
@@ -51,6 +53,21 @@
             <li role="presentation">
                 <a href="#mortgage" style="background-color: #f5f5f5"
                    aria-controls="settings" role="tab" data-toggle="tab">项目情况 </a></li>
+        {% elif warrant_typ == 41 %} <!-- (41, '车辆')-->
+            <li role="presentation" class="active">
+                <a href="#storages" style="background-color: #f5f5f5"
+                   aria-controls="profile" role="tab" data-toggle="tab">出入库 </a></li>
+            <li role="presentation">
+                <a href="#mortgage" style="background-color: #f5f5f5"
+                   aria-controls="settings" role="tab" data-toggle="tab">项目情况 </a></li>
+        {% elif warrant_typ == 51 %} <!-- (51, '动产')-->
+            <li role="presentation" class="active">
+                <a href="#mortgage" style="background-color: #f5f5f5"
+                   aria-controls="settings" role="tab" data-toggle="tab">项目情况 </a></li>
+        {% elif warrant_typ == 55 %} <!--(55, '其他')-->
+            <li role="presentation" class="active">
+                <a href="#mortgage" style="background-color: #f5f5f5"
+                   aria-controls="settings" role="tab" data-toggle="tab">项目情况 </a></li>
         {% endif %}
 
     </ul>
@@ -90,6 +107,17 @@
             <div role="tabpanel" class="tab-pane active" id="draftbag"> <!--票据包-->
                 {% include 'dbms/warrant/scan/warrant_tab/draftbag.html' %}</div>
             <div role="tabpanel" class="tab-pane" id="mortgage"> <!--项目情况-->
+                {% include 'dbms/warrant/scan/warrant_tab/mortgage.html' %}</div>
+        {% elif warrant_typ == 41 %} <!--(41, '车辆')-->
+            <div role="tabpanel" class="tab-pane active" id="storages"> <!--出入库-->
+                {% include 'dbms/warrant/scan/warrant_tab/storages.html' %}</div>
+            <div role="tabpanel" class="tab-pane" id="mortgage"> <!--项目情况-->
+                {% include 'dbms/warrant/scan/warrant_tab/mortgage.html' %}</div>
+        {% elif warrant_typ == 51 %} <!--(51, '动产')-->
+            <div role="tabpanel" class="tab-pane active" id="mortgage"> <!--项目情况-->
+                {% include 'dbms/warrant/scan/warrant_tab/mortgage.html' %}</div>
+        {% elif warrant_typ == 55 %} <!--(55, '其他')-->
+            <div role="tabpanel" class="tab-pane active" id="mortgage"> <!--项目情况-->
                 {% include 'dbms/warrant/scan/warrant_tab/mortgage.html' %}</div>
         {% endif %}
 

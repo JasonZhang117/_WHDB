@@ -1,0 +1,35 @@
+<div class="table-responsive">
+    <table class="table table-bordered table-hover table-condensed active">
+        <caption>成都武侯中小企业融资担保有限责任公司在保项目分类统计表（按品种）</caption>
+        <thead>
+        <tr style="text-align: center">
+            <th>序号</th>
+            <th>授信品种</th>
+            <th>项目笔数</th>
+            <th>担保余额</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for breed in provide_groups_breed %}
+            <tr>
+                <td>{{ forloop.counter }}</td>
+                {#            PROVIDE_TYP_LIST = ((1, '流贷'), (11, '承兑'), (21, '保函'), (31, '委贷'), (41, '小贷'))#}
+                {% if breed.provide_typ == 1 %}
+                    <td>{{ provide_typ_dic.1 }}</td>
+                {% elif breed.provide_typ == 11 %}
+                    <td>{{ provide_typ_dic.11 }}</td>
+                {% elif breed.provide_typ == 21 %}
+                    <td>{{ provide_typ_dic.21 }}</td>
+                {% elif breed.provide_typ == 31 %}
+                    <td>{{ provide_typ_dic.31 }}</td>
+                {% elif breed.provide_typ == 41 %}
+                    <td>{{ provide_typ_dic.41 }}</td>
+                {% endif %}
+                <td align="right">{{ breed.con }}</td>
+                <td align="right">{{ breed.sum|floatformat:2 }}</td>
+            </tr>
+        {% endfor %}
+        {% include 'dbms/report/balance/balance-class.html' %}
+        </tbody>
+    </table>
+</div>

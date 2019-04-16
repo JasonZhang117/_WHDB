@@ -100,7 +100,7 @@ def warrant_add_ajax(request):
                 try:
                     with transaction.atomic():
                         warrant_obj = models.Warrants.objects.create(
-                            warrant_num=warrant_add_clean['warrant_num'], warrant_state=6,
+                            warrant_num=warrant_add_clean['warrant_num'], warrant_state=6, evaluate_state=99,
                             warrant_typ=warrant_typ, warrant_buildor=request.user)
                         construct_obj = models.Construction.objects.create(
                             warrant=warrant_obj,
@@ -124,7 +124,7 @@ def warrant_add_ajax(request):
                 try:
                     with transaction.atomic():
                         warrant_obj = models.Warrants.objects.create(
-                            warrant_num=warrant_add_clean['warrant_num'], warrant_state=6,
+                            warrant_num=warrant_add_clean['warrant_num'], warrant_state=6, evaluate_state=99,
                             warrant_typ=warrant_typ, warrant_buildor=request.user)
                         receivable_obj = models.Receivable.objects.create(
                             warrant=warrant_obj, receivable_buildor=request.user,
@@ -147,7 +147,7 @@ def warrant_add_ajax(request):
                 try:
                     with transaction.atomic():
                         warrant_obj = models.Warrants.objects.create(
-                            warrant_num=warrant_add_clean['warrant_num'], warrant_state=6,
+                            warrant_num=warrant_add_clean['warrant_num'], warrant_state=6, evaluate_state=99,
                             warrant_typ=warrant_typ, warrant_buildor=request.user)
                         stock_obj = models.Stockes.objects.create(
                             warrant=warrant_obj, stock_buildor=request.user,
@@ -173,7 +173,7 @@ def warrant_add_ajax(request):
                 try:
                     with transaction.atomic():
                         warrant_obj = models.Warrants.objects.create(
-                            warrant_num=warrant_add_clean['warrant_num'],
+                            warrant_num=warrant_add_clean['warrant_num'], evaluate_state=99,
                             warrant_typ=warrant_typ, warrant_buildor=request.user)
                         draft_obj = models.Draft.objects.create(
                             warrant=warrant_obj, draft_buildor=request.user,
@@ -196,7 +196,7 @@ def warrant_add_ajax(request):
                 try:
                     with transaction.atomic():
                         warrant_obj = models.Warrants.objects.create(
-                            warrant_num=warrant_add_clean['warrant_num'],
+                            warrant_num=warrant_add_clean['warrant_num'], evaluate_state=99,
                             warrant_typ=warrant_typ, warrant_buildor=request.user)
                         vehicle_obj = models.Vehicle.objects.create(
                             warrant=warrant_obj, vehicle_buildor=request.user,
@@ -223,7 +223,7 @@ def warrant_add_ajax(request):
         (31, '解保出库'), (99, '已注销'))'''
                     with transaction.atomic():
                         warrant_obj = models.Warrants.objects.create(
-                            warrant_num=warrant_add_clean['warrant_num'], warrant_state=6,
+                            warrant_num=warrant_add_clean['warrant_num'], warrant_state=6, evaluate_state=99,
                             warrant_typ=warrant_typ, warrant_buildor=request.user)
                         chattel_obj = models.Chattel.objects.create(
                             warrant=warrant_obj, chattel_buildor=request.user,
@@ -250,7 +250,7 @@ def warrant_add_ajax(request):
         (99, '已注销'))'''
                     with transaction.atomic():
                         warrant_obj = models.Warrants.objects.create(
-                            warrant_num=warrant_add_clean['warrant_num'], warrant_state=6,
+                            warrant_num=warrant_add_clean['warrant_num'], warrant_state=6, evaluate_state=99,
                             warrant_typ=warrant_typ, warrant_buildor=request.user)
                         other_obj = models.Others.objects.create(
                             warrant=warrant_obj, otheror=request.user,
@@ -354,6 +354,7 @@ def warrant_edit_ajax(request):
                         models.Houses.objects.filter(warrant=warrant_obj).update(
                             house_locate=house_add_edit_clean['house_locate'],
                             house_app=house_add_edit_clean['house_app'],
+                            house_name=house_add_edit_clean['house_name'],
                             house_area=house_add_edit_clean['house_area'])
                     response['message'] = '房产修改成功！！！'
                 except Exception as e:
@@ -416,101 +417,104 @@ def warrant_edit_ajax(request):
                         response['message'] = '应收账款信息修改该成功！！！'
                 except Exception as e:
                     response['status'] = False
-                    response['message'] = '应收账款修改失败：%s' % str(e)
+                    response['message'] = '应收账款信息修改失败：%s' % str(e)
             else:
                 response['status'] = False
                 response['message'] = '表单信息有误！！！'
                 response['forme'] = form_receivable_edit.errors
-        elif warrant_typ == 11:  # (11, '应收账款')
-            form_receivable_edit = forms.FormReceivableEdit(post_data)
-            if form_receivable_edit.is_valid():
-                receivable_edit_clean = form_receivable_edit.cleaned_data
+        elif warrant_typ == 21:  # (21, '股权')
+            form_stockes_edit = forms.FormStockesEdit(post_data)
+            if form_stockes_edit.is_valid():
+                stockes_edit_clean = form_stockes_edit.cleaned_data
                 try:
                     with transaction.atomic():
                         warrant_list.update(
                             warrant_num=warrant_edit_clean['warrant_num'])
-                        models.Receivable.objects.filter(warrant=warrant_obj).update(
-                            receivable_detail=receivable_edit_clean['receivable_detail'])
-                        response['message'] = '应收账款信息修改该成功！！！'
+                        models.Stockes.objects.filter(warrant=warrant_obj).update(
+                            target=stockes_edit_clean['target'], share=stockes_edit_clean['share'],
+                            ratio=stockes_edit_clean['ratio'], stock_typ=stockes_edit_clean['stock_typ'])
+                        response['message'] = '股权信息修改该成功！！！'
                 except Exception as e:
                     response['status'] = False
-                    response['message'] = '应收账款修改失败：%s' % str(e)
+                    response['message'] = '股权信息修改失败：%s' % str(e)
             else:
                 response['status'] = False
                 response['message'] = '表单信息有误！！！'
-                response['forme'] = form_receivable_edit.errors
-        elif warrant_typ == 11:  # (11, '应收账款')
-            form_receivable_edit = forms.FormReceivableEdit(post_data)
-            if form_receivable_edit.is_valid():
-                receivable_edit_clean = form_receivable_edit.cleaned_data
+                response['forme'] = form_stockes_edit.errors
+        elif warrant_typ == 31:  # (31, '票据')
+            form_draft_eidt = forms.FormDraftEdit(post_data)
+            if form_draft_eidt.is_valid():
+                draft_edit_clean = form_draft_eidt.cleaned_data
                 try:
                     with transaction.atomic():
                         warrant_list.update(
                             warrant_num=warrant_edit_clean['warrant_num'])
-                        models.Receivable.objects.filter(warrant=warrant_obj).update(
-                            receivable_detail=receivable_edit_clean['receivable_detail'])
-                        response['message'] = '应收账款信息修改该成功！！！'
+                        models.Draft.objects.filter(warrant=warrant_obj).update(
+                            draft_detail=draft_edit_clean['draft_detail'])
+                        response['message'] = '票据信息修改该成功！！！'
                 except Exception as e:
                     response['status'] = False
-                    response['message'] = '应收账款修改失败：%s' % str(e)
+                    response['message'] = '票据信息修改失败：%s' % str(e)
             else:
                 response['status'] = False
                 response['message'] = '表单信息有误！！！'
-                response['forme'] = form_receivable_edit.errors
-        elif warrant_typ == 11:  # (11, '应收账款')
-            form_receivable_edit = forms.FormReceivableEdit(post_data)
-            if form_receivable_edit.is_valid():
-                receivable_edit_clean = form_receivable_edit.cleaned_data
+                response['forme'] = form_draft_eidt.errors
+        elif warrant_typ == 41:  # (41, '车辆')
+            form_vehicle_eidt = forms.FormVehicleEdit(post_data)  # 41车辆添加
+            if form_vehicle_eidt.is_valid():
+                vehicle_edit_clean = form_vehicle_eidt.cleaned_data
                 try:
                     with transaction.atomic():
                         warrant_list.update(
                             warrant_num=warrant_edit_clean['warrant_num'])
-                        models.Receivable.objects.filter(warrant=warrant_obj).update(
-                            receivable_detail=receivable_edit_clean['receivable_detail'])
-                        response['message'] = '应收账款信息修改该成功！！！'
+                        models.Vehicle.objects.filter(warrant=warrant_obj).update(
+                            frame_num=vehicle_edit_clean['frame_num'], plate_num=vehicle_edit_clean['plate_num'])
+                        response['message'] = '车辆信息修改该成功！！！'
                 except Exception as e:
                     response['status'] = False
-                    response['message'] = '应收账款修改失败：%s' % str(e)
+                    response['message'] = '车辆信息修改失败：%s' % str(e)
             else:
                 response['status'] = False
                 response['message'] = '表单信息有误！！！'
-                response['forme'] = form_receivable_edit.errors
-        elif warrant_typ == 11:  # (11, '应收账款')
-            form_receivable_edit = forms.FormReceivableEdit(post_data)
-            if form_receivable_edit.is_valid():
-                receivable_edit_clean = form_receivable_edit.cleaned_data
+                response['forme'] = form_vehicle_eidt.errors
+        elif warrant_typ == 51:  # (51, '动产')
+            form_chattel_eidt = forms.FormChattelEdit(post_data)  # 51动产添加
+            if form_chattel_eidt.is_valid():
+                chattel_edit_clean = form_chattel_eidt.cleaned_data
                 try:
                     with transaction.atomic():
                         warrant_list.update(
                             warrant_num=warrant_edit_clean['warrant_num'])
-                        models.Receivable.objects.filter(warrant=warrant_obj).update(
-                            receivable_detail=receivable_edit_clean['receivable_detail'])
-                        response['message'] = '应收账款信息修改该成功！！！'
+                        models.Chattel.objects.filter(warrant=warrant_obj).update(
+                            chattel_typ=chattel_edit_clean['chattel_typ'],
+                            chattel_detail=chattel_edit_clean['chattel_detail'])
+                        response['message'] = '动产信息修改该成功！！！'
                 except Exception as e:
                     response['status'] = False
-                    response['message'] = '应收账款修改失败：%s' % str(e)
+                    response['message'] = '动产信息修改失败：%s' % str(e)
             else:
                 response['status'] = False
                 response['message'] = '表单信息有误！！！'
-                response['forme'] = form_receivable_edit.errors
-        elif warrant_typ == 11:  # (11, '应收账款')
-            form_receivable_edit = forms.FormReceivableEdit(post_data)
-            if form_receivable_edit.is_valid():
-                receivable_edit_clean = form_receivable_edit.cleaned_data
+                response['forme'] = form_chattel_eidt.errors
+        elif warrant_typ == 55:  # (55, '其他')
+            form_other_eidt = forms.FormOthersEdit(post_data)  # 55其他添加
+            if form_other_eidt.is_valid():
+                other_edit_clean = form_other_eidt.cleaned_data
                 try:
                     with transaction.atomic():
                         warrant_list.update(
                             warrant_num=warrant_edit_clean['warrant_num'])
-                        models.Receivable.objects.filter(warrant=warrant_obj).update(
-                            receivable_detail=receivable_edit_clean['receivable_detail'])
-                        response['message'] = '应收账款信息修改该成功！！！'
+                        models.Others.objects.filter(warrant=warrant_obj).update(
+                            other_typ=other_edit_clean['other_typ'],
+                            other_detail=other_edit_clean['other_detail'])
+                        response['message'] = '其他权证信息修改该成功！！！'
                 except Exception as e:
                     response['status'] = False
-                    response['message'] = '应收账款修改失败：%s' % str(e)
+                    response['message'] = '其他权证信息修改失败：%s' % str(e)
             else:
                 response['status'] = False
                 response['message'] = '表单信息有误！！！'
-                response['forme'] = form_receivable_edit.errors
+                response['forme'] = form_other_eidt.errors
         elif warrant_typ == 99:  # (99, '他权')
             try:
                 warrant_list.update(warrant_num=warrant_edit_clean['warrant_num'])
@@ -519,12 +523,7 @@ def warrant_edit_ajax(request):
                 response['status'] = False
                 response['message'] = '他权信息修改失败：%s' % str(e)
         else:
-            try:
-                warrant_list.update(warrant_num=warrant_edit_clean['warrant_num'])
-                response['message'] = '权证信息修改该成功！！！'
-            except Exception as e:
-                response['status'] = False
-                response['message'] = '权证信息修改失败：%s' % str(e)
+            response['message'] = '无该类型权证，请联系管理员！！！'
     else:
         response['status'] = False
         response['message'] = '表单信息有误！！！'
@@ -737,15 +736,14 @@ def storages_add_ajax(request):  # 出入库添加ajax
     warrant_obj = warrant_list.first()
     warrant_state = warrant_obj.warrant_state
     form_storage_add_edit = forms.StoragesAddEidtForm(post_data)
-    '''STORAGE_TYP_LIST = ((1, '入库'), (2, '续抵出库'), (11, '借出'), (12, '归还'), (31, '解保出库'))'''
+    '''STORAGE_TYP_LIST = ((1, '入库'), (2, '续抵出库'), (6, '无需入库'), (11, '借出'), 
+    (12, '归还'), (31, '解保出库'))'''
     '''WARRANT_STATE_LIST = (
         (1, '未入库'), (2, '已入库'), (6, '无需入库'), (11, '续抵出库'), (21, '已借出'), (31, '解保出库'),
-         (99, '已注销'))'''
+        (99, '已注销'))'''
     if form_storage_add_edit.is_valid():
         storage_add_clean = form_storage_add_edit.cleaned_data
-        print('storage_add_clean:', storage_add_clean)
         storage_typ = storage_add_clean['storage_typ']
-        print('warrant_state:', warrant_state)
         if warrant_state in [6, 99]:  # (6, '无需入库'),(99, '已注销'))
             response['status'] = False
             response['message'] = '权证状态为：%s，无法办理出入库操作！' % warrant_state
@@ -810,9 +808,8 @@ def storages_add_ajax(request):  # 出入库添加ajax
             else:
                 response['status'] = False
                 response['message'] = '该权证不在库中，无法办理出库操作！！！'
-        else:  # (1, '未入库'), (3, '已出库'), (4, '已借出')----不在库状态
+        else:  # (1, '未入库'), (3, '已出库'), (4, '已借出'), (6, '无需入库')----不在库状态
             if storage_typ in [1, 12]:  # (1, '入库'), (4, '归还')----入库
-                print("storage_typ in [1, 4]")
                 try:
                     with transaction.atomic():
                         storage_explain = storage_add_clean['storage_explain']
@@ -822,9 +819,23 @@ def storages_add_ajax(request):  # 出入库添加ajax
                             transfer=storage_add_clean['transfer'],
                             storage_explain=storage_explain,
                             conservator=request.user)
-                        print('storage_obj:', storage_obj)
                         warrant_list.update(warrant_state=2, storage_explain=storage_explain)
                     response['message'] = '权证入库成功！！！'
+                except Exception as e:
+                    response['status'] = False
+                    response['message'] = '权证入库失败：%s' % str(e)
+            elif storage_typ == 6:  # (6, '无需入库')
+                try:
+                    with transaction.atomic():
+                        storage_explain = storage_add_clean['storage_explain']
+                        storage_obj = models.Storages.objects.create(
+                            warrant=warrant_obj, storage_typ=storage_typ,
+                            storage_date=storage_add_clean['storage_date'],
+                            transfer=storage_add_clean['transfer'],
+                            storage_explain=storage_explain,
+                            conservator=request.user)
+                        warrant_list.update(warrant_state=6, storage_explain=storage_explain)
+                    response['message'] = '权证设置为“无需入库”！！！'
                 except Exception as e:
                     response['status'] = False
                     response['message'] = '权证入库失败：%s' % str(e)
@@ -860,10 +871,15 @@ def evaluate_add_ajax(request):  # 出入库添加ajax
                 evaluate_value = evaluate_clean['evaluate_value']
                 evaluate_date = evaluate_clean['evaluate_date']
                 evaluate_explain = evaluate_clean['evaluate_explain']
+                ''' EVALUATE_STATE_LIST = [(1, '机构评估'), (11, '机构预估'), (21, '综合询价'), (31, '购买成本'),
+                                           (41, '拍卖评估'), (99, '无需评估')]'''
                 evaluate_obj = models.Evaluate.objects.create(
                     warrant=warrant_obj, evaluate_state=evaluate_state,
                     evaluate_value=evaluate_value, evaluate_date=evaluate_date,
                     evaluate_explain=evaluate_explain, evaluator=request.user)
+                '''EVALUATE_STATE_LIST = [(0, '待评估'), (1, '机构评估'), (11, '机构预估'), 
+                (21, '综合询价'), (31, '购买成本'),
+                           (41, '拍卖评估'), (99, '无需评估')]'''
                 warrant_list.update(evaluate_state=evaluate_state, evaluate_value=evaluate_value,
                                     evaluate_date=evaluate_date, evaluate_explain=evaluate_explain)
             response['message'] = '评估成功！！！'

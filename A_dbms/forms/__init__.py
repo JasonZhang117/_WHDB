@@ -12,7 +12,7 @@ from .f_warrant import (
     HypothecsAddEidtForm, StoragesAddEidtForm, FormReceivable, FormReceivableEdit,
     FormStockes, FormStockesEdit, FormDraft, FormDraftEdit, FormDraftExtend,
     FormVehicle, FormVehicleEdit, FormChattel, FormChattelEdit, FormOthers, FormOthersEdit, EvaluateAddEidtForm)
-from .f_agree import (AgreeAddForm, AddCounterForm, FormAgreeSign)
+from .f_agree import (AgreeAddForm, AddCounterForm, FormAgreeSign, AgreeEditForm)
 from .f_provide import (FormCounterSignAdd, FormAscertainAdd, FormNotifyAdd, FormProvideAdd, FormPigeonholeAdd,
                         FormImplementAdd, FormPigeonholeNumAdd, FormRepaymentAdd)
 

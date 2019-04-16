@@ -57,6 +57,7 @@ urlpatterns = [
     path('agree/counter/preview/<int:agree_id>/<int:counter_id>/', views.counter_preview, name='agree_counter_preview'),
     path('agree/sign/preview/<int:agree_id>/', views.agree_sign_preview, name='agree_sign_preview'),
     path('agree/add/', views.agree_add_ajax, name='agree_add_ajax'),
+    path('agree/edit/', views.agree_edit_ajax, name='agree_edit_ajax'),
     path('agree/sign/', views.agree_sign_ajax, name='agree_sign_ajax'),
     path('agree/counter/add/', views.counter_add_ajax, name='agree_counter_add_ajax'),
     path('agree/counter/del/', views.counter_del_ajax, name='agree_counter_del_ajax'),
@@ -71,6 +72,10 @@ urlpatterns = [
          name='warrant_agree_warrant'),
     path('warrant/draft/soondue/', views.soondue_draft, name='warrant_soondue_draft_all'),  #
     path('warrant/draft/overdue/', views.overdue_draft, name='warrant_overdue_draft_all'),  #
+    path('warrant/evaluate/overdue/', views.overdue_evaluate, name='warrant_overdue_evaluate_all'),
+    path('warrant/evaluate/overdue/<int:evaluate_state>/', views.overdue_evaluate, name='warrant_overdue_evaluate'),
+    path('warrant/storage/overdue/', views.overdue_storage, name='warrant_overdue_storage_all'),
+    path('warrant/storage/overdue/<int:warrant_state>/', views.overdue_storage, name='warrant_overdue_storage'),
 
     path('warrant/add/', views.warrant_add_ajax, name='warrant_add_ajax'),
     path('warrant/del/', views.warrant_del_ajax, name='warrant_del_ajax'),
@@ -103,6 +108,8 @@ urlpatterns = [
     path('provide/scan/<int:provide_id>/', views.provide_scan, name='provide_scan'),
     path('provide/overdue/', views.overdue, name='provide_overdue_all'),  # 菜单-放款管理-逾期项目
     path('provide/soondue/', views.soondue, name='provide_soondue_all'),  # 菜单-放款管理-即将到期
+    path('provide/follow/', views.provide_follow, name='provide_follow_all'),
+    path('provide/follow/<int:agree_state>/', views.provide_follow, name='provide_follow'),
 
     path('provide/counter/sign/', views.counter_sign_ajax, name='provide_counter_sign_ajax'),
     path('provide/ascertain/add/', views.ascertain_add_ajax, name='provide_ascertain_add_ajax'),
@@ -190,8 +197,10 @@ urlpatterns = [
     path('report/', views.report, name='report'),  #
     path('report/provide/list/', views.report_provide_list, name='report_provide_list_all'),  # 菜单-合作机构
     path('report/provide/list/<int:provide_typ>/', views.report_provide_list, name='report_provide_list'),
-    path('report/provide/balance/class/', views.report_balance_class, name='report_balance_class_all'),  # 菜单-合作机构
+    path('report/provide/balance/class/', views.report_balance_class, name='report_balance_class_all'),
     path('report/provide/balance/class/<int:class_typ>/', views.report_balance_class, name='report_balance_class'),
+    path('report/article/balance/class/<int:class_typ>/', views.report_article_class, name='report_article_class'),
+
     # 员工
     path('employee/', views.employee, name='employee'),
     path('employee/add/', views.employee_add, name='employee_add'),

@@ -1,0 +1,14 @@
+<div class="panel-body row">
+    <label class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
+        权证类型：{{ warrant_obj.get_warrant_typ_display }}
+    </label>
+    <label class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
+        所有权人：{{ warrant_obj.vehicle_warrant.vehicle_owner.short_name }}
+    </label>
+    <label class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
+        车架号：{{ warrant_obj.vehicle_warrant.frame_num }}
+    </label>
+    <label class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
+        车牌号：{{ warrant_obj.vehicle_warrant.plate_num }}
+    </label>
+</div>

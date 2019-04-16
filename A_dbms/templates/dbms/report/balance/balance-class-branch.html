@@ -10,10 +10,10 @@
         </tr>
         </thead>
         <tbody>
-        {% for branch in provide_groups_branch %}
+        {% for branch in article_groups_branch %}
             <tr>
                 <td>{{ forloop.counter }}</td>
-                <td>{{ branch.notify__agree__branch__short_name }}</td>
+                <td>{{ branch.lending_summary__agree_lending__branch__short_name }}</td>
                 <td align="right">{{ branch.con }}</td>
                 <td align="right">{{ branch.sum|floatformat:2 }}</td>
             </tr>

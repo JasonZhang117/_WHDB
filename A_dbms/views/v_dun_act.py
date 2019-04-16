@@ -408,6 +408,8 @@ def sealup_add_ajax(request):  # 修改项目ajax
             sealup_date = sealup_cleaned['sealup_date']
             due_date = sealup_cleaned['due_date']
             sealup_remark = sealup_cleaned['sealup_remark']
+            '''SEAL_STATE_LIST = [(1, '查询跟踪'), (3, '诉前保全'), (5, '首次首封'), (11, '首次轮封'), 
+            (21, '续查封'), (51, '解除查封'), (99, '注销')]'''
             try:
                 with transaction.atomic():
                     seal_default = {
@@ -416,7 +418,7 @@ def sealup_add_ajax(request):  # 修改项目ajax
                         'seal_remark': sealup_remark, 'sealor': request.user}
                     seal_obj, created = models.Seal.objects.update_or_create(
                         dun=dun_obj, warrant=warrant_obj, defaults=seal_default)
-                    if sealup_type in [1, 5, 11, 21]:
+                    if sealup_type in [1, 3, 5, 11, 21]:
                         sealup_default = {
                             'seal': seal_obj, 'sealup_type': sealup_type, 'sealup_date': sealup_date,
                             'due_date': due_date, 'sealup_remark': sealup_remark,
@@ -711,8 +713,6 @@ def inquiry_add_ajax(request):
                     response['status'] = False
                     response['message'] = '查询信息创建失败：%s！' % str(e)
         else:
-            print('form_inquiry_add.errors:', form_inquiry_add.errors)
-
             response['status'] = False
             response['message'] = '表单信息有误！！！'
             response['forme'] = form_inquiry_add.errors

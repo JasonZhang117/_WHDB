@@ -114,7 +114,8 @@ def notify_add_ajax(request):
             time_limit = form_notify_cleaned['time_limit']  # 通知期限
             if time_limit > agree_term:
                 response['status'] = False
-                response['message'] = '通知期限（%s个月）大于合同期限（%s个月），放款通知添加失败！'
+                response['message'] = '通知期限（%s个月）大于合同期限（%s个月），放款通知添加失败！' % (time_limit,
+                                                                            agree_term)
             else:
                 notify_money = form_notify_cleaned['notify_money']  # 通知金额
                 weighting_money = round((time_limit / agree_term) * notify_money, 2)  # 时间加权通知金额
@@ -165,7 +166,6 @@ def notify_add_ajax(request):
                             article_obj = article_list.first()
                             article_notify_amount = models.Notify.objects.filter(
                                 agree__lending__summary=article_obj).aggregate(Sum('weighting'))['weighting__sum']
-                            print('article_notify_amount:', article_notify_amount)
                             article_list.update(article_notify_sum=round(article_notify_amount, 2))
                         response['message'] = '成功添加放款通知！'
                     except Exception as e:

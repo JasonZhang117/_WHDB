@@ -542,21 +542,21 @@ def article_sign_ajax(request):
     '''((1, '同意'), (2, '不同意'))'''
     sign_type = int(post_data['sign_type'])
     article_id = post_data['article_id']
-    aritcle_obj = models.Articles.objects.get(id=article_id)
+    article_obj = models.Articles.objects.get(id=article_id)
     '''ARTICLE_STATE_LIST = [(1, '待反馈'), (2, '已反馈'), (3, '待上会'), (4, '已上会'), (5, '已签批'),
                           (51, '已放款'), (52, '已放完'), (55, '已解保'), (61, '待变更'), (99, '已注销')]'''
-    if aritcle_obj.article_state in [4, 61]:
+    if article_obj.article_state in [4, 61]:
         if sign_type == 2:
             models.Articles.objects.filter(id=article_id).update(
                 sign_type=sign_type, sign_date=post_data['sign_date'], article_state=6)
-            response['message'] = '%s项目被否决，更新为注销状态！' % aritcle_obj.article_num
+            response['message'] = '%s项目被否决，更新为注销状态！' % article_obj.article_num
         else:
             form = forms.ArticlesSignForm(post_data)
             if form.is_valid():
                 cleaned_data = form.cleaned_data
-                article_expert_amount = aritcle_obj.expert.all().count()
+                article_expert_amount = article_obj.expert.all().count()
                 '''COMMENT_TYPE_LIST = ((0, ''), (1, '同意'), (2, '复议'), (3, '不同意'))'''
-                article_comment_amount = aritcle_obj.comment_summary.exclude(comment_type=0).count()  # 发表意见的评委数
+                article_comment_amount = article_obj.comment_summary.exclude(comment_type=0).count()  # 发表意见的评委数
                 if article_expert_amount == article_comment_amount:
                     renewal = cleaned_data['renewal']
                     augment = cleaned_data['augment']
@@ -578,10 +578,13 @@ def article_sign_ajax(request):
                                     sign_date=cleaned_data['sign_date'],
                                     article_state=5)
                                 # 更新客户授信总额
-                                custom_id = aritcle_obj.custom.id
+                                custom_id = article_obj.custom.id
                                 models.Customes.objects.filter(id=custom_id).update(
                                     credit_amount=cleaned_data['credit_amount'])
-                            response['message'] = '成功签批项目：%s！' % aritcle_obj.article_num
+                                models.Warrants.objects.filter(
+                                    lending_warrant__sure__lending__summary=article_obj).update(
+                                    meeting_date=article_obj.review_date)
+                            response['message'] = '成功签批项目：%s！' % article_obj.article_num
                         except Exception as e:
                             response['status'] = False
                             response['message'] = '项目签批失败失败：%s' % str(e)
@@ -598,7 +601,7 @@ def article_sign_ajax(request):
                 response['forme'] = form.errors
     else:
         response['status'] = False
-        response['message'] = '项目状态为：%s，本次签批失败！！！' % aritcle_obj.article_state
+        response['message'] = '项目状态为：%s，本次签批失败！！！' % article_obj.article_state
     result = json.dumps(response, ensure_ascii=False)
     return HttpResponse(result)
 

@@ -1,0 +1,59 @@
+<div class="table-responsive">
+    <table class="table table-bordered table-hover table-condensed active">
+        <thead>
+        <tr style="text-align: center">
+            <th>权证编号({{ warrant_acount }})</th>
+            <th>类型</th>
+            <th>最近上会日</th>
+            {#            <th>描述</th>#}
+            <th>评估情况</th>
+            <th>评估价值</th>
+            <th>评估日期</th>
+            <th>所属项目</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for warrant in p_list %}
+            <tr>
+                <td>
+                    <a href="{% url 'dbms:warrant_scan' warrant_id=warrant.id %}">{{ warrant.warrant_num }}</a>
+                </td>
+                <td>{{ warrant.get_warrant_typ_display }}</td>
+                {#WARRANT_TYP_LIST = [#}
+                {#(1, '房产'), (2, '房产包'), (5, '土地'), (6, '在建工程'), (11, '应收账款'),#}
+                {#(21, '股权'), (31, '票据'), (41, '车辆'), (51, '动产'), (55, '其他'), (99, '他权')]#}
+                {#                <td>#}
+                {#                    {% if warrant.warrant_typ == 1 %}#}
+                {#                        {{ warrant.house_warrant.house_locate }}#}
+                {#                    {% elif warrant.warrant_typ == 5 %}#}
+                {#                        {{ warrant.ground_warrant.ground_locate }}#}
+                {#                    {% elif warrant.warrant_typ == 11 %}#}
+                {#                        {{ warrant.receive_warrant.receivable_detail }}#}
+                {#                    {% elif warrant.warrant_typ == 21 %}#}
+                {#                        {{ warrant.stock_warrant.target }}#}
+                {#                    {% elif warrant.warrant_typ == 31 %}#}
+                {#                        {{ warrant.draft_warrant.draft_detail }}#}
+                {#                    {% elif warrant.warrant_typ == 41 %}#}
+                {#                        {{ warrant.vehicle_warrant.frame_num }}#}
+                {#                    {% elif warrant.warrant_typ == 51 %}#}
+                {#                        {{ warrant.chattel_warrant.chattel_detail }}#}
+                {#                    {% elif warrant.warrant_typ == 55 %}#}
+                {#                        {{ warrant.other_warrant.other_detail }}#}
+                {#                    {% endif %}#}
+                {#                </td>#}
+                <td>{{ warrant.meeting_date|default_if_none:'' }}</td>
+                <td>{{ warrant.get_evaluate_state_display }}</td>
+                <td align="right">{{ warrant.evaluate_value|default_if_none:'' }}</td>
+                <td>{{ warrant.evaluate_date|default_if_none:'' }}</td>
+                <td>
+                    <a href="{% url 'dbms:article_scan_lending' article_id=warrant.lending_warrant.all.0.sure.lending.summary.id lending_id=warrant.lending_warrant.all.0.sure.lending.id %}">
+                        {{ warrant.lending_warrant.all.0.sure.lending.summary }}</a>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    {% include 'dbms/board/page.html' %}
+
+</div>

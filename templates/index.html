@@ -84,9 +84,18 @@
                 {% block right-content-container %}<!--右侧内容-->
                     <h2 class="page-header"><a href="{% url 'dbms:index' %}">测试页，点击进入正式系统</a></h2>
 
-                    <div style="background:url('bbj.png') no-repeat;width:100px;height:100px">
-                        qweqe
-                    </div>
+                    <table>
+                        {% for warrant in warrant_list %}
+                            <tr>
+                                <td>
+                                    {{ forloop.counter }}
+                                </td>
+                                <td>
+                                    {{ warrant }}
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </table>
 
                 {% endblock %}
             </div>

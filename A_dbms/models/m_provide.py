@@ -62,7 +62,7 @@ class Provides(models.Model):  # 放款
     provide_date = models.DateField(verbose_name='放款日期')
     due_date = models.DateField(verbose_name='到期日')
 
-    IMPLEMENT_LIST = [(1, '未归档'), (11, '退回'), (21, '暂存风控'), (31, '移交行政'), (41, '已归档')]
+    IMPLEMENT_LIST = [(1, '未归档'), (11, '退回'), (21, '暂存风控'), (31, '移交行政'), (41, '已归档'), (99, '无需归档')]
     implement = models.IntegerField(verbose_name='_归档状态', choices=IMPLEMENT_LIST, default=1)
     file_num = models.CharField(verbose_name='档案编号', max_length=64, unique=True, null=True, blank=True)
 
