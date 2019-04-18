@@ -6,7 +6,7 @@
 
     function bindAddEvaluateB() {
         $('#addEvaluateB').click(function () {
-            console.log("bindAddEvaluateB")
+            console.log("bindAddEvaluateB");
             $('#addEvaluateModal').modal('show');
         })
     }
@@ -21,8 +21,6 @@
             });
             var postDataStr = JSON.stringify(postData);
 
-            console.log(postDataStr)
-
             $.ajax({
                 url: '/dbms/warrant/evaluate/add/',
                 type: 'POST',
@@ -30,17 +28,16 @@
                 data: {'postDataStr': postDataStr},
                 dataType: 'JSON',
                 success: function (arg) {
-                    console.log(arg);
                     if (arg.status) {
                         $('#addEvaluateModal').modal('hide');
                         alert(arg.message);
                         window.location.reload();
                     } else {
+                        alert(arg.message);
                         $('#e_evaluate_state').text(arg.forme.evaluate_state);
                         $('#e_evaluate_value').text(arg.forme.evaluate_value);
                         $('#e_evaluate_date').text(arg.forme.evaluate_date);
                         $('#e_evaluate_explain').text(arg.forme.evaluate_explain);
-                        alert(arg.message);
                     }
                 }
             })

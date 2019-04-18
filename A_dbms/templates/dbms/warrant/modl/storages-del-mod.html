@@ -1,0 +1,18 @@
+<div class="modal fade bs-example-modal-sm" id="delStorageModal"
+     tabindex="-1" role="dialog" aria-labelledby="delStorageModal">
+    <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="delStorageModalLabel">删除出入库信息
+                    <input style="display: none" name="warrant_id" value="{{ warrant_obj.id }}">
+                    <input style="display: none" name="storage_id" id="delStorageId">
+                </h4>
+            </div>
+            <div class="modal-body">是否确定删除该出入库信息!!!</div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                <button type="button" class="btn btn-primary" id="delStorageModalOk">确定</button>
+            </div>
+        </div>
+    </div>
+</div>

@@ -5,12 +5,12 @@
         <tr style="text-align: center">
             <th>序号</th>
             <th>项目助理理</th>
-            <th>项目笔数</th>
+            <th>放款笔数</th>
             <th>担保余额</th>
         </tr>
         </thead>
         <tbody>
-        {% for assistant in article_groups_assistant %}
+        {% for assistant in provide_groups_assistant %}
             <tr>
                 <td>{{ forloop.counter }}</td>
                 <td>{{ assistant.notify__agree__lending__summary__assistant__name }}</td>

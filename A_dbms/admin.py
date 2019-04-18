@@ -84,7 +84,7 @@ admin.site.register(models.CountersWarrants)  # 抵质押押反担保合同
 class WarrantsAdmin(admin.ModelAdmin):
     list_display = ('warrant_num', 'warrant_typ', 'meeting_date','evaluate_state', 'evaluate_value',
                     'evaluate_date', 'warrant_state')
-    list_per_page = 20  # 每页显示条目数
+    list_per_page = 200  # 每页显示条目数
     search_fields = ['warrant_num']  # 搜索字段
     ordering = ['warrant_num']  # 排序字段
 

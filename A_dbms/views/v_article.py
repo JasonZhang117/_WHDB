@@ -95,7 +95,7 @@ def article_scan(request, article_id):  # 项目预览
         'director_id': article_obj.director.id,
         'assistant_id': article_obj.assistant.id, 'control_id': article_obj.control.id,
         'article_date': str(article_obj.article_date)}
-    form_article_add_edit = forms.ArticlesAddForm(form_date)
+    form_article_add_edit = forms.ArticlesAddForm(initial=form_date)
     expert_list = article_obj.expert.values_list('id')
     feedbac_list = article_obj.feedback_article.all()
     if feedbac_list:

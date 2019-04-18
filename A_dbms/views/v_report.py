@@ -64,10 +64,10 @@ def report_balance_class(request, *args, **kwargs):  #
     current_url_name = resolve(request.path).url_name  # 获取当前URL_NAME
     authority_list = request.session.get('authority_list')  # 获取当前用户的所有权限
     menu_result = MenuHelper(request).menu_data_list()
-    PAGE_TITLE = '在保分类'
+    PAGE_TITLE = '在保分类(按放款)'
     print('kwargs:', kwargs, kwargs['class_typ'], type(kwargs['class_typ']))
-    CLASS_LIST = [(1, '按品种'), (11, '按银行'), (21, '按区域'), (31, '按行业'), (35, '按项部门'),
-                  (41, '按项目经理'), (51, '按项目助理'), (61, '按风控专员'), (71, '按支行'), ]
+    CLASS_LIST = [(1, '品种'), (11, '授信银行'), (21, '区域'), (31, '行业'), (35, '部门'),
+                  (41, '项目经理'), (51, '项目助理'), (61, '风控专员'), (71, '放款支行'), (81, '法律顾问'), ]
     provide_typ_list = models.Provides.PROVIDE_TYP_LIST  # 筛选条件
     provide_typ_dic = {}
     for provide_typ in provide_typ_list:
@@ -75,6 +75,7 @@ def report_balance_class(request, *args, **kwargs):  #
     provide_groups = models.Provides.objects.filter(provide_status=1)
     provide_balance = provide_groups.aggregate(Sum('provide_balance'))['provide_balance__sum']  # 在保余额
     provide_count = provide_groups.aggregate(Count('provide_money'))['provide_money__count']  # 在保项目数
+
     provide_groups_breed = provide_groups.values(
         'provide_typ').annotate(
         con=Count('provide_typ'), sum=Sum('provide_balance')).values(
@@ -111,11 +112,15 @@ def report_balance_class(request, *args, **kwargs):  #
         'notify__agree__lending__summary__director__department__name').annotate(
         con=Count('provide_balance'), sum=Sum('provide_balance')).values(
         'notify__agree__lending__summary__director__department__name', 'con', 'sum').order_by('-sum')
+    provide_groups_organization = provide_groups.values(
+        'notify__agree__lending__summary__expert__organization').annotate(
+        con=Count('provide_balance'), sum=Sum('provide_balance')).values(
+        'notify__agree__lending__summary__expert__organization', 'con', 'sum').order_by('-sum')
 
     return render(request, 'dbms/report/balance-class-provide.html', locals())
 
 
-# -----------------------在保分类---------------------#
+# -----------------------在保分类（按项目）---------------------#
 @login_required
 @authority
 def report_article_class(request, *args, **kwargs):  #
@@ -123,9 +128,9 @@ def report_article_class(request, *args, **kwargs):  #
     current_url_name = resolve(request.path).url_name  # 获取当前URL_NAME
     authority_list = request.session.get('authority_list')  # 获取当前用户的所有权限
     menu_result = MenuHelper(request).menu_data_list()
-    PAGE_TITLE = '在保分类'
-    CLASS_LIST = [(11, '按银行'), (21, '按区域'), (31, '按行业'), (35, '按项部门'),
-                  (41, '按项目经理'), (51, '按项目助理'), (61, '按风控专员'), (71, '按支行'), ]
+    PAGE_TITLE = '在保分类(按项目)'
+    CLASS_LIST = [(21, '区域'), (31, '行业'), (35, '部门'),
+                  (41, '项目经理'), (51, '项目助理'), (61, '风控专员'), (81, '法律顾问'), ]
 
     article_groups = models.Articles.objects.filter(article_balance__gt=0)
     provide_balance = article_groups.aggregate(Sum('article_balance'))['article_balance__sum']  # 在保余额
@@ -151,17 +156,76 @@ def report_article_class(request, *args, **kwargs):  #
         'custom__company_custome__district__name').annotate(
         con=Count('article_balance'), sum=Sum('article_balance')).values(
         'custom__company_custome__district__name', 'con', 'sum').order_by('-sum')
-    article_groups_bank = article_groups.values(
-        'lending_summary__agree_lending__branch__cooperator__short_name').annotate(
-        con=Count('article_balance'), sum=Sum('article_balance')).values(
-        'lending_summary__agree_lending__branch__cooperator__short_name', 'con', 'sum').order_by('-sum')
-    article_groups_branch = article_groups.values(
-        'lending_summary__agree_lending__branch__short_name').annotate(
-        con=Count('article_balance'), sum=Sum('article_balance')).values(
-        'lending_summary__agree_lending__branch__short_name', 'con', 'sum').order_by('-sum')
     article_groups_depart = article_groups.values(
         'director__department__name').annotate(
         con=Count('article_balance'), sum=Sum('article_balance')).values(
         'director__department__name', 'con', 'sum').order_by('-sum')
-
+    article_groups_organization = article_groups.values(
+        'expert__organization').annotate(
+        con=Count('article_balance'), sum=Sum('article_balance')).values(
+        'expert__organization', 'con', 'sum').order_by('-sum')
     return render(request, 'dbms/report/balance-class-article.html', locals())
+
+
+# -----------------------放款分类---------------------#
+@login_required
+@authority
+def report_accrual_class(request, *args, **kwargs):  #
+    print(request.path, '>', resolve(request.path).url_name, '>', request.user)
+    current_url_name = resolve(request.path).url_name  # 获取当前URL_NAME
+    authority_list = request.session.get('authority_list')  # 获取当前用户的所有权限
+    menu_result = MenuHelper(request).menu_data_list()
+    PAGE_TITLE = '在保分类(按放款)'
+    print('kwargs:', kwargs, kwargs['class_typ'], type(kwargs['class_typ']))
+    CLASS_LIST = [(1, '品种'), (11, '授信银行'), (21, '区域'), (31, '行业'), (35, '部门'),
+                  (41, '项目经理'), (51, '项目助理'), (61, '风控专员'), (71, '放款支行'), (81, '法律顾问'), ]
+    provide_typ_list = models.Provides.PROVIDE_TYP_LIST  # 筛选条件
+    provide_typ_dic = {}
+    for provide_typ in provide_typ_list:
+        provide_typ_dic[provide_typ[0]] = provide_typ[1]
+    provide_groups = models.Provides.objects.filter(provide_date__year=2019)
+    provide_accrual = provide_groups.aggregate(Sum('provide_money'))['provide_money__sum']  # 在保余额
+    provide_count = provide_groups.aggregate(Count('provide_money'))['provide_money__count']  # 在保项目数
+
+    provide_groups_breed = provide_groups.values(
+        'provide_typ').annotate(
+        con=Count('provide_money'), sum=Sum('provide_money')).values(
+        'provide_typ', 'con', 'sum').order_by('-sum')
+    provide_groups_director = provide_groups.values(
+        'notify__agree__lending__summary__director__name').annotate(
+        con=Count('provide_money'), sum=Sum('provide_money')).values(
+        'notify__agree__lending__summary__director__name', 'con', 'sum').order_by('-sum')
+    provide_groups_assistant = provide_groups.values(
+        'notify__agree__lending__summary__assistant__name').annotate(
+        con=Count('provide_money'), sum=Sum('provide_money')).values(
+        'notify__agree__lending__summary__assistant__name', 'con', 'sum').order_by('-sum')
+    provide_groups_control = provide_groups.values(
+        'notify__agree__lending__summary__control__name').annotate(
+        con=Count('provide_money'), sum=Sum('provide_money')).values(
+        'notify__agree__lending__summary__control__name', 'con', 'sum').order_by('-sum')
+    provide_groups_idustry = provide_groups.values(
+        'notify__agree__lending__summary__custom__company_custome__idustry__name').annotate(
+        con=Count('provide_money'), sum=Sum('provide_money')).values(
+        'notify__agree__lending__summary__custom__company_custome__idustry__name', 'con', 'sum').order_by('-sum')
+    provide_groups_district = provide_groups.values(
+        'notify__agree__lending__summary__custom__company_custome__district__name').annotate(
+        con=Count('provide_money'), sum=Sum('provide_money')).values(
+        'notify__agree__lending__summary__custom__company_custome__district__name', 'con', 'sum').order_by('-sum')
+    provide_groups_bank = provide_groups.values(
+        'notify__agree__branch__cooperator__short_name').annotate(
+        con=Count('provide_money'), sum=Sum('provide_money')).values(
+        'notify__agree__branch__cooperator__short_name', 'con', 'sum').order_by('-sum')
+    provide_groups_branch = provide_groups.values(
+        'notify__agree__branch__short_name').annotate(
+        con=Count('provide_money'), sum=Sum('provide_money')).values(
+        'notify__agree__branch__short_name', 'con', 'sum').order_by('-sum')
+    provide_groups_depart = provide_groups.values(
+        'notify__agree__lending__summary__director__department__name').annotate(
+        con=Count('provide_money'), sum=Sum('provide_money')).values(
+        'notify__agree__lending__summary__director__department__name', 'con', 'sum').order_by('-sum')
+    provide_groups_organization = provide_groups.values(
+        'notify__agree__lending__summary__expert__organization').annotate(
+        con=Count('provide_money'), sum=Sum('provide_money')).values(
+        'notify__agree__lending__summary__expert__organization', 'con', 'sum').order_by('-sum')
+
+    return render(request, 'dbms/report/balance-class-provide.html', locals())

@@ -84,7 +84,7 @@ class Branches(models.Model):  # 放款银行
         verbose_name_plural = '外部-放款银行'  # 指定显示名称
         db_table = 'dbms_branchess'  # 指定数据表的名称
         unique_together = (('name', 'cooperator'),)
-        ordering = ['name']
+        ordering = ['name', ]
 
     def __str__(self):
         return self.name

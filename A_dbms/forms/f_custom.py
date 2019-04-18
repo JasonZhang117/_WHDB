@@ -39,24 +39,17 @@ class CustomEditForm(dform.ModelForm):
 
 # -----------------------企业客户添加-------------------------#
 class CustomCAddForm(dform.ModelForm):  # 企业客户
-    idustry = fields.ChoiceField(
-        label="所属行业", label_suffix="：", widget=widgets.Select(attrs={'class': 'form-control'}))
 
     class Meta:
         model = models.CustomesC
-        fields = ['district', 'capital', 'registered_addr', 'representative']
+        fields = ['district', 'capital', 'idustry', 'registered_addr', 'representative']
         widgets = {
             'capital': dform.TextInput(attrs={'class': 'form-control', 'placeholder': '注册资本'}),
             'registered_addr': dform.TextInput(attrs={'class': 'form-control', 'placeholder': '注册地址'}),
             'representative': dform.TextInput(attrs={'class': 'form-control', 'placeholder': '法人代表'}),
-            # 'idustry': dform.Select(attrs={'class': 'form-control'}),
+            'idustry': dform.Select(attrs={'class': 'form-control'}),
             'district': dform.Select(attrs={'class': 'form-control'}),
         }
-
-    def __init__(self, *args, **kwargs):
-        super(CustomCAddForm, self).__init__(*args, **kwargs)
-        self.fields['idustry'].choices = models.Industries.objects.values_list(
-            'id', 'name').order_by('code')
 
 
 # -----------------------股权信息添加-------------------------#

@@ -24,6 +24,8 @@
             {% include 'dbms/report/balance/balance-class-control.html' %}
         {% elif  kwargs.class_typ == 71 %}
             {% include 'dbms/report/balance/balance-class-branch.html' %}
+        {% elif  kwargs.class_typ == 81 %}
+            {% include 'dbms/report/balance/balance-class-organization.html' %}
         {% endif %}
     </div>
 {% endblock %}

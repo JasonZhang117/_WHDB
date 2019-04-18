@@ -13,7 +13,7 @@
         {% for assistant in article_groups_assistant %}
             <tr>
                 <td>{{ forloop.counter }}</td>
-                <td>{{ assistant.provide_groups_assistant }}</td>
+                <td>{{ assistant.assistant__name }}</td>
                 <td align="right">{{ assistant.con }}</td>
                 <td align="right">{{ assistant.sum|floatformat:2 }}</td>
             </tr>

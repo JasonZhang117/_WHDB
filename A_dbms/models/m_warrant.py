@@ -414,9 +414,9 @@ class Storages(models.Model):  # 出入库
     warrant = models.ForeignKey(to='Warrants', verbose_name="权证",
                                 on_delete=models.PROTECT,
                                 related_name='storage_warrant')
-    ''' WARRANT_STATE_LIST = (
+    '''WARRANT_STATE_LIST = [
         (1, '未入库'), (2, '已入库'), (6, '无需入库'), (11, '续抵出库'), (21, '已借出'), (31, '解保出库'),
-        (99, '已注销'))'''
+        (99, '已注销')]'''
 
     STORAGE_TYP_LIST = [(1, '入库'), (2, '续抵出库'), (6, '无需入库'), (11, '借出'), (12, '归还'), (31, '解保出库')]
     storage_typ = models.IntegerField(verbose_name='出入库', choices=STORAGE_TYP_LIST, default=1)

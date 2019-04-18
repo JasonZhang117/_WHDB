@@ -26,7 +26,8 @@ from .v_warrant import (
     soondue_draft, overdue_draft, overdue_evaluate, overdue_storage)
 from .v_warrant_act import (
     warrant_add_ajax, warrant_del_ajax, warrant_edit_ajax, owership_add_ajax, owership_del_ajax,
-    guaranty_add_ajax, guaranty_del_ajax, storages_add_ajax, housebag_add_ajax, draftextend_add_ajax,
+    guaranty_add_ajax, guaranty_del_ajax, storages_add_ajax, storage_del_ajax,
+    housebag_add_ajax, draftextend_add_ajax,
     evaluate_add_ajax)
 
 # ----------------------v_provide放款管理视图--------------------#

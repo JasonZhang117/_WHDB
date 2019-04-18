@@ -47,6 +47,7 @@ class Customes(models.Model):  # 客户
     class Meta:
         verbose_name_plural = '客户'  # 指定显示名称
         db_table = 'dbms_customes'  # 指定数据表的名称
+        ordering = ['genre', 'name']
 
     def __str__(self):
         return self.name
@@ -127,6 +128,7 @@ class Districtes(models.Model):  # 区域（街道）
     class Meta:
         verbose_name_plural = '客户-区域'  # 指定显示名称
         db_table = 'dbms_districtes'  # 指定数据表的名称
+        ordering = ['name', ]
 
     def __str__(self):
         return self.name
@@ -141,6 +143,7 @@ class Industries(models.Model):  # 行业
     class Meta:
         verbose_name_plural = '客户-行业'  # 指定显示名称
         db_table = 'dbms_industriess'  # 指定数据表的名称
+        ordering = ['code', ]
 
     def __str__(self):
         return self.name

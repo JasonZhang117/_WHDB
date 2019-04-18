@@ -9,7 +9,7 @@ from django.core.exceptions import NON_FIELD_ERRORS, ValidationError
 # -----------------------项目添加-------------------------#
 class ArticlesAddForm(dform.Form):  # 项目添加
     custom_id = fields.IntegerField(
-        label='客户', label_suffix="：", widget=widgets.Select(attrs={'class': 'form-control'}))
+        label='客户名称', label_suffix="：", widget=widgets.Select(attrs={'class': 'form-control'}))
     renewal = fields.FloatField(
         label='续贷金额（元）', label_suffix="：",
         widget=widgets.NumberInput(attrs={'class': 'form-control', 'placeholder': '输入续贷金额'}))
@@ -24,18 +24,17 @@ class ArticlesAddForm(dform.Form):  # 项目添加
     assistant_id = fields.IntegerField(
         label="项目助理", label_suffix="：", widget=widgets.Select(attrs={'class': 'form-control'}))
     control_id = fields.IntegerField(
-        label="风控专员", label_suffix="：", widget=widgets.Select(attrs={'class': 'form-control', }))
+        label="风控专员", label_suffix="：", widget=widgets.Select(attrs={'class': 'form-control'}))
 
     def __init__(self, *args, **kwargs):
         super(ArticlesAddForm, self).__init__(*args, **kwargs)
-        self.fields['custom_id'].widget.choices = models.Customes.objects.filter(
-            counter_only=0).values_list('id', 'name').order_by('name')
+        self.fields['custom_id'].widget.choices = models.Customes.objects.values_list('id', 'name')
         self.fields['director_id'].widget.choices = models.Employees.objects.filter(
-            job__name='项目经理', employee_status=1).values_list('id', 'name').order_by('name')
+            job__name='项目经理', employee_status=1).values_list('id', 'name')
         self.fields['assistant_id'].widget.choices = models.Employees.objects.filter(
-            job__name='项目经理', employee_status=1).values_list('id', 'name').order_by('name')
+            job__name='项目经理', employee_status=1).values_list('id', 'name')
         self.fields['control_id'].widget.choices = models.Employees.objects.filter(
-            job__name='风控专员', employee_status=1).values_list('id', 'name').order_by('name')
+            job__name='风控专员', employee_status=1).values_list('id', 'name')
 
 
 # -----------------------风控反馈添加-------------------------#

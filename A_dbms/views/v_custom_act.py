@@ -41,7 +41,7 @@ def custom_add_ajax(request):
                             custom_buildor=request.user)
                         custom_c_obj = models.CustomesC.objects.create(
                             custome=custom_obj,
-                            idustry_id=custom_c_data['idustry'],
+                            idustry=custom_c_data['idustry'],
                             district=custom_c_data['district'],
                             capital=custom_c_data['capital'],
                             registered_addr=custom_c_data['registered_addr'],
@@ -106,15 +106,12 @@ def shareholder_add_ajax(request):
         shareholder_add_data = form_shareholder_add.cleaned_data
         custom_c_obj = custom_obj.company_custome
         shareholder_ratio_amount = custom_c_obj.shareholder_custom_c.all().aggregate(Sum('shareholding_ratio'))
-        print('shareholder_ratio_amount:', shareholder_ratio_amount)
         shareholding_ratio = shareholder_add_data['shareholding_ratio']
-        print('shareholding_ratio:', shareholding_ratio)
         shareholder_ratio_a = shareholder_ratio_amount['shareholding_ratio__sum']
         if shareholder_ratio_a:
             ratio_amount = shareholder_ratio_a + shareholding_ratio
         else:
             ratio_amount = shareholding_ratio
-        print('ratio_amount:', ratio_amount)
         if ratio_amount > 100:
             response['status'] = False
             response['message'] = '股权比合计操过100%，股权信息创建失败！！！'
@@ -186,7 +183,6 @@ def custom_del_ajax(request):
     custom_id = post_data['custom_id']
     custom_obj = models.Customes.objects.get(id=custom_id)
     lending_custom_list = custom_obj.lending_custom.all()
-    print('lending_custom_list:', lending_custom_list)
     if lending_custom_list:
         response['status'] = False
         response['message'] = '客户已作为项目反担保人，无法删除！'
@@ -218,9 +214,7 @@ def custom_edit_ajax(request):
     form_custom_edit = forms.CustomEditForm(post_data)
     if form_custom_edit.is_valid():
         custom_edit_data = form_custom_edit.cleaned_data
-        print('custom_edit_data:', custom_edit_data)
         genre = custom_obj.genre
-
         if genre == 1:
             form_custom_c_add = forms.CustomCAddForm(post_data)
             if form_custom_c_add.is_valid():
@@ -254,7 +248,6 @@ def custom_edit_ajax(request):
             form_custom_p_add = forms.CustomPAddForm(post_data)
             if form_custom_p_add.is_valid():
                 custom_p_data = form_custom_p_add.cleaned_data
-                print('custom_p_data:', custom_p_data)
                 try:
                     with transaction.atomic():
                         custom_lsit.update(

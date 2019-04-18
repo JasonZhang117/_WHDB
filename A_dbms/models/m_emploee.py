@@ -70,6 +70,7 @@ class Employees(AbstractBaseUser, PermissionsMixin):
     class Meta:
         verbose_name_plural = '内部-员工'  # 指定显示名称
         db_table = 'dbms_employees'  # 指定数据表的名称
+        ordering = ['name', ]
         permissions = [
             ('dbms_article_all', '访问项目列表'),
             ('dbms_article', '访问所有项目列表'),

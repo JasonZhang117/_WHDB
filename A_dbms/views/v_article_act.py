@@ -84,7 +84,7 @@ def article_edit_ajax(request):  # 修改项目ajax
     '''((1, '待反馈'), (2, '已反馈'), (3, '待上会'),
         (4, '已上会'), (5, '已签批'), (6, '已注销'))
         (5, '已签批')-->才能出合同'''
-    if article_obj.article_state == 1:
+    if article_obj.article_state in [1, 2, 3, 4]:
         form = forms.ArticlesAddForm(post_data, request.FILES)
         if form.is_valid():
             cleaned_data = form.cleaned_data

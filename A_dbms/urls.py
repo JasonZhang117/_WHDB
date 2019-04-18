@@ -87,6 +87,7 @@ urlpatterns = [
     path('warrant/guaranty/add/', views.guaranty_add_ajax, name='warrant_guaranty_add_ajax'),
     path('warrant/guaranty/del/', views.guaranty_del_ajax, name='warrant_guaranty_del_ajax'),
     path('warrant/storages/add/', views.storages_add_ajax, name='warrant_storages_add_ajax'),
+    path('warrant/storages/del/', views.storage_del_ajax, name='warrant_storage_del_ajax'),
     path('warrant/evaluate/add/', views.evaluate_add_ajax, name='warrant_evaluate_add_ajax'),
 
     # -----------------------house房产管理-------------------------#

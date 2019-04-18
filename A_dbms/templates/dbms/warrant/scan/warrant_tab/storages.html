@@ -10,7 +10,7 @@
             <th>操作</th>
         </tr>
         </thead>
-        <tbody>
+        <tbody id="storage-tb">
         {% for storage in storage_warrant_list %}
             <tr storage-nid="{{ storage.id }}">
                 <td>{{ storage.get_storage_typ_display }}</td>

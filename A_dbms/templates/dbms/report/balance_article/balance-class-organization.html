@@ -1,0 +1,25 @@
+<div class="table-responsive">
+    <table class="table table-bordered table-hover table-condensed active">
+        <caption>成都武侯中小企业融资担保有限责任公司在保项目分类统计表（按法律顾问）</caption>
+        <thead>
+        <tr style="text-align: center">
+            <th>放款银行</th>
+            <th>放款笔数</th>
+            <th>担保余额</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for organization in article_groups_organization %}
+            {% if organization.expert__organization == '泰和泰律师事务所' or organization.expert__organization == '明之鉴律师事务所' %}
+                <tr>
+                    <td>
+                        {{ organization.expert__organization }}
+                    </td>
+                    <td align="right">{{ organization.con }}</td>
+                    <td align="right">{{ organization.sum|floatformat:2 }}</td>
+                </tr>
+            {% endif %}
+        {% endfor %}
+        </tbody>
+    </table>
+</div>

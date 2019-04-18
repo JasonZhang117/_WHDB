@@ -39,7 +39,7 @@ def guarantee_add_ajax(request):  # 反担保措施添加ajax
         (31, '应收质押'), (32, '股权质押'), (33, '票据质押'), (34, '动产质押'), (39, '其他权利质押'),
         (42, '房产监管'), (43, '土地监管'), (44, '票据监管'), (47, '动产监管'), (49, '其他监管'),
         (51, '股权预售'), (52, '房产预售'), (53, '土地预售'))'''
-    if article_state in [1, 2, 3, 4, 5, 51, 61]:
+    if article_state in [1, 2, 3, 4, 61]:
         if form_lendingsures.is_valid():
             lendingsures_clean = form_lendingsures.cleaned_data
             sure_typ = lendingsures_clean['sure_typ']
@@ -250,7 +250,7 @@ def guarantee_add_ajax(request):  # 反担保措施添加ajax
 # -----------------------反担保措施删除ajax-------------------------#
 @login_required
 @authority
-def guarantee_del_ajax(request):  # 反担保人删除ajax
+def guarantee_del_ajax(request):  #
     print(request.path, '>', resolve(request.path).url_name, '>', request.user)
     response = {'status': True, 'message': None, 'forme': None, }
     post_data_str = request.POST.get('postDataStr')
@@ -260,10 +260,10 @@ def guarantee_del_ajax(request):  # 反担保人删除ajax
     sure_typ = int(post_data['sure_typ'])
 
     lending_obj = models.LendingOrder.objects.get(id=lending_id)
-    '''ARTICLE_STATE_LIST = ((1, '待反馈'), (2, '已反馈'), (3, '待上会'), (4, '已上会'), (5, '已签批'),
-                          (51, '已放完'), (61, '待变更'), (99, '已注销'))'''
+    '''ARTICLE_STATE_LIST = [(1, '待反馈'), (2, '已反馈'), (3, '待上会'), (4, '已上会'), (5, '已签批'),
+                          (51, '已放款'), (52, '已放完'), (55, '已解保'), (61, '待变更'), (99, '已注销')]'''
     article_state = lending_obj.summary.article_state
-    if article_state in [1, 2, 3, 4, 61]:
+    if article_state in [1, 2, 3, 4, 61,]:
         lendingsure_obj = lending_obj.sure_lending.get(sure_typ=sure_typ)
         '''SURE_TYP_LIST = (
         (1, '企业保证'), (2, '个人保证'),
@@ -275,7 +275,6 @@ def guarantee_del_ajax(request):  # 反担保人删除ajax
         if sure_typ in [1, 2]:
             custom_id = post_data['del_guarantee_id']
             custom_obj = models.Customes.objects.get(id=custom_id)
-            print('custom_obj:', custom_obj)
             try:
                 with transaction.atomic():
                     lendingsure_obj.custom_sure.custome.remove(custom_obj)
@@ -303,9 +302,9 @@ def guarantee_del_ajax(request):  # 反担保人删除ajax
                     response['message'] = msg
             except Exception as e:
                 response['status'] = False
-                response['message'] = '放担保物删除失败：%s' % str(e)
+                response['message'] = '反担保物删除失败：%s' % str(e)
     else:
-        msg = '项目状态为：%s，无法删除放款次序！！！' % article_state
+        msg = '项目状态为：%s，无法删除反担保物！！！' % article_state
         response['status'] = False
         response['message'] = msg
     result = json.dumps(response, ensure_ascii=False)

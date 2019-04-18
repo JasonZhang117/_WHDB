@@ -5,15 +5,15 @@
         <tr style="text-align: center">
             <th>序号</th>
             <th>项目经理</th>
-            <th>项目笔数</th>
+            <th>放款笔数</th>
             <th>担保余额</th>
         </tr>
         </thead>
         <tbody>
-        {% for director in article_groups_director %}
+        {% for director in provide_groups_director %}
             <tr>
                 <td>{{ forloop.counter }}</td>
-                <td>{{ director.director__name }}</td>
+                <td>{{ director.notify__agree__lending__summary__director__name }}</td>
                 <td align="right">{{ director.con }}</td>
                 <td align="right">{{ director.sum|floatformat:2 }}</td>
             </tr>

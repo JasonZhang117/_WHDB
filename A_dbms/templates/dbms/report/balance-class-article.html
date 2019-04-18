@@ -22,6 +22,8 @@
             {% include 'dbms/report/balance_article/balance-class-control.html' %}
         {% elif  kwargs.class_typ == 71 %}
             {% include 'dbms/report/balance_article/balance-class-branch.html' %}
+        {% elif  kwargs.class_typ == 81 %}
+            {% include 'dbms/report/balance_article/balance-class-organization.html' %}
         {% endif %}
     </div>
 {% endblock %}

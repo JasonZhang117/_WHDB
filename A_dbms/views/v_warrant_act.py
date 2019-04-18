@@ -736,15 +736,15 @@ def storages_add_ajax(request):  # 出入库添加ajax
     warrant_obj = warrant_list.first()
     warrant_state = warrant_obj.warrant_state
     form_storage_add_edit = forms.StoragesAddEidtForm(post_data)
-    '''STORAGE_TYP_LIST = ((1, '入库'), (2, '续抵出库'), (6, '无需入库'), (11, '借出'), 
-    (12, '归还'), (31, '解保出库'))'''
-    '''WARRANT_STATE_LIST = (
+    '''STORAGE_TYP_LIST = [(1, '入库'), (2, '续抵出库'), (6, '无需入库'), (11, '借出'), (12, '归还'), 
+    (31, '解保出库')]'''
+    '''WARRANT_STATE_LIST = [
         (1, '未入库'), (2, '已入库'), (6, '无需入库'), (11, '续抵出库'), (21, '已借出'), (31, '解保出库'),
-        (99, '已注销'))'''
+        (99, '已注销')]'''
     if form_storage_add_edit.is_valid():
         storage_add_clean = form_storage_add_edit.cleaned_data
         storage_typ = storage_add_clean['storage_typ']
-        if warrant_state in [6, 99]:  # (6, '无需入库'),(99, '已注销'))
+        if warrant_state == 99:  # (99, '已注销'))
             response['status'] = False
             response['message'] = '权证状态为：%s，无法办理出入库操作！' % warrant_state
         elif warrant_state == 2:  # (2, '已入库')----在库状态
@@ -850,10 +850,64 @@ def storages_add_ajax(request):  # 出入库添加ajax
     return HttpResponse(result)
 
 
+# -----------------------出入库删除ajax-------------------------#
+@login_required
+@authority
+def storage_del_ajax(request):  #
+    print(request.path, '>', resolve(request.path).url_name, '>', request.user)
+    response = {'status': True, 'message': None, 'forme': None, }
+    post_data_str = request.POST.get('postDataStr')
+    post_data = json.loads(post_data_str)
+    print('post_data:', post_data)
+
+    warrant_list = models.Warrants.objects.filter(id=post_data['warrant_id'])
+    warrant_obj = warrant_list.first()
+    warrant_state = warrant_obj.warrant_state
+
+    storage_list = models.Storages.objects.filter(id=post_data['storage_id'])
+    storage_obj = storage_list.first()
+    storage_typ = storage_obj.storage_typ
+
+    '''STORAGE_TYP_LIST = [(1, '入库'), (2, '续抵出库'), (6, '无需入库'), (11, '借出'), (12, '归还'), 
+    (31, '解保出库')]'''
+    '''WARRANT_STATE_LIST = [
+        (1, '未入库'), (2, '已入库'), (6, '无需入库'), (11, '续抵出库'), (21, '已借出'), (31, '解保出库'),
+        (99, '已注销')]'''
+    if storage_typ in [1, 6]:  # (1, '入库'), (6, '无需入库')
+        try:
+            with transaction.atomic():
+                storage_list.delete()
+                warrant_list.update(warrant_state=1)
+            response['message'] = '出入库信息删除成功！！！'
+        except Exception as e:
+            response['status'] = False
+            response['message'] = '出入库信息散出失败：%s' % str(e)
+    elif storage_typ in [2, 11, 31]:  # (2, '续抵出库'),(11, '借出'), (31, '解保出库')
+        try:
+            with transaction.atomic():
+                storage_list.delete()
+                warrant_list.update(warrant_state=2)
+            response['message'] = '出入库信息删除成功！！！'
+        except Exception as e:
+            response['status'] = False
+            response['message'] = '出入库信息散出失败：%s' % str(e)
+    elif storage_typ == 12:  # (12, '归还')
+        try:
+            with transaction.atomic():
+                storage_list.delete()
+                warrant_list.update(warrant_state=21)
+            response['message'] = '出入库信息删除成功！！！'
+        except Exception as e:
+            response['status'] = False
+            response['message'] = '出入库信息散出失败：%s' % str(e)
+    result = json.dumps(response, ensure_ascii=False)
+    return HttpResponse(result)
+
+
 # -----------------------评估添加ajax-------------------------#
 @login_required
 @authority
-def evaluate_add_ajax(request):  # 出入库添加ajax
+def evaluate_add_ajax(request):  #
     print(request.path, '>', resolve(request.path).url_name, '>', request.user)
     response = {'status': True, 'message': None, 'forme': None, }
     post_data_str = request.POST.get('postDataStr')
@@ -873,10 +927,13 @@ def evaluate_add_ajax(request):  # 出入库添加ajax
                 evaluate_explain = evaluate_clean['evaluate_explain']
                 ''' EVALUATE_STATE_LIST = [(1, '机构评估'), (11, '机构预估'), (21, '综合询价'), (31, '购买成本'),
                                            (41, '拍卖评估'), (99, '无需评估')]'''
-                evaluate_obj = models.Evaluate.objects.create(
-                    warrant=warrant_obj, evaluate_state=evaluate_state,
-                    evaluate_value=evaluate_value, evaluate_date=evaluate_date,
-                    evaluate_explain=evaluate_explain, evaluator=request.user)
+                evaluate_default = {
+                    'warrant': warrant_obj, 'evaluate_state': evaluate_state, 'evaluate_value': evaluate_value,
+                    'evaluate_date': evaluate_date, 'evaluate_explain': evaluate_explain,
+                    'evaluator': request.user}
+                evaluate_obj, created = models.Evaluate.objects.update_or_create(
+                    warrant=warrant_obj, evaluate_date=evaluate_date, defaults=evaluate_default)
+
                 '''EVALUATE_STATE_LIST = [(0, '待评估'), (1, '机构评估'), (11, '机构预估'), 
                 (21, '综合询价'), (31, '购买成本'),
                            (41, '拍卖评估'), (99, '无需评估')]'''
@@ -886,9 +943,11 @@ def evaluate_add_ajax(request):  # 出入库添加ajax
         except Exception as e:
             response['status'] = False
             response['message'] = '评估失败：%s' % str(e)
+            print(response['message'])
     else:
         response['status'] = False
         response['message'] = '表单信息有误！！！'
         response['forme'] = form_evaluate_add_edit.errors
+
     result = json.dumps(response, ensure_ascii=False)
     return HttpResponse(result)

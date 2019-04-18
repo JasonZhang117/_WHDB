@@ -1,0 +1,54 @@
+<script>
+    $(function () {
+        bindDelStorageB();
+        bindDelStorageModalOk();
+    });
+
+    function bindDelStorageB() {
+        $('#storage-tb').on('click', '.delStorageB', function () {
+            console.log("bindDelStorageB");
+            delStorageNid = $(this).parent().parent().attr('storage-nid');
+            console.log(delStorageNid);
+            $('#delStorageId').val(delStorageNid);
+            $('#delStorageModal').modal('show');
+        })
+    }
+
+    function bindDelStorageModalOk() {
+        $('#delStorageModalOk').click(function () {
+            var postData = {};
+
+            $('#delStorageModal').find('input,select').each(function () {
+                var v = $(this).val();
+                var n = $(this).attr('name');
+                postData[n] = v;
+            });
+            var postDataStr = JSON.stringify(postData);
+            console.log(postDataStr);
+            $.ajax({
+                url: '/dbms/warrant/storages/del/',
+                type: 'POST',
+                dataType: 'JSON',
+                data: {'postDataStr': postDataStr},
+                success: function (arg) {
+                    if (arg.status) {
+                        $('#delStorageModal').modal('hide');
+                        alert(arg.message);
+                        window.location.reload();
+                    } else {
+                        $('#delStorageModal').modal('hide');
+                        alert(arg.message);
+                        {#window.location.reload();#}
+                    }
+                }
+            })
+
+        })
+    }
+</script>
+
+
+
+
+
+

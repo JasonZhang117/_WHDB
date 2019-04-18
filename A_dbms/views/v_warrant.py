@@ -454,7 +454,7 @@ def overdue_evaluate(request, *args, **kwargs):  #
     EVALUATE_STATE_LIST = models.Warrants.EVALUATE_STATE_LIST  # 筛选条件
     '''筛选'''
     warrant_list = models.Warrants.objects.filter(**kwargs).exclude(
-        evaluate_state__in=[41, 99]).order_by('evaluate_date')
+        evaluate_state__in=[41, 99])
     '''EVALUATE_STATE_LIST = [(0, '待评估'), (5, '机构评估'), (11, '机构预估'), (21, '综合询价'), (31, '购买成本'),
                                (41, '拍卖评估'), (99, '无需评估')]'''
     '''ARTICLE_STATE_LIST = [(1, '待反馈'), (2, '已反馈'), (3, '待上会'), (4, '已上会'), (5, '已签批'),
@@ -469,7 +469,7 @@ def overdue_evaluate(request, *args, **kwargs):  #
             cccc = warrant.meeting_date - warrant.evaluate_date
             if cccc.days > 365:
                 ddd.append(warrant.id)
-    warrant_list = models.Warrants.objects.filter(id__in=ddd)
+    warrant_list = models.Warrants.objects.filter(id__in=ddd).order_by('-meeting_date')
 
     '''搜索'''
     search_key = request.GET.get('_s')

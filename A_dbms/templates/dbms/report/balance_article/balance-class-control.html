@@ -13,7 +13,7 @@
         {% for control in article_groups_control %}
             <tr>
                 <td>{{ forloop.counter }}</td>
-                <td>{{ control.provide_groups_control }}</td>
+                <td>{{ control.control__name }}</td>
                 <td align="right">{{ control.con }}</td>
                 <td align="right">{{ control.sum|floatformat:2 }}</td>
             </tr>

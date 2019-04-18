@@ -1,5 +1,5 @@
 <tr style="border: 1px solid black">{#审保会次数#}
-    <th style="border: 1px solid black;width: 100px">审保会次数</th>
+    <td style="border: 1px solid black;width: 100px">审保会次数</td>
     <td style="border: 1px solid black">
         {{ article_obj.appraisal_article.all.first.review_year }}年度第
         {{ article_obj.appraisal_article.all.first.review_order }}次审保会（
@@ -7,15 +7,15 @@
     </td>
 </tr>
 <tr style="border: 1px solid black">{#上会日期#}
-    <th style="border: 1px solid black">上会日期</th>
+    <td style="border: 1px solid black">上会日期</td>
     <td style="border: 1px solid black">{{ article_obj.review_date }}</td>
 </tr>
 <tr style="border: 1px solid black">{#主持人#}
-    <th style="border: 1px solid black">主持人</th>
+    <td style="border: 1px solid black">主持人</td>
     <td style="border: 1px solid black">张春玉</td>
 </tr>
 <tr style="border: 1px solid black">{#参会委员#}
-    <th style="border: 1px solid black">参会委员</th>
+    <td style="border: 1px solid black">参会委员</td>
     <td style="border: 1px solid black">
         {% for expert in article_obj.expert.all %}
             {{ expert }}{% if not forloop.last %}、 {% endif %}
@@ -23,16 +23,16 @@
     </td>
 </tr>
 <tr style="border: 1px solid black">{#项目名称#}
-    <th style="border: 1px solid black">项目名称</th>
+    <td style="border: 1px solid black">项目名称</td>
     <td style="border: 1px solid black">{{ article_obj.custom }}</td>
 </tr>
 <tr style="border: 1px solid black">{#所属行业#}
-    <th style="border: 1px solid black">所属行业</th>
+    <td style="border: 1px solid black">所属行业</td>
     <td style="border: 1px solid black">
         {{ article_obj.custom.company_custome.idustry }}</td>
 </tr>
 <tr style="border: 1px solid black">{#项目成员#}
-    <th style="border: 1px solid black">项目成员</th>
+    <td style="border: 1px solid black">项目成员</td>
     <td style="border: 1px solid black">A角：{{ article_obj.director.name }}
         &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbspB角：
         {{ article_obj.assistant.name }}
@@ -40,7 +40,7 @@
         {{ article_obj.control.name }}</td>
 </tr>
 <tr style="border: 1px solid black">{#评审结论#}
-    <th style="border: 1px solid black">评审结论</th>
+    <td style="border: 1px solid black">评审结论</td>
     <td style="border: 1px solid black">
         同意为该公司
         {% for single_dic in  single_dic_list %}
@@ -56,7 +56,7 @@
     </td>
 </tr>
 <tr style="border: 1px solid black">{#业务品种#}
-    <th style="border: 1px solid black">业务品种</th>
+    <td style="border: 1px solid black">业务品种</td>
     <td style="border: 1px solid black">
         {% for single in  article_obj.single_quota_summary.all %}
             {{ single.get_credit_model_display }}
@@ -65,7 +65,7 @@
     </td>
 </tr>
 <tr style="border: 1px solid black">{#金额#}
-    <th style="border: 1px solid black">金额</th>
+    <td style="border: 1px solid black">金额</td>
     <td style="border: 1px solid black">
         {{ amount_str }}万元
         {% if article_obj.renewal > 0 and article_obj.augment > 0 %}
@@ -78,7 +78,7 @@
     </td>
 </tr>
 <tr style="border: 1px solid black"> {#期限#}
-    <th style="border: 1px solid black">期限</th>
+    <td style="border: 1px solid black">期限</td>
     <td style="border: 1px solid black">
         {% if article_obj.credit_term == 12 %}
             壹年期
@@ -88,7 +88,7 @@
     </td>
 </tr>
 <tr style="border: 1px solid black">{#费率及收费方式#}
-    <th style="border: 1px solid black">费率及收费方式</th>
+    <td style="border: 1px solid black">费率及收费方式</td>
     <td style="border: 1px solid black">
         {% if article_obj.single_quota_summary.all.count > 1 %}
             {% for single in  article_obj.single_quota_summary.all %}
