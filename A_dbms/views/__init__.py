@@ -27,13 +27,13 @@ from .v_warrant import (
 from .v_warrant_act import (
     warrant_add_ajax, warrant_del_ajax, warrant_edit_ajax, owership_add_ajax, owership_del_ajax,
     guaranty_add_ajax, guaranty_del_ajax, storages_add_ajax, storage_del_ajax,
-    housebag_add_ajax, draftextend_add_ajax,
-    evaluate_add_ajax)
+    housebag_add_ajax, housebag_del_ajax, receivextend_add_ajax, receivextend_del_ajax, draftextend_add_ajax,
+    draftbag_del_ajax, evaluate_add_ajax)
 
 # ----------------------v_provide放款管理视图--------------------#
 from .v_provide import (
     provide_agree, provide_agree_scan, provide_agree_notify, provide, provide_scan, overdue, soondue, notify,
-    notify_scan,provide_follow)
+    notify_scan, provide_follow)
 from .v_provide_act import (
     counter_sign_ajax, ascertain_add_ajax, notify_add_ajax, notify_del_ajax, provide_add_ajax,
     provide_del_ajax, repayment_add_ajax, repayment_del_ajax)

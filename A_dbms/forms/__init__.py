@@ -9,7 +9,7 @@ from .f_appraisal import (
 from .f_warrant import (
     WarrantAddForm, WarrantEditForm, HouseBagAddEidtForm, OwerShipAddForm, HouseAddEidtForm, GroundAddEidtForm,
     ConstructionAddForm,
-    HypothecsAddEidtForm, StoragesAddEidtForm, FormReceivable, FormReceivableEdit,
+    HypothecsAddEidtForm, StoragesAddEidtForm, FormReceivable, FormReceivableEdit, FormReceivExtend,
     FormStockes, FormStockesEdit, FormDraft, FormDraftEdit, FormDraftExtend,
     FormVehicle, FormVehicleEdit, FormChattel, FormChattelEdit, FormOthers, FormOthersEdit, EvaluateAddEidtForm)
 from .f_agree import (AgreeAddForm, AddCounterForm, FormAgreeSign, AgreeEditForm)

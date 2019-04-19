@@ -14,7 +14,7 @@
         </thead>
         <tbody id="draftbag-tb">
         {% for draft in warrant_obj.draft_warrant.extend_draft.all %}
-            <tr draft-nid="{{ draft.id }}">
+            <tr draftbag-nid="{{ draft.id }}">
                 <td>{{ forloop.counter }}</td>
                 <td>{{ draft.draft_num }}</td>
                 <td>{{ draft.get_draft_typ_display }}</td>

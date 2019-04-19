@@ -1,0 +1,15 @@
+<p><strong><u>{{ agree_obj.lending.summary.custom.name }}</u></strong>（以下简称委托人）与贵公司
+    于<u>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</u>年<u>&nbsp&nbsp&nbsp&nbsp</u>月
+    <u>&nbsp&nbsp&nbsp&nbsp</u>日签订了《{{ agree_obj.get_agree_name_display }}》（以下
+    称：“合同”，合同编号:<strong><u>{{ agree_obj.agree_num }}</u></strong>），合同
+    约定贵公司为委托人在<strong><u>{{ agree_obj.branch.name }}</u></strong>申请的
+    {% if agree_term == 12 %}
+        壹年
+    {% else %}
+        {{ agree_term_str }}个月
+    {% endif %}
+    期<strong><u>人
+        民币{{ agree_amount_cn }}</u></strong>的贷款提供保证担保，担保金额为：<strong><u>人
+        民币本金{{ agree_amount_cn }}</u>（具体金额以银行放款凭证为准）及其产生的法定利息、约定利息、复
+        利、罚息、违约金、赔偿金和实现债权的费用（包括但不限于诉讼费、律师费、公证
+        费、执行费等）</strong>。对此，本人无条件地不可撤销地保证：</p>

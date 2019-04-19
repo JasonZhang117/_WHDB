@@ -144,6 +144,7 @@ def warrant_scan(request, warrant_id):  # house_scan房产预览
     form_owership_add_edit = forms.OwerShipAddForm()  # 所有权证form
     form_housebag_add_edit = forms.HouseBagAddEidtForm()  # 房产包form
     form_draftbag_add_edit = forms.FormDraftExtend()  # 票据包form
+    form_receivbag_add = forms.FormReceivExtend()  # 应收包form
     form_evaluate_add_edit = forms.EvaluateAddEidtForm(initial={'evaluate_date': str(datetime.date.today())})  # 评估
     storage_warrant_list = warrant_obj.storage_warrant.all()  # 出入库信息
     '''ARTICLE_STATE_LIST = ((1, '待反馈'), (2, '已反馈'), (3, '待上会'), (4, '已上会'), (5, '已签批'),

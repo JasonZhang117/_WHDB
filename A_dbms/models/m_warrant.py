@@ -217,6 +217,7 @@ class ReceiveExtend(models.Model):  # 应收列表
     class Meta:
         verbose_name_plural = '权证-应收明细'  # 指定显示名称
         db_table = 'dbms_receiveextend'  # 指定数据表的名称
+        unique_together = ['receivable', 'receive_unit']
 
     def __str__(self):
         return '%s' % self.receivable.warrant.warrant_num

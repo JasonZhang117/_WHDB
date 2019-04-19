@@ -1,0 +1,19 @@
+<div class="modal fade bs-example-modal-sm" id="delReceivBagModal"
+     tabindex="-1" role="dialog" aria-labelledby="delReceivBagModal">
+    <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="delReceivBagModalLabel">删除付款人
+                    <input style="display: none" name="receivable_id" id="id_receivable_id"
+                           value={{ warrant_obj.receive_warrant.id }}>
+                    <input style="display: none" name="receivbag_id" id="delReceivBagModalId">
+                </h4>
+            </div>
+            <div class="modal-body">是否确定删除付款人信息!!!</div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                <button type="button" class="btn btn-primary" id="delReceivBagModalOk">删除</button>
+            </div>
+        </div>
+    </div>
+</div>

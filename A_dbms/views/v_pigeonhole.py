@@ -116,19 +116,7 @@ def pigeonhole_overdue(request, *args, **kwargs):
             q.children.append(("%s__contains" % field, search_key))
         pigeonhole_overdue_list = pigeonhole_overdue_list.filter(q)
 
-    provide_amount = pigeonhole_overdue_list.aggregate(Sum('provide_money'))['provide_money__sum']  # 放款金额合计
-    repayment_amount = pigeonhole_overdue_list.aggregate(
-        Sum('provide_repayment_sum'))['provide_repayment_sum__sum']  # 还款金额合计
-    if provide_amount:
-        provide_amount = provide_amount
-    else:
-        provide_amount = 0
-
-    if repayment_amount:
-        repayment_amount = repayment_amount
-    else:
-        repayment_amount = 0
-    balance = round(provide_amount - repayment_amount, 2)
+    balance = pigeonhole_overdue_list.aggregate(Sum('provide_balance'))['provide_balance__sum']  # 在保余额
 
     provide_acount = pigeonhole_overdue_list.count()  # 信息数目
 

@@ -1,0 +1,53 @@
+<script>
+    $(function () {
+        bindDelHouseBagB();
+        bindDelHouseBagModalOk();
+    });
+
+    function bindDelHouseBagB() {
+        $('#housebag-tb').on('click', '.delHouseBagB', function () {
+            var delHouseBagNid = $(this).parent().parent().attr('housebag-nid');
+            $('#delHouseBagModalId').val(delHouseBagNid);
+            $('#delHouseBagModal').modal('show');
+        })
+    }
+
+    function bindDelHouseBagModalOk() {
+        $('#delHouseBagModalOk').click(function () {
+            var postData = {};
+
+            $('#delHouseBagModal').find('input,select').each(function () {
+                var v = $(this).val();
+                var n = $(this).attr('name');
+                postData[n] = v;
+            });
+            var postDataStr = JSON.stringify(postData);
+            console.log(postDataStr);
+
+            $.ajax({
+                url: '/dbms/warrant/housebag/del/',
+                type: 'POST',
+                dataType: 'JSON',
+                data: {'postDataStr': postDataStr},
+                success: function (arg) {
+                    if (arg.status) {
+                        $('#delHouseBagModal').modal('hide');
+                        alert(arg.message);
+                        window.location.reload();
+                    } else {
+                        $('#delHouseBagModal').modal('hide');
+                        alert(arg.message);
+                        {#window.location.reload();#}
+                    }
+                }
+            })
+
+        })
+    }
+</script>
+
+
+
+
+
+

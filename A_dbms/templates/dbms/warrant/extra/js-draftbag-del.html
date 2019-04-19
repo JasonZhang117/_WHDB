@@ -1,0 +1,53 @@
+<script>
+    $(function () {
+        bindDelDraftBagB();
+        bindDelDraftBagModalOk();
+    });
+
+    function bindDelDraftBagB() {
+        $('#draftbag-tb').on('click', '.delDraftBagB', function () {
+            var delDraftBagNid = $(this).parent().parent().attr('draftbag-nid');
+            $('#delDraftBagModalId').val(delDraftBagNid);
+            $('#delDraftBagModal').modal('show');
+        })
+    }
+
+    function bindDelDraftBagModalOk() {
+        $('#delDraftBagModalOk').click(function () {
+            var postData = {};
+
+            $('#delDraftBagModal').find('input,select').each(function () {
+                var v = $(this).val();
+                var n = $(this).attr('name');
+                postData[n] = v;
+            });
+            var postDataStr = JSON.stringify(postData);
+            console.log(postDataStr);
+
+            $.ajax({
+                url: '/dbms/warrant/draftbag/del/',
+                type: 'POST',
+                dataType: 'JSON',
+                data: {'postDataStr': postDataStr},
+                success: function (arg) {
+                    if (arg.status) {
+                        $('#delDraftBagModal').modal('hide');
+                        alert(arg.message);
+                        window.location.reload();
+                    } else {
+                        $('#delDraftBagModal').modal('hide');
+                        alert(arg.message);
+                        {#window.location.reload();#}
+                    }
+                }
+            })
+
+        })
+    }
+</script>
+
+
+
+
+
+

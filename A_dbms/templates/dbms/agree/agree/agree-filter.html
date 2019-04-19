@@ -23,7 +23,7 @@
         </form>
     </label>
     <label>
-        在保余额：{{ balance }}
+        在保余额：{{ balance|floatformat:'2' }}
     </label>
 
     {% if form_agree_add %}

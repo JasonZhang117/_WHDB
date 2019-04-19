@@ -1,0 +1,26 @@
+<div class="table-responsive">
+    {#"table-responsive":表格响应式布局#}
+    <table class="table table-bordered table-hover table-condensed active">
+        {#"table-bordered":表格表格边框#}
+        {#"table-hover":表格悬停变色#}
+        {#"table-condensed":表格紧缩#}
+        {#<caption><h4>项目管理</h4></caption>#}
+        <thead>
+        <tr style="text-align: center">
+            <th>编号</th>
+            <th>应收单位</th>
+            <th>操作</th>
+        </tr>
+        </thead>
+        <tbody id="receivbag-tb">
+        {% for receivbag in warrant_obj.receive_warrant.extend_receiveable.all %}
+            <tr receivbag-nid="{{ receivbag.id }}">
+                <td>{{ forloop.counter }}</td>
+                <td>{{ receivbag.receive_unit }}</td>
+                <td><a class="btn btn-primary btn-xs delReceivBagB">删除</a></td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+</div>

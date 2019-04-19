@@ -1,0 +1,53 @@
+<script>
+    $(function () {
+        bindDelReceivBagB();
+        bindDelReceivBagModalOk();
+    });
+
+    function bindDelReceivBagB() {
+        $('#receivbag-tb').on('click', '.delReceivBagB', function () {
+            var delReceivBagNid = $(this).parent().parent().attr('receivbag-nid');
+            $('#delReceivBagModalId').val(delReceivBagNid);
+            $('#delReceivBagModal').modal('show');
+        })
+    }
+
+    function bindDelReceivBagModalOk() {
+        $('#delReceivBagModalOk').click(function () {
+            var postData = {};
+
+            $('#delReceivBagModal').find('input,select').each(function () {
+                var v = $(this).val();
+                var n = $(this).attr('name');
+                postData[n] = v;
+            });
+            var postDataStr = JSON.stringify(postData);
+            console.log(postDataStr);
+
+            $.ajax({
+                url: '/dbms/warrant/receivbag/del/',
+                type: 'POST',
+                dataType: 'JSON',
+                data: {'postDataStr': postDataStr},
+                success: function (arg) {
+                    if (arg.status) {
+                        $('#delReceivBagModal').modal('hide');
+                        alert(arg.message);
+                        window.location.reload();
+                    } else {
+                        $('#delReceivBagModal').modal('hide');
+                        alert(arg.message);
+                        {#window.location.reload();#}
+                    }
+                }
+            })
+
+        })
+    }
+</script>
+
+
+
+
+
+

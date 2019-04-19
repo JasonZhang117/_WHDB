@@ -483,19 +483,7 @@ def overdue(request, *args, **kwargs):  # 逾期列表
             q.children.append(("%s__contains" % field, search_key))
         overdue_list = overdue_list.filter(q)
 
-    provide_amount = overdue_list.aggregate(Sum('provide_money'))['provide_money__sum']  # 放款金额合计
-    repayment_amount = overdue_list.aggregate(
-        Sum('provide_repayment_sum'))['provide_repayment_sum__sum']  # 还款金额合计
-    if provide_amount:
-        provide_amount = provide_amount
-    else:
-        provide_amount = 0
-
-    if repayment_amount:
-        repayment_amount = repayment_amount
-    else:
-        repayment_amount = 0
-    balance = provide_amount - repayment_amount
+    balance = overdue_list.aggregate(Sum('provide_balance'))['provide_balance__sum']  # 在保余额
 
     provide_acount = overdue_list.count()
     '''分页'''
@@ -540,20 +528,7 @@ def soondue(request, *args, **kwargs):  # 委托合同列表
             q.children.append(("%s__contains" % field, search_key))
         soondue_list = soondue_list.filter(q)
 
-    provide_amount = soondue_list.aggregate(Sum('provide_money'))['provide_money__sum']  # 放款金额合计
-    repayment_amount = soondue_list.aggregate(
-        Sum('provide_repayment_sum'))['provide_repayment_sum__sum']  # 还款金额合计
-    if provide_amount:
-        provide_amount = provide_amount
-    else:
-        provide_amount = 0
-
-    if repayment_amount:
-        repayment_amount = repayment_amount
-    else:
-        repayment_amount = 0
-    balance = provide_amount - repayment_amount
-
+    balance = soondue_list.aggregate(Sum('provide_balance'))['provide_balance__sum']  # 在保余额
     provide_acount = soondue_list.count()
     '''分页'''
     paginator = Paginator(soondue_list, 19)

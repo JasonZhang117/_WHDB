@@ -19,6 +19,8 @@
                 <a class="btn btn-primary btn-sm " id="addEvaluateB">评估</a><!--#path('warrant/evaluate/'-->
                 <a class="btn btn-primary btn-sm " id="addHouseBagB">添加房产包</a><!--#path('warrant/storages/'-->
                 <a class="btn btn-primary btn-sm " id="addStoragesB">出入库</a><!--#path('warrant/storages/'-->
+            {% elif warrant_typ == 11 %}
+                <a class="btn btn-primary btn-sm " id="addReceivbagB">添加明细</a><!--#path('warrant/storages/'-->
             {% elif warrant_typ == 31 %}
                 <a class="btn btn-primary btn-sm " id="addDraftBagB">添加票据</a><!--#path('warrant/storages/'-->
                 <a class="btn btn-primary btn-sm " id="addStoragesB">出入库</a><!--#path('warrant/storages/'-->
@@ -26,7 +28,7 @@
                 <a class="btn btn-primary btn-sm " id="addStoragesB">出入库</a><!--#path('warrant/storages/'-->
             {% endif %}
             <a class="btn btn-primary btn-sm " id="editWarrant">修改</a><!--#path('warrant/edit/'-->
-            <a class="btn btn-danger btn-sm " id="delWarrant">删除</a><!--#path('warrant/del/'-->
+            <a class="btn btn-primary btn-sm " id="delWarrant">删除</a><!--#path('warrant/del/'-->
         </label>
     </div>
 

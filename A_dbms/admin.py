@@ -98,6 +98,7 @@ admin.site.register(models.Grounds)  # 土地
 admin.site.register(models.Construction)  # 在建工程
 admin.site.register(models.Stockes)  # 股权
 admin.site.register(models.Receivable)  # 应收账款
+admin.site.register(models.ReceiveExtend)  # 应收账款
 admin.site.register(models.Draft)  # 票据
 admin.site.register(models.DraftExtend)  # 票据列表
 admin.site.register(models.Chattel)  # 动产

@@ -630,6 +630,92 @@ def housebag_add_ajax(request):  # 产权证添加ajax
     return HttpResponse(result)
 
 
+# -----------------------产权证删除ajax-------------------------#
+@login_required
+@authority
+def housebag_del_ajax(request):  #
+    print(request.path, '>', resolve(request.path).url_name, '>', request.user)
+    response = {'status': True, 'message': None, 'forme': None, }
+    post_data_str = request.POST.get('postDataStr')
+    post_data = json.loads(post_data_str)
+
+    housebag_obj = models.HouseBag.objects.get(id=post_data['housebag_id'])
+
+    lending_warrant_list = ''  # warrant_obj.lending_warrant.all()
+    if lending_warrant_list:
+        response['status'] = False
+        response['message'] = '担保物已作为项目反担保，无法删除！'
+    else:
+        try:
+            housebag_obj.delete()  # 删除评审会
+            msg = '房产项目删除成功！'
+            response['message'] = msg
+        except Exception as e:
+            response['status'] = False
+            response['message'] = '房产项目删除失败:%s！' % str(e)
+
+    result = json.dumps(response, ensure_ascii=False)
+    return HttpResponse(result)
+
+
+# ----------------------付款人添加ajax-------------------------#
+@login_required
+@authority
+def receivextend_add_ajax(request):  # 产权证添加ajax
+    print(request.path, '>', resolve(request.path).url_name, '>', request.user)
+    response = {'status': True, 'message': None, 'forme': None, }
+    post_data_str = request.POST.get('postDataStr')
+    post_data = json.loads(post_data_str)
+    print('post_data:', post_data)
+    receive_obj = models.Receivable.objects.get(id=post_data['receivable_id'])
+
+    form_receivbag_add = forms.FormReceivExtend(post_data)
+    if form_receivbag_add.is_valid():
+        receivbag_clean = form_receivbag_add.cleaned_data
+        try:
+            receivbag_obj = models.ReceiveExtend.objects.create(
+                receivable=receive_obj, receive_unit=receivbag_clean['receive_unit'],
+                receiv_e_buildor=request.user)
+            response['message'] = '应收单位创建成功！！！'
+        except Exception as e:
+            response['status'] = False
+            response['message'] = '应收单位创建失败：%s' % str(e)
+    else:
+        response['status'] = False
+        response['message'] = '表单信息有误！！！'
+        response['forme'] = form_receivbag_add.errors
+    result = json.dumps(response, ensure_ascii=False)
+    return HttpResponse(result)
+
+
+# -----------------------付款人删除ajax-------------------------#
+@login_required
+@authority
+def receivextend_del_ajax(request):  # 产权证删除ajax
+    print(request.path, '>', resolve(request.path).url_name, '>', request.user)
+    response = {'status': True, 'message': None, 'forme': None, }
+    post_data_str = request.POST.get('postDataStr')
+    post_data = json.loads(post_data_str)
+
+    receivbag_obj = models.ReceiveExtend.objects.get(id=post_data['receivbag_id'])
+
+    lending_warrant_list = ''  # warrant_obj.lending_warrant.all()
+    if lending_warrant_list:
+        response['status'] = False
+        response['message'] = '担保物已作为项目反担保，无法删除！'
+    else:
+        try:
+            receivbag_obj.delete()  # 删除评审会
+            msg = '付款人删除成功！'
+            response['message'] = msg
+        except Exception as e:
+            response['status'] = False
+            response['message'] = '付款人删除失败:%s！' % str(e)
+
+    result = json.dumps(response, ensure_ascii=False)
+    return HttpResponse(result)
+
+
 # ----------------------票据添加ajax-------------------------#
 @login_required
 @authority
@@ -661,6 +747,34 @@ def draftextend_add_ajax(request):  # 产权证添加ajax
         response['status'] = False
         response['message'] = '表单信息有误！！！'
         response['forme'] = form_draftbag_add_edit.errors
+    result = json.dumps(response, ensure_ascii=False)
+    return HttpResponse(result)
+
+
+# -----------------------票据删除ajax-------------------------#
+@login_required
+@authority
+def draftbag_del_ajax(request):  #
+    print(request.path, '>', resolve(request.path).url_name, '>', request.user)
+    response = {'status': True, 'message': None, 'forme': None, }
+    post_data_str = request.POST.get('postDataStr')
+    post_data = json.loads(post_data_str)
+
+    draftbag_obj = models.DraftExtend.objects.get(id=post_data['draftbag_id'])
+
+    lending_warrant_list = ''  # warrant_obj.lending_warrant.all()
+    if lending_warrant_list:
+        response['status'] = False
+        response['message'] = '担保物已作为项目反担保，无法删除！'
+    else:
+        try:
+            draftbag_obj.delete()  # 删除评审会
+            msg = '票据项删除成功！'
+            response['message'] = msg
+        except Exception as e:
+            response['status'] = False
+            response['message'] = '票据项删除失败:%s！' % str(e)
+
     result = json.dumps(response, ensure_ascii=False)
     return HttpResponse(result)
 

@@ -296,6 +296,8 @@ def counter_preview(request, agree_id, counter_id):
             counter_property_type = '土地使用权'
         elif counter_warrant_typ == 6:
             counter_property_type = '在建工程'
+        elif counter_warrant_typ == 11:
+            receive_extend_list = counter_warrant_obj.receive_warrant.extend_receiveable.all()
         elif counter_warrant_typ == 51:
             chattel_typ = counter_warrant_obj.chattel_warrant.chattel_typ  # 动产种类
             if chattel_typ == 1:
@@ -308,12 +310,15 @@ def counter_preview(request, agree_id, counter_id):
             (31, '应收质押'), (32, '股权质押'), (33, '票据质押'), (34, '动产质押'),
             (41, '其他权利质押'),
             (51, '股权预售'), (52, '房产预售'), (53, '土地预售')]'''
+    X_COUNTER_TYP_LIST = [1, 2, ]
     D_COUNTER_TYP_LIST = [11, 12, 13, 14, 15, ]
     Z_COUNTER_TYP_LIST = [31, 32, 33, 34, 41, ]
 
     agree_amount = agree_obj.agree_amount
     agree_amount_cn = convert(agree_amount)
     agree_amount_str = str(agree_amount / 10000).rstrip('0').rstrip('.')  # 续贷（万元）
+    agree_term = agree_obj.agree_term
+    agree_term_str = convert_num(agree_term)
 
     return render(request, 'dbms/agree/preview-counter.html', locals())
 

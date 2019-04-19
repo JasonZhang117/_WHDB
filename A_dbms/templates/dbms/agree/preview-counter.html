@@ -15,22 +15,22 @@
     {#单笔#}
     {% if agree_obj.agree_typ == 1 %}
         {% if counter_obj.counter_typ == 1 %}
-            {% include 'dbms/agree/agree_board/counter/single/counter-s-x.html' %}
+            {% include 'dbms/agree/agree_board/counter/c-s-x.html' %}
         {% elif counter_obj.counter_typ == 2 %}
-            {% include 'dbms/agree/agree_board/counter/single/counter-s-g.html' %}
+            {% include 'dbms/agree/agree_board/counter/c-s-g.html' %}
         {% elif counter_obj.counter_typ in D_COUNTER_TYP_LIST %}
-            {% include 'dbms/agree/agree_board/counter/single/counter-s-d.html' %}
+            {% include 'dbms/agree/agree_board/counter/c-s-d.html' %}
         {% elif counter_obj.counter_typ in Z_COUNTER_TYP_LIST %}
-            {% include 'dbms/agree/agree_board/counter/single/counter-s-z.html' %}
+            {% include 'dbms/agree/agree_board/counter/c-s-z.html' %}
         {% endif %}
         {#最高额#}
     {% elif agree_obj.agree_typ == 2 %}
         {% if counter_obj.counter_typ == 1 %}
-            {% include 'dbms/agree/agree_board/counter/max/counter-m-x.html' %}
+            {% include 'dbms/agree/agree_board/counter/c-m-x.html' %}
         {% elif counter_obj.counter_typ == 2 %}
-            {% include 'dbms/agree/agree_board/counter/max/counter-m-g.html' %}
+            {% include 'dbms/agree/agree_board/counter/c-m-g.html' %}
         {% elif counter_obj.counter_typ in D_COUNTER_TYP_LIST %}
-            {% include 'dbms/agree/agree_board/counter/max/counter-m-d.html' %}
+            {% include 'dbms/agree/agree_board/counter/c-m-d.html' %}
         {% elif counter_obj.counter_typ in Z_COUNTER_TYP_LIST %}
 
         {% endif %}
