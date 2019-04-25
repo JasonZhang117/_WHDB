@@ -1,0 +1,49 @@
+<script>
+    $(function () {
+        bindAddTrusteeB();
+        bindAddTrusteeModalOk();
+    });
+
+    function bindAddTrusteeB() {
+        $('#addTrusteeB').click(function () {
+            {#console.log("bindAddCounterB")#}
+            $('#addTrusteeModal').modal('show');
+        })
+    }
+
+    function bindAddTrusteeModalOk() {
+        $('#addTrusteeModalOk').click(function () {
+            var postData = {};
+            $('#addTrusteeModal').find('input,select').each(function () {
+                var v = $(this).val();
+                var n = $(this).attr('name');
+                postData[n] = v;
+            });
+            var postDataStr = JSON.stringify(postData);
+            console.log(postDataStr);
+            $.ajax({
+                url: '/dbms/custom/trustee/add/',
+                type: 'POST',
+                data: {'postDataStr': postDataStr},
+                dataType: 'JSON',
+                success: function (arg) {
+                    console.log(arg);
+                    if (arg.status) {
+                        $('#addTrusteeModal').modal('hide');
+                        alert(arg.message);
+                        window.location.reload();
+                    } else {
+                        alert(arg.message);
+                        $('#e_trustee_name').text(arg.forme.trustee_name);
+                    }
+                }
+            })
+        })
+    }
+</script>
+
+
+
+
+
+

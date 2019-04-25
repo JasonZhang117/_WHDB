@@ -42,13 +42,14 @@ class CustomCAddForm(dform.ModelForm):  # 企业客户
 
     class Meta:
         model = models.CustomesC
-        fields = ['district', 'capital', 'idustry', 'registered_addr', 'representative']
+        fields = ['district', 'capital', 'idustry', 'decisionor', 'registered_addr', 'representative']
         widgets = {
             'capital': dform.TextInput(attrs={'class': 'form-control', 'placeholder': '注册资本'}),
             'registered_addr': dform.TextInput(attrs={'class': 'form-control', 'placeholder': '注册地址'}),
             'representative': dform.TextInput(attrs={'class': 'form-control', 'placeholder': '法人代表'}),
             'idustry': dform.Select(attrs={'class': 'form-control'}),
             'district': dform.Select(attrs={'class': 'form-control'}),
+            'decisionor': dform.Select(attrs={'class': 'form-control'}),
         }
 
 
@@ -61,6 +62,15 @@ class FormShareholderAdd(dform.ModelForm):  # 股权信息添加
             'shareholder_name': dform.TextInput(attrs={'class': 'form-control', 'placeholder': '股东名称'}),
             'invested_amount': dform.NumberInput(attrs={'class': 'form-control', 'placeholder': '投资额'}),
             'shareholding_ratio': dform.NumberInput(attrs={'class': 'form-control', 'placeholder': '持股比例（%）'})}
+
+
+# -----------------------董事信息添加-------------------------#
+class FormTrusteeAdd(dform.ModelForm):  # 股权信息添加
+    class Meta:
+        model = models.Trustee
+        fields = ['trustee_name', ]
+        widgets = {
+            'trustee_name': dform.TextInput(attrs={'class': 'form-control', 'placeholder': '董事姓名'}), }
 
 
 # -----------------------个人客户添加-------------------------#

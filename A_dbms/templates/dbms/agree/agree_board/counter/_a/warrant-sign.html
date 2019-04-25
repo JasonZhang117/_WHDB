@@ -18,7 +18,13 @@
                         {% endfor %}</u></strong>
                         {#(11, '应收账款')#}
                     {% elif warrant.warrant_typ == 11 %}
-                        <strong><u>{{ warrant.receive_warrant.receive_owner.name }}</u></strong>
+                        <strong><u>{{ counter_receive_obj.receive_owner.name }}</u></strong>
+                        {#(21, '股权')#}
+                    {% elif warrant.warrant_typ == 21 %}
+                        <strong><u>{{ counter_stock_obj.stock_owner.name }}</u></strong>
+                        {#(31, '票据')#}
+                    {% elif warrant.warrant_typ == 31 %}
+                        <strong><u>{{ counter_draft_obj.draft_owner.name }}</u></strong>
                         {#(41, '车辆')#}
                     {% elif warrant.warrant_typ == 41 %}
                         <strong><u>{{ warrant.vehicle_warrant.vehicle_owner.name }}</u></strong>
@@ -26,7 +32,7 @@
                     {% elif warrant.warrant_typ == 51 %}
                         <strong><u>{{ warrant.chattel_warrant.chattel_owner.name }}</u></strong>
                     {% else %}
-                        <strong><u>？？？？？？？？？？？？？？？？？？？？</u></strong>
+                        <strong><u>？？？？？？？？？？？？</u></strong>
                     {% endif %}
                 {% endif %}
             {% endfor %}
@@ -60,6 +66,16 @@
                         {% if warrant.receive_warrant.receive_owner.company_custome %}
                             <strong><u>{{ warrant.receive_warrant.receive_owner.company_custome.representative }}</u></strong>
                         {% endif %}
+                        {#(21, '股权')#}
+                    {% elif warrant.warrant_typ == 21 %}
+                        {% if warrant.stock_warrant.stock_owner.company_custome %}
+                            <strong><u>{{ warrant.stock_warrant.stock_owner.company_custome.representative }}</u></strong>
+                        {% endif %}
+                        {#(31, '票据')#}
+                    {% elif warrant.warrant_typ == 31 %}
+                        {% if warrant.draft_warrant.draft_owner.company_custome %}
+                            <strong><u>{{ warrant.draft_warrant.draft_owner.company_custome.representative }}</u></strong>
+                        {% endif %}
                         {#(41, '车辆')#}
                     {% elif warrant.warrant_typ == 41 %}
                         {% if warrant.vehicle_warrant.vehicle_owner.company_custome %}
@@ -71,7 +87,7 @@
                             <strong><u>{{ warrant.chattel_warrant.chattel_owner.company_custome.representative }}</u></strong>
                         {% endif %}
                     {% else %}
-                        <strong><u>？？？？？？？？？？？？？？？？？？？？</u></strong>
+                        <strong><u>？？？？？？？？？？？？</u></strong>
                     {% endif %}
                 {% endif %}
             {% endfor %}

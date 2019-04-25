@@ -86,6 +86,7 @@ class Jobs(models.Model):  # 岗位（角色）
     class Meta:
         verbose_name_plural = '内部-岗位'  # 指定显示名称
         db_table = 'dbms_jobs'  # 指定数据表的名称
+        ordering = ['name', ]
 
     def __str__(self):
         return self.name
@@ -106,6 +107,7 @@ class Cartes(models.Model):
         verbose_name_plural = '内部-菜单'
         db_table = 'dbms_cartes'
         # unique_together = ('name', 'url_name')
+        ordering = ['ordery', ]
 
     def __str__(self):
         return '%s-%s' % (self.caption, self.ordery)
@@ -127,6 +129,7 @@ class Authorities(models.Model):
         verbose_name_plural = '内部-权限'
         db_table = 'dbms_authorities'
         unique_together = ('name', 'url_name')
+        ordering = ['name', ]
 
     def __str__(self):
         return '%s-%s' % (self.name, self.url_name)

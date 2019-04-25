@@ -12,9 +12,15 @@
         标的公司：{{ warrant_obj.stock_warrant.target }}
     </label>
     <label class="col-lg-3 col-md-4 col-sm-12 col-xs-12">
-        数量（万）：{{ warrant_obj.stock_warrant.share }}
+        股权比例（%）：{{ warrant_obj.stock_warrant.ratio }}
     </label>
     <label class="col-lg-3 col-md-4 col-sm-12 col-xs-12">
-        比例（%）：{{ warrant_obj.stock_warrant.ratio }}
+        认缴资本（万）：{{ warrant_obj.stock_warrant.registe }}
+    </label>
+    <label class="col-lg-3 col-md-4 col-sm-12 col-xs-12">
+        实收资本（万）：{{ warrant_obj.stock_warrant.share }}
+    </label>
+    <label class="col-lg-3 col-md-4 col-sm-12 col-xs-12">
+        状态：{{ warrant_obj.get_warrant_state_display }}
     </label>
 </div>

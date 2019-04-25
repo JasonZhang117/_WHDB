@@ -109,7 +109,7 @@ class HouseBag(models.Model):  # 产权证
         (31, '票据'), (41, '车辆'), (51, '动产'), (99, '他权')]'''
     warrant = models.ForeignKey(to='Warrants', verbose_name="权证",
                                 on_delete=models.CASCADE,
-                                limit_choices_to={'warrant_typ': 1},
+                                limit_choices_to={'warrant_typ': 2},
                                 related_name='housebag_warrant')
     housebag_locate = models.CharField(verbose_name='房产坐落', max_length=64, unique=True)
     HOUSEBAG_APP_LIST = ((1, '住宅'), (11, '商业'), (21, '办公'), (31, '公寓'), (41, '厂房'), (51, '科研'))
@@ -235,8 +235,9 @@ class Stockes(models.Model):  # 股权
                                     on_delete=models.PROTECT,
                                     related_name='stock_owner_custome')
     target = models.CharField(verbose_name='标的公司', max_length=64)
-    share = models.FloatField(verbose_name='数量（万）')
     ratio = models.FloatField(verbose_name='比例（%）')
+    registe = models.FloatField(verbose_name='认缴资本（万）', default=0)
+    share = models.FloatField(verbose_name='实缴资本（万）', default=0)
     stock_buildor = models.ForeignKey(to='Employees', verbose_name="创建者", default=1,
                                       on_delete=models.PROTECT,
                                       related_name='stock_buildor_employee')
@@ -277,8 +278,8 @@ class DraftExtend(models.Model):  # 票据列表
     draft = models.ForeignKey(to='Draft', verbose_name="票据",
                               on_delete=models.CASCADE,
                               related_name='extend_draft')
-    DRAFT_TYP_LIST = ((1, '电子银行承兑汇票'), (2, '普通银行承兑汇票'), (11, '电子商业承兑汇票'),
-                      (12, '普通商业承兑汇票'), (21, '支票'))
+    DRAFT_TYP_LIST = ((1, '电子银行承兑汇票'), (2, '银行承兑汇票'), (11, '电子商业承兑汇票'),
+                      (12, '商业承兑汇票'), (21, '支票'))
     draft_typ = models.IntegerField(verbose_name='票据种类', choices=DRAFT_TYP_LIST, default=1)
     draft_num = models.CharField(verbose_name="票据编号", max_length=64)
     draft_acceptor = models.CharField(verbose_name="承兑人", max_length=64)
@@ -312,7 +313,9 @@ class Vehicle(models.Model):  # 车辆
                                       related_name='vehicle_custome')
     frame_num = models.CharField(verbose_name="车架号", max_length=64, unique=True)
     plate_num = models.CharField(verbose_name="车牌号", max_length=64, unique=True)
-    vehicle_buildor = models.ForeignKey(to='Employees', verbose_name="创建者", default=1,
+    vehicle_brand = models.CharField(verbose_name="品牌型号", max_length=64)
+    vehicle_remark = models.CharField(verbose_name="备注", max_length=64, null=True, blank=True)
+    vehicle_buildor = models.ForeignKey(to='Employees', verbose_name="创建者",
                                         on_delete=models.PROTECT,
                                         related_name='vehicle_buildor_employee')
     vehicle_date = models.DateField(verbose_name='创建日期', default=datetime.date.today)
@@ -334,8 +337,7 @@ class Chattel(models.Model):  # 动产
     chattel_owner = models.ForeignKey(to='Customes', verbose_name="所有权人",
                                       on_delete=models.PROTECT,
                                       related_name='chattel_custome')
-    CHATTEL_TYP_LIST = [(1, '存货'), (11, '机器设备'), (21, '合格证'), (31, '专利'), (41, '商标'),
-                        (71, '账户'), (99, '其他')]
+    CHATTEL_TYP_LIST = [(1, '存货'), (11, '机器设备'), (99, '其他')]
     chattel_typ = models.IntegerField(verbose_name='动产种类', choices=CHATTEL_TYP_LIST, default=1)
     chattel_detail = models.TextField(verbose_name="动产具体描述")
     chattel_buildor = models.ForeignKey(to='Employees', verbose_name="创建者", default=1,

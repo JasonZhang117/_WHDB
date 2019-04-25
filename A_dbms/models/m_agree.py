@@ -48,6 +48,8 @@ class Agrees(models.Model):  # 委托合同
     agree_provide_sum = models.FloatField(verbose_name='_放款金额', default=0)
     agree_repayment_sum = models.FloatField(verbose_name='_还款金额', default=0)
     agree_balance = models.FloatField(verbose_name='_在保余额', default=0)
+    agree_sign = models.TextField(verbose_name='签批单', null=True, blank=True)
+    agree_view = models.TextField(verbose_name='合同预览', null=True, blank=True)
 
     agree_buildor = models.ForeignKey(to='Employees', verbose_name="创建人",
                                       on_delete=models.PROTECT, related_name='agree_buildor_employee')
@@ -76,13 +78,13 @@ class Counters(models.Model):  # 反担保合同
     counter_name = models.IntegerField(verbose_name='合同种类', choices=COUNTER_NAME_LIST, null=True, blank=True)
     agree = models.ForeignKey(to='Agrees', verbose_name="委托保证合同",
                               on_delete=models.PROTECT, related_name='counter_agree')
-    '''SURE_TYP_LIST = (
+    '''SURE_TYP_LIST = [
         (1, '企业保证'), (2, '个人保证'),
         (11, '房产抵押'), (12, '土地抵押'), (13, '动产抵押'), (14, '在建工程抵押'), (15, '车辆抵押'),
         (21, '房产顺位'), (22, '土地顺位'), (23, '在建工程顺位'), (24, '动产顺位'),
         (31, '应收质押'), (32, '股权质押'), (33, '票据质押'), (34, '动产质押'), (39, '其他权利质押'),
         (42, '房产监管'), (43, '土地监管'), (44, '票据监管'), (47, '动产监管'), (49, '其他监管'),
-        (51, '股权预售'), (52, '房产预售'), (53, '土地预售'))'''
+        (51, '股权预售'), (52, '房产预售'), (53, '土地预售')]'''
     COUNTER_TYP_LIST = [
         (1, '企业担保'), (2, '个人保证'),
         (11, '房产抵押'), (12, '土地抵押'), (13, '动产抵押'), (14, '在建工程抵押'), (15, '车辆抵押'),
@@ -95,6 +97,7 @@ class Counters(models.Model):  # 反担保合同
     counter_state = models.IntegerField(verbose_name='签订状态', choices=COUNTER_STATE_LIST, default=11)
     counter_sign_date = models.DateField(verbose_name='签订日期', null=True, blank=True)
     counter_remark = models.TextField(verbose_name='签订备注', null=True, blank=True)
+    counter_view = models.TextField(verbose_name='合同预览', null=True, blank=True)
 
     counter_buildor = models.ForeignKey(to='Employees', verbose_name="创建者", default=1,
                                         on_delete=models.PROTECT,
@@ -122,7 +125,7 @@ class CountersAssure(models.Model):  # 保证反担保合同
     custome = models.ManyToManyField(to='Customes',
                                      verbose_name="反担保人",
                                      related_name='counter_custome')
-    counter_assure_buildor = models.ForeignKey(to='Employees', verbose_name="创建者", default=1,
+    counter_assure_buildor = models.ForeignKey(to='Employees', verbose_name="创建者",
                                                on_delete=models.PROTECT,
                                                related_name='counter_assureor_employee')
     counter_assure_date = models.DateField(verbose_name='创建日期', default=datetime.date.today)
@@ -142,7 +145,7 @@ class CountersWarrants(models.Model):  # 房产抵押反担保合同
                                    related_name='warrant_counter')
     warrant = models.ManyToManyField(to='Warrants', verbose_name="抵质押物",
                                      related_name='counter_warrant')
-    counter_warrant_buildor = models.ForeignKey(to='Employees', verbose_name="创建者", default=1,
+    counter_warrant_buildor = models.ForeignKey(to='Employees', verbose_name="创建者",
                                                 on_delete=models.PROTECT,
                                                 related_name='counter_warrantor_employee')
     counter_warrant_date = models.DateField(verbose_name='创建日期', default=datetime.date.today)
@@ -153,3 +156,29 @@ class CountersWarrants(models.Model):  # 房产抵押反担保合同
 
     def __str__(self):
         return "%s_%s" % (self.counter, self.counter.counter_typ)
+
+
+# -------------------决议及声明模型--------------------#
+class ResultState(models.Model):  # 房产抵押反担保合同
+    agree = models.ForeignKey(to='Agrees', verbose_name="主合同", default=1,
+                              on_delete=models.PROTECT,
+                              related_name='result_agree')
+    custom = models.ForeignKey(to='Customes', verbose_name="客户",
+                               on_delete=models.PROTECT,
+                               related_name='result_custom')
+    RESULT_TYP_LIST = [(11, '股东会决议'), (21, '董事会决议'), (31, '声明书'), (41, '单身声明')]
+    result_typ = models.IntegerField(verbose_name='决议类型', choices=RESULT_TYP_LIST)
+    result_detail = models.TextField(verbose_name='决议声明内容', blank=True, null=True)
+    resultor = models.ForeignKey(to='Employees', verbose_name="创建者",
+                                 on_delete=models.PROTECT,
+                                 related_name='resultor_employee')
+    result_date = models.DateField(verbose_name='创建日期', default=datetime.date.today)
+
+    class Meta:
+        verbose_name_plural = '合同-决议及声明'  # 指定显示名称
+        db_table = 'dbms_resultstate'  # 指定数据表的名称
+        unique_together = ['agree', 'custom', 'result_typ']
+        ordering = ['-agree', ]
+
+    def __str__(self):
+        return "%s_%s_%s" % (self.agree, self.custom, self.result_typ)

@@ -1,0 +1,36 @@
+<script>
+    $(function () {
+        bindCounterView();
+    });
+
+    function bindCounterView() {
+        var postData = {};
+        postData["content"] = $("#view-save").html();
+        postData["counter_id"] = $("#id_counter_id").val();
+
+        var postDataStr = JSON.stringify(postData);
+        console.log(postDataStr);
+        $.ajax({
+            url: '/dbms/agree/counter/save/',
+            type: 'POST',
+            dataType: 'JSON',
+            data: {'postDataStr': postDataStr},
+            success: function (arg) {
+                if (arg.status) {
+                    {#alert(arg.message);#}
+                    {#window.location.reload();#}
+                } else {
+                    alert(arg.message);
+                    {#window.location.reload();#}
+                }
+            }
+        });
+    }
+
+</script>
+
+
+
+
+
+

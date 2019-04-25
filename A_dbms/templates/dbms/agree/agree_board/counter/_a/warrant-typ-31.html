@@ -1,0 +1,29 @@
+{% for draft_bag in counter_draft_bag_list %}
+    {% if forloop.counter == 1 %}
+        <tr>
+            {#                <td align="center">票据种类</td>#}
+            <td align="center">承兑人名称</td>
+            <td align="center">票面金额（元）</td>
+            <td align="center">出票时间</td>
+            <td align="center">到期日</td>
+            <td align="center">票据编号</td>
+        </tr>
+        <tr>
+            {#                <td>{{ draft_bag.get_draft_typ_display }}</td>#}
+            <td>{{ draft_bag.draft_acceptor }}</td>
+            <td align="right">{{ draft_bag.draft_amount|floatformat:'2' }}</td>
+            <td align="right">{{ draft_bag.issue_date }}</td>
+            <td align="right">{{ draft_bag.due_date }}</td>
+            <td>{{ draft_bag.draft_num }}</td>
+        </tr>
+    {% else %}
+        <tr>
+            <td>{{ draft_bag.draft_acceptor }}</td>
+            <td align="right">{{ draft_bag.draft_amount|floatformat:'2' }}</td>
+            <td align="right">{{ draft_bag.issue_date }}</td>
+            <td align="right">{{ draft_bag.due_date }}</td>
+            <td>{{ draft_bag.draft_num }}</td>
+        </tr>
+    {% endif %}
+{% endfor %}
+

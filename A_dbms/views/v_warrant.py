@@ -115,6 +115,7 @@ def warrant_scan(request, warrant_id):  # house_scan房产预览
         form_date = {
             'target': warrant_obj.stock_warrant.target,
             'share': warrant_obj.stock_warrant.share,
+            'registe': warrant_obj.stock_warrant.registe,
             'ratio': warrant_obj.stock_warrant.ratio,
             'stock_typ': warrant_obj.stock_warrant.stock_typ}
         form_stockes_edit = forms.FormStockesEdit(form_date)
@@ -124,8 +125,10 @@ def warrant_scan(request, warrant_id):  # house_scan房产预览
     elif warrant_typ == 41:  # 41车辆添加
         form_date = {
             'frame_num': warrant_obj.vehicle_warrant.frame_num,
-            'plate_num': warrant_obj.vehicle_warrant.plate_num}
-        form_vehicle_eidt = forms.FormVehicleEdit(form_date)  # 41车辆添加
+            'plate_num': warrant_obj.vehicle_warrant.plate_num,
+            'vehicle_brand': warrant_obj.vehicle_warrant.vehicle_brand,
+            'vehicle_remark': warrant_obj.vehicle_warrant.vehicle_remark,}
+        form_vehicle_eidt = forms.FormVehicleEdit(initial=form_date)  # 41车辆添加
     elif warrant_typ == 51:  # 51动产添加
         form_date = {
             'chattel_typ': warrant_obj.chattel_warrant.chattel_typ,

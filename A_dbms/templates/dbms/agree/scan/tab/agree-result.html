@@ -1,0 +1,28 @@
+<div class="table-responsive">
+    <table class="table table-bordered table-hover table-condensed active">
+        <thead>
+        <tr style="text-align: center">
+            <th>序号</th>
+            <th>客户名称</th>
+            <th>决议类型</th>
+            <th>操作</th>
+        </tr>
+        </thead>
+        <tbody id="agree-result-tb">
+        {% for result in agree_obj.result_agree.all %}
+            <tr result-nid={{ result.id }}>
+                <td>{{ forloop.counter }}</td>
+                <td><a target="_blank"
+                       href="{% url 'dbms:custom_scan' custom_id=result.custom.id %}">
+                    {{ result.custom.name }}</a></td>
+                <td>{{ result.get_result_typ_display }}</td>
+                <td>
+                    <a class="btn btn-primary btn-xs scanResultB" target="_blank"
+                       href="{% url 'dbms:agree_result_preview' agree_id=agree_obj.id  result_id=result.id %}">预览</a>
+                    <a class="btn btn-primary btn-xs delResultB">删除</a>
+                </td>
+            <tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>

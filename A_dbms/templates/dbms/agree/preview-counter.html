@@ -12,27 +12,42 @@
         (51, '股权预售'), (52, '房产预售'), (53, '土地预售')]
             AGREE_TYP_LIST = [(1, '单笔'), (2, '最高额'), (3, '保函'), (7, '小贷'),
                       (41, '单笔(公证)'), (42, '最高额(公证)'), (47, '小贷(公证)')]-->
-    {#单笔#}
-    {% if agree_obj.agree_typ == 1 %}
-        {% if counter_obj.counter_typ == 1 %}
-            {% include 'dbms/agree/agree_board/counter/c-s-x.html' %}
-        {% elif counter_obj.counter_typ == 2 %}
-            {% include 'dbms/agree/agree_board/counter/c-s-g.html' %}
-        {% elif counter_obj.counter_typ in D_COUNTER_TYP_LIST %}
-            {% include 'dbms/agree/agree_board/counter/c-s-d.html' %}
-        {% elif counter_obj.counter_typ in Z_COUNTER_TYP_LIST %}
-            {% include 'dbms/agree/agree_board/counter/c-s-z.html' %}
-        {% endif %}
-        {#最高额#}
-    {% elif agree_obj.agree_typ == 2 %}
-        {% if counter_obj.counter_typ == 1 %}
-            {% include 'dbms/agree/agree_board/counter/c-m-x.html' %}
-        {% elif counter_obj.counter_typ == 2 %}
-            {% include 'dbms/agree/agree_board/counter/c-m-g.html' %}
-        {% elif counter_obj.counter_typ in D_COUNTER_TYP_LIST %}
-            {% include 'dbms/agree/agree_board/counter/c-m-d.html' %}
-        {% elif counter_obj.counter_typ in Z_COUNTER_TYP_LIST %}
+    {% if agree_obj.agree_state == 11 or agree_obj.agree_state == 51 %}
+        <div class="container-fluid" style="padding-left: 1px;">
+            <input style="display: none" name="counter_id" id="id_counter_id" value={{ counter_obj.id }}>
+        </div>
+        <div id="view-save">
+            {#单笔#}
+            {% if agree_obj.agree_typ == 1 %}
+                {% if counter_obj.counter_typ == 1 %}
+                    {% include 'dbms/agree/agree_board/counter/c-s-x.html' %}
+                {% elif counter_obj.counter_typ == 2 %}
+                    {% include 'dbms/agree/agree_board/counter/c-s-g.html' %}
+                {% elif counter_obj.counter_typ in D_COUNTER_TYP_LIST %}
+                    {% include 'dbms/agree/agree_board/counter/c-s-d.html' %}
+                {% elif counter_obj.counter_typ in Z_COUNTER_TYP_LIST %}
+                    {% include 'dbms/agree/agree_board/counter/c-s-z.html' %}
+                {% endif %}
+                {#最高额#}
+            {% elif agree_obj.agree_typ == 2 %}
+                {% if counter_obj.counter_typ == 1 %}
+                    {% include 'dbms/agree/agree_board/counter/c-m-x.html' %}
+                {% elif counter_obj.counter_typ == 2 %}
+                    {% include 'dbms/agree/agree_board/counter/c-m-g.html' %}
+                {% elif counter_obj.counter_typ in D_COUNTER_TYP_LIST %}
+                    {% include 'dbms/agree/agree_board/counter/c-m-d.html' %}
+                {% elif counter_obj.counter_typ in Z_COUNTER_TYP_LIST %}
+                    {% include 'dbms/agree/agree_board/counter/c-m-z.html' %}
+                {% endif %}
+            {% endif %}
+        </div>
+    {% else %}
+        {{ counter_obj.counter_view|safe }}
+    {% endif %}
+{% endblock %}
 
-        {% endif %}
+{% block extra-js %}
+    {% if agree_obj.agree_state == 11 or agree_obj.agree_state == 51 %}
+        {% include 'dbms/agree/extra/js-view-save-counter.html' %}
     {% endif %}
 {% endblock %}

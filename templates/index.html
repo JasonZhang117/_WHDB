@@ -42,7 +42,7 @@
                             {{ request.user.name }} <span class="caret"></span>
                         </a>
                         <ul class="dropdown-menu">
-                            <li><a href="/admin/">个人信息</a></li>
+                            <li><a target="_blank" href="/admin/">个人信息</a></li>
                             <li><a href="{% url 'logout' %}">退出系统</a></li>
                         </ul>
                     </li>
@@ -91,17 +91,11 @@
                 {% block right-content-container %}<!--右侧内容-->
                     <h2 class="page-header"><a href="{% url 'dbms:index' %}">测试页，点击进入正式系统</a></h2>
 
-                    <table>
-                        {% for warrant in warrant_list %}
-                            <tr>
-                                <td>
-                                    {{ forloop.counter }}
-                                </td>
-                                <td>
-                                    {{ warrant }}
-                                </td>
-                            </tr>
-                        {% endfor %}
+                    <table border="1pt" cellpadding="0" cellspacing="0">
+                        <tr>
+                            <td valign="top" width="100pt" height="100pt">wefewf</td>
+                            <td>wefewf</td>
+                        </tr>
                     </table>
 
                 {% endblock %}

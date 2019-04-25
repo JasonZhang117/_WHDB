@@ -1,0 +1,18 @@
+<div class="modal fade bs-example-modal-sm" id="delTrusteeModal"
+     tabindex="-1" role="dialog" aria-labelledby="delTrusteeModal">
+    <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="delTrusteeModalLabel">删除董事
+                    <input style="display: none" name="custom_id" id="id_custom_id" value={{ custom_obj.id }}>
+                    <input style="display: none" name="trustee_id" id="delTrusteeModalId">
+                </h4>
+            </div>
+            <div class="modal-body">是否确定删除此董事!!!</div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                <button type="button" class="btn btn-primary" id="delTrusteeModalOk">删除</button>
+            </div>
+        </div>
+    </div>
+</div>

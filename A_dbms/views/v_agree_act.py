@@ -9,6 +9,7 @@ from django.db.models import Q, F
 from django.urls import resolve, reverse
 from _WHDB.views import MenuHelper
 from _WHDB.views import authority
+from .v_agree import convert, convert_num
 
 
 # ---------------------------合同签批ajax----------------------------#
@@ -282,6 +283,29 @@ def agree_edit_ajax(request):  #
     return HttpResponse(result)
 
 
+# ---------------------------委托担保合同保存ajax----------------------------#
+@login_required
+def agree_save_ajax(request):  #
+    print(request.path, '>', resolve(request.path).url_name, '>', request.user)
+    response = {'status': True, 'message': None, 'forme': None, 'skip': None, }
+    post_data_str = request.POST.get('postDataStr')
+    post_data = json.loads(post_data_str)
+    print('post_data:', post_data)
+    agree_content = post_data['content']
+    agree_obj = models.Agrees.objects.filter(id=post_data['agree_id'])
+    '''ARTICLE_STATE_LIST = [(1, '待反馈'), (2, '已反馈'), (3, '待上会'), (4, '已上会'), (5, '已签批'),
+                          (51, '已放款'), (52, '已放完'), (55, '已解保'), (61, '待变更'), (99, '已注销')]'''
+    try:
+        agree_obj.update(agree_view=agree_content)
+        response['message'] = '合同保存成功！'
+    except Exception as e:
+        response['status'] = False
+        response['message'] = '合同保存失败：%s' % str(e)
+
+    result = json.dumps(response, ensure_ascii=False)
+    return HttpResponse(result)
+
+
 # -------------------------添加反担保合同ajax-------------------------#
 @login_required
 @authority
@@ -507,5 +531,565 @@ def counter_del_ajax(request):  # 删除反担保合同ajax
     else:
         response['status'] = False
         response['message'] = '委托担保合同状态为%s，无法删除反担保合同！' % agree_obj.agree_state
+    result = json.dumps(response, ensure_ascii=False)
+    return HttpResponse(result)
+
+
+# ---------------------------反担保合同保存ajax----------------------------#
+@login_required
+def counter_save_ajax(request):  # 添加合同
+    print(request.path, '>', resolve(request.path).url_name, '>', request.user)
+    response = {'status': True, 'message': None, 'forme': None, 'skip': None, }
+    post_data_str = request.POST.get('postDataStr')
+    post_data = json.loads(post_data_str)
+    print('post_data:', post_data)
+    counter_content = post_data['content']
+    counter_obj = models.Counters.objects.filter(id=post_data['counter_id'])
+    '''ARTICLE_STATE_LIST = [(1, '待反馈'), (2, '已反馈'), (3, '待上会'), (4, '已上会'), (5, '已签批'),
+                          (51, '已放款'), (52, '已放完'), (55, '已解保'), (61, '待变更'), (99, '已注销')]'''
+    try:
+        counter_obj.update(counter_view=counter_content)
+        response['message'] = '合同保存成功！'
+    except Exception as e:
+        response['status'] = False
+        response['message'] = '合同保存失败：%s' % str(e)
+
+    result = json.dumps(response, ensure_ascii=False)
+    return HttpResponse(result)
+
+
+# -----------------------------决议声明合同ajax------------------------------#
+@login_required
+@authority
+def result_state_ajax(request):  #
+    print(request.path, '>', resolve(request.path).url_name, '>', request.user)
+    response = {'status': True, 'message': None, 'forme': None, }
+    post_data_str = request.POST.get('postDataStr')
+    post_data = json.loads(post_data_str)
+    agree_obj = models.Agrees.objects.get(id=post_data['agree_id'])
+    '''AGREE_TYP_LIST = [(1, '单笔'), (2, '最高额'), (3, '保函'), (7, '小贷'),
+                      (41, '单笔(公证)'), (42, '最高额(公证)'), (47, '小贷(公证)')]'''
+    '''SURE_TYP_LIST = [
+        (1, '企业保证'), (2, '个人保证'),
+        (11, '房产抵押'), (12, '土地抵押'), (13, '动产抵押'), (14, '在建工程抵押'), (15, '车辆抵押'),
+        (21, '房产顺位'), (22, '土地顺位'), (23, '在建工程顺位'), (24, '动产顺位'),
+        (31, '应收质押'), (32, '股权质押'), (33, '票据质押'), (34, '动产质押'), (39, '其他权利质押'),
+        (42, '房产监管'), (43, '土地监管'), (44, '票据监管'), (47, '动产监管'), (49, '其他监管'),
+        (51, '股权预售'), (52, '房产预售'), (53, '土地预售')]'''
+    '''COUNTER_TYP_LIST = [
+        (1, '企业担保'), (2, '个人保证'),
+        (11, '房产抵押'), (12, '土地抵押'), (13, '动产抵押'), (14, '在建工程抵押'), (15, '车辆抵押'),
+        (31, '应收质押'), (32, '股权质押'), (33, '票据质押'), (34, '动产质押'),
+        (41, '其他权利质押'),
+        (51, '股权预售'), (52, '房产预售'), (53, '土地预售')]'''
+    '''AGREE_STATE_LIST = [(11, '待签批'), (21, '已签批'), (31, '未落实'),
+                        (41, '已落实'), (51, '待变更'), (61, '已解保'), (99, '已注销')]'''
+    # --------------------------------------------------------------#
+    # if not agree_obj.agree_state in [11, 51]:
+    #     response['status'] = False
+    #     response['message'] = '委托担保合同状态为%s，无法生成相关决议及声明！' % agree_obj.agree_state
+    #     result = json.dumps(response, ensure_ascii=False)
+    #     return HttpResponse(result)
+    # --------------------------------------------------------------#
+    agree_custom_obj = agree_obj.lending.summary.custom
+    counter_agree_list = agree_obj.counter_agree.all()
+    search_fields = ['counter_custome__counter',
+                     'owner_custome__warrant__counter_warrant__counter',
+                     'receive_custome__warrant__counter_warrant__counter',
+                     'stock_owner_custome__warrant__counter_warrant__counter',
+                     'draft_custome__warrant__counter_warrant__counter',
+                     'vehicle_custome__warrant__counter_warrant__counter',
+                     'chattel_custome__warrant__counter_warrant__counter',
+                     'other_custome__warrant__counter_warrant__counter']
+    q = Q()
+    q.connector = 'OR'
+    for field in search_fields:
+        q.children.append(("%s__in" % field, counter_agree_list,))
+
+    counter_custom_list = models.Customes.objects.filter(q).distinct()
+    agree_custom_list = models.Customes.objects.filter(
+        article_custom__lending_summary__agree_lending=agree_obj).distinct()
+    custom_list = []
+    for counter_custom in counter_custom_list:
+        custom_list.append(counter_custom)
+    for agree_custom in agree_custom_list:
+        if not agree_custom in custom_list:
+            custom_list.append(agree_custom)
+    agree_amount_cn = convert(agree_obj.agree_amount)
+    agree_term = round(agree_obj.agree_term, 0)
+    if agree_term == 12:
+        agree_term_str = '壹年期'
+    elif agree_term == 24:
+        agree_term_str = '贰年期'
+    elif agree_term == 36:
+        agree_term_str = '叁年期'
+    elif agree_term == 48:
+        agree_term_str = '肆年期'
+    elif agree_term == 60:
+        agree_term_str = '伍年期'
+    else:
+        term_str = convert_num(agree_term)
+        agree_term_str = '%s个月期' % term_str
+    try:
+        with transaction.atomic():
+            for counter_custom in custom_list:
+                result = ''
+                order = 0
+                if counter_custom.genre == 1:
+                    '''DECISIONOR_LIST = [(11, '股东会'), (21, '董事会')]'''
+                    decision = counter_custom.company_custome.decisionor
+                    if decision == 11:
+                        result_tp = 11
+                        result = '<p style="text-align: center"><strong>%s股东会决议</strong></p>' % counter_custom.name
+                        result += '<p>会议时间：   年   月   日</p>'
+                        result += '<p>会议地点:  公司会议室</p>'
+                        result += '<p>本次董事会会议已按《中华人民共和国公司法》及公司章程的有关规定' \
+                                  '通知全体股东到会参加会议。本公司共有股东____名，与会股东____名，与' \
+                                  '会股东所持股份占公司股份的____，符合《公司法》和本公司章程规定的程序和要求。' \
+                                  '经代表____表决权的股东通过，做出如下决议：</p>'
+                    elif decision == 21:
+                        result_tp = 21
+                        result = '<p style="text-align: center"><strong>%s董事会决议</strong></p>' % counter_custom.name
+                        result += '<p>会议时间：   年   月   日</p>'
+                        result += '<p>会议地点:  公司会议室</p>'
+                        result += '<p>本次董事会会议已按《中华人民共和国公司法》及公司章程的有关规定' \
+                                  '通知全体董事到会参加会议。本公司共有董事____名，与会董事____名，与' \
+                                  '会董事占公司董事的____，符合《公司法》和本公司章程规定的程序和要求。' \
+                                  '经____董事通过，做出如下决议：</p>'
+                    if counter_custom == agree_custom_obj:
+                        result += '<p>  1、同意向%s申请人民币%s%s银行贷款，用以补充流动资金。</p>' % (
+                            agree_obj.branch.name, agree_amount_cn, agree_term_str)
+                        result += '<p>  2、同意委托成都武侯中小企业融资担保有限责任公司为该融资贷款向贷款方提供担保。</p>'
+                        order = 3
+                    else:
+                        order = 1
+                    '''WARRANT_TYP_LIST = [
+                            (1, '房产'), (2, '房产包'), (5, '土地'), (6, '在建工程'), (11, '应收账款'),
+                            (21, '股权'), (31, '票据'), (41, '车辆'), (51, '动产'), (55, '其他'), (99, '他权')]'''
+                    # 保证反担保
+                    counter_asure_list = models.CountersAssure.objects.filter(
+                        counter__in=counter_agree_list, custome=counter_custom)
+                    if counter_asure_list:
+                        result += '<p>%s、同意为%s在%s申请的人民币%s%s贷款，向成都武侯' \
+                                  '中小企业融资担保有限责任公司提供连带责任保证反担保。</p>' % (
+                                      order, agree_custom_obj.name, agree_obj.branch.name, agree_amount_cn,
+                                      agree_term_str)
+                        order += 1
+                    # (1, '房产'), (2, '房产包')
+                    counter_house_list = models.Warrants.objects.filter(
+                        counter_warrant__counter__in=counter_agree_list, warrant_typ__in=[1, 2],
+                        ownership_warrant__owner=counter_custom)
+                    if counter_house_list:
+                        result += '<p>%s、同意以公司名下房产向成都武侯中小企业融资' \
+                                  '担保有限责任公司提供抵押反担保，签订抵押反担保合同，并办理抵押登' \
+                                  '记。房产的详细信息如下：</p>' % order
+                        result += '<table>' \
+                                  '<tr>' \
+                                  '<td align="center">所有权人</td> ' \
+                                  '<td align="center">处所</td> ' \
+                                  '<td align="center">面积(平方米)</td> ' \
+                                  '<td align="center">产权证编号</td> ' \
+                                  '</tr>'
+                        for warrant_house in counter_house_list:
+                            owership_list = warrant_house.ownership_warrant.all()
+                            owership_list_count = owership_list.count()
+                            owership_name = ''
+                            owership_num = ''
+                            owership_list_order = 0
+                            for owership in owership_list:
+                                owership_name += '%s' % owership.owner.name
+                                owership_num += '%s' % owership.ownership_num
+                                owership_list_order += 1
+                                if owership_list_order < owership_list_count:
+                                    owership_name += '、'
+                                    owership_num += '、'
+                            if warrant_house.warrant_typ == 1:
+                                house = warrant_house.house_warrant
+                                house_locate = house.house_locate
+                                house_app = house.house_app
+                                house_area = house.house_area
+                                result += '<tr>' \
+                                          '<td>%s</td> ' \
+                                          '<td>%s</td> ' \
+                                          '<td align="right">%s</td> ' \
+                                          '<td>%s</td> ' \
+                                          '</tr>' % (
+                                              owership_name, house_locate, house_area, owership_num)
+                            else:
+                                housebag_list = warrant_house.housebag_warrant.all()
+                                housebag_count = housebag_list.count()
+                                housebag_num = 1
+                                for housebag in housebag_list:
+                                    housebag_locate = housebag.housebag_locate
+                                    housebag_app = housebag.housebag_app
+                                    housebag_area = housebag.housebag_area
+                                    if housebag_num == 1:
+                                        result += '<tr>' \
+                                                  '<td rowspan="%s">%s</td> ' \
+                                                  '<td>%s</td> ' \
+                                                  '<td align="right">%s</td> ' \
+                                                  '<td rowspan="%s">%s</td> ' \
+                                                  '</tr>' % (
+                                                      housebag_count, counter_custom.name, housebag_locate,
+                                                      housebag_area, housebag_count, owership_num)
+                                        housebag_num += 1
+                                    else:
+                                        result += '<tr>' \
+                                                  '<td>%s</td> ' \
+                                                  '<td align="right">%s</td> ' \
+                                                  '</tr>' % (
+                                                      housebag_locate, housebag_area)
+                        result += '</table>'
+                        order += 1
+                    # (5, '土地')
+                    counter_ground_list = models.Warrants.objects.filter(
+                        counter_warrant__counter__in=counter_agree_list, warrant_typ=5,
+                        ownership_warrant__owner=counter_custom)
+                    if counter_ground_list:
+                        result += '<p>%s、同意以公司名下国有土地使用权向成都武侯中小企业融资' \
+                                  '担保有限责任公司提供抵押反担保，签订抵押反担保合同，并办理抵押登' \
+                                  '记。国有土地使用权的详细信息如下：</p>' % order
+                        result += '<table>' \
+                                  '<tr>' \
+                                  '<td align="center">所有权人</td> ' \
+                                  '<td align="center">座落</td> ' \
+                                  '<td align="center">面积(平方米)</td> ' \
+                                  '<td align="center">产权证编号</td> ' \
+                                  '</tr>'
+                        for warrant_ground in counter_ground_list:
+                            owership_list = warrant_ground.ownership_warrant.all()
+                            owership_list_count = owership_list.count()
+                            owership_name = ''
+                            owership_num = ''
+                            owership_list_order = 0
+                            for owership in owership_list:
+                                owership_name += '%s' % owership.owner.name
+                                owership_num += '%s' % owership.ownership_num
+                                owership_list_order += 1
+                                if owership_list_order < owership_list_count:
+                                    owership_name += '、'
+                                    owership_num += '、'
+                            ground = warrant_ground.ground_warrant
+                            ground_locate = ground.ground_locate
+                            ground_app = ground.ground_app
+                            ground_area = ground.ground_area
+
+                            result += '<tr>' \
+                                      '<td>%s</td> ' \
+                                      '<td>%s</td> ' \
+                                      '<td align="right">%s</td> ' \
+                                      '<td>%s</td> ' \
+                                      '</tr>' % (
+                                          owership_name, ground_locate, ground_area, owership_num)
+                        result += '</table>'
+                        order += 1
+                    #  (11, '应收账款')
+                    counter_receive_list = models.Receivable.objects.filter(
+                        warrant__counter_warrant__counter__in=counter_agree_list,
+                        receive_owner=counter_custom)
+                    if counter_receive_list:
+                        result += '<p>%s、同意以' % order
+                        receive_count = counter_receive_list.count()
+                        receive_num = 0
+                        for receive in counter_receive_list:
+                            receive_detail = receive.receivable_detail
+                            result += '%s' % (receive_detail)
+                            receive_num += 1
+                            if receive_num < receive_count:
+                                result += '、'
+                        result += '向成都武侯中小企业融资担保有限责任公司提供质押反担' \
+                                  '保，签订质押反担保合同，并办理质押登记。</p>'
+                        order += 1
+                    # (21, '股权')
+                    counter_target_list = models.Stockes.objects.filter(
+                        warrant__counter_warrant__counter__in=counter_agree_list,
+                        target=counter_custom.name)
+                    if counter_target_list:
+                        result += '<p>%s、同意公司股东' % order
+                        target_count = counter_target_list.count()
+                        target_num = 0
+                        for target in counter_target_list:
+                            target_owner = target.stock_owner
+                            target_ratio = target.ratio
+                            result += '%s以其持有本公司的%s' % (target_owner, target_ratio)
+                            result += '%股权'
+                            target_num += 1
+                            if target_num < target_count:
+                                result += '、'
+                        result += '向成都武侯中小企业融资担保有限责任公司提' \
+                                  '供质押反担保，签订质押反担保合同，并办理质押登记。</p>'
+                        order += 1
+                    # 持有(21, '股权')
+                    counter_stock_list = models.Stockes.objects.filter(
+                        warrant__counter_warrant__counter__in=counter_agree_list,
+                        stock_owner=counter_custom)
+                    if counter_stock_list:
+                        result += '<p>%s、同意以本公司所持有的' % order
+                        stock_count = counter_target_list.count()
+                        stock_num = 0
+                        for stock in counter_stock_list:
+                            target = stock.target
+                            ratio = stock.ratio
+                            result += '%s%s' % (target, ratio)
+                            result += '%股权'
+                            stock_num += 1
+                            if stock_num < stock_count:
+                                result += '、'
+                        result += '向成都武侯中小企业融资担保有限责任公司提' \
+                                  '供质押反担保，签订质押反担保合同，并办理质押登记。</p>'
+                        order += 1
+                    # (31, '票据')
+                    counter_draft_list = models.Draft.objects.filter(
+                        warrant__counter_warrant__counter__in=counter_agree_list,
+                        draft_owner=counter_custom)
+                    if counter_draft_list:
+                        result += '<p>%s、同意以本公司所有的' % order
+                        draft_count = counter_draft_list.count()
+                        draft_num = 0
+                        for draft in counter_draft_list:
+                            if draft_num == 0:
+                                draft_detail = draft.draft_detail
+                                result += '%s' % draft_detail
+                                draft_num += 1
+                                # if draft_num < draft_count:
+                                #     result += '、'
+                        result += '向成都武侯中小企业融资担保有限责任公司提' \
+                                  '供质押反担保，签订质押反担保合同，并办理质押登记。</p>'
+                        order += 1
+                    # (41, '车辆')
+                    counter_vehicle_list = models.Vehicle.objects.filter(
+                        warrant__counter_warrant__counter__in=counter_agree_list,
+                        vehicle_owner=counter_custom)
+                    if counter_vehicle_list:
+                        result += '<p>%s、同意以公司名下车辆向成都武侯中小企业融资' \
+                                  '担保有限责任公司提供抵押反担保，签订抵押反担保合同，并办理抵押登' \
+                                  '记。车辆的详细信息如下：</p>' % order
+                        result += '<table>' \
+                                  '<tr>' \
+                                  '<td align="center">所有权人</td> ' \
+                                  '<td align="center">车架号</td> ' \
+                                  '<td align="center">车牌号</td> ' \
+                                  '<td align="center">品牌及型号</td> ' \
+                                  '<td align="center">备注</td> ' \
+                                  '</tr>'
+                        vehicle_count = counter_vehicle_list.count()
+                        vehicle_num = 0
+                        for vehicle in counter_vehicle_list:
+                            vehicle_owner = vehicle.vehicle_owner
+                            frame_num = vehicle.frame_num
+                            plate_num = vehicle.plate_num
+                            vehicle_brand = vehicle.vehicle_brand
+                            vehicle_remark = vehicle.vehicle_remark
+                            result += '<tr>' \
+                                      '<td>%s</td> ' \
+                                      '<td>%s</td> ' \
+                                      '<td>%s</td> ' \
+                                      '<td>%s</td> ' \
+                                      '<td>%s</td> ' \
+                                      '</tr>' % (vehicle_owner, frame_num, plate_num, vehicle_brand, vehicle_remark)
+                        result += '</table>'
+                        order += 1
+                    # (51, '动产')
+                    counter_chattel_list = models.Chattel.objects.filter(
+                        warrant__counter_warrant__counter__in=counter_agree_list,
+                        chattel_owner=counter_custom)
+                    if counter_chattel_list:
+                        result += '<p>%s、同意以本公司所有的' % order
+                        chattel_count = counter_chattel_list.count()
+                        chattel_num = 0
+                        for chattel in counter_chattel_list:
+                            if chattel_num == 0:
+                                chattel_detail = chattel.chattel_detail
+                                result += '%s' % chattel_detail
+                                chattel_num += 1
+                                # if draft_num < draft_count:
+                                #     result += '、'
+                        result += '向成都武侯中小企业融资担保有限责任公司提' \
+                                  '供抵押反担保，签订抵押反担保合同，并办理抵押登记。</p>'
+                        order += 1
+                    # (55, '其他')
+                    counter_other_list = models.Others.objects.filter(
+                        warrant__counter_warrant__counter__in=counter_agree_list,
+                        other_owner=counter_custom)
+                    if counter_other_list:
+                        result += '<p>%s、同意以本公司所有的' % order
+                        other_count = counter_other_list.count()
+                        other_num = 0
+                        for other in counter_other_list:
+                            if other_num == 0:
+                                other_detail = other.other_detail
+                                result += '%s' % other_detail
+                                other_num += 1
+                                # if draft_num < draft_count:
+                                #     result += '、'
+                        if counter_other_list.first().other_typ == 21:
+                            result += '提供质押反担保，签订质押反担保合同，将车辆合格证存放在成都武侯中小企业融资担保' \
+                                      '有限责任公司，并按照质押反担保合同及其他相关约定进行更换。</p >'
+                        else:
+                            result += '向成都武侯中小企业融资担保有限责任公司提' \
+                                      '供质押反担保，签订质押反担保合同，并办理质押登记。</p>'
+                        order += 1
+                    if decision == 11:
+                        result += '<p><strong>本公司及参会股东对本次股东会决议的程序的合法性以及股东签名的真实性负责。</strong></p>'
+                        result += '<p>参会股东（或代表）签字：</p>'
+                    elif decision == 21:
+                        result += '<p><strong>本公司及参会董事对本次股东会决议的程序的合法性以及股东签名的真实性负责。</strong></p>'
+                        result += '<p>参会董事（或代表）签字：</p>'
+
+
+                    if decision == 11:
+                        shareholder_list = counter_custom.company_custome.shareholder_custom_c.all()
+                        shareholder_count = shareholder_list.count()
+                        shareholder_num = 0
+                        result += '<p>'
+                        for shareholder in shareholder_list:
+                            result += '%s' % shareholder.shareholder_name
+                            shareholder_num += 1
+                            if shareholder_num < shareholder_count:
+                                result += '、'
+                        result += '</p>'
+                    elif decision == 21:
+                        trustee_list = counter_custom.company_custome.trustee_custom_c.all()
+                        trustee_count = trustee_list.count()
+                        trustee_num = 0
+                        result += '<p>'
+                        for trustee in trustee_list:
+                            result += '%s' % trustee.trustee_name
+                            trustee_num += 1
+                            if trustee_num < trustee_count:
+                                result += '、'
+                        result += '</p>'
+
+                    default = {'agree': agree_obj, 'custom': counter_custom, 'result_typ': result_tp,
+                               'result_detail': result, 'resultor': request.user}
+                    result_obj, created = models.ResultState.objects.update_or_create(
+                        agree=agree_obj, custom=counter_custom, result_typ=result_tp, defaults=default)
+
+                else:
+                    spouse = counter_custom.person_custome.spouses
+                    if not spouse:
+                        result += '<p style="text-align: center"><strong>个人婚姻状况申明</strong></p>'
+                        result += '<p>姓名：王子铭</p>'
+                        result += '<p>居民身份证编号： 350111196901260478</p>'
+                        result += '<p>家庭详细住址：</p>'
+                        result += '<p>现本人声明，截止到     年    月    日，本人在全国婚姻登记处管辖范围内未登记结婚。</p>'
+                        result += '<p>特此申明！</p>'
+                        result += '<p>申明人：</p>'
+                        result += '<p>年    月    日'
+                        default = {'agree': agree_obj, 'custom': counter_custom, 'result_typ': 41,
+                                   'result_detail': result, 'resultor': request.user}
+                        result_obj, created = models.ResultState.objects.update_or_create(
+                            agree=agree_obj, custom=counter_custom, result_typ=41, defaults=default)
+                    else:
+                        # (1, '房产'), (2, '房产包')
+                        counter_house_list = models.Warrants.objects.filter(
+                            counter_warrant__counter__in=counter_agree_list, warrant_typ__in=[1, 2],
+                            ownership_warrant__owner=counter_custom)
+                        single_house_list = counter_house_list.exclude(ownership_warrant__owner=spouse)
+                        if single_house_list:
+                            result += '<p style="text-align: center"><strong>声明书</strong></p>'
+                            result += '<p>声明人：%s，公民身份号码：%s</p>' % (
+                                spouse.name, spouse.person_custome.license_num)
+                            result += '<p>我声明人%s与%s是夫妻关系，下表所列房屋系%s' \
+                                      '单独所有，无其他共有人，现%s以下列房屋作抵押，我' \
+                                      '无异议。若到期债务人不能清偿债务须处分下列房屋时，我' \
+                                      '无条件放弃对该物业的任何权益主张。</p>' % (
+                                          spouse.name, counter_custom.name,
+                                          counter_custom.name, counter_custom.name)
+                            result += '<table>' \
+                                      '<tr>' \
+                                      '<td align="center">所有权人</td> ' \
+                                      '<td align="center">处所</td> ' \
+                                      '<td align="center">面积(平方米)</td> ' \
+                                      '<td align="center">产权证编号</td> ' \
+                                      '</tr>'
+                            for warrant_house in single_house_list:
+                                owership_list = warrant_house.ownership_warrant.all()
+                                owership_list_count = owership_list.count()
+                                owership_name = ''
+                                owership_num = ''
+                                owership_list_order = 0
+                                for owership in owership_list:
+                                    owership_name += '%s' % owership.owner.name
+                                    owership_num += '%s' % owership.ownership_num
+                                    owership_list_order += 1
+                                    if owership_list_order < owership_list_count:
+                                        owership_name += '、'
+                                        owership_num += '、'
+                                if warrant_house.warrant_typ == 1:
+                                    house = warrant_house.house_warrant
+                                    house_locate = house.house_locate
+                                    house_app = house.house_app
+                                    house_area = house.house_area
+                                    result += '<tr>' \
+                                              '<td>%s</td> ' \
+                                              '<td>%s</td> ' \
+                                              '<td align="right">%s</td> ' \
+                                              '<td>%s</td> ' \
+                                              '</tr>' % (
+                                                  owership_name, house_locate, house_area, owership_num)
+                                else:
+                                    housebag_list = warrant_house.housebag_warrant.all()
+                                    housebag_count = housebag_list.count()
+                                    housebag_num = 1
+                                    for housebag in housebag_list:
+                                        housebag_locate = housebag.housebag_locate
+                                        housebag_app = housebag.housebag_app
+                                        housebag_area = housebag.housebag_area
+                                        if housebag_num == 1:
+                                            result += '<tr>' \
+                                                      '<td rowspan="%s">%s</td> ' \
+                                                      '<td>%s</td> ' \
+                                                      '<td align="right">%s</td> ' \
+                                                      '<td rowspan="%s">%s</td> ' \
+                                                      '</tr>' % (
+                                                          housebag_count, counter_custom.name, housebag_locate,
+                                                          housebag_area, housebag_count, owership_num)
+                                            housebag_num += 1
+                                        else:
+                                            result += '<tr>' \
+                                                      '<td>%s</td> ' \
+                                                      '<td align="right">%s</td> ' \
+                                                      '</tr>' % (
+                                                          housebag_locate, housebag_area)
+                                        result += '</table>'
+                                        result += '我保证我的上述声明真实有效，如有虚假，所产生的法律责任均由' \
+                                                  '我本人承担。'
+                            default = {'agree': agree_obj, 'custom': counter_custom, 'result_typ': 31,
+                                       'result_detail': result, 'resultor': request.user}
+                            result_obj, created = models.ResultState.objects.update_or_create(
+                                agree=agree_obj, custom=counter_custom, result_typ=31, defaults=default)
+        response['message'] = '决议及声明生成成功！'
+    except Exception as e:
+        response['status'] = False
+        response['message'] = '决议及声明生成失败：%s' % str(e)
+    result = json.dumps(response, ensure_ascii=False)
+    return HttpResponse(result)
+
+
+# -------------------------删除决议ajax-------------------------#
+@login_required
+@authority
+def result_del_ajax(request):  # 删除反担保合同ajax
+    print(request.path, '>', resolve(request.path).url_name, '>', request.user)
+    response = {'status': True, 'message': None, 'forme': None, }
+    post_data_str = request.POST.get('postDataStr')
+    post_data = json.loads(post_data_str)
+    agree_obj = models.Agrees.objects.get(id=post_data['agree_id'])
+    result_obj = models.ResultState.objects.get(id=post_data['result_id'])
+    '''AGREE_STATE_LIST = [(11, '待签批'), (21, '已签批'), (31, '未落实'),
+                        (41, '已落实'), (51, '待变更'), (61, '已解保'), (99, '已注销')]'''
+    # if agree_obj.agree_state in [11, 51]:
+    if True:
+        try:
+            with transaction.atomic():
+                result_obj.delete()  # 删除保证反担保合同
+            response['message'] = '决议及声明删除成功！'
+        except Exception as e:
+            response['status'] = False
+            response['message'] = '决议及声明删除失败:%s！' % str(e)
+    else:
+        response['status'] = False
+        response['message'] = '委托担保合同状态为%s，无法删除相关决议及声明！' % agree_obj.agree_state
     result = json.dumps(response, ensure_ascii=False)
     return HttpResponse(result)

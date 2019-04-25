@@ -65,6 +65,8 @@ class CustomesC(models.Model):
     district = models.ForeignKey(to='Districtes', verbose_name="所属区域",
                                  on_delete=models.PROTECT,
                                  related_name='custome_district')
+    DECISIONOR_LIST = [(11, '股东会'), (21, '董事会')]
+    decisionor = models.IntegerField(verbose_name='决策机构', choices=DECISIONOR_LIST, default=11)
     capital = models.FloatField(verbose_name='注册资本')
     registered_addr = models.CharField(verbose_name='注册地址', max_length=64)
     representative = models.CharField(verbose_name='法人代表', max_length=16)
@@ -82,7 +84,7 @@ class Shareholders(models.Model):
     custom = models.ForeignKey(to='CustomesC', verbose_name="企业客户",
                                on_delete=models.CASCADE,
                                related_name='shareholder_custom_c')
-    shareholder_name = models.CharField(verbose_name='简称', max_length=32)
+    shareholder_name = models.CharField(verbose_name='股东名称', max_length=32)
     invested_amount = models.FloatField(verbose_name='投资额')
     shareholding_ratio = models.FloatField(verbose_name='持股比例（%）')
     shareholderor = models.ForeignKey(to='Employees', verbose_name="创建者",
@@ -97,6 +99,26 @@ class Shareholders(models.Model):
 
     def __str__(self):
         return '%s-%s' % (self.custom, self.shareholder_name)
+
+
+# -----------------------董事信息-------------------------#
+class Trustee(models.Model):
+    custom = models.ForeignKey(to='CustomesC', verbose_name="企业客户",
+                               on_delete=models.CASCADE,
+                               related_name='trustee_custom_c')
+    trustee_name = models.CharField(verbose_name='董事姓名', unique=True, max_length=32)
+    trusteeor = models.ForeignKey(to='Employees', verbose_name="创建者",
+                                  on_delete=models.PROTECT,
+                                  related_name='trusteeor_employee')
+    trusteeor_date = models.DateField(verbose_name='创建时间', default=datetime.date.today)
+
+    class Meta:
+        verbose_name_plural = '客户-董事信息'  # 指定显示名称
+        db_table = 'dbms_trustee'  # 指定数据表的名称
+        unique_together = ['custom', 'trustee_name']
+
+    def __str__(self):
+        return '%s-%s' % (self.custom, self.trustee_name)
 
 
 # -----------------------个人客户-------------------------#

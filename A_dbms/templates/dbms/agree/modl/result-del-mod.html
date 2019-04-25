@@ -1,0 +1,18 @@
+<div class="modal fade bs-example-modal-sm" id="delResultModal"
+     tabindex="-1" role="dialog" aria-labelledby="delResultModal">
+    <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="delResultModalLabel">删除决议/声明
+                    <input style="display: none" name="agree_id" id="id_agree_id" value={{ agree_obj.id }}>
+                    <input style="display: none" name="result_id" id="delResultModalId">
+                </h4>
+            </div>
+            <div class="modal-body">是否确定删除此删除决议/声明!!!</div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                <button type="button" class="btn btn-primary" id="delResultModalOk">删除</button>
+            </div>
+        </div>
+    </div>
+</div>

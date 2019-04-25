@@ -73,6 +73,7 @@ def custom_scan(request, custom_id):  # 项目预览
         form_date = {
             'idustry': idustry_id,
             'district': custom_obj.company_custome.district,
+            'decisionor': custom_obj.company_custome.decisionor,
             'capital': custom_obj.company_custome.capital,
             'registered_addr': custom_obj.company_custome.registered_addr,
             'representative': custom_obj.company_custome.representative}
@@ -83,6 +84,7 @@ def custom_scan(request, custom_id):  # 项目预览
             'license_addr': custom_obj.person_custome.license_addr}
         form_custom_p_add = forms.CustomPAddForm(initial=form_date)
     form_shareholder_add = forms.FormShareholderAdd()
+    form_trustee_add = forms.FormTrusteeAdd()
     form_article_add = forms.ArticlesAddForm()
     form_spouse_add = forms.FormCustomSpouseAdd()
     review_custom_list = custom_obj.review_custom.all().filter().order_by('-review_date', '-review_plan_date')

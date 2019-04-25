@@ -4,40 +4,100 @@
         <td align="center">抵押财产名称</td>
         <td align="center">规划用途</td>
         <td align="center">面积(平方米)</td>
-        <td align="center">权利证书名称及编号</td>
         <td align="center">处所</td>
+        <td align="center">权利证书编号</td>
         <td align="center">被担保债权数额</td>
         <td align="center">评估价值备注</td>
     </tr>
-    <tr>
-        <td rowspan="{{ counter_obj.warrant_counter.warrant.count }}">
-            {% for ownership in warrant.ownership_warrant.all %}
-                {{ ownership.owner.name }}{% if not forloop.last %}、{% endif %}
-            {% endfor %}
-        </td>
-        <td rowspan="{{ counter_obj.warrant_counter.warrant.count }}">{{ counter_property_type }}</td>
-        <td>{{ warrant.house_warrant.get_house_app_display }}</td>
-        <td align="right">{{ warrant.house_warrant.house_area }}</td>
-        <td>
-            {% for ownership in warrant.ownership_warrant.all %}
-                {{ ownership.ownership_num }}{% if not forloop.last %}、{% endif %}
-            {% endfor %}
-        </td>
-        <td>{{ warrant.house_warrant.house_locate }}</td>
-        <td></td>
-        <td></td>
-    </tr>
+    {% if warrant.warrant_typ == 2 %}
+        {% for house_bag in warrant.housebag_warrant.all %}
+            {% if forloop.counter == 1 %}
+                <tr>
+                    <td rowspan="{{ counter_warrant_list_count }}">
+                        {% for ownership in warrant.ownership_warrant.all %}
+                            {{ ownership.owner.name }}{% if not forloop.last %}、{% endif %}
+                        {% endfor %}
+                    </td>
+                    <td rowspan="{{ counter_warrant_list_count }}">{{ counter_property_type }}</td>
+                    <td>{{ house_bag.get_housebag_app_display }}</td>
+                    <td align="right">{{ house_bag.housebag_area }}</td>
+                    <td>{{ house_bag.housebag_locate }}</td>
+                    <td rowspan="{{ warrant.housebag_warrant.all.count }}">
+                        {% for ownership in warrant.ownership_warrant.all %}
+                            {{ ownership.ownership_num }}{% if not forloop.last %}、{% endif %}
+                        {% endfor %}
+                    </td>
+                    <td></td>
+                    <td></td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td>{{ house_bag.get_housebag_app_display }}</td>
+                    <td align="right">{{ house_bag.housebag_area }}</td>
+                    <td>{{ house_bag.housebag_locate }}</td>
+                    <td></td>
+                    <td></td>
+                </tr>
+            {% endif %}
+        {% endfor %}
+    {% else %}
+        <tr>
+            <td rowspan="{{ counter_warrant_list_count }}">
+                {% for ownership in warrant.ownership_warrant.all %}
+                    {{ ownership.owner.name }}{% if not forloop.last %}、{% endif %}
+                {% endfor %}
+            </td>
+            <td rowspan="{{ counter_warrant_list_count }}">{{ counter_property_type }}</td>
+            <td>{{ warrant.house_warrant.get_house_app_display }}</td>
+            <td align="right">{{ warrant.house_warrant.house_area }}</td>
+            <td>{{ warrant.house_warrant.house_locate }}</td>
+            <td>
+                {% for ownership in warrant.ownership_warrant.all %}
+                    {{ ownership.ownership_num }}{% if not forloop.last %}、{% endif %}
+                {% endfor %}
+            </td>
+            <td></td>
+            <td></td>
+        </tr>
+    {% endif %}
 {% else %}
-    <tr>
-        <td>{{ warrant.house_warrant.get_house_app_display }}</td>
-        <td align="right">{{ warrant.house_warrant.house_area }}</td>
-        <td>
-            {% for ownership in warrant.ownership_warrant.all %}
-                {{ ownership.ownership_num }}{% if not forloop.last %}、{% endif %}
-            {% endfor %}
-        </td>
-        <td>{{ warrant.house_warrant.house_locate }}</td>
-        <td></td>
-        <td></td>
-    </tr>
+    {% if warrant.warrant_typ == 2 %}
+        {% for house_bag in warrant.housebag_warrant.all %}
+            {% if forloop.counter == 1 %}
+                <tr>
+                    <td>{{ house_bag.get_housebag_app_display }}</td>
+                    <td align="right">{{ house_bag.housebag_area }}</td>
+                    <td>{{ house_bag.housebag_locate }}</td>
+                    <td rowspan="{{ warrant.housebag_warrant.all.count }}">
+                        {% for ownership in warrant.ownership_warrant.all %}
+                            {{ ownership.ownership_num }}{% if not forloop.last %}、{% endif %}
+                        {% endfor %}
+                    </td>
+                    <td></td>
+                    <td></td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td>{{ house_bag.get_housebag_app_display }}</td>
+                    <td align="right">{{ house_bag.housebag_area }}</td>
+                    <td>{{ house_bag.housebag_locate }}</td>
+                    <td></td>
+                    <td></td>
+                </tr>
+            {% endif %}
+        {% endfor %}
+    {% else %}
+        <tr>
+            <td>{{ warrant.house_warrant.get_house_app_display }}</td>
+            <td align="right">{{ warrant.house_warrant.house_area }}</td>
+            <td>{{ warrant.house_warrant.house_locate }}</td>
+            <td>
+                {% for ownership in warrant.ownership_warrant.all %}
+                    {{ ownership.ownership_num }}{% if not forloop.last %}、{% endif %}
+                {% endfor %}
+            </td>
+            <td></td>
+            <td></td>
+        </tr>
+    {% endif %}
 {% endif %}

@@ -18,8 +18,9 @@ from .v_appraisal_act import (
     article_sign_ajax, guarantee_add_ajax, guarantee_del_ajax, single_del_ajax, comment_edit_ajax,
     single_quota_ajax, lending_change_ajax, lending_del_ajax, lending_order_ajax, article_change_ajax)
 # ----------------------v_agree合同管理视图--------------------#
-from .v_agree import (agree, agree_scan, agree_preview, counter_preview, agree_sign_preview, )
-from .v_agree_act import (agree_add_ajax, counter_add_ajax, agree_sign_ajax, counter_del_ajax, agree_edit_ajax)
+from .v_agree import (agree, agree_scan, agree_preview, counter_preview, agree_sign_preview, result_preview)
+from .v_agree_act import (agree_add_ajax, counter_add_ajax, agree_sign_ajax, counter_del_ajax, agree_edit_ajax,
+                          result_state_ajax, result_del_ajax, agree_save_ajax, counter_save_ajax)
 # ----------------------v_warrant权证管理视图--------------------#
 from .v_warrant import (
     warrant, warrant_scan, warrant_agree, warrant_agree_scan, warrant_agree_warrant, house, ground,
@@ -56,7 +57,9 @@ from .v_dun_act import (
 
 # ----------------------v_custom客户管理视图--------------------#
 from .v_custom import (custom, custom_scan)
-from .v_custom_act import (custom_add_ajax, custom_del_ajax, custom_edit_ajax, shareholder_add_ajax, spouse_add_ajax)
+from .v_custom_act import (custom_add_ajax, custom_del_ajax, custom_edit_ajax, shareholder_add_ajax,
+                           shareholder_del_ajax,
+                           spouse_add_ajax, trustee_add_ajax,trustee_del_ajax)
 from .v_external import cooperative, cooperative_scan, soondue_cooperator, overdue_cooperator, branches
 from .v_external_act import agreement_add_ajax
 # ----------------------v_report报表管理视图--------------------#

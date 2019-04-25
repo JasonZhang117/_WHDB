@@ -6,18 +6,18 @@ from .m_appraisal import (
     LendingCustoms, LendingWarrants, )
 # -----------------------m_agree合同模型---------------------#
 from .m_agree import (
-    Agrees, Counters, CountersAssure, CountersWarrants)
+    Agrees, Counters, CountersAssure, CountersWarrants, ResultState)
 # -------------------v_warrant担保物模型---------------------#
 from .m_warrant import (
     Warrants, Ownership, Houses, HouseBag, Grounds, Construction, Stockes, Receivable, ReceiveExtend, Draft,
-    DraftExtend, Chattel, Others,Vehicle, Hypothecs, Evaluate, Storages)
+    DraftExtend, Chattel, Others, Vehicle, Hypothecs, Evaluate, Storages)
 # -----------------------m_provide放款模型-------------------#
 from .m_provide import (Notify, Provides, Repayments, Pigeonholes, Charges)
 # -----------------------m_dun追偿-------------------#
 from .m_dun import (Compensatories, Dun, Agent, Staff, Retrieve, Charge, Stage, Judgment, Standing,
                     Seal, Sealup, Inquiry)
 # ---------------------m_custom客户信息-----------------------#
-from .m_custom import Customes, CustomesC, CustomesP, Shareholders
+from .m_custom import Customes, CustomesC, CustomesP, Shareholders, Trustee
 # ---------------------m_review保后信息-----------------------#
 from .m_review import Review
 

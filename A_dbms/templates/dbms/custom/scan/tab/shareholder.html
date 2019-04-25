@@ -5,14 +5,16 @@
             <th>股东名称</th>
             <th>投资额(万)</th>
             <th>持股比例(%)</th>
+            <th>操作</th>
         </tr>
         </thead>
-        <tbody>
+        <tbody id="shareholder-tb">
         {% for shareholder in custom_obj.company_custome.shareholder_custom_c.all %}
-            <tr>
+            <tr shareholder-nid="{{ shareholder.id }}">
                 <td>{{ shareholder.shareholder_name }}</td>
                 <td>{{ shareholder.invested_amount }}</td>
                 <td>{{ shareholder.shareholding_ratio }}</td>
+                <td><a class="btn btn-primary btn-xs delShareholderB">删除</a></td>
             </tr>
         {% endfor %}
         </tbody>

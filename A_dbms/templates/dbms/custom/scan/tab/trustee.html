@@ -1,0 +1,18 @@
+<div class="table-responsive">
+    <table class="table table-bordered table-hover table-condensed active">
+        <thead>
+        <tr style="text-align: center">
+            <th>董事姓名</th>
+            <th>操作</th>
+        </tr>
+        </thead>
+        <tbody id="trustee-tb">
+        {% for trustee in custom_obj.company_custome.trustee_custom_c.all %}
+            <tr trustee-nid="{{ trustee.id }}">
+                <td>{{ trustee.trustee_name }}</td>
+                <td><a class="btn btn-primary btn-xs delTrusteeB">删除</a></td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>

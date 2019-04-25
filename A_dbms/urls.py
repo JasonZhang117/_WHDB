@@ -54,13 +54,21 @@ urlpatterns = [
     path('agree/<int:agree_state>/', views.agree, name='agree'),  # /dbms/article/(0-9)
     path('agree/scan/<int:agree_id>/', views.agree_scan, name='agree_scan'),
     path('agree/preview/<int:agree_id>/', views.agree_preview, name='agree_preview'),
-    path('agree/counter/preview/<int:agree_id>/<int:counter_id>/', views.counter_preview, name='agree_counter_preview'),
-    path('agree/sign/preview/<int:agree_id>/', views.agree_sign_preview, name='agree_sign_preview'),
+    path('agree/preview/counter/<int:agree_id>/<int:counter_id>/', views.counter_preview, name='agree_counter_preview'),
+    path('agree/preview/sign/<int:agree_id>/', views.agree_sign_preview, name='agree_sign_preview'),
+    path('agree/preview/result/<int:agree_id>/<int:result_id>/', views.result_preview, name='agree_result_preview'),
     path('agree/add/', views.agree_add_ajax, name='agree_add_ajax'),
     path('agree/edit/', views.agree_edit_ajax, name='agree_edit_ajax'),
+    path('agree/save/', views.agree_save_ajax, name='agree_save_ajax'),
     path('agree/sign/', views.agree_sign_ajax, name='agree_sign_ajax'),
     path('agree/counter/add/', views.counter_add_ajax, name='agree_counter_add_ajax'),
     path('agree/counter/del/', views.counter_del_ajax, name='agree_counter_del_ajax'),
+    path('agree/counter/save/', views.counter_save_ajax, name='agree_counter_save_ajax'),
+    path('agree/result/add/', views.result_state_ajax, name='agree_result_state_ajax'),
+    path('agree/result/del/', views.result_del_ajax, name='agree_result_del_ajax'),
+
+
+
     # -----------------------warrant权证管理-------------------------#
     path('warrant/', views.warrant, name='warrant_all'),  # 菜单-权证管理-所有权证
     path('warrant/<int:warrant_typ>/', views.warrant, name='warrant'),  # /dbms/warrant/(0-9)
@@ -186,6 +194,10 @@ urlpatterns = [
     path('custom/del/', views.custom_del_ajax, name='custom_del_ajax'),
     path('custom/edit/', views.custom_edit_ajax, name='custom_edit_ajax'),
     path('custom/shareholder/add/', views.shareholder_add_ajax, name='custom_shareholder_add_ajax'),
+    path('custom/shareholder/del/', views.shareholder_del_ajax, name='custom_shareholder_del_ajax'),
+    path('custom/trustee/add/', views.trustee_add_ajax, name='custom_trustee_add_ajax'),
+    path('custom/trustee/del/', views.trustee_del_ajax, name='custom_trustee_del_ajax'),
+
     path('custom/spouse/add/', views.spouse_add_ajax, name='custom_spouse_add_ajax'),
 
     # ------------------------------合作机构--------------------------------------#

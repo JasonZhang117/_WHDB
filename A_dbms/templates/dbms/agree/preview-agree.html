@@ -3,14 +3,32 @@
 {% block extra-css %}
     {% include 'dbms/agree/agree_board/style.html' %}
 {% endblock %}
+{#AGREE_STATE_LIST = [(11, '待签批'), (21, '已签批'), (31, '未落实'),#}
+{#                        (41, '已落实'), (51, '待变更'), (61, '已解保'), (99, '已注销')]#}
 {% block body %}
-    <div class="contain">
-        <!--AGREE_TYP_LIST = [(1, '单笔'), (2, '最高额'), (3, '保函'), (7, '小贷'),
-                      (41, '单笔(公证)'), (42, '最高额(公证)'), (47, '小贷(公证)')]-->
-        {% if agree_obj.agree_typ == 1 %}
-            {% include 'dbms/agree/agree_board/entrust-single.html' %}
-        {% elif agree_obj.agree_typ == 2 %}
-            {% include 'dbms/agree/agree_board/entrust-maximum.html' %}
-        {% endif %}
-    </div>
+    {% if agree_obj.agree_state == 11 or agree_obj.agree_state == 51 %}
+        <div class="container-fluid" style="padding-left: 1px;">
+            <input style="display: none" name="agree_id" id="id_agree_id" value={{ agree_obj.id }}>
+        </div>
+        <div id="view-save">
+            <div class="contain">
+                <!--AGREE_TYP_LIST = [(1, '单笔'), (2, '最高额'), (3, '保函'), (7, '小贷'),
+                              (41, '单笔(公证)'), (42, '最高额(公证)'), (47, '小贷(公证)')]-->
+                {% if agree_obj.agree_typ == 1 %}
+                    {% include 'dbms/agree/agree_board/entrust-single.html' %}
+                {% elif agree_obj.agree_typ == 2 %}
+                    {% include 'dbms/agree/agree_board/entrust-maximum.html' %}
+                {% endif %}
+            </div>
+        </div>
+    {% else %}
+        {{ agree_obj.agree_view|safe }}
+    {% endif %}
+{% endblock %}
+
+
+{% block extra-js %}
+    {% if agree_obj.agree_state == 11 or agree_obj.agree_state == 51 %}
+        {% include 'dbms/agree/extra/js-view-save-agree.html' %}
+    {% endif %}
 {% endblock %}

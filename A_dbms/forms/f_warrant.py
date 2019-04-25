@@ -125,10 +125,11 @@ class FormStockes(dform.ModelForm):  # 股权
 
     class Meta:
         model = models.Stockes
-        fields = ['target', 'share', 'ratio', 'stock_typ']
+        fields = ['target', 'ratio', 'registe', 'share', 'stock_typ']
         widgets = {'target': dform.TextInput(attrs={'class': 'form-control', 'placeholder': '目标企业'}),
-                   'share': dform.NumberInput(attrs={'class': 'form-control', 'placeholder': '万元或万股'}),
                    'ratio': dform.NumberInput(attrs={'class': 'form-control', 'placeholder': '占比'}),
+                   'registe': dform.NumberInput(attrs={'class': 'form-control', 'placeholder': '万元或万股'}),
+                   'share': dform.NumberInput(attrs={'class': 'form-control', 'placeholder': '万元或万股'}),
                    'stock_typ': dform.Select(attrs={'class': 'form-control'})}
 
     def __init__(self, *args, **kwargs):
@@ -140,10 +141,11 @@ class FormStockes(dform.ModelForm):  # 股权
 class FormStockesEdit(dform.ModelForm):  #
     class Meta:
         model = models.Stockes
-        fields = ['target', 'share', 'ratio', 'stock_typ']
-        widgets = {'target': dform.TextInput(attrs={'class': 'form-control'}),
-                   'share': dform.NumberInput(attrs={'class': 'form-control', 'placeholder': '万元或万股'}),
+        fields = ['target', 'ratio', 'registe', 'share', 'stock_typ']
+        widgets = {'target': dform.TextInput(attrs={'class': 'form-control', 'placeholder': '目标企业'}),
                    'ratio': dform.NumberInput(attrs={'class': 'form-control', 'placeholder': '占比'}),
+                   'registe': dform.NumberInput(attrs={'class': 'form-control', 'placeholder': '万元或万股'}),
+                   'share': dform.NumberInput(attrs={'class': 'form-control', 'placeholder': '万元或万股'}),
                    'stock_typ': dform.Select(attrs={'class': 'form-control'})}
 
 
@@ -191,9 +193,11 @@ class FormVehicle(dform.ModelForm):  # 车辆FormVehicle41
 
     class Meta:
         model = models.Vehicle
-        fields = ['frame_num', 'plate_num']
+        fields = ['frame_num', 'plate_num', 'vehicle_brand', 'vehicle_remark']
         widgets = {'frame_num': dform.TextInput(attrs={'class': 'form-control', 'placeholder': '车架号'}),
-                   'plate_num': dform.TextInput(attrs={'class': 'form-control', 'placeholder': '车牌号'})}
+                   'plate_num': dform.TextInput(attrs={'class': 'form-control', 'placeholder': '车牌号'}),
+                   'vehicle_brand': dform.TextInput(attrs={'class': 'form-control', 'placeholder': '品牌型号'}),
+                   'vehicle_remark': dform.TextInput(attrs={'class': 'form-control', 'placeholder': '备注'}), }
 
     def __init__(self, *args, **kwargs):
         super(FormVehicle, self).__init__(*args, **kwargs)
@@ -201,13 +205,19 @@ class FormVehicle(dform.ModelForm):  # 车辆FormVehicle41
 
 
 # ------------------------车辆FormVehicleEdit41--------------------------#
-class FormVehicleEdit(dform.Form):  # 车辆FormVehicle41
+class FormVehicleEdit(dform.ModelForm):  # 车辆FormVehicle41
     frame_num = fields.CharField(
         label='车架号', label_suffix="：",
         widget=widgets.TextInput(attrs={'class': 'form-control', 'placeholder': '车架号'}))
     plate_num = fields.CharField(
         label='车牌号', label_suffix="：",
         widget=widgets.TextInput(attrs={'class': 'form-control', 'placeholder': '车牌号'}))
+
+    class Meta:
+        model = models.Vehicle
+        fields = ['vehicle_brand', 'vehicle_remark']
+        widgets = {'vehicle_brand': dform.TextInput(attrs={'class': 'form-control', 'placeholder': '品牌型号'}),
+                   'vehicle_remark': dform.TextInput(attrs={'class': 'form-control', 'placeholder': '备注'}), }
 
 
 # ------------------------动产FormChattel51--------------------------#

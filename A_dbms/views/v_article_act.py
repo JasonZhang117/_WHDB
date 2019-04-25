@@ -159,7 +159,6 @@ def article_feedback_ajax(request):
         form = forms.FeedbackAddForm(post_data)
         if form.is_valid():
             cleaned_data = form.cleaned_data
-            print('cleaned_data:', cleaned_data)
             try:
                 today_str = time.strftime("%Y-%m-%d", time.gmtime())
                 default = {

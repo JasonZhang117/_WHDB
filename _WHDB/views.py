@@ -428,6 +428,8 @@ def home(request):
     #     if evaluate_state == 5:
     #         models.Warrants.objects.filter(id=warrant.id).update(evaluate_state=1)
 
+
+
     return render(request, 'index.html', locals())
 
 

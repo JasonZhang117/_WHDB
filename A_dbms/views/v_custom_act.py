@@ -11,6 +11,7 @@ from django.urls import resolve
 from _WHDB.views import MenuHelper
 from _WHDB.views import authority
 
+
 # -----------------------客户添加-------------------------#
 @login_required
 @authority
@@ -43,6 +44,7 @@ def custom_add_ajax(request):
                             custome=custom_obj,
                             idustry=custom_c_data['idustry'],
                             district=custom_c_data['district'],
+                            decisionor=custom_c_data['decisionor'],
                             capital=custom_c_data['capital'],
                             registered_addr=custom_c_data['registered_addr'],
                             representative=custom_c_data['representative'])
@@ -130,6 +132,92 @@ def shareholder_add_ajax(request):
         response['status'] = False
         response['message'] = '表单信息有误！！！'
         response['forme'] = form_shareholder_add.errors
+    result = json.dumps(response, ensure_ascii=False)
+    return HttpResponse(result)
+
+
+# -----------------------删除股东信息ajax-------------------------#
+@login_required
+@authority
+def shareholder_del_ajax(request):  #
+    print(request.path, '>', resolve(request.path).url_name, '>', request.user)
+    response = {'status': True, 'message': None, 'forme': None, }
+    post_data_str = request.POST.get('postDataStr')
+    post_data = json.loads(post_data_str)
+    custom_obj = models.Customes.objects.get(id=post_data['custom_id'])
+    shareholder_obj = models.Shareholders.objects.get(id=post_data['shareholder_id'])
+    '''GENRE_LIST = ((1, '企业'), (2, '个人'))'''
+    custom_genre = custom_obj.genre
+    if custom_genre == 1:
+        try:
+            with transaction.atomic():
+                shareholder_obj.delete()  #
+            response['message'] = '股东删除成功！'
+        except Exception as e:
+            response['status'] = False
+            response['message'] = '股东删除失败:%s！' % str(e)
+    else:
+        response['status'] = False
+        response['message'] = '客户类别为%s，无法删除相关股东！' % custom_genre
+    result = json.dumps(response, ensure_ascii=False)
+    return HttpResponse(result)
+
+
+# -----------------------董事信息添加-------------------------#
+@login_required
+@authority
+def trustee_add_ajax(request):
+    print(request.path, '>', resolve(request.path).url_name, '>', request.user)
+    response = {'status': True, 'message': None, 'forme': None, }
+    post_data_str = request.POST.get('postDataStr')
+    post_data = json.loads(post_data_str)
+    print('post_data:', post_data)
+    custom_obj = models.Customes.objects.get(id=post_data['custom_id'])
+
+    form_trustee_add = forms.FormTrusteeAdd(post_data)
+
+    if form_trustee_add.is_valid():
+        truste_data = form_trustee_add.cleaned_data
+        custom_c_obj = custom_obj.company_custome
+        try:
+            trustee_obj = models.Trustee.objects.create(
+                custom=custom_c_obj, trustee_name=truste_data['trustee_name'],
+                trusteeor=request.user)
+        except Exception as e:
+            response['status'] = False
+            response['message'] = '董事信息创建失败：%s' % str(e)
+        response['message'] = '董事信息创建成功！！！'
+    else:
+        response['status'] = False
+        response['message'] = '表单信息有误！！！'
+        response['forme'] = form_trustee_add.errors
+    result = json.dumps(response, ensure_ascii=False)
+    return HttpResponse(result)
+
+
+# -----------------------删除董事信息ajax-------------------------#
+@login_required
+@authority
+def trustee_del_ajax(request):  #
+    print(request.path, '>', resolve(request.path).url_name, '>', request.user)
+    response = {'status': True, 'message': None, 'forme': None, }
+    post_data_str = request.POST.get('postDataStr')
+    post_data = json.loads(post_data_str)
+    custom_obj = models.Customes.objects.get(id=post_data['custom_id'])
+    trustee_obj = models.Trustee.objects.get(id=post_data['trustee_id'])
+    '''GENRE_LIST = ((1, '企业'), (2, '个人'))'''
+    custom_genre = custom_obj.genre
+    if custom_genre == 1:
+        try:
+            with transaction.atomic():
+                trustee_obj.delete()  #
+            response['message'] = '董事删除成功！'
+        except Exception as e:
+            response['status'] = False
+            response['message'] = '董事删除失败:%s！' % str(e)
+    else:
+        response['status'] = False
+        response['message'] = '客户类别为%s，无法删除相关董事！' % custom_genre
     result = json.dumps(response, ensure_ascii=False)
     return HttpResponse(result)
 
@@ -231,6 +319,7 @@ def custom_edit_ajax(request):
                         models.CustomesC.objects.filter(custome=custom_obj).update(
                             idustry=custom_c_data['idustry'],
                             district=custom_c_data['district'],
+                            decisionor=custom_c_data['decisionor'],
                             capital=custom_c_data['capital'],
                             registered_addr=custom_c_data['registered_addr'],
                             representative=custom_c_data['representative'])

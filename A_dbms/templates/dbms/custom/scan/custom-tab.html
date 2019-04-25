@@ -11,6 +11,9 @@
             <li role="presentation">
                 <a href="#shareholder" style="background-color: #f5f5f5"
                    aria-controls="profile" role="tab" data-toggle="tab">股东信息</a></li>
+             <li role="presentation">
+                <a href="#trustee" style="background-color: #f5f5f5"
+                   aria-controls="profile" role="tab" data-toggle="tab">董事信息</a></li>
         {% elif custom_obj.genre == 2 %}
             <li role="presentation">
                 <a href="#spouse" style="background-color: #f5f5f5"
@@ -32,6 +35,8 @@
                 {% include 'dbms/custom/scan/tab/business_information.html' %}</div>
             <div role="tabpanel" class="tab-pane" id="shareholder"> <!--股东信息-->
                 {% include 'dbms/custom/scan/tab/shareholder.html' %}</div>
+            <div role="tabpanel" class="tab-pane" id="trustee"> <!--股东信息-->
+                {% include 'dbms/custom/scan/tab/trustee.html' %}</div>
         {% elif custom_obj.genre == 2 %}
             <div role="tabpanel" class="tab-pane" id="spouse"> <!--配偶-->
                 {% include 'dbms/custom/scan/tab/spouse.html' %}</div>

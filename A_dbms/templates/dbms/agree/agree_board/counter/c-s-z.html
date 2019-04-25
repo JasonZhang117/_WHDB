@@ -40,11 +40,20 @@
         {% include 'dbms/agree/agree_board/counter/_c/counter-sign.html' %}
     </div>
     <div class="split">
-        {% if counter_typ == 31 %}
+        {% if counter_warrant_typ == 11 %}
             {% include 'dbms/agree/agree_board/counter/_c/z-appendix-receive.html' %}
+        {% elif counter_warrant_typ == 21%}
+            {% include 'dbms/agree/agree_board/counter/_c/d-appendix-1.html' %}
+        {% elif counter_warrant_typ == 31 %}
+            {% include 'dbms/agree/agree_board/counter/_c/d-appendix-draft.html' %}
+        {% else %}
+            <p>？？？？？？？？？？？？？？？？？？？？？？？？？？</p>
+            <p>？？？？？？？？？？？？？？？？？？？？？？？？？？</p>
+            <p>？？？？？？？？？？？？？？？？？？？？？？？？？？</p>
+            <p>？？？？？？？？？？？？？？？？？？？？？？？？？？</p>
         {% endif %}
     </div>
-    {% if counter_typ == 31 %}
+    {% if counter_warrant_typ == 11 %}
         <div class="split">
             {% include 'dbms/agree/agree_board/counter/_c/z-registration-receive.html' %}
         </div>

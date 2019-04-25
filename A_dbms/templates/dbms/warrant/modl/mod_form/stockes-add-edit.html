@@ -26,18 +26,21 @@
         <label id="e_target" class="pull-right">{{ form_stockes_add_edit.target.errors }}</label>
     </div>
 
-    <div class="form-group"><!--股权数量-->
-        <label for="id_share" class="col-sm-3 control-label">{{ form_stockes_add_edit.share.label }}：</label>
-        <div class="col-sm-9">{{ form_stockes_add_edit.share }}</div>
-        <label id="e_share" class="pull-right">{{ form_stockes_add_edit.share.errors }}</label>
-    </div>
-
     <div class="form-group"><!--股权比例-->
         <label for="id_ratio" class="col-sm-3 control-label">{{ form_stockes_add_edit.ratio.label }}：</label>
         <div class="col-sm-9">{{ form_stockes_add_edit.ratio }}</div>
         <label id="e_ratio" class="pull-right">{{ form_stockes_add_edit.ratio.errors }}</label>
     </div>
-
+    <div class="form-group"><!--注册资本-->
+        <label for="id_registe" class="col-sm-3 control-label">{{ form_stockes_add_edit.registe.label }}：</label>
+        <div class="col-sm-9">{{ form_stockes_add_edit.registe }}</div>
+        <label id="e_registe" class="pull-right">{{ form_stockes_add_edit.registe.errors }}</label>
+    </div>
+    <div class="form-group"><!--实收资本-->
+        <label for="id_share" class="col-sm-3 control-label">{{ form_stockes_add_edit.share.label }}：</label>
+        <div class="col-sm-9">{{ form_stockes_add_edit.share }}</div>
+        <label id="e_share" class="pull-right">{{ form_stockes_add_edit.share.errors }}</label>
+    </div>
     <div class="form-group"><!--股权类型-->
         <label for="id_stock_typ" class="col-sm-3 control-label">{{ form_stockes_add_edit.stock_typ.label }}：</label>
         <div class="col-sm-9">{{ form_stockes_add_edit.stock_typ }}</div>

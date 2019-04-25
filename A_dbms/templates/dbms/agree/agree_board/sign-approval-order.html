@@ -39,6 +39,24 @@
         </tr>
     {% endif %}
 {% endfor %}
+{% if result_list %}
+    {% for result in result_list %}
+        {% if forloop.first %}
+            <tr>
+                <td align="center" rowspan="{{ result_count }}">声明</td>
+                <td align="center">{{ result.get_result_typ_display }}({{ result.custom.name }})</td>
+                <td align="center" colspan="3"></td>
+                <td align="center">{{ result.counter_copies }}2份</td>
+            </tr>
+        {% else %}
+            <tr>
+                <td align="center">{{ result.get_result_typ_display }}({{ result.custom.name }})</td>
+                <td align="center" colspan="3">{{ result.counter_num }}</td>
+                <td align="center">{{ result.counter_copies }}2份</td>
+            </tr>
+        {% endif %}
+    {% endfor %}
+{% endif %}
 <tr>
     <td align="center" colspan="6">评审信息</td>
 </tr>

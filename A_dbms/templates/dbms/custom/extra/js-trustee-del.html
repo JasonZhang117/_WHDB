@@ -1,0 +1,51 @@
+<script>
+    $(function () {
+        bindDelTrusteeB();
+        bindDelTrusteeModalOk();
+    });
+
+    function bindDelTrusteeB() {
+        $('#trustee-tb').on('click', '.delTrusteeB', function () {
+            var delTrusteeNid = $(this).parent().parent().attr('trustee-nid');
+            $('#delTrusteeModalId').val(delTrusteeNid);
+            $('#delTrusteeModal').modal('show');
+        })
+    }
+
+    function bindDelTrusteeModalOk() {
+        $('#delTrusteeModalOk').click(function () {
+            var postData = {};
+
+            $('#delTrusteeModal').find('input,select').each(function () {
+                var v = $(this).val();
+                var n = $(this).attr('name');
+                postData[n] = v;
+            });
+            var postDataStr = JSON.stringify(postData);
+            $.ajax({
+                url: '/dbms/custom/trustee/del/',
+                type: 'POST',
+                dataType: 'JSON',
+                data: {'postDataStr': postDataStr},
+                success: function (arg) {
+                    if (arg.status) {
+                        $('#delTrusteeModal').modal('hide');
+                        alert(arg.message);
+                        window.location.reload();
+                    } else {
+                        $('#delTrusteeModal').modal('hide');
+                        alert(arg.message);
+                        {#window.location.reload();#}
+                    }
+                }
+            })
+
+        })
+    }
+</script>
+
+
+
+
+
+

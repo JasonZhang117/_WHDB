@@ -153,7 +153,7 @@ def warrant_add_ajax(request):
                             warrant=warrant_obj, stock_buildor=request.user,
                             stock_typ=stocke_clean['stock_typ'],
                             stock_owner_id=stocke_clean['stock_owner'],
-                            target=stocke_clean['target'],
+                            target=stocke_clean['target'], registe=round(stocke_clean['registe'], 2),
                             share=round(stocke_clean['share'], 2),
                             ratio=round(stocke_clean['ratio'], 2))
                     response['message'] = '股权创建成功！！！'
@@ -202,7 +202,9 @@ def warrant_add_ajax(request):
                             warrant=warrant_obj, vehicle_buildor=request.user,
                             vehicle_owner_id=vehicle_clean['vehicle_owner'],
                             frame_num=vehicle_clean['frame_num'],
-                            plate_num=vehicle_clean['plate_num'])
+                            plate_num=vehicle_clean['plate_num'],
+                            vehicle_brand=vehicle_clean['vehicle_brand'],
+                            vehicle_remark=vehicle_clean['vehicle_remark'])
                     response['message'] = '车辆创建成功！！！'
                     response['skip'] = "/dbms/warrant/scan/%s/" % warrant_obj.id
                 except Exception as e:
@@ -431,8 +433,9 @@ def warrant_edit_ajax(request):
                         warrant_list.update(
                             warrant_num=warrant_edit_clean['warrant_num'])
                         models.Stockes.objects.filter(warrant=warrant_obj).update(
-                            target=stockes_edit_clean['target'], share=stockes_edit_clean['share'],
-                            ratio=stockes_edit_clean['ratio'], stock_typ=stockes_edit_clean['stock_typ'])
+                            target=stockes_edit_clean['target'], registe=round(stockes_edit_clean['registe'], 2),
+                            share=stockes_edit_clean['share'], ratio=stockes_edit_clean['ratio'],
+                            stock_typ=stockes_edit_clean['stock_typ'])
                         response['message'] = '股权信息修改该成功！！！'
                 except Exception as e:
                     response['status'] = False
@@ -468,7 +471,10 @@ def warrant_edit_ajax(request):
                         warrant_list.update(
                             warrant_num=warrant_edit_clean['warrant_num'])
                         models.Vehicle.objects.filter(warrant=warrant_obj).update(
-                            frame_num=vehicle_edit_clean['frame_num'], plate_num=vehicle_edit_clean['plate_num'])
+                            frame_num=vehicle_edit_clean['frame_num'],
+                            plate_num=vehicle_edit_clean['plate_num'],
+                            vehicle_brand=vehicle_edit_clean['vehicle_brand'],
+                            vehicle_remark=vehicle_edit_clean['vehicle_remark'], )
                         response['message'] = '车辆信息修改该成功！！！'
                 except Exception as e:
                     response['status'] = False

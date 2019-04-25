@@ -1,0 +1,18 @@
+<div class="modal fade bs-example-modal-sm" id="delShareholderModal"
+     tabindex="-1" role="dialog" aria-labelledby="delShareholderModal">
+    <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="delShareholderModalLabel">删除股东
+                    <input style="display: none" name="custom_id" id="id_custom_id" value={{ custom_obj.id }}>
+                    <input style="display: none" name="shareholder_id" id="delShareholderModalId">
+                </h4>
+            </div>
+            <div class="modal-body">是否确定删除此股东!!!</div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                <button type="button" class="btn btn-primary" id="delShareholderModalOk">删除</button>
+            </div>
+        </div>
+    </div>
+</div>

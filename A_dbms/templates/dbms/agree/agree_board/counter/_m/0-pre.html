@@ -1,6 +1,6 @@
 <p>根据丙方申请，甲方决定为丙方在<strong><u>{{ agree_obj.branch.name }}</u></strong>的债务（包括借款或承兑汇票、
     保函等）提供保证担保，于{% include 'dbms/agree/agree_board/date-period.html' %}签
-    订《最高额委托保证合同》
+    订《{{ agree_obj.get_agree_name_display }}》
     （合同编号：<strong><u>{{ agree_obj.agree_num }}</u></strong>，以下简称“主合同”），
     并受托与债权银行签订相应的保证合同或保函。
     经甲、丙方要求，乙方愿意就甲方基于为丙方担保所承担的保证责任而向甲方提供相应的

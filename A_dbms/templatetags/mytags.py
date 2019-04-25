@@ -1,6 +1,7 @@
 from django import template
 from django.utils.safestring import mark_safe
 from .. import models
+from django.db.models import Q, F
 
 register = template.Library()
 
@@ -231,3 +232,26 @@ def article_summary(article_id):
                 result += '存放于我公司进行保管。</td></tr>'
                 sure_or += 1
     return mark_safe(result)
+
+
+@register.simple_tag
+def decision(agree_id):
+    agree_obj = models.Agrees.objects.get(id=agree_id)
+    agree_custom_obj = agree_obj.lending.summary.custom
+    counter_agree_list = agree_obj.counter_agree.all()
+    search_fields = ['counter_custome__counter',
+                     'owner_custome__warrant__counter_warrant__counter',
+                     'receive_custome__warrant__counter_warrant__counter',
+                     'stock_owner_custome__warrant__counter_warrant__counter',
+                     'draft_custome__warrant__counter_warrant__counter',
+                     'vehicle_custome__warrant__counter_warrant__counter',
+                     'chattel_custome__warrant__counter_warrant__counter',
+                     'other_custome__warrant__counter_warrant__counter']
+    q = Q()
+    q.connector = 'OR'
+    for field in search_fields:
+        q.children.append(("%s__in" % field, counter_agree_list))
+    counter_custom_list = models.Customes.objects.filter(q)
+    print('counter_custom_list:', counter_custom_list)
+    if agree_custom_obj.genre == 1:
+        result = '<p>%s股东会决议</p>'

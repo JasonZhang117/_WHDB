@@ -116,7 +116,6 @@ def agree_scan(request, agree_id):  # 查看合同
         lending_warrant__sure__lending=agree_lending_obj, warrant_typ=55).exclude(
         counter_warrant__counter__agree=agree_obj).values_list('id', 'warrant_num').order_by('warrant_num')
     from_counter = forms.AddCounterForm()
-
     form_agree_sign_data = {'agree_sign_date': str(datetime.date.today())}
     form_agree_sign = forms.FormAgreeSign(initial=form_agree_sign_data)
     form_agree_edit_date = {
@@ -257,6 +256,7 @@ def agree_preview(request, agree_id):
     single_quota_rate = agree_obj.lending.summary.single_quota_summary.first().flow_rate
     charge = round(agree_amount * single_quota_rate / 100, 2)
     charge_cn = convert(charge)
+
     return render(request, 'dbms/agree/preview-agree.html', locals())
 
 
@@ -288,6 +288,10 @@ def counter_preview(request, agree_id, counter_id):
         counter_warrant_list = warrant_counter_obj.warrant.all()  # 反担保合同项下抵质押物列表
         counter_warrant_obj = counter_warrant_list.first()  # 反担保合同项下抵质押物（首个）
         counter_warrant_typ = counter_warrant_obj.warrant_typ  # 反担保合同项下抵质押物种类
+        counter_warrant_list_count = counter_warrant_list.count()
+        for counter_warrant in counter_warrant_list:
+            if counter_warrant.warrant_typ == 2:
+                counter_warrant_list_count += counter_warrant.housebag_warrant.all().count() - 1
 
         counter_property_type = ''
         if counter_warrant_typ in [1, 2]:
@@ -297,7 +301,18 @@ def counter_preview(request, agree_id, counter_id):
         elif counter_warrant_typ == 6:
             counter_property_type = '在建工程'
         elif counter_warrant_typ == 11:
-            receive_extend_list = counter_warrant_obj.receive_warrant.extend_receiveable.all()
+            counter_receive_obj = counter_warrant_obj.receive_warrant
+            receive_extend_list = counter_receive_obj.extend_receiveable.all()
+        elif counter_warrant_typ == 21:
+            counter_stock_obj = counter_warrant_obj.stock_warrant
+            stock_registe_str = str(counter_stock_obj.registe).rstrip('0').rstrip('.')  # 续贷（万元）
+            stock_share_str = str(counter_stock_obj.share).rstrip('0').rstrip('.')  # 续贷（万元）
+            agree_share_cn = convert(counter_stock_obj.share * 10000)
+        elif counter_warrant_typ == 31:
+            vehicle_draft_obj = counter_warrant_obj.vehicle_warrant
+        elif counter_warrant_typ == 41:
+            counter_draft_obj = counter_warrant_obj.draft_warrant
+            counter_draft_bag_list = counter_draft_obj.extend_draft.all()
         elif counter_warrant_typ == 51:
             chattel_typ = counter_warrant_obj.chattel_warrant.chattel_typ  # 动产种类
             if chattel_typ == 1:
@@ -343,13 +358,32 @@ def agree_sign_preview(request, agree_id):
     agree_amount_str = str(agree_amount / 10000).rstrip('0').rstrip('.')  # 续贷（万元）
     article_amount = agree_obj.lending.summary.amount
     article_amount_str = str(article_amount / 10000).rstrip('0').rstrip('.')  # 续贷（万元）
-
+    '''AGREE_STATE_LIST = [(11, '待签批'), (21, '已签批'), (31, '未落实'),
+                        (41, '已落实'), (51, '待变更'), (61, '已解保'), (99, '已注销')]'''
     agree_article = agree_obj.lending.summary
-    article_agree_list = models.Agrees.objects.filter(lending__summary=agree_article)
+    article_agree_list = models.Agrees.objects.filter(lending__summary=agree_article).exclude(agree_state=99)
     article_agree_amount = article_agree_list.aggregate(Sum('agree_amount'))['agree_amount__sum']
     article_agree_amount_ar = round(article_agree_amount - agree_amount, 2)
     article_agree_amount_ar_str = str(article_agree_amount_ar / 10000).rstrip('0').rstrip('.')  # 续贷（万元）
-
+    '''RESULT_TYP_LIST = [(11, '股东会决议'), (21, '董事会决议'), (31, '弃权声明'), (41, '单身声明')]'''
     counter_list = agree_obj.counter_agree.all()
     counter_count = counter_list.count() + 1
+    result_list = agree_obj.result_agree.filter(result_typ__in=[31, 41])
+    result_count = result_list.count()
+
     return render(request, 'dbms/agree/preview-sign.html', locals())
+
+
+# -------------------------决议声明预览-------------------------#
+@login_required
+@authority
+def result_preview(request, agree_id, result_id):
+    print(request.path, '>', resolve(request.path).url_name, '>', request.user)
+    current_url_name = resolve(request.path).url_name  # 获取当前URL_NAME
+    authority_list = request.session.get('authority_list')  # 获取当前用户的所有权限
+    menu_result = MenuHelper(request).menu_data_list()
+    agree_obj = models.Agrees.objects.get(id=agree_id)  # 委托合同
+    result_obj = models.ResultState.objects.get(id=result_id)  # 反担保合同
+    result_detail = result_obj.result_detail
+
+    return render(request, 'dbms/agree/preview-result.html', locals())

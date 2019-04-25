@@ -67,11 +67,22 @@ class AgreesAdmin(admin.ModelAdmin):
 admin.site.register(models.Agrees, AgreesAdmin)  # 合同
 
 
+class AgreesResultState(admin.ModelAdmin):
+    list_display = (
+        'agree', 'custom', 'result_typ')  # 显示字段
+    list_per_page = 20  # 每页显示条目数
+    search_fields = ['agree']  # 搜索字段
+    ordering = ['-agree']  # 排序字段
+
+
+admin.site.register(models.ResultState, AgreesResultState)  # 合同
+
+
 class CountersAdmin(admin.ModelAdmin):
     list_display = (
         'counter_num', 'counter_name', 'agree', 'counter_typ', 'counter_copies')  # 显示字段
     # list_per_page = 20  # 每页显示条目数
-    # search_fields = ['counter_num']  # 搜索字段
+    search_fields = ['counter_num']  # 搜索字段
     # ordering = ['-agree_date']  # 排序字段
 
 
@@ -82,7 +93,7 @@ admin.site.register(models.CountersWarrants)  # 抵质押押反担保合同
 
 # ------------------------担保物--------------------------#
 class WarrantsAdmin(admin.ModelAdmin):
-    list_display = ('warrant_num', 'warrant_typ', 'meeting_date','evaluate_state', 'evaluate_value',
+    list_display = ('warrant_num', 'warrant_typ', 'meeting_date', 'evaluate_state', 'evaluate_value',
                     'evaluate_date', 'warrant_state')
     list_per_page = 200  # 每页显示条目数
     search_fields = ['warrant_num']  # 搜索字段
@@ -207,6 +218,8 @@ class IndustriesAdmin(admin.ModelAdmin):
 
 admin.site.register(models.Industries, IndustriesAdmin)  # 行业
 admin.site.register(models.Shareholders)  # 股东
+admin.site.register(models.Trustee)  # 董事
+
 # -----------------------保后-------------------------#
 admin.site.register(models.Review)  # 行业
 
