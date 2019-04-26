@@ -248,6 +248,7 @@ def agree_preview(request, agree_id):
     authority_list = request.session.get('authority_list')  # 获取当前用户的所有权限
     menu_result = MenuHelper(request).menu_data_list()
     agree_obj = models.Agrees.objects.get(id=agree_id)
+    agree_typ = agree_obj.agree_typ
     agree_amount = agree_obj.agree_amount
     agree_amount_cn = convert(agree_amount)
     agree_amount_str = str(agree_amount / 10000).rstrip('0').rstrip('.')  # 续贷（万元）
@@ -270,15 +271,20 @@ def counter_preview(request, agree_id, counter_id):
     menu_result = MenuHelper(request).menu_data_list()
     agree_obj = models.Agrees.objects.get(id=agree_id)  # 委托合同
     counter_obj = models.Counters.objects.get(id=counter_id)  # 反担保合同
-
-    '''WARRANT_TYP_LIST = [
-           (1, '房产'), (2, '房产包'), (5, '土地'), (6, '在建工程'), (11, '应收账款'),
-           (21, '股权'), (31, '票据'), (41, '车辆'), (51, '动产'), (55, '其他'), (99, '他权')]'''
-    '''CHATTEL_TYP_LIST = [(1, '存货'), (11, '机器设备'), (21, '合格证'), (31, '专利'), (41, '商标'),
-                        (71, '账户'), (99, '其他')]'''
-    '''OTHER_TYP_LIST = ((11, '购房合同'), (21, '合格证'), (31, '专利'), (41, '商标'), (71, '账户'),
-                      (99, '其他'))'''
+    '''AGREE_TYP_LIST = [(1, '单笔'), (2, '最高额'), (3, '保函'), (7, '小贷'),
+                      (41, '单笔(公证)'), (42, '最高额(公证)'), (47, '小贷(公证)')]'''
+    agree_typ = agree_obj.agree_typ
+    '''COUNTER_TYP_LIST = [
+        (1, '企业担保'), (2, '个人保证'),
+        (11, '房产抵押'), (12, '土地抵押'), (13, '动产抵押'), (14, '在建工程抵押'), (15, '车辆抵押'),
+        (31, '应收质押'), (32, '股权质押'), (33, '票据质押'), (34, '动产质押'),
+        (41, '其他权利质押'),
+        (51, '股权预售'), (52, '房产预售'), (53, '土地预售')]'''
     counter_typ = counter_obj.counter_typ
+    X_COUNTER_TYP_LIST = [1, 2, ]
+    D_COUNTER_TYP_LIST = [11, 12, 13, 14, 15, ]
+    Z_COUNTER_TYP_LIST = [31, 32, 33, 34, 41, ]
+
     if counter_typ in [1, 2]:
         assure_counter_obj = counter_obj.assure_counter
         custom_obj = assure_counter_obj.custome
@@ -287,6 +293,9 @@ def counter_preview(request, agree_id, counter_id):
         counter_warrant_count = warrant_counter_obj.warrant.count()  # 反担保合同项下抵质押物数量
         counter_warrant_list = warrant_counter_obj.warrant.all()  # 反担保合同项下抵质押物列表
         counter_warrant_obj = counter_warrant_list.first()  # 反担保合同项下抵质押物（首个）
+        '''WARRANT_TYP_LIST = [
+        (1, '房产'), (2, '房产包'), (5, '土地'), (6, '在建工程'), (11, '应收账款'),
+        (21, '股权'), (31, '票据'), (41, '车辆'), (51, '动产'), (55, '其他'), (99, '他权')]'''
         counter_warrant_typ = counter_warrant_obj.warrant_typ  # 反担保合同项下抵质押物种类
         counter_warrant_list_count = counter_warrant_list.count()
         for counter_warrant in counter_warrant_list:
@@ -305,8 +314,8 @@ def counter_preview(request, agree_id, counter_id):
             receive_extend_list = counter_receive_obj.extend_receiveable.all()
         elif counter_warrant_typ == 21:
             counter_stock_obj = counter_warrant_obj.stock_warrant
-            stock_registe_str = str(counter_stock_obj.registe).rstrip('0').rstrip('.')  # 续贷（万元）
-            stock_share_str = str(counter_stock_obj.share).rstrip('0').rstrip('.')  # 续贷（万元）
+            stock_registe_str = str(counter_stock_obj.registe).rstrip('0').rstrip('.')
+            stock_share_str = str(counter_stock_obj.share).rstrip('0').rstrip('.')
             agree_share_cn = convert(counter_stock_obj.share * 10000)
         elif counter_warrant_typ == 31:
             vehicle_draft_obj = counter_warrant_obj.vehicle_warrant
@@ -319,15 +328,6 @@ def counter_preview(request, agree_id, counter_id):
                 counter_property_type = '存货'
             elif chattel_typ == 11:
                 counter_property_type = '机器设备'
-    '''COUNTER_TYP_LIST = [
-            (1, '企业担保'), (2, '个人保证'),
-            (11, '房产抵押'), (12, '土地抵押'), (13, '动产抵押'), (14, '在建工程抵押'), (15, '车辆抵押'),
-            (31, '应收质押'), (32, '股权质押'), (33, '票据质押'), (34, '动产质押'),
-            (41, '其他权利质押'),
-            (51, '股权预售'), (52, '房产预售'), (53, '土地预售')]'''
-    X_COUNTER_TYP_LIST = [1, 2, ]
-    D_COUNTER_TYP_LIST = [11, 12, 13, 14, 15, ]
-    Z_COUNTER_TYP_LIST = [31, 32, 33, 34, 41, ]
 
     agree_amount = agree_obj.agree_amount
     agree_amount_cn = convert(agree_amount)

@@ -4,10 +4,12 @@
     （合同编号：<strong><u>{{ agree_obj.agree_num }}</u></strong>，以下简称“主合同”），
     并受托与债权银行签订相应的保证合同或保函。
     经甲、丙方要求，乙方愿意就甲方基于为丙方担保所承担的保证责任而向甲方提供相应的
-    {% if counter_obj.counter_typ in MORTGAGE_COUNTER_TYP_LIST %}
+    {% if counter_typ in D_COUNTER_TYP_LIST %}
         抵押
-    {% elif counter_obj.counter_typ == 1 or counter_obj.counter_typ == 2 %}
+    {% elif counter_typ in X_COUNTER_TYP_LIST %}
         保证
+    {% elif counter_typ in Z_COUNTER_TYP_LIST %}
+        质押
     {% endif %}
     反担保。甲、乙、
     丙三方根据有关法律、法规规定，经协商一致，特订立如下条款：</p>

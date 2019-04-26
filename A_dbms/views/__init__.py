@@ -36,7 +36,7 @@ from .v_provide import (
     provide_agree, provide_agree_scan, provide_agree_notify, provide, provide_scan, overdue, soondue, notify,
     notify_scan, provide_follow)
 from .v_provide_act import (
-    counter_sign_ajax, ascertain_add_ajax, notify_add_ajax, notify_del_ajax, provide_add_ajax,
+    counter_sign_ajax, ascertain_add_ajax, notify_add_ajax, notify_edit_ajax,notify_del_ajax, provide_add_ajax,
     provide_del_ajax, repayment_add_ajax, repayment_del_ajax)
 
 from .v_pigeonhole import pigeonhole, pigeonhole_scan, pigeonhole_overdue

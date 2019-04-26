@@ -7,17 +7,27 @@
 {#                        (41, '已落实'), (51, '待变更'), (61, '已解保'), (99, '已注销')]#}
 {% block body %}
     {% if agree_obj.agree_state == 11 or agree_obj.agree_state == 51 %}
-        <div class="container-fluid" style="padding-left: 1px;">
+        <div class="container-fluid">
             <input style="display: none" name="agree_id" id="id_agree_id" value={{ agree_obj.id }}>
         </div>
         <div id="view-save">
             <div class="contain">
-                <!--AGREE_TYP_LIST = [(1, '单笔'), (2, '最高额'), (3, '保函'), (7, '小贷'),
-                              (41, '单笔(公证)'), (42, '最高额(公证)'), (47, '小贷(公证)')]-->
-                {% if agree_obj.agree_typ == 1 %}
+                {#AGREE_TYP_LIST = [(1, '单笔'), (2, '最高额'), (3, '保函'), (7, '小贷'),#}
+                {#(41, '单笔(公证)'), (42, '最高额(公证)'), (47, '小贷(公证)')]#}
+                {% if agree_typ == 1 %}
                     {% include 'dbms/agree/agree_board/entrust-single.html' %}
-                {% elif agree_obj.agree_typ == 2 %}
+                {% elif agree_typ == 2 %}
                     {% include 'dbms/agree/agree_board/entrust-maximum.html' %}
+                {% elif agree_typ == 3 %}
+                    <p>？？？？？？？？？尚未添加保函委托合同模板？？？？？？？？？？？？？？</p>
+                {% elif agree_typ == 7 %}
+                    <p>？？？？？？？？？尚未添加小贷借款合同模板？？？？？？？？？？？？？？</p>
+                {% elif agree_typ == 41 %}
+                    <p>？？？？？？？？？尚未添加单笔公证版本模板？？？？？？？？？？？？？？</p>
+                {% elif agree_typ == 42 %}
+                    <p>？？？？？？？？？尚未添加最高额公证版本模板？？？？？？？？？？？？？</p>
+                {% elif agree_typ == 47 %}
+                    <p>？？？？？？？？？尚未添加小贷借款合同公证模板？？？？？？？？？？？？</p>
                 {% endif %}
             </div>
         </div>

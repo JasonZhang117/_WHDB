@@ -38,6 +38,17 @@ class FormNotifyAdd(dform.ModelForm):
             'remark': dform.TextInput(attrs={'class': 'form-control', 'placeholder': '备注'})}
 
 
+# -----------------------放款通知修改-------------------------#
+class FormNotifyEdit(dform.ModelForm):
+    class Meta:
+        model = models.Notify
+        fields = ['contracts_lease', 'contract_guaranty', 'remark']
+        widgets = {
+            'contracts_lease': dform.TextInput(attrs={'class': 'form-control', 'placeholder': '借款合同编号'}),
+            'contract_guaranty': dform.TextInput(attrs={'class': 'form-control', 'placeholder': '保证合同编号'}),
+            'remark': dform.TextInput(attrs={'class': 'form-control', 'placeholder': '备注'})}
+
+
 # -----------------------放款添加-------------------------#
 class FormProvideAdd(dform.ModelForm):
     class Meta:

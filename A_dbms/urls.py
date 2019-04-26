@@ -127,6 +127,7 @@ urlpatterns = [
     path('provide/counter/sign/', views.counter_sign_ajax, name='provide_counter_sign_ajax'),
     path('provide/ascertain/add/', views.ascertain_add_ajax, name='provide_ascertain_add_ajax'),
     path('provide/notify/add/', views.notify_add_ajax, name='provide_notify_add_ajax'),
+    path('provide/notify/edit/', views.notify_edit_ajax, name='provide_notify_edit_ajax'),
     path('provide/notify/del/', views.notify_del_ajax, name='provide_notify_del_ajax'),
     path('provide/add/', views.provide_add_ajax, name='provide_add_ajax'),
     path('provide/del/', views.provide_del_ajax, name='provide_del_ajax'),

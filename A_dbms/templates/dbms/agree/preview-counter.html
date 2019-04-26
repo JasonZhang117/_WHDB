@@ -4,41 +4,49 @@
     {% include 'dbms/agree/agree_board/style.html' %}
 {% endblock %}
 {% block body %}
-    <!-- COUNTER_TYP_LIST = [
-        (1, '企业担保'), (2, '个人保证'),
-        (11, '房产抵押'), (12, '土地抵押'), (13, '动产抵押'), (14, '在建工程抵押'), (15, '车辆抵押'),
-        (31, '应收质押'), (32, '股权质押'), (33, '票据质押'), (34, '动产质押'),
-        (41, '其他权利质押'),
-        (51, '股权预售'), (52, '房产预售'), (53, '土地预售')]
-            AGREE_TYP_LIST = [(1, '单笔'), (2, '最高额'), (3, '保函'), (7, '小贷'),
-                      (41, '单笔(公证)'), (42, '最高额(公证)'), (47, '小贷(公证)')]-->
+    {#COUNTER_TYP_LIST = [#}
+    {#(1, '企业担保'), (2, '个人保证'),#}
+    {#(11, '房产抵押'), (12, '土地抵押'), (13, '动产抵押'), (14, '在建工程抵押'), (15, '车辆抵押'),#}
+    {#(31, '应收质押'), (32, '股权质押'), (33, '票据质押'), (34, '动产质押'),#}
+    {#(41, '其他权利质押'),#}
+    {#(51, '股权预售'), (52, '房产预售'), (53, '土地预售')]#}
+    {#AGREE_TYP_LIST = [(1, '单笔'), (2, '最高额'), (3, '保函'), (7, '小贷'),#}
+    {#(41, '单笔(公证)'), (42, '最高额(公证)'), (47, '小贷(公证)')]#}
     {% if agree_obj.agree_state == 11 or agree_obj.agree_state == 51 %}
         <div class="container-fluid" style="padding-left: 1px;">
             <input style="display: none" name="counter_id" id="id_counter_id" value={{ counter_obj.id }}>
         </div>
         <div id="view-save">
-            {#单笔#}
-            {% if agree_obj.agree_typ == 1 %}
-                {% if counter_obj.counter_typ == 1 %}
+            {% if agree_typ == 1 %}
+                {% if counter_typ == 1 %}
                     {% include 'dbms/agree/agree_board/counter/c-s-x.html' %}
-                {% elif counter_obj.counter_typ == 2 %}
+                {% elif counter_typ == 2 %}
                     {% include 'dbms/agree/agree_board/counter/c-s-g.html' %}
-                {% elif counter_obj.counter_typ in D_COUNTER_TYP_LIST %}
+                {% elif counter_typ in D_COUNTER_TYP_LIST %}
                     {% include 'dbms/agree/agree_board/counter/c-s-d.html' %}
-                {% elif counter_obj.counter_typ in Z_COUNTER_TYP_LIST %}
+                {% elif counter_typ in Z_COUNTER_TYP_LIST %}
                     {% include 'dbms/agree/agree_board/counter/c-s-z.html' %}
                 {% endif %}
-                {#最高额#}
-            {% elif agree_obj.agree_typ == 2 %}
-                {% if counter_obj.counter_typ == 1 %}
+            {% elif agree_typ == 2 %}
+                {% if counter_typ == 1 %}
                     {% include 'dbms/agree/agree_board/counter/c-m-x.html' %}
-                {% elif counter_obj.counter_typ == 2 %}
+                {% elif counter_typ == 2 %}
                     {% include 'dbms/agree/agree_board/counter/c-m-g.html' %}
-                {% elif counter_obj.counter_typ in D_COUNTER_TYP_LIST %}
+                {% elif counter_typ in D_COUNTER_TYP_LIST %}
                     {% include 'dbms/agree/agree_board/counter/c-m-d.html' %}
-                {% elif counter_obj.counter_typ in Z_COUNTER_TYP_LIST %}
+                {% elif counter_typ in Z_COUNTER_TYP_LIST %}
                     {% include 'dbms/agree/agree_board/counter/c-m-z.html' %}
                 {% endif %}
+            {% elif agree_typ == 3 %}
+                <p>！！！！！！！agree_typ == 3还未添加合同模板，请联系系统管理员！！！！！！！</p>
+            {% elif agree_typ == 7 %}
+                <p>！！！！！！！agree_typ == 7还未添加合同模板，请联系系统管理员！！！！！！！</p>
+            {% elif agree_typ == 41 %}
+                <p>！！！！！！！agree_typ == 41还未添加合同模板，请联系系统管理员！！！！！！！</p>
+            {% elif agree_typ == 42 %}
+                <p>！！！！！！！agree_typ == 42还未添加合同模板，请联系系统管理员！！！！！！！</p>
+            {% elif agree_typ == 47 %}
+                <p>！！！！！！！agree_typ == 47还未添加合同模板，请联系系统管理员！！！！！！！</p>
             {% endif %}
         </div>
     {% else %}

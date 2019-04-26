@@ -182,6 +182,39 @@ def notify_add_ajax(request):
     return HttpResponse(result)
 
 
+# -----------------------------修改放款通知ajax------------------------------#
+@login_required
+@authority
+def notify_edit_ajax(request):
+    print(request.path, '>', resolve(request.path).url_name, '>', request.user)
+    response = {'status': True, 'message': None, 'forme': None, }
+    post_data_str = request.POST.get('postDataStr')
+    post_data = json.loads(post_data_str)
+
+    notify_list = models.Notify.objects.filter(id=post_data['notify_id'])
+    form_notify_edit = forms.FormNotifyEdit(post_data)
+    '''AGREE_STATE_LIST = ((11, '待签批'), (21, '已签批'), (31, '未落实'),
+                        (41, '已落实'), (51, '待变更'), (61, '已解保'), (99, '作废'))'''
+    if form_notify_edit.is_valid():
+        notify_data = form_notify_edit.cleaned_data
+        try:
+            with transaction.atomic():
+                notify_list.update(contracts_lease=notify_data['contracts_lease'],
+                                   contract_guaranty=notify_data['contract_guaranty'],
+                                   remark=notify_data['remark'], notifyor=request.user)
+            response['message'] = '成功修改放款通知！'
+        except Exception as e:
+            response['status'] = False
+            response['message'] = '放款通知修改失败：%s' % str(e)
+    else:
+        response['status'] = False
+        response['message'] = '表单信息有误！！！'
+        response['forme'] = form_notify_edit.errors
+
+    result = json.dumps(response, ensure_ascii=False)
+    return HttpResponse(result)
+
+
 # -----------------------删除放款通知ajax-------------------------#
 @login_required
 @authority
@@ -190,9 +223,7 @@ def notify_del_ajax(request):  # 反担保人删除ajax
     response = {'status': True, 'message': None, 'forme': None, }
     post_data_str = request.POST.get('postDataStr')
     post_data = json.loads(post_data_str)
-    print('post_data:', post_data)
-    notify_id = post_data['notify_id']
-    notify_obj = models.Notify.objects.get(id=notify_id)
+    notify_obj = models.Notify.objects.get(id=post_data['notify_id'])
     provide_notify_list = notify_obj.provide_notify.all()
     if provide_notify_list:
         response['status'] = False

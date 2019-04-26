@@ -20,7 +20,6 @@ def agree_sign_ajax(request):  # 添加合同
     response = {'status': True, 'message': None, 'forme': None, 'skip': None, }
     post_data_str = request.POST.get('postDataStr')
     post_data = json.loads(post_data_str)
-    print('post_data:', post_data)
 
     agree_id = post_data['agree_id']
     agree_list = models.Agrees.objects.filter(id=agree_id)
@@ -56,7 +55,6 @@ def agree_add_ajax(request):  # 添加合同
     response = {'status': True, 'message': None, 'forme': None, 'skip': None, }
     post_data_str = request.POST.get('postDataStr')
     post_data = json.loads(post_data_str)
-    print('post_data:', post_data)
     lending_obj = models.LendingOrder.objects.get(id=post_data['lending'])
     article_state_lending = lending_obj.summary.article_state
     '''ARTICLE_STATE_LIST = [(1, '待反馈'), (2, '已反馈'), (3, '待上会'), (4, '已上会'), (5, '已签批'),
@@ -158,7 +156,6 @@ def agree_edit_ajax(request):  #
     response = {'status': True, 'message': None, 'forme': None, 'skip': None, }
     post_data_str = request.POST.get('postDataStr')
     post_data = json.loads(post_data_str)
-    print('post_data:', post_data)
     agree_list = models.Agrees.objects.filter(id=post_data['agree_id'])
     agree_obj = agree_list.first()
     agree_state = agree_obj.agree_state
@@ -178,7 +175,8 @@ def agree_edit_ajax(request):  #
             agree_typ = agree_add_cleaned['agree_typ']
             branche_obj = models.Branches.objects.get(id=branch_id)
             cooperator_up_scale = branche_obj.cooperator.up_scale
-            '''AGREE_TYP_LIST = ((1, '单笔'), (2, '最高额'), (3, '保函'))'''
+            '''AGREE_TYP_LIST = [(1, '单笔'), (2, '最高额'), (3, '保函'), (7, '小贷'),
+                                 (41, '单笔(公证)'), (42, '最高额(公证)'), (47, '小贷(公证)')]'''
             order_amount = round(lending_obj.order_amount, 2)  # 放款次序金额
             if agree_typ == 2:  # (2, '最高额')
                 order_amount_up = round(order_amount * (1 + cooperator_up_scale), 2)  # 最高允许的合同金额
@@ -196,7 +194,6 @@ def agree_edit_ajax(request):  #
                 response['message'] = '放款限额（%s）超过审批额度（%s）！' % (amount_limit, order_amount,)
                 result = json.dumps(response, ensure_ascii=False)
                 return HttpResponse(result)
-
             '''AGREE_TYP_LIST = [(1, '单笔'), (2, '最高额'), (3, '保函'), (7, '小贷'),
                                  (41, '单笔(公证)'), (42, '最高额(公证)'), (47, '小贷(公证)')]'''
             '''AGREE_NAME_LIST = [(1, '委托保证合同'), (11, '最高额委托保证合同'),
@@ -218,6 +215,21 @@ def agree_edit_ajax(request):  #
                         amount_limit=amount_limit,
                         agree_amount=agree_amount, guarantee_typ=guarantee_typ, agree_copies=agree_copies,
                         agree_buildor=request.user)
+                    '''COUNTER_NAME_LIST = [(1, '保证反担保合同'), (2, '不可撤销的反担保函'),
+                         (3, '抵押反担保合同'), (4, '应收账款质押反担保合同'),
+                         (5, '股权质押反担保合同'), (6, '质押反担保合同'), (9, '预售合同'),
+                         (21, '最高额保证反担保合同'),
+                         (23, '最高额抵押反担保合同'), (24, '最高额应收账款质押反担保合同'),
+                         (25, '最高额股权质押反担保合同'), (26, '最高额质押反担保合同'),
+                         (41, '保证合同'),
+                         (43, '抵押合同'), (44, '应收账款质押合同'),
+                         (45, '股权质押合同'), (46, '质押合同')]'''
+                    '''COUNTER_TYP_LIST = [
+        (1, '企业担保'), (2, '个人保证'),
+        (11, '房产抵押'), (12, '土地抵押'), (13, '动产抵押'), (14, '在建工程抵押'), (15, '车辆抵押'),
+        (31, '应收质押'), (32, '股权质押'), (33, '票据质押'), (34, '动产质押'),
+        (41, '其他权利质押'),
+        (51, '股权预售'), (52, '房产预售'), (53, '土地预售')]'''
                     for counter in agree_obj.counter_agree.all():
                         counter_typ = counter.counter_typ
                         counter_name = ''
@@ -232,11 +244,26 @@ def agree_edit_ajax(request):  #
                                 counter_name = 4
                             elif counter_typ == 32:
                                 counter_name = 5
-                            elif counter_typ in [33, 34, 39, 41]:
+                            elif counter_typ in [33, 34, 41]:
                                 counter_name = 6
                             elif counter_typ in [51, 52, 53]:
                                 counter_name = 9
                         elif agree_typ in [2, 42]:
+                            if counter_typ == 1:
+                                counter_name = 21
+                            elif counter_typ == 2:
+                                counter_name = 2
+                            elif counter_typ in [11, 12, 13, 14, 15]:
+                                counter_name = 23
+                            elif counter_typ == 31:
+                                counter_name = 24
+                            elif counter_typ == 32:
+                                counter_name = 25
+                            elif counter_typ in [33, 34, 39, 41]:
+                                counter_name = 26
+                            elif counter_typ in [51, 52, 53]:
+                                counter_name = 9
+                        elif agree_typ == 3:
                             if counter_typ == 1:
                                 counter_name = 21
                             elif counter_typ == 2:
@@ -290,7 +317,6 @@ def agree_save_ajax(request):  #
     response = {'status': True, 'message': None, 'forme': None, 'skip': None, }
     post_data_str = request.POST.get('postDataStr')
     post_data = json.loads(post_data_str)
-    print('post_data:', post_data)
     agree_content = post_data['content']
     agree_obj = models.Agrees.objects.filter(id=post_data['agree_id'])
     '''ARTICLE_STATE_LIST = [(1, '待反馈'), (2, '已反馈'), (3, '待上会'), (4, '已上会'), (5, '已签批'),
@@ -314,7 +340,6 @@ def counter_add_ajax(request):
     response = {'status': True, 'message': None, 'forme': None, }
     post_data_str = request.POST.get('postDataStr')
     post_data = json.loads(post_data_str)
-    print('post_data:', post_data)
     agree_id = post_data['agree_id']
     counter_typ = int(post_data['counter_typ'])
     agree_obj = models.Agrees.objects.get(id=agree_id)
@@ -542,7 +567,6 @@ def counter_save_ajax(request):  # 添加合同
     response = {'status': True, 'message': None, 'forme': None, 'skip': None, }
     post_data_str = request.POST.get('postDataStr')
     post_data = json.loads(post_data_str)
-    print('post_data:', post_data)
     counter_content = post_data['content']
     counter_obj = models.Counters.objects.filter(id=post_data['counter_id'])
     '''ARTICLE_STATE_LIST = [(1, '待反馈'), (2, '已反馈'), (3, '待上会'), (4, '已上会'), (5, '已签批'),
@@ -935,7 +959,6 @@ def result_state_ajax(request):  #
                     elif decision == 21:
                         result += '<p><strong>本公司及参会董事对本次股东会决议的程序的合法性以及股东签名的真实性负责。</strong></p>'
                         result += '<p>参会董事（或代表）签字：</p>'
-
 
                     if decision == 11:
                         shareholder_list = counter_custom.company_custome.shareholder_custom_c.all()

@@ -94,7 +94,7 @@ class Counters(models.Model):  # 反担保合同
     counter_typ = models.IntegerField(verbose_name='合同类型', choices=COUNTER_TYP_LIST)
     counter_copies = models.IntegerField(verbose_name='合同份数')
     COUNTER_STATE_LIST = ((11, '未签订'), (21, '已签订'), (31, '作废'))
-    counter_state = models.IntegerField(verbose_name='签订状态', choices=COUNTER_STATE_LIST, default=11)
+    counter_state = models.IntegerField(verbose_name='签订状态', choices=COUNTER_STATE_LIST, default=21)
     counter_sign_date = models.DateField(verbose_name='签订日期', null=True, blank=True)
     counter_remark = models.TextField(verbose_name='签订备注', null=True, blank=True)
     counter_view = models.TextField(verbose_name='合同预览', null=True, blank=True)

@@ -1,20 +1,19 @@
 <script>
     $(function () {
-        bindAddNotifyB();
-        bindAddNotifyModalOk();
+        bindEditNotifyB();
+        bindEditNotifyModalOk();
     });
 
-    function bindAddNotifyB() {
-        $('#addNotifyB').click(function () {
-            console.log("bindAddNotifyB");
-            $('#addNotifyModal').modal('show');
+    function bindEditNotifyB() {
+        $('#editNotifyB').click(function () {
+            $('#editNotifyModal').modal('show');
         })
     }
 
-    function bindAddNotifyModalOk() {
-        $('#addNotifyModalOk').click(function () {
+    function bindEditNotifyModalOk() {
+        $('#editNotifyModalOk').click(function () {
             var postData = {};
-            $('#addNotifyModal').find('input,select').each(function () {
+            $('#editNotifyModal').find('input,select').each(function () {
                 var v = $(this).val();
                 var n = $(this).attr('name');
                 postData[n] = v;
@@ -22,7 +21,7 @@
             var postDataStr = JSON.stringify(postData);
             console.log(postDataStr);
             $.ajax({
-                url: '/dbms/provide/notify/add/',
+                url: '/dbms/provide/notify/edit/',
                 type: 'POST',
                 traditional: true,
                 data: {'postDataStr': postDataStr},
@@ -30,15 +29,12 @@
                 success: function (arg) {
                     console.log(arg);
                     if (arg.status) {
-                        $('#addNotifyModal').modal('hide');
+                        $('#editNotifyModal').modal('hide');
                         alert(arg.message);
                         {#window.location.href = arg.skip;#}
                         window.location.reload();
                     } else {
                         alert(arg.message);
-                        $('#e_notify_money').text(arg.forme.notify_money);
-                        $('#e_time_limit').text(arg.forme.time_limit);
-                        $('#e_notify_date').text(arg.forme.notify_date);
                         $('#e_contracts_lease').text(arg.forme.contracts_lease);
                         $('#e_contract_guaranty').text(arg.forme.contract_guaranty);
                         $('#e_remark').text(arg.forme.remark);

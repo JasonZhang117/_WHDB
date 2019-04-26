@@ -380,7 +380,10 @@ def notify_scan(request, notify_id):  # 查看放款通知
     date_th_later = today_str + datetime.timedelta(days=365)
     form_provide_data = {'provide_date': str(today_str), 'due_date': str(date_th_later)}
     form_provide_add = forms.FormProvideAdd(initial=form_provide_data)
-
+    form_data = {'contracts_lease': notify_obj.contracts_lease,
+                 'contract_guaranty': notify_obj.contract_guaranty,
+                 'remark': notify_obj.remark}
+    form_notify_edit = forms.FormNotifyEdit(initial=form_data)  # 添加放款通知
     return render(request, 'dbms/provide/provide-notify-scan.html', locals())
 
 
