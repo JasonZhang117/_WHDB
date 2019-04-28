@@ -1,0 +1,28 @@
+<div class="table-responsive">
+    <table class="table table-bordered table-hover table-condensed active">
+        <thead>
+        <tr style="text-align: center">
+            <th>序号</th>
+            <th>还款日期</th>
+            <th>还款金额</th>
+            <th>操作人</th>
+            {% if PAGE_TITLE == '放款详情' %}
+                <th>操作</th>
+            {% endif %}
+        </tr>
+        </thead>
+        <tbody id="provide-repayment-tb">
+        {% for repayment in provide_obj.repayment_provide.all %}
+            <tr repayment-nid="{{ repayment.id }}">
+                <td>{{ forloop.counter }}</td>
+                <td>{{ repayment.repayment_date }}</td>
+                <td>{{ repayment.repayment_money }}</td>
+                <td>{{ repayment.repaymentor.name }}</td>
+                {% if PAGE_TITLE == '放款详情' %}
+                    <td><a class="btn btn-danger btn-xs delRepaymentB">删除</a></td>
+                {% endif %}
+            <tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>

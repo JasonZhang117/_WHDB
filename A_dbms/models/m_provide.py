@@ -93,7 +93,7 @@ class Repayments(models.Model):  # 还款
     repayment_money = models.FloatField(verbose_name='还款金额')
     repayment_date = models.DateField(verbose_name='还款日期', default=datetime.date.today)
     repaymentor = models.ForeignKey(to='Employees', verbose_name="_创建者",
-                                    on_delete=models.PROTECT, default=1,
+                                    on_delete=models.PROTECT,
                                     related_name='repaymentor_employee')
     repaymentdate = models.DateField(verbose_name='_创建日期', default=datetime.date.today)
 
@@ -128,3 +128,29 @@ class Pigeonholes(models.Model):  # 归档
 
     def __str__(self):
         return '%s_%s_%s' % (self.provide, self.pigeonhole_date, self.pigeonhole_transfer.name)
+
+
+# ------------------------持续跟踪模型--------------------------#
+class Track(models.Model):  #
+    provide = models.ForeignKey(to='Provides', verbose_name="放款",
+                                on_delete=models.PROTECT,
+                                limit_choices_to={'provide_status': 1},
+                                related_name='track_provide')
+    plan_date = models.DateField(verbose_name='计划日期')
+    proceed = models.CharField(verbose_name='跟踪内容', max_length=128)
+    track_date = models.DateField(verbose_name='跟踪日期', null=True, blank=True)
+    condition = models.TextField(verbose_name='跟踪情况', null=True, blank=True)
+    TRACK_STATE_LIST = [(11, '待跟踪'), (21, '已跟踪'), ]
+    track_state = models.IntegerField(verbose_name='跟踪状态', choices=TRACK_STATE_LIST, default=11)
+    trackor = models.ForeignKey(to='Employees', verbose_name="_创建者",
+                                on_delete=models.PROTECT,
+                                related_name='trackor_employee')
+    trackordate = models.DateField(verbose_name='_创建日期', default=datetime.date.today)
+
+    class Meta:
+        verbose_name_plural = '放款-跟踪'  # 指定显示名称
+        db_table = 'dbms_track'  # 指定数据表的名称
+        ordering = ['plan_date', ]
+
+    def __str__(self):
+        return '%s_%s' % (self.provide, self.track_date)

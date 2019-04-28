@@ -18,7 +18,7 @@
                 <td>{{ appraisal.review_date }}</td>
                 <td>
                     {% for expert in article_obj.expert.all %}
-                        {{ expert }}|
+                        {{ expert }}{% if not forloop.last %}、{% endif %}
                     {% endfor %}
                 </td>
             {% endfor %}

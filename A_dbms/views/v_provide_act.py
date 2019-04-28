@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect, HttpResponse
 from .. import models, forms
-import time, json
+import time, datetime, json
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.db.utils import IntegrityError
 from django.db import transaction
@@ -870,5 +870,105 @@ def repayment_del_ajax(request):  # 删除还款信息ajax
     else:
         response['status'] = False
         response['message'] = '该笔放款状态为：%s，还款信息删除失败！！！' % provide_obj.provide_status
+    result = json.dumps(response, ensure_ascii=False)
+    return HttpResponse(result)
+
+
+# -----------------------------跟踪计划ajax------------------------------#
+@login_required
+@authority
+def track_plan_ajax(request):
+    print(request.path, '>', resolve(request.path).url_name, '>', request.user)
+    response = {'status': True, 'message': None, 'forme': None, }
+    post_data_str = request.POST.get('postDataStr')
+    post_data = json.loads(post_data_str)
+    print('post_data:', post_data)
+
+    provide_list = models.Provides.objects.filter(id=post_data['provide_id'])
+    provide_obj = provide_list.first()
+    form_track_plan = forms.FormTrackPlan(post_data)
+    if form_track_plan.is_valid():
+        track_plan_cleaned = form_track_plan.cleaned_data
+        plan_date = track_plan_cleaned['plan_date']
+
+        date_tup = time.strptime(str(plan_date), "%Y-%m-%d")  # 字符串转换为元组
+        date_stamp = time.mktime(date_tup)  # 元组转换为时间戳
+        today_str = str(datetime.date.today())  # 元组转换为字符串
+        today_tup = time.strptime(today_str, "%Y-%m-%d")  # 字符串转换为元组
+        today_stamp = time.mktime(today_tup)  # 元组转换为时间戳
+
+        if today_stamp - date_stamp > 0:
+            response['status'] = False
+            response['message'] = '计划失败，计划的时间不能早于现在的时间!'
+        else:
+            try:
+                '''REVIEW_STATE_LIST = ((1, '待保后'), (11, '待报告'), (21, '已完成'))'''
+                with transaction.atomic():
+                    models.Track.objects.create(provide=provide_obj, plan_date=plan_date,
+                                                proceed=track_plan_cleaned['proceed'], trackor=request.user)
+                response['message'] = '跟踪计划成功！'
+            except Exception as e:
+                response['status'] = False
+                response['message'] = '跟踪计划失败：%s' % str(e)
+    else:
+        response['status'] = False
+        response['message'] = '表单信息有误！！！'
+        response['forme'] = form_track_plan.errors
+    result = json.dumps(response, ensure_ascii=False)
+    return HttpResponse(result)
+
+
+# -----------------------取消跟踪ajax-------------------------#
+@login_required
+@authority
+def track_del_ajax(request):
+    print(request.path, '>', resolve(request.path).url_name, '>', request.user)
+    response = {'status': True, 'message': None, 'forme': None, }
+    post_data_str = request.POST.get('postDataStr')
+    post_data = json.loads(post_data_str)
+    print('post_data:', post_data)
+
+    track_list = models.Track.objects.filter(id=post_data['track_id'])
+    try:
+        with transaction.atomic():
+            track_list.delete()
+        response['message'] = '跟踪计划删除成功！'
+    except Exception as e:
+        response['status'] = False
+        response['message'] = '跟踪取消失败：%s' % str(e)
+    result = json.dumps(response, ensure_ascii=False)
+    return HttpResponse(result)
+
+
+# -----------------------------跟踪ajax------------------------------#
+@login_required
+@authority
+def track_update_ajax(request):
+    print(request.path, '>', resolve(request.path).url_name, '>', request.user)
+    response = {'status': True, 'message': None, 'forme': None, }
+    post_data_str = request.POST.get('postDataStr')
+    post_data = json.loads(post_data_str)
+    print('post_data:', post_data)
+
+    track_list = models.Track.objects.filter(id=post_data['track_id'])
+
+    form_track_add = forms.FormTrackAdd(post_data)
+    if form_track_add.is_valid():
+        track_cleaned = form_track_add.cleaned_data
+        today_str = str(datetime.date.today())
+        try:
+            with transaction.atomic():
+                '''TRACK_STATE_LIST = [(11, '待跟踪'), (21, '已跟踪'), ]'''
+                track_list.update(track_date=today_str, track_state=21,
+                                  condition=track_cleaned['condition'],
+                                  trackor=request.user)  # 更新保后信息
+            response['message'] = '跟踪成功！'
+        except Exception as e:
+            response['status'] = False
+            response['message'] = '跟踪失败：%s' % str(e)
+    else:
+        response['status'] = False
+        response['message'] = '表单信息有误！！！'
+        response['forme'] = form_track_add.errors
     result = json.dumps(response, ensure_ascii=False)
     return HttpResponse(result)

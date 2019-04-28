@@ -1,0 +1,28 @@
+<div class="table-responsive">
+    <table class="table table-bordered table-hover table-condensed active">
+        <thead>
+        <tr style="text-align: center">
+            <th>合同编号</th>
+            <th>客户名称</th>
+            <th>放款银行</th>
+            <th>放款金额</th>
+            <th>计划日期</th>
+            <th>跟踪内容</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for track in p_list %}
+            <tr>
+                <td><a target="_blank" href="{% url 'dbms:provide_scan' provide_id=track.provide.id %}">
+                    {{ track.provide.notify.agree.agree_num }}}</a></td>
+                <td>{{ track.provide.notify.agree.lending.summary.custom.short_name }}</td>
+                <td>{{ track.provide.notify.agree.branch.short_name }}</td>
+                <td align="right">{{ track.provide.provide_money }}</td>
+                <td>{{ track.plan_date }}</td>
+                <td>{{ track.proceed }}</td>
+            <tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    {% include 'dbms/board/page.html' %}
+</div>

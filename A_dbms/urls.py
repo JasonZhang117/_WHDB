@@ -67,8 +67,6 @@ urlpatterns = [
     path('agree/result/add/', views.result_state_ajax, name='agree_result_state_ajax'),
     path('agree/result/del/', views.result_del_ajax, name='agree_result_del_ajax'),
 
-
-
     # -----------------------warrant权证管理-------------------------#
     path('warrant/', views.warrant, name='warrant_all'),  # 菜单-权证管理-所有权证
     path('warrant/<int:warrant_typ>/', views.warrant, name='warrant'),  # /dbms/warrant/(0-9)
@@ -123,6 +121,8 @@ urlpatterns = [
     path('provide/soondue/', views.soondue, name='provide_soondue_all'),  # 菜单-放款管理-即将到期
     path('provide/follow/', views.provide_follow, name='provide_follow_all'),
     path('provide/follow/<int:agree_state>/', views.provide_follow, name='provide_follow'),
+    path('provide/track/overdue/', views.track_overdue, name='provide_track_overdue'),
+    path('provide/track/soondue/', views.track_soondue, name='provide_track_soondue'),
 
     path('provide/counter/sign/', views.counter_sign_ajax, name='provide_counter_sign_ajax'),
     path('provide/ascertain/add/', views.ascertain_add_ajax, name='provide_ascertain_add_ajax'),
@@ -133,6 +133,10 @@ urlpatterns = [
     path('provide/del/', views.provide_del_ajax, name='provide_del_ajax'),
     path('provide/repayment/add/', views.repayment_add_ajax, name='provide_repayment_add_ajax'),
     path('provide/repayment/del/', views.repayment_del_ajax, name='provide_repayment_del_ajax'),
+    path('provide/track/plan/', views.track_plan_ajax, name='provide_track_plan_ajax'),
+    path('provide/track/del/', views.track_del_ajax, name='provide_track_del_ajax'),
+    path('provide/track/update/', views.track_update_ajax, name='provide_track_update_ajax'),
+
     # -----------------------归档管理-------------------------#
     path('pigeonhole/', views.pigeonhole, name='pigeonhole_all'),  # 菜单-放款管理-放款
     path('pigeonhole/<int:implement>/', views.pigeonhole, name='pigeonhole'),  # /dbms/grant/(0-9)

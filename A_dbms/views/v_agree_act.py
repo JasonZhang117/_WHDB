@@ -1078,10 +1078,10 @@ def result_state_ajax(request):  #
                                         result += '</table>'
                                         result += '我保证我的上述声明真实有效，如有虚假，所产生的法律责任均由' \
                                                   '我本人承担。'
-                            default = {'agree': agree_obj, 'custom': counter_custom, 'result_typ': 31,
+                            default = {'agree': agree_obj, 'custom': spouse, 'result_typ': 31,
                                        'result_detail': result, 'resultor': request.user}
                             result_obj, created = models.ResultState.objects.update_or_create(
-                                agree=agree_obj, custom=counter_custom, result_typ=31, defaults=default)
+                                agree=agree_obj, custom=spouse, result_typ=31, defaults=default)
         response['message'] = '决议及声明生成成功！'
     except Exception as e:
         response['status'] = False

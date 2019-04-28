@@ -18,68 +18,76 @@
 {#            <div class="col-sm-10 col-sm-offset-3 col-md-10 col-md-offset-2 main" style="padding: 1px;"><!--右侧主体框架-->#}
 {% block right-content-container %}<!--右侧内容-->
     <h2 class="page-header">跟踪事项：</h2>
-    {% if no_feedback_count > 0 %}
-        <h3>待反馈项目：<a href="{% url 'dbms:article' article_state=1 %}">{{ no_feedback_count }}</a>
-        </h3>
-    {% endif %}
-    {% if no_ascertain_count > 0 %}
-        <h3>未落实风控条件项目：
-            <a href="{% url 'dbms:provide_agree' agree_state=31 %}">{{ no_ascertain_count }}</a>
-        </h3>
-    {% endif %}
-    {% if pigeonhole_overdue > 0 %}
-        <h3>逾期归档：
-            <a href="{% url 'dbms:pigeonhole_overdue_all' %}">{{ pigeonhole_overdue }}</a></h3>
-    {% endif %}
+    <div class="row">
+        {% if no_feedback_count > 0 %}
+            <h3 class="col-lg-4 col-md-4 col-sm-6 col-xs-12">待反馈项目：<a
+                    href="{% url 'dbms:article' article_state=1 %}">{{ no_feedback_count }}</a></h3>
+        {% endif %}
+        {% if no_ascertain_count > 0 %}
+            <h3 class="col-lg-4 col-md-4 col-sm-6 col-xs-12">风控落实：
+                <a href="{% url 'dbms:provide_agree' agree_state=31 %}">{{ no_ascertain_count }}</a></h3>
+        {% endif %}
+        {% if pigeonhole_overdue > 0 %}
+            <h3 class="col-lg-4 col-md-4 col-sm-6 col-xs-12">逾期归档：
+                <a href="{% url 'dbms:pigeonhole_overdue_all' %}">{{ pigeonhole_overdue }}</a></h3>
+        {% endif %}
+        {% if overdue_count > 0 %}
+            <h3 class="col-lg-4 col-md-4 col-sm-6 col-xs-12">逾期项目：
+                <a href="{% url 'dbms:provide_overdue_all' %}">{{ overdue_count }}</a></h3>
+        {% endif %}
+        {% if overdue_draft_count > 0 %}
+            <h3 class="col-lg-4 col-md-4 col-sm-6 col-xs-12">逾期票据：
+                <a href="{% url 'dbms:warrant_overdue_draft_all' %}">{{ overdue_draft_count }}</a></h3>
+        {% endif %}
+        {% if overdue_seal_count > 0 %}
+            <h3 class="col-lg-4 col-md-4 col-sm-6 col-xs-12">逾期查封：
+                <a href="{% url 'dbms:dun_overdue_seal_all' %}">{{ overdue_seal_count }}</a></h3>
+        {% endif %}
+        {% if review_overdue > 0 %}
+            <h3 class="col-lg-4 col-md-4 col-sm-6 col-xs-12">逾期保后：
+                <a href="{% url 'dbms:review_overdue_all' %}">{{ review_overdue }}</a></h3>
+        {% endif %}
+        {% if track_overdue_count > 0 %}
+            <h3 class="col-lg-4 col-md-4 col-sm-6 col-xs-12">逾期跟踪事项：
+                <a href="{% url 'dbms:provide_track_overdue' %}">{{ track_overdue_count }}</a></h3>
+        {% endif %}
+        {% if overdue_cooperator_count > 0 %}
+            <h3 class="col-lg-4 col-md-4 col-sm-6 col-xs-12">逾期协议：
+                <a href="{% url 'dbms:cooperative_overdue_all' %}">{{ overdue_cooperator_count }}</a></h3>
+        {% endif %}
 
-    {% if no_pigeonhole_count > 0 %}
-        <h3>暂存风控档案：<a href="{% url 'dbms:pigeonhole' implement=21 %}">{{ no_pigeonhole_count }}</a></h3>
-    {% endif %}
 
-    {% if overdue_count > 0 %}
-        <h3>逾期项目：<a href="{% url 'dbms:provide_overdue_all' %}">{{ overdue_count }}</a></h3>
-    {% endif %}
 
-    {% if soondue_count > 0 %}
-        <h3>30天内到期项目：<a href="{% url 'dbms:provide_soondue_all' %}">{{ soondue_count }}</a></h3>
-    {% endif %}
+        {% if no_pigeonhole_count > 0 %}
+            <h3 class="col-lg-4 col-md-4 col-sm-6 col-xs-12">暂存风控档案：
+                <a href="{% url 'dbms:pigeonhole' implement=21 %}">{{ no_pigeonhole_count }}</a></h3>
+        {% endif %}
+        {% if soondue_count > 0 %}
+            <h3 class="col-lg-4 col-md-4 col-sm-6 col-xs-12">一月内到期项目：
+                <a href="{% url 'dbms:provide_soondue_all' %}">{{ soondue_count }}</a></h3>
+        {% endif %}
+        {% if soondue_draft_count > 0 %}
+            <h3 class="col-lg-4 col-md-4 col-sm-6 col-xs-12">一月内到期票据：
+                <a href="{% url 'dbms:warrant_soondue_draft_all' %}">{{ soondue_draft_count }}</a></h3>
+        {% endif %}
 
-    {% if overdue_draft_count > 0 %}
-        <h3>逾期票据：<a href="{% url 'dbms:warrant_overdue_draft_all' %}">{{ overdue_draft_count }}</a></h3>
-    {% endif %}
-
-    {% if soondue_draft_count > 0 %}
-        <h3>30天内到期票据：<a href="{% url 'dbms:warrant_soondue_draft_all' %}">{{ soondue_draft_count }}</a></h3>
-    {% endif %}
-
-    {% if overdue_cooperator_count > 0 %}
-        <h3>逾期协议：<a href="{% url 'dbms:cooperative_overdue_all' %}">{{ overdue_cooperator_count }}</a></h3>
-    {% endif %}
-
-    {% if soondue_cooperator_count > 0 %}
-        <h3>30天内到期协议：
-            <a href="{% url 'dbms:cooperative_soondue_all' %}">{{ soondue_cooperator_count }}</a></h3>
-    {% endif %}
-
-    {% if overdue_seal_count > 0 %}
-        <h3>逾期查封：<a href="{% url 'dbms:dun_overdue_seal_all' %}">{{ overdue_seal_count }}</a></h3>
-    {% endif %}
-
-    {% if soondue_seal_count > 0 %}
-        <h3>30天内到期查封：
-            <a href="{% url 'dbms:dun_soondue_seal_all' %}">{{ soondue_seal_count }}</a></h3>
-    {% endif %}
-
-    {% if overdue_search_count > 0 %}
-        <h3>超过30天未跟踪的查封资产：
-            <a href="{% url 'dbms:dun_overdue_search_all' %}">{{ overdue_search_count }}</a></h3>
-    {% endif %}
-
-    {% if review_overdue > 0 %}
-        <h3>逾期保后：
-            <a href="{% url 'dbms:review_overdue_all' %}">{{ review_overdue }}</a></h3>
-    {% endif %}
-
+        {% if soondue_seal_count > 0 %}
+            <h3 class="col-lg-4 col-md-4 col-sm-6 col-xs-12">一月内到期查封：
+                <a href="{% url 'dbms:dun_soondue_seal_all' %}">{{ soondue_seal_count }}</a></h3>
+        {% endif %}
+        {% if overdue_search_count > 0 %}
+            <h3 class="col-lg-4 col-md-4 col-sm-6 col-xs-12">超过一月未跟踪的查封资产：
+                <a href="{% url 'dbms:dun_overdue_search_all' %}">{{ overdue_search_count }}</a></h3>
+        {% endif %}
+        {% if track_soondue_count > 0 %}
+            <h3 class="col-lg-4 col-md-4 col-sm-6 col-xs-12">一周内的跟踪计划：
+                <a href="{% url 'dbms:provide_track_soondue' %}">{{ track_soondue_count }}</a></h3>
+        {% endif %}
+        {% if soondue_cooperator_count > 0 %}
+            <h3 class="col-lg-4 col-md-4 col-sm-6 col-xs-12">一月内到期协议：
+                <a href="{% url 'dbms:cooperative_soondue_all' %}">{{ soondue_cooperator_count }}</a></h3>
+        {% endif %}
+    </div>
 
 {% endblock %}
 {#            </div>#}

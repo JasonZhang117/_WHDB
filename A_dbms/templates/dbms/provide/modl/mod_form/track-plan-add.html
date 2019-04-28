@@ -1,0 +1,16 @@
+<div id="form_track_plan">
+
+    <div class="form-group"><!--跟踪计划日期-->
+        <label for="id_plan_date"
+               class="col-sm-3 control-label">{{ form_track_plan.plan_date.label }}：</label>
+        <div class="col-sm-9">{{ form_track_plan.plan_date }}</div>
+        <label id="e_plan_date" class="pull-right">{{ form_track_plan.plan_date.errors }}</label>
+    </div>
+    <div class="form-group"><!--跟踪计划-->
+        <label for="id_proceed"
+               class="col-sm-3 control-label">{{ form_track_plan.proceed.label }}：</label>
+        <div class="col-sm-9">{{ form_track_plan.proceed }}</div>
+        <label id="e_proceed" class="pull-right">{{ form_track_plan.proceed.errors }}</label>
+    </div>
+
+</div>

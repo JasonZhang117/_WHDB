@@ -34,10 +34,10 @@ from .v_warrant_act import (
 # ----------------------v_provide放款管理视图--------------------#
 from .v_provide import (
     provide_agree, provide_agree_scan, provide_agree_notify, provide, provide_scan, overdue, soondue, notify,
-    notify_scan, provide_follow)
+    notify_scan, provide_follow, track_overdue, track_soondue)
 from .v_provide_act import (
-    counter_sign_ajax, ascertain_add_ajax, notify_add_ajax, notify_edit_ajax,notify_del_ajax, provide_add_ajax,
-    provide_del_ajax, repayment_add_ajax, repayment_del_ajax)
+    counter_sign_ajax, ascertain_add_ajax, notify_add_ajax, notify_edit_ajax, notify_del_ajax, provide_add_ajax,
+    provide_del_ajax, repayment_add_ajax, repayment_del_ajax, track_plan_ajax, track_del_ajax, track_update_ajax)
 
 from .v_pigeonhole import pigeonhole, pigeonhole_scan, pigeonhole_overdue
 from .v_pigeonhole_act import pigeonhole_add_ajax
@@ -59,7 +59,7 @@ from .v_dun_act import (
 from .v_custom import (custom, custom_scan)
 from .v_custom_act import (custom_add_ajax, custom_del_ajax, custom_edit_ajax, shareholder_add_ajax,
                            shareholder_del_ajax,
-                           spouse_add_ajax, trustee_add_ajax,trustee_del_ajax)
+                           spouse_add_ajax, trustee_add_ajax, trustee_del_ajax)
 from .v_external import cooperative, cooperative_scan, soondue_cooperator, overdue_cooperator, branches
 from .v_external_act import agreement_add_ajax
 # ----------------------v_report报表管理视图--------------------#

@@ -1,0 +1,18 @@
+<div class="modal fade bs-example-modal-sm" id="delTrackModal"
+     tabindex="-1" role="dialog" aria-labelledby="delTrackModal">
+    <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="delTrackModalLabel">取消跟踪计划
+                    <input style="display: none" name="provide_id" value="{{ provide_obj.id }}">
+                    <input style="display: none" name="track_id" id="delTrackId">
+                </h4>
+            </div>
+            <div class="modal-body">是否确定取消本次跟踪计划？</div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                <button type="button" class="btn btn-primary" id="delTrackModalOk">确定</button>
+            </div>
+        </div>
+    </div>
+</div>

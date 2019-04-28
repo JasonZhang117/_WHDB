@@ -70,7 +70,7 @@ def compensatory_scan(request, compensatory_id):
 # -----------------------追偿列表-------------------------#
 @login_required
 @authority
-def dun(request, *args, **kwargs):  # 代偿列表
+def dun(request, *args, **kwargs):  #
     print(request.path, '>', resolve(request.path).url_name, '>', request.user)
     current_url_name = resolve(request.path).url_name  # 获取当前URL_NAME
     authority_list = request.session.get('authority_list')  # 获取当前用户的所有权限
@@ -243,7 +243,6 @@ def overdue_seal(request, *args, **kwargs):
         for field in search_fields:
             q.children.append(("%s__contains" % field, search_key))
         overdue_seal_list = overdue_seal_list.filter(q)
-    print("overdue_seal_list:", overdue_seal_list)
     provide_acount = overdue_seal_list.count()
     '''分页'''
     paginator = Paginator(overdue_seal_list, 19)

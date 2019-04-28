@@ -20,7 +20,7 @@
         <tbody class="guarantee-tb">
         {% for agree in lending_obj.agree_lending.all %}
             <tr>
-                <td><a target="_blank" href="{% url 'dbms:provide_agree_scan' agree_id=agree.id %}">
+                <td><a target="_blank" href="{% url 'dbms:agree_scan' agree_id=agree.id %}">
                     {{ agree.agree_num }}</a>
                 </td>
                 <td>{{ agree.branch }}</td>

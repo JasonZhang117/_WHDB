@@ -455,6 +455,10 @@ def provide_scan(request, provide_id):  # 查看放款
     today_str = str(datetime.date.today())
     form_repayment_add = forms.FormRepaymentAdd(initial={'repayment_date': today_str})
     form_compensatory_add = forms.FormCompensatoryAdd(initial={'compensatory_date': today_str})
+    date_th_later = datetime.date.today() + datetime.timedelta(days=30)  # 30天后的日期
+    form_track_plan = forms.FormTrackPlan(initial={'plan_date': str(date_th_later)})
+    form_track_add = forms.FormTrackAdd()
+
     return render(request, 'dbms/provide/provide-scan.html', locals())
 
 
@@ -490,7 +494,7 @@ def overdue(request, *args, **kwargs):  # 逾期列表
 
     provide_acount = overdue_list.count()
     '''分页'''
-    paginator = Paginator(overdue_list, 19)
+    paginator = Paginator(overdue_list, 119)
     page = request.GET.get('page')
     try:
         p_list = paginator.page(page)
@@ -534,7 +538,7 @@ def soondue(request, *args, **kwargs):  # 委托合同列表
     balance = soondue_list.aggregate(Sum('provide_balance'))['provide_balance__sum']  # 在保余额
     provide_acount = soondue_list.count()
     '''分页'''
-    paginator = Paginator(soondue_list, 19)
+    paginator = Paginator(soondue_list, 119)
     page = request.GET.get('page')
     try:
         p_list = paginator.page(page)
@@ -593,3 +597,90 @@ def provide_follow(request, *args, **kwargs):  # 放款管理
         p_list = paginator.page(paginator.num_pages)
 
     return render(request, 'dbms/provide/provide-follow.html', locals())
+
+
+# -----------------------逾期跟踪---------------------#
+@login_required
+@authority
+def track_overdue(request, *args, **kwargs):  #
+    print(request.path, '>', resolve(request.path).url_name, '>', request.user)
+    current_url_name = resolve(request.path).url_name  # 获取当前URL_NAME
+    authority_list = request.session.get('authority_list')  # 获取当前用户的所有权限
+    menu_result = MenuHelper(request).menu_data_list()
+    job_list = request.session.get('job_list')  # 获取当前用户的所有角色
+    PAGE_TITLE = '逾期跟踪'
+    track_overdue = models.Track.objects.filter(track_state=11, plan_date__lt=datetime.date.today())
+    if '项目经理' in job_list:
+        track_overdue = track_overdue.filter(
+            Q(provide__notify__agree__lending__summary__director=request.user) |
+            Q(provide__notify__agree__lending__summary__assistant=request.user))
+    '''搜索'''
+    search_key = request.GET.get('_s')
+    if search_key:
+        search_fields = ['provide__notify__agree__lending__summary__custom__name',
+                         'provide__notify__agree__lending__summary__custom__short_name',
+                         'provide__notify__agree__branch__name',
+                         'provide__notify__agree__branch__short_name',
+                         'provide__notify__agree__agree_num']
+        q = Q()
+        q.connector = 'OR'
+        for field in search_fields:
+            q.children.append(("%s__contains" % field, search_key))
+        track_overdue = track_overdue.filter(q)
+
+    provide_acount = track_overdue.count()
+    '''分页'''
+    paginator = Paginator(track_overdue, 119)
+    page = request.GET.get('page')
+    try:
+        p_list = paginator.page(page)
+    except PageNotAnInteger:
+        p_list = paginator.page(1)
+    except EmptyPage:
+        p_list = paginator.page(paginator.num_pages)
+
+    return render(request, 'dbms/provide/provide-track-overdu.html', locals())
+
+
+# -----------------------1周内跟踪---------------------#
+@login_required
+@authority
+def track_soondue(request, *args, **kwargs):  #
+    print(request.path, '>', resolve(request.path).url_name, '>', request.user)
+    current_url_name = resolve(request.path).url_name  # 获取当前URL_NAME
+    authority_list = request.session.get('authority_list')  # 获取当前用户的所有权限
+    menu_result = MenuHelper(request).menu_data_list()
+    job_list = request.session.get('job_list')  # 获取当前用户的所有角色
+    PAGE_TITLE = '一周跟踪'
+    date_7_later = datetime.date.today() + datetime.timedelta(days=7)  # 7天后的日期
+    track_soondue = models.Track.objects.filter(
+        track_state=11, plan_date__gte=datetime.date.today(), plan_date__lt=date_7_later)
+    if '项目经理' in job_list:
+        track_soondue = track_soondue.filter(
+            Q(provide__notify__agree__lending__summary__director=request.user) |
+            Q(provide__notify__agree__lending__summary__assistant=request.user))
+    '''搜索'''
+    search_key = request.GET.get('_s')
+    if search_key:
+        search_fields = ['provide__notify__agree__lending__summary__custom__name',
+                         'provide__notify__agree__lending__summary__custom__short_name',
+                         'provide__notify__agree__branch__name',
+                         'provide__notify__agree__branch__short_name',
+                         'provide__notify__agree__agree_num']
+        q = Q()
+        q.connector = 'OR'
+        for field in search_fields:
+            q.children.append(("%s__contains" % field, search_key))
+        track_soondue = track_soondue.filter(q)
+
+    '''分页'''
+    paginator = Paginator(track_soondue, 119)
+    page = request.GET.get('page')
+    try:
+        p_list = paginator.page(page)
+    except PageNotAnInteger:
+        p_list = paginator.page(1)
+    except EmptyPage:
+        p_list = paginator.page(paginator.num_pages)
+
+    return render(request, 'dbms/provide/provide-track-overdu.html', locals())

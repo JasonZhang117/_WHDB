@@ -1,13 +1,12 @@
 <div>
     <label>
         <form class="navbar-form" style="display: inline">
-            <input type="search" name="_s" class="form-control" placeholder="合同编号,客户,银行,纪要"
+            <input type="search" name="_s" class="form-control" placeholder="客户,银行,合同"
                    value="{{ search_key|default_if_none:'' }}">
             <button type="submit" class="btn btn-primary btn-sm">搜索</button>
         </form>
     </label>
-    <label>
-        在保余额：{{ balance|floatformat:'2' }}
-    </label>
-
+    {#    <label>#}
+    {#        在保余额：{{ balance|floatformat:'2' }}#}
+    {#    </label>#}
 </div>

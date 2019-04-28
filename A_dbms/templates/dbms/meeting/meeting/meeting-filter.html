@@ -26,7 +26,8 @@
 
     <label>
         <form class="navbar-form" style="display: inline">
-            <input type="search" name="_s" class="form-control" placeholder="审报会编号,项目编号，客户名称">
+            <input type="search" name="_s" class="form-control" placeholder="审报会编号,项目编号，客户名称"
+                   value="{{ search_key|default_if_none:'' }}">
             <button type="submit" class="btn btn-primary btn-sm">搜索</button>
         </form>
     </label>

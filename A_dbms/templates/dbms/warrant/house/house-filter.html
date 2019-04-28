@@ -26,7 +26,7 @@
     <label>
         <form class="navbar-form" style="display: inline">
             <input type="text" class="form-control"
-                   placeholder="搜索地址">
+                   placeholder="搜索地址" value="{{ search_key|default_if_none:'' }}">
             <button type="submit" class="btn btn-primary btn-sm">
                 搜索
             </button>

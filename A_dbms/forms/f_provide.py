@@ -98,3 +98,22 @@ class FormPigeonholeNumAdd(dform.ModelForm):
         fields = ['file_num']
         widgets = {
             'file_num': dform.TextInput(attrs={'class': 'form-control', 'placeholder': '档案编号'})}
+
+
+# -----------------------跟踪计划-------------------------#
+class FormTrackPlan(dform.ModelForm):
+    class Meta:
+        model = models.Track
+        fields = ['plan_date', 'proceed']
+        widgets = {
+            'plan_date': dform.DateInput(attrs={'class': 'form-control', 'type': 'date'}),
+            'proceed': dform.TextInput(attrs={'class': 'form-control', 'placeholder': '跟踪事项'}), }
+
+
+# -----------------------跟踪计划-------------------------#
+class FormTrackAdd(dform.ModelForm):
+    class Meta:
+        model = models.Track
+        fields = ['condition']
+        widgets = {
+            'condition': dform.Textarea(attrs={'class': 'form-control', 'placeholder': '跟踪情况'}), }

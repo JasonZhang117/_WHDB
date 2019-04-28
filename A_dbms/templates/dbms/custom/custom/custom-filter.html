@@ -26,7 +26,8 @@
 
     <label>
         <form class="navbar-form" style="display: inline">
-            <input type="search" name="_s" class="form-control" placeholder="姓名、地址、电话">
+            <input type="search" name="_s" class="form-control" placeholder="姓名、地址、电话"
+                   value="{{ search_key|default_if_none:'' }}">
             <button type="submit" class="btn btn-primary btn-sm">搜索</button>
         </form>
     </label>

@@ -138,6 +138,7 @@ class ProvidesAdmin(admin.ModelAdmin):
 
 
 admin.site.register(models.Provides, ProvidesAdmin)  # 放款
+admin.site.register(models.Track)  # 跟踪
 
 
 class NotifyAdmin(admin.ModelAdmin):

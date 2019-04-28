@@ -1,0 +1,52 @@
+<script>
+    $(function () {
+        bindaAddTrackB();
+        bindAddTrackModalOk();
+    });
+
+    function bindaAddTrackB() {
+        $('#provide-track-tb').on('click', '.addTrackB', function () {
+            trackNid = $(this).parent().parent().attr('track-nid');
+            $('#trackId').val(trackNid);
+            $('#addTrackModal').modal('show');
+        })
+    }
+
+    function bindAddTrackModalOk() {
+        $('#addTrackModalOk').click(function () {
+            var postData = {};
+            $('#addTrackModal').find('input,select').each(function () {
+                var v = $(this).val();
+                var n = $(this).attr('name');
+                postData[n] = v;
+            });
+            postData['condition'] = $('#id_condition').val();
+
+            var postDataStr = JSON.stringify(postData);
+            console.log(postDataStr);
+            $.ajax({
+                url: '/dbms/provide/track/update/',
+                type: 'POST',
+                data: {'postDataStr': postDataStr},
+                dataType: 'JSON',
+                success: function (arg) {
+                    if (arg.status) {
+                        $('#addTrackModal').modal('hide');
+                        alert(arg.message);
+                        window.location.reload();
+                    } else {
+                        alert(arg.message);
+                        $('#e_track_date').text(arg.forme.track_date);
+                        $('#e_condition').text(arg.forme.condition);
+                    }
+                }
+            })
+        })
+    }
+</script>
+
+
+
+
+
+
