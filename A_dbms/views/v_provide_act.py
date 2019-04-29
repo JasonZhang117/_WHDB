@@ -905,7 +905,9 @@ def track_plan_ajax(request):
                 '''REVIEW_STATE_LIST = ((1, '待保后'), (11, '待报告'), (21, '已完成'))'''
                 with transaction.atomic():
                     models.Track.objects.create(provide=provide_obj, plan_date=plan_date,
-                                                proceed=track_plan_cleaned['proceed'], trackor=request.user)
+                                                proceed=track_plan_cleaned['proceed'],
+                                                track_typ=track_plan_cleaned['track_typ'],
+                                                trackor=request.user)
                 response['message'] = '跟踪计划成功！'
             except Exception as e:
                 response['status'] = False

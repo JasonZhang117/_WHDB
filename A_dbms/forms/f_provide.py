@@ -77,8 +77,7 @@ class FormImplementAdd(dform.ModelForm):
         model = models.Pigeonholes
         fields = ['implement']
         '''IMPLEMENT_LIST = [(1, '未归档'), (11, '退回'), (21, '暂存风控'), (31, '移交行政'), (41, '已归档')]'''
-        widgets = {
-            'implement': dform.Select(attrs={'class': 'form-control'})}
+        widgets = {'implement': dform.Select(attrs={'class': 'form-control'})}
 
 
 # -----------------------归档添加-------------------------#
@@ -104,8 +103,9 @@ class FormPigeonholeNumAdd(dform.ModelForm):
 class FormTrackPlan(dform.ModelForm):
     class Meta:
         model = models.Track
-        fields = ['plan_date', 'proceed']
+        fields = ['track_typ', 'plan_date', 'proceed']
         widgets = {
+            'pigeonhole_transfer': dform.Select(attrs={'class': 'form-control'}),
             'plan_date': dform.DateInput(attrs={'class': 'form-control', 'type': 'date'}),
             'proceed': dform.TextInput(attrs={'class': 'form-control', 'placeholder': '跟踪事项'}), }
 

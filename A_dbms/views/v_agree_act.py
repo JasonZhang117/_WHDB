@@ -754,7 +754,7 @@ def result_state_ajax(request):  #
                                                   '<td align="right">%s</td> ' \
                                                   '<td rowspan="%s">%s</td> ' \
                                                   '</tr>' % (
-                                                      housebag_count, counter_custom.name, housebag_locate,
+                                                      housebag_count, owership_name, housebag_locate,
                                                       housebag_area, housebag_count, owership_num)
                                         housebag_num += 1
                                     else:

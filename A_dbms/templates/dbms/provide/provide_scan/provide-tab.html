@@ -8,10 +8,10 @@
             <a href="#provide-repayment" style="background-color: #f5f5f5" aria-controls="home" role="tab"
                data-toggle="tab">还款 </a></li>
         <li role="presentation">
-            <a href="#compensatory" style="background-color: #f5f5f5" aria-controls="home" role="tab" data-toggle="tab">代偿 </a>
-        <li role="presentation">
             <a href="#track" style="background-color: #f5f5f5" aria-controls="home" role="tab"
                data-toggle="tab">跟踪事项 </a>
+        <li role="presentation">
+            <a href="#compensatory" style="background-color: #f5f5f5" aria-controls="home" role="tab" data-toggle="tab">代偿 </a>
         </li>
     </ul>
 
@@ -21,9 +21,9 @@
             {% include 'dbms/provide/scan/tab/provide-article.html' %} </div>
         <div role="presentation" class="tab-pane active" id="provide-repayment"> <!--还款-->
             {% include 'dbms/provide/scan/tab/provide-repayment.html' %} </div>
-        <div role="presentation" class="tab-pane" id="compensatory"> <!--代偿-->
-            {% include 'dbms/provide/scan/tab/provide-compensatory.html' %} </div>
         <div role="presentation" class="tab-pane" id="track"> <!--跟踪事项-->
             {% include 'dbms/provide/scan/tab/provide-track.html' %} </div>
+        <div role="presentation" class="tab-pane" id="compensatory"> <!--代偿-->
+            {% include 'dbms/provide/scan/tab/provide-compensatory.html' %} </div>
     </div>
 </div>

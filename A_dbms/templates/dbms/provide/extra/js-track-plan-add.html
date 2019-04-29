@@ -33,6 +33,7 @@
                         window.location.reload();
                     } else {
                         alert(arg.message);
+                        $('#e_track_typ').text(arg.plan_date.track_typ);
                         $('#e_plan_date').text(arg.plan_date.name);
                         $('#e_proceed').text(arg.proceed.name);
                     }

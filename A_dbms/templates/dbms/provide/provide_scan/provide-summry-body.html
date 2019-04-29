@@ -3,7 +3,8 @@
 <label class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
     放款银行：{{ provide_obj.notify.agree.branch.short_name }}</label>
 <label class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
-    委托合同：{{ provide_obj.notify.agree.agree_num }}</label>
+    委托合同：<a target="_blank" href="{% url 'dbms:provide_notify_scan' notify_id=provide_obj.notify.id %}">
+    {{ provide_obj.notify.agree.agree_num }}</a></label>
 <label class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
     合同金额：{{ provide_obj.notify.agree.agree_amount }}</label>
 <label class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
@@ -18,7 +19,7 @@
     到期日：{{ provide_obj.due_date }}</label>
 {% if PAGE_TITLE != '归档管理' %}
     <label class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
-    还款金额：{{ provide_obj.provide_repayment_sum }}</label>
+        还款金额：{{ provide_obj.provide_repayment_sum }}</label>
 {% endif %}
 <label class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
     归档情况：{{ provide_obj.get_implement_display }}</label>

@@ -14,7 +14,7 @@
         {% for track in p_list %}
             <tr>
                 <td><a target="_blank" href="{% url 'dbms:provide_scan' provide_id=track.provide.id %}">
-                    {{ track.provide.notify.agree.agree_num }}}</a></td>
+                    {{ track.provide.notify.agree.agree_num }}</a></td>
                 <td>{{ track.provide.notify.agree.lending.summary.custom.short_name }}</td>
                 <td>{{ track.provide.notify.agree.branch.short_name }}</td>
                 <td align="right">{{ track.provide.provide_money }}</td>

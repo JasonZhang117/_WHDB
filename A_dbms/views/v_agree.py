@@ -200,7 +200,7 @@ def convert(n):
     if decimal_part:
         res.append(''.join([nums[int(x)] + y for x, y in list(zip(decimal_part, decimal_label)) if x != '0']))
     if int_part != '0':
-        res.append('元')
+        res.append('圆')
         while int_part:
             small_int_part, int_part = int_part[-4:], int_part[:-4]
             tmp = ''.join(

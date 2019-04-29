@@ -1,5 +1,10 @@
 <div id="form_track_plan">
-
+    <div class="form-group"><!--跟踪类型-->
+        <label for="id_track_typ"
+               class="col-sm-3 control-label">{{ form_track_plan.track_typ.label }}：</label>
+        <div class="col-sm-9">{{ form_track_plan.track_typ }}</div>
+        <label id="e_track_typ" class="pull-right">{{ form_track_plan.track_typ.errors }}</label>
+    </div>
     <div class="form-group"><!--跟踪计划日期-->
         <label for="id_plan_date"
                class="col-sm-3 control-label">{{ form_track_plan.plan_date.label }}：</label>

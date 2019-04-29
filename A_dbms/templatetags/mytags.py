@@ -2,22 +2,9 @@ from django import template
 from django.utils.safestring import mark_safe
 from .. import models
 from django.db.models import Q, F
+from ..views.v_appraisal import convert_str
 
 register = template.Library()
-
-
-def num_to_cn(lending_or):
-    if lending_or == 1:
-        lending_orz = '一'
-    elif lending_or == 2:
-        lending_orz = '二'
-    elif lending_or == 3:
-        lending_orz = '三'
-    elif lending_or == 4:
-        lending_orz = '四'
-    else:
-        lending_orz = lending_or
-    return lending_orz
 
 
 def guarantee_house(lending, sure_typ):
@@ -97,13 +84,13 @@ def guarantee_ground(lending, sure_typ):
 def article_summary(article_id):
     article_obj = models.Articles.objects.get(id=article_id)
     lending_list = article_obj.lending_summary.all()  # 放款次序列表
-    result = '<tr><td>'
+    result = ''
     lending_or = 1
     for lending in lending_list:
-        lending_orz = num_to_cn(lending_or)
+        lending_orz = convert_str(lending_or)
         lending_list_count = lending_list.count()
         if lending_list_count > 1:
-            result += '<tr><td>（%s）第%s次发放%s万元，并落实以下反担保措施</td></tr>' % (
+            result += '<tr><td colspan="4">（%s）第%s次发放%s万元，并落实以下反担保措施</td></tr>' % (
                 lending_orz, lending_orz, str(lending.order_amount / 10000).rstrip('0').rstrip('.'))
         lending_or += 1
         sure_list = lending.sure_lending.all()
@@ -121,9 +108,9 @@ def article_summary(article_id):
             if sure_typ == 1:  # 企业保证
                 custom_c_list = models.Customes.objects.filter(lending_custom__sure__lending=lending, genre=1)  # 企业
                 if sure_count > 1:
-                    result += '<tr><td>（%s）企业保证：' % sure_or
+                    result += '<tr><td colspan="4">（%s）企业保证：' % sure_or
                 else:
-                    result += '<tr><td>企业保证：'
+                    result += '<tr><td colspan="4">企业保证：'
                 custom_c_count = custom_c_list.count()
                 custom_c_c = 1
                 for custom_c in custom_c_list:
@@ -138,9 +125,9 @@ def article_summary(article_id):
             elif sure_typ == 2:  # 个人保证
                 custom_p_list = models.Customes.objects.filter(lending_custom__sure__lending=lending, genre=2)  # 个人
                 if sure_count > 1:
-                    result += '<tr><td>（%s）个人保证：' % sure_or
+                    result += '<tr><td colspan="4">（%s）个人保证：' % sure_or
                 else:
-                    result += '<tr><td>个人保证：'
+                    result += '<tr><td colspan="4">个人保证：'
                 custom_p_count = custom_p_list.count()
                 custom_p_c = 1
                 for custom_p in custom_p_list:

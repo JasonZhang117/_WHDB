@@ -1,34 +1,11 @@
 {% extends 'base.html' %}
 {% block title %}{{ article_obj.article_num }}{% endblock %}
 {% block extra-css %}
-    <style>
-        body {
-            width: 210mm;
-            margin-left: auto;
-            margin-right: auto;
-        }
-
-        .headline {
-            text-align: center;
-            color: red;
-        }
-
-        .notice-body {
-            font-size: 14pt
-        }
-
-        td {
-            border: 1px solid black;
-        }
-
-        thead {
-            text-align: center;
-        }
-    </style>
+    {% include 'dbms/appraisal/summary_style.html' %}
 {% endblock %}
 
 {% block body %}
-    <div>
+    <div class="contain">
         <div class="headline">
             <h2>成都武侯中小企业融资担保有限责任公司</h2>
             <h2>担保审查委员会项目审查意见书</h2>
@@ -39,9 +16,8 @@
                 <table style="width: 100%;">
                     <tbody>
                     {% include 'dbms/appraisal/summary/guarantee-th.html' %}
-                    <tr> {#综合审批意见#}
-                        {% include 'dbms/appraisal/summary/summary-detail.html' %}
-                    </tr>
+                    {{ article_summary|safe }}
+                    {% include 'dbms/appraisal/summary/summary-detail.html' %}
                     </tbody>
                 </table>
             </div>

@@ -1,22 +1,28 @@
 <tr style="border: 1px solid black">{#审保会次数#}
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+</tr>
+<tr style="border: 1px solid black">{#审保会次数#}
     <td style="border: 1px solid black;width: 100px">审保会次数</td>
-    <td style="border: 1px solid black">
-        {{ article_obj.appraisal_article.all.first.review_year }}年度第
-        {{ article_obj.appraisal_article.all.first.review_order }}次审保会（
-        {{ article_obj.appraisal_article.all.first.get_review_model_display }}）
+    <td style="border: 1px solid black" colspan="4">
+        {{ review_year }}年度第{{ review_order_cn }}次审保
+        会（{{ article_obj.appraisal_article.all.0.get_review_model_display }}）
     </td>
 </tr>
 <tr style="border: 1px solid black">{#上会日期#}
     <td style="border: 1px solid black">上会日期</td>
-    <td style="border: 1px solid black">{{ article_obj.review_date }}</td>
+    <td style="border: 1px solid black" colspan="4">{{ article_obj.review_date }}</td>
 </tr>
 <tr style="border: 1px solid black">{#主持人#}
     <td style="border: 1px solid black">主持人</td>
-    <td style="border: 1px solid black">张春玉</td>
+    <td style="border: 1px solid black" colspan="4">张春玉</td>
 </tr>
 <tr style="border: 1px solid black">{#参会委员#}
     <td style="border: 1px solid black">参会委员</td>
-    <td style="border: 1px solid black">
+    <td style="border: 1px solid black" colspan="4">
         {% for expert in article_obj.expert.all %}
             {{ expert }}{% if not forloop.last %}、 {% endif %}
         {% endfor %}
@@ -24,16 +30,16 @@
 </tr>
 <tr style="border: 1px solid black">{#项目名称#}
     <td style="border: 1px solid black">项目名称</td>
-    <td style="border: 1px solid black">{{ article_obj.custom }}</td>
+    <td style="border: 1px solid black" colspan="4">{{ article_obj.custom }}</td>
 </tr>
 <tr style="border: 1px solid black">{#所属行业#}
     <td style="border: 1px solid black">所属行业</td>
-    <td style="border: 1px solid black">
+    <td style="border: 1px solid black" colspan="4">
         {{ article_obj.custom.company_custome.idustry }}</td>
 </tr>
 <tr style="border: 1px solid black">{#项目成员#}
     <td style="border: 1px solid black">项目成员</td>
-    <td style="border: 1px solid black">A角：{{ article_obj.director.name }}
+    <td style="border: 1px solid black" colspan="4">A角：{{ article_obj.director.name }}
         &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbspB角：
         {{ article_obj.assistant.name }}
         &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp风控专员：
@@ -41,23 +47,17 @@
 </tr>
 <tr style="border: 1px solid black">{#评审结论#}
     <td style="border: 1px solid black">评审结论</td>
-    <td style="border: 1px solid black">
-        同意为该公司
-        {% for single_dic in  single_dic_list %}
-            {{ single_dic.credit_amount }}万元
-            {% if single_dic.credit_model == 1 %}流动资金贷款
-            {% elif single_dic.credit_model == 2 %}银行承兑汇票
-            {% elif single_dic.credit_model == 3 %}保函
-            {% elif single_dic.credit_model == 4 %}综合授信额度（含流贷、银承、保函）
-            {% endif %}
-            {% if not forloop.last %}、{% endif %}
-        {% endfor %}
+    <td style="border: 1px solid black" colspan="4">
+        同意为该公司{% for single_dic in  single_dic_list %}{{ single_dic.credit_amount }}万
+        元{{ single_dic.credit }}
+        {% if not forloop.last %}、{% endif %}
+    {% endfor %}
         提供担保
     </td>
 </tr>
 <tr style="border: 1px solid black">{#业务品种#}
     <td style="border: 1px solid black">业务品种</td>
-    <td style="border: 1px solid black">
+    <td style="border: 1px solid black" colspan="4">
         {% for single in  article_obj.single_quota_summary.all %}
             {{ single.get_credit_model_display }}
             {% if not forloop.last %}、{% endif %}
@@ -66,7 +66,7 @@
 </tr>
 <tr style="border: 1px solid black">{#金额#}
     <td style="border: 1px solid black">金额</td>
-    <td style="border: 1px solid black">
+    <td style="border: 1px solid black" colspan="4">
         {{ amount_str }}万元
         {% if article_obj.renewal > 0 and article_obj.augment > 0 %}
             （其中：存量{{ renewal_str }}万元、新增{{ augment_str }}万元）
@@ -79,9 +79,13 @@
 </tr>
 <tr style="border: 1px solid black"> {#期限#}
     <td style="border: 1px solid black">期限</td>
-    <td style="border: 1px solid black">
+    <td style="border: 1px solid black" colspan="4">
         {% if article_obj.credit_term == 12 %}
             壹年期
+        {% elif article_obj.credit_term == 24 %}
+            贰年期
+        {% elif article_obj.credit_term == 36 %}
+            叁年期
         {% else %}
             {{ article_obj.credit_term }}个月
         {% endif %}
@@ -89,12 +93,10 @@
 </tr>
 <tr style="border: 1px solid black">{#费率及收费方式#}
     <td style="border: 1px solid black">费率及收费方式</td>
-    <td style="border: 1px solid black">
+    <td style="border: 1px solid black" colspan="4">
         {% if article_obj.single_quota_summary.all.count > 1 %}
             {% for single in  article_obj.single_quota_summary.all %}
-                {{ single.get_credit_model_display }}按{{ single.flow_rate }}%/
-                {% if article_obj.credit_term == 12 %}
-                    年
+                {{ single.get_credit_model_display }}按{{ single.flow_rate }}%/{% if credit_term == 12 %}年
                 {% else %}
                     {{ article_obj.credit_term }}个月
                 {% endif %}
@@ -102,13 +104,86 @@
             {% endfor %}
         {% else %}
             {% for single in  article_obj.single_quota_summary.all %}
-                {{ single.flow_rate }}%/
-                {% if article_obj.credit_term == 12 %}
-                    年
+                {{ single.flow_rate }}%/{% if article_obj.credit_term == 12 %}年
                 {% else %}
                     {{ article_obj.credit_term }}个月
                 {% endif %}一次性收取
             {% endfor %}
         {% endif %}
     </td>
+</tr>
+<tr style="border: 1px solid black">{#评审意见#}
+    <td style="border: 1px solid black" rowspan="{{ rowspan_count }}">评审意见</td>
+    <td colspan="4">
+        根据公司成武担发[2014]5号文件《成都武侯中小企业融资担保有限责任公司担保审查委员
+        会组织与管理办法》规定，该项目符合公司
+        {% if review_model == 1 %}
+            内部评审程序，
+        {% else %}外部评审程序，{% endif %}
+        参会人员{{ expert_amount }}人，其中
+        {% if comment_type_1 %}{{ comment_type_1 }}人同意{% endif %}
+        {% if comment_type_2 %}，{{ comment_type_2 }}人复议{% endif %}
+        {% if comment_type_3 %}，{{ comment_type_3 }}人不同意{% endif %}，会议形成如下结论：
+    </td>
+</tr>
+<tr style="border: 1px solid black">{#评审意见#}
+    <td colspan="4">
+        一、同意为该客户{% for single_dic in  single_dic_list %}{{ single_dic.credit_amount }}万
+        元{{ single_dic.credit }}
+        {% if not forloop.last %}、{% endif %}
+    {% endfor %}提供担保，期限
+        {% if article_obj.credit_term == 12 %}
+            壹年
+        {% else %}
+            {{ article_obj.credit_term }}个月
+        {% endif %}，综合费率
+        {% if single_count > 1 %}
+            {% for single in  single_list %}
+                {{ single.get_credit_model_display }}按{{ single.flow_rate }}%/
+                {% if credit_term == 12 or credit_term == 24 or credit_term == 36 %}
+                    年
+                {% else %}
+                    {{ credit_term }}个月
+                {% endif %}
+                {% if not forloop.last %}、{% endif %}
+                收取。
+            {% endfor %}
+        {% else %}
+            {% for single in  article_obj.single_quota_summary.all %}
+                按{{ single.flow_rate }}%/
+                {% if article_obj.credit_term == 12 %}
+                    年
+                {% else %}
+                    {{ article_obj.credit_term }}个月
+                {% endif %}收取。
+            {% endfor %}
+        {% endif %}
+        {% if lending_count > 1 %}
+            贷款分
+            {% if lending_count == 2 %}
+                二
+            {% elif lending_count == 3 %}
+                三
+            {% elif lending_count == 4 %}
+                四
+            {% endif %}
+            次发放，
+            {% for order in order_amount_dic_list %}第
+                {% if order.order == 1 %}
+                    一
+                {% elif order.order == 2 %}
+                    二
+                {% elif order.order == 3 %}
+                    三
+                {% elif order.order == 4 %}
+                    四
+                {% endif %}
+                发放{{ order.order_amount }}万元
+                {% if not forloop.last %}、{% else %}。{% endif %}
+            {% endfor %}
+        {% endif %}
+    </td>
+</tr>
+<tr style="border: 1px solid black">{#评审意见#}
+    <td style="border: 1px solid black" colspan="4">二、落实以下反担保措施</td>
 </tr>

@@ -43,6 +43,7 @@ def index(request):
     date_th_later = datetime.datetime.now() - datetime.timedelta(days=-30)  # 30天前的日期
     print("date_th_later.strftime('%Y-%m-%d'):", date_th_later.strftime('%Y-%m-%d'))
     '''
+    date_90_later = datetime.date.today() + datetime.timedelta(days=90)  # 90天后的日期
     date_30_later = datetime.date.today() + datetime.timedelta(days=30)  # 30天后的日期
     date_7_later = datetime.date.today() + datetime.timedelta(days=7)  # 7天后的日期
     date_30_befor = datetime.date.today() - datetime.timedelta(days=30)  # 30天前的日期
@@ -73,10 +74,10 @@ def index(request):
     # 逾期票据
     overdue_draft_count = models.DraftExtend.objects.filter(
         draft_state__in=[1, 2], due_date__lt=datetime.date.today()).count()
-    # 30天内到期协议
+    # 90天内到期协议
     '''COOPERATOR_STATE_LIST = ((1, '正常'), (11, '注销'))'''
     soondue_cooperator_count = models.Cooperators.objects.filter(
-        cooperator_state=1, due_date__gte=datetime.date.today(), due_date__lt=date_30_later).count()
+        cooperator_state=1, due_date__gte=datetime.date.today(), due_date__lt=date_90_later).count()
     # 逾期协议
     overdue_cooperator_count = models.Cooperators.objects.filter(
         cooperator_state=1, due_date__lt=datetime.date.today()).count()

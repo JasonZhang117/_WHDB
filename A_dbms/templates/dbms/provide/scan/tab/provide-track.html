@@ -3,6 +3,7 @@
         <thead>
         <tr style="text-align: center">
             <th>序号</th>
+            <th>跟踪类型</th>
             <th>计划日期</th>
             <th>跟踪内容</th>
             <th>跟踪日期</th>
@@ -15,6 +16,7 @@
         {% for track in provide_obj.track_provide.all %}
             <tr track-nid="{{ track.id }}">
                 <td>{{ forloop.counter }}</td>
+                <td>{{ track.get_track_typ_display}}</td>
                 <td>{{ track.plan_date }}</td>
                 <td>{{ track.proceed }}</td>
                 <td>{{ track.track_date|default_if_none:'' }}</td>

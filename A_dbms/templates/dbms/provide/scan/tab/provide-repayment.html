@@ -16,7 +16,7 @@
             <tr repayment-nid="{{ repayment.id }}">
                 <td>{{ forloop.counter }}</td>
                 <td>{{ repayment.repayment_date }}</td>
-                <td>{{ repayment.repayment_money }}</td>
+                <td align="right">{{ repayment.repayment_money }}</td>
                 <td>{{ repayment.repaymentor.name }}</td>
                 {% if PAGE_TITLE == '放款详情' %}
                     <td><a class="btn btn-danger btn-xs delRepaymentB">删除</a></td>

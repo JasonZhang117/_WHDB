@@ -109,10 +109,10 @@ def soondue_cooperator(request, *args, **kwargs):
     menu_result = MenuHelper(request).menu_data_list()
     PAGE_TITLE = '即将到期协议'
 
-    date_th_later = datetime.date.today() - datetime.timedelta(days=-30)  # 30天前的日期
+    date_90_later = datetime.date.today() + datetime.timedelta(days=90)  # 90天后的日期
     soondue_cooperator_list = models.Cooperators.objects.filter(
         cooperator_state=1, due_date__gte=datetime.date.today(),
-        due_date__lt=date_th_later).order_by('-due_date')  # 30天内到期协议
+        due_date__lt=date_90_later).order_by('-due_date')  # 90天后的日期
     '''搜索'''
     search_key = request.GET.get('_s')
     if search_key:
