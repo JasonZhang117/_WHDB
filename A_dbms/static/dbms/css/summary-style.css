@@ -1,0 +1,44 @@
+body {
+    padding-top: 3pt;
+    font-family: SimSun;
+}
+
+.contain {
+    /*{#宽度#} */
+    width: 210mm;
+    /*{#左空白#} */
+    margin-left: auto;
+    /*{#又空白#} */
+    margin-right: auto;
+    /*{#字体大小#} */
+    font-size: 14pt;
+    /*{#背景色 #} */
+    background-color: #dddddd;
+    /*{#字间距 #} */
+    letter-spacing: 0pt;
+    /*{#行间距#}*/
+    /*{#    line-height: 18pt;#} */
+}
+
+.headline {
+    text-align: center;
+    font-size: 23pt;
+    font-weight: bold;
+    line-height: 18pt;
+    /*color: red;*/
+    margin-bottom: 20pt;
+}
+
+/*{#tr td {#}*/
+/*{#    border: 1px solid black;#}*/
+.bb {
+    border: 1pt solid black;
+}
+
+.bl {
+    border-left: 1pt solid black;
+}
+
+.style0 {
+    border-top: none;
+}

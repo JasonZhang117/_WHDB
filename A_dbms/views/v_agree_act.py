@@ -711,7 +711,7 @@ def result_state_ajax(request):  #
                                   '<tr>' \
                                   '<td align="center">所有权人</td> ' \
                                   '<td align="center">处所</td> ' \
-                                  '<td align="center">面积(平方米)</td> ' \
+                                  '<td align="center">面积(㎡)</td> ' \
                                   '<td align="center">产权证编号</td> ' \
                                   '</tr>'
                         for warrant_house in counter_house_list:
@@ -777,7 +777,7 @@ def result_state_ajax(request):  #
                                   '<tr>' \
                                   '<td align="center">所有权人</td> ' \
                                   '<td align="center">座落</td> ' \
-                                  '<td align="center">面积(平方米)</td> ' \
+                                  '<td align="center">面积(㎡)</td> ' \
                                   '<td align="center">产权证编号</td> ' \
                                   '</tr>'
                         for warrant_ground in counter_ground_list:
@@ -987,7 +987,6 @@ def result_state_ajax(request):  #
                                'result_detail': result, 'resultor': request.user}
                     result_obj, created = models.ResultState.objects.update_or_create(
                         agree=agree_obj, custom=counter_custom, result_typ=result_tp, defaults=default)
-
                 else:
                     spouse = counter_custom.person_custome.spouses
                     if not spouse:

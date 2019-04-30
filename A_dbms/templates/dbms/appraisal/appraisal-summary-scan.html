@@ -1,25 +1,30 @@
 {% extends 'base.html' %}
+{% load static %}
 {% block title %}{{ article_obj.article_num }}{% endblock %}
 {% block extra-css %}
-    {% include 'dbms/appraisal/summary_style.html' %}
+    <link rel="stylesheet" media="screen" href="{% static 'dbms/css/summary-style.css' %}">
+    <link rel="stylesheet" media="print" href="{% static 'dbms/css/summary-style.css' %}">
 {% endblock %}
 
 {% block body %}
     <div class="contain">
-        <div class="headline">
-            <h2>成都武侯中小企业融资担保有限责任公司</h2>
-            <h2>担保审查委员会项目审查意见书</h2>
+        <div class="headline" style="color: #ff0000;">
+            <p>成都武侯中小企业融资担保有限责任公司</p>
+            <p>担保审查委员会项目审查意见书</p>
         </div>
         <div class="notice-body">
             <p style="margin-bottom: 0px;">编号：成武担审保会{{ article_obj.summary_num }}</p>
             <div>
-                <table style="width: 100%;">
-                    <tbody>
+                <table style="width: 100%;" cellspacing="0" cellpadding="0">
+                    <tbody style="border: 1pt solid black">
                     {% include 'dbms/appraisal/summary/guarantee-th.html' %}
-                    {{ article_summary|safe }}
-                    {% include 'dbms/appraisal/summary/summary-detail.html' %}
+                    {{ article_obj.summary|safe }}
+                    {% include 'dbms/appraisal/summary/summary-sign.html' %}
                     </tbody>
                 </table>
+                <br>
+                记录人：&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+                &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp核对人：
             </div>
         </div>
     </div>

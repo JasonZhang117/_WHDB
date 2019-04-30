@@ -1,7 +1,10 @@
 {% extends 'base.html' %}
+{% load static %}
 {% block title %}{{ counter_obj.counter_num }}{% endblock %}
 {% block extra-css %}
-    {% include 'dbms/agree/agree_board/style.html' %}
+{#    {% include 'dbms/agree/agree_board/style.html' %}#}
+    <link rel="stylesheet" media="screen" href="{% static 'dbms/css/agree-style.css' %}">
+    <link rel="stylesheet" media="print" href="{% static 'dbms/css/agree-style.css' %}">
 {% endblock %}
 {% block body %}
     {#COUNTER_TYP_LIST = [#}

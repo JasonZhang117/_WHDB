@@ -1,7 +1,10 @@
 {% extends 'base.html' %}
+{% load static %}
 {% block title %}{{ agree_obj.agree_num }}{% endblock %}
 {% block extra-css %}
-    {% include 'dbms/agree/agree_board/style.html' %}
+{#    {% include 'dbms/agree/agree_board/style.html' %}#}
+    <link rel="stylesheet" media="screen" href="{% static 'dbms/css/agree-style.css' %}">
+    <link rel="stylesheet" media="print" href="{% static 'dbms/css/agree-style.css' %}">
 {% endblock %}
 {#AGREE_STATE_LIST = [(11, '待签批'), (21, '已签批'), (31, '未落实'),#}
 {#                        (41, '已落实'), (51, '待变更'), (61, '已解保'), (99, '已注销')]#}
