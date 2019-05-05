@@ -39,6 +39,8 @@ urlpatterns = [
     path('appraisal/scan/<int:article_id>/<int:lending_id>/', views.appraisal_scan_lending,
          name='appraisal_scan_lending'),
     path('appraisal/summary/<int:article_id>/', views.summary_scan, name='appraisal_summary_scan'),
+    path('appraisal/sign/<int:article_id>/', views.summary_sign_scan, name='appraisal_sign_scan'),
+
     path('appraisal/comment/', views.comment_edit_ajax, name='appraisal_comment_edit_ajax'),
     path('appraisal/single/add/', views.single_quota_ajax, name='appraisal_single_quota_ajax'),
     path('appraisal/single/del/', views.single_del_ajax, name='appraisal_single_del_ajax'),

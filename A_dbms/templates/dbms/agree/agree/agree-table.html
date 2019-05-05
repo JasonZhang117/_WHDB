@@ -10,12 +10,12 @@
             <th>合同金额</th>
             <th>放款限额</th>
             {% if PAGE_TITLE == '风控落实' %}
-                <th>加权通知金额</th>
+{#                <th>加权通知金额</th>#}
                 <th>放款金额</th>
                 <th>还款金额</th>
                 <th>在保余额</th>
             {% endif %}
-            <th>纪要编号</th>
+{#            <th>纪要编号</th>#}
             <th>合同状态</th>
         </tr>
         </thead>
@@ -34,12 +34,12 @@
                 <td align="right">{{ agree.agree_amount }}</td>
                 <td align="right">{{ agree.amount_limit }}</td>
                 {% if PAGE_TITLE == '风控落实' %}
-                    <td align="right">{{ agree.agree_notify_sum }}</td>
+{#                    <td align="right">{{ agree.agree_notify_sum }}</td>#}
                     <td align="right">{{ agree.agree_provide_sum }}</td>
                     <td align="right">{{ agree.agree_repayment_sum }}</td>
                     <td align="right">{{ agree.agree_balance }}</td>
                 {% endif %}
-                <td>{{ agree.lending }}</td>
+{#                <td>{{ agree.lending }}</td>#}
                 <td>{{ agree.get_agree_state_display }}</td>
             </tr>
         {% endfor %}

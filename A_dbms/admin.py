@@ -36,7 +36,12 @@ class AppraisalsAdmin(admin.ModelAdmin):
 
 
 admin.site.register(models.Appraisals, AppraisalsAdmin)  # 评审会
-admin.site.register(models.SingleQuota)  # 单项额度
+class SingleQuotaAdmin(admin.ModelAdmin):
+    list_display = ('summary', 'credit_model', 'credit_amount', 'flow_rate')  # 显示字段
+    list_per_page = 200  # 每页显示条目数
+    # search_fields = ['article_num']  # 搜索字段
+    # ordering = ['num']  # 排序字段
+admin.site.register(models.SingleQuota,SingleQuotaAdmin)  # 单项额度
 admin.site.register(models.Comments)  # 评审意见
 admin.site.register(models.LendingOrder)  # 发放次序
 

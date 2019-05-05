@@ -615,6 +615,12 @@ def result_state_ajax(request):  #
     #     result = json.dumps(response, ensure_ascii=False)
     #     return HttpResponse(result)
     # --------------------------------------------------------------#
+    # if agree_obj.agree_state in [21, 31, 41, 61, 99]:
+    if False:
+        response['status'] = False
+        response['message'] = '合同状态为%s，无法生成决议及声明！' % agree_obj.agree_state
+        result = json.dumps(response, ensure_ascii=False)
+        return HttpResponse(result)
     agree_custom_obj = agree_obj.lending.summary.custom
     counter_agree_list = agree_obj.counter_agree.all()
     search_fields = ['counter_custome__counter',
@@ -640,20 +646,14 @@ def result_state_ajax(request):  #
         if not agree_custom in custom_list:
             custom_list.append(agree_custom)
     agree_amount_cn = convert(agree_obj.agree_amount)
+
     agree_term = round(agree_obj.agree_term, 0)
-    if agree_term == 12:
-        agree_term_str = '壹年期'
-    elif agree_term == 24:
-        agree_term_str = '贰年期'
-    elif agree_term == 36:
-        agree_term_str = '叁年期'
-    elif agree_term == 48:
-        agree_term_str = '肆年期'
-    elif agree_term == 60:
-        agree_term_str = '伍年期'
+    credit_term_exactly = agree_term % 12
+    if credit_term_exactly == 0:
+        agree_term_str = '%s年期' % convert_num(agree_term / 12)
     else:
-        term_str = convert_num(agree_term)
-        agree_term_str = '%s个月期' % term_str
+        agree_term_str = '%s个月期' % convert_num(agree_term)
+
     try:
         with transaction.atomic():
             for counter_custom in custom_list:

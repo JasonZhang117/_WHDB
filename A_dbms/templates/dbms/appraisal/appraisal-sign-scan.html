@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}{{ article_obj.article_num }}{% endblock %}
+{% block extra-css %}
+    <link rel="stylesheet" media="screen" href="{% static 'dbms/css/summary-sign-style.css' %}">
+    <link rel="stylesheet" media="print" href="{% static 'dbms/css/summary-sign-style.css' %}">
+{% endblock %}
+
+{% block body %}
+    <div class="contain">
+        <div class="headline">
+            <p class="headline-1">成都武侯中小企业融资担保有限责任公司</p>
+            <p class="headline-2">
+                {% if article_obj.appraisal_article.all.0.review_model == 1 %}
+                    内部
+                {% else %}
+                    外部
+                {% endif %}
+                审查意见书审核签批单</p>
+        </div>
+        <div class="notice-body">
+            <div>
+                <table style="width: 100%;" cellspacing="0" cellpadding="0">
+                    <tbody style="border: 2pt solid black">
+                    <tr class="bb2">
+                        <td style="padding-top: 12pt" width="67pt" valign="top">主题：</td>
+                        <td style="padding-top: 12pt; padding-bottom: 12pt">
+                            关于{{ article_obj.custom.name }}{{ amount_str }}万元担保融资项目的评审
+                            意见（审查意见书：{{ article_obj.summary_num }}）
+                        </td>
+                    </tr>
+                    <tr class="bb2">
+                        <td class="bb2" colspan="2" height="550" valign="top">董事长意见：
+                            <br><br><br><br><br><br><br><br>
+                            <span style="padding-left: 350pt">签名：</span><br>
+                            <span style="padding-left: 350pt">时间：</span></td>
+                    </tr>
+                    <tr>
+                        <td class="bb2" colspan="2">主送：风险管理部</td>
+                    </tr>
+                    <tr>
+                        <td class="bb2" colspan="2">抄送：担保业务部、行政部、相关项目经理</td>
+                    </tr>
+                    <tr>
+                        <td class="bb2" colspan="2">备注：</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+

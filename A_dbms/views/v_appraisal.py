@@ -185,7 +185,7 @@ def convert_str(n):
     return result
 
 
-# -----------------------summary_scan纪要预览-------------------------#
+# -----------------------summary_scan意见书-------------------------#
 @login_required
 @authority
 def summary_scan(request, article_id):  # 评审项目预览
@@ -193,7 +193,7 @@ def summary_scan(request, article_id):  # 评审项目预览
     current_url_name = resolve(request.path).url_name  # 获取当前URL_NAME
     authority_list = request.session.get('authority_list')  # 获取当前用户的所有权限
     menu_result = MenuHelper(request).menu_data_list()
-    PAGE_TITLE = '纪要预览'
+    PAGE_TITLE = '意见书'
 
     article_list = models.Articles.objects.filter(id=article_id)
     article_obj = article_list.first()
@@ -825,3 +825,19 @@ def summary_scan(request, article_id):  # 评审项目预览
         article_list.update(summary=summary)
 
     return render(request, 'dbms/appraisal/appraisal-summary-scan.html', locals())
+
+
+# -----------------------sign_scan签批单-------------------------#
+@login_required
+@authority
+def summary_sign_scan(request, article_id):  #
+    print(request.path, '>', resolve(request.path).url_name, '>', request.user)
+    current_url_name = resolve(request.path).url_name  # 获取当前URL_NAME
+    authority_list = request.session.get('authority_list')  # 获取当前用户的所有权限
+    menu_result = MenuHelper(request).menu_data_list()
+    PAGE_TITLE = '签批单'
+
+    article_obj = models.Articles.objects.get(id=article_id)
+    amount_str = str(article_obj.amount / 10000).rstrip('0').rstrip('.')  # 总额（万元）
+
+    return render(request, 'dbms/appraisal/appraisal-sign-scan.html', locals())
