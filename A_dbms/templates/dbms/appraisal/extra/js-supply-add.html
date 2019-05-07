@@ -1,0 +1,49 @@
+<script>
+    $(function () {
+        bindAddSupplyB();
+        bindSupplyAddModalOk();
+
+    });
+
+    function bindAddSupplyB() {
+        $('#addSupplyB').click(function () {
+            $('#supplyAddModal').modal('show');
+        })
+    }
+
+    function bindSupplyAddModalOk() {
+        $('#supplyAddModalOk').click(function () {
+            var postData = {};
+            $('#supplyAddModal').find('input,select').each(function () {
+                var v = $(this).val();
+                var n = $(this).attr('name');
+                postData[n] = v;
+            });
+            postData['detail'] = $('#id_detail').val();
+            var postDataStr = JSON.stringify(postData);
+            console.log(postDataStr);
+            $.ajax({
+                url: '/dbms/appraisal/supply/add/',
+                type: 'POST',
+                data: {'postDataStr': postDataStr},
+                dataType: 'JSON',
+                success: function (arg) {
+                    if (arg.status) {
+                        $('#supplyAddModal').modal('hide');
+                        alert(arg.message);
+                        window.location.reload();
+                    } else {
+                        alert(arg.message);
+                        $('#e_detail').text(arg.forme.detail);
+                    }
+                }
+            })
+        })
+    }
+</script>
+
+
+
+
+
+

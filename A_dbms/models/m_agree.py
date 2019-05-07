@@ -20,7 +20,6 @@ class Agrees(models.Model):  # 委托合同
                                 # limit_choices_to=limit_agree_choices,
                                 related_name='agree_lending')
     # limit_choices_to = limit_agree_choices,
-
     branch = models.ForeignKey(to='Branches', verbose_name="放款银行",
                                on_delete=models.PROTECT,
                                # limit_choices_to={'branch_state': 1},
@@ -35,6 +34,7 @@ class Agrees(models.Model):  # 委托合同
     agree_copies = models.IntegerField(verbose_name='合同份数')
     agree_amount = models.FloatField(verbose_name='合同金额')
     amount_limit = models.FloatField(verbose_name='放款限额')
+    agree_rate = models.CharField(verbose_name='收费', max_length=128)
     agree_sign_date = models.DateField(verbose_name='签批日期', null=True, blank=True)
     charge = models.FloatField(verbose_name='应收保费（元）', default=0)
 

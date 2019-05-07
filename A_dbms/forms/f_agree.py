@@ -31,12 +31,14 @@ class AgreeAddForm(dform.ModelForm):
 class AgreeEditForm(dform.ModelForm):
     class Meta:
         model = models.Agrees
-        fields = ['branch', 'agree_typ', 'agree_amount', 'amount_limit', 'agree_term', 'guarantee_typ', 'agree_copies']
+        fields = ['branch', 'agree_typ', 'agree_amount', 'amount_limit', 'agree_rate', 'agree_term',
+                  'guarantee_typ', 'agree_copies']
         widgets = {
             'branch': dform.Select(attrs={'class': 'form-control'}),
             'agree_typ': dform.Select(attrs={'class': 'form-control'}),
             'agree_amount': dform.NumberInput(attrs={'class': 'form-control', 'placeholder': '合同金额（元）'}),
             'amount_limit': dform.NumberInput(attrs={'class': 'form-control', 'placeholder': '放款限额（元）'}),
+            'agree_rate': dform.TextInput(attrs={'class': 'form-control', 'placeholder': '如为单项合同输入纯数字'}),
             'agree_term': dform.NumberInput(attrs={'class': 'form-control', 'placeholder': '期限'}),
             'guarantee_typ': dform.Select(attrs={'class': 'form-control'}),
             'agree_copies': dform.NumberInput(attrs={'class': 'form-control', 'placeholder': '合同份数'}), }

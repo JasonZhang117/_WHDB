@@ -1,45 +1,47 @@
 body {
     padding-top: 3pt;
+    /*字体*/
     font-family: SimSun;
 }
 
 .contain {
-    /*{#宽度#} */
+    /*页面宽度*/
     width: 210mm;
-    /*{#左空白#} */
+    /*左空白*/
     margin-left: auto;
-    /*{#又空白#} */
+    /*右空白*/
     margin-right: auto;
-    /*{#字体大小#} */
+    /*字体大小*/
     font-size: 14pt;
-    /*{#背景色 #} */
-    background-color: #dddddd;
-    /*{#字间距 #} */
+    /*背景色 */
+    /*background-color: #dddddd;*/
+    /*字间距*/
     letter-spacing: 0pt;
-    /*{#行间距#} */
+    /*行间距*/
     line-height: 25pt;
-    /*{#字体#}{#    font-family: "宋体";#}*/
+    background-image: url("../images/agree_dark_line.png");
+    background-repeat: repeat-y;
 }
 
-/*{#段前缩进#}*/
+/*段前缩进*/
 p {
     margin-top: 9pt;
     margin-bottom: 0pt;
     text-indent: 30pt;
 }
 
-/*{#换页打印#}*/
+/*换页打印*/
 .split {
     page-break-after: always;
 }
 
-/*{#收紧#}*/
+/*收紧*/
 .frap {
-    /*{#字间距#} */
+    /*字间距*/
     letter-spacing: 0pt;
 }
 
-/*{#合同标题#}*/
+/*合同标题*/
 .agree-title {
     text-align: center;
     font-size: 27.5pt;
@@ -52,7 +54,7 @@ p {
     text-indent: 0pt;
 }
 
-/*{#合同封面-甲方#}*/
+/*合同封面-甲方*/
 .page-home-j {
     font-size: 15.75pt;
     padding-top: 20mm;
@@ -60,7 +62,7 @@ p {
     text-indent: 0pt;
 }
 
-/*{#合同封面-乙方#}*/
+/*合同封面-乙方*/
 .page-home-y {
     font-size: 15.75pt;
     padding-top: 20mm;
@@ -68,7 +70,7 @@ p {
     text-indent: 0pt;
 }
 
-/*{#合同封面-丙方#}*/
+/*合同封面-丙方*/
 .page-home-b {
     font-size: 15.75pt;
     padding-top: 20mm;
@@ -76,7 +78,7 @@ p {
     text-indent: 0pt;
 }
 
-/*{#合同签字页#}*/
+/*合同签字页*/
 .sign-page {
     padding-top: 20pt;
 }
@@ -91,42 +93,19 @@ p {
 }
 
 .sign-date {
-    padding-left: 240pt;
+    padding-left: 340pt;
 }
 
 table {
     width: 100%;
+    border-collapse: collapse;
+    /*行间距*/
+    line-height: 21pt;
 }
 
 tr td {
     border: 1px solid black;
     height: 24pt;
-}
-
-/*{#合同审签表样式#}*/
-.sing-tab {
-    /*{#宽度#} */
-    width: 210mm;
-    /*{#左空白#} */
-    margin-left: auto;
-    /*{#又空白#} */
-    margin-right: auto;
-    /*{#字体大小#} */
-    font-size: 12pt;
-    /*{#背景色#} */
-    background-color: #dddddd;
-    /*{#字间距 #} */
-    letter-spacing: 0pt;
-    /*{#行间距#} */
-    line-height: 20.5pt;
-    /*{#字体#} */
-    /*font-family: "宋体";*/
-}
-
-.sing-tab p {
-    margin-top: 0pt;
-    margin-bottom: 0pt;
-    text-indent: 20pt;
 }
 
 /*{#应收账款质押登记表样式#}*/
@@ -140,17 +119,21 @@ tr td {
     /*{#字体大小#} */
     font-size: 12pt;
     /*{#背景色#} */
-    background-color: #dddddd;
+    /*background-color: #dddddd;*/
     /*{#字间距 #} */
     letter-spacing: 0pt;
     /*{#行间距#} */
-    line-height: 17pt;
+    line-height: 15pt;
+    background-image: url("../images/agree_dark_line.png");
+    background-repeat: repeat-y;
 }
 
 .receive-tab p {
     margin-top: 0pt;
     margin-bottom: 0pt;
     text-indent: 16pt;
+    /*{#行间距#} */
+    line-height: 17pt;
 }
 
 .pro-tab tr td {

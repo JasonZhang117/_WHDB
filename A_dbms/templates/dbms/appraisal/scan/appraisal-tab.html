@@ -4,6 +4,9 @@
         <li role="presentation">
             <a href="#comment" style="background-color: #f5f5f5"
                aria-controls="profile" role="tab" data-toggle="tab">评委意见</a></li>
+         <li role="presentation">
+            <a href="#supply" style="background-color: #f5f5f5"
+               aria-controls="profile" role="tab" data-toggle="tab">补调问题</a></li>
         <li role="presentation">
             <a href="#single" style="background-color: #f5f5f5"
                aria-controls="messages" role="tab" data-toggle="tab">单项额度</a></li>
@@ -21,6 +24,8 @@
     <div class="tab-content">
         <div role="tabpanel" class="tab-pane" id="comment"><!--评审意见-->
             {% include 'dbms/appraisal/scan/tab/comment.html' %} </div>
+        <div role="tabpanel" class="tab-pane" id="supply"><!--补调问题-->
+            {% include 'dbms/appraisal/scan/tab/supply.html' %} </div>
         <div role="tabpanel" class="tab-pane" id="single"><!--单项额度-->
             {% include 'dbms/appraisal/scan/tab/single.html' %} </div>
         <div role="tabpanel" class="tab-pane active" id="lending_order"><!--放款次序-->

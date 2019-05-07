@@ -13,15 +13,16 @@
 <label class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
     放款限额：{{ agree_obj.amount_limit }}</label>
 <label class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
+    费率（%）：{{ agree_obj.agree_rate }}</label>
+<label class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
     期限（月）：{{ agree_obj.agree_term }}</label>
-{#<label class="col-lg-3 col-md-4 col-sm-6 col-xs-12">#}
-{#    签批日期：{{ agree_obj.agree_sign_date }}</label>#}
+<label class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
+    签批日期：{{ agree_obj.agree_sign_date|default_if_none:'' }}</label>
 <label class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
     合同状态：{{ agree_obj.get_agree_state_display }}</label>
-{##}
-{#<label class="col-lg-3 col-md-4 col-sm-6 col-xs-12">#}
-{#    通知金额：{{ agree_obj.agree_notify_sum }}</label>#}
-{#<label class="col-lg-3 col-md-4 col-sm-6 col-xs-12">#}
-{#    放款金额：{{ agree_obj.agree_provide_sum }}</label>#}
+<label class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
+    通知金额：{{ agree_obj.agree_notify_sum }}</label>
+<label class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
+    放款金额：{{ agree_obj.agree_provide_sum }}</label>
 {#<label class="col-lg-3 col-md-4 col-sm-6 col-xs-12">#}
 {#    还款金额：{{ agree_obj.agree_repayment_sum }}</label>#}

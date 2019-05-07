@@ -1,22 +1,17 @@
-{% for custom in counter_obj.assure_counter.custome.all %}
-    <div class="row">
-        <div class="col-lg-6 col-xs-6">
-            <p style="margin-bottom: 24pt"><strong>反担保人：<u>{{ custom.name }}</u></strong></p>
-            <p><strong>身份证号码：<u>{{ custom.person_custome.license_num }}</u></strong></p>
-            <p>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
-                <u>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</u>年<u>&nbsp&nbsp&nbsp&nbsp</u>月
-                <u>&nbsp&nbsp&nbsp&nbsp</u>日</p>
-        </div>
-        {% if custom.person_custome.spouses %}
-            <div class="col-lg-6 col-xs-6">
-                <p style="margin-bottom: 24pt"><strong>反担保人(配偶)：{{ custom.person_custome.spouses.name }}</strong></p>
-                <p><strong>身份证号码：<u>{{ custom.person_custome.spouses.person_custome.license_num }}</u></strong>
-                </p>
-                <p>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
-                    <u>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</u>年<u>&nbsp&nbsp&nbsp&nbsp</u>月
-                    <u>&nbsp&nbsp&nbsp&nbsp</u>日</p>
-            </div>
-        {% endif %}
-    </div>
-{% endfor %}
+<table style="margin-top: 15pt">
+    <tr style="height: 45pt">
+        <td style="border: none" width="50%"><strong>反担保人：<u>{{ counter_obj.assure_counter.custome.all.0.name }}</u></strong></td>
+        <td style="border: none" width="50%"><strong>反担保人(配偶)：<u>{{ counter_obj.assure_counter.custome.all.0.person_custome.spouses.name }}</u></strong></td>
+    </tr>
+    <tr style="height: 45pt">
+        <td style="border: none"><strong>身份证号码：<u>{{ counter_obj.assure_counter.custome.all.0.person_custome.license_num }}
+        </u></strong></td>
+        <td style="border: none"><strong>身份证号码：<u>{{ counter_obj.assure_counter.custome.all.0.person_custome.spouses.person_custome.license_num }}
+        </u></strong></td>
+    </tr>
+    <tr style="height: 45pt">
+        <td style="border: none" align="center">{% include 'dbms/agree/agree_board/date-period.html' %}</td>
+        <td style="border: none" align="center">{% include 'dbms/agree/agree_board/date-period.html' %}</td>
+    </tr>
+</table>
 <p>附：夫妇双方身份证、结婚证复印件，签字、盖手印、《反担保人个人基本情况》</p>

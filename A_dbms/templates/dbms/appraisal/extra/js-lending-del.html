@@ -6,9 +6,7 @@
 
     function bindDelLendingB() {
         $('#lending-tb').on('click', '.delLendingOrderB', function () {
-            console.log("bindDelLendingB")
             delLendingNid = $(this).parent().parent().attr('lending-nid');
-            console.log(delLendingNid)
             $('#delLendingModalId').val(delLendingNid);
             $('#delLendingModal').modal('show');
         })

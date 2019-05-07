@@ -1,0 +1,53 @@
+<script>
+    $(function () {
+        bindEditSupplyB();
+        bindSupplyAddModalOk();
+
+    });
+
+    function bindEditSupplyB() {
+        $('#supply-tb').on('click', '.editSupplyB', function () {
+            editSupplyModalNid = $(this).parent().parent().attr('supply-nid');
+            $('#editSupplyModalId').val(editSupplyModalNid);
+            console.log($(this).parent().parent().attr('supply-detail'));
+            $('#supply_detail_id').text($(this).parent().parent().attr('supply-detail'));
+            $('#supplyEditModal').modal('show');
+        })
+    }
+
+    function bindSupplyAddModalOk() {
+        $('#supplyAddModalOk').click(function () {
+            var postData = {};
+            $('#supplyAddModal').find('input,select').each(function () {
+                var v = $(this).val();
+                var n = $(this).attr('name');
+                postData[n] = v;
+            });
+            postData['detail'] = $('#id_detail').val();
+            var postDataStr = JSON.stringify(postData);
+            console.log(postDataStr);
+            $.ajax({
+                url: '/dbms/appraisal/supply/add/',
+                type: 'POST',
+                data: {'postDataStr': postDataStr},
+                dataType: 'JSON',
+                success: function (arg) {
+                    if (arg.status) {
+                        $('#supplyAddModal').modal('hide');
+                        alert(arg.message);
+                        window.location.reload();
+                    } else {
+                        alert(arg.message);
+                        $('#e_detail').text(arg.forme.detail);
+                    }
+                }
+            })
+        })
+    }
+</script>
+
+
+
+
+
+

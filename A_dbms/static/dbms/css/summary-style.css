@@ -1,44 +1,74 @@
 body {
     padding-top: 3pt;
-    font-family: SimSun;
+    font-family: 仿宋;
 }
 
 .contain {
-    /*{#宽度#} */
-    width: 210mm;
-    /*{#左空白#} */
+    /*页面宽度 */
+    width: 188mm;
+    /*左空白*/
     margin-left: auto;
-    /*{#又空白#} */
+    /*右空白 */
     margin-right: auto;
-    /*{#字体大小#} */
+    /*字体大小 */
     font-size: 14pt;
-    /*{#背景色 #} */
-    background-color: #dddddd;
-    /*{#字间距 #} */
+    /*背景色*/
+    /*background-color: #dddddd;*/
+    /*字间距  */
     letter-spacing: 0pt;
-    /*{#行间距#}*/
-    /*{#    line-height: 18pt;#} */
+    /*行间距*/
+    line-height: 21pt;
 }
 
 .headline {
     text-align: center;
-    font-size: 23pt;
-    font-weight: bold;
-    line-height: 18pt;
-    /*color: red;*/
-    margin-bottom: 20pt;
+    font-size: 24pt;
+    font-weight: bolder;
+    /*行间距*/
+    line-height: 12pt;
+    color: red;
+    /*margin-bottom: 12pt;*/
+}
+
+.otr {
+    height: 27pt;
+    /*行间距*/
+    line-height: 19pt;
+    border: 2pt solid black;
+}
+
+.oi {
+    padding-top: 3pt;
+    padding-bottom: 3pt;
+    border-right: 2pt solid black;
+    border-left: 2pt solid black;
+}
+
+/*内部表格*/
+.tbi {
+    margin-left: 1pt;
+    margin-right: 1pt;
+    border-collapse: collapse;
+}
+
+.tbi td {
+    border: 1pt solid black;
+}
+
+.it {
+    height: 25pt;
+    /*行间距*/
+    line-height: 15pt;
 }
 
 /*{#tr td {#}*/
 /*{#    border: 1px solid black;#}*/
 .bb {
-    border: 1pt solid black;
+    border: 2pt solid black;
+    /*padding-top: 3pt;*/
+    /*padding-bottom: 3pt;*/
 }
 
 .bl {
-    border-left: 1pt solid black;
-}
-
-.style0 {
-    border-top: none;
+    border-left: 2pt solid black;
 }

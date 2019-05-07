@@ -2,7 +2,7 @@
 from .m_article import (Articles, Feedback, ArticleChange)
 # ----------------------m_appraisal评审管理--------------------#
 from .m_appraisal import (
-    Appraisals, SingleQuota, Comments, LendingOrder, LendingSures,
+    Appraisals, SingleQuota, Comments, LendingOrder, LendingSures,Supply,
     LendingCustoms, LendingWarrants, )
 # -----------------------m_agree合同模型---------------------#
 from .m_agree import (

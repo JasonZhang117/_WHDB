@@ -5,7 +5,7 @@
 {#WARRANT_TYP_LIST = [#}
 {#        (1, '房产'), (2, '房产包'), (5, '土地'), (6, '在建工程'), (11, '应收账款'),#}
 {#        (21, '股权'), (31, '票据'), (41, '车辆'), (51, '动产'), (55, '其他'), (99, '他权')]#}
-<table>
+<table  cellspacing="0" cellpadding="0">
     {% include 'dbms/agree/agree_board/counter/_a/warrant-typ-31.html' %}
 </table>
 <p>甲方将负责保管以上{{ counter_draft_obj.extend_draft.all.0.get_draft_typ_display }}，直至

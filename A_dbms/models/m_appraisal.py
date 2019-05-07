@@ -48,10 +48,10 @@ class SingleQuota(models.Model):  # 单项额度
                          (4, '综合授信额度（含流贷、银承、保函）'), (31, '委托贷款'), (42, '小额贷款')]
     credit_model = models.IntegerField(verbose_name='授信类型', choices=CREDIT_MODEL_LIST, default=1)
     credit_amount = models.FloatField(verbose_name='授信额度（元）')
-    flow_rate = models.FloatField(verbose_name='费率（%）')
+    flow_rate = models.CharField(verbose_name='费率', max_length=128, null=True, blank=True)
 
     single_buildor = models.ForeignKey(to='Employees', verbose_name="创建人",
-                                       on_delete=models.PROTECT, default=1,
+                                       on_delete=models.PROTECT,
                                        related_name='single_buildor_employee')
     single_date = models.DateField(verbose_name='创建日期', default=datetime.date.today)
 
@@ -62,6 +62,26 @@ class SingleQuota(models.Model):  # 单项额度
 
     def __str__(self):
         return "%s_%s_%s" % (self.summary, self.credit_model, self.credit_amount)
+
+
+# ------------------------补调问题--------------------------#
+class Supply(models.Model):
+    summary = models.ForeignKey(to='Articles', verbose_name="项目",
+                                on_delete=models.PROTECT,
+                                # limit_choices_to=limit_article_choices,
+                                related_name='supply_summary')
+    detail = models.TextField(verbose_name='补调问题')
+    supplyor = models.ForeignKey(to='Employees', verbose_name="创建人",
+                                 on_delete=models.PROTECT,
+                                 related_name='supplyor_employee')
+    supply_date = models.DateField(verbose_name='创建日期', default=datetime.date.today)
+
+    class Meta:
+        verbose_name_plural = '评审-补调问题'  # 指定显示名称
+        db_table = 'dbms_supply'  # 指定数据表的名称
+
+    def __str__(self):
+        return "%s" % self.summary
 
 
 # ------------------------放款次序--------------------------#

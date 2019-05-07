@@ -128,7 +128,7 @@ def agree_add_ajax(request):  # 添加合同
                     agree_num=agree_num, agree_name=agree_name, num_prefix=agree_num_prefix,
                     lending=lending_obj, branch_id=branch_id, agree_typ=agree_typ,
                     agree_term=agree_add_cleaned['agree_term'],
-                    amount_limit=amount_limit,
+                    amount_limit=amount_limit,agree_rate=agree_add_cleaned['agree_rate'],
                     agree_amount=agree_amount, guarantee_typ=guarantee_typ, agree_copies=agree_copies,
                     agree_buildor=request.user)
                 response['skip'] = "/dbms/agree/scan/%s" % agree_obj.id
@@ -212,7 +212,7 @@ def agree_edit_ajax(request):  #
                     agree_list.update(
                         agree_name=agree_name, branch_id=branch_id, agree_typ=agree_typ,
                         agree_term=agree_add_cleaned['agree_term'],
-                        amount_limit=amount_limit,
+                        amount_limit=amount_limit,agree_rate=agree_add_cleaned['agree_rate'],
                         agree_amount=agree_amount, guarantee_typ=guarantee_typ, agree_copies=agree_copies,
                         agree_buildor=request.user)
                     '''COUNTER_NAME_LIST = [(1, '保证反担保合同'), (2, '不可撤销的反担保函'),

@@ -1,32 +1,35 @@
-{% extends 'base.html' %}
 {% load static %}
-{% block title %}{{ article_obj.article_num }}{% endblock %}
-{% block extra-css %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ article_obj.article_num }}</title>
     <link rel="stylesheet" media="screen" href="{% static 'dbms/css/summary-style.css' %}">
     <link rel="stylesheet" media="print" href="{% static 'dbms/css/summary-style.css' %}">
-{% endblock %}
-
-{% block body %}
-    <div class="contain">
-        <div class="headline" style="color: #ff0000;">
-            <p>成都武侯中小企业融资担保有限责任公司</p>
-            <p>担保审查委员会项目审查意见书</p>
-        </div>
-        <div class="notice-body">
-            <p style="margin-bottom: 0px;">编号：成武担审保会{{ article_obj.summary_num }}</p>
-            <div>
-                <table style="width: 100%;" cellspacing="0" cellpadding="0">
-                    <tbody style="border: 2pt solid black">
-                    {% include 'dbms/appraisal/summary/guarantee-th.html' %}
-                    {{ article_obj.summary|safe }}
-                    {% include 'dbms/appraisal/summary/summary-sign.html' %}
-                    </tbody>
-                </table>
-                <br>
-                记录人：&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
-                &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp核对人：
-            </div>
+</head>
+<body>
+<div class="contain">
+    <div class="headline">
+        <p>成都武侯中小企业融资担保有限责任公司</p>
+        <p style="margin-bottom: 15pt">担保审查委员会项目审查意见书</p>
+    </div>
+    <div class="notice-body">
+        <p style="margin-bottom: 0px;margin-top: 0px;">编号：成武担审保会{{ article_obj.summary_num }}</p>
+        <div>
+            <table class="ot" style="width: 100%; border-collapse:collapse;" cellspacing="0" cellpadding="0">
+                <tbody style="border: 2pt solid black">
+                {% include 'dbms/appraisal/summary/guarantee-th.html' %}
+                {{ article_obj.summary|safe }}
+                {% include 'dbms/appraisal/summary/summary-sign.html' %}
+                </tbody>
+            </table>
+            <table style="width: 100%;">
+                <tbody>
+                <tr><td style="width: 70%">记录人：</td><td>核对人：</td></tr>
+                </tbody>
+            </table>
         </div>
     </div>
-{% endblock %}
-
+</div>
+</body>
+</html>

@@ -69,8 +69,8 @@ def ascertain_add_ajax(request):
         ascertain_cleaned = form_ascertain_add.cleaned_data
         agree_state = ascertain_cleaned['agree_state']
         agree_remark = ascertain_cleaned['agree_remark']
-        '''AGREE_STATE_LIST = ((11, '待签批'), (21, '已签批'), (31, '未落实'),
-                    (41, '已落实'), (51, '待变更'), (61, '已解保'), (99, '作废'))'''
+        '''AGREE_STATE_LIST = [(11, '待签批'), (21, '已签批'), (31, '未落实'),
+                        (41, '已落实'), (51, '待变更'), (61, '已解保'), (99, '已注销')]'''
         agree_state_y = agree_obj.agree_state
         if agree_state_y in [21, 31, 51]:
             try:

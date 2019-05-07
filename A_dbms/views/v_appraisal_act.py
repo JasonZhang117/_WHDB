@@ -263,7 +263,7 @@ def guarantee_del_ajax(request):  #
     '''ARTICLE_STATE_LIST = [(1, '待反馈'), (2, '已反馈'), (3, '待上会'), (4, '已上会'), (5, '已签批'),
                           (51, '已放款'), (52, '已放完'), (55, '已解保'), (61, '待变更'), (99, '已注销')]'''
     article_state = lending_obj.summary.article_state
-    if article_state in [1, 2, 3, 4, 61,]:
+    if article_state in [1, 2, 3, 4, 61, ]:
         lendingsure_obj = lending_obj.sure_lending.get(sure_typ=sure_typ)
         '''SURE_TYP_LIST = (
         (1, '企业保证'), (2, '个人保证'),
@@ -371,20 +371,114 @@ def single_quota_ajax(request):  # 单项额度ajax
     '''ARTICLE_STATE_LIST = ((1, '待反馈'), (2, '已反馈'), (3, '待上会'), (4, '已上会'), (5, '已签批'),
                           (51, '已放完'), (61, '待变更'), (99, '已注销'))'''
     if article_obj.article_state in [4, 61]:
-
         form = forms.SingleQuotaForm(post_data)
         if form.is_valid():
             cleaned_data = form.cleaned_data
-        default = {
-            'summary_id': article_id, 'credit_model': credit_model, 'credit_amount': credit_amount,
-            'flow_rate': flow_rate, 'single_buildor': request.user}
-        single, created = models.SingleQuota.objects.update_or_create(
-            summary_id=article_id, credit_model=credit_model, defaults=default)
-        response['message'] = '单项额度设置成功！'
-
+            default = {
+                'summary_id': article_id, 'credit_model': credit_model, 'credit_amount': credit_amount,
+                'flow_rate': flow_rate, 'single_buildor': request.user}
+            single, created = models.SingleQuota.objects.update_or_create(
+                summary_id=article_id, credit_model=credit_model, defaults=default)
+            response['message'] = '单项额度设置成功！'
+        else:
+            response['status'] = False
+            response['message'] = '表单信息有误！！！'
+            response['forme'] = form.errors
     else:
         response['status'] = False
         response['message'] = '项目状态为：%s，无法设置单项额度！！！' % article_obj.article_state
+    result = json.dumps(response, ensure_ascii=False)
+    return HttpResponse(result)
+
+
+# -----------------------补调问题ajax-------------------------#
+@login_required
+@authority
+def supply_ajax(request):  #
+    print(request.path, '>', resolve(request.path).url_name, '>', request.user)
+    response = {'status': True, 'message': None, 'forme': None, }
+    post_data_str = request.POST.get('postDataStr')
+    post_data = json.loads(post_data_str)
+
+    article_obj = models.Articles.objects.get(id=post_data['article_id'])
+    '''ARTICLE_STATE_LIST = [(1, '待反馈'), (2, '已反馈'), (3, '待上会'), (4, '已上会'), (5, '已签批'),
+                          (51, '已放款'), (52, '已放完'), (55, '已解保'), (61, '待变更'), (99, '已注销')]'''
+    if article_obj.article_state in [4, 61]:
+        form_supply = forms.FormAddSupply(post_data)
+        if form_supply.is_valid():
+            supply_data = form_supply.cleaned_data
+            try:
+                models.Supply.objects.create(
+                    summary=article_obj, detail=supply_data['detail'], supplyor=request.user)
+                response['message'] = '补调问题添加成功！'
+            except Exception as e:
+                response['status'] = False
+                response['message'] = '补调问题添加失败：%s' % str(e)
+        else:
+            response['status'] = False
+            response['message'] = '表单信息有误！！！'
+            response['forme'] = form_supply.errors
+    else:
+        response['status'] = False
+        response['message'] = '项目状态为：%s，无法设置补调问题！！！' % article_obj.article_state
+    result = json.dumps(response, ensure_ascii=False)
+    return HttpResponse(result)
+
+# -----------------------补调问题修改ajax-------------------------#
+@login_required
+@authority
+def supply_edit_ajax(request):  #
+    print(request.path, '>', resolve(request.path).url_name, '>', request.user)
+    response = {'status': True, 'message': None, 'forme': None, }
+    post_data_str = request.POST.get('postDataStr')
+    post_data = json.loads(post_data_str)
+
+    article_obj = models.Articles.objects.get(id=post_data['article_id'])
+    '''ARTICLE_STATE_LIST = [(1, '待反馈'), (2, '已反馈'), (3, '待上会'), (4, '已上会'), (5, '已签批'),
+                          (51, '已放款'), (52, '已放完'), (55, '已解保'), (61, '待变更'), (99, '已注销')]'''
+    if article_obj.article_state in [4, 61]:
+        form_supply = forms.FormAddSupply(post_data)
+        if form_supply.is_valid():
+            supply_data = form_supply.cleaned_data
+            try:
+                models.Supply.objects.create(
+                    summary=article_obj, detail=supply_data['detail'], supplyor=request.user)
+                response['message'] = '补调问题添加成功！'
+            except Exception as e:
+                response['status'] = False
+                response['message'] = '补调问题添加失败：%s' % str(e)
+        else:
+            response['status'] = False
+            response['message'] = '表单信息有误！！！'
+            response['forme'] = form_supply.errors
+    else:
+        response['status'] = False
+        response['message'] = '项目状态为：%s，无法设置补调问题！！！' % article_obj.article_state
+    result = json.dumps(response, ensure_ascii=False)
+    return HttpResponse(result)
+# -----------------------补调问题删除ajax-------------------------#
+@login_required
+@authority
+def supply_del_ajax(request):  #
+    print(request.path, '>', resolve(request.path).url_name, '>', request.user)
+    response = {'status': True, 'message': None, 'forme': None, }
+    post_data_str = request.POST.get('postDataStr')
+    post_data = json.loads(post_data_str)
+
+    supply_obj = models.Supply.objects.get(id=post_data['supply_id'])
+    article_obj = models.Articles.objects.get(id=post_data['article_id'])
+    '''ARTICLE_STATE_LIST = [(1, '待反馈'), (2, '已反馈'), (3, '待上会'), (4, '已上会'), (5, '已签批'),
+                          (51, '已放款'), (52, '已放完'), (55, '已解保'), (61, '待变更'), (99, '已注销')]'''
+    if article_obj.article_state in [1, 2, 3, 4, 61]:
+        try:
+            supply_obj.delete()  #
+            response['message'] = '补调问题删除成功！'
+        except Exception as e:
+            response['status'] = False
+            response['message'] = '补调问题删除失败：%s' % str(e)
+    else:
+        response['status'] = False
+        response['message'] = '项目状态为：%s，无法删除补调问题！！！' % article_obj.article_state
     result = json.dumps(response, ensure_ascii=False)
     return HttpResponse(result)
 

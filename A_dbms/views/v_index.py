@@ -82,8 +82,8 @@ def index(request):
     overdue_cooperator_count = models.Cooperators.objects.filter(
         cooperator_state=1, due_date__lt=datetime.date.today()).count()
     # 30天内到期查封
-    '''SEAL_STATE_LIST = ((1, '查询跟踪'), (3, '诉前保全'), (5, '首次首封'), (11, '首次轮封'), (21, '续查封'),
-                       (51, '解除查封'), (99, '注销'))'''
+    '''SEAL_STATE_LIST = [(1, '查询跟踪'), (3, '诉前保全'), (5, '首次首封'), (11, '首次轮封'), (21, '续查封'),
+                       (51, '解除查封'), (99, '注销')]'''
     soondue_seal_count = models.Seal.objects.filter(
         seal_state__in=[3, 5, 11, 21], due_date__gte=datetime.date.today(),
         due_date__lt=date_30_later).count()

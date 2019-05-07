@@ -5,7 +5,7 @@
             <th>合同编号</th>
             <th>合同类型</th>
             <th>签订人</th>
-            <th>签订情况</th>
+{#            <th>签订情况</th>#}
             {% if PAGE_TITLE == '风控落实' %}
                 <th>签订日期</th>
                 <th>签订情况</th>
@@ -73,7 +73,7 @@
                         {% endfor %}
                     </td>
                 {% endif %}
-                <td>{{ counter.get_counter_state_display }}</td>
+{#                <td>{{ counter.get_counter_state_display }}</td>#}
                 {% if PAGE_TITLE == '合同详情' %}
                     <td><a class="btn btn-primary btn-xs" target="_blank"
                            href="{% url 'dbms:agree_counter_preview' agree_id=agree_obj.id counter_id=counter.id %}">

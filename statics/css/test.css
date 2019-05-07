@@ -1,0 +1,14 @@
+body {
+    /*padding-top: 10pt;*/
+    font-family: SimSun;
+}
+
+.s1 {
+    color: red;
+    font-weight: bold;
+}
+
+.s2 {
+    color: red;
+    /*font-weight: bold;*/
+}

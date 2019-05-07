@@ -123,6 +123,7 @@ def agree_scan(request, agree_id):  # 查看合同
         'agree_typ': agree_obj.agree_typ,
         'agree_amount': agree_obj.agree_amount,
         'amount_limit': agree_obj.amount_limit,
+        'agree_rate': agree_obj.agree_rate,
         'agree_term': agree_obj.agree_term,
         'guarantee_typ': agree_obj.guarantee_typ,
         'agree_copies': agree_obj.agree_copies}
@@ -212,6 +213,7 @@ def convert(n):
                 tmp += unit
                 res.append(tmp)
     result = ''.join(res[::-1])
+    # print('len(result):',len(result),result,result[-1])
     if not result[-1] == '分':
         result += '整'
     return result
@@ -251,12 +253,17 @@ def agree_preview(request, agree_id):
     agree_typ = agree_obj.agree_typ
     agree_amount = agree_obj.agree_amount
     agree_amount_cn = convert(agree_amount)
+    '''AGREE_TYP_LIST = [(1, '单笔'), (2, '最高额'), (3, '保函'), (7, '小贷'),
+                      (41, '单笔(公证)'), (42, '最高额(公证)'), (47, '小贷(公证)')]'''
     agree_amount_str = str(agree_amount / 10000).rstrip('0').rstrip('.')  # 续贷（万元）
     agree_copy_cn = convert_num(agree_obj.agree_copies)
     agree_copy_jy_cn = convert_num(agree_obj.agree_copies - 2)
-    single_quota_rate = agree_obj.lending.summary.single_quota_summary.first().flow_rate
-    charge = round(agree_amount * single_quota_rate / 100, 2)
-    charge_cn = convert(charge)
+    try:
+        single_quota_rate = float(agree_obj.agree_rate)
+        charge = round(agree_amount * single_quota_rate / 100, 2)
+        charge_cn = convert(charge)
+    except ValueError:
+        single_quota_rate = agree_obj.agree_rate
 
     return render(request, 'dbms/agree/preview-agree.html', locals())
 

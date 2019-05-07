@@ -1,26 +1,26 @@
-<tr>{#审保会次数#}
+<tr style="height: 0pt">{#审保会次数#}
     <td></td>
-    <td width="14%"></td>
+    <td></td>
     <td></td>
     <td></td>
     <td></td>
 </tr>
-<tr>{#审保会次数#}
+<tr class="otr">{#审保会次数#}
     <td class="bb" style="width: 100px">审保会次数</td>
     <td class="bb" colspan="4">
         {{ review_year }}年度第{{ review_order_cn }}次审保
         会（{{ article_obj.appraisal_article.all.0.get_review_model_display }}）
     </td>
 </tr>
-<tr>{#上会日期#}
+<tr class="otr">{#上会日期#}
     <td class="bb">上会日期</td>
     <td class="bb" colspan="4">{{ article_obj.review_date }}</td>
 </tr>
-<tr>{#主持人#}
+<tr class="otr">{#主持人#}
     <td class="bb">主持人</td>
     <td class="bb" colspan="4">张春玉</td>
 </tr>
-<tr>{#参会委员#}
+<tr class="otr">{#参会委员#}
     <td class="bb">参会委员</td>
     <td class="bb" colspan="4">
         {% for expert in article_obj.expert.all %}
@@ -28,11 +28,11 @@
         {% endfor %}
     </td>
 </tr>
-<tr>{#项目名称#}
+<tr class="otr">{#项目名称#}
     <td class="bb">项目名称</td>
     <td class="bb" colspan="4">{{ article_obj.custom.name }}</td>
 </tr>
-<tr>{#所属行业#}
+<tr class="otr">{#所属行业#}
     <td class="bb">所属行业</td>
     <td class="bb" colspan="4">
         {{ article_obj.custom.company_custome.idustry }}</td>

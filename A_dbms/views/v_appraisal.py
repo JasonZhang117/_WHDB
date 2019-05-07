@@ -83,6 +83,7 @@ def appraisal_scan(request, article_id):  # 评审项目预览
         form_article_sign = forms.ArticlesSignForm(initial=form_date)
     form_comment = forms.CommentsAddForm()
     form_single = forms.SingleQuotaForm()
+    form_supply = forms.FormAddSupply()
     form_lending = forms.FormLendingOrder()
     form_article_change = forms.ArticleChangeForm(initial={'change_date': str(datetime.date.today())})
     return render(request, 'dbms/appraisal/appraisal-scan.html', locals())
@@ -247,7 +248,7 @@ def summary_scan(request, article_id):  # 评审项目预览
     if True:
         rowspan_count = 3
         summary = ''
-        summary += '<tr class="style0"><td class="style0" colspan="4">&nbsp&nbsp一、同意为该客户'
+        summary += '<tr class="ot"><td class="oi" colspan="4">&nbsp&nbsp一、同意为该客户'
         single_dic_count = len(single_dic_list)
         single_dic_c = 0
         for single in single_dic_list:
@@ -255,16 +256,16 @@ def summary_scan(request, article_id):  # 评审项目预览
             summary += '%s万元%s' % (single['credit_amount'], single['credit_model_cn'])
             if single_dic_c < single_dic_count:
                 summary += '、'
-        summary += '提供担保，期限%s，综合费率' % credit_term_cn
+        summary += '提供担保，期限%s,' % credit_term_cn
         single_dic_c = 0
         for single in single_dic_list:
             if single_dic_count > 1:
                 single_dic_c += 1
-                summary += '%s按%s收取' % (single['credit'], single['flow_rate'])
+                summary += '%s%s收取' % (single['credit'], single['flow_rate'])
                 if single_dic_c < single_dic_count:
                     summary += '、'
             else:
-                summary += '按%s收取' % (single['flow_rate'])
+                summary += '%s收取' % (single['flow_rate'])
         if lending_count > 1:
             # rowspan_count += lending_count
             summary += '。贷款分%s次发放，' % convert_str(lending_count)
@@ -276,7 +277,7 @@ def summary_scan(request, article_id):  # 评审项目预览
                 if lending_c < lending_count:
                     summary += '、'
         summary += '。</td></tr>'
-        summary += '<tr><td colspan="4">&nbsp&nbsp二、落实以下反担保措施</td></tr>'
+        summary += '<tr class="ot"><td class="oi" colspan="4">&nbsp&nbsp二、落实以下反担保措施</td></tr>'
 
         lend_or = 0
         for lending in lending_list:
@@ -288,12 +289,12 @@ def summary_scan(request, article_id):  # 评审项目预览
                 rowspan_count += 1
                 lend_or += 1
                 lend_oz = convert_str(lend_or)
-                summary += '<tr><td colspan="4">&nbsp&nbsp（%s）第%s次发放%s万元，并落实以下反担保措施</td></tr>' % (
+                summary += '<tr class="ot"><td class="oi" colspan="4">&nbsp&nbsp（%s）第%s次发放%s万元，并落实以下反担保措施</td></tr>' % (
                     lend_oz, lend_oz, str(order_amount / 10000).rstrip('0').rstrip('.'))
             custom_c_list = models.Customes.objects.filter(lending_custom__sure__lending=lending, genre=1)  # 企业
             if custom_c_list:
                 rowspan_count += 1
-                summary += '<tr><td colspan="4">&nbsp&nbsp%s、企业保证：' % sure_or
+                summary += '<tr class="ot"><td class="oi" colspan="4">&nbsp&nbsp%s、企业保证：' % sure_or
                 custom_c_count = custom_c_list.count()
                 custom_c_c = 1
                 for custom_c in custom_c_list:
@@ -306,7 +307,7 @@ def summary_scan(request, article_id):  # 评审项目预览
             custom_p_list = models.Customes.objects.filter(lending_custom__sure__lending=lending, genre=2)  # 个人
             if custom_p_list:
                 rowspan_count += 1
-                summary += '<tr><td colspan="4">&nbsp&nbsp%s、个人保证：' % sure_or
+                summary += '<tr class="ot"><td class="oi" colspan="4">&nbsp&nbsp%s、个人保证：' % sure_or
                 custom_p_count = custom_p_list.count()
                 custom_p_c = 1
                 for custom_p in custom_p_list:
@@ -332,10 +333,10 @@ def summary_scan(request, article_id):  # 评审项目预览
                 lending_warrant__sure__lending=lending, lending_warrant__sure__sure_typ=11)  # 抵押房产
             if warrant_h_11_list:
                 rowspan_count += 2
-                summary += '<tr><td colspan="4">&nbsp&nbsp%s、房产抵押：' \
+                summary += '<tr class="ot"><td class="oi" colspan="4">&nbsp&nbsp%s、房产抵押：' \
                            '以下房产抵押给我公司，签订抵押反担保合同并办理抵押登记</td></tr>' % sure_or
-                # summary += '<tr><td colspan="4"><table style="margin-left: 1pt;margin-right: 1pt;">'
-                summary += '<tr>' \
+                summary += '<tr class="it"><td colspan="4"><table class="tbi" cellspacing="0" cellpadding="0" >'
+                summary += '<tr class="it">' \
                            '<td class="bb" align="center">所有权人</td> ' \
                            '<td class="bb" align="center">处所</td> ' \
                            '<td class="bb" align="center">面积(㎡)</td> ' \
@@ -355,12 +356,12 @@ def summary_scan(request, article_id):  # 评审项目预览
                             owership_name += '、'
                             owership_num += '、'
                     if warrant_house.warrant_typ == 1:
-                        rowspan_count += 1
+                        # rowspan_count += 1
                         house = warrant_house.house_warrant
                         house_locate = house.house_locate
                         house_app = house.house_app
                         house_area = house.house_area
-                        summary += '<tr>' \
+                        summary += '<tr class="it">' \
                                    '<td class="bb">%s</td> ' \
                                    '<td class="bb">%s</td> ' \
                                    '<td class="bb" align="right">%s</td> ' \
@@ -371,12 +372,12 @@ def summary_scan(request, article_id):  # 评审项目预览
                         housebag_count = housebag_list.count()
                         housebag_num = 1
                         for housebag in housebag_list:
-                            rowspan_count += 1
+                            # rowspan_count += 1
                             housebag_locate = housebag.housebag_locate
                             housebag_app = housebag.housebag_app
                             housebag_area = housebag.housebag_area
                             if housebag_num == 1:
-                                summary += '<tr>' \
+                                summary += '<tr class="it">' \
                                            '<td class="bb" rowspan="%s">%s</td> ' \
                                            '<td class="bb">%s</td> ' \
                                            '<td class="bb" align="right">%s</td> ' \
@@ -386,28 +387,29 @@ def summary_scan(request, article_id):  # 评审项目预览
                                                housebag_area, housebag_count, owership_num)
                                 housebag_num += 1
                             else:
-                                summary += '<tr>' \
+                                summary += '<tr class="it">' \
                                            '<td class="bb">%s</td> ' \
                                            '<td class="bb" align="right">%s</td> ' \
                                            '</tr>' % (
                                                housebag_locate, housebag_area)
-                # summary += '</table></td></tr>'
+                summary += '</table></td></tr>'
                 sure_or += 1
             warrant_g_12_list = models.Warrants.objects.filter(
                 lending_warrant__sure__lending=lending, lending_warrant__sure__sure_typ=12)  # 土地抵押
             if warrant_g_12_list:
                 rowspan_count += 2
-                summary += '<tr><td colspan="4">' \
+                summary += '<tr class="ot"><td class="oi" colspan="4">' \
                            '&nbsp&nbsp%s、土地抵押：以下国有土地使用权抵押给我公司，签订抵押反担保合同并办理抵押登记' \
                            '</td></tr>' % sure_or
-                summary += '<tr>' \
+                summary += '<tr class="it"><td colspan="4"><table class="tbi" cellspacing="0" cellpadding="0" >'
+                summary += '<tr class="it">' \
                            '<td class="bb" align="center">所有权人</td> ' \
                            '<td class="bb" align="center">座落</td> ' \
                            '<td class="bb" align="center">面积(㎡)</td> ' \
                            '<td class="bb" align="center">产权证编号</td> ' \
                            '</tr>'
                 for warrant_ground in warrant_g_12_list:
-                    rowspan_count += 1
+                    # rowspan_count += 1
                     owership_list = warrant_ground.ownership_warrant.all()
                     owership_list_count = owership_list.count()
                     owership_name = ''
@@ -424,29 +426,31 @@ def summary_scan(request, article_id):  # 评审项目预览
                     ground_locate = ground.ground_locate
                     ground_app = ground.ground_app
                     ground_area = ground.ground_area
-                    summary += '<tr>' \
+                    summary += '<tr class="it">' \
                                '<td class="bb">%s</td> ' \
                                '<td class="bb">%s</td> ' \
                                '<td class="bb" align="right">%s</td> ' \
                                '<td class="bb">%s</td> ' \
                                '</tr>' % (
                                    owership_name, ground_locate, ground_area, owership_num)
+                summary += '</table></td></tr>'
                 sure_or += 1
             warrant_c_14_list = models.Warrants.objects.filter(
                 lending_warrant__sure__lending=lending, lending_warrant__sure__sure_typ=14)  # 在建工程抵押
             if warrant_c_14_list:
                 rowspan_count += 2
-                summary += '<tr><td colspan="4">' \
+                summary += '<tr class="ot"><td class="oi" colspan="4">' \
                            '&nbsp&nbsp%s、在建工程抵押：以下在建工程抵押给我公司，签订抵押反担保合同并办理抵押登记' \
                            '</td></tr>' % sure_or
-                summary += '<tr>' \
+                summary += '<tr class="it"><td colspan="4"><table class="tbi" cellspacing="0" cellpadding="0" >'
+                summary += '<tr class="it">' \
                            '<td class="bb" align="center">所有权人</td> ' \
                            '<td class="bb" align="center">座落</td> ' \
                            '<td class="bb" align="center">面积(㎡)</td> ' \
                            '<td class="bb" align="center">备注</td> ' \
                            '</tr>'
                 for warrant_c in warrant_c_14_list:
-                    rowspan_count += 1
+                    # rowspan_count += 1
                     owership_list = warrant_c.ownership_warrant.all()
                     owership_list_count = owership_list.count()
                     owership_name = ''
@@ -459,18 +463,19 @@ def summary_scan(request, article_id):  # 评审项目预览
                     coustruct = warrant_c.coustruct_warrant
                     coustruct_locate = coustruct.coustruct_locate
                     coustruct_area = coustruct.coustruct_area
-                    summary += '<tr>' \
+                    summary += '<tr class="it">' \
                                '<td class="bb">%s</td> ' \
                                '<td class="bb">%s</td> ' \
                                '<td class="bb" align="right">%s</td> ' \
                                '<td class="bb">最终以实际抵押面积为准</td> ' \
                                '</tr>' % (owership_name, coustruct_locate, coustruct_area)
+                summary += '</table></td></tr>'
                 sure_or += 1
             warrant_c_13_list = models.Warrants.objects.filter(
                 lending_warrant__sure__lending=lending, lending_warrant__sure__sure_typ=13)  # 动产抵押
             if warrant_c_13_list:
                 rowspan_count += 1
-                summary += '<tr><td colspan="4">&nbsp&nbsp%s、动产抵押：' % sure_or
+                summary += '<tr class="ot"><td class="oi" colspan="4">&nbsp&nbsp%s、动产抵押：' % sure_or
                 warrant_c_count = warrant_c_13_list.count()
                 warrant_c_c = 0
                 for warrant_c in warrant_c_13_list:
@@ -486,36 +491,39 @@ def summary_scan(request, article_id):  # 评审项目预览
             if warrant_v_15_list:
                 rowspan_count += 2
                 warrant_count = warrant_v_15_list.count()
-                summary += '<tr><td colspan="4">' \
+                summary += '<tr class="ot"><td class="oi" colspan="4">' \
                            '&nbsp&nbsp%s、车辆抵押抵押：以下车辆抵押给我公司，签订抵押反担保合同并办理抵押登记' \
                            '</td></tr>' % sure_or
-                summary += '<tr>' \
+                summary += '<tr class="it"><td colspan="4"><table class="tbi" cellspacing="0" cellpadding="0" >'
+                summary += '<tr class="it">' \
                            '<td class="bb" align="center">所有权人</td> ' \
                            '<td class="bb" align="center">车架号</td> ' \
                            '<td class="bb" align="center">车牌号</td> ' \
                            '<td class="bb" align="center">备注</td> ' \
                            '</tr>'
                 for warrant_v in warrant_v_15_list:
-                    rowspan_count += 1
+                    # rowspan_count += 1
                     vehicle = warrant_v.vehicle_warrant
                     vehicle_owner = vehicle.vehicle_owner.name
                     frame_num = vehicle.frame_num
                     plate_num = vehicle.plate_num
                     vehicle_remark = vehicle.vehicle_remark
-                    summary += '<tr>' \
+                    summary += '<tr class="it">' \
                                '<td class="bb">%s</td> ' \
                                '<td class="bb">%s</td> ' \
                                '<td class="bb" align="right">%s</td> ' \
                                '<td class="bb">%s</td> ' \
                                '</tr>' % (vehicle_owner, frame_num, plate_num, vehicle_remark)
+                summary += '</table></td></tr>'
                 sure_or += 1
             warrant_h_21_list = models.Warrants.objects.filter(
                 lending_warrant__sure__lending=lending, lending_warrant__sure__sure_typ=21)  # 房产顺位
             if warrant_h_21_list:
                 rowspan_count += 2
-                summary += '<tr><td colspan="4">&nbsp&nbsp%s、房产顺位抵押：' \
+                summary += '<tr class="ot"><td class="oi" colspan="4">&nbsp&nbsp%s、房产顺位抵押：' \
                            '以下房产抵押给我公司，签订抵押反担保合同并办理顺位抵押登记</td></tr>' % sure_or
-                summary += '<tr>' \
+                summary += '<tr class="it"><td colspan="4"><table class="tbi" cellspacing="0" cellpadding="0" >'
+                summary += '<tr class="it">' \
                            '<td class="bb" align="center">所有权人</td> ' \
                            '<td class="bb" align="center">处所</td> ' \
                            '<td class="bb" align="center">面积(㎡)</td> ' \
@@ -535,12 +543,12 @@ def summary_scan(request, article_id):  # 评审项目预览
                             owership_name += '、'
                             owership_num += '、'
                     if warrant_house.warrant_typ == 1:
-                        rowspan_count += 1
+                        # rowspan_count += 1
                         house = warrant_house.house_warrant
                         house_locate = house.house_locate
                         house_app = house.house_app
                         house_area = house.house_area
-                        summary += '<tr>' \
+                        summary += '<tr class="it">' \
                                    '<td class="bb">%s</td> ' \
                                    '<td class="bb">%s</td> ' \
                                    '<td class="bb" align="right">%s</td> ' \
@@ -551,12 +559,12 @@ def summary_scan(request, article_id):  # 评审项目预览
                         housebag_count = housebag_list.count()
                         housebag_num = 1
                         for housebag in housebag_list:
-                            rowspan_count += 1
+                            # rowspan_count += 1
                             housebag_locate = housebag.housebag_locate
                             housebag_app = housebag.housebag_app
                             housebag_area = housebag.housebag_area
                             if housebag_num == 1:
-                                summary += '<tr>' \
+                                summary += '<tr class="it">' \
                                            '<td class="bb" rowspan="%s">%s</td> ' \
                                            '<td class="bb">%s</td> ' \
                                            '<td class="bb" align="right">%s</td> ' \
@@ -566,28 +574,29 @@ def summary_scan(request, article_id):  # 评审项目预览
                                                housebag_area, housebag_count, owership_num)
                                 housebag_num += 1
                             else:
-                                summary += '<tr>' \
+                                summary += '<tr class="it">' \
                                            '<td class="bb">%s</td> ' \
                                            '<td class="bb" align="right">%s</td> ' \
                                            '</tr>' % (
                                                housebag_locate, housebag_area)
+                summary += '</table></td></tr>'
                 sure_or += 1
             warrant_g_22_list = models.Warrants.objects.filter(
                 lending_warrant__sure__lending=lending, lending_warrant__sure__sure_typ=22)  # 土地顺位
             if warrant_g_22_list:
                 rowspan_count += 2
-                summary += '<tr><td colspan="4">' \
+                summary += '<tr class="ot"><td class="oi" colspan="4">' \
                            '&nbsp&nbsp%s、土地顺位抵押：以下国有土地使用权抵押给我公司，签订抵押反担保合同并办理顺位抵押登记' \
                            '</td></tr>' % sure_or
-                # summary += '<tr><td colspan="4"><table style="margin-left: 1pt;margin-right: 1pt;">'
-                summary += '<tr>' \
+                summary += '<tr class="it"><td colspan="4"><table class="tbi" cellspacing="0" cellpadding="0" >'
+                summary += '<tr class="it">' \
                            '<td class="bb" align="center">所有权人</td> ' \
                            '<td class="bb" align="center">座落</td> ' \
                            '<td class="bb" align="center">面积(㎡)</td> ' \
                            '<td class="bb" align="center">产权证编号</td> ' \
                            '</tr>'
                 for warrant_ground in warrant_g_22_list:
-                    rowspan_count += 1
+                    # rowspan_count += 1
                     owership_list = warrant_ground.ownership_warrant.all()
                     owership_list_count = owership_list.count()
                     owership_name = ''
@@ -604,23 +613,24 @@ def summary_scan(request, article_id):  # 评审项目预览
                     ground_locate = ground.ground_locate
                     ground_app = ground.ground_app
                     ground_area = ground.ground_area
-                    summary += '<tr>' \
+                    summary += '<tr class="it">' \
                                '<td class="bb">%s</td> ' \
                                '<td class="bb">%s</td> ' \
                                '<td class="bb" align="right">%s</td> ' \
                                '<td class="bb">%s</td> ' \
                                '</tr>' % (
                                    owership_name, ground_locate, ground_area, owership_num)
-                # summary += '</table></td></tr>'
+                summary += '</table></td></tr>'
                 sure_or += 1
             warrant_c_23_list = models.Warrants.objects.filter(
                 lending_warrant__sure__lending=lending, lending_warrant__sure__sure_typ=23)  # 在建工程顺位
             if warrant_c_23_list:
                 rowspan_count += 2
-                summary += '<tr><td colspan="4">' \
+                summary += '<tr class="ot"><td class="oi" colspan="4">' \
                            '&nbsp&nbsp%s、在建工程顺位抵押：以下在建工程抵押给我公司，签订抵押反担保合同并办理顺位抵押登记' \
                            '</td></tr>' % sure_or
-                summary += '<tr>' \
+                summary += '<tr class="it"><td colspan="4"><table class="tbi" cellspacing="0" cellpadding="0" >'
+                summary += '<tr class="it">' \
                            '<td class="bb" align="center">所有权人</td> ' \
                            '<td class="bb" align="center">座落</td> ' \
                            '<td class="bb" align="center">面积(㎡)</td> ' \
@@ -640,18 +650,20 @@ def summary_scan(request, article_id):  # 评审项目预览
                     coustruct = warrant_c.coustruct_warrant
                     coustruct_locate = coustruct.coustruct_locate
                     coustruct_area = coustruct.coustruct_area
-                    summary += '<tr>' \
+                    summary += '<tr class="it">' \
                                '<td class="bb">%s</td> ' \
                                '<td class="bb">%s</td> ' \
                                '<td class="bb" align="right">%s</td> ' \
                                '<td class="bb">最终以实际抵押面积为准</td> ' \
                                '</tr>' % (owership_name, coustruct_locate, coustruct_area)
+
+                summary += '</table></td></tr>'
                 sure_or += 1
             warrant_c_24_list = models.Warrants.objects.filter(
                 lending_warrant__sure__lending=lending, lending_warrant__sure__sure_typ=24)  # 动产顺位
             if warrant_c_24_list:
                 rowspan_count += 1
-                summary += '<tr><td colspan="4">&nbsp&nbsp%s、动产顺位抵押：' % sure_or
+                summary += '<tr class="ot"><td class="oi" colspan="4">&nbsp&nbsp%s、动产顺位抵押：' % sure_or
                 warrant_c_count = warrant_c_24_list.count()
                 warrant_c_c = 0
                 for warrant_c in warrant_c_24_list:
@@ -666,7 +678,7 @@ def summary_scan(request, article_id):  # 评审项目预览
                 lending_warrant__sure__lending=lending, lending_warrant__sure__sure_typ=31)  # 应收质押
             if warrant_r_31_list:
                 rowspan_count += 1
-                summary += '<tr><td colspan="4">&nbsp&nbsp%s、应收账款质押：' % sure_or
+                summary += '<tr class="ot"><td class="oi" colspan="4">&nbsp&nbsp%s、应收账款质押：' % sure_or
                 warrant_r_count = warrant_r_31_list.count()
                 warrant_r_c = 0
                 for warrant_r in warrant_r_31_list:
@@ -681,7 +693,7 @@ def summary_scan(request, article_id):  # 评审项目预览
                 lending_warrant__sure__lending=lending, lending_warrant__sure__sure_typ=32)  # 股权质押
             if warrant_s_32_list:
                 rowspan_count += 1
-                summary += '<tr><td colspan="4">&nbsp&nbsp%s、股权质押：' % sure_or
+                summary += '<tr class="ot"><td class="oi" colspan="4">&nbsp&nbsp%s、股权质押：' % sure_or
                 warrant_s_count = warrant_s_32_list.count()
                 warrant_s_c = 0
                 for warrant_s in warrant_s_32_list:
@@ -698,7 +710,7 @@ def summary_scan(request, article_id):  # 评审项目预览
                 lending_warrant__sure__lending=lending, lending_warrant__sure__sure_typ=33)  # 票据质押
             if warrant_d_33_list:
                 rowspan_count += 1
-                summary += '<tr><td colspan="4">&nbsp&nbsp%s、票据质押：' % sure_or
+                summary += '<tr class="ot"><td class="oi" colspan="4">&nbsp&nbsp%s、票据质押：' % sure_or
                 warrant_d_count = warrant_d_33_list.count()
                 warrant_d_c = 0
                 for warrant_d in warrant_d_33_list:
@@ -741,6 +753,17 @@ def summary_scan(request, article_id):  # 评审项目预览
                 lending_warrant__sure__lending=lending, lending_warrant__sure__sure_typ=49)  # 其他监管
             if warrant_o_49_list:
                 rowspan_count += 1
+                summary += '<tr class="ot"><td class="oi" colspan="4">&nbsp&nbsp%s、其他：' % sure_or
+                warrant_o_49_count = warrant_o_49_list.count()
+                warrant_o_49_c = 0
+                for warrant_o_49 in warrant_o_49_list:
+                    warrant_o_49_c += 1
+                    summary += '%s%s' % (warrant_o_49.other_warrant.other_owner.name,
+                                         warrant_o_49.other_warrant.other_detail)
+                    if warrant_o_49_c < warrant_o_49_count:
+                        summary += '、'
+                summary += '</td></tr>'
+                sure_or += 1
             warrant_s_51_list = models.Warrants.objects.filter(
                 lending_warrant__sure__lending=lending, lending_warrant__sure__sure_typ=51)  # 股权预售
             if warrant_s_51_list:
@@ -757,14 +780,28 @@ def summary_scan(request, article_id):  # 评审项目预览
                 rowspan_count += 2
                 warrant_count = warrant_g_53_list.count()
                 rowspan_count += warrant_count
+        supply_list = article_obj.supply_summary.all()
+        if supply_list:
+            rowspan_count += 1
+            summary += '<tr class="ot"><td class="oi" colspan="4">&nbsp&nbsp三、落实以下问题</td></tr>'
+            supply_count = supply_list.count()
+            supply_c = 0
+            for supply in supply_list:
+                rowspan_count += 1
+                supply_c += 1
+                summary += '<tr class="ot"><td class="oi" colspan="4">&nbsp&nbsp%s、%s' % (supply_c, supply.detail)
+                if supply_c < supply_count:
+                    summary += '；</td></tr>'
+                else:
+                    summary += '。</td></tr>'
         head = ''
         # ----------------项目成员
-        head += '<tr><td class="bb" rowspan="%s">项目成员</td>'
-        head += '<td>A角：%s</td>' % article_obj.director.name
-        head += '<td>B角：%s</td>' % article_obj.assistant.name
-        head += '<td colspan="2">风控专员：%s</td></tr>' % article_obj.control.name
+        head += '<tr class="ot"><td class="bb">项目成员</td>'
+        head += '<td class="bb" colspan="4">A角：%s&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp' \
+                'B角：%s&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp风控专员：%s</td>' % (
+            article_obj.director.name, article_obj.assistant.name, article_obj.control.name)
         # ----------------评审结论
-        head += '<tr><td class="bb" rowspan="%s">评审结论</td>'
+        head += '<tr class="otr"><td class="bb" rowspan="%s">评审结论</td>'
         head += '<td class="bb" colspan="4">同意为该公司'
         single_c = 0
         for single_dic in single_dic_list:
@@ -774,7 +811,7 @@ def summary_scan(request, article_id):  # 评审项目预览
                 head += '、'
         head += '提供担保</td></tr>'
         # ----------------业务品种
-        head += '<tr><td class="bb" rowspan="%s">业务品种</td>'
+        head += '<tr class="otr"><td class="bb" rowspan="%s">业务品种</td>'
         head += '<td class="bb" colspan="4">'
         single_c = 0
         for single_dic in single_dic_list:
@@ -784,7 +821,7 @@ def summary_scan(request, article_id):  # 评审项目预览
                 head += '、'
         head += '</td></tr>'
         # ----------------金额
-        head += '<tr><td class="bb" rowspan="%s">金额</td>'
+        head += '<tr class="otr"><td class="bb" rowspan="%s">金额</td>'
         head += '<td class="bb" colspan="4">%s万元' % amount_str
         if article_obj.renewal > 0 and article_obj.augment > 0:
             head += '（其中：存量%s万元、新增%s万元）</td></tr>' % (renewal_str, augment_str)
@@ -793,24 +830,24 @@ def summary_scan(request, article_id):  # 评审项目预览
         else:
             head += '（新增）</td></tr>'
             # ----------------期限
-        head += '<tr><td class="bb" rowspan="%s">期限</td>'
+        head += '<tr class="otr"><td class="bb" rowspan="%s">期限</td>'
         head += '<td class="bb" colspan="4">%s期</td></tr>' % credit_term_cn
         # ----------------费率及收费方式
-        head += '<tr><td class="bb" rowspan="%s">费率及收费方式</td>'
+        head += '<tr class="otr"><td class="bb" rowspan="%s">费率及收费方式</td>'
         head += '<td class="bb" colspan="4">'
         if single_count > 1:
             single_c = 0
             for single_dic in single_dic_list:
                 single_c += 1
-                head += '%s按%s' % (single_dic['credit_model_cn'], single_dic['flow_rate'])
+                head += '%s%s' % (single_dic['credit_model_cn'], single_dic['flow_rate'])
                 if single_c < single_count:
                     head += '、'
         else:
             for single_dic in single_dic_list:
-                head += '按%s' % (single_dic['flow_rate'])
+                head += '%s' % (single_dic['flow_rate'])
         head += '</td></tr>'
         # -----------------评审意见
-        head += '<tr><td class="bb" rowspan="%s">评审意见</td>' % rowspan_count
+        head += '<tr class="ot"><td class="bb" rowspan="%s">评审意见</td>' % rowspan_count
         head += '<td colspan="4">&nbsp&nbsp根据公司成武担发[2014]5号文件《成都武侯中小企业融资担' \
                 '保有限责任公司担保审查委员会组织与管理办法》规定，该项目符合公司%s评审程序，参会人员%s人，其中' % (
                     REVIEW_MODEL_DEC[review_model], expert_amount)

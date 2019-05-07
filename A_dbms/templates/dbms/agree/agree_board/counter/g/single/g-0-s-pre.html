@@ -1,6 +1,5 @@
 <p><strong><u>{{ agree_obj.lending.summary.custom.name }}</u></strong>（以下简称委托人）与贵公司
-    于<u>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</u>年<u>&nbsp&nbsp&nbsp&nbsp</u>月
-    <u>&nbsp&nbsp&nbsp&nbsp</u>日签订了《{{ agree_obj.get_agree_name_display }}》（以下
+    于{% include 'dbms/agree/agree_board/date-period.html' %}签订了《{{ agree_obj.get_agree_name_display }}》（以下
     称：“合同”，合同编号:<strong><u>{{ agree_obj.agree_num }}</u></strong>），合同
     约定贵公司为委托人在<strong><u>{{ agree_obj.branch.name }}</u></strong>申请的
     {% if agree_term == 12 %}

@@ -77,9 +77,9 @@ class SingleQuotaForm(dform.Form):  # 分配项目评委
     credit_amount = fields.FloatField(
         label='授信额度（元）', label_suffix="：",
         widget=widgets.NumberInput(attrs={'class': 'form-control', 'placeholder': '授信额度（元）'}))
-    flow_rate = fields.FloatField(
+    flow_rate = fields.CharField(
         label='费率（%）', label_suffix="：",
-        widget=widgets.NumberInput(attrs={'class': 'form-control', 'placeholder': '费率（%）'}))
+        widget=widgets.TextInput(attrs={'class': 'form-control', 'placeholder': '费率'}))
 
 
 # -----------------------放款次序-------------------------#

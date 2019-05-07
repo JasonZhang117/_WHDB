@@ -1,0 +1,29 @@
+<div class="table-responsive">
+    <table class="table table-bordered table-hover table-condensed active">
+        <thead>
+        <tr style="text-align: center">
+            <th>序号</th>
+            <th>补调问题</th>
+            <th>创建人</th>
+            {% if PAGE_TITLE == '项目评审' %}
+                <th>操作</th>
+            {% endif %}
+        </tr>
+        </thead>
+        <tbody id="supply-tb">
+        {% for supply in article_obj.supply_summary.all %}
+            <tr supply-nid={{ supply.id }} supply-detail={{ supply.detail }}>
+                <td>{{ forloop.counter }}</td>
+                <td>{{ supply.detail }}</td>
+                <td>{{ supply.supplyor.name }}</td>
+                {% if PAGE_TITLE == '项目评审' %}
+                    <td>
+                        <a class="btn btn-primary btn-xs editSupplyB">修改</a>
+                        <a class="btn btn-primary btn-xs delSupplyB">删除</a>
+                    </td>
+                {% endif %}
+            <tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>

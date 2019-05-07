@@ -100,7 +100,7 @@ def dun(request, *args, **kwargs):  #
         dun_amount = round(dun_amount, 2)
     else:
         dun_amount = 0
-    dun_retrieve_sun = dun_list.aggregate(Sum('dun_retrieve_sun'))['dun_retrieve_sun__sum'] # 回收总额
+    dun_retrieve_sun = dun_list.aggregate(Sum('dun_retrieve_sun'))['dun_retrieve_sun__sum']  # 回收总额
     if dun_retrieve_sun:
         dun_retrieve_sun = round(dun_retrieve_sun, 2)
     else:
@@ -230,10 +230,10 @@ def overdue_seal(request, *args, **kwargs):
     authority_list = request.session.get('authority_list')  # 获取当前用户的所有权限
     menu_result = MenuHelper(request).menu_data_list()
     PAGE_TITLE = '逾期查封'
-    '''SEAL_STATE_LIST = ((1, '诉前保全'), (5, '首次首封'), (11, '首次轮封'), (21, '续查封'),
-                           (51, '解除查封'), (99, '注销'))'''
+    '''SEAL_STATE_LIST = [(1, '查询跟踪'), (3, '诉前保全'), (5, '首次首封'), (11, '首次轮封'), (21, '续查封'),
+                       (51, '解除查封'), (99, '注销')]'''
     overdue_seal_list = models.Seal.objects.filter(
-        seal_state__in=[1, 5, 11, 21], due_date__lt=datetime.date.today()).order_by('due_date')  # 逾期协议
+        seal_state__in=[3, 5, 11, 21], due_date__lt=datetime.date.today()).order_by('due_date')  #
     '''搜索'''
     search_key = request.GET.get('_s')
     if search_key:
@@ -245,7 +245,7 @@ def overdue_seal(request, *args, **kwargs):
         overdue_seal_list = overdue_seal_list.filter(q)
     provide_acount = overdue_seal_list.count()
     '''分页'''
-    paginator = Paginator(overdue_seal_list, 19)
+    paginator = Paginator(overdue_seal_list, 119)
     page = request.GET.get('page')
     try:
         p_list = paginator.page(page)
@@ -267,8 +267,10 @@ def soondue_seal(request, *args, **kwargs):
     menu_result = MenuHelper(request).menu_data_list()
     PAGE_TITLE = '即将到期查封'
     date_th_later = datetime.date.today() - datetime.timedelta(days=-30)  # 30天前的日期
+    '''SEAL_STATE_LIST = [(1, '查询跟踪'), (3, '诉前保全'), (5, '首次首封'), (11, '首次轮封'), (21, '续查封'),
+                           (51, '解除查封'), (99, '注销')]'''
     soondue_seal_list = models.Seal.objects.filter(
-        seal_state__in=[1, 5, 11, 21], due_date__gte=datetime.date.today(),
+        seal_state__in=[3, 5, 11, 21], due_date__gte=datetime.date.today(),
         due_date__lt=date_th_later).order_by('due_date')  # 30天内到期协议
     '''搜索'''
     search_key = request.GET.get('_s')

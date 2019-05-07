@@ -428,9 +428,14 @@ def home(request):
     #     if evaluate_state == 5:
     #         models.Warrants.objects.filter(id=warrant.id).update(evaluate_state=1)
 
+    # singl_list = models.SingleQuota.objects.all()
+    # for single in singl_list:
+    #     f = single.rate
+    #     models.SingleQuota.objects.filter(id=single.id).update(flow_rate=f)
 
 
-    return render(request, 'index.html', locals())
+
+    return render(request, 'test.html', locals())
 
 
 def Caltime(date1, date2):
