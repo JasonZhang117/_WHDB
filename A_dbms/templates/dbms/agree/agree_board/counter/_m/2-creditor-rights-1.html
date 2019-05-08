@@ -1,9 +1,8 @@
-<p>1、乙方自愿对甲方担保的丙方自<u>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</u>年
-    <u>&nbsp&nbsp&nbsp&nbsp</u>月<u>&nbsp&nbsp&nbsp&nbsp</u>日至
-    <u>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</u>年<u>&nbsp&nbsp&nbsp&nbsp</u>月<u>&nbsp&nbsp&nbsp&nbsp</u>
-    日期间，向<strong><u>{{ agree_obj.branch.name }}</u></strong>申请的最高额为<strong><u class="frap">人民
-        币{{ agree_amount_str }}万元</u></strong>（大写：
-    <strong><u>人民币{{ agree_amount_cn }}</u></strong>，具体金额以银行放款凭证为准）的一系列债务
+<p>1、乙方自愿对甲方担保的丙方
+    自{% include 'dbms/agree/agree_board/date-period.html' %}至{% include 'dbms/agree/agree_board/date-period.html' %}
+    期间，向<strong><u>{{ agree_obj.branch.name }}</u></strong>申请的最高额为<strong><u class="frap">人民
+        币{{ agree_amount_str }}万元</u></strong>（大写：<strong><u>人民
+        币{{ agree_amount_cn }}</u></strong>，具体金额以银行放款凭证为准）的一系列债务
     （包括但不限于：人民币借款、银行承兑汇票、银行保函、履约保函等）向甲方提供
     {% if counter_obj.counter_typ in MORTGAGE_COUNTER_TYP_LIST %}
         最高额抵押

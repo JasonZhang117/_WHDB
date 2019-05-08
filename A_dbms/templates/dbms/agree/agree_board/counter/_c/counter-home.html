@@ -1,31 +1,27 @@
-<p align="right">合同编号：<u>{{ counter_obj.counter_num }}</u></p>
+<div align="right">合同编号：<u>{{ counter_obj.counter_num }}</u></div>
 {#合同标题#}
-<p class="agree-title"><strong>{{ counter_obj.get_counter_name_display }}</strong></p>
+<div class="agree-title" style="text-align: center"><strong>{{ counter_obj.get_counter_name_display }}</strong></div>
 <div class="page-home">
     <div class="page-home-j">
-        <div>
-            <p><strong>
-                {% if  counter_typ in X_COUNTER_TYP_LIST %}
-                    担保人
-                {% elif counter_typ in D_COUNTER_TYP_LIST %}
-                    抵押权人
-                {% elif counter_typ in Z_COUNTER_TYP_LIST %}
-                    质权人
-                {% endif %}
-                （甲方）：成都武侯中小企业融资担保有限责任公司</strong></p>
-            <p>住所（地址）：成都市武侯区武青南路33号(武侯新城管委会内)</p>
-            <p>法定代表人：何长见</p>
-        </div>
+        <p><strong>
+            {% if  counter_typ in X_COUNTER_TYP_LIST %}
+                担保人
+            {% elif counter_typ in D_COUNTER_TYP_LIST %}
+                抵押权人
+            {% elif counter_typ in Z_COUNTER_TYP_LIST %}
+                质权人
+            {% endif %}
+            （甲方）：成都武侯中小企业融资担保有限责任公司</strong></p>
+        <p>住所（地址）：成都市武侯区武青南路33号(武侯新城管委会内)</p>
+        <p>法定代表人：何长见</p>
     </div>
     {# 乙方信息#}
     <div class="page-home-y">
         {% include 'dbms/agree/agree_board/counter/_c/counter-home-y.html' %}
     </div>
     <div class="page-home-b">
-        <div>
-            <p><strong>借款人（丙方）：<u>{{ agree_obj.lending.summary.custom.name }}</u></strong></p>
-            <p>住所（地址）：<u>{{ agree_obj.lending.summary.custom.company_custome.registered_addr }}</u></p>
-            <p>法定代表人：<u>{{ agree_obj.lending.summary.custom.company_custome.representative }}</u></p>
-        </div>
+        <p><strong>借款人（丙方）：<u>{{ agree_obj.lending.summary.custom.name }}</u></strong></p>
+        <p>住所（地址）：<u>{{ agree_obj.lending.summary.custom.company_custome.registered_addr }}</u></p>
+        <p>法定代表人：<u>{{ agree_obj.lending.summary.custom.company_custome.representative }}</u></p>
     </div>
 </div>

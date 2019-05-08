@@ -5,16 +5,18 @@
     的内容与本合同约定相冲突的，以本合同约定为准。</p>
 <p><strong>声明：乙丙双方已阅读本合同所有条款。应乙丙双方要求，甲方已经就本合同作了相应的说
     明。乙丙双方对本合同条款的含义及相应的法律后果已全部通晓并充分理解。</strong></p>
-<div class="row">
-    <div class="col-lg-6 col-xs-6">
-        <p><strong>乙方确认签章：</strong></p>
-        <p>
-            {% if counter_obj.counter_typ == 1 %}
+<table style="margin-top: 15pt">
+    <tr style="height: 30pt">
+        <td style="border: none" width="50%"><strong>乙方确认签章：</strong></td>
+        <td style="border: none"><strong>丙方确认签章：</strong></td>
+    </tr>
+    <tr style="height: 30pt">
+        <td style="border: none">
+            {% if counter_typ in X_COUNTER_TYP_LIST %}
                 {% for custom in counter_obj.assure_counter.custome.all %}
                     <strong><u>{{ custom.name }}</u></strong>
                 {% endfor %}
-                {#MORTGAGE_COUNTER_TYP_LIST = [11, 12, 13, 14, 15, ]#}
-            {% elif counter_obj.counter_typ in MORTGAGE_COUNTER_TYP_LIST %}
+            {% else %}
                 <!--WARRANT_TYP_LIST = [
                     (1, '房产'), (2, '房产包'), (5, '土地'), (6, '在建工程'), (11, '应收账款'),
                     (21, '股权'), (31, '票据'), (41, '车辆'), (51, '动产'), (55, '其他'), (99, '他权')]-->
@@ -22,23 +24,40 @@
                     {% if forloop.first %}
                         {#(1, '房产'), (2, '房产包'), (5, '土地'), (6, '在建工程')#}
                         {% if warrant.ownership_warrant.all %}
-                            <strong><u>{% for ownership in warrant.ownership_warrant.all %}
-                                {{ ownership.owner.name }}{% if not forloop.last %}、{% endif %}
-                            {% endfor %}</u></strong>
+                            {% for ownership in warrant.ownership_warrant.all %}
+                                <strong><u>
+                                    {{ ownership.owner.name }}
+                                    {% if not forloop.last %}、{% endif %}
+                                </u></strong>
+                            {% endfor %}
+                            {#(11, '应收账款')#}
+                        {% elif warrant.warrant_typ == 11 %}
+                            <strong><u>{{ warrant.receive_warrant.receive_owner.name }}</u></strong>
+                            {#(21, '股权')#}
+                        {% elif warrant.warrant_typ == 21 %}
+                            <strong><u>{{ warrant.stock_warrant.stock_owner.name }}</u></strong>
+                            {#(31, '票据')#}
+                        {% elif warrant.warrant_typ == 31 %}
+                            <strong><u>{{ warrant.draft_warrant.draft_owner.name }}</u></strong>
                             {#(41, '车辆')#}
                         {% elif warrant.warrant_typ == 41 %}
-                            <strong><u>{{ warrant.vehicle_owner.name }}</u></strong>
+                            <strong><u>{{ warrant.vehicle_warrant.vehicle_owner.name }}</u></strong>
                             {#(51, '动产')#}
                         {% elif warrant.warrant_typ == 51 %}
-                            <strong><u>{{ warrant.chattel_owner.name }}</u></strong>
+                            <strong><u>{{ warrant.chattel_warrant.chattel_owner.name }}</u></strong>
+                            {#(55, '其他')#}
+                        {% elif warrant.warrant_typ == 55 %}
+                            <strong><u>{{ warrant.other_warrant.other_owner.name }}</u></strong>
+                        {% else %}
+                            <p><strong>？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？</strong></p>
                         {% endif %}
                     {% endif %}
                 {% endfor %}
             {% endif %}
-        </p>
-    </div>
-    <div class="col-lg-6 col-xs-6">
-        <p><strong>丙方确认签章：</strong></p>
-        <p><strong><u>{{ agree_obj.lending.summary.custom.name }}</u></strong></p>
-    </div>
-</div>
+        </td>
+        <td style="border: none">
+            <strong><u>{{ agree_obj.lending.summary.custom.name }}</u></strong>
+        </td>
+    </tr>
+</table>
+

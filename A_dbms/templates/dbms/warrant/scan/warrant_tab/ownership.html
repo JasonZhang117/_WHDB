@@ -12,7 +12,8 @@
         {% for ownership in warrant_obj.ownership_warrant.all %}
             <tr ownership-nid="{{ ownership.id }}">
                 <td>{{ ownership.ownership_num }}</td>
-                <td>{{ ownership.owner }}</td>
+                <td><a target="_blank" href="{% url 'dbms:custom_scan' custom_id=ownership.owner.id %}">
+                    {{ ownership.owner }}</a></td>
                 <td>{{ ownership.ownership_buildor.name }}</td>
                 <td><a class="btn btn-danger btn-xs delOwershipB">删除</a></td>
             </tr>

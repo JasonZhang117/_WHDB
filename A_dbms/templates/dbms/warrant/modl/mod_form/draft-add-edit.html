@@ -18,11 +18,23 @@
         <label id="e_draft_owner" class="pull-right">{{ form_draft_add_eidt.draft_owner.errors }}</label>
     </div>所有者-->
 
+    <div class="form-group"><!--票面总额-->
+        <label for="id_denomination"
+               class="col-sm-3 control-label">{{ form_draft_add_eidt.denomination.label }}：</label>
+        <div class="col-sm-9">{{ form_draft_add_eidt.denomination }}</div>
+        <label id="e_denomination" class="pull-right">{{ form_draft_add_eidt.denomination.errors }}</label>
+    </div>
+    <div class="form-group"><!--票面总类-->
+        <label for="id_typ"
+               class="col-sm-3 control-label">{{ form_draft_add_eidt.typ.label }}：</label>
+        <div class="col-sm-9">{{ form_draft_add_eidt.typ }}</div>
+        <label id="e_typ" class="pull-right">{{ form_draft_add_eidt.typ.errors }}</label>
+    </div>
+
     <div class="form-group"><!--票据描述-->
         <label for="id_draft_detail"
                class="col-sm-3 control-label">{{ form_draft_add_eidt.draft_detail.label }}：</label>
         <div class="col-sm-9">{{ form_draft_add_eidt.draft_detail }}</div>
         <label id="e_draft_detaile" class="pull-right">{{ form_draft_add_eidt.draft_detail.errors }}</label>
     </div>
-
 </div>

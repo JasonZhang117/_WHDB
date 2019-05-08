@@ -178,6 +178,8 @@ def warrant_add_ajax(request):
                         draft_obj = models.Draft.objects.create(
                             warrant=warrant_obj, draft_buildor=request.user,
                             draft_owner_id=draft_clean['draft_owner'],
+                            typ=draft_clean['typ'],
+                            denomination=draft_clean['denomination'],
                             draft_detail=draft_clean['draft_detail'])
                     response['message'] = '票据包创建成功，请添加票据！！！'
                     response['skip'] = "/dbms/warrant/scan/%s/" % warrant_obj.id
@@ -453,7 +455,9 @@ def warrant_edit_ajax(request):
                         warrant_list.update(
                             warrant_num=warrant_edit_clean['warrant_num'])
                         models.Draft.objects.filter(warrant=warrant_obj).update(
-                            draft_detail=draft_edit_clean['draft_detail'])
+                            draft_detail=draft_edit_clean['draft_detail'],
+                            typ=draft_edit_clean['typ'],
+                            denomination=draft_edit_clean['denomination'])
                         response['message'] = '票据信息修改该成功！！！'
                 except Exception as e:
                     response['status'] = False

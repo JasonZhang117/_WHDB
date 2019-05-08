@@ -128,7 +128,7 @@ def agree_add_ajax(request):  # 添加合同
                     agree_num=agree_num, agree_name=agree_name, num_prefix=agree_num_prefix,
                     lending=lending_obj, branch_id=branch_id, agree_typ=agree_typ,
                     agree_term=agree_add_cleaned['agree_term'],
-                    amount_limit=amount_limit,agree_rate=agree_add_cleaned['agree_rate'],
+                    amount_limit=amount_limit, agree_rate=agree_add_cleaned['agree_rate'],
                     agree_amount=agree_amount, guarantee_typ=guarantee_typ, agree_copies=agree_copies,
                     agree_buildor=request.user)
                 response['skip'] = "/dbms/agree/scan/%s" % agree_obj.id
@@ -212,7 +212,7 @@ def agree_edit_ajax(request):  #
                     agree_list.update(
                         agree_name=agree_name, branch_id=branch_id, agree_typ=agree_typ,
                         agree_term=agree_add_cleaned['agree_term'],
-                        amount_limit=amount_limit,agree_rate=agree_add_cleaned['agree_rate'],
+                        amount_limit=amount_limit, agree_rate=agree_add_cleaned['agree_rate'],
                         agree_amount=agree_amount, guarantee_typ=guarantee_typ, agree_copies=agree_copies,
                         agree_buildor=request.user)
                     '''COUNTER_NAME_LIST = [(1, '保证反担保合同'), (2, '不可撤销的反担保函'),
@@ -684,29 +684,55 @@ def result_state_ajax(request):  #
                         result += '<p>  1、同意向%s申请人民币%s%s银行贷款，用以补充流动资金。</p>' % (
                             agree_obj.branch.name, agree_amount_cn, agree_term_str)
                         result += '<p>  2、同意委托成都武侯中小企业融资担保有限责任公司为该融资贷款向贷款方提供担保。</p>'
-                        order = 3
+                        order = 2
                     else:
-                        order = 1
+                        order = 0
                     '''WARRANT_TYP_LIST = [
                             (1, '房产'), (2, '房产包'), (5, '土地'), (6, '在建工程'), (11, '应收账款'),
                             (21, '股权'), (31, '票据'), (41, '车辆'), (51, '动产'), (55, '其他'), (99, '他权')]'''
+                    counter_warrant_count = models.Warrants.objects.filter(
+                        counter_warrant__counter__in=counter_agree_list, warrant_typ__in=[1, 2, 5],
+                        ownership_warrant__owner=counter_custom).count()
+                    counter_receive_count = models.Receivable.objects.filter(
+                        warrant__counter_warrant__counter__in=counter_agree_list, receive_owner=counter_custom).count()
+                    counter_target_count = models.Stockes.objects.filter(
+                        warrant__counter_warrant__counter__in=counter_agree_list, target=counter_custom.name).count()
+                    counter_draft_count = models.Draft.objects.filter(
+                        warrant__counter_warrant__counter__in=counter_agree_list, draft_owner=counter_custom).count()
+                    counter_vehicle_count = models.Vehicle.objects.filter(
+                        warrant__counter_warrant__counter__in=counter_agree_list, vehicle_owner=counter_custom).count()
+                    counter_chattel_count = models.Chattel.objects.filter(
+                        warrant__counter_warrant__counter__in=counter_agree_list, chattel_owner=counter_custom).count()
+                    counter_other_count = models.Others.objects.filter(
+                        warrant__counter_warrant__counter__in=counter_agree_list, other_owner=counter_custom).count()
+                    counter_asure_count = models.CountersAssure.objects.filter(
+                        counter__in=counter_agree_list, custome=counter_custom).count()
+                    counter_count = (counter_warrant_count + counter_receive_count + counter_target_count +
+                                     counter_draft_count + counter_vehicle_count + counter_chattel_count +
+                                     counter_other_count + counter_asure_count)
+                    if counter_count + order > 1:
+                        order += 1
+                        crder_str = '%s、' % order
+                    else:
+                        crder_str = ''
                     # 保证反担保
                     counter_asure_list = models.CountersAssure.objects.filter(
                         counter__in=counter_agree_list, custome=counter_custom)
                     if counter_asure_list:
-                        result += '<p>%s、同意为%s在%s申请的人民币%s%s贷款，向成都武侯' \
+                        result += '<p>%s同意为%s在%s申请的人民币%s%s贷款，向成都武侯' \
                                   '中小企业融资担保有限责任公司提供连带责任保证反担保。</p>' % (
-                                      order, agree_custom_obj.name, agree_obj.branch.name, agree_amount_cn,
+                                      crder_str, agree_custom_obj.name, agree_obj.branch.name, agree_amount_cn,
                                       agree_term_str)
                         order += 1
+                        crder_str = '%s、' % order
                     # (1, '房产'), (2, '房产包')
                     counter_house_list = models.Warrants.objects.filter(
                         counter_warrant__counter__in=counter_agree_list, warrant_typ__in=[1, 2],
                         ownership_warrant__owner=counter_custom)
                     if counter_house_list:
-                        result += '<p>%s、同意以公司名下房产向成都武侯中小企业融资' \
+                        result += '<p>%s同意以公司名下房产向成都武侯中小企业融资' \
                                   '担保有限责任公司提供抵押反担保，签订抵押反担保合同，并办理抵押登' \
-                                  '记。房产的详细信息如下：</p>' % order
+                                  '记。房产的详细信息如下：</p>' % crder_str
                         result += '<table>' \
                                   '<tr>' \
                                   '<td align="center">所有权人</td> ' \
@@ -765,14 +791,15 @@ def result_state_ajax(request):  #
                                                       housebag_locate, housebag_area)
                         result += '</table>'
                         order += 1
+                        crder_str = '%s、' % order
                     # (5, '土地')
                     counter_ground_list = models.Warrants.objects.filter(
                         counter_warrant__counter__in=counter_agree_list, warrant_typ=5,
                         ownership_warrant__owner=counter_custom)
                     if counter_ground_list:
-                        result += '<p>%s、同意以公司名下国有土地使用权向成都武侯中小企业融资' \
+                        result += '<p>%s同意以公司名下国有土地使用权向成都武侯中小企业融资' \
                                   '担保有限责任公司提供抵押反担保，签订抵押反担保合同，并办理抵押登' \
-                                  '记。国有土地使用权的详细信息如下：</p>' % order
+                                  '记。国有土地使用权的详细信息如下：</p>' % crder_str
                         result += '<table>' \
                                   '<tr>' \
                                   '<td align="center">所有权人</td> ' \
@@ -807,12 +834,12 @@ def result_state_ajax(request):  #
                                           owership_name, ground_locate, ground_area, owership_num)
                         result += '</table>'
                         order += 1
+                        crder_str = '%s、' % order
                     #  (11, '应收账款')
                     counter_receive_list = models.Receivable.objects.filter(
-                        warrant__counter_warrant__counter__in=counter_agree_list,
-                        receive_owner=counter_custom)
+                        warrant__counter_warrant__counter__in=counter_agree_list, receive_owner=counter_custom)
                     if counter_receive_list:
-                        result += '<p>%s、同意以' % order
+                        result += '<p>%s同意以' % crder_str
                         receive_count = counter_receive_list.count()
                         receive_num = 0
                         for receive in counter_receive_list:
@@ -824,12 +851,12 @@ def result_state_ajax(request):  #
                         result += '向成都武侯中小企业融资担保有限责任公司提供质押反担' \
                                   '保，签订质押反担保合同，并办理质押登记。</p>'
                         order += 1
+                        crder_str = '%s、' % order
                     # (21, '股权')
                     counter_target_list = models.Stockes.objects.filter(
-                        warrant__counter_warrant__counter__in=counter_agree_list,
-                        target=counter_custom.name)
+                        warrant__counter_warrant__counter__in=counter_agree_list, target=counter_custom.name)
                     if counter_target_list:
-                        result += '<p>%s、同意公司股东' % order
+                        result += '<p>%s同意公司股东' % crder_str
                         target_count = counter_target_list.count()
                         target_num = 0
                         for target in counter_target_list:
@@ -843,12 +870,12 @@ def result_state_ajax(request):  #
                         result += '向成都武侯中小企业融资担保有限责任公司提' \
                                   '供质押反担保，签订质押反担保合同，并办理质押登记。</p>'
                         order += 1
+                        crder_str = '%s、' % order
                     # 持有(21, '股权')
                     counter_stock_list = models.Stockes.objects.filter(
-                        warrant__counter_warrant__counter__in=counter_agree_list,
-                        stock_owner=counter_custom)
+                        warrant__counter_warrant__counter__in=counter_agree_list, stock_owner=counter_custom)
                     if counter_stock_list:
-                        result += '<p>%s、同意以本公司所持有的' % order
+                        result += '<p>%s同意以本公司所持有的' % crder_str
                         stock_count = counter_target_list.count()
                         stock_num = 0
                         for stock in counter_stock_list:
@@ -862,12 +889,12 @@ def result_state_ajax(request):  #
                         result += '向成都武侯中小企业融资担保有限责任公司提' \
                                   '供质押反担保，签订质押反担保合同，并办理质押登记。</p>'
                         order += 1
+                        crder_str = '%s、' % order
                     # (31, '票据')
                     counter_draft_list = models.Draft.objects.filter(
-                        warrant__counter_warrant__counter__in=counter_agree_list,
-                        draft_owner=counter_custom)
+                        warrant__counter_warrant__counter__in=counter_agree_list, draft_owner=counter_custom)
                     if counter_draft_list:
-                        result += '<p>%s、同意以本公司所有的' % order
+                        result += '<p>%s同意以本公司所有的' % crder_str
                         draft_count = counter_draft_list.count()
                         draft_num = 0
                         for draft in counter_draft_list:
@@ -880,14 +907,14 @@ def result_state_ajax(request):  #
                         result += '向成都武侯中小企业融资担保有限责任公司提' \
                                   '供质押反担保，签订质押反担保合同，并办理质押登记。</p>'
                         order += 1
+                        crder_str = '%s、' % order
                     # (41, '车辆')
                     counter_vehicle_list = models.Vehicle.objects.filter(
-                        warrant__counter_warrant__counter__in=counter_agree_list,
-                        vehicle_owner=counter_custom)
+                        warrant__counter_warrant__counter__in=counter_agree_list, vehicle_owner=counter_custom)
                     if counter_vehicle_list:
-                        result += '<p>%s、同意以公司名下车辆向成都武侯中小企业融资' \
+                        result += '<p>%s同意以公司名下车辆向成都武侯中小企业融资' \
                                   '担保有限责任公司提供抵押反担保，签订抵押反担保合同，并办理抵押登' \
-                                  '记。车辆的详细信息如下：</p>' % order
+                                  '记。车辆的详细信息如下：</p>' % crder_str
                         result += '<table>' \
                                   '<tr>' \
                                   '<td align="center">所有权人</td> ' \
@@ -913,12 +940,12 @@ def result_state_ajax(request):  #
                                       '</tr>' % (vehicle_owner, frame_num, plate_num, vehicle_brand, vehicle_remark)
                         result += '</table>'
                         order += 1
+                        crder_str = '%s、' % order
                     # (51, '动产')
                     counter_chattel_list = models.Chattel.objects.filter(
-                        warrant__counter_warrant__counter__in=counter_agree_list,
-                        chattel_owner=counter_custom)
+                        warrant__counter_warrant__counter__in=counter_agree_list, chattel_owner=counter_custom)
                     if counter_chattel_list:
-                        result += '<p>%s、同意以本公司所有的' % order
+                        result += '<p>%s同意以本公司所有的' % crder_str
                         chattel_count = counter_chattel_list.count()
                         chattel_num = 0
                         for chattel in counter_chattel_list:
@@ -931,12 +958,12 @@ def result_state_ajax(request):  #
                         result += '向成都武侯中小企业融资担保有限责任公司提' \
                                   '供抵押反担保，签订抵押反担保合同，并办理抵押登记。</p>'
                         order += 1
+                        crder_str = '%s、' % order
                     # (55, '其他')
                     counter_other_list = models.Others.objects.filter(
-                        warrant__counter_warrant__counter__in=counter_agree_list,
-                        other_owner=counter_custom)
+                        warrant__counter_warrant__counter__in=counter_agree_list, other_owner=counter_custom)
                     if counter_other_list:
-                        result += '<p>%s、同意以本公司所有的' % order
+                        result += '<p>%s同意以本公司所有的' % crder_str
                         other_count = counter_other_list.count()
                         other_num = 0
                         for other in counter_other_list:
@@ -953,6 +980,7 @@ def result_state_ajax(request):  #
                             result += '向成都武侯中小企业融资担保有限责任公司提' \
                                       '供质押反担保，签订质押反担保合同，并办理质押登记。</p>'
                         order += 1
+                        crder_str = '%s、' % order
                     if decision == 11:
                         result += '<p><strong>本公司及参会股东对本次股东会决议的程序的合法性以及股东签名的真实性负责。</strong></p>'
                         result += '<p>参会股东（或代表）签字：</p>'
@@ -991,9 +1019,9 @@ def result_state_ajax(request):  #
                     spouse = counter_custom.person_custome.spouses
                     if not spouse:
                         result += '<p style="text-align: center"><strong>个人婚姻状况申明</strong></p>'
-                        result += '<p>姓名：王子铭</p>'
-                        result += '<p>居民身份证编号： 350111196901260478</p>'
-                        result += '<p>家庭详细住址：</p>'
+                        result += '<p>姓名：%s</p>' % counter_custom.name
+                        result += '<p>居民身份证编号： %s</p>' % counter_custom.person_custome.license_num
+                        result += '<p>家庭详细住址：%s</p>' % counter_custom.contact_addr
                         result += '<p>现本人声明，截止到     年    月    日，本人在全国婚姻登记处管辖范围内未登记结婚。</p>'
                         result += '<p>特此申明！</p>'
                         result += '<p>申明人：</p>'

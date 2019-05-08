@@ -259,10 +259,12 @@ def agree_preview(request, agree_id):
     agree_copy_cn = convert_num(agree_obj.agree_copies)
     agree_copy_jy_cn = convert_num(agree_obj.agree_copies - 2)
     try:
+        rate_b = True
         single_quota_rate = float(agree_obj.agree_rate)
         charge = round(agree_amount * single_quota_rate / 100, 2)
         charge_cn = convert(charge)
     except ValueError:
+        rate_b = False
         single_quota_rate = agree_obj.agree_rate
 
     return render(request, 'dbms/agree/preview-agree.html', locals())
@@ -291,6 +293,14 @@ def counter_preview(request, agree_id, counter_id):
     X_COUNTER_TYP_LIST = [1, 2, ]
     D_COUNTER_TYP_LIST = [11, 12, 13, 14, 15, ]
     Z_COUNTER_TYP_LIST = [31, 32, 33, 34, 41, ]
+
+    credit_term = agree_obj.agree_term  # 授信期限（月）
+    credit_term_exactly = credit_term % 12
+    credit_term_cn = ''
+    if credit_term_exactly == 0:
+        credit_term_cn = '%s年' % convert_num(credit_term / 12)
+    else:
+        credit_term_cn = '%s个月' % convert_num(credit_term)
 
     if counter_typ in [1, 2]:
         assure_counter_obj = counter_obj.assure_counter
@@ -325,10 +335,12 @@ def counter_preview(request, agree_id, counter_id):
             stock_share_str = str(counter_stock_obj.share).rstrip('0').rstrip('.')
             agree_share_cn = convert(counter_stock_obj.share * 10000)
         elif counter_warrant_typ == 31:
-            vehicle_draft_obj = counter_warrant_obj.vehicle_warrant
-        elif counter_warrant_typ == 41:
             counter_draft_obj = counter_warrant_obj.draft_warrant
             counter_draft_bag_list = counter_draft_obj.extend_draft.all()
+            denomination_str = str(counter_draft_obj.denomination / 10000).rstrip('0').rstrip('.')
+            denomination_cn = convert(counter_draft_obj.denomination)
+        elif counter_warrant_typ == 41:
+            counter_vehicle_obj = counter_warrant_obj.vehicle_warrant
         elif counter_warrant_typ == 51:
             chattel_typ = counter_warrant_obj.chattel_warrant.chattel_typ  # 动产种类
             if chattel_typ == 1:

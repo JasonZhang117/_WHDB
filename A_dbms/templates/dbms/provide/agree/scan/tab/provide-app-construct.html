@@ -32,7 +32,8 @@
                         <td>{{ lending_sure.get_sure_typ_display }}</td>
                         <td>
                             {% for ownership in warrant.ownership_warrant.all %}
-                                {{ ownership.owner.short_name }}{% if not forloop.last %}、{% endif %}
+                                <a target="_blank" href="{% url 'dbms:custom_scan' custom_id=ownership.owner.id %}">
+                                    {{ ownership.owner.short_name }}</a>{% if not forloop.last %}、{% endif %}
                             {% endfor %}
                         </td>
                         <td>{{ warrant.coustruct_warrant.coustruct_locate }}</td>

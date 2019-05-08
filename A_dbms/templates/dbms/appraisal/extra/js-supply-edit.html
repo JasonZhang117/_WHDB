@@ -1,7 +1,7 @@
 <script>
     $(function () {
         bindEditSupplyB();
-        bindSupplyAddModalOk();
+        bindSupplyEditModalOk();
 
     });
 
@@ -15,8 +15,8 @@
         })
     }
 
-    function bindSupplyAddModalOk() {
-        $('#supplyAddModalOk').click(function () {
+    function bindSupplyEditModalOk() {
+        $('#supplyEditModalOk').click(function () {
             var postData = {};
             $('#supplyAddModal').find('input,select').each(function () {
                 var v = $(this).val();
@@ -33,7 +33,7 @@
                 dataType: 'JSON',
                 success: function (arg) {
                     if (arg.status) {
-                        $('#supplyAddModal').modal('hide');
+                        $('#supplyEditModal').modal('hide');
                         alert(arg.message);
                         window.location.reload();
                     } else {

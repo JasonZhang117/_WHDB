@@ -24,7 +24,8 @@
                         <td><a target="_blank" href="{% url 'dbms:warrant_scan' warrant_id=warrant.id %}">
                             {{ forloop.counter }}</a></td>
                         <td>{{ lending_sure.get_sure_typ_display }}</td>
-                        <td>{{ warrant.vehicle_warrant.vehicle_owner.short_name }}</td>
+                        <td><a target="_blank" href="{% url 'dbms:custom_scan' custom_id=warrant.vehicle_warrant.vehicle_owner.id %}">
+                            {{ warrant.vehicle_warrant.vehicle_owner.short_name }}</a></td>
                         <td>{{ warrant.vehicle_warrant.frame_num }}</td>
                         <td>{{ warrant.vehicle_warrant.plate_num }}</td>
                         {% if PAGE_TITLE == '权证管理' or PAGE_TITLE == '风控落实' %}

@@ -11,19 +11,19 @@
     </tr>
     <tr>
         <td rowspan="{{ counter_obj.warrant_counter.warrant.count }}">
-            {{ stock_obj.target }}{% if not forloop.last %}、{% endif %}的股权
+            {{ counter_stock_obj.target }}{% if not forloop.last %}、{% endif %}的股权
         </td>
-        <td rowspan="{{ counter_obj.warrant_counter.warrant.count }}">{{ stock_obj.get_stock_typ_display }}</td>
+        <td rowspan="{{ counter_obj.warrant_counter.warrant.count }}">{{ counter_stock_obj.get_stock_typ_display }}</td>
         <td>
-            {% if stock_obj.stock_typ == 1 %}
+            {% if counter_stock_obj.stock_typ == 1 %}
                 万元
-            {% elif stock_obj.stock_typ == 11 %}
+            {% elif counter_stock_obj.stock_typ == 11 %}
                 万股
             {% else %}
                 ？？？
             {% endif %}
         </td>
-        <td align="right">{{ stock_obj.registe }}</td>
+        <td align="right">{{ counter_stock_obj.registe }}</td>
         <td></td>
         <td>红利及其他孳息</td>
         <td></td>
@@ -32,19 +32,19 @@
 {% else %}
     <tr>
         <td rowspan="{{ counter_obj.warrant_counter.warrant.count }}">
-            {{ stock_obj.target }}{% if not forloop.last %}、{% endif %}的股权
+            {{ counter_stock_obj.target }}{% if not forloop.last %}、{% endif %}的股权
         </td>
-        <td rowspan="{{ counter_obj.warrant_counter.warrant.count }}">{{ stock_obj.get_stock_typ_display }}</td>
+        <td rowspan="{{ counter_obj.warrant_counter.warrant.count }}">{{ counter_stock_obj.get_stock_typ_display }}</td>
         <td>
-            {% if stock_obj.stock_typ == 1 %}
+            {% if counter_stock_obj.stock_typ == 1 %}
                 万元
-            {% elif stock_obj.stock_typ == 11 %}
+            {% elif counter_stock_obj.stock_typ == 11 %}
                 万股
             {% else %}
                 ？？？
             {% endif %}
         </td>
-        <td align="right">{{ stock_obj.registe }}</td>
+        <td align="right">{{ counter_stock_obj.registe }}</td>
         <td></td>
         <td>红利及其他孳息</td>
         <td></td>

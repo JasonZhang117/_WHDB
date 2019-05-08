@@ -27,7 +27,8 @@
                         <td><a target="_blank" href="{% url 'dbms:warrant_scan' warrant_id=warrant.id %}">
                             {{ forloop.counter }}</a></td>
                         <td>{{ lending_sure.get_sure_typ_display }}</td>
-                        <td>{{ warrant.stock_warrant.stock_owner.short_name }}</td>
+                        <td><a target="_blank" href="{% url 'dbms:custom_scan' custom_id=warrant.stock_warrant.stock_owner.id %}">
+                            {{ warrant.stock_warrant.stock_owner.short_name }}</a></td>
                         <td>{{ warrant.stock_warrant.target }}</td>
                         <td align="right">{{ warrant.stock_warrant.share }}</td>
                         <td align="right">{{ warrant.stock_warrant.ratio }}</td>

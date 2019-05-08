@@ -1,11 +1,11 @@
 <table>
     <tr style="height: 36pt">
         {% if counter_typ in D_COUNTER_TYP_LIST %}
-            <td style="border: 0pt; width: 20%" align="right" valign="top">乙方（抵押人）：</td>
+            <td style="border: 0pt; width: 115pt" align="right" valign="top">乙方（抵押人）：</td>
         {% elif counter_typ in Z_COUNTER_TYP_LIST %}
-            <td style="border: 0pt; width: 20%" align="right" valign="top">乙方（出质人）：</td>
+            <td style="border: 0pt; width: 115pt" align="right" valign="top">乙方（出质人）：</td>
         {% endif %}
-        <td style="border: 0pt; width: 30%" valign="top">
+        <td style="border: 0pt; width: 25%" valign="top">
             <!--WARRANT_TYP_LIST = [
                 (1, '房产'), (2, '房产包'), (5, '土地'), (6, '在建工程'), (11, '应收账款'),
                 (21, '股权'), (31, '票据'), (41, '车辆'), (51, '动产'), (55, '其他'), (99, '他权')]-->
@@ -39,9 +39,9 @@
         </td>
 
         {% if counter_typ in D_COUNTER_TYP_LIST %}
-            <td style="border: 0pt; width: 25%" align="right" valign="top">甲方（抵押权人）：</td>
+            <td style="border: 0pt; width:135pt" align="right" valign="top">甲方（抵押权人）：</td>
         {% elif counter_typ in Z_COUNTER_TYP_LIST %}
-            <td style="border: 0pt; width: 20%" align="right" valign="top">甲方（质权人）：</td>
+            <td style="border: 0pt; width:115pt" align="right" valign="top">甲方（质权人）：</td>
         {% endif %}
         <td style="border: 0pt" valign="top">成都武侯中小企业融资担保有限责任公司</td>
 

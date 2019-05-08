@@ -1,12 +1,12 @@
 <p><u>{{ counter_obj.counter_num }}</u>《{{ counter_obj.get_counter_name_display }}》项下</p>
-<p align="center"><strong>
+<div align="center"><strong>
     {% if counter_typ in D_COUNTER_TYP_LIST %}
         抵押财产
     {% elif counter_typ in Z_COUNTER_TYP_LIST %}
         质押权利
     {% endif %}
     清单
-</strong></p>
+</strong></div>
 <p style="float: right">
     {% if counter_warrant_typ == 1 or counter_warrant_typ == 5 %}
         单位：万元

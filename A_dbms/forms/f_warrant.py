@@ -156,8 +156,10 @@ class FormDraft(dform.ModelForm):  # 票据31
 
     class Meta:
         model = models.Draft
-        fields = ['draft_detail']
-        widgets = {'draft_detail': dform.Textarea(attrs={'class': 'form-control', 'rows': '3'})}
+        fields = ['draft_detail', 'denomination', 'typ']
+        widgets = {'draft_detail': dform.Textarea(attrs={'class': 'form-control', 'rows': '3'}),
+                   'typ': dform.Select(attrs={'class': 'form-control'}),
+                   'denomination': dform.NumberInput(attrs={'class': 'form-control', 'placeholder': '票面总额'}), }
 
     def __init__(self, *args, **kwargs):
         super(FormDraft, self).__init__(*args, **kwargs)
@@ -168,8 +170,10 @@ class FormDraft(dform.ModelForm):  # 票据31
 class FormDraftEdit(dform.ModelForm):  # 票据31
     class Meta:
         model = models.Draft
-        fields = ['draft_detail']
-        widgets = {'draft_detail': dform.Textarea(attrs={'class': 'form-control', 'rows': '3'})}
+        fields = ['draft_detail', 'denomination', 'typ']
+        widgets = {'draft_detail': dform.Textarea(attrs={'class': 'form-control', 'rows': '3'}),
+                   'typ': dform.Select(attrs={'class': 'form-control'}),
+                   'denomination': dform.NumberInput(attrs={'class': 'form-control', 'placeholder': '票面总额'}), }
 
 
 # ------------------------票据包31--------------------------#

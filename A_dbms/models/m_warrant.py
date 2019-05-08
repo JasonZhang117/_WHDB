@@ -260,6 +260,9 @@ class Draft(models.Model):  # 应收票据
     draft_owner = models.ForeignKey(to='Customes', verbose_name="所有权人",
                                     on_delete=models.PROTECT,
                                     related_name='draft_custome')
+    TYP_LIST = ((11, '商业承兑汇票'), (21, '银行承兑汇票'), (31, '支票'))
+    typ = models.IntegerField(verbose_name='票据种类', choices=TYP_LIST, default=11)
+    denomination = models.FloatField(verbose_name="票面总额")
     draft_detail = models.TextField(verbose_name="票据描述")
     draft_buildor = models.ForeignKey(to='Employees', verbose_name="创建者", default=1,
                                       on_delete=models.PROTECT,

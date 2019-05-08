@@ -23,7 +23,6 @@ def guarantee_add_ajax(request):  # 反担保措施添加ajax
     response = {'status': True, 'message': None, 'forme': None, }
     post_data_str = request.POST.get('postDataStr')
     post_data = json.loads(post_data_str)
-    print('post_data:', post_data)
 
     lending_id = int(post_data['lending_id'])
     lending_obj = models.LendingOrder.objects.get(id=lending_id)

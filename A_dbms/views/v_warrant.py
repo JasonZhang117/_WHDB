@@ -120,7 +120,9 @@ def warrant_scan(request, warrant_id):  # house_scan房产预览
             'stock_typ': warrant_obj.stock_warrant.stock_typ}
         form_stockes_edit = forms.FormStockesEdit(form_date)
     elif warrant_typ == 31:  # 31票据添加
-        form_date = {'draft_detail': warrant_obj.draft_warrant.draft_detail}
+        form_date = {'draft_detail': warrant_obj.draft_warrant.draft_detail,
+                     'typ': warrant_obj.draft_warrant.typ,
+                     'denomination': warrant_obj.draft_warrant.denomination}
         form_draft_eidt = forms.FormDraftEdit(form_date)  # 31票据添加
     elif warrant_typ == 41:  # 41车辆添加
         form_date = {
