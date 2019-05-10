@@ -368,9 +368,10 @@ class Others(models.Model):  #
     other_owner = models.ForeignKey(to='Customes', verbose_name="所有权人",
                                     on_delete=models.PROTECT,
                                     related_name='other_custome')
-    OTHER_TYP_LIST = [(11, '购房合同'), (21, '合格证'), (31, '专利'), (41, '商标'), (71, '账户'),
+    OTHER_TYP_LIST = [(11, '购房合同'), (21, '车辆合格证'), (31, '专利'), (41, '商标'), (71, '账户'),
                       (99, '其他')]
     other_typ = models.IntegerField(verbose_name='资产种类', choices=OTHER_TYP_LIST, default=99)
+    cost = models.FloatField(verbose_name="价值（元）")
     other_detail = models.TextField(verbose_name="具体描述")
     otheror = models.ForeignKey(to='Employees', verbose_name="创建者", default=1,
                                 on_delete=models.PROTECT,

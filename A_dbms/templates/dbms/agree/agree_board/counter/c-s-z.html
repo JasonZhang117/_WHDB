@@ -45,7 +45,16 @@
         {% elif counter_warrant_typ == 21 %}
             {% include 'dbms/agree/agree_board/counter/d/d-appendix-1.html' %}
         {% elif counter_warrant_typ == 31 %}
-            {% include 'dbms/agree/agree_board/counter/z/d-appendix-draft.html' %}
+            {% include 'dbms/agree/agree_board/counter/z/z-appendix-draft.html' %}
+        {% elif counter_warrant_typ == 55 %}
+            {% if other_typ == 21 %}
+                {% include 'dbms/agree/agree_board/counter/z/z-appendix-other-21.html' %}
+            {% else %}
+                <p>？？？？？？？？？？？？？？？？？？？？？？？？？？</p>
+                <p>？？？？？？？？？？？？？？？？？？？？？？？？？？</p>
+                <p>？？？？？？？？？？？？？？？？？？？？？？？？？？</p>
+                <p>？？？？？？？？？？？？？？？？？？？？？？？？？？</p>
+            {% endif %}
         {% else %}
             <p>？？？？？？？？？？？？？？？？？？？？？？？？？？</p>
             <p>？？？？？？？？？？？？？？？？？？？？？？？？？？</p>
@@ -56,9 +65,6 @@
     {% if counter_warrant_typ == 11 %}
         <div class="split">
             {% include 'dbms/agree/agree_board/counter/z/z-registration-receive.html' %}
-        </div>
-        <div class="split">
-            <p style="padding-top: 100pt">（此页空白）</p>
         </div>
     {% endif %}
 

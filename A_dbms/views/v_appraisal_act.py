@@ -402,7 +402,7 @@ def supply_ajax(request):  #
     article_obj = models.Articles.objects.get(id=post_data['article_id'])
     '''ARTICLE_STATE_LIST = [(1, '待反馈'), (2, '已反馈'), (3, '待上会'), (4, '已上会'), (5, '已签批'),
                           (51, '已放款'), (52, '已放完'), (55, '已解保'), (61, '待变更'), (99, '已注销')]'''
-    if article_obj.article_state in [4, 61]:
+    if article_obj.article_state in [1, 2, 3, 4, 61]:
         form_supply = forms.FormAddSupply(post_data)
         if form_supply.is_valid():
             supply_data = form_supply.cleaned_data
@@ -422,6 +422,7 @@ def supply_ajax(request):  #
         response['message'] = '项目状态为：%s，无法设置补调问题！！！' % article_obj.article_state
     result = json.dumps(response, ensure_ascii=False)
     return HttpResponse(result)
+
 
 # -----------------------补调问题修改ajax-------------------------#
 @login_required
@@ -431,30 +432,32 @@ def supply_edit_ajax(request):  #
     response = {'status': True, 'message': None, 'forme': None, }
     post_data_str = request.POST.get('postDataStr')
     post_data = json.loads(post_data_str)
-
-    article_obj = models.Articles.objects.get(id=post_data['article_id'])
+    print('post_data:',post_data)
+    article_obj = models.Articles.objects.get(id=post_data['edit_article_id'])
     '''ARTICLE_STATE_LIST = [(1, '待反馈'), (2, '已反馈'), (3, '待上会'), (4, '已上会'), (5, '已签批'),
                           (51, '已放款'), (52, '已放完'), (55, '已解保'), (61, '待变更'), (99, '已注销')]'''
-    if article_obj.article_state in [4, 61]:
+    if article_obj.article_state in [1, 2, 3, 4, 61]:
         form_supply = forms.FormAddSupply(post_data)
         if form_supply.is_valid():
             supply_data = form_supply.cleaned_data
             try:
-                models.Supply.objects.create(
-                    summary=article_obj, detail=supply_data['detail'], supplyor=request.user)
-                response['message'] = '补调问题添加成功！'
+                models.Supply.objects.filter(id=post_data['edit_supply_id']).update(
+                    detail=supply_data['detail'], supplyor=request.user)
+                response['message'] = '补调问题修改成功！'
             except Exception as e:
                 response['status'] = False
-                response['message'] = '补调问题添加失败：%s' % str(e)
+                response['message'] = '补调问题修改失败：%s' % str(e)
         else:
             response['status'] = False
             response['message'] = '表单信息有误！！！'
             response['forme'] = form_supply.errors
     else:
         response['status'] = False
-        response['message'] = '项目状态为：%s，无法设置补调问题！！！' % article_obj.article_state
+        response['message'] = '项目状态为：%s，无法修改补调问题！！！' % article_obj.article_state
     result = json.dumps(response, ensure_ascii=False)
     return HttpResponse(result)
+
+
 # -----------------------补调问题删除ajax-------------------------#
 @login_required
 @authority
@@ -535,7 +538,7 @@ def lending_change_ajax(request):  # 放款次序ajax
 
     '''ARTICLE_STATE_LIST = [(1, '待反馈'), (2, '已反馈'), (3, '待上会'), (4, '已上会'), (5, '已签批'),
                           (51, '已放款'), (52, '已放完'), (55, '已解保'), (61, '待变更'), (99, '已注销')]'''
-    if article_obj.article_state in [4, 61]:
+    if article_obj.article_state in [1, 2, 3, 4, 61]:
         form_lending_change = forms.FormLendingOrder(post_data)
         if form_lending_change.is_valid():
             lending_change_data = form_lending_change.cleaned_data
@@ -550,7 +553,6 @@ def lending_change_ajax(request):  # 放款次序ajax
             response['status'] = False
             response['message'] = '表单信息有误！！！'
             response['forme'] = form_lending_change.errors
-
     else:
         msg = '项目状态为：%s，无法变更放款次序！！！' % article_obj.article_state
         response['status'] = False

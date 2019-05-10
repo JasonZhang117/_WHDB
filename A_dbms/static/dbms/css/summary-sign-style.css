@@ -40,11 +40,25 @@ body {
     transform: scale(1, 3);
 }
 
-.headline-2 {
+.headline-2-d {
+    padding-top: 30pt;
+    font-size: 22pt;
+    font-weight: bolder;
+    color: #cc00cc;
+}
+
+.headline-2-r {
     padding-top: 30pt;
     font-size: 22pt;
     font-weight: bolder;
     color: red;
+}
+
+.tbp {
+    text-align: justify;
+    text-justify: distribute;
+    text-align-last: left;
+    -moz-text-align-last: left; /* 针对 Firefox 的代码 */
 }
 
 /*{#tr td {#}*/

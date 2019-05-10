@@ -257,7 +257,12 @@ def agree_preview(request, agree_id):
                       (41, '单笔(公证)'), (42, '最高额(公证)'), (47, '小贷(公证)')]'''
     agree_amount_str = str(agree_amount / 10000).rstrip('0').rstrip('.')  # 续贷（万元）
     agree_copy_cn = convert_num(agree_obj.agree_copies)
-    agree_copy_jy_cn = convert_num(agree_obj.agree_copies - 2)
+    notarization_typ = False
+    if agree_typ in [1, 2, 3, 7]:
+        agree_copy_jy_cn = convert_num(agree_obj.agree_copies - 2)
+    else:
+        notarization_typ = True
+        agree_copy_jy_cn = convert_num(agree_obj.agree_copies - 3)
     try:
         rate_b = True
         single_quota_rate = float(agree_obj.agree_rate)
@@ -283,6 +288,9 @@ def counter_preview(request, agree_id, counter_id):
     '''AGREE_TYP_LIST = [(1, '单笔'), (2, '最高额'), (3, '保函'), (7, '小贷'),
                       (41, '单笔(公证)'), (42, '最高额(公证)'), (47, '小贷(公证)')]'''
     agree_typ = agree_obj.agree_typ
+    notarization_typ = False
+    if agree_typ in [41, 42, 47]:
+        notarization_typ = True
     '''COUNTER_TYP_LIST = [
         (1, '企业担保'), (2, '个人保证'),
         (11, '房产抵押'), (12, '土地抵押'), (13, '动产抵押'), (14, '在建工程抵押'), (15, '车辆抵押'),
@@ -342,11 +350,24 @@ def counter_preview(request, agree_id, counter_id):
         elif counter_warrant_typ == 41:
             counter_vehicle_obj = counter_warrant_obj.vehicle_warrant
         elif counter_warrant_typ == 51:
+            '''CHATTEL_TYP_LIST = [(1, '存货'), (11, '机器设备'), (99, '其他')]'''
             chattel_typ = counter_warrant_obj.chattel_warrant.chattel_typ  # 动产种类
             if chattel_typ == 1:
                 counter_property_type = '存货'
             elif chattel_typ == 11:
                 counter_property_type = '机器设备'
+        elif counter_warrant_typ == 55:
+            '''OTHER_TYP_LIST = [(11, '购房合同'), (21, '车辆合格证'), (31, '专利'), (41, '商标'), (71, '账户'),
+                      (99, '其他')]'''
+            counter_other_list = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, ]
+            counter_other_obj = counter_warrant_obj.other_warrant
+            other_typ = counter_other_obj.other_typ  # 其他种类
+            cost_str = str(counter_other_obj.cost / 10000).rstrip('0').rstrip('.')
+            cost_cn = convert(counter_other_obj.cost)
+            if other_typ == 11:
+                counter_property_type = '购房合同'
+            elif other_typ == 21:
+                counter_property_type = '车辆合格证'
 
     agree_amount = agree_obj.agree_amount
     agree_amount_cn = convert(agree_amount)

@@ -1,14 +1,30 @@
-{% load static %}
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>测试页</title>
-    <link rel="stylesheet" media="screen" href="{% static 'css/test.css' %}">
-    <link rel="stylesheet" media="print" href="{% static 'css/test.css' %}">
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <title> 页面名称 </title>
+<style type="text/css">
+header, footer {
+    display: none;
+}
+@media print {
+    header {
+        display: block;
+    }
+    footer {
+        display: block;
+    }
+}
+</style>
 </head>
 <body>
-<div class="s1">成都武侯中小企业融资担保有限责任公司</div>
-<div class="s2"><strong>成都武侯中小企业融资担保有限责任公司</strong></div>
+
+<header>页眉</header>
+
+<p>内容</p>
+
+<footer>页脚</footer>
+
 </body>
 </html>

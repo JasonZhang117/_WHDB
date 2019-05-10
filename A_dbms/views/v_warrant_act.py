@@ -260,6 +260,7 @@ def warrant_add_ajax(request):
                             warrant=warrant_obj, otheror=request.user,
                             other_owner_id=other_clean['other_owner'],
                             other_typ=other_clean['other_typ'],
+                            cost=other_clean['cost'],
                             other_detail=other_clean['other_detail'])
                     response['message'] = '资产创建成功！！！'
                     response['skip'] = "/dbms/warrant/scan/%s/" % warrant_obj.id
@@ -516,6 +517,7 @@ def warrant_edit_ajax(request):
                             warrant_num=warrant_edit_clean['warrant_num'])
                         models.Others.objects.filter(warrant=warrant_obj).update(
                             other_typ=other_edit_clean['other_typ'],
+                            cost=other_edit_clean['cost'],
                             other_detail=other_edit_clean['other_detail'])
                         response['message'] = '其他权证信息修改该成功！！！'
                 except Exception as e:

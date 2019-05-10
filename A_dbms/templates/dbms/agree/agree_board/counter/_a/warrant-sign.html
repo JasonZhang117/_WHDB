@@ -31,6 +31,8 @@
                         {#(51, '动产')#}
                     {% elif warrant.warrant_typ == 51 %}
                         <strong><u>{{ warrant.chattel_warrant.chattel_owner.name }}</u></strong>
+                    {% elif warrant.warrant_typ == 55 %}
+                        <strong><u>{{ warrant.other_warrant.other_owner.name }}</u></strong>
                     {% else %}
                         <strong><u>？？？？？？？？？？？？</u></strong>
                     {% endif %}
@@ -85,6 +87,10 @@
                     {% elif warrant.warrant_typ == 51 %}
                         {% if warrant.chattel_warrant.chattel_owner.company_custome %}
                             <strong><u>{{ warrant.chattel_warrant.chattel_owner.company_custome.representative }}</u></strong>
+                        {% endif %}
+                    {% elif warrant.warrant_typ == 55 %}
+                        {% if warrant.other_warrant.other_owner.company_custome %}
+                            <strong><u>{{ warrant.other_warrant.other_owner.company_custome.representative }}</u></strong>
                         {% endif %}
                     {% else %}
                         <strong><u>？？？？？？？？？？？？</u></strong>

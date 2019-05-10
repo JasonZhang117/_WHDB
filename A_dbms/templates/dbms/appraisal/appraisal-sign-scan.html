@@ -11,8 +11,11 @@
 <div class="contain">
     <div class="headline">
         <p class="headline-1"><b>成都武侯中小企业融资担保有限责任公司</b></p>
-        <p class="headline-2"><b>{% if article_obj.appraisal_article.all.0.review_model == 1 %}内
-            部{% else %}外部{% endif %}审查意见书审核签批单</b></p>
+        {% if new > 0 %}
+            <p class="headline-2-r"><b>{% if article_obj.appraisal_article.all.0.review_model == 1 %}内部{% else %}外部{% endif %}审查意见书审核签批单</b></p>
+        {% else %}
+            <p class="headline-2-d"><b>{% if article_obj.appraisal_article.all.0.review_model == 1 %}内部{% else %}外部{% endif %}审查意见书审核签批单</b></p>
+        {% endif %}
     </div>
     <div class="notice-body">
         <div>
@@ -20,9 +23,8 @@
                 <tbody>
                 <tr class="bb2">
                     <td style="padding-top: 6pt" width="67pt" valign="top"><b>主题：</b></td>
-                    <td style="padding-top: 6pt; padding-bottom: 6pt">
-                        关于{{ article_obj.custom.name }}{{ amount_str }}万元担保融资项目的评审
-                        意见（审查意见书：{{ article_obj.summary_num }}）
+                    <td class="tbp" style="padding-top: 6pt; padding-bottom: 6pt">
+                        关于{{ article_obj.custom.name }}{{ amount_str }}万元担保融资项目的评审意见（审查意见书：{{ article_obj.summary_num }}）
                     </td>
                 </tr>
                 <tr class="bb2">

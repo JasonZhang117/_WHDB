@@ -1,12 +1,15 @@
-{% extends 'base.html' %}
 {% load static %}
-{% block title %}{{ agree_obj.agree_num }}{% endblock %}
-{% block extra-css %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ agree_obj.agree_num }}</title>
     <link rel="stylesheet" media="screen" href="{% static 'dbms/css/agree-result-style.css' %}">
     <link rel="stylesheet" media="print" href="{% static 'dbms/css/agree-result-style.css' %}">
-{% endblock %}
-{% block body %}
-    <div class="contain">
-        {{ result_detail|safe }}
-    </div>
-{% endblock %}
+</head>
+<body>
+<div class="contain-result">
+    {{ result_detail|safe }}
+</div>
+</body>
+</html>

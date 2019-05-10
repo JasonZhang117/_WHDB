@@ -9,18 +9,13 @@
         <tr>
             <td colspan="4">
                 <p style="text-indent: 0pt;">质押权人（甲方）：成都武侯中小企业融资担保有限责任公司</p>
-                <p style="text-indent: 0pt;">
-                    出质人（乙方）：<strong><u>{{ counter_obj.warrant_counter.warrant.all.0.receive_warrant.receive_owner.name }}</u></strong>
-                </p>
+                <p style="text-indent: 0pt;">出质人（乙方）：<strong><u>{{ counter_obj.warrant_counter.warrant.all.0.receive_warrant.receive_owner.name }}</u></strong></p>
             </td>
         </tr>
         <tr>
             <td style="width: 10%">甲乙双方就用于质押登记的应收账款描述（见右）</td>
             <td colspan="3">
-                <p>1、甲乙双方约定从{% include 'dbms/agree/agree_board/date-period.html' %}起至甲方的追偿权诉讼
-                    时效届满之后两年止，乙方将其在生产经营中取得的包括但不限于下表的全部应
-                    收账款质押给甲方，为甲方提供质押反担保，质押权金额为人
-                    民币<strong><u>{{ agree_amount_cn }}</u></strong></p>
+                <p>1、甲乙双方约定从{% include 'dbms/agree/agree_board/date-period.html' %}起至甲方的追偿权诉讼时效届满之后两年止，乙方将其在生产经营中取得的包括但不限于下表的全部应收账款质押给甲方，为甲方提供质押反担保，质押权金额为人民币<strong><u>{{ agree_amount_cn }}</u></strong></p>
                 <p>2、应收账款质押明细表（包含但不限于下表所列的全部应收账款）</p>
                 <table cellspacing="0" cellpadding="0">
                     <tr>
@@ -86,13 +81,8 @@
                         </td>
                     </tr>
                 </table>
-                <p>3、双方约定乙方授权甲方全权办理该合同的质押登记手续，如甲方在登记过程中发生登
-                    记错误（包括但不限于：根据已经作废的合同或协议作出登记；登记事项与实际情况不符；乙
-                    方授权甲方填写合同或协议的部分要件[如：签字时间、涉及的合同编号等]补记，乙方补记
-                    错误或根据未补记的合同或协议进行了登记）。乙方授权甲方可以根据实际情况进行更正登记。</p>
-                <p>4、甲乙双方约定由于应收账款的回收金额具有不确定性，已质押的应收账款在实现质押权
-                    时，回收金额同样具有不确定性，为此双方一致同意用于质押的应收账款金额可以远大于
-                    其担保债权。</p>
+                <p>3、双方约定乙方授权甲方全权办理该合同的质押登记手续，如甲方在登记过程中发生登记错误（包括但不限于：根据已经作废的合同或协议作出登记；登记事项与实际情况不符；乙方授权甲方填写合同或协议的部分要件[如：签字时间、涉及的合同编号等]补记，乙方补记错误或根据未补记的合同或协议进行了登记）。乙方授权甲方可以根据实际情况进行更正登记。</p>
+                <p>4、甲乙双方约定由于应收账款的回收金额具有不确定性，已质押的应收账款在实现质押权时，回收金额同样具有不确定性，为此双方一致同意用于质押的应收账款金额可以远大于其担保债权。</p>
             </td>
         </tr>
         <tr>
@@ -100,19 +90,14 @@
             <td colspan="3">
                 <p style="line-height: 19pt;">1、甲乙双方已签订<strong><u>{{ counter_obj.counter_num }}</u></strong>的
                     <strong><u>《{{ counter_obj.get_counter_name_display }}》</u></strong>。</p>
-                <p style="line-height: 19pt;">2、双方约定乙方授权甲方全权办理该合同的质押登记手续，如甲方在登记过程中发生登记
-                    错误（包括但不限于：根据作废了的合同、协议进行了登记;登记事项与实际情况不符;乙方
-                    授权甲方填写合同或协议的部分要件[如：签字时间、涉及的合同编号等]补记，乙方补记错误
-                    或根据未补记的合同或协议进行了登记）。乙方授权甲方可以根据实际情况进行更正登记。</p>
+                <p style="line-height: 19pt;">2、双方约定乙方授权甲方全权办理该合同的质押登记手续，如甲方在登记过程中发生登记错误（包括但不限于：根据作废了的合同、协议进行了登记;登记事项与实际情况不符；乙方授权甲方填写合同或协议的部分要件[如：签字时间、涉及的合同编号等]补记，乙方补记错误或根据未补记的合同或协议进行了登记）。乙方授权甲方可以根据实际情况进行更正登记。</p>
                 <p style="line-height: 19pt;">3、乙方已告知甲方，最近四个月内，企业使用过的所有名称为：<strong><u>{{ counter_obj.warrant_counter.warrant.all.0.receive_warrant.receive_owner.name }}</u></strong>
                    </p>
             </td>
         </tr>
         <tr>
             <td rowspan="8">合同情况</td>
-            <td style="width: 40%" align="center">
-                《&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp》编号:
-            </td>
+            <td style="width: 40%" align="center">《&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp》编号:</td>
             <td style="width: 10%" align="center">币种</td>
             <td style="width: 40%" align="center">借款金额</td>
         </tr>
@@ -122,9 +107,7 @@
             <td></td>
         </tr>
         <tr>
-            <td align="center">
-                《&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp》编号：
-            </td>
+            <td align="center">《&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp》编号:</td>
             <td align="center">币种</td>
             <td align="center">借款金额</td>
         </tr>
@@ -141,8 +124,7 @@
         <tr>
             <td><strong><u>{{ agree_obj.agree_num }}</u></strong></td>
             <td>人民币</td>
-            <td>人民币本金<strong><u>{{ agree_amount_cn }}</u></strong>以及产生的法定利息、约定利息、复
-                利、罚息、违约金、赔偿金和实现债权的费用（包括但不限于诉讼费、律师费、公证费用、执行费用等）
+            <td>人民币本金<strong><u>{{ agree_amount_cn }}</u></strong>以及产生的法定利息、约定利息、复利、罚息、违约金、赔偿金和实现债权的费用（包括但不限于诉讼费、律师费、公证费用、执行费用等）
             </td>
         </tr>
         <tr>

@@ -1,0 +1,30 @@
+{% for other in counter_other_list %}
+    {% if forloop.counter == 1 %}
+        <tr>
+            <td align="center" width="5%">序号</td>
+            <td align="center" width="20%">车型</td>
+            <td align="center">合格证编号</td>
+            <td align="center">购进价格</td>
+            <td align="center">车辆识别代号</td>
+            <td align="center">备注</td>
+        </tr>
+        <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+    {% else %}
+        <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+    {% endif %}
+{% endfor %}
+

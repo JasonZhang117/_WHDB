@@ -343,6 +343,7 @@ def counter_add_ajax(request):
     agree_id = post_data['agree_id']
     counter_typ = int(post_data['counter_typ'])
     agree_obj = models.Agrees.objects.get(id=agree_id)
+    agree_typ = agree_obj.agree_typ
     from_counter_add = forms.AddCounterForm(post_data)
 
     counter_prefix = agree_obj.num_prefix
@@ -448,6 +449,10 @@ def counter_add_ajax(request):
         counter_copies = 2
         counter_max = models.Counters.objects.filter(
             agree=agree_obj, counter_typ__in=[31, 32, 33]).count() + 1
+    '''AGREE_TYP_LIST = [(1, '单笔'), (2, '最高额'), (3, '保函'), (7, '小贷'),
+                      (41, '单笔(公证)'), (42, '最高额(公证)'), (47, '小贷(公证)')]'''
+    if agree_typ in [41, 42, 47]:
+        counter_copies += 1
     '''成武担[2016]018④W6-1'''
     counter_num = '%s%s%s-%s' % (counter_prefix, counter_typ_n, counter_copies, counter_max)
 
@@ -664,22 +669,24 @@ def result_state_ajax(request):  #
                     decision = counter_custom.company_custome.decisionor
                     if decision == 11:
                         result_tp = 11
-                        result = '<p style="text-align: center"><strong>%s股东会决议</strong></p>' % counter_custom.name
-                        result += '<p>会议时间：   年   月   日</p>'
+                        result = '<div class="tt" align="center"><strong>%s股东会决议</strong></div>' % counter_custom.name
+                        result += '<p>会议时间：&nbsp&nbsp&nbsp年&nbsp&nbsp月&nbsp&nbsp日</p>'
                         result += '<p>会议地点:  公司会议室</p>'
                         result += '<p>本次董事会会议已按《中华人民共和国公司法》及公司章程的有关规定' \
-                                  '通知全体股东到会参加会议。本公司共有股东____名，与会股东____名，与' \
-                                  '会股东所持股份占公司股份的____，符合《公司法》和本公司章程规定的程序和要求。' \
-                                  '经代表____表决权的股东通过，做出如下决议：</p>'
+                                  '通知全体股东到会参加会议。本公司共有股东<u>&nbsp&nbsp&nbsp</u>名，与会股' \
+                                  '东<u>&nbsp&nbsp&nbsp</u>名，与会股东所持股份占公司股份的<u>&nbsp&nbsp&nbsp</u>，' \
+                                  '符合《公司法》和本公司章程规定的程序和要求。' \
+                                  '经代表<u>&nbsp&nbsp&nbsp</u>表决权的股东通过，做出如下决议：</p>'
                     elif decision == 21:
                         result_tp = 21
-                        result = '<p style="text-align: center"><strong>%s董事会决议</strong></p>' % counter_custom.name
-                        result += '<p>会议时间：   年   月   日</p>'
+                        result = '<p class="tt" align="center"><strong>%s董事会决议</strong></p>' % counter_custom.name
+                        result += '<p>会议时间：&nbsp&nbsp&nbsp年&nbsp&nbsp月&nbsp&nbsp日</p>'
                         result += '<p>会议地点:  公司会议室</p>'
                         result += '<p>本次董事会会议已按《中华人民共和国公司法》及公司章程的有关规定' \
-                                  '通知全体董事到会参加会议。本公司共有董事____名，与会董事____名，与' \
-                                  '会董事占公司董事的____，符合《公司法》和本公司章程规定的程序和要求。' \
-                                  '经____董事通过，做出如下决议：</p>'
+                                  '通知全体董事到会参加会议。本公司共有董事<u>&nbsp&nbsp&nbsp</u>名，与会董' \
+                                  '事<u>&nbsp&nbsp&nbsp</u>名，与会董事占公司董事的<u>&nbsp&nbsp&nbsp</u>，' \
+                                  '符合《公司法》和本公司章程规定的程序和要求。' \
+                                  '经<u>&nbsp&nbsp&nbsp</u>董事通过，做出如下决议：</p>'
                     if counter_custom == agree_custom_obj:
                         result += '<p>  1、同意向%s申请人民币%s%s银行贷款，用以补充流动资金。</p>' % (
                             agree_obj.branch.name, agree_amount_cn, agree_term_str)
@@ -1018,14 +1025,15 @@ def result_state_ajax(request):  #
                 else:
                     spouse = counter_custom.person_custome.spouses
                     if not spouse:
-                        result += '<p style="text-align: center"><strong>个人婚姻状况申明</strong></p>'
+                        result += '<div class="tt" align="center"><strong>个人婚姻状况申明</strong></div>'
                         result += '<p>姓名：%s</p>' % counter_custom.name
                         result += '<p>居民身份证编号： %s</p>' % counter_custom.person_custome.license_num
                         result += '<p>家庭详细住址：%s</p>' % counter_custom.contact_addr
-                        result += '<p>现本人声明，截止到     年    月    日，本人在全国婚姻登记处管辖范围内未登记结婚。</p>'
-                        result += '<p>特此申明！</p>'
-                        result += '<p>申明人：</p>'
-                        result += '<p>年    月    日'
+                        result += '<p>现本人声明，截止到&nbsp&nbsp&nbsp年&nbsp&nbsp月&nbsp&nbsp日，本人在全国婚姻登记' \
+                                  '处管辖范围内未登记结婚。</p>'
+                        result += '<p><strong>特此申明！</strong></p><br>'
+                        result += '<p class="sm">申明人：</p><br>'
+                        result += '<p class="sm">&nbsp&nbsp&nbsp年&nbsp&nbsp月&nbsp&nbsp日'
                         default = {'agree': agree_obj, 'custom': counter_custom, 'result_typ': 41,
                                    'result_detail': result, 'resultor': request.user}
                         result_obj, created = models.ResultState.objects.update_or_create(
@@ -1037,12 +1045,13 @@ def result_state_ajax(request):  #
                             ownership_warrant__owner=counter_custom)
                         single_house_list = counter_house_list.exclude(ownership_warrant__owner=spouse)
                         if single_house_list:
-                            result += '<p style="text-align: center"><strong>声明书</strong></p>'
+                            result += '<div class="tt" align="center"><strong>声明书</strong></div>'
                             result += '<p>声明人：%s，公民身份号码：%s</p>' % (
                                 spouse.name, spouse.person_custome.license_num)
-                            result += '<p>我声明人%s与%s是夫妻关系，下表所列房屋系%s' \
-                                      '单独所有，无其他共有人，现%s以下列房屋作抵押，我' \
-                                      '无异议。若到期债务人不能清偿债务须处分下列房屋时，我' \
+                            result += '<p>我声明人<strong><u>%s</u></strong>与<strong><u>%s</u></strong>是夫妻关系，' \
+                                      '下表所列房屋系<strong><u>%s</u></strong>单独所有，无其他共有人，' \
+                                      '现<strong><u>%s</u></strong>以下列房' \
+                                      '屋作抵押，我无异议。若到期债务人不能清偿债务须处分下列房屋时，我' \
                                       '无条件放弃对该物业的任何权益主张。</p>' % (
                                           spouse.name, counter_custom.name,
                                           counter_custom.name, counter_custom.name)
@@ -1102,9 +1111,11 @@ def result_state_ajax(request):  #
                                                       '<td align="right">%s</td> ' \
                                                       '</tr>' % (
                                                           housebag_locate, housebag_area)
-                                        result += '</table>'
-                                        result += '我保证我的上述声明真实有效，如有虚假，所产生的法律责任均由' \
-                                                  '我本人承担。'
+                            result += '</table>'
+                            result += '<p><strong>我保证我的上述声明真实有效，如有虚假，所产生的法律责任' \
+                                      '均由我本人承担。</strong></p><br>'
+                            result += '<p class="sm">声明人：</p><br>'
+                            result += '<p class="sm">&nbsp&nbsp&nbsp年&nbsp&nbsp月&nbsp&nbsp日'
                             default = {'agree': agree_obj, 'custom': spouse, 'result_typ': 31,
                                        'result_detail': result, 'resultor': request.user}
                             result_obj, created = models.ResultState.objects.update_or_create(

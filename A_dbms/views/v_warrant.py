@@ -139,6 +139,7 @@ def warrant_scan(request, warrant_id):  # house_scan房产预览
     elif warrant_typ == 55:  # 55其他添加
         form_date = {
             'other_typ': warrant_obj.other_warrant.other_typ,
+            'cost': warrant_obj.other_warrant.cost,
             'other_detail': warrant_obj.other_warrant.other_detail}
         form_other_eidt = forms.FormOthersEdit(form_date)  # 55其他添加
     elif warrant_typ == 99:  # 他权form

@@ -1,4 +1,4 @@
-<tr style="height: 0pt">{#审保会次数#}
+<tr style="display:none;">{#审保会次数#}
     <td></td>
     <td></td>
     <td></td>
@@ -8,8 +8,7 @@
 <tr class="otr">{#审保会次数#}
     <td class="bb" style="width: 100px">审保会次数</td>
     <td class="bb" colspan="4">
-        {{ review_year }}年度第{{ review_order_cn }}次审保
-        会（{{ article_obj.appraisal_article.all.0.get_review_model_display }}）
+        {{ review_year }}年度第{{ review_order_cn }}次审保会（{{ article_obj.appraisal_article.all.0.get_review_model_display }}）
     </td>
 </tr>
 <tr class="otr">{#上会日期#}

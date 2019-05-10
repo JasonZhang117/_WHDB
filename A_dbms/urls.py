@@ -43,6 +43,7 @@ urlpatterns = [
 
     path('appraisal/comment/', views.comment_edit_ajax, name='appraisal_comment_edit_ajax'),
     path('appraisal/supply/add/', views.supply_ajax, name='appraisal_supply_ajax'),
+    path('appraisal/supply/edit/', views.supply_edit_ajax, name='appraisal_supply_edit_ajax'),
     path('appraisal/supply/del/', views.supply_del_ajax, name='appraisal_supply_del_ajax'),
     path('appraisal/single/add/', views.single_quota_ajax, name='appraisal_single_quota_ajax'),
     path('appraisal/single/del/', views.single_del_ajax, name='appraisal_single_del_ajax'),

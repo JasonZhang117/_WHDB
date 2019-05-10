@@ -9,7 +9,7 @@
 {#           (21, '股权'), (31, '票据'), (41, '车辆'), (51, '动产'), (55, '其他'), (99, '他权')]#}
 {% if counter_typ in D_COUNTER_TYP_LIST %}
     <p>抵押财产的鉴定、评估、登记、公证、提存等费用由丙方承担。</p>
-{% elif counter_warrant_typ == 11 or counter_warrant_typ == 21 or counter_warrant_typ == 31%}
+{% elif counter_warrant_typ == 11 or counter_warrant_typ == 21 or counter_warrant_typ == 31 or counter_warrant_typ == 55%}
     <p>出质权利的鉴定、评估、保管、登记、公证、提存等费用由丙方承担。</p>
 {% else %}
     <p><strong>？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？</strong></p>

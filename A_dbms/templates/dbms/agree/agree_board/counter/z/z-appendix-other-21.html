@@ -1,0 +1,16 @@
+<p><u>{{ counter_obj.counter_num }}</u>《{{ counter_obj.get_counter_name_display }}》项下</p>
+<div align="center"><strong>质押权利清单</strong></div>
+<p style="float: right">单位：元</p>
+{#WARRANT_TYP_LIST = [#}
+{#        (1, '房产'), (2, '房产包'), (5, '土地'), (6, '在建工程'), (11, '应收账款'),#}
+{#        (21, '股权'), (31, '票据'), (41, '车辆'), (51, '动产'), (55, '其他'), (99, '他权')]#}
+<table  cellspacing="0" cellpadding="0">
+    {% include 'dbms/agree/agree_board/counter/_a/warrant-typ-55-21.html' %}
+</table>
+<p>甲方将负责保管以上{{ counter_other_obj.get_other_typ_display }}，直至丙方还清<strong><u>{{ agree_amount_cn }}</u></strong>贷款及相关利息（贷款期限：<strong><u>{{ credit_term_cn }}期</u></strong>）。若发生甲方代偿情形，甲方保管合格证期限将延期至丙方偿清所有代偿金之后。</p>
+<p>在此期间，丙方若想凭此收条取回上述{{ counter_other_obj.get_other_typ_display }}的，可采用提供其他{{ counter_other_obj.get_other_typ_display }}或相应资金的方式换取，具体要求如下：</p>
+<p>1、采取提供其他{{ counter_other_obj.get_other_typ_display }}方式换取，需提供不低于上述{{ counter_other_obj.get_other_typ_display }}对应车辆总价值的相应{{ counter_other_obj.get_other_typ_display }}换取。</p>
+<p>2、采取提供资金方式换取的，需提供不低于上述{{ counter_other_obj.get_other_typ_display }}对应车辆总价值的资金。</p>
+<p>《汽车合格证换取/赎回申请审批单》是本合同的附件，是本合同不可分割的一部分，与本合同具有同等法律效力。</p>
+<br>
+{% include 'dbms/agree/agree_board/counter/_a/warrant-sign.html' %}

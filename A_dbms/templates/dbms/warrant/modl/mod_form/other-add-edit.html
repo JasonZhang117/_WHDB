@@ -27,6 +27,14 @@
         <label id="e_other_typ" class="pull-right">{{ form_other_add_eidt.other_typ.errors }}</label>
     </div>
 
+
+    <div class="form-group"><!--价值-->
+        <label for="id_cost"
+               class="col-sm-3 control-label">{{ form_other_add_eidt.cost.label }}：</label>
+        <div class="col-sm-9">{{ form_other_add_eidt.cost }}</div>
+        <label id="e_cost" class="pull-right">{{ form_other_add_eidt.cost.errors }}</label>
+    </div>
+
     <div class="form-group"><!--动产描述-->
         <label for="id_other_detail"
                class="col-sm-3 control-label">{{ form_other_add_eidt.other_detail.label }}：</label>

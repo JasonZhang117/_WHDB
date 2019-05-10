@@ -1,13 +1,10 @@
 <div align="center" style="padding-bottom: 30pt;font-size: 21pt"><strong>应收账款质押登记协议书</strong></div>
 <p>出质人：<strong><u>{{ counter_warrant_obj.receive_warrant.receive_owner.name }}</u></strong></p>
-<p>法定代表人：<strong><u>{{ counter_warrant_obj.receive_warrant.receive_owner.company_custome.representative }}</u></strong>
-</p>
+<p>法定代表人：<strong><u>{{ counter_warrant_obj.receive_warrant.receive_owner.company_custome.representative }}</u></strong></p>
 <p>质权人：成都武侯中小企业融资担保有限责任公司</p>
 <p>法定代表人：何长见</p>
 <br>
-<p>鉴于出质人与质权人已签订编号
-    为<strong><u>{{ counter_obj.counter_num }}号</u></strong>的<strong><u>《{{ counter_obj.get_counter_name_display }}》</u></strong>，
-    经协商一致，双方同意：</p>
+<p>鉴于出质人与质权人已签订编号为<strong><u>{{ counter_obj.counter_num }}号</u></strong>的<strong><u>《{{ counter_obj.get_counter_name_display }}》</u></strong>，经协商一致，双方同意：</p>
 <p>由质权人按照中国人民银行的相关规定，在中国人民银行征信中心的应收账款质押登记公示系统办理质押登记。</p>
 <p>出质人已告知质权人，质押登记之前的四个月内企业所使用过的有效名称为：四川旭普信息产业发展有限公司。</p>
 <p>本合同一式叁份，经双方法定代表人（负责人）签字或加盖公章后生效。</p>
@@ -17,9 +14,7 @@
 <div>
     <div style="padding-bottom: 51pt">
         <p>出质人（签章）：<strong><u>{{ counter_warrant_obj.receive_warrant.receive_owner.name }}</u></strong></p>
-        <p>
-            法定代表人：<strong><u>{{ counter_warrant_obj.receive_warrant.receive_owner.company_custome.representative }}</u></strong>
-        </p>
+        <p>法定代表人：<strong><u>{{ counter_warrant_obj.receive_warrant.receive_owner.company_custome.representative }}</u></strong></p>
         {% include 'dbms/agree/agree_board/sign-date.html' %}
     </div>
     <div>

@@ -1,5 +1,5 @@
 <div align="right">合同编号：<u>{{ agree_obj.agree_num }}</u></div>
-<div class="agree-title" style="text-align: center"><strong>{{ agree_obj.get_agree_name_display }}</strong></div>
+<div class="agree-title-w"><strong>{{ agree_obj.get_agree_name_display }}</strong></div>
 <div class="page-home">
     <div class="page-home-j">
         <p class="page-home-p">担保人（甲方）：成都武侯中小企业融资担保有限责任公司</p>
@@ -8,11 +8,7 @@
     </div>
     <div class="page-home-y">
         <p class="str-p page-home-p"><strong>被担保人（乙方）：{{ agree_obj.lending.summary.custom.name }}</strong></p>
-        <p class="page-home-p">住所（地址）：
-            {{ agree_obj.lending.summary.custom.company_custome.registered_addr }}
-        </p>
-        <p class="page-home-p">法定代表人：
-            {{ agree_obj.lending.summary.custom.company_custome.representative }}
-        </p>
+        <p class="page-home-p">住所（地址）：{{ agree_obj.lending.summary.custom.company_custome.registered_addr }}</p>
+        <p class="page-home-p">法定代表人：{{ agree_obj.lending.summary.custom.company_custome.representative }}</p>
     </div>
 </div>

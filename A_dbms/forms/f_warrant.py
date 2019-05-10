@@ -259,8 +259,9 @@ class FormOthers(dform.ModelForm):  #
 
     class Meta:
         model = models.Others
-        fields = ['other_typ', 'other_detail']
+        fields = ['other_typ', 'other_detail', 'cost']
         widgets = {'other_typ': dform.Select(attrs={'class': 'form-control'}),
+                   'cost': dform.NumberInput(attrs={'class': 'form-control', 'placeholder': '价值'}),
                    'other_detail': dform.Textarea(
                        attrs={'class': 'form-control', 'rows': '3', 'placeholder': '详细情况'})}
 
@@ -274,8 +275,9 @@ class FormOthersEdit(dform.ModelForm):  #
 
     class Meta:
         model = models.Others
-        fields = ['other_typ', 'other_detail']
+        fields = ['other_typ', 'other_detail', 'cost']
         widgets = {'other_typ': dform.Select(attrs={'class': 'form-control'}),
+                   'cost': dform.NumberInput(attrs={'class': 'form-control', 'placeholder': '价值'}),
                    'other_detail': dform.Textarea(
                        attrs={'class': 'form-control', 'rows': '3', 'placeholder': '详细情况'})}
 
