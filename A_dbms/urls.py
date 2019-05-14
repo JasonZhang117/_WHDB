@@ -158,6 +158,8 @@ urlpatterns = [
     path('review/plan/', views.review_plan_ajax, name='review_plan_ajax'),  #
     path('review/update/', views.review_update_ajax, name='review_update_ajax'),  #
     path('review/del/', views.review_del_ajax, name='review_del_ajax'),  #
+    path('investigate/add/', views.investigate_add_ajax, name='investigate_add_ajax'),  #
+    path('investigate/del/', views.investigate_del_ajax, name='investigate_del_ajax'),  #
 
     # -----------------------代偿管理-------------------------#
     path('compensatory/', views.compensatory, name='compensatory_all'),  # 菜单-追偿管理

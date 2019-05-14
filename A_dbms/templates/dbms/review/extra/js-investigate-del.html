@@ -1,46 +1,46 @@
 <script>
     $(function () {
-        bindLendingOrder();
-        bindLendingOrderModalOk();
-
+        bindDelInvestigateB();
+        bindDelInvestigateModalOk();
     });
 
-    function bindLendingOrder() {
-        $('#lendingOrder').click(function () {
-            console.log("bindLendingOrder");
-            $('#lendingOrderModal').modal('show');
+    function bindDelInvestigateB() {
+        $('#investigate-tb').on('click', '.delInvestigateB', function () {
+            $('#delInvestigateId').val($(this).parent().parent().attr('investigate-nid'));
+            $('#delInvestigateModal').modal('show');
         })
     }
 
-    function bindLendingOrderModalOk() {
-        $('#lendingOrderModalOk').click(function () {
+    function bindDelInvestigateModalOk() {
+        $('#delInvestigateModalOk').click(function () {
             var postData = {};
-            $('#lendingOrderModal').find('input,select').each(function () {
+
+            $('#delInvestigateModal').find('input,select').each(function () {
                 var v = $(this).val();
                 var n = $(this).attr('name');
                 postData[n] = v;
             });
-
             var postDataStr = JSON.stringify(postData);
+            console.log("postDataStr");
             console.log(postDataStr);
             $.ajax({
-                url: '/dbms/appraisal/lending/add/',
+                url: '/dbms/investigate/del/',
                 type: 'POST',
                 data: {'postDataStr': postDataStr},
                 dataType: 'JSON',
                 success: function (arg) {
                     if (arg.status) {
-                        $('#singleQuotaModal').modal('hide');
+                        $('#delInvestigateModal').modal('hide');
                         alert(arg.message);
                         window.location.reload();
                     } else {
+                        $('#delInvestigateModal').modal('hide');
                         alert(arg.message);
-                        $('#e_order').text(arg.forme.order);
-                        $('#e_order_amount').text(arg.forme.order_amount);
-                        $('#e_remark').text(arg.forme.remark);
+                        {#window.location.reload();#}
                     }
                 }
             })
+
         })
     }
 </script>

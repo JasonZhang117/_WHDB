@@ -100,7 +100,7 @@ class LendingOrder(models.Model):
     ORDER_LIST = ((1, '第一次'), (2, '第二次'), (3, '第三次'), (4, '第四次'))
     order = models.IntegerField(verbose_name='发放次序', choices=ORDER_LIST, default=1)
     order_amount = models.FloatField(verbose_name='拟放金额')
-
+    remark = models.CharField(verbose_name='备注', max_length=128, null=True, blank=True)
     lending_provide_sum = models.FloatField(verbose_name='_放款金额', default=0)
     lending_repayment_sum = models.FloatField(verbose_name='_还款金额', default=0)
     lending_balance = models.FloatField(verbose_name='_在保余额', default=0)

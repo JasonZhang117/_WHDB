@@ -8,6 +8,7 @@
             <th>流贷余额</th>
             <th>承兑余额</th>
             <th>保函余额</th>
+            <th>年调(次)</th>
             <th>最近调查</th>
             <th>风险分类</th>
             <th>计划时间</th>
@@ -21,13 +22,14 @@
                     <td><a href="{% url 'dbms:custom_scan' custom_id=custom.id %}">{{ custom.short_name }}</a></td>
                 {% endif %}
                 {% if PAGE_TITLE == '保后管理' or PAGE_TITLE == '逾期保后' %}
-                    <td><a href="{% url 'dbms:review_scan' custom_id=custom.id %}">{{ custom.name }}</a></td>
+                    <td><a href="{% url 'dbms:review_scan' custom_id=custom.id %}">{{ custom.short_name }}</a></td>
                 {% endif %}
                 <td align="right">{{ custom.managementor }}</td>
                 <td align="right">{{ custom.credit_amount }}</td>
                 <td align="right">{{ custom.custom_flow }}</td>
                 <td align="right">{{ custom.custom_accept }}</td>
                 <td align="right">{{ custom.custom_back }}</td>
+                <td align="right">{{ custom.review_amount }}</td>
                 <td>{{ custom.lately_date }}</td>
                 <td>{{ custom.get_classification_display }}</td>
                 <td>{{ custom.review_plan_date|default_if_none:"" }}</td>

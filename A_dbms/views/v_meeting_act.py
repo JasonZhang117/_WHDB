@@ -20,7 +20,6 @@ def meeting_add_ajax(request):
     response = {'status': True, 'message': None, 'forme': None, }
     post_data_str = request.POST.get('postDataStr')
     post_data = json.loads(post_data_str)
-    print('post_data:', post_data)
     form = forms.MeetingAddForm(post_data, request.FILES)
 
     if form.is_valid():
@@ -190,10 +189,8 @@ def meeting_article_del_ajax(request):  # 取消项目上会ajax
 def meeting_allot_add_ajax(request):  # 分配评审委员
     print(request.path, '>', resolve(request.path).url_name, '>', request.user)
     response = {'status': True, 'message': None, 'forme': None, }
-
     post_data_str = request.POST.get('postDataStr')
     post_data = json.loads(post_data_str)
-    print('post_data:', post_data)
     article_id = post_data['article_id']
     '''ARTICLE_STATE_LIST = ((1, '待反馈'), (2, '已反馈'), (3, '待上会'),
                           (4, '已上会'), (5, '已签批'), (6, '已注销'))
@@ -236,8 +233,6 @@ def meeting_allot_del_ajax(request):  # 取消项目上会ajax
     response = {'status': True, 'message': None, 'forme': None, }
     post_data_str = request.POST.get('postDataStr')
     post_data = json.loads(post_data_str)
-    print('post_data:', post_data)
-
     article_id = post_data['article_id']
     expert_id = post_data['expert_id']
     article_obj = models.Articles.objects.get(id=article_id)
@@ -266,11 +261,9 @@ def meeting_allot_del_ajax(request):  # 取消项目上会ajax
 @authority
 def meeting_edit_ajax(request):  # 编辑评审会ajax
     print(request.path, '>', resolve(request.path).url_name, '>', request.user)
-
     response = {'status': True, 'message': None, 'forme': None, }
     post_data_str = request.POST.get('postDataStr')
     post_data = json.loads(post_data_str)
-    print('post_data:', post_data)
     meeting_id = post_data['meeting_id']
     meeting_list = models.Appraisals.objects.filter(id=meeting_id)
     meeting_obj = meeting_list.first()
@@ -303,7 +296,6 @@ def meeting_edit_ajax(request):  # 编辑评审会ajax
 @authority
 def meeting_close_ajax(request):  # 完成上会ajax
     print(request.path, '>', resolve(request.path).url_name, '>', request.user)
-
     response = {'status': True, 'message': None, 'forme': None, }
     post_data_str = request.POST.get('postDataStr')
     post_data = json.loads(post_data_str)

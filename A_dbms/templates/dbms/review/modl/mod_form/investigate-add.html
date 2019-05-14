@@ -1,0 +1,32 @@
+<div id="form_inv_add">
+    <div class="form-group"><!--补调类型-->
+        <label for="id_inv_typ"
+               class="col-sm-3 control-label">{{ form_inv_add.inv_typ.label }}：</label>
+        <div class="col-sm-9">{{ form_inv_add.inv_typ }}</div>
+        <label id="e_inv_typ" class="pull-right">{{ form_inv_add.inv_typ.errors }}</label>
+    </div>
+    <div class="form-group"><!--风险分析-->
+        <label for="id_i_analysis"
+               class="col-sm-3 control-label">{{ form_inv_add.i_analysis.label }}：</label>
+        <div class="col-sm-9">{{ form_inv_add.i_analysis }}</div>
+        <label id="e_i_analysis" class="pull-right">{{ form_inv_add.i_analysis.errors }}</label>
+    </div>
+    <div class="form-group"><!--风控建议-->
+        <label for="id_i_suggestion"
+               class="col-sm-3 control-label">{{ form_inv_add.i_suggestion.label }}：</label>
+        <div class="col-sm-9">{{ form_inv_add.i_suggestion }}</div>
+        <label id="e_i_suggestion" class="pull-right">{{ form_inv_add.i_suggestion.errors }}</label>
+    </div>
+    <div class="form-group"><!--五级分类-->
+        <label for="id_i_classification"
+               class="col-sm-3 control-label">{{ form_inv_add.i_classification.label }}：</label>
+        <div class="col-sm-9">{{ form_inv_add.i_classification }}</div>
+        <label id="e_i_classification" class="pull-right">{{ form_inv_add.i_classification.errors }}</label>
+    </div>
+     <div class="form-group"><!--补调日期-->
+        <label for="id_inv_date"
+               class="col-sm-3 control-label">{{ form_inv_add.inv_date.label }}：</label>
+        <div class="col-sm-9">{{ form_inv_add.inv_date }}</div>
+        <label id="e_inv_date" class="pull-right">{{ form_inv_add.inv_date.errors }}</label>
+    </div>
+</div>

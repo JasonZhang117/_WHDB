@@ -20,7 +20,6 @@ def counter_sign_ajax(request):
     response = {'status': True, 'message': None, 'forme': None, }
     post_data_str = request.POST.get('postDataStr')
     post_data = json.loads(post_data_str)
-    print('post_data:', post_data)
 
     counter_list = models.Counters.objects.filter(id=post_data['counter_id'])
     counter_obj = counter_list.first()
@@ -59,7 +58,6 @@ def ascertain_add_ajax(request):
     response = {'status': True, 'message': None, 'forme': None, }
     post_data_str = request.POST.get('postDataStr')
     post_data = json.loads(post_data_str)
-    print('post_data:', post_data)
     agree_list = models.Agrees.objects.filter(id=post_data['agree_id'])
     agree_obj = agree_list.first()
     '''AGREE_STATE_LIST = ((11, '待签批'), (21, '已签批'), (31, '未落实'),
@@ -100,7 +98,6 @@ def notify_add_ajax(request):
     response = {'status': True, 'message': None, 'forme': None, }
     post_data_str = request.POST.get('postDataStr')
     post_data = json.loads(post_data_str)
-    print('post_data:', post_data)
     agree_list = models.Agrees.objects.filter(id=post_data['agree_id'])
     agree_obj = agree_list.first()
     form_notify_add = forms.FormNotifyAdd(post_data)
@@ -253,7 +250,6 @@ def provide_add_ajax(request):
     response = {'status': True, 'message': None, 'forme': None, }
     post_data_str = request.POST.get('postDataStr')
     post_data = json.loads(post_data_str)
-    print('post_data:', post_data)
     notify_list = models.Notify.objects.filter(id=post_data['notify_id'])
     notify_obj = notify_list.first()
     form_provide_add = forms.FormProvideAdd(post_data)
@@ -368,8 +364,7 @@ def provide_add_ajax(request):
                             Sum('entrusted_loan'))['entrusted_loan__sum']  # 授信银行项下，委贷余额
                         cooperator_list.update(entrusted_loan=round(cooperator_entrusted_loan_balance, 2))
                     elif provide_typ == 41:
-                        custom_list.update(petty_loan=round(custom_provide_balance, 2),
-                                           lately_date=form_provide_cleaned['provide_date'])  # 客户，更新委贷余额
+                        custom_list.update(petty_loan=round(custom_provide_balance, 2))  # 客户，更新委贷余额
                         branch_list.update(petty_loan=round(branch_provide_balance, 2))  # 放款银行，更新委贷余额
                         cooperator_petty_loan_balance = models.Branches.objects.filter(
                             cooperator=cooperator_obj).aggregate(
@@ -395,7 +390,6 @@ def provide_del_ajax(request):  # 删除放款ajax
     response = {'status': True, 'message': None, 'forme': None, }
     post_data_str = request.POST.get('postDataStr')
     post_data = json.loads(post_data_str)
-    print('post_data:', post_data)
 
     provide_list = models.Provides.objects.filter(id=post_data['provide_id'])
     provide_obj = provide_list.first()
@@ -572,7 +566,6 @@ def repayment_add_ajax(request):
     response = {'status': True, 'message': None, 'forme': None, }
     post_data_str = request.POST.get('postDataStr')
     post_data = json.loads(post_data_str)
-    print('post_data:', post_data)
     provide_list = models.Provides.objects.filter(id=post_data['provide_id'])
     provide_obj = provide_list.first()
     form_repayment_add = forms.FormRepaymentAdd(post_data)
@@ -731,7 +724,6 @@ def repayment_del_ajax(request):  # 删除还款信息ajax
     response = {'status': True, 'message': None, 'forme': None, }
     post_data_str = request.POST.get('postDataStr')
     post_data = json.loads(post_data_str)
-    print('post_data:', post_data)
 
     provide_id = post_data['provide_id']
     provide_list = models.Provides.objects.filter(id=provide_id)
@@ -882,7 +874,6 @@ def track_plan_ajax(request):
     response = {'status': True, 'message': None, 'forme': None, }
     post_data_str = request.POST.get('postDataStr')
     post_data = json.loads(post_data_str)
-    print('post_data:', post_data)
 
     provide_list = models.Provides.objects.filter(id=post_data['provide_id'])
     provide_obj = provide_list.first()
@@ -928,7 +919,6 @@ def track_del_ajax(request):
     response = {'status': True, 'message': None, 'forme': None, }
     post_data_str = request.POST.get('postDataStr')
     post_data = json.loads(post_data_str)
-    print('post_data:', post_data)
 
     track_list = models.Track.objects.filter(id=post_data['track_id'])
     try:
@@ -950,7 +940,6 @@ def track_update_ajax(request):
     response = {'status': True, 'message': None, 'forme': None, }
     post_data_str = request.POST.get('postDataStr')
     post_data = json.loads(post_data_str)
-    print('post_data:', post_data)
 
     track_list = models.Track.objects.filter(id=post_data['track_id'])
 

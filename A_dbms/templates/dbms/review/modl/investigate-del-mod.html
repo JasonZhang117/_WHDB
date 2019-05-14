@@ -1,0 +1,22 @@
+<div class="modal fade bs-example-modal-sm" id="delInvestigateModal"
+     tabindex="-1" role="dialog" aria-labelledby="delInvestigateModal">
+    <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="delInvestigateModalLabel">删除补调
+                    {% if PAGE_TITLE == '项目评审' %}
+                        <input style="display: none" name="custom_id" value="{{ article_obj.custom.id }}">
+                    {% elif  PAGE_TITLE == '保后详情' %}
+                        <input style="display: none" name="custom_id" value="{{ custom_obj.id }}">
+                    {% endif %}
+                    <input style="display: none" name="investigate_id" id="delInvestigateId">
+                </h4>
+            </div>
+            <div class="modal-body">是否确定删除该补调？</div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                <button type="button" class="btn btn-primary" id="delInvestigateModalOk">确定</button>
+            </div>
+        </div>
+    </div>
+</div>

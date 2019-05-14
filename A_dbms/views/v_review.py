@@ -49,6 +49,12 @@ def review(request, *args, **kwargs):  # 保后列表
         for field in search_fields:
             q.children.append(("%s__contains" % field, search_key))
         custom_list = custom_list.filter(q)
+    today_year = datetime.date.today().year
+    for custom in custom_list:
+        review_count = custom.review_custom.filter(review_date__year=today_year).count()  # 保后次数
+        article_count = custom.article_custom.filter(build_date__year=today_year).count()  # 上会次数
+        inv_count = custom.inv_custom.filter(inv_date__year=today_year).count()  # 补调次数
+        models.Customes.objects.filter(id=custom.id).update(review_amount=(review_count + article_count + inv_count))
 
     flow_amount = custom_list.aggregate(Sum('custom_flow'))['custom_flow__sum']  # 流贷余额
     accept_amount = custom_list.aggregate(Sum('custom_accept'))['custom_accept__sum']  # 承兑余额
@@ -101,10 +107,12 @@ def review_scan(request, custom_id):  #
 
     date_th_later = datetime.date.today() + datetime.timedelta(days=30)  # 30天后的日期
     form_review_plan = forms.FormRewiewPlanAdd(initial={'review_plan_date': str(date_th_later)})
-    form_review_add = forms.FormRewiewAdd()
+    form_review_add = forms.FormRewiewAdd(initial={'review_date': str(datetime.date.today())})
+    form_inv_add = forms.FormInvestigateAdd(initial={'inv_date': str(datetime.date.today())})
 
-    review_custom_list = custom_obj.review_custom.all().order_by('-review_date', '-review_plan_date')
     article_custom_list = custom_obj.article_custom.all().order_by('-build_date')
+    review_custom_list = custom_obj.review_custom.all().order_by('-review_date', '-review_plan_date')
+    investigate_custom_list = custom_obj.inv_custom.all().order_by('-inv_date')
 
     return render(request, 'dbms/review/review-scan.html', locals())
 

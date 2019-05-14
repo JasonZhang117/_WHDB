@@ -21,15 +21,12 @@
             });
             var postDataStr = JSON.stringify(postData);
 
-            console.log(postDataStr);
-
             $.ajax({
                 url: '/dbms/review/plan/',
                 type: 'POST',
                 data: {'postDataStr': postDataStr},
                 dataType: 'JSON',
                 success: function (arg) {
-                    console.log(arg);
                     if (arg.status) {
                         $('#addReviewPlanModal').modal('hide');
                         alert(arg.message);

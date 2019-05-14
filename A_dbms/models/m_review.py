@@ -2,6 +2,7 @@ from django.db import models
 import datetime
 
 
+# ------------------------保后--------------------------#
 class Review(models.Model):
     custom = models.ForeignKey(to='Customes', verbose_name="客户",
                                on_delete=models.PROTECT,
@@ -26,3 +27,28 @@ class Review(models.Model):
 
     def __str__(self):
         return '%s_%s' % (self.custom, self.review_date)
+
+
+# ------------------------补调--------------------------#
+class Investigate(models.Model):
+    custom = models.ForeignKey(to='Customes', verbose_name="客户",
+                               on_delete=models.PROTECT,
+                               related_name='inv_custom')
+    INV_TYP_LIST = [(11, '超时补调'), (21, '分次补调'), ]
+    inv_typ = models.IntegerField(verbose_name='补调类型', choices=INV_TYP_LIST)
+    i_analysis = models.TextField(verbose_name='风险分析', blank=True, null=True)
+    i_suggestion = models.TextField(verbose_name='风控建议', blank=True, null=True)
+    CLASSIFICATION_LIST = [(1, '正常'), (11, '关注'), (21, '次级'), (31, '可疑'), (41, '损失')]
+    i_classification = models.IntegerField(verbose_name='风险分类', choices=CLASSIFICATION_LIST, blank=True, null=True)
+    inv_date = models.DateField(verbose_name='补调日期', default=datetime.date.today())
+    invor = models.ForeignKey(to='Employees', verbose_name="补调人员",
+                              on_delete=models.PROTECT,
+                              related_name='invor_employee')
+
+    class Meta:
+        verbose_name_plural = '项目-补调'  # 指定显示名称
+        db_table = 'dbms_investigate'  # 指定数据表的名称
+        ordering = ['inv_date', ]
+
+    def __str__(self):
+        return '%s_%s_%s' % (self.custom, self.inv_typ, self.inv_date)

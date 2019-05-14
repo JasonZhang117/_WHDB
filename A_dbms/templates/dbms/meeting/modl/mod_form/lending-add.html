@@ -1,29 +1,21 @@
 <div id="form_lending">
 
     <div class="form-group"><!--发放次序-->
-        <label for="id_order" class="col-sm-3 control-label">
-            {{ form_lending.order.label }}：
-        </label>
-        <div class="col-sm-9">
-            {{ form_lending.order }}
-        </div>
-        <label id="e_order" class="pull-right">
-            {{ form_lending.order.errors }}
-        </label>
+        <label for="id_order" class="col-sm-3 control-label">{{ form_lending.order.label }}：</label>
+        <div class="col-sm-9">{{ form_lending.order }}</div>
+        <label id="e_order" class="pull-right">{{ form_lending.order.errors }}</label>
     </div>
 
     <div class="form-group"><!--拟放金额-->
-        <label for="id_order_amount" class="col-sm-3 control-label">
-            {{ form_lending.order_amount.label }}：
-        </label>
-        <div class="col-sm-9">
-            {{ form_lending.order_amount }}
-        </div>
-        <label id="e_order_amount" class="pull-right">
-            {{ form_lending.order_amount.errors }}
-        </label>
+        <label for="id_order_amount" class="col-sm-3 control-label">{{ form_lending.order_amount.label }}：</label>
+        <div class="col-sm-9">{{ form_lending.order_amount }}</div>
+        <label id="e_order_amount" class="pull-right">{{ form_lending.order_amount.errors }}</label>
     </div>
-
+    <div class="form-group"><!--备注-->
+        <label for="id_remark" class="col-sm-3 control-label">{{ form_lending.remark.label }}：</label>
+        <div class="col-sm-9">{{ form_lending.remark }}</div>
+        <label id="e_remark" class="pull-right">{{ form_lending.remark.errors }}</label>
+    </div>
 </div>
 
 

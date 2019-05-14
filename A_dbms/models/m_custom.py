@@ -16,6 +16,7 @@ class Customes(models.Model):  # 客户
     REVIEW_STATE_LIST = [(1, '待保后'), (11, '待报告'), (21, '已完成'), (81, '自主保后')]
     review_state = models.IntegerField(verbose_name='_保后状态', choices=REVIEW_STATE_LIST, default=21)
     review_date = models.DateField(verbose_name='保后日期', blank=True, null=True)
+    review_amount = models.IntegerField(verbose_name='年度调查', default=0)
 
     CLASSIFICATION_LIST = [(1, '正常'), (11, '关注'), (21, '次级'), (31, '可疑'), (41, '损失')]
     classification = models.IntegerField(verbose_name='_风险分类', choices=CLASSIFICATION_LIST, default=1)

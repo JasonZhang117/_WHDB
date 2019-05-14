@@ -2,7 +2,7 @@
 from .m_article import (Articles, Feedback, ArticleChange)
 # ----------------------m_appraisal评审管理--------------------#
 from .m_appraisal import (
-    Appraisals, SingleQuota, Comments, LendingOrder, LendingSures,Supply,
+    Appraisals, SingleQuota, Comments, LendingOrder, LendingSures, Supply,
     LendingCustoms, LendingWarrants, )
 # -----------------------m_agree合同模型---------------------#
 from .m_agree import (
@@ -19,7 +19,7 @@ from .m_dun import (Compensatories, Dun, Agent, Staff, Retrieve, Charge, Stage, 
 # ---------------------m_custom客户信息-----------------------#
 from .m_custom import Customes, CustomesC, CustomesP, Shareholders, Trustee
 # ---------------------m_review保后信息-----------------------#
-from .m_review import Review
+from .m_review import Review, Investigate
 
 # ---------------------v_interior内部信息----------------------#
 # 部门、岗位、员工

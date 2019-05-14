@@ -1,0 +1,52 @@
+<script>
+    $(function () {
+        bindInvestigateB();
+        bindaAddInvestigateModalOk();
+    });
+
+    function bindInvestigateB() {
+        $('#investigateB').click(function () {
+            $('#addInvestigateModal').modal('show');
+        })
+    }
+
+    function bindaAddInvestigateModalOk() {
+        $('#addInvestigateModalOk').click(function () {
+            var postData = {};
+            $('#addInvestigateModal').find('input,select').each(function () {
+                var v = $(this).val();
+                var n = $(this).attr('name');
+                postData[n] = v;
+            });
+            postData['i_analysis'] = $('#id_i_analysis').val();
+            postData['i_suggestion'] = $('#id_i_suggestion').val();
+
+            var postDataStr = JSON.stringify(postData);
+            console.log(postDataStr);
+            $.ajax({
+                url: '/dbms/investigate/add/',
+                type: 'POST',
+                data: {'postDataStr': postDataStr},
+                dataType: 'JSON',
+                success: function (arg) {
+                    if (arg.status) {
+                        $('#addInvestigateModal').modal('hide');
+                        alert(arg.message);
+                        window.location.reload();
+                    } else {
+                        alert(arg.message);
+                        $('#e_i_analysis').text(arg.forme.i_analysis);
+                        $('#e_i_suggestion').text(arg.forme.i_suggestion);
+                        $('#e_inv_date').text(arg.forme.inv_date);
+                    }
+                }
+            })
+        })
+    }
+</script>
+
+
+
+
+
+

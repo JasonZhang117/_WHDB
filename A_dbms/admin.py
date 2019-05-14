@@ -232,7 +232,8 @@ admin.site.register(models.Shareholders)  # 股东
 admin.site.register(models.Trustee)  # 董事
 
 # -----------------------保后-------------------------#
-admin.site.register(models.Review)  # 行业
+admin.site.register(models.Review)  # 保后
+admin.site.register(models.Investigate)  # 补调
 
 
 # -----------------------外部信息-------------------------#

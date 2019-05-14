@@ -38,7 +38,6 @@ def article_add_ajax(request):  # 添加项目
     response = {'status': True, 'message': None, 'forme': None, ' skip': None, }
     post_data_str = request.POST.get('postDataStr')
     post_data = json.loads(post_data_str)
-    print('post_data:', post_data)
     form = forms.ArticlesAddForm(post_data, request.FILES)  #####
     if form.is_valid():
         cleaned_data = form.cleaned_data
@@ -54,9 +53,8 @@ def article_add_ajax(request):  # 添加项目
                     augment=augment, amount=amount, credit_term=cleaned_data['credit_term'],
                     director_id=cleaned_data['director_id'], assistant_id=cleaned_data['assistant_id'],
                     control_id=cleaned_data['control_id'], article_buildor=request.user)
-                today_str = time.strftime("%Y-%m-%d", time.localtime())  # 元组转换为字符串
                 models.Customes.objects.filter(article_custom=article_obj).update(
-                    lately_date=today_str, managementor_id=cleaned_data['director_id'])
+                    lately_date=datetime.date.today(), managementor_id=cleaned_data['director_id'])
             response['message'] = '成功创建项目：%s！' % article_obj.article_num
             response['skip'] = "/dbms/article/"
         except Exception as e:

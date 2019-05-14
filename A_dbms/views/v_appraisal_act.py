@@ -432,7 +432,7 @@ def supply_edit_ajax(request):  #
     response = {'status': True, 'message': None, 'forme': None, }
     post_data_str = request.POST.get('postDataStr')
     post_data = json.loads(post_data_str)
-    print('post_data:',post_data)
+    print('post_data:', post_data)
     article_obj = models.Articles.objects.get(id=post_data['edit_article_id'])
     '''ARTICLE_STATE_LIST = [(1, '待反馈'), (2, '已反馈'), (3, '待上会'), (4, '已上会'), (5, '已签批'),
                           (51, '已放款'), (52, '已放完'), (55, '已解保'), (61, '待变更'), (99, '已注销')]'''
@@ -504,7 +504,7 @@ def lending_order_ajax(request):  # 放款次序ajax
             cleaned_data = form.cleaned_data
             try:
                 models.LendingOrder.objects.create(
-                    summary_id=article_id, order=cleaned_data['order'],
+                    summary_id=article_id, order=cleaned_data['order'], remark=cleaned_data['remark'],
                     order_amount=cleaned_data['order_amount'], lending_buildor=request.user)
                 response['message'] = '放款次序设置成功！'
             except Exception as e:
@@ -543,7 +543,7 @@ def lending_change_ajax(request):  # 放款次序ajax
         if form_lending_change.is_valid():
             lending_change_data = form_lending_change.cleaned_data
             try:
-                lending_list.update(order=lending_change_data['order'],
+                lending_list.update(order=lending_change_data['order'], remark=lending_change_data['remark'],
                                     order_amount=lending_change_data['order_amount'], lending_buildor=request.user)
                 response['message'] = '放款次序变更成功！'
             except Exception as e:
@@ -631,7 +631,6 @@ def article_sign_ajax(request):
     response = {'status': True, 'message': None, 'forme': None, }
     post_data_str = request.POST.get('postDataStr')
     post_data = json.loads(post_data_str)
-    print('post_data:', post_data)
 
     '''((1, '同意'), (2, '不同意'))'''
     sign_type = int(post_data['sign_type'])
@@ -674,7 +673,8 @@ def article_sign_ajax(request):
                                 # 更新客户授信总额
                                 custom_id = article_obj.custom.id
                                 models.Customes.objects.filter(id=custom_id).update(
-                                    credit_amount=cleaned_data['credit_amount'])
+                                    credit_amount=cleaned_data['credit_amount'],
+                                    lately_date=article_obj.review_date)
                                 models.Warrants.objects.filter(
                                     lending_warrant__sure__lending__summary=article_obj).update(
                                     meeting_date=article_obj.review_date)
@@ -708,7 +708,6 @@ def article_change_ajax(request):
     response = {'status': True, 'message': None, 'forme': None, }
     post_data_str = request.POST.get('postDataStr')
     post_data = json.loads(post_data_str)
-    print('post_data:', post_data)
 
     '''((1, '同意'), (2, '不同意'))'''
     article_list = models.Articles.objects.filter(id=post_data['article_id'])

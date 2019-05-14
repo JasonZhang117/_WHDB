@@ -1,0 +1,32 @@
+<div class="table-responsive">
+    <table class="table table-bordered table-hover table-condensed active">
+        <thead>
+        <tr style="text-align: center">
+            <th>补调类型</th>
+            <th>风险分析</th>
+            <th>风控建议</th>
+            <th>风险分类</th>
+            <th>补调日期</th>
+            <th>添加人</th>
+            {% if PAGE_TITLE == '保后详情' or PAGE_TITLE == '项目评审'%}
+                <th>操作</th>
+            {% endif %}
+        </tr>
+        </thead>
+        <tbody id="investigate-tb">
+        {% for investigate in investigate_custom_list %}
+            <tr investigate-nid="{{ investigate.id }}">
+                <td>{{ investigate.get_inv_typ_display }}</td>
+                <td>{{ investigate.i_analysis|default_if_none:"" }}</td>
+                <td>{{ investigate.i_suggestion|default_if_none:"" }}</td>
+                <td>{{ investigate.get_i_classification_display|default_if_none:"" }}</td>
+                <td>{{ investigate.inv_date|default_if_none:"" }}</td>
+                <td>{{ investigate.invor }}</td>
+                {% if PAGE_TITLE == '保后详情' or  PAGE_TITLE == '项目评审' %}
+                    <td><a class="btn btn-primary btn-xs delInvestigateB">删除</a></td>
+                {% endif %}
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>

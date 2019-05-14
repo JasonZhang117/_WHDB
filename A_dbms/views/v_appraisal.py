@@ -86,6 +86,9 @@ def appraisal_scan(request, article_id):  # 评审项目预览
     form_supply = forms.FormAddSupply()
     form_lending = forms.FormLendingOrder()
     form_article_change = forms.ArticleChangeForm(initial={'change_date': str(datetime.date.today())})
+    form_inv_add = forms.FormInvestigateAdd(initial={'inv_date': str(datetime.date.today())})
+    investigate_custom_list = article_obj.custom.inv_custom.all().order_by('-inv_date')
+
     return render(request, 'dbms/appraisal/appraisal-scan.html', locals())
 
 
@@ -159,7 +162,9 @@ def appraisal_scan_lending(request, article_id, lending_id):  # 评审项目预�
     form_lendingother_add = forms.LendinOtherForm()  # 其他
 
     form_lending = forms.FormLendingOrder(
-        initial={'order': lending_obj.order, 'order_amount': lending_obj.order_amount})
+        initial={'order': lending_obj.order,
+                 'remark': lending_obj.remark,
+                 'order_amount': lending_obj.order_amount})
 
     return render(request, 'dbms/appraisal/appraisal-scan-lending.html', locals())
 
@@ -263,7 +268,14 @@ def summary_scan(request, article_id):  # 评审项目预览
             summary += '%s万元%s' % (single['credit_amount'], single['credit_model_cn'])
             if single_dic_c < single_dic_count:
                 summary += '、'
-        summary += '提供担保，期限%s,' % credit_term_cn
+        if lending_count == 1:
+            if lending_list.first().remark:
+                lk = lending_list.first().remark
+            else:
+                lk = ''
+            summary += '提供担保%s，期限%s,' % (lk, credit_term_cn)
+        else:
+            summary += '提供担保，期限%s,' % credit_term_cn
         single_dic_c = 0
         for single in single_dic_list:
             if single_dic_count > 1:
@@ -289,6 +301,10 @@ def summary_scan(request, article_id):  # 评审项目预览
         lend_or = 0
         for lending in lending_list:
             order_amount = lending.order_amount
+            if lending.remark:
+                lk = lending.remark
+            else:
+                lk = ''
             sure_list = lending.sure_lending.all()
             sure_count = sure_list.count()
             sure_or = 1
@@ -296,8 +312,9 @@ def summary_scan(request, article_id):  # 评审项目预览
                 rowspan_count += 1
                 lend_or += 1
                 lend_oz = convert_str(lend_or)
-                summary += '<tr class="ot tbp"><td class="oi" colspan="4">&nbsp&nbsp（%s）第%s次发放%s万元，并落实以下反担保措施</td></tr>' % (
-                    lend_oz, lend_oz, str(order_amount / 10000).rstrip('0').rstrip('.'))
+                summary += '<tr class="ot tbp"><td class="oi" colspan="4">&nbsp&nbsp（%s）第%s次发放%s万元%s，' \
+                           '并落实以下反担保措施</td></tr>' % (
+                               lend_oz, lend_oz, str(order_amount / 10000).rstrip('0').rstrip('.'), lk)
             custom_c_list = models.Customes.objects.filter(lending_custom__sure__lending=lending, genre=1)  # 企业
             if custom_c_list:
                 rowspan_count += 1
@@ -766,7 +783,7 @@ def summary_scan(request, article_id):  # 评审项目预览
                 for warrant_o_49 in warrant_o_49_list:
                     warrant_o_49_c += 1
                     summary += '%s提供%s' % (warrant_o_49.other_warrant.other_owner.name,
-                                         warrant_o_49.other_warrant.other_detail)
+                                           warrant_o_49.other_warrant.other_detail)
                     if warrant_o_49_c < warrant_o_49_count:
                         summary += '、'
                 summary += '</td></tr>'

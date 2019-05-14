@@ -1,0 +1,28 @@
+<div class="modal fade" id="addInvestigateModal" tabindex="-1"
+     role="dialog" aria-labelledby="addInvestigateModal">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title" id="addReviewModalLabel">补充调查
+                    {% if PAGE_TITLE == '项目评审' %}
+                        <input style="display: none" name="custom_id" value="{{ article_obj.custom.id }}">
+                    {% elif  PAGE_TITLE == '保后详情' %}
+                        <input style="display: none" name="custom_id" value="{{ custom_obj.id }}">
+                    {% endif %}
+                </h4>
+            </div>
+            <div class="modal-body">
+                <form class="form-horizontal">
+                    {% include 'dbms/review/modl/mod_form/investigate-add.html' %}
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                <button type="button" class="btn btn-primary" id="addInvestigateModalOk">添加</button>
+            </div>
+        </div>
+    </div>
+</div>
