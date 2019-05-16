@@ -256,8 +256,8 @@ def summary_scan(request, article_id):  # 评审项目预览
     lending_count = lending_list.count()  # 放款笔数
     '''ARTICLE_STATE_LIST = [(1, '待反馈'), (2, '已反馈'), (3, '待上会'), (4, '已上会'), (5, '已签批'),
                           (51, '已放款'), (52, '已放完'), (55, '已解保'), (61, '待变更'), (99, '已注销')]'''
-    # if article_obj.article_state in [1, 2, 3, 4, 61]:
-    if True:
+    # if True:
+    if article_obj.article_state in [1, 2, 3, 4, 61]:
         rowspan_count = 3
         summary = ''
         summary += '<tr class="ot tbp"><td class="oi" colspan="4">&nbsp&nbsp一、同意为该客户'
@@ -707,7 +707,7 @@ def summary_scan(request, article_id):  # 评审项目预览
                 warrant_r_c = 0
                 for warrant_r in warrant_r_31_list:
                     warrant_r_c += 1
-                    summary += '%s提供%s' % (warrant_r.receive_warrant.receive_owner.name,
+                    summary += '%s将%s' % (warrant_r.receive_warrant.receive_owner.name,
                                            warrant_r.receive_warrant.receivable_detail)
                     if warrant_r_c < warrant_r_count:
                         summary += '、'

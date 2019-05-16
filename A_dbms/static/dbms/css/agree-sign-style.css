@@ -15,7 +15,7 @@ body {
     /*字体大小*/
     font-size: 12pt;
     /*{#背景色*/
-    background-color: #dddddd;
+    /*background-color: #dddddd;*/
     /*字间距*/
     letter-spacing: 0pt;
     /*行间距*/
@@ -34,6 +34,11 @@ table {
 }
 
 td {
+    border: 1px solid black;
+    height: 24pt;
+}
+
+th {
     border: 1px solid black;
     height: 24pt;
 }

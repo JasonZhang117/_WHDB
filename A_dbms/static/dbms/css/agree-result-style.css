@@ -38,17 +38,39 @@ p {
     -moz-text-align-last: left; /* 针对 Firefox 的代码 */
 }
 
+/*换页打印*/
+.split {
+    page-break-after: always;
+}
+
 /*标题*/
 .tt {
     text-align: center;
     font-size: 21pt;
+    font-weight: bold;
     padding-top: 15mm;
     padding-bottom: 5mm;
 }
+
+/*签字样本标题*/
+.ts {
+    text-align: center;
+    font-size: 21pt;
+    font-weight: bold;
+    /*padding-top: 15mm;*/
+    /*padding-bottom: 5mm;*/
+}
+
+/*签字样本行高*/
+.trs {
+    height: 60pt;
+}
+
 /*声明人及日期*/
-.sm{
+.sm {
     padding-left: 230pt;
 }
+
 table {
     width: 100%;
     border-collapse: collapse;
@@ -56,7 +78,7 @@ table {
     line-height: 21pt;
 }
 
-tr td {
+tr, td, th {
     border: 1px solid black;
     height: 24pt;
 }

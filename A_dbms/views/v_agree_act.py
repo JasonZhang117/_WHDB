@@ -620,8 +620,8 @@ def result_state_ajax(request):  #
     #     result = json.dumps(response, ensure_ascii=False)
     #     return HttpResponse(result)
     # --------------------------------------------------------------#
-    # if agree_obj.agree_state in [21, 31, 41, 61, 99]:
-    if False:
+    # if False:
+    if agree_obj.agree_state in [21, 31, 41, 61, 99]:
         response['status'] = False
         response['message'] = '合同状态为%s，无法生成决议及声明！' % agree_obj.agree_state
         result = json.dumps(response, ensure_ascii=False)
@@ -669,17 +669,19 @@ def result_state_ajax(request):  #
                     decision = counter_custom.company_custome.decisionor
                     if decision == 11:
                         result_tp = 11
-                        result = '<div class="tt" align="center"><strong>%s股东会决议</strong></div>' % counter_custom.name
+                        result = '<div class="split"><div class="tt" align="center"><strong>%s股东会' \
+                                 '决议</strong></div>' % counter_custom.name
                         result += '<p>会议时间：&nbsp&nbsp&nbsp年&nbsp&nbsp月&nbsp&nbsp日</p>'
                         result += '<p>会议地点:  公司会议室</p>'
-                        result += '<p>本次董事会会议已按《中华人民共和国公司法》及公司章程的有关规定' \
+                        result += '<p>本次股东会会议已按《中华人民共和国公司法》及公司章程的有关规定' \
                                   '通知全体股东到会参加会议。本公司共有股东<u>&nbsp&nbsp&nbsp</u>名，与会股' \
                                   '东<u>&nbsp&nbsp&nbsp</u>名，与会股东所持股份占公司股份的<u>&nbsp&nbsp&nbsp</u>，' \
                                   '符合《公司法》和本公司章程规定的程序和要求。' \
                                   '经代表<u>&nbsp&nbsp&nbsp</u>表决权的股东通过，做出如下决议：</p>'
                     elif decision == 21:
                         result_tp = 21
-                        result = '<p class="tt" align="center"><strong>%s董事会决议</strong></p>' % counter_custom.name
+                        result = '<div class="split"><p class="tt" align="center"><strong>%s董事会' \
+                                 '决议</strong></p>' % counter_custom.name
                         result += '<p>会议时间：&nbsp&nbsp&nbsp年&nbsp&nbsp月&nbsp&nbsp日</p>'
                         result += '<p>会议地点:  公司会议室</p>'
                         result += '<p>本次董事会会议已按《中华人民共和国公司法》及公司章程的有关规定' \
@@ -1000,24 +1002,35 @@ def result_state_ajax(request):  #
                         shareholder_count = shareholder_list.count()
                         shareholder_num = 0
                         result += '<p>'
+                        signature = '<table><tr><th width="200pt">股东姓名（名称）</th><th>签字（盖章）</th><th>联系方式</th></tr>'
                         for shareholder in shareholder_list:
                             result += '%s' % shareholder.shareholder_name
+                            signature += '<tr class="trs"><td align="center">%s</td><td></td><td></td></tr>' % shareholder.shareholder_name
                             shareholder_num += 1
                             if shareholder_num < shareholder_count:
                                 result += '、'
-                        result += '</p>'
+                        signature += '</table>'
+                        result += '</p></div>'
+                        result += '<div class="tt" align="center">%s股东</div>' \
+                                  '<div class="ts" align="center">签字样本</div>' % counter_custom.name
+                        result += signature
                     elif decision == 21:
                         trustee_list = counter_custom.company_custome.trustee_custom_c.all()
                         trustee_count = trustee_list.count()
                         trustee_num = 0
                         result += '<p>'
+                        signature = '<table><tr><th width="200pt">董事姓名</th><th>签字</th><th>联系方式</th></tr>'
                         for trustee in trustee_list:
                             result += '%s' % trustee.trustee_name
+                            signature += '<tr class="trs"><td align="center">%s</td><td></td><td></td></tr>' % trustee.trustee_name
                             trustee_num += 1
                             if trustee_num < trustee_count:
                                 result += '、'
-                        result += '</p>'
-
+                        signature += '</table>'
+                        result += '</p></div>'
+                        result += '<div class="tt" align="center">%s董事</div>' \
+                                  '<div class="ts" align="center">签字样本</div>' % counter_custom.name
+                        result += signature
                     default = {'agree': agree_obj, 'custom': counter_custom, 'result_typ': result_tp,
                                'result_detail': result, 'resultor': request.user}
                     result_obj, created = models.ResultState.objects.update_or_create(
@@ -1033,7 +1046,7 @@ def result_state_ajax(request):  #
                                   '处管辖范围内未登记结婚。</p>'
                         result += '<p><strong>特此申明！</strong></p><br>'
                         result += '<p class="sm">申明人：</p><br>'
-                        result += '<p class="sm">&nbsp&nbsp&nbsp年&nbsp&nbsp月&nbsp&nbsp日'
+                        result += '<p class="sm">&nbsp&nbsp&nbsp年&nbsp&nbsp月&nbsp&nbsp日</p>'
                         default = {'agree': agree_obj, 'custom': counter_custom, 'result_typ': 41,
                                    'result_detail': result, 'resultor': request.user}
                         result_obj, created = models.ResultState.objects.update_or_create(
@@ -1115,7 +1128,7 @@ def result_state_ajax(request):  #
                             result += '<p><strong>我保证我的上述声明真实有效，如有虚假，所产生的法律责任' \
                                       '均由我本人承担。</strong></p><br>'
                             result += '<p class="sm">声明人：</p><br>'
-                            result += '<p class="sm">&nbsp&nbsp&nbsp年&nbsp&nbsp月&nbsp&nbsp日'
+                            result += '<p class="sm">&nbsp&nbsp&nbsp年&nbsp&nbsp月&nbsp&nbsp日</p>'
                             default = {'agree': agree_obj, 'custom': spouse, 'result_typ': 31,
                                        'result_detail': result, 'resultor': request.user}
                             result_obj, created = models.ResultState.objects.update_or_create(

@@ -8,8 +8,8 @@
     <link rel="stylesheet" media="print" href="{% static 'dbms/css/agree-style.css' %}">
 </head>
 <body>
-{#{% if agree_obj.agree_state == 11 or agree_obj.agree_state == 51 %}#}
-{% if 1 %}
+{% if agree_obj.agree_state == 11 or agree_obj.agree_state == 51 %}
+{#{% if 1 %}#}
     <div class="container-fluid" style="padding-left: 1px;">
         <input style="display: none" name="counter_id" id="id_counter_id" value={{ counter_obj.id }}>
     </div>
