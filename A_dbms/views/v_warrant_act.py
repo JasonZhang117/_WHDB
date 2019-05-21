@@ -17,7 +17,6 @@ def warrant_add_ajax(request):
     response = {'status': True, 'message': None, 'forme': None, ' skip': None, }
     post_data_str = request.POST.get('postDataStr')
     post_data = json.loads(post_data_str)
-    print('post_data:', post_data)
     warrant_typ_n = int(post_data['warrant_typ_n'])
     if warrant_typ_n == 0:
         warrant_typ = int(post_data['warrant_typ'])

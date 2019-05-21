@@ -658,7 +658,7 @@ def result_state_ajax(request):  #
         agree_term_str = '%s年期' % convert_num(agree_term / 12)
     else:
         agree_term_str = '%s个月期' % convert_num(agree_term)
-
+    agr_typ = agree_obj.agree_typ
     try:
         with transaction.atomic():
             for counter_custom in custom_list:
@@ -690,9 +690,16 @@ def result_state_ajax(request):  #
                                   '符合《公司法》和本公司章程规定的程序和要求。' \
                                   '经<u>&nbsp&nbsp&nbsp</u>董事通过，做出如下决议：</p>'
                     if counter_custom == agree_custom_obj:
-                        result += '<p>  1、同意向%s申请人民币%s%s银行贷款，用以补充流动资金。</p>' % (
-                            agree_obj.branch.name, agree_amount_cn, agree_term_str)
-                        result += '<p>  2、同意委托成都武侯中小企业融资担保有限责任公司为该融资贷款向贷款方提供担保。</p>'
+                        '''AGREE_TYP_LIST = [(1, '单笔'), (2, '最高额'), (3, '保函'), (7, '小贷'),
+                      (41, '单笔(公证)'), (42, '最高额(公证)'), (47, '小贷(公证)')]'''
+                        if agr_typ in [1, 41]:
+                            result += '<p>  1、同意向%s申请人民币%s%s贷款，用以补充流动资金。</p>' % (
+                                agree_obj.branch.name, agree_amount_cn, agree_term_str)
+                            result += '<p>  2、同意委托成都武侯中小企业融资担保有限责任公司为该贷款向贷款方提供担保。</p>'
+                        elif agr_typ in [2, 42]:
+                            result += '<p>  1、同意向%s申请最高限额为人民币%s%s的银行授信（包括借款或银行承兑汇票、保函等），用以补充流动资金。</p>' % (
+                                agree_obj.branch.name, agree_amount_cn, agree_term_str)
+                            result += '<p>  2、同意委托成都武侯中小企业融资担保有限责任公司为该授信向贷款方提供担保。</p>'
                         order = 2
                     else:
                         order = 0
@@ -728,10 +735,16 @@ def result_state_ajax(request):  #
                     counter_asure_list = models.CountersAssure.objects.filter(
                         counter__in=counter_agree_list, custome=counter_custom)
                     if counter_asure_list:
-                        result += '<p>%s同意为%s在%s申请的人民币%s%s贷款，向成都武侯' \
-                                  '中小企业融资担保有限责任公司提供连带责任保证反担保。</p>' % (
-                                      crder_str, agree_custom_obj.name, agree_obj.branch.name, agree_amount_cn,
-                                      agree_term_str)
+                        if agr_typ in [1, 41]:
+                            result += '<p>%s同意为%s在%s申请的人民币%s%s贷款，向成都武侯' \
+                                      '中小企业融资担保有限责任公司提供连带责任保证反担保。</p>' % (
+                                          crder_str, agree_custom_obj.name, agree_obj.branch.name, agree_amount_cn,
+                                          agree_term_str)
+                        elif agr_typ in [2, 42]:
+                            result += '<p>%s同意为%s在%s申请的最高限额为人民币%s%s银行授信，向成都武侯' \
+                                      '中小企业融资担保有限责任公司提供连带责任保证反担保。</p>' % (
+                                          crder_str, agree_custom_obj.name, agree_obj.branch.name, agree_amount_cn,
+                                          agree_term_str)
                         order += 1
                         crder_str = '%s、' % order
                     # (1, '房产'), (2, '房产包')
@@ -1153,8 +1166,8 @@ def result_del_ajax(request):  # 删除反担保合同ajax
     result_obj = models.ResultState.objects.get(id=post_data['result_id'])
     '''AGREE_STATE_LIST = [(11, '待签批'), (21, '已签批'), (31, '未落实'),
                         (41, '已落实'), (51, '待变更'), (61, '已解保'), (99, '已注销')]'''
-    # if agree_obj.agree_state in [11, 51]:
-    if True:
+    # if True:
+    if agree_obj.agree_state in [11, 51]:
         try:
             with transaction.atomic():
                 result_obj.delete()  # 删除保证反担保合同

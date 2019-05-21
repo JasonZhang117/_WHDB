@@ -212,7 +212,7 @@ admin.site.register(models.CustomesC, CustomesCAdmin)  # 企业客户
 class CustomesPAdmin(admin.ModelAdmin):
     list_display = ('custome', 'spouses', 'license_num', 'license_addr')  # 显示字段
     # list_per_page = 20  # 每页显示条目数
-    search_fields = ['custome', 'spouse']  # 搜索字段
+    search_fields = ['license_num', 'license_addr']  # 搜索字段
     ordering = ['id']  # 排序字段
 
 

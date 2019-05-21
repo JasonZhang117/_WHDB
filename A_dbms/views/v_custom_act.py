@@ -20,7 +20,6 @@ def custom_add_ajax(request):
     response = {'status': True, 'message': None, 'forme': None, ' skip': None, }
     post_data_str = request.POST.get('postDataStr')
     post_data = json.loads(post_data_str)
-    print('post_data:', post_data)
 
     form_custom_add = forms.CustomAddForm(post_data)
     if form_custom_add.is_valid():
@@ -35,7 +34,7 @@ def custom_add_ajax(request):
                         custom_obj = models.Customes.objects.create(
                             name=custom_add_data['name'], genre=genre,
                             short_name=custom_add_data['short_name'],
-                            counter_only=custom_add_data['counter_only'],
+                            # counter_only=custom_add_data['counter_only'],
                             contact_addr=custom_add_data['contact_addr'],
                             linkman=custom_add_data['linkman'],
                             contact_num=custom_add_data['contact_num'],
@@ -66,7 +65,7 @@ def custom_add_ajax(request):
                         custom_obj = models.Customes.objects.create(
                             name=custom_add_data['name'], genre=genre,
                             short_name=custom_add_data['short_name'],
-                            counter_only=custom_add_data['counter_only'],
+                            # counter_only=custom_add_data['counter_only'],
                             contact_addr=custom_add_data['contact_addr'],
                             linkman=custom_add_data['linkman'],
                             contact_num=custom_add_data['contact_num'],
@@ -312,7 +311,7 @@ def custom_edit_ajax(request):
                         custom_lsit.update(
                             name=custom_edit_data['name'],
                             short_name=custom_edit_data['short_name'],
-                            counter_only=custom_edit_data['counter_only'],
+                            # counter_only=custom_edit_data['counter_only'],
                             contact_addr=custom_edit_data['contact_addr'],
                             linkman=custom_edit_data['linkman'],
                             contact_num=custom_edit_data['contact_num'])
@@ -342,7 +341,7 @@ def custom_edit_ajax(request):
                         custom_lsit.update(
                             name=custom_edit_data['name'],
                             short_name=custom_edit_data['short_name'],
-                            counter_only=custom_edit_data['counter_only'],
+                            # counter_only=custom_edit_data['counter_only'],
                             contact_addr=custom_edit_data['contact_addr'],
                             linkman=custom_edit_data['linkman'],
                             contact_num=custom_edit_data['contact_num'])

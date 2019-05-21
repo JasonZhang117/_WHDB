@@ -4,8 +4,7 @@
         (31, '应收质押'), (32, '股权质押'), (33, '票据质押'), (34, '动产质押'),
         (41, '其他权利质押'),
         (51, '股权预售'), (52, '房产预售'), (53, '土地预售'))-->
-乙方同意以拥有所有权或处分权的财产
-{% if counter_obj.counter_typ == 11 %}
+乙方同意以拥有所有权或处分权的财产{% if counter_obj.counter_typ == 11 %}
     <strong><u>1</u></strong>
 {% elif counter_obj.counter_typ == 12 %}
     <strong><u>2</u></strong>
@@ -15,8 +14,7 @@
     <strong><u>4</u></strong>
 {% elif counter_obj.counter_typ == 15 %}
     <strong><u>5</u></strong>
-{% endif %}
-（1、房屋所有权；2、土地使用权；3、设备；4、在建工程；5、车辆；6、其他）设定抵押（前述
+{% endif %}（1、房屋所有权；2、土地使用权；3、设备；4、在建工程；5、车辆；6、其他）设定抵押（前述
 抵押物详见附件《抵押财产清单》，该抵押财产清单为本合同组成部
 分，与本合同具有同等法律效力）。各方认可抵押物价值为（大写）人民币<u>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
     &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</u>。
