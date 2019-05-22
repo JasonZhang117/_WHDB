@@ -275,6 +275,17 @@ def agree_preview(request, agree_id):
     return render(request, 'dbms/agree/preview-agree.html', locals())
 
 
+# -------------------------合同期限-------------------------#
+def credit_term_c(credit_term):
+    credit_term_exactly = credit_term % 12
+    credit_term_cn = ''
+    if credit_term_exactly == 0:
+        credit_term_cn = '%s年' % convert_num(credit_term / 12)
+    else:
+        credit_term_cn = '%s个月' % convert_num(credit_term)
+    return credit_term_cn
+
+
 # -------------------------反担保合同预览-------------------------#
 @login_required
 @authority
@@ -303,13 +314,7 @@ def counter_preview(request, agree_id, counter_id):
     Z_COUNTER_TYP_LIST = [31, 32, 33, 34, 41, ]
 
     credit_term = agree_obj.agree_term  # 授信期限（月）
-    credit_term_exactly = credit_term % 12
-    credit_term_cn = ''
-    if credit_term_exactly == 0:
-        credit_term_cn = '%s年' % convert_num(credit_term / 12)
-    else:
-        credit_term_cn = '%s个月' % convert_num(credit_term)
-
+    credit_term_cn = credit_term_c(credit_term)
     if counter_typ in [1, 2]:
         assure_counter_obj = counter_obj.assure_counter
         custom_obj = assure_counter_obj.custome
@@ -393,6 +398,9 @@ def agree_sign_preview(request, agree_id):
         (31, '应收质押'), (32, '股权质押'), (33, '票据质押'), (34, '动产质押'),
         (41, '其他权利质押'),
         (51, '股权预售'), (52, '房产预售'), (53, '土地预售')]'''
+
+    credit_term = agree_obj.agree_term  # 授信期限（月）
+    credit_term_cn = credit_term_c(credit_term)
 
     agree_amount = agree_obj.agree_amount
     agree_amount_str = str(agree_amount / 10000).rstrip('0').rstrip('.')  # 续贷（万元）

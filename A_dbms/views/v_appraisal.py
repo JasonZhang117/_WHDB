@@ -224,6 +224,7 @@ def summary_scan(request, article_id):  # 评审项目预览
         credit_term_cn = '%s年' % convert_num(credit_term / 12)
     else:
         credit_term_cn = '%s个月' % convert_num(credit_term)
+
     renewal_str = str(article_obj.renewal / 10000).rstrip('0').rstrip('.')  # 续贷（万元）
     augment_str = str(article_obj.augment / 10000).rstrip('0').rstrip('.')  # 新增（万元）
     amount_str = str(article_obj.amount / 10000).rstrip('0').rstrip('.')  # 总额（万元）

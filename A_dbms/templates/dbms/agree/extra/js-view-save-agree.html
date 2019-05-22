@@ -4,6 +4,7 @@
     });
 
     function bindCounterView() {
+        console.log('bindCounterView');
         var postData = {};
         postData["content"] = $("#view-save").html();
         postData["agree_id"] = $("#id_agree_id").val();
@@ -17,7 +18,7 @@
             data: {'postDataStr': postDataStr},
             success: function (arg) {
                 if (arg.status) {
-                    {#alert(arg.message);#}
+                    alert(arg.message);
                     {#window.location.reload();#}
                 } else {
                     alert(arg.message);

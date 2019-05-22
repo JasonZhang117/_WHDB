@@ -207,6 +207,8 @@ def agree_edit_ajax(request):  #
                 agree_name = 21
             elif agree_typ in [7, 47]:
                 agree_name = 31
+            agree_num_prefix = agree_obj.num_prefix
+            agree_num = "%sW%s-1" % (agree_num_prefix, agree_copies)
             try:
                 with transaction.atomic():
                     agree_list.update(
@@ -572,6 +574,7 @@ def counter_save_ajax(request):  # 添加合同
     response = {'status': True, 'message': None, 'forme': None, 'skip': None, }
     post_data_str = request.POST.get('postDataStr')
     post_data = json.loads(post_data_str)
+    print(post_data)
     counter_content = post_data['content']
     counter_obj = models.Counters.objects.filter(id=post_data['counter_id'])
     '''ARTICLE_STATE_LIST = [(1, '待反馈'), (2, '已反馈'), (3, '待上会'), (4, '已上会'), (5, '已签批'),
@@ -658,6 +661,8 @@ def result_state_ajax(request):  #
         agree_term_str = '%s年期' % convert_num(agree_term / 12)
     else:
         agree_term_str = '%s个月期' % convert_num(agree_term)
+    '''AGREE_TYP_LIST = [(1, '单笔'), (2, '最高额'), (3, '保函'), (7, '小贷'),
+                      (41, '单笔(公证)'), (42, '最高额(公证)'), (47, '小贷(公证)')]'''
     agr_typ = agree_obj.agree_typ
     try:
         with transaction.atomic():
@@ -665,7 +670,7 @@ def result_state_ajax(request):  #
                 result = ''
                 order = 0
                 if counter_custom.genre == 1:
-                    '''DECISIONOR_LIST = [(11, '股东会'), (21, '董事会')]'''
+                    '''DECISIONOR_LIST = [(11, '股东会'), (13, '合伙人会议'),(21, '董事会'),  (23, '理事会')]'''
                     decision = counter_custom.company_custome.decisionor
                     if decision == 11:
                         result_tp = 11
@@ -674,21 +679,46 @@ def result_state_ajax(request):  #
                         result += '<p>会议时间：&nbsp&nbsp&nbsp年&nbsp&nbsp月&nbsp&nbsp日</p>'
                         result += '<p>会议地点:  公司会议室</p>'
                         result += '<p>本次股东会会议已按《中华人民共和国公司法》及公司章程的有关规定' \
-                                  '通知全体股东到会参加会议。本公司共有股东<u>&nbsp&nbsp&nbsp</u>名，与会股' \
-                                  '东<u>&nbsp&nbsp&nbsp</u>名，与会股东所持股份占公司股份的<u>&nbsp&nbsp&nbsp</u>，' \
-                                  '符合《公司法》和本公司章程规定的程序和要求。' \
-                                  '经代表<u>&nbsp&nbsp&nbsp</u>表决权的股东通过，做出如下决议：</p>'
+                                  '通知全体股东到会参加会议。本公司共有股东<u>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</u>名，' \
+                                  '与会股东<u>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</u>名，与会股东所持股份占公司股份' \
+                                  '的<u>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</u>，符合《公司法》和本公司章程规定的' \
+                                  '程序和要求。经代表<u>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</u>表决权的股东通过，' \
+                                  '做出如下决议：</p>'
                     elif decision == 21:
                         result_tp = 21
-                        result = '<div class="split"><p class="tt" align="center"><strong>%s董事会' \
-                                 '决议</strong></p>' % counter_custom.name
+                        result = '<div class="split"><div class="tt" align="center"><strong>%s董事会' \
+                                 '决议</strong></div>' % counter_custom.name
                         result += '<p>会议时间：&nbsp&nbsp&nbsp年&nbsp&nbsp月&nbsp&nbsp日</p>'
                         result += '<p>会议地点:  公司会议室</p>'
                         result += '<p>本次董事会会议已按《中华人民共和国公司法》及公司章程的有关规定' \
-                                  '通知全体董事到会参加会议。本公司共有董事<u>&nbsp&nbsp&nbsp</u>名，与会董' \
-                                  '事<u>&nbsp&nbsp&nbsp</u>名，与会董事占公司董事的<u>&nbsp&nbsp&nbsp</u>，' \
-                                  '符合《公司法》和本公司章程规定的程序和要求。' \
-                                  '经<u>&nbsp&nbsp&nbsp</u>董事通过，做出如下决议：</p>'
+                                  '事<u>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</u>名，与会董事占公司董事的' \
+                                  '<u>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</u>，符合《公司法》和本公司章程规定' \
+                                  '的程序和要求。经<u>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</u>名董事通过，做出如下决议：</p>'
+                    elif decision == 13:
+                        result_tp = 13
+                        result = '<div class="split"><div class="tt" align="center"><strong>%s合伙人' \
+                                 '决议</strong></div>' % counter_custom.name
+                        result += '<p>会议时间：&nbsp&nbsp&nbsp年&nbsp&nbsp月&nbsp&nbsp日</p>'
+                        result += '<p>会议地点:  公司会议室</p>'
+                        result += '<p>本次合伙人会议已按《中华人民共和国合伙企业法》及合伙人协议的有关规定' \
+                                  '通知全体合伙人到会参加会议。本公司共有合伙人<u>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</u>' \
+                                  '名，与会合伙人<u>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</u>名，与会合伙人占企业合伙' \
+                                  '人的<u>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</u>，符合《中华人民共和国合伙企业法》和本' \
+                                  '合伙企业合伙人协议规定的程序和要求。经<u>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</u>名' \
+                                  '合伙人通过，做出如下决议：</p>'
+                    elif decision == 23:
+                        result_tp = 23
+                        result = '<div class="split"><div class="tt" align="center"><strong>%s管委会' \
+                                 '决议</strong></div>' % counter_custom.name
+                        result += '<p>会议时间：&nbsp&nbsp&nbsp年&nbsp&nbsp月&nbsp&nbsp日</p>'
+                        result += '<p>会议地点:  公司会议室</p>'
+                        result += '<p>本次管委会会议已按《民办非企业单位登记管理暂行条例》及本企业《章程》的有关规定' \
+                                  '通知全体管委会委员到会参加会议。本公司共有管委会委员' \
+                                  '<u>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</u>名，与会委员' \
+                                  '<u>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</u>名，与会委员占全体委员的' \
+                                  '<u>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</u>，符合《民办非企业单位登记管理暂行条例》和本' \
+                                  '企业《章程》规定的程序和要求。经<u>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</u>名' \
+                                  '委员通过，做出如下决议：</p>'
                     if counter_custom == agree_custom_obj:
                         '''AGREE_TYP_LIST = [(1, '单笔'), (2, '最高额'), (3, '保函'), (7, '小贷'),
                       (41, '单笔(公证)'), (42, '最高额(公证)'), (47, '小贷(公证)')]'''
@@ -697,8 +727,9 @@ def result_state_ajax(request):  #
                                 agree_obj.branch.name, agree_amount_cn, agree_term_str)
                             result += '<p>  2、同意委托成都武侯中小企业融资担保有限责任公司为该贷款向贷款方提供担保。</p>'
                         elif agr_typ in [2, 42]:
-                            result += '<p>  1、同意向%s申请最高限额为人民币%s%s的银行授信（包括借款或银行承兑汇票、保函等），用以补充流动资金。</p>' % (
-                                agree_obj.branch.name, agree_amount_cn, agree_term_str)
+                            result += '<p>  1、同意向%s申请最高限额为人民币%s%s的银行授信（包括借款或银行承兑汇票、' \
+                                      '保函等），用以补充流动资金。</p>' % (
+                                          agree_obj.branch.name, agree_amount_cn, agree_term_str)
                             result += '<p>  2、同意委托成都武侯中小企业融资担保有限责任公司为该授信向贷款方提供担保。</p>'
                         order = 2
                     else:
@@ -729,6 +760,9 @@ def result_state_ajax(request):  #
                     if counter_count + order > 1:
                         order += 1
                         crder_str = '%s、' % order
+                    elif agr_typ in [41, 42, 47]:
+                        order += 1
+                        crder_str = '%s、' % order
                     else:
                         crder_str = ''
                     # 保证反担保
@@ -752,7 +786,7 @@ def result_state_ajax(request):  #
                         counter_warrant__counter__in=counter_agree_list, warrant_typ__in=[1, 2],
                         ownership_warrant__owner=counter_custom)
                     if counter_house_list:
-                        result += '<p>%s同意以公司名下房产向成都武侯中小企业融资' \
+                        result += '<p>%s同意以企业名下房产向成都武侯中小企业融资' \
                                   '担保有限责任公司提供抵押反担保，签订抵押反担保合同，并办理抵押登' \
                                   '记。房产的详细信息如下：</p>' % crder_str
                         result += '<table>' \
@@ -819,7 +853,7 @@ def result_state_ajax(request):  #
                         counter_warrant__counter__in=counter_agree_list, warrant_typ=5,
                         ownership_warrant__owner=counter_custom)
                     if counter_ground_list:
-                        result += '<p>%s同意以公司名下国有土地使用权向成都武侯中小企业融资' \
+                        result += '<p>%s同意以企业名下国有土地使用权向成都武侯中小企业融资' \
                                   '担保有限责任公司提供抵押反担保，签订抵押反担保合同，并办理抵押登' \
                                   '记。国有土地使用权的详细信息如下：</p>' % crder_str
                         result += '<table>' \
@@ -878,13 +912,13 @@ def result_state_ajax(request):  #
                     counter_target_list = models.Stockes.objects.filter(
                         warrant__counter_warrant__counter__in=counter_agree_list, target=counter_custom.name)
                     if counter_target_list:
-                        result += '<p>%s同意公司股东' % crder_str
+                        result += '<p>%s同意企业股东' % crder_str
                         target_count = counter_target_list.count()
                         target_num = 0
                         for target in counter_target_list:
                             target_owner = target.stock_owner
                             target_ratio = target.ratio
-                            result += '%s以其持有本公司的%s' % (target_owner, target_ratio)
+                            result += '%s以其持有本企业的%s' % (target_owner, target_ratio)
                             result += '%股权'
                             target_num += 1
                             if target_num < target_count:
@@ -897,7 +931,7 @@ def result_state_ajax(request):  #
                     counter_stock_list = models.Stockes.objects.filter(
                         warrant__counter_warrant__counter__in=counter_agree_list, stock_owner=counter_custom)
                     if counter_stock_list:
-                        result += '<p>%s同意以本公司所持有的' % crder_str
+                        result += '<p>%s同意以本企业所持有的' % crder_str
                         stock_count = counter_target_list.count()
                         stock_num = 0
                         for stock in counter_stock_list:
@@ -916,7 +950,7 @@ def result_state_ajax(request):  #
                     counter_draft_list = models.Draft.objects.filter(
                         warrant__counter_warrant__counter__in=counter_agree_list, draft_owner=counter_custom)
                     if counter_draft_list:
-                        result += '<p>%s同意以本公司所有的' % crder_str
+                        result += '<p>%s同意以本企业所有的' % crder_str
                         draft_count = counter_draft_list.count()
                         draft_num = 0
                         for draft in counter_draft_list:
@@ -934,7 +968,7 @@ def result_state_ajax(request):  #
                     counter_vehicle_list = models.Vehicle.objects.filter(
                         warrant__counter_warrant__counter__in=counter_agree_list, vehicle_owner=counter_custom)
                     if counter_vehicle_list:
-                        result += '<p>%s同意以公司名下车辆向成都武侯中小企业融资' \
+                        result += '<p>%s同意以企业名下车辆向成都武侯中小企业融资' \
                                   '担保有限责任公司提供抵押反担保，签订抵押反担保合同，并办理抵押登' \
                                   '记。车辆的详细信息如下：</p>' % crder_str
                         result += '<table>' \
@@ -967,7 +1001,7 @@ def result_state_ajax(request):  #
                     counter_chattel_list = models.Chattel.objects.filter(
                         warrant__counter_warrant__counter__in=counter_agree_list, chattel_owner=counter_custom)
                     if counter_chattel_list:
-                        result += '<p>%s同意以本公司所有的' % crder_str
+                        result += '<p>%s同意以本企业所有的' % crder_str
                         chattel_count = counter_chattel_list.count()
                         chattel_num = 0
                         for chattel in counter_chattel_list:
@@ -1003,19 +1037,30 @@ def result_state_ajax(request):  #
                                       '供质押反担保，签订质押反担保合同，并办理质押登记。</p>'
                         order += 1
                         crder_str = '%s、' % order
+                    if agr_typ in [41, 42, 47]:
+                        result += '<p>%s同意对上述事项所涉及的相关合同及协议进行强制执行公证。' % crder_str
                     if decision == 11:
                         result += '<p><strong>本公司及参会股东对本次股东会决议的程序的合法性以及股东签名的真实性负责。</strong></p>'
                         result += '<p>参会股东（或代表）签字：</p>'
+                    elif decision == 13:
+                        result += '<p><strong>本合伙企业及参会合伙人对本次合伙人会议决议的程序的合法性以及合伙人签名的真实性负责。</strong></p>'
+                        result += '<p>参会合伙人（或代表）签字：</p>'
                     elif decision == 21:
                         result += '<p><strong>本公司及参会董事对本次股东会决议的程序的合法性以及股东签名的真实性负责。</strong></p>'
                         result += '<p>参会董事（或代表）签字：</p>'
+                    elif decision == 23:
+                        result += '<p><strong>本企业及参会管委会委员对本次管委会决议的程序的合法性以及委员签名的真实性负责。</strong></p>'
+                        result += '<p>参会委员（或代表）签字：</p>'
 
-                    if decision == 11:
+                    if decision in [11, 13]:
                         shareholder_list = counter_custom.company_custome.shareholder_custom_c.all()
                         shareholder_count = shareholder_list.count()
                         shareholder_num = 0
                         result += '<p>'
-                        signature = '<table><tr><th width="200pt">股东姓名（名称）</th><th>签字（盖章）</th><th>联系方式</th></tr>'
+                        if decision == 11:
+                            signature = '<table><tr><th width="200pt">股东姓名（名称）</th><th>签字（盖章）</th><th>联系方式</th></tr>'
+                        elif decision == 13:
+                            signature = '<table><tr><th width="200pt">合伙人姓名（名称）</th><th>签字（盖章）</th><th>联系方式</th></tr>'
                         for shareholder in shareholder_list:
                             result += '%s' % shareholder.shareholder_name
                             signature += '<tr class="trs"><td align="center">%s</td><td></td><td></td></tr>' % shareholder.shareholder_name
@@ -1024,15 +1069,22 @@ def result_state_ajax(request):  #
                                 result += '、'
                         signature += '</table>'
                         result += '</p></div>'
-                        result += '<div class="tt" align="center">%s股东</div>' \
-                                  '<div class="ts" align="center">签字样本</div>' % counter_custom.name
+                        if decision == 11:
+                            result += '<div class="tt" align="center">%s股东</div>' \
+                                      '<div class="ts" align="center">签字样本</div>' % counter_custom.name
+                        elif decision == 13:
+                            result += '<div class="tt" align="center">%s合伙人</div>' \
+                                      '<div class="ts" align="center">签字样本</div>' % counter_custom.name
                         result += signature
-                    elif decision == 21:
+                    elif decision in [21, 23]:
                         trustee_list = counter_custom.company_custome.trustee_custom_c.all()
                         trustee_count = trustee_list.count()
                         trustee_num = 0
                         result += '<p>'
-                        signature = '<table><tr><th width="200pt">董事姓名</th><th>签字</th><th>联系方式</th></tr>'
+                        if decision == 21:
+                            signature = '<table><tr><th width="200pt">董事姓名</th><th>签字</th><th>联系方式</th></tr>'
+                        elif decision == 23:
+                            signature = '<table><tr><th width="200pt">委员姓名</th><th>签字</th><th>联系方式</th></tr>'
                         for trustee in trustee_list:
                             result += '%s' % trustee.trustee_name
                             signature += '<tr class="trs"><td align="center">%s</td><td></td><td></td></tr>' % trustee.trustee_name
@@ -1041,8 +1093,12 @@ def result_state_ajax(request):  #
                                 result += '、'
                         signature += '</table>'
                         result += '</p></div>'
-                        result += '<div class="tt" align="center">%s董事</div>' \
-                                  '<div class="ts" align="center">签字样本</div>' % counter_custom.name
+                        if decision == 21:
+                            result += '<div class="tt" align="center">%s董事</div>' \
+                                      '<div class="ts" align="center">签字样本</div>' % counter_custom.name
+                        elif decision == 23:
+                            result += '<div class="tt" align="center">%s管委会委员</div>' \
+                                      '<div class="ts" align="center">签字样本</div>' % counter_custom.name
                         result += signature
                     default = {'agree': agree_obj, 'custom': counter_custom, 'result_typ': result_tp,
                                'result_detail': result, 'resultor': request.user}

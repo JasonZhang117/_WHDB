@@ -66,7 +66,7 @@ class CustomesC(models.Model):
     district = models.ForeignKey(to='Districtes', verbose_name="所属区域",
                                  on_delete=models.PROTECT,
                                  related_name='custome_district')
-    DECISIONOR_LIST = [(11, '股东会'), (21, '董事会')]
+    DECISIONOR_LIST = [(11, '股东会'), (13, '合伙人会议'), (21, '董事会'), (23, '管理委员会')]
     decisionor = models.IntegerField(verbose_name='决策机构', choices=DECISIONOR_LIST, default=11)
     capital = models.FloatField(verbose_name='注册资本')
     registered_addr = models.CharField(verbose_name='注册地址', max_length=64)

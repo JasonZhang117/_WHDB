@@ -166,7 +166,8 @@ class ResultState(models.Model):  # 房产抵押反担保合同
     custom = models.ForeignKey(to='Customes', verbose_name="客户",
                                on_delete=models.PROTECT,
                                related_name='result_custom')
-    RESULT_TYP_LIST = [(11, '股东会决议'), (21, '董事会决议'), (31, '声明书'), (41, '单身申明')]
+    RESULT_TYP_LIST = [(11, '股东会决议'), (13, '合伙人会议决议'), (21, '董事会决议'), (23, '管委会决议'),
+                       (31, '弃权声明'), (41, '单身申明')]
     result_typ = models.IntegerField(verbose_name='决议类型', choices=RESULT_TYP_LIST)
     result_detail = models.TextField(verbose_name='决议声明内容', blank=True, null=True)
     resultor = models.ForeignKey(to='Employees', verbose_name="创建者",
