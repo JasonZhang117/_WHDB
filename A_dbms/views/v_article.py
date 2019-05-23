@@ -29,7 +29,7 @@ def article(request, *args, **kwargs):  # 项目列表
     PAGE_TITLE = '项目列表'
 
     form_article_add_edit = forms.ArticlesAddForm()
-    for k, v in request.GET.items():
+    for k, v in request.GET.items():  # 获取传递参数
         print(k, ' ', v)
     condition = {
         # 'article_state' : 0, #查询字段及值的字典，空字典查询所有

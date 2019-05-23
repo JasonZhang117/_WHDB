@@ -16,8 +16,8 @@ class Compensatories(models.Model):  #
     '''STAGE_TYPE_LIST = ((1, '证据及财产线索资料'), (11, '诉前资料'), (21, '一审资料'),
                            (31, '上诉及再审'), (41, '案外之诉'),
                            (51, '执行资料'), (99, '其他'))'''
-    DUN_STATE_LIST = ((1, '已代偿'), (3, '诉前'), (11, '一审'), (21, '上诉及再审'), (31, '案外之诉'),
-                      (41, '执行'), (91, '结案'))
+    DUN_STATE_LIST = [(1, '已代偿'), (3, '诉前'), (11, '一审'), (21, '上诉及再审'), (31, '案外之诉'),
+                      (41, '执行'), (91, '结案')]
     dun_state = models.IntegerField(verbose_name='追偿状态', choices=DUN_STATE_LIST, default=1)
     compensator = models.ForeignKey(to='Employees', verbose_name="创建人", on_delete=models.PROTECT,
                                     related_name='compensator_employee')
@@ -46,8 +46,8 @@ class Dun(models.Model):  #
     custom = models.ManyToManyField(to='Customes', verbose_name="被告人",
                                     related_name='dun_custom',
                                     null=True, blank=True)
-    DUN_STAGE_LIST = ((1, '已代偿'), (3, '诉前'), (11, '一审'), (21, '上诉及再审'), (31, '案外之诉'),
-                      (41, '执行'), (91, '结案'))
+    DUN_STAGE_LIST = [(1, '已代偿'), (3, '诉前'), (11, '一审'), (21, '上诉及再审'), (31, '案外之诉'),
+                      (41, '执行'), (91, '结案')]
     dun_stage = models.IntegerField(verbose_name='追偿状态', choices=DUN_STAGE_LIST, default=1)
     dunor = models.ForeignKey(to='Employees', verbose_name="创建人", on_delete=models.PROTECT,
                               related_name='dunor_employee')

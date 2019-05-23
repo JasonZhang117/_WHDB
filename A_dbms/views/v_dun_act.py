@@ -1039,8 +1039,12 @@ def stage_add_ajax(request):
                       (21, '执行'), (31, '和解'),
                       (41, '中止执行'), (51, '终本执行'), (61, '终止执行'))'''
                     if stage_type in [11, 21, 31, 41, 51]:
+                        '''DUN_STATE_LIST = [(1, '已代偿'), (3, '诉前'), (11, '一审'), (21, '上诉及再审'), 
+                        (31, '案外之诉'), (41, '执行'), (91, '结案')]'''
                         dun_obj.compensatory.all().update(dun_state=dun_state_n)
-                        dun_list.update(dun_state=dun_state_n)
+                        '''DUN_STAGE_LIST = [(1, '已代偿'), (3, '诉前'), (11, '一审'), (21, '上诉及再审'), 
+                        (31, '案外之诉'), (41, '执行'), (91, '结案')]'''
+                        dun_list.update(dun_stage=dun_state_n)
                 response['message'] = '成功创建资料目录信息！'
             except Exception as e:
                 response['status'] = False

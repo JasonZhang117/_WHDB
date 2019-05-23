@@ -93,8 +93,8 @@ class Counters(models.Model):  # 反担保合同
         (51, '股权预售'), (52, '房产预售'), (53, '土地预售')]
     counter_typ = models.IntegerField(verbose_name='合同类型', choices=COUNTER_TYP_LIST)
     counter_copies = models.IntegerField(verbose_name='合同份数')
-    COUNTER_STATE_LIST = ((11, '未签订'), (21, '已签订'), (31, '作废'))
-    counter_state = models.IntegerField(verbose_name='签订状态', choices=COUNTER_STATE_LIST, default=21)
+    COUNTER_STATE_LIST = [(11, '未签订'), (21, '已签订'), (31, '作废')]
+    counter_state = models.IntegerField(verbose_name='签订状态', choices=COUNTER_STATE_LIST, default=11)
     counter_sign_date = models.DateField(verbose_name='签订日期', null=True, blank=True)
     counter_remark = models.TextField(verbose_name='签订备注', null=True, blank=True)
     counter_view = models.TextField(verbose_name='合同预览', null=True, blank=True)
@@ -167,7 +167,7 @@ class ResultState(models.Model):  # 房产抵押反担保合同
                                on_delete=models.PROTECT,
                                related_name='result_custom')
     RESULT_TYP_LIST = [(11, '股东会决议'), (13, '合伙人会议决议'), (21, '董事会决议'), (23, '管委会决议'),
-                       (31, '弃权声明'), (41, '单身申明')]
+                       (31, '声明书'), (41, '单身申明')]
     result_typ = models.IntegerField(verbose_name='决议类型', choices=RESULT_TYP_LIST)
     result_detail = models.TextField(verbose_name='决议声明内容', blank=True, null=True)
     resultor = models.ForeignKey(to='Employees', verbose_name="创建者",
