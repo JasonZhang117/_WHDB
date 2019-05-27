@@ -4,6 +4,7 @@
         <tr style="text-align: center">
             <th>合同编号</th>
             <th>合同类型</th>
+            <th>合同份数</th>
             <th>签订人</th>
 {#            <th>签订情况</th>#}
             {% if PAGE_TITLE == '风控落实' %}
@@ -20,6 +21,7 @@
             <tr counter-nid={{ counter.id }} counter-typ-nid={{ counter.counter_typ }}>
                 <td>{{ counter.counter_num }}</td>
                 <td>{{ counter.get_counter_typ_display }}</td>
+                <td align="right">{{ counter.counter_copies }}</td>
                 {% if counter.counter_typ in COUNTER_TYP_CUSTOM %}
                     <td>
                         {% for custome in counter.assure_counter.custome.all %}

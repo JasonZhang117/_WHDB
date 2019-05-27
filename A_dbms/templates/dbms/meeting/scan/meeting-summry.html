@@ -15,6 +15,7 @@
         <label class="col-lg-3 col-md-4 col-sm-6 col-xs-12">评审编号：{{ meeting_obj.num }}</label>
         <label class="col-lg-3 col-md-4 col-sm-6 col-xs-12">评审类型：{{ meeting_obj.get_review_model_display }}</label>
         <label class="col-lg-3 col-md-4 col-sm-6 col-xs-12">评审日期：{{ meeting_obj.review_date }}</label>
+        <label class="col-lg-3 col-md-4 col-sm-6 col-xs-12">主持人：{{ meeting_obj.compere }}</label>
         <label class="col-lg-3 col-md-4 col-sm-6 col-xs-12">会议状态：{{ meeting_obj.get_meeting_state_display }}</label>
     </div>
 </div>

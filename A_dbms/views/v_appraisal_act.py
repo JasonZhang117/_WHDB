@@ -31,13 +31,13 @@ def guarantee_add_ajax(request):  # 反担保措施添加ajax
     '''ARTICLE_STATE_LIST = ((1, '待反馈'), (2, '已反馈'), (3, '待上会'), (4, '已上会'), (5, '已签批'),
                           (51, '已放款'), (52, '已放完'), (55, '已解保'), (61, '待变更'), (99, '已注销'))'''
     article_state = lending_obj.summary.article_state
-    ''' SURE_TYP_LIST = (
+    '''  SURE_TYP_LIST = [
         (1, '企业保证'), (2, '个人保证'),
         (11, '房产抵押'), (12, '土地抵押'), (13, '动产抵押'), (14, '在建工程抵押'), (15, '车辆抵押'),
         (21, '房产顺位'), (22, '土地顺位'), (23, '在建工程顺位'), (24, '动产顺位'),
         (31, '应收质押'), (32, '股权质押'), (33, '票据质押'), (34, '动产质押'), (39, '其他权利质押'),
         (42, '房产监管'), (43, '土地监管'), (44, '票据监管'), (47, '动产监管'), (49, '其他监管'),
-        (51, '股权预售'), (52, '房产预售'), (53, '土地预售'))'''
+        (51, '股权预售'), (52, '房产预售'), (53, '土地预售'), (59, '其他预售')]'''
     if article_state in [1, 2, 3, 4, 61]:
         if form_lendingsures.is_valid():
             lendingsures_clean = form_lendingsures.cleaned_data
@@ -214,7 +214,7 @@ def guarantee_add_ajax(request):  # 反担保措施添加ajax
                 except Exception as e:
                     response['status'] = False
                     response['message'] = '反担保设置失败：%s' % str(e)
-            elif sure_typ in [39, 49]:  # 其他
+            elif sure_typ in [39, 49, 59]:  # 其他
                 form_lendingother_add = forms.LendinOtherForm(post_data)
                 if form_lendingother_add.is_valid():
                     lendingwarrant_clean = form_lendingother_add.cleaned_data

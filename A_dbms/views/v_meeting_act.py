@@ -60,7 +60,7 @@ def meeting_add_ajax(request):
             with transaction.atomic():
                 meeting_obj = models.Appraisals.objects.create(
                     num=review_num, review_year=r_year, review_model=review_model, review_order=order_max_x,
-                    review_date=review_date, meeting_buildor=request.user)
+                    compere=cleaned_data['compere'], review_date=review_date, meeting_buildor=request.user)
                 meeting_obj.article.set(article_list_l)
                 models.Articles.objects.filter(id__in=article_list_l).update(article_state=3)
             response['message'] = '成功添加评审会：%s！' % meeting_obj.num
@@ -275,11 +275,12 @@ def meeting_edit_ajax(request):  # 编辑评审会ajax
             try:
                 with transaction.atomic():
                     meeting_list.update(review_model=meeting_edit_cleaned['review_model'],
+                                        compere=meeting_edit_cleaned['compere'],
                                         review_date=meeting_edit_cleaned['review_date'])
                 response['message'] = '成功变更评审会：%s！' % meeting_obj.num
             except Exception as e:
                 response['status'] = False
-                response['message'] = '分配评委失败：%s' % str(e)
+                response['message'] = '变更评审会失败：%s' % str(e)
         else:
             response['status'] = False
             response['message'] = '表单信息有误！！！'

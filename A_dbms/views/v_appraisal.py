@@ -105,13 +105,13 @@ def appraisal_scan_lending(request, article_id, lending_id):  # 评审项目预�
     lending_obj = models.LendingOrder.objects.get(id=lending_id)
     '''ARTICLE_STATE_LIST = ((1, '待反馈'), (2, '已反馈'), (3, '待上会'), (4, '已上会'), (5, '已签批'),
                           (51, '已放款'), (52, '已放完'), (55, '已解保'), (61, '待变更'), (99, '已注销'))'''
-    '''SURE_TYP_LIST = (
+    '''SURE_TYP_LIST = [
         (1, '企业保证'), (2, '个人保证'),
         (11, '房产抵押'), (12, '土地抵押'), (13, '动产抵押'), (14, '在建工程抵押'), (15, '车辆抵押'),
         (21, '房产顺位'), (22, '土地顺位'), (23, '在建工程顺位'), (24, '动产顺位'),
         (31, '应收质押'), (32, '股权质押'), (33, '票据质押'), (34, '动产质押'), (39, '其他权利质押'),
         (42, '房产监管'), (43, '土地监管'), (44, '票据监管'), (47, '动产监管'), (49, '其他监管'),
-        (51, '股权预售'), (52, '房产预售'), (53, '土地预售'))'''
+        (51, '股权预售'), (52, '房产预售'), (53, '土地预售'), (59, '其他预售')]'''
     '''WARRANT_TYP_LIST = [
         (1, '房产'), (2, '房产包'), (5, '土地'), (6, '在建工程'), (11, '应收账款'),
         (21, '股权'), (31, '票据'), (41, '车辆'), (51, '动产'), (55, '其他'), (99, '他权')]'''
@@ -124,7 +124,7 @@ def appraisal_scan_lending(request, article_id, lending_id):  # 评审项目预�
     DRAFT_LIST = [33, 44]  # 票据类
     VEHICLE_LIST = [15, ]  # 车辆类
     CHATTEL_LIST = [13, 24, 34, 47]  # 动产类
-    OTHER_LIST = [39, 49]  # 其他类
+    OTHER_LIST = [39, 49, 59]  # 其他类
     custom_lending_list = models.Customes.objects.filter(lending_custom__sure__lending=lending_obj)
     warrant_lending_h_list = models.Warrants.objects.filter(lending_warrant__sure__lending=lending_obj,
                                                             warrant_typ__in=[1, 2])
@@ -144,6 +144,7 @@ def appraisal_scan_lending(request, article_id, lending_id):  # 评审项目预�
                                                             warrant_typ=51)
     warrant_lending_o_list = models.Warrants.objects.filter(lending_warrant__sure__lending=lending_obj,
                                                             warrant_typ=55)
+    print('warrant_lending_o_list:',warrant_lending_o_list)
     form_lendingcustoms_c_add = models.Customes.objects.exclude(
         id=article_obj.custom.id).filter(genre=1).values_list('id', 'name')
     form_lendingcustoms_p_add = models.Customes.objects.exclude(
@@ -350,7 +351,7 @@ def summary_scan(request, article_id):  # 评审项目预览
             (21, '房产顺位'), (22, '土地顺位'), (23, '在建工程顺位'), (24, '动产顺位'),
             (31, '应收质押'), (32, '股权质押'), (33, '票据质押'), (34, '动产质押'), (39, '其他权利质押'),
             (42, '房产监管'), (43, '土地监管'), (44, '票据监管'), (47, '动产监管'), (49, '其他监管'),
-            (51, '股权预售'), (52, '房产预售'), (53, '土地预售')]'''
+            (51, '股权预售'), (52, '房产预售'), (53, '土地预售'), (59, '其他预售')]'''
             ''' WARRANT_TYP_LIST = [
             (1, '房产'), (2, '房产包'), (5, '土地'), (6, '在建工程'), (11, '应收账款'),
             (21, '股权'), (31, '票据'), (41, '车辆'), (51, '动产'), (55, '其他'), (99, '他权')]'''
@@ -709,7 +710,7 @@ def summary_scan(request, article_id):  # 评审项目预览
                 for warrant_r in warrant_r_31_list:
                     warrant_r_c += 1
                     summary += '%s将%s' % (warrant_r.receive_warrant.receive_owner.name,
-                                           warrant_r.receive_warrant.receivable_detail)
+                                          warrant_r.receive_warrant.receivable_detail)
                     if warrant_r_c < warrant_r_count:
                         summary += '、'
                 summary += '质押给我公司，签订质押反担保合同并办理质押登记。</td></tr>'
@@ -778,7 +779,7 @@ def summary_scan(request, article_id):  # 评审项目预览
                 lending_warrant__sure__lending=lending, lending_warrant__sure__sure_typ=49)  # 其他监管
             if warrant_o_49_list:
                 rowspan_count += 1
-                summary += '<tr class="ot tbp"><td class="oi" colspan="4">&nbsp&nbsp%s、其他：' % sure_or
+                summary += '<tr class="ot tbp"><td class="oi" colspan="4">&nbsp&nbsp%s、其他监管：' % sure_or
                 warrant_o_49_count = warrant_o_49_list.count()
                 warrant_o_49_c = 0
                 for warrant_o_49 in warrant_o_49_list:
@@ -805,6 +806,21 @@ def summary_scan(request, article_id):  # 评审项目预览
                 rowspan_count += 2
                 warrant_count = warrant_g_53_list.count()
                 rowspan_count += warrant_count
+            warrant_o_59_list = models.Warrants.objects.filter(
+                lending_warrant__sure__lending=lending, lending_warrant__sure__sure_typ=59)  # 其他预售
+            if warrant_o_59_list:
+                rowspan_count += 1
+                summary += '<tr class="ot tbp"><td class="oi" colspan="4">&nbsp&nbsp%s、其他：' % sure_or
+                warrant_o_59_count = warrant_o_59_list.count()
+                warrant_o_59_c = 0
+                for warrant_o_59 in warrant_o_59_list:
+                    warrant_o_59_c += 1
+                    summary += '%s提供%s' % (warrant_o_59.other_warrant.other_owner.name,
+                                           warrant_o_59.other_warrant.other_detail)
+                    if warrant_o_59_c < warrant_o_59_count:
+                        summary += '、'
+                summary += '</td></tr>'
+                sure_or += 1
         supply_list = article_obj.supply_summary.all()
         if supply_list:
             rowspan_count += 1

@@ -69,12 +69,12 @@ def agree_scan(request, agree_id):  # 查看合同
     PAGE_TITLE = '合同详情'
     COUNTER_TYP_CUSTOM = [1, 2]
     WARRANT_TYP_OWN_LIST = [1, 2, 5, 6]
-    '''COUNTER_TYP_LIST = (
+    ''' COUNTER_TYP_LIST = [
         (1, '企业担保'), (2, '个人保证'),
         (11, '房产抵押'), (12, '土地抵押'), (13, '动产抵押'), (14, '在建工程抵押'), (15, '车辆抵押'),
         (31, '应收质押'), (32, '股权质押'), (33, '票据质押'), (34, '动产质押'),
         (41, '其他权利质押'),
-        (51, '股权预售'), (52, '房产预售'), (53, '土地预售'))'''
+        (51, '股权预售'), (52, '房产预售'), (53, '土地预售'), (59, '其他预售')]'''
     agree_obj = models.Agrees.objects.get(id=agree_id)
     agree_lending_obj = agree_obj.lending
 

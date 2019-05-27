@@ -12,6 +12,12 @@
         <label id="e_review_date" class="pull-right">{{ form_meeting_add.review_date.errors }}</label>
     </div>
 
+    <div class="form-group"><!--主持人-->
+        <label for="id_compere" class="col-sm-3 control-label">{{ form_meeting_add.compere.label }}：</label>
+        <div class="col-sm-9">{{ form_meeting_add.compere }}</div>
+        <label id="e_compere" class="pull-right">{{ form_meeting_add.compere.errors }}</label>
+    </div>
+
     <div class="form-group"><!--参评项目-->
         <label for="id_article" class="col-sm-3 control-label">{{ form_meeting_add.article.label }}：</label>
         <div class="col-sm-9">{{ form_meeting_add.article }}</div>

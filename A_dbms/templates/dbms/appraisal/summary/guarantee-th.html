@@ -6,7 +6,7 @@
     <td></td>
 </tr>
 <tr class="otr">{#审保会次数#}
-    <td class="bb" style="width: 100px">审保会次数</td>
+    <td class="bb" width="100pt">审保会次数</td>
     <td class="bb" colspan="4">
         {{ review_year }}年度第{{ review_order_cn }}次审保会（{{ article_obj.appraisal_article.all.0.get_review_model_display }}）
     </td>
@@ -17,7 +17,7 @@
 </tr>
 <tr class="otr">{#主持人#}
     <td class="bb">主持人</td>
-    <td class="bb" colspan="4">张春玉</td>
+    <td class="bb" colspan="4">{{ article_obj.appraisal_article.all.0.compere.name }}</td>
 </tr>
 <tr class="otr">{#参会委员#}
     <td class="bb">参会委员</td>

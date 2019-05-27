@@ -250,6 +250,8 @@ def agree_edit_ajax(request):  #
                                 counter_name = 6
                             elif counter_typ in [51, 52, 53]:
                                 counter_name = 9
+                            elif counter_typ == 59:
+                                counter_name = 59
                         elif agree_typ in [2, 42]:
                             if counter_typ == 1:
                                 counter_name = 21
@@ -265,6 +267,8 @@ def agree_edit_ajax(request):  #
                                 counter_name = 26
                             elif counter_typ in [51, 52, 53]:
                                 counter_name = 9
+                            elif counter_typ == 59:
+                                counter_name = 59
                         elif agree_typ == 3:
                             if counter_typ == 1:
                                 counter_name = 21
@@ -280,6 +284,8 @@ def agree_edit_ajax(request):  #
                                 counter_name = 26
                             elif counter_typ in [51, 52, 53]:
                                 counter_name = 9
+                            elif counter_typ == 59:
+                                counter_name = 59
                         elif agree_typ in [7, 47]:
                             if counter_typ == 1:
                                 counter_name = 41
@@ -295,6 +301,8 @@ def agree_edit_ajax(request):  #
                                 counter_name = 46
                             elif counter_typ in [51, 52, 53]:
                                 counter_name = 9
+                            elif counter_typ == 59:
+                                counter_name = 59
                         models.Counters.objects.filter(id=counter.id).update(counter_name=counter_name)
                 response['skip'] = "/dbms/agree/scan/%s" % agree_obj.id
                 response['message'] = '成功修改合同：%s！' % agree_obj.agree_num
@@ -349,13 +357,13 @@ def counter_add_ajax(request):
     from_counter_add = forms.AddCounterForm(post_data)
 
     counter_prefix = agree_obj.num_prefix
-    '''SURE_TYP_LIST = [
+    ''' SURE_TYP_LIST = [
         (1, '企业保证'), (2, '个人保证'),
         (11, '房产抵押'), (12, '土地抵押'), (13, '动产抵押'), (14, '在建工程抵押'), (15, '车辆抵押'),
         (21, '房产顺位'), (22, '土地顺位'), (23, '在建工程顺位'), (24, '动产顺位'),
         (31, '应收质押'), (32, '股权质押'), (33, '票据质押'), (34, '动产质押'), (39, '其他权利质押'),
         (42, '房产监管'), (43, '土地监管'), (44, '票据监管'), (47, '动产监管'), (49, '其他监管'),
-        (51, '股权预售'), (52, '房产预售'), (53, '土地预售')]'''
+        (51, '股权预售'), (52, '房产预售'), (53, '土地预售'), (59, '其他预售')]'''
     '''AGREE_TYP_LIST = [(1, '单笔'), (2, '最高额'), (3, '保函'), (7, '小贷'),
                                      (41, '单笔(公证)'), (42, '最高额(公证)'), (47, '小贷(公证)')]'''
     ''' COUNTER_TYP_LIST = [
@@ -363,7 +371,7 @@ def counter_add_ajax(request):
         (11, '房产抵押'), (12, '土地抵押'), (13, '动产抵押'), (14, '在建工程抵押'), (15, '车辆抵押'),
         (31, '应收质押'), (32, '股权质押'), (33, '票据质押'), (34, '动产质押'),
         (41, '其他权利质押'),
-        (51, '股权预售'), (52, '房产预售'), (53, '土地预售')]'''
+        (51, '股权预售'), (52, '房产预售'), (53, '土地预售'), (59, '其他预售')]'''
     agree_typ = agree_obj.agree_typ
     '''COUNTER_NAME_LIST = [(1, '保证反担保合同'), (2, '不可撤销的反担保函'),
                          (3, '抵押反担保合同'), (4, '应收账款质押反担保合同'),
@@ -373,7 +381,8 @@ def counter_add_ajax(request):
                          (25, '最高额股权质押反担保合同'), (26, '最高额质押反担保合同'),
                          (41, '保证合同'),
                          (43, '抵押合同'), (44, '应收账款质押合同'),
-                         (45, '股权质押合同'), (46, '质押合同')]'''
+                         (45, '股权质押合同'), (46, '质押合同'),
+                         (59, '举办者权益转让协议'),]'''
     counter_name = ''
     if agree_typ in [1, 41]:
         if counter_typ == 1:
@@ -390,6 +399,8 @@ def counter_add_ajax(request):
             counter_name = 6
         elif counter_typ in [51, 52, 53]:
             counter_name = 9
+        elif counter_typ == 59:
+            counter_name = 59
     elif agree_typ in [2, 42]:
         if counter_typ == 1:
             counter_name = 21
@@ -405,6 +416,8 @@ def counter_add_ajax(request):
             counter_name = 26
         elif counter_typ in [51, 52, 53]:
             counter_name = 9
+        elif counter_typ == 59:
+            counter_name = 59
     elif agree_typ in [7, 47]:
         if counter_typ == 1:
             counter_name = 41
@@ -420,6 +433,8 @@ def counter_add_ajax(request):
             counter_name = 46
         elif counter_typ in [51, 52, 53]:
             counter_name = 9
+        elif counter_typ == 59:
+            counter_name = 59
 
     if counter_typ == 1:
         counter_typ_n = 'X'
@@ -441,7 +456,7 @@ def counter_add_ajax(request):
         counter_copies = 4
         counter_max = models.Counters.objects.filter(
             agree=agree_obj, counter_typ__in=[31, 32, 33, 34, 41]).count() + 1
-    elif counter_typ in [51, 52, 53]:
+    elif counter_typ in [51, 52, 53, 59]:
         counter_typ_n = 'Y'
         counter_copies = 3
         counter_max = models.Counters.objects.filter(
@@ -457,7 +472,6 @@ def counter_add_ajax(request):
         counter_copies += 1
     '''成武担[2016]018④W6-1'''
     counter_num = '%s%s%s-%s' % (counter_prefix, counter_typ_n, counter_copies, counter_max)
-
     agree_state_counter = agree_obj.agree_state
     '''AGREE_STATE_LIST = [(11, '待签批'), (21, '已签批'), (31, '未落实'),
                         (41, '已落实'), (51, '待变更'), (61, '已解保'), (99, '已注销')]'''
@@ -503,16 +517,24 @@ def counter_add_ajax(request):
                 warrant_list = post_data['vehicle']
             elif counter_typ in [13, 34]:  # (13, '动产抵押'), (34, '动产质押')
                 warrant_list = post_data['chattel']
-            elif counter_typ == 41:  # (41, '其他权利质押')
+            elif counter_typ in [41, 59]:  # (41, '其他权利质押')
                 warrant_list = post_data['other']
+            print('warrant_list:', warrant_list)
+            print('counter_num:', counter_num)
+            print('counter_name:', counter_name)
+            print('agree:', agree_obj)
+            print('counter_typ:', counter_typ)
+            print('counter_copies:', counter_copies)
             try:
                 with transaction.atomic():
                     counter_obj = models.Counters.objects.create(
                         counter_num=counter_num, counter_name=counter_name, agree=agree_obj, counter_typ=counter_typ,
                         counter_copies=counter_copies, counter_buildor=request.user)
+
                     counter_warrant_obj = models.CountersWarrants.objects.create(
                         counter=counter_obj, counter_warrant_buildor=request.user)
                     for warrant in warrant_list:
+                        print('warrant:', warrant)
                         counter_warrant_obj.warrant.add(warrant)
                 response['message'] = '成功创建反担保合同：%s！' % counter_obj.counter_num
             except Exception as e:
@@ -739,21 +761,21 @@ def result_state_ajax(request):  #
                             (21, '股权'), (31, '票据'), (41, '车辆'), (51, '动产'), (55, '其他'), (99, '他权')]'''
                     counter_warrant_count = models.Warrants.objects.filter(
                         counter_warrant__counter__in=counter_agree_list, warrant_typ__in=[1, 2, 5],
-                        ownership_warrant__owner=counter_custom).count()
+                        ownership_warrant__owner=counter_custom).exists()
                     counter_receive_count = models.Receivable.objects.filter(
-                        warrant__counter_warrant__counter__in=counter_agree_list, receive_owner=counter_custom).count()
+                        warrant__counter_warrant__counter__in=counter_agree_list, receive_owner=counter_custom).exists()
                     counter_target_count = models.Stockes.objects.filter(
-                        warrant__counter_warrant__counter__in=counter_agree_list, target=counter_custom.name).count()
+                        warrant__counter_warrant__counter__in=counter_agree_list, target=counter_custom.name).exists()
                     counter_draft_count = models.Draft.objects.filter(
-                        warrant__counter_warrant__counter__in=counter_agree_list, draft_owner=counter_custom).count()
+                        warrant__counter_warrant__counter__in=counter_agree_list, draft_owner=counter_custom).exists()
                     counter_vehicle_count = models.Vehicle.objects.filter(
-                        warrant__counter_warrant__counter__in=counter_agree_list, vehicle_owner=counter_custom).count()
+                        warrant__counter_warrant__counter__in=counter_agree_list, vehicle_owner=counter_custom).exists()
                     counter_chattel_count = models.Chattel.objects.filter(
-                        warrant__counter_warrant__counter__in=counter_agree_list, chattel_owner=counter_custom).count()
+                        warrant__counter_warrant__counter__in=counter_agree_list, chattel_owner=counter_custom).exists()
                     counter_other_count = models.Others.objects.filter(
-                        warrant__counter_warrant__counter__in=counter_agree_list, other_owner=counter_custom).count()
+                        warrant__counter_warrant__counter__in=counter_agree_list, other_owner=counter_custom).exists()
                     counter_asure_count = models.CountersAssure.objects.filter(
-                        counter__in=counter_agree_list, custome=counter_custom).count()
+                        counter__in=counter_agree_list, custome=counter_custom).exists()
                     counter_count = (counter_warrant_count + counter_receive_count + counter_target_count +
                                      counter_draft_count + counter_vehicle_count + counter_chattel_count +
                                      counter_other_count + counter_asure_count)
@@ -1107,12 +1129,13 @@ def result_state_ajax(request):  #
                 else:
                     spouse = counter_custom.person_custome.spouses
                     if not spouse:
-                        result += '<div class="tt" align="center"><strong>个人婚姻状况申明</strong></div>'
+                        result += '<div class="tt" align="center"><strong>个人婚姻状况及财产申明</strong></div>'
                         result += '<p>姓名：%s</p>' % counter_custom.name
                         result += '<p>居民身份证编号： %s</p>' % counter_custom.person_custome.license_num
                         result += '<p>家庭详细住址：%s</p>' % counter_custom.contact_addr
-                        result += '<p>现本人声明，截止到&nbsp&nbsp&nbsp年&nbsp&nbsp月&nbsp&nbsp日，本人在全国婚姻登记' \
-                                  '处管辖范围内未登记结婚。</p>'
+                        result += '<p>现本人申明：</p><p>1、截止到<u>&nbsp&nbsp&nbsp</u>年<u>&nbsp&nbsp</u>月' \
+                                  '<u>&nbsp&nbsp</u>日，本人在婚姻状况为：□已婚、□未婚、□离异、□丧偶。</p>'
+                        result += '<p>2、本人名下所有房屋、银行存款等资产均系本人单独所有，无其他共有人。</p>'
                         result += '<p><strong>特此申明！</strong></p><br>'
                         result += '<p class="sm">申明人：</p><br>'
                         result += '<p class="sm">&nbsp&nbsp&nbsp年&nbsp&nbsp月&nbsp&nbsp日</p>'

@@ -1,27 +1,21 @@
 <div id="form_meeting_edit">
 
     <div class="form-group"> <!--评审类型-->
-        <label for="id_review_model" class="col-sm-3 control-label">
-            {{ form_meeting_edit.review_model.label }}：
-        </label>
-        <div class="col-sm-9">
-            {{ form_meeting_edit.review_model }}
-        </div>
-        <label id="e_review_model" class="pull-right">
-            {{ form_meeting_edit.review_model.errors }}
-        </label>
+        <label for="id_review_model" class="col-sm-3 control-label">{{ form_meeting_edit.review_model.label }}：</label>
+        <div class="col-sm-9">{{ form_meeting_edit.review_model }}</div>
+        <label id="e_review_model" class="pull-right">{{ form_meeting_edit.review_model.errors }}</label>
     </div>
 
     <div class="form-group"><!--评审日期-->
-        <label for="id_review_date" class="col-sm-3 control-label">
-            {{ form_meeting_edit.review_date.label }}：
-        </label>
-        <div class="col-sm-9">
-            {{ form_meeting_edit.review_date }}
-        </div>
-        <label id="e_review_date" class="pull-right">
-            {{ form_meeting_edit.review_date.errors }}
-        </label>
+        <label for="id_review_date" class="col-sm-3 control-label">{{ form_meeting_edit.review_date.label }}：</label>
+        <div class="col-sm-9">{{ form_meeting_edit.review_date }}</div>
+        <label id="e_review_date" class="pull-right">{{ form_meeting_edit.review_date.errors }}</label>
+    </div>
+
+     <div class="form-group"><!--主持人-->
+        <label for="id_compere" class="col-sm-3 control-label">{{ form_meeting_edit.compere.label }}：</label>
+        <div class="col-sm-9">{{ form_meeting_edit.compere }}</div>
+        <label id="e_compere" class="pull-right">{{ form_meeting_edit.compere.errors }}</label>
     </div>
 
 </div>

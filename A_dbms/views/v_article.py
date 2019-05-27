@@ -173,7 +173,7 @@ def article_scan_lending(request, article_id, lending_id):  # 项目预览
     DRAFT_LIST = [33, 44]  # 票据类
     VEHICLE_LIST = [15, ]  # 车辆类
     CHATTEL_LIST = [13, 24, 34, 47]  # 动产类
-    OTHER_LIST = [39, 49]  # 其他类
+    OTHER_LIST = [39, 49, 59]  # 其他类
     '''反担保情况'''
     custom_lending_list = models.Customes.objects.filter(lending_custom__sure__lending=lending_obj)
     warrant_lending_h_list = models.Warrants.objects.filter(lending_warrant__sure__lending=lending_obj,

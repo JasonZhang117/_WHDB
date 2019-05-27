@@ -72,8 +72,10 @@ def meeting_scan(request, meeting_id):  # 评审会预览
     expert_ll = models.Experts.objects.filter(article_expert__appraisal_article=meeting_obj).count()
     form_meeting_article_add = forms.MeetingArticleAddForm()
 
-    meeting_edit_form_data = {'review_model': meeting_obj.review_model, 'review_date': str(meeting_obj.review_date)}
-    form_meeting_edit = forms.MeetingEditForm(meeting_edit_form_data)
+    meeting_edit_form_data = {'review_model': meeting_obj.review_model,
+                              'review_date': str(meeting_obj.review_date),
+                              'compere': meeting_obj.compere, }
+    form_meeting_edit = forms.MeetingEditForm(initial=meeting_edit_form_data)
 
     return render(request, 'dbms/meeting/meeting-scan.html', locals())
 
