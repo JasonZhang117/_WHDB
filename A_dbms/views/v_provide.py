@@ -169,8 +169,8 @@ def provide_agree_scan(request, agree_id):  # 查看放款
                     if not warrant.warrant_typ in [31, 55]:  # 票据、其他无需他权
                         if not sure.sure_typ in [42, 43, 44, 47, 49, 51, 52, 53, ]:  # 监管、预售无需他权
                             warrant_ypothec_str += '%s' % warrant.warrant_num  # 无他权
-                            if sure_warrant_c < sure_warrant_count:
-                                warrant_ypothec_str += '，'
+                            # if sure_warrant_c < sure_warrant_count:
+                            #     warrant_ypothec_str += '，'
                             if sure_c < sure_count:
                                 warrant_ypothec_str += '，'
                 else:
@@ -180,8 +180,8 @@ def provide_agree_scan(request, agree_id):  # 查看放款
                         # (1, '未入库'), (11, '续抵出库'), (21, '已借出')
                         if warrant_state in [1, 11, 21] and not warrant.warrant_typ == 31:
                             ypothec_storage_str += '%s' % ypothec.warrant.warrant_num  # 他权未入库
-                            if ypothec_c < ypothec_count:
-                                ypothec_storage_str += '，'
+                            # if ypothec_c < ypothec_count:
+                            #     ypothec_storage_str += '，'
                             if sure_c < sure_count:
                                 warrant_ypothec_str += '，'
 

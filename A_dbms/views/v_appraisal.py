@@ -815,8 +815,7 @@ def summary_scan(request, article_id):  # 评审项目预览
                 warrant_o_59_c = 0
                 for warrant_o_59 in warrant_o_59_list:
                     warrant_o_59_c += 1
-                    summary += '%s提供%s' % (warrant_o_59.other_warrant.other_owner.name,
-                                           warrant_o_59.other_warrant.other_detail)
+                    summary += '%s' % (warrant_o_59.other_warrant.other_detail)
                     if warrant_o_59_c < warrant_o_59_count:
                         summary += '、'
                 summary += '</td></tr>'

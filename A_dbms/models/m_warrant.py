@@ -84,7 +84,8 @@ class Houses(models.Model):  # 房产
     house_locate = models.CharField(verbose_name='房产坐落', max_length=128, unique=True)
     HOUSE_APP_LIST = [(1, '住宅'), (11, '商业'), (21, '办公'), (31, '公寓'), (41, '生产性工业用房'),
                       (42, '非生产性工业用房'), (43, '厂房'), (44, '工业性科研用房'),
-                      (51, '科研'), (52, '车间'), (53, '消防通道'), (54, '倒班房'), (61, '车库'), (71, '仓储'),
+                      (51, '科研'), (52, '车间'), (53, '消防通道'), (54, '倒班房'), (61, '车库'),
+                      (62, '车位'), (71, '仓储'),
                       (81, '在建工程'), (91, '其他'), (99, '期房')]
     house_app = models.IntegerField(verbose_name='房产用途', choices=HOUSE_APP_LIST, default=1)
     house_area = models.FloatField(verbose_name='建筑面积')

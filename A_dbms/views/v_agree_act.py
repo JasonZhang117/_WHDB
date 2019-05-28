@@ -333,7 +333,7 @@ def agree_save_ajax(request):  #
                           (51, '已放款'), (52, '已放完'), (55, '已解保'), (61, '待变更'), (99, '已注销')]'''
     try:
         agree_obj.update(agree_view=agree_content)
-        response['message'] = '合同保存成功！'
+        response['message'] = '合同保存成功，正式签订合同须经公司领导签批！！！'
     except Exception as e:
         response['status'] = False
         response['message'] = '合同保存失败：%s' % str(e)
@@ -603,7 +603,7 @@ def counter_save_ajax(request):  # 添加合同
                           (51, '已放款'), (52, '已放完'), (55, '已解保'), (61, '待变更'), (99, '已注销')]'''
     try:
         counter_obj.update(counter_view=counter_content)
-        response['message'] = '合同保存成功！'
+        response['message'] = '合同保存成功，正式签订合同须经公司领导签批！！！'
     except Exception as e:
         response['status'] = False
         response['message'] = '合同保存失败：%s' % str(e)
@@ -692,10 +692,14 @@ def result_state_ajax(request):  #
                 result = ''
                 order = 0
                 if counter_custom.genre == 1:
-                    '''DECISIONOR_LIST = [(11, '股东会'), (13, '合伙人会议'),(21, '董事会'),  (23, '理事会')]'''
+                    '''DECISIONOR_LIST = [(11, '股东会'), (13, '合伙人会议'), (15, '举办者会议'), (21, '董事会'), 
+                        (23, '管理委员会')]'''
+                    '''RESULT_TYP_LIST = [(11, '股东会决议'), (13, '合伙人会议决议'), (15, '举办者会议决议'),
+                        (21, '董事会决议'), (23, '管委会决议'),
+                       (31, '声明书'), (41, '单身申明')]'''
                     decision = counter_custom.company_custome.decisionor
-                    if decision == 11:
-                        result_tp = 11
+                    if decision == 11: #(11, '股东会')
+                        result_tp = 11 #(11, '股东会决议')
                         result = '<div class="split"><div class="tt" align="center"><strong>%s股东会' \
                                  '决议</strong></div>' % counter_custom.name
                         result += '<p>会议时间：&nbsp&nbsp&nbsp年&nbsp&nbsp月&nbsp&nbsp日</p>'
@@ -704,20 +708,10 @@ def result_state_ajax(request):  #
                                   '通知全体股东到会参加会议。本公司共有股东<u>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</u>名，' \
                                   '与会股东<u>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</u>名，与会股东所持股份占公司股份' \
                                   '的<u>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</u>，符合《公司法》和本公司章程规定的' \
-                                  '程序和要求。经代表<u>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</u>表决权的股东通过，' \
+                                  '程序和要求。经代表<u>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</u>表决权的股东表决通过，' \
                                   '做出如下决议：</p>'
-                    elif decision == 21:
-                        result_tp = 21
-                        result = '<div class="split"><div class="tt" align="center"><strong>%s董事会' \
-                                 '决议</strong></div>' % counter_custom.name
-                        result += '<p>会议时间：&nbsp&nbsp&nbsp年&nbsp&nbsp月&nbsp&nbsp日</p>'
-                        result += '<p>会议地点:  公司会议室</p>'
-                        result += '<p>本次董事会会议已按《中华人民共和国公司法》及公司章程的有关规定' \
-                                  '事<u>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</u>名，与会董事占公司董事的' \
-                                  '<u>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</u>，符合《公司法》和本公司章程规定' \
-                                  '的程序和要求。经<u>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</u>名董事通过，做出如下决议：</p>'
-                    elif decision == 13:
-                        result_tp = 13
+                    elif decision == 13: #(13, '合伙人会议')
+                        result_tp = 13 #(13, '合伙人会议决议')
                         result = '<div class="split"><div class="tt" align="center"><strong>%s合伙人' \
                                  '决议</strong></div>' % counter_custom.name
                         result += '<p>会议时间：&nbsp&nbsp&nbsp年&nbsp&nbsp月&nbsp&nbsp日</p>'
@@ -727,9 +721,30 @@ def result_state_ajax(request):  #
                                   '名，与会合伙人<u>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</u>名，与会合伙人占企业合伙' \
                                   '人的<u>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</u>，符合《中华人民共和国合伙企业法》和本' \
                                   '合伙企业合伙人协议规定的程序和要求。经<u>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</u>名' \
-                                  '合伙人通过，做出如下决议：</p>'
-                    elif decision == 23:
-                        result_tp = 23
+                                  '合伙人表决通过，做出如下决议：</p>'
+                    elif decision == 15: #(15, '举办者会议')
+                        result_tp = 15 #(15, '举办者会议决议')
+                        result = '<div class="split"><div class="tt" align="center"><strong>%s举办者会议' \
+                                 '决议</strong></div>' % counter_custom.name
+                        result += '<p>会议时间：&nbsp&nbsp&nbsp年&nbsp&nbsp月&nbsp&nbsp日</p>'
+                        result += '<p>会议地点:  公司会议室</p>'
+                        result += '<p>本次举办者会议已按本医院章程及相关文件规定通知全体举办者到会参加会议。' \
+                                  '本医院共有举办者<u>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</u>名，与会举办者' \
+                                  '<u>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</u>名，与会举办者所持举办者权益占医院举办' \
+                                  '者权益的<u>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</u>，符合本医院章程规定的程序和要求。' \
+                                  '经代表<u>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</u>表决权的举办者表决通过，做出如下决议：</p>'
+                    elif decision == 21: #(21, '董事会')
+                        result_tp = 21 #(21, '董事会决议')
+                        result = '<div class="split"><div class="tt" align="center"><strong>%s董事会' \
+                                 '决议</strong></div>' % counter_custom.name
+                        result += '<p>会议时间：&nbsp&nbsp&nbsp年&nbsp&nbsp月&nbsp&nbsp日</p>'
+                        result += '<p>会议地点:  公司会议室</p>'
+                        result += '<p>本次董事会会议已按《中华人民共和国公司法》及公司章程的有关规定' \
+                                  '事<u>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</u>名，与会董事占公司董事的' \
+                                  '<u>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</u>，符合《公司法》和本公司章程规定' \
+                                  '的程序和要求。经<u>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</u>名董事表决通过，做出如下决议：</p>'
+                    elif decision == 23: #(23, '管理委员会')
+                        result_tp = 23 #(23, '管委会决议')
                         result = '<div class="split"><div class="tt" align="center"><strong>%s管委会' \
                                  '决议</strong></div>' % counter_custom.name
                         result += '<p>会议时间：&nbsp&nbsp&nbsp年&nbsp&nbsp月&nbsp&nbsp日</p>'
@@ -740,7 +755,7 @@ def result_state_ajax(request):  #
                                   '<u>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</u>名，与会委员占全体委员的' \
                                   '<u>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</u>，符合《民办非企业单位登记管理暂行条例》和本' \
                                   '企业《章程》规定的程序和要求。经<u>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</u>名' \
-                                  '委员通过，做出如下决议：</p>'
+                                  '委员表决通过，做出如下决议：</p>'
                     if counter_custom == agree_custom_obj:
                         '''AGREE_TYP_LIST = [(1, '单笔'), (2, '最高额'), (3, '保函'), (7, '小贷'),
                       (41, '单笔(公证)'), (42, '最高额(公证)'), (47, '小贷(公证)')]'''
