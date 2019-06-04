@@ -75,7 +75,7 @@ table {
     width: 100%;
     border-collapse: collapse;
     /*行间距*/
-    line-height: 21pt;
+    line-height: 15pt;
 }
 
 tr, td, th {

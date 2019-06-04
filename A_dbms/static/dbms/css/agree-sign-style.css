@@ -31,6 +31,8 @@ body {
 
 table {
     width: 100%;
+    /*行间距*/
+    line-height: 15pt;
 }
 
 td {

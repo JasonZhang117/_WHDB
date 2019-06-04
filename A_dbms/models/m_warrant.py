@@ -341,7 +341,7 @@ class Chattel(models.Model):  # 动产
     chattel_owner = models.ForeignKey(to='Customes', verbose_name="所有权人",
                                       on_delete=models.PROTECT,
                                       related_name='chattel_custome')
-    CHATTEL_TYP_LIST = [(1, '存货'), (11, '机器设备'), (99, '其他')]
+    CHATTEL_TYP_LIST = [(1, '存货'), (11, '机器设备'), (21, '医疗设备'), (99, '其他')]
     chattel_typ = models.IntegerField(verbose_name='动产种类', choices=CHATTEL_TYP_LIST, default=1)
     chattel_detail = models.TextField(verbose_name="动产具体描述")
     chattel_buildor = models.ForeignKey(to='Employees', verbose_name="创建者", default=1,

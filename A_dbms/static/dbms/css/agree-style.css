@@ -114,14 +114,14 @@ p {
 }
 
 .sign-date {
-    padding-left: 340pt;
+    padding-left: 300pt;
 }
 
 table {
     width: 100%;
     border-collapse: collapse;
     /*行间距*/
-    line-height: 21pt;
+    line-height: 15pt;
 }
 
 tr td {

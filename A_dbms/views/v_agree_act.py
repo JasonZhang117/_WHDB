@@ -98,14 +98,12 @@ def agree_add_ajax(request):  # 添加合同
             ###合同序号(order)
             order_max_x = models.Agrees.objects.filter(
                 agree_date__year=agree_year).count() + 1
-
             if order_max_x < 10:
                 agree_order = '00%s' % order_max_x
             elif order_max_x < 100:
                 agree_order = '0%s' % order_max_x
             else:
                 agree_order = '%s' % order_max_x
-
             ###合同编号拼接
             '''成武担[2016]018④W6-1'''
             agree_num_prefix = "成武担[%s]%s%s" % (agree_year, agree_order, guarantee_typ)
@@ -686,6 +684,10 @@ def result_state_ajax(request):  #
     '''AGREE_TYP_LIST = [(1, '单笔'), (2, '最高额'), (3, '保函'), (7, '小贷'),
                       (41, '单笔(公证)'), (42, '最高额(公证)'), (47, '小贷(公证)')]'''
     agr_typ = agree_obj.agree_typ
+    if agr_typ in [2, 42]:
+        hhh = '最高额'
+    else:
+        hhh = ''
     try:
         with transaction.atomic():
             for counter_custom in custom_list:
@@ -698,8 +700,8 @@ def result_state_ajax(request):  #
                         (21, '董事会决议'), (23, '管委会决议'),
                        (31, '声明书'), (41, '单身申明')]'''
                     decision = counter_custom.company_custome.decisionor
-                    if decision == 11: #(11, '股东会')
-                        result_tp = 11 #(11, '股东会决议')
+                    if decision == 11:  # (11, '股东会')
+                        result_tp = 11  # (11, '股东会决议')
                         result = '<div class="split"><div class="tt" align="center"><strong>%s股东会' \
                                  '决议</strong></div>' % counter_custom.name
                         result += '<p>会议时间：&nbsp&nbsp&nbsp年&nbsp&nbsp月&nbsp&nbsp日</p>'
@@ -710,8 +712,8 @@ def result_state_ajax(request):  #
                                   '的<u>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</u>，符合《公司法》和本公司章程规定的' \
                                   '程序和要求。经代表<u>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</u>表决权的股东表决通过，' \
                                   '做出如下决议：</p>'
-                    elif decision == 13: #(13, '合伙人会议')
-                        result_tp = 13 #(13, '合伙人会议决议')
+                    elif decision == 13:  # (13, '合伙人会议')
+                        result_tp = 13  # (13, '合伙人会议决议')
                         result = '<div class="split"><div class="tt" align="center"><strong>%s合伙人' \
                                  '决议</strong></div>' % counter_custom.name
                         result += '<p>会议时间：&nbsp&nbsp&nbsp年&nbsp&nbsp月&nbsp&nbsp日</p>'
@@ -722,8 +724,8 @@ def result_state_ajax(request):  #
                                   '人的<u>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</u>，符合《中华人民共和国合伙企业法》和本' \
                                   '合伙企业合伙人协议规定的程序和要求。经<u>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</u>名' \
                                   '合伙人表决通过，做出如下决议：</p>'
-                    elif decision == 15: #(15, '举办者会议')
-                        result_tp = 15 #(15, '举办者会议决议')
+                    elif decision == 15:  # (15, '举办者会议')
+                        result_tp = 15  # (15, '举办者会议决议')
                         result = '<div class="split"><div class="tt" align="center"><strong>%s举办者会议' \
                                  '决议</strong></div>' % counter_custom.name
                         result += '<p>会议时间：&nbsp&nbsp&nbsp年&nbsp&nbsp月&nbsp&nbsp日</p>'
@@ -733,8 +735,8 @@ def result_state_ajax(request):  #
                                   '<u>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</u>名，与会举办者所持举办者权益占医院举办' \
                                   '者权益的<u>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</u>，符合本医院章程规定的程序和要求。' \
                                   '经代表<u>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</u>表决权的举办者表决通过，做出如下决议：</p>'
-                    elif decision == 21: #(21, '董事会')
-                        result_tp = 21 #(21, '董事会决议')
+                    elif decision == 21:  # (21, '董事会')
+                        result_tp = 21  # (21, '董事会决议')
                         result = '<div class="split"><div class="tt" align="center"><strong>%s董事会' \
                                  '决议</strong></div>' % counter_custom.name
                         result += '<p>会议时间：&nbsp&nbsp&nbsp年&nbsp&nbsp月&nbsp&nbsp日</p>'
@@ -743,8 +745,8 @@ def result_state_ajax(request):  #
                                   '事<u>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</u>名，与会董事占公司董事的' \
                                   '<u>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</u>，符合《公司法》和本公司章程规定' \
                                   '的程序和要求。经<u>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</u>名董事表决通过，做出如下决议：</p>'
-                    elif decision == 23: #(23, '管理委员会')
-                        result_tp = 23 #(23, '管委会决议')
+                    elif decision == 23:  # (23, '管理委员会')
+                        result_tp = 23  # (23, '管委会决议')
                         result = '<div class="split"><div class="tt" align="center"><strong>%s管委会' \
                                  '决议</strong></div>' % counter_custom.name
                         result += '<p>会议时间：&nbsp&nbsp&nbsp年&nbsp&nbsp月&nbsp&nbsp日</p>'
@@ -824,8 +826,8 @@ def result_state_ajax(request):  #
                         ownership_warrant__owner=counter_custom)
                     if counter_house_list:
                         result += '<p>%s同意以企业名下房产向成都武侯中小企业融资' \
-                                  '担保有限责任公司提供抵押反担保，签订抵押反担保合同，并办理抵押登' \
-                                  '记。房产的详细信息如下：</p>' % crder_str
+                                  '担保有限责任公司提供%s抵押反担保，签订%s抵押反担保合同，并办理%s抵押登' \
+                                  '记。房产的详细信息如下：</p>' % (crder_str, hhh, hhh, hhh)
                         result += '<table>' \
                                   '<tr>' \
                                   '<td align="center">所有权人</td> ' \
@@ -891,8 +893,8 @@ def result_state_ajax(request):  #
                         ownership_warrant__owner=counter_custom)
                     if counter_ground_list:
                         result += '<p>%s同意以企业名下国有土地使用权向成都武侯中小企业融资' \
-                                  '担保有限责任公司提供抵押反担保，签订抵押反担保合同，并办理抵押登' \
-                                  '记。国有土地使用权的详细信息如下：</p>' % crder_str
+                                  '担保有限责任公司提供%s抵押反担保，签订%s抵押反担保合同，并办理%s抵押登' \
+                                  '记。国有土地使用权的详细信息如下：</p>' % (crder_str, hhh, hhh, hhh)
                         result += '<table>' \
                                   '<tr>' \
                                   '<td align="center">所有权人</td> ' \
@@ -941,8 +943,8 @@ def result_state_ajax(request):  #
                             receive_num += 1
                             if receive_num < receive_count:
                                 result += '、'
-                        result += '向成都武侯中小企业融资担保有限责任公司提供质押反担' \
-                                  '保，签订质押反担保合同，并办理质押登记。</p>'
+                        result += '向成都武侯中小企业融资担保有限责任公司提供%s质押反担' \
+                                  '保，签订%s质押反担保合同，并办理%s质押登记。</p>' % (hhh, hhh, hhh)
                         order += 1
                         crder_str = '%s、' % order
                     # (21, '股权')
@@ -961,7 +963,7 @@ def result_state_ajax(request):  #
                             if target_num < target_count:
                                 result += '、'
                         result += '向成都武侯中小企业融资担保有限责任公司提' \
-                                  '供质押反担保，签订质押反担保合同，并办理质押登记。</p>'
+                                  '供%s质押反担保，签订%s质押反担保合同，并办理%s质押登记。</p>' % (hhh, hhh, hhh)
                         order += 1
                         crder_str = '%s、' % order
                     # 持有(21, '股权')
@@ -980,7 +982,7 @@ def result_state_ajax(request):  #
                             if stock_num < stock_count:
                                 result += '、'
                         result += '向成都武侯中小企业融资担保有限责任公司提' \
-                                  '供质押反担保，签订质押反担保合同，并办理质押登记。</p>'
+                                  '供%s质押反担保，签订%s质押反担保合同，并办理%s质押登记。</p>' % (hhh, hhh, hhh)
                         order += 1
                         crder_str = '%s、' % order
                     # (31, '票据')
@@ -1006,8 +1008,8 @@ def result_state_ajax(request):  #
                         warrant__counter_warrant__counter__in=counter_agree_list, vehicle_owner=counter_custom)
                     if counter_vehicle_list:
                         result += '<p>%s同意以企业名下车辆向成都武侯中小企业融资' \
-                                  '担保有限责任公司提供抵押反担保，签订抵押反担保合同，并办理抵押登' \
-                                  '记。车辆的详细信息如下：</p>' % crder_str
+                                  '担保有限责任公司提供%s抵押反担保，签订%s抵押反担保合同，并办理%s抵押登' \
+                                  '记。车辆的详细信息如下：</p>' % (crder_str, hhh, hhh, hhh)
                         result += '<table>' \
                                   '<tr>' \
                                   '<td align="center">所有权人</td> ' \
@@ -1049,7 +1051,7 @@ def result_state_ajax(request):  #
                                 # if draft_num < draft_count:
                                 #     result += '、'
                         result += '向成都武侯中小企业融资担保有限责任公司提' \
-                                  '供抵押反担保，签订抵押反担保合同，并办理抵押登记。</p>'
+                                  '供%s抵押反担保，签订%s抵押反担保合同，并办理%s抵押登记。</p>' % (hhh, hhh, hhh)
                         order += 1
                         crder_str = '%s、' % order
                     # (55, '其他')
@@ -1067,8 +1069,8 @@ def result_state_ajax(request):  #
                                 # if draft_num < draft_count:
                                 #     result += '、'
                         if counter_other_list.first().other_typ == 21:
-                            result += '提供质押反担保，签订质押反担保合同，将车辆合格证存放在成都武侯中小企业融资担保' \
-                                      '有限责任公司，并按照质押反担保合同及其他相关约定进行更换。</p >'
+                            result += '提供%s质押反担保，签订%s质押反担保合同，将车辆合格证存放在成都武侯中小企业融资' \
+                                      '担保有限责任公司，并按照质押反担保合同及其他相关约定进行更换。</p >' % (hhh, hhh)
                         else:
                             result += '向成都武侯中小企业融资担保有限责任公司提' \
                                       '供质押反担保，签订质押反担保合同，并办理质押登记。</p>'
@@ -1149,7 +1151,7 @@ def result_state_ajax(request):  #
                         result += '<p>居民身份证编号： %s</p>' % counter_custom.person_custome.license_num
                         result += '<p>家庭详细住址：%s</p>' % counter_custom.contact_addr
                         result += '<p>现本人申明：</p><p>1、截止到<u>&nbsp&nbsp&nbsp</u>年<u>&nbsp&nbsp</u>月' \
-                                  '<u>&nbsp&nbsp</u>日，本人在婚姻状况为：□已婚、□未婚、□离异、□丧偶。</p>'
+                                  '<u>&nbsp&nbsp</u>日，本人婚姻状况为：<u>&nbsp&nbsp&nbsp&nbsp&nbsp</u>(已婚、未婚、离异、丧偶)。</p>'
                         result += '<p>2、本人名下所有房屋、银行存款等资产均系本人单独所有，无其他共有人。</p>'
                         result += '<p><strong>特此申明！</strong></p><br>'
                         result += '<p class="sm">申明人：</p><br>'
