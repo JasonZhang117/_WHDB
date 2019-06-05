@@ -79,3 +79,7 @@ body {
 .bl {
     border-left: 2pt solid black;
 }
+
+table{
+    width: 100%;
+}

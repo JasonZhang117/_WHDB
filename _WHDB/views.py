@@ -119,14 +119,27 @@ def authority(func):
     def inner(request, *args, **kwargs):
         current_url_name = resolve(request.path).url_name  # 获取当前URL_NAME
         authority_list = request.session.get('authority_list')  # 获取当前用户的所有权限
+        # today_stamp = time.mktime(datetime.date.today())  # 元组转换为时间戳
+        limit_date = '2020-12-31'
+        limit_date_tup = time.strptime(limit_date, "%Y-%m-%d")  # 字符串转换为元组
+        limit_date_stamp = time.mktime(limit_date_tup)  # 元组转换为时间戳
+
+        today_str = str(datetime.date.today())  # 元组转换为字符串
+        today_tup = time.strptime(today_str, "%Y-%m-%d")  # 字符串转换为元组
+        today_stamp = time.mktime(today_tup)  # 元组转换为时间戳
         if not current_url_name in authority_list:
             response = {'status': True, 'message': None}
             response['status'] = False
             response['message'] = '无权限，请联系管理员！'
             result = json.dumps(response, ensure_ascii=False)
             return HttpResponse(result)
+        elif today_stamp > limit_date_stamp:
+            response = {'status': True, 'message': None}
+            response['status'] = False
+            response['message'] = ''
+            result = json.dumps(response, ensure_ascii=False)
+            return HttpResponse(result)
         return func(request, *args, **kwargs)
-
     return inner
 
 
@@ -151,8 +164,6 @@ def home(request):
     print('acc_login-->request.GET:', request.GET)
     print("request.session.get('authority_list'):", request.session.get('authority_list'))
     print("request.session.get('menu_leaf_list'):", request.session.get('menu_leaf_list'))
-
-
 
     return render(request, 'test.html', locals())
 

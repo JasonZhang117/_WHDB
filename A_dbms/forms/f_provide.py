@@ -105,7 +105,7 @@ class FormTrackPlan(dform.ModelForm):
         model = models.Track
         fields = ['track_typ', 'plan_date', 'proceed']
         widgets = {
-            'pigeonhole_transfer': dform.Select(attrs={'class': 'form-control'}),
+            'track_typ': dform.Select(attrs={'class': 'form-control'}),
             'plan_date': dform.DateInput(attrs={'class': 'form-control', 'type': 'date'}),
             'proceed': dform.TextInput(attrs={'class': 'form-control', 'placeholder': '跟踪事项'}), }
 

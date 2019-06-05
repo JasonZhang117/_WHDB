@@ -331,7 +331,7 @@ def agree_save_ajax(request):  #
                           (51, '已放款'), (52, '已放完'), (55, '已解保'), (61, '待变更'), (99, '已注销')]'''
     try:
         agree_obj.update(agree_view=agree_content)
-        response['message'] = '合同保存成功，正式签订合同须经公司领导签批！！！'
+        response['message'] = '合同保存成功，正式签订合同须经公司领导签批！合同签批后，合同内容将固定！'
     except Exception as e:
         response['status'] = False
         response['message'] = '合同保存失败：%s' % str(e)
@@ -601,7 +601,7 @@ def counter_save_ajax(request):  # 添加合同
                           (51, '已放款'), (52, '已放完'), (55, '已解保'), (61, '待变更'), (99, '已注销')]'''
     try:
         counter_obj.update(counter_view=counter_content)
-        response['message'] = '合同保存成功，正式签订合同须经公司领导签批！！！'
+        response['message'] = '合同保存成功，正式签订合同须经公司领导签批！合同签批后，合同内容将固定'
     except Exception as e:
         response['status'] = False
         response['message'] = '合同保存失败：%s' % str(e)
