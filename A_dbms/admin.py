@@ -111,7 +111,17 @@ class WarrantsAdmin(admin.ModelAdmin):
 
 
 admin.site.register(models.Warrants, WarrantsAdmin)  # 担保物
-admin.site.register(models.Ownership)  # 产权证
+
+
+class OwnershipAdmin(admin.ModelAdmin):
+    list_display = ('ownership_num', 'warrant', 'owner')
+    list_per_page = 200  # 每页显示条目数
+    search_fields = ['ownership_num']  # 搜索字段
+    ordering = ['ownership_num']  # 排序字段
+
+
+admin.site.register(models.Ownership, OwnershipAdmin)  # 产权证
+
 admin.site.register(models.Hypothecs)  # 他权
 admin.site.register(models.Houses)  # 房产
 admin.site.register(models.HouseBag)  # 房产包

@@ -17,7 +17,21 @@
     <td align="center">{{ agree_obj.agree_copies }}份</td>
 </tr>
 {% for counter in counter_list %}
-    {% if counter.counter_typ == 2%}
+    {% if counter.counter_typ == 2 and agree_typ in AGREE_TYP_GZ %}
+        <tr>
+            <td align="center">{{ counter.get_counter_name_display }}
+                {% for custom in counter.assure_counter.custome.all %}
+                    ({{ custom }}
+                    {% if custom.person_custome.spouses %}
+                        、{{ custom.person_custome.spouses.name }}夫妇
+                    {% endif %}
+                    )
+                {% endfor %}
+            </td>
+            <td align="center" colspan="3">{{ counter.counter_num }}</td>
+            <td align="center">{{ counter.counter_copies }}份</td>
+        </tr>
+    {% elif counter.counter_typ == 2 %}
         <tr>
             <td align="center">{{ counter.get_counter_name_display }}
                 {% for custom in counter.assure_counter.custome.all %}
@@ -31,10 +45,10 @@
             <td align="center" colspan="3"></td>
             <td align="center">{{ counter.counter_copies }}份</td>
         </tr>
-    {% elif counter.counter_typ == 59%}
+    {% elif counter.counter_typ == 59 %}
         <tr>
             <td align="center">{{ counter.get_counter_name_display }}
-                    ({{ counter.warrant_counter.warrant.all.0.other_warrant.other_owner.short_name }})
+                ({{ counter.warrant_counter.warrant.all.0.other_warrant.other_owner.short_name }})
             </td>
             <td align="center" colspan="3"></td>
             <td align="center">{{ counter.counter_copies }}份</td>

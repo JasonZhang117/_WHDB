@@ -4,6 +4,10 @@
         <p>法定代表人（或授权代理人）：<strong><u>{{ custom.company_custome.representative }}</u></strong></p>
         <p>（签字或盖章）</p>
     {% endfor %}
+{% elif counter_typ == 2 %}
+    {% for custom in counter_obj.assure_counter.custome.all %}
+        <p>乙方（或受托人）：<strong><u>{{ custom.name }}{% if custom.person_custome.spouses %}、{{ custom.person_custome.spouses.name }}{% endif %}</u></strong></p>
+    {% endfor %}
 {% else %}
     <!--WARRANT_TYP_LIST = [
                    (1, '房产'), (2, '房产包'), (5, '土地'), (6, '在建工程'), (11, '应收账款'),

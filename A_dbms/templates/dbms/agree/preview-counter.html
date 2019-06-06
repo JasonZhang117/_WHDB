@@ -47,7 +47,8 @@
             {% if counter_typ == 1 %}
                 {% include 'dbms/agree/agree_board/counter/c-s-x-n.html' %}
             {% elif counter_typ == 2 %}
-                {% include 'dbms/agree/agree_board/counter/c-s-g-n.html' %}
+                {% include 'dbms/agree/agree_board/counter/c-s-x-n-g.html' %}
+{#                {% include 'dbms/agree/agree_board/counter/c-s-g-n.html' %}#}
             {% elif counter_typ in D_COUNTER_TYP_LIST %}
                 {% include 'dbms/agree/agree_board/counter/c-s-d-n.html' %}
             {% elif counter_typ in Z_COUNTER_TYP_LIST %}

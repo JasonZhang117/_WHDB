@@ -398,7 +398,10 @@ def agree_sign_preview(request, agree_id):
         (31, '应收质押'), (32, '股权质押'), (33, '票据质押'), (34, '动产质押'),
         (41, '其他权利质押'),
         (51, '股权预售'), (52, '房产预售'), (53, '土地预售')]'''
-
+    agree_typ = agree_obj.agree_typ
+    '''AGREE_TYP_LIST = [(1, '单笔'), (2, '最高额'), (3, '保函'), (7, '小贷'),
+                      (41, '单笔(公证)'), (42, '最高额(公证)'), (47, '小贷(公证)')]'''
+    AGREE_TYP_GZ = [41, 42, 47]
     credit_term = agree_obj.agree_term  # 授信期限（月）
     credit_term_cn = credit_term_c(credit_term)
 

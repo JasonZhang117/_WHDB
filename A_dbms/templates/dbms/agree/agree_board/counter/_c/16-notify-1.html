@@ -12,13 +12,26 @@
     (11, '房产抵押'), (12, '土地抵押'), (13, '动产抵押'), (15, '车辆抵押'),
     (31, '应收质押'), (32, '股权质押'), (33, '票据质押'),
     (51, '股权预售'), (52, '房产预售'), (53, '土地预售'))-->
-{% if counter_obj.counter_typ == 1 %}
+{% if counter_typ == 1 %}
     {% for custom in counter_obj.assure_counter.custome.all %}
         <div>
             <p>地址：<strong><u>{{ custom.contact_addr }}</u></strong></p>
             <p>电话：<strong><u>{{ custom.contact_num }}</u></strong></p>
             <p>收件人：<strong><u>{{ custom.linkman }}</u></strong></p>
         </div>
+    {% endfor %}
+{% elif counter_typ == 2 %}
+    {% for custom in counter_obj.assure_counter.custome.all %}
+    <div>
+        <p>地址：<strong><u>{{ custom.contact_addr }}</u></strong></p>
+        <p>电话：<strong><u>{{ custom.contact_num }}</u></strong></p>
+        <p>收件人：<strong><u>{{ custom.linkman }}</u></strong></p>
+        {% if custom.person_custome.spouses %}
+            <p>地址：<strong><u>{{ custom.person_custome.spouses.contact_addr }}</u></strong></p>
+            <p>电话：<strong><u>{{ custom.person_custome.spouses.contact_num }}</u></strong></p>
+            <p>收件人：<strong><u>{{ custom.person_custome.spouses.linkman }}</u></strong></p>
+        {% endif %}
+    </div>
     {% endfor %}
     {#MORTGAGE_COUNTER_TYP_LIST = [11, 12, 13, 14, 15, ]#}
 {% else %}

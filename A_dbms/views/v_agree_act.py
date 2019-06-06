@@ -385,6 +385,8 @@ def counter_add_ajax(request):
     if agree_typ in [1, 41]:
         if counter_typ == 1:
             counter_name = 1
+        elif counter_typ == 2 and agree_typ == 41:
+            counter_name = 1
         elif counter_typ == 2:
             counter_name = 2
         elif counter_typ in [11, 12, 13, 14, 15]:
@@ -402,6 +404,8 @@ def counter_add_ajax(request):
     elif agree_typ in [2, 42]:
         if counter_typ == 1:
             counter_name = 21
+        elif counter_typ == 2 and agree_typ == 42:
+            counter_name = 2
         elif counter_typ == 2:
             counter_name = 2
         elif counter_typ in [11, 12, 13, 14, 15]:
@@ -419,6 +423,8 @@ def counter_add_ajax(request):
     elif agree_typ in [7, 47]:
         if counter_typ == 1:
             counter_name = 41
+        elif counter_typ == 2 and agree_typ == 47:
+            counter_name = 1
         elif counter_typ == 2:
             counter_name = 2
         elif counter_typ in [11, 12, 13, 14, 15]:
@@ -439,6 +445,11 @@ def counter_add_ajax(request):
         counter_copies = 3
         counter_max = models.Counters.objects.filter(
             agree=agree_obj, counter_typ=counter_typ).count() + 1
+    elif counter_typ == 2 and agree_typ in [41, 42, 47]:
+        counter_typ_n = 'X'
+        counter_copies = 3
+        counter_max = models.Counters.objects.filter(
+            agree=agree_obj, counter_typ__in=[1, 2]).count() + 1
     elif counter_typ == 2:
         counter_typ_n = 'G'
         counter_copies = 2
@@ -517,12 +528,6 @@ def counter_add_ajax(request):
                 warrant_list = post_data['chattel']
             elif counter_typ in [41, 59]:  # (41, '其他权利质押')
                 warrant_list = post_data['other']
-            print('warrant_list:', warrant_list)
-            print('counter_num:', counter_num)
-            print('counter_name:', counter_name)
-            print('agree:', agree_obj)
-            print('counter_typ:', counter_typ)
-            print('counter_copies:', counter_copies)
             try:
                 with transaction.atomic():
                     counter_obj = models.Counters.objects.create(

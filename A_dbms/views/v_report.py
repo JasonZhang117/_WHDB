@@ -228,4 +228,4 @@ def report_accrual_class(request, *args, **kwargs):  #
         con=Count('provide_money'), sum=Sum('provide_money')).values(
         'notify__agree__lending__summary__expert__organization', 'con', 'sum').order_by('-sum')
 
-    return render(request, 'dbms/report/balance-class-provide.html', locals())
+    return render(request, 'dbms/report/accrual-class-provide.html', locals())
