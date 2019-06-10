@@ -16,7 +16,6 @@ from _WHDB.views import authority
 @login_required
 @authority
 def warrant(request, *args, **kwargs):  # 房产列表
-    print(request.path, '>', resolve(request.path).url_name, '>', request.user)
     current_url_name = resolve(request.path).url_name  # 获取当前URL_NAME
     authority_list = request.session.get('authority_list')  # 获取当前用户的所有权限
     menu_result = MenuHelper(request).menu_data_list()
@@ -72,7 +71,6 @@ def warrant(request, *args, **kwargs):  # 房产列表
 @login_required
 @authority
 def warrant_scan(request, warrant_id):  # house_scan房产预览
-    print(request.path, '>', resolve(request.path).url_name, '>', request.user)
     current_url_name = resolve(request.path).url_name  # 获取当前URL_NAME
     authority_list = request.session.get('authority_list')  # 获取当前用户的所有权限
     menu_result = MenuHelper(request).menu_data_list()
@@ -165,7 +163,6 @@ def warrant_scan(request, warrant_id):  # house_scan房产预览
 @login_required
 @authority
 def warrant_agree(request, *args, **kwargs):  # 按合同入库
-    print(request.path, '>', resolve(request.path).url_name, '>', request.user)
     current_url_name = resolve(request.path).url_name  # 获取当前URL_NAME
     authority_list = request.session.get('authority_list')  # 获取当前用户的所有权限
     menu_result = MenuHelper(request).menu_data_list()
@@ -205,7 +202,6 @@ def warrant_agree(request, *args, **kwargs):  # 按合同入库
 @login_required
 @authority
 def warrant_agree_scan(request, agree_id):  # 查看合同
-    print(request.path, '>', resolve(request.path).url_name, '>', request.user)
     current_url_name = resolve(request.path).url_name  # 获取当前URL_NAME
     authority_list = request.session.get('authority_list')  # 获取当前用户的所有权限
     menu_result = MenuHelper(request).menu_data_list()
@@ -267,7 +263,6 @@ def warrant_agree_scan(request, agree_id):  # 查看合同
 @login_required
 @authority
 def warrant_agree_warrant(request, agree_id, warrant_id):  # 查看合同
-    print(request.path, '>', resolve(request.path).url_name, '>', request.user)
     current_url_name = resolve(request.path).url_name  # 获取当前URL_NAME
     authority_list = request.session.get('authority_list')  # 获取当前用户的所有权限
     menu_result = MenuHelper(request).menu_data_list()
@@ -288,7 +283,6 @@ def warrant_agree_warrant(request, agree_id, warrant_id):  # 查看合同
     lending_obj = agree_obj.lending
     warrant_obj = models.Warrants.objects.get(id=warrant_id)
 
-    print('agree_obj.ypothec_agree.all():', agree_obj.ypothec_agree.all())
     '''WARRANT_TYP_LIST = [
         (1, '房产'), (2, '土地'), (11, '应收'), (21, '股权'),
         (31, '票据'), (41, '车辆'), (51, '动产'), (99, '他权')]'''
@@ -307,11 +301,9 @@ def warrant_agree_warrant(request, agree_id, warrant_id):  # 查看合同
 @login_required
 @authority
 def house(request, *args, **kwargs):  # 房产列表
-    print(request.path, '>', resolve(request.path).url_name, '>', request.user)
     current_url_name = resolve(request.path).url_name  # 获取当前URL_NAME
     authority_list = request.session.get('authority_list')  # 获取当前用户的所有权限
     menu_result = MenuHelper(request).menu_data_list()
-    print('**kwargs:', kwargs)
 
     PAGE_TITAL = '权证-房产'
     add_warrant = '添加房产'
@@ -339,7 +331,6 @@ def house(request, *args, **kwargs):  # 房产列表
 @login_required
 @authority
 def ground(request, *args, **kwargs):  # 房产列表
-    print(request.path, '>', resolve(request.path).url_name, '>', request.user)
     current_url_name = resolve(request.path).url_name  # 获取当前URL_NAME
     authority_list = request.session.get('authority_list')  # 获取当前用户的所有权限
     menu_result = MenuHelper(request).menu_data_list()
@@ -370,7 +361,6 @@ def ground(request, *args, **kwargs):  # 房产列表
 @login_required
 @authority
 def soondue_draft(request, *args, **kwargs):  #
-    print(request.path, '>', resolve(request.path).url_name, '>', request.user)
     current_url_name = resolve(request.path).url_name  # 获取当前URL_NAME
     authority_list = request.session.get('authority_list')  # 获取当前用户的所有权限
     menu_result = MenuHelper(request).menu_data_list()
@@ -408,7 +398,6 @@ def soondue_draft(request, *args, **kwargs):  #
 @login_required
 @authority
 def overdue_draft(request, *args, **kwargs):  #
-    print(request.path, '>', resolve(request.path).url_name, '>', request.user)
     current_url_name = resolve(request.path).url_name  # 获取当前URL_NAME
     authority_list = request.session.get('authority_list')  # 获取当前用户的所有权限
     menu_result = MenuHelper(request).menu_data_list()
@@ -445,7 +434,6 @@ def overdue_draft(request, *args, **kwargs):  #
 @login_required
 @authority
 def overdue_evaluate(request, *args, **kwargs):  #
-    print(request.path, '>', resolve(request.path).url_name, '>', request.user)
     current_url_name = resolve(request.path).url_name  # 获取当前URL_NAME
     authority_list = request.session.get('authority_list')  # 获取当前用户的所有权限
     menu_result = MenuHelper(request).menu_data_list()
@@ -505,7 +493,6 @@ def overdue_evaluate(request, *args, **kwargs):  #
 @login_required
 @authority
 def overdue_storage(request, *args, **kwargs):  #
-    print(request.path, '>', resolve(request.path).url_name, '>', request.user)
     current_url_name = resolve(request.path).url_name  # 获取当前URL_NAME
     authority_list = request.session.get('authority_list')  # 获取当前用户的所有权限
     menu_result = MenuHelper(request).menu_data_list()

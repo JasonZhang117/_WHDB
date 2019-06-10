@@ -18,7 +18,6 @@ from .v_agree import convert_num
 @login_required
 @authority
 def appraisal(request, *args, **kwargs):  # 评审情况
-    print(request.path, '>', resolve(request.path).url_name, '>', request.user)
     current_url_name = resolve(request.path).url_name  # 获取当前URL_NAME
     authority_list = request.session.get('authority_list')  # 获取当前用户的所有权限
     menu_result = MenuHelper(request).menu_data_list()
@@ -58,7 +57,6 @@ def appraisal(request, *args, **kwargs):  # 评审情况
 @login_required
 @authority
 def appraisal_scan(request, article_id):  # 评审项目预览
-    print(request.path, '>', resolve(request.path).url_name, '>', request.user)
     current_url_name = resolve(request.path).url_name  # 获取当前URL_NAME
     authority_list = request.session.get('authority_list')  # 获取当前用户的所有权限
     menu_result = MenuHelper(request).menu_data_list()
@@ -96,7 +94,6 @@ def appraisal_scan(request, article_id):  # 评审项目预览
 @login_required
 @authority
 def appraisal_scan_lending(request, article_id, lending_id):  # 评审项目预览
-    print(request.path, '>', resolve(request.path).url_name, '>', request.user)
     current_url_name = resolve(request.path).url_name  # 获取当前URL_NAME
     authority_list = request.session.get('authority_list')  # 获取当前用户的所有权限
     menu_result = MenuHelper(request).menu_data_list()
@@ -203,7 +200,6 @@ def convert_str(n):
 @login_required
 @authority
 def summary_scan(request, article_id):  # 评审项目预览
-    print(request.path, '>', resolve(request.path).url_name, '>', request.user)
     current_url_name = resolve(request.path).url_name  # 获取当前URL_NAME
     authority_list = request.session.get('authority_list')  # 获取当前用户的所有权限
     menu_result = MenuHelper(request).menu_data_list()
@@ -908,7 +904,6 @@ def summary_scan(request, article_id):  # 评审项目预览
 @login_required
 @authority
 def summary_sign_scan(request, article_id):  #
-    print(request.path, '>', resolve(request.path).url_name, '>', request.user)
     current_url_name = resolve(request.path).url_name  # 获取当前URL_NAME
     authority_list = request.session.get('authority_list')  # 获取当前用户的所有权限
     menu_result = MenuHelper(request).menu_data_list()

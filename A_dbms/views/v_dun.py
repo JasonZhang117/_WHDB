@@ -16,7 +16,6 @@ from _WHDB.views import authority
 @login_required
 @authority
 def compensatory(request, *args, **kwargs):  # 代偿列表
-    print(request.path, '>', resolve(request.path).url_name, '>', request.user)
     current_url_name = resolve(request.path).url_name  # 获取当前URL_NAME
     authority_list = request.session.get('authority_list')  # 获取当前用户的所有权限
     menu_result = MenuHelper(request).menu_data_list()
@@ -61,7 +60,6 @@ def compensatory(request, *args, **kwargs):  # 代偿列表
 @login_required
 @authority
 def compensatory_scan(request, compensatory_id):
-    print(request.path, '>', resolve(request.path).url_name, '>', request.user)
     current_url_name = resolve(request.path).url_name  # 获取当前URL_NAME
     authority_list = request.session.get('authority_list')  # 获取当前用户的所有权限
     menu_result = MenuHelper(request).menu_data_list()
@@ -71,7 +69,6 @@ def compensatory_scan(request, compensatory_id):
 @login_required
 @authority
 def dun(request, *args, **kwargs):  #
-    print(request.path, '>', resolve(request.path).url_name, '>', request.user)
     current_url_name = resolve(request.path).url_name  # 获取当前URL_NAME
     authority_list = request.session.get('authority_list')  # 获取当前用户的所有权限
     menu_result = MenuHelper(request).menu_data_list()
@@ -129,7 +126,6 @@ def dun(request, *args, **kwargs):  #
 @login_required
 @authority
 def dun_scan(request, dun_id):  # 查看合同
-    print(request.path, '>', resolve(request.path).url_name, '>', request.user)
     current_url_name = resolve(request.path).url_name  # 获取当前URL_NAME
     authority_list = request.session.get('authority_list')  # 获取当前用户的所有权限
     menu_result = MenuHelper(request).menu_data_list()
@@ -174,7 +170,6 @@ def dun_scan(request, dun_id):  # 查看合同
 @login_required
 @authority
 def seal(request, *args, **kwargs):
-    print(request.path, '>', resolve(request.path).url_name, '>', request.user)
     current_url_name = resolve(request.path).url_name  # 获取当前URL_NAME
     authority_list = request.session.get('authority_list')  # 获取当前用户的所有权限
     menu_result = MenuHelper(request).menu_data_list()
@@ -211,13 +206,11 @@ def seal(request, *args, **kwargs):
 @login_required
 @authority
 def seal_scan(request, dun_id, warrant_id):  # 查看合同
-    print(request.path, '>', resolve(request.path).url_name, '>', request.user)
     current_url_name = resolve(request.path).url_name  # 获取当前URL_NAME
     authority_list = request.session.get('authority_list')  # 获取当前用户的所有权限
     menu_result = MenuHelper(request).menu_data_list()
     PAGE_TITLE = '查封详情'
     seal_obj = models.Seal.objects.get(dun_id=dun_id, warrant_id=warrant_id)
-    print('seal_obj:', seal_obj)
     return render(request, 'dbms/dun/dun-seal-scan.html', locals())
 
 
@@ -225,7 +218,6 @@ def seal_scan(request, dun_id, warrant_id):  # 查看合同
 @login_required
 @authority
 def overdue_seal(request, *args, **kwargs):
-    print(request.path, '>', resolve(request.path).url_name, '>', request.user)
     current_url_name = resolve(request.path).url_name  # 获取当前URL_NAME
     authority_list = request.session.get('authority_list')  # 获取当前用户的所有权限
     menu_result = MenuHelper(request).menu_data_list()
@@ -261,7 +253,6 @@ def overdue_seal(request, *args, **kwargs):
 @login_required
 @authority
 def soondue_seal(request, *args, **kwargs):
-    print(request.path, '>', resolve(request.path).url_name, '>', request.user)
     current_url_name = resolve(request.path).url_name  # 获取当前URL_NAME
     authority_list = request.session.get('authority_list')  # 获取当前用户的所有权限
     menu_result = MenuHelper(request).menu_data_list()
@@ -300,7 +291,6 @@ def soondue_seal(request, *args, **kwargs):
 @login_required
 @authority
 def overdue_search(request, *args, **kwargs):
-    print(request.path, '>', resolve(request.path).url_name, '>', request.user)
     current_url_name = resolve(request.path).url_name  # 获取当前URL_NAME
     authority_list = request.session.get('authority_list')  # 获取当前用户的所有权限
     menu_result = MenuHelper(request).menu_data_list()

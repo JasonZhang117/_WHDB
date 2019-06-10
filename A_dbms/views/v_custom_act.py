@@ -16,7 +16,6 @@ from _WHDB.views import authority
 @login_required
 @authority
 def custom_add_ajax(request):
-    print(request.path, '>', resolve(request.path).url_name, '>', request.user)
     response = {'status': True, 'message': None, 'forme': None, ' skip': None, }
     post_data_str = request.POST.get('postDataStr')
     post_data = json.loads(post_data_str)
@@ -94,11 +93,9 @@ def custom_add_ajax(request):
 @login_required
 @authority
 def shareholder_add_ajax(request):
-    print(request.path, '>', resolve(request.path).url_name, '>', request.user)
     response = {'status': True, 'message': None, 'forme': None, }
     post_data_str = request.POST.get('postDataStr')
     post_data = json.loads(post_data_str)
-    print('post_data:', post_data)
     custom_id = post_data['custom_id']
     custom_obj = models.Customes.objects.get(id=custom_id)
 
@@ -139,7 +136,6 @@ def shareholder_add_ajax(request):
 @login_required
 @authority
 def shareholder_del_ajax(request):  #
-    print(request.path, '>', resolve(request.path).url_name, '>', request.user)
     response = {'status': True, 'message': None, 'forme': None, }
     post_data_str = request.POST.get('postDataStr')
     post_data = json.loads(post_data_str)
@@ -166,11 +162,9 @@ def shareholder_del_ajax(request):  #
 @login_required
 @authority
 def trustee_add_ajax(request):
-    print(request.path, '>', resolve(request.path).url_name, '>', request.user)
     response = {'status': True, 'message': None, 'forme': None, }
     post_data_str = request.POST.get('postDataStr')
     post_data = json.loads(post_data_str)
-    print('post_data:', post_data)
     custom_obj = models.Customes.objects.get(id=post_data['custom_id'])
 
     form_trustee_add = forms.FormTrusteeAdd(post_data)
@@ -198,7 +192,6 @@ def trustee_add_ajax(request):
 @login_required
 @authority
 def trustee_del_ajax(request):  #
-    print(request.path, '>', resolve(request.path).url_name, '>', request.user)
     response = {'status': True, 'message': None, 'forme': None, }
     post_data_str = request.POST.get('postDataStr')
     post_data = json.loads(post_data_str)
@@ -225,11 +218,9 @@ def trustee_del_ajax(request):  #
 @login_required
 @authority
 def spouse_add_ajax(request):
-    print(request.path, '>', resolve(request.path).url_name, '>', request.user)
     response = {'status': True, 'message': None, 'forme': None, }
     post_data_str = request.POST.get('postDataStr')
     post_data = json.loads(post_data_str)
-    print('post_data:', post_data)
     custom_obj = models.Customes.objects.get(id=post_data['custom_id'])
     '''CUSTOM_STATE_LIST = ((1, '正常'), (99, '注销'))'''
     custom_state = custom_obj.custom_state
@@ -261,11 +252,9 @@ def spouse_add_ajax(request):
 @login_required
 @authority
 def custom_del_ajax(request):
-    print(request.path, '>', resolve(request.path).url_name, '>', request.user)
     response = {'status': True, 'message': None, 'forme': None, }
     post_data_str = request.POST.get('postDataStr')
     post_data = json.loads(post_data_str)
-    print('post_data:', post_data)
 
     custom_id = post_data['custom_id']
     custom_obj = models.Customes.objects.get(id=custom_id)
@@ -290,11 +279,9 @@ def custom_del_ajax(request):
 @login_required
 @authority
 def custom_edit_ajax(request):
-    print(request.path, '>', resolve(request.path).url_name, '>', request.user)
     response = {'status': True, 'message': None, 'forme': None, }
     post_data_str = request.POST.get('postDataStr')
     post_data = json.loads(post_data_str)
-    print('post_data:', post_data)
     custom_id = post_data['custom_id']
     custom_lsit = models.Customes.objects.filter(id=custom_id)
     custom_obj = custom_lsit[0]

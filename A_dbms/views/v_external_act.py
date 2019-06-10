@@ -17,14 +17,12 @@ from _WHDB.views import authority
 @login_required
 @authority
 def agreement_add_ajax(request):  # 合作协议ajax
-    print(request.path, '>', resolve(request.path).url_name, '>', request.user)
     current_url_name = resolve(request.path).url_name  # 获取当前URL_NAME
     authority_list = request.session.get('authority_list')  # 获取当前用户的所有权限
     menu_result = MenuHelper(request).menu_data_list()
     response = {'status': True, 'message': None, 'forme': None, }
     post_data_str = request.POST.get('postDataStr')
     post_data = json.loads(post_data_str)
-    print('post_data:', post_data)
     cooperator_list = models.Cooperators.objects.filter(id=post_data['cooperator_id'])
     cooperator_obj = cooperator_list.first()
     cooperator_state = cooperator_obj.cooperator_state

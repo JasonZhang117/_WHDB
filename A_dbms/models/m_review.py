@@ -10,7 +10,7 @@ class Review(models.Model):
     review_plan_date = models.DateField(verbose_name='保后计划', blank=True, null=True)
     REVIEW_STATE_LIST = [(1, '待保后'), (11, '待报告'), (21, '已完成'), (81, '自主保后')]
     review_state = models.IntegerField(verbose_name='_保后状态', choices=REVIEW_STATE_LIST, default=1)
-    REVIEW_STY_LIST = [(1, '现场检查'), (11, '电话回访')]
+    REVIEW_STY_LIST = [(1, '现场检查'), (11, '电话回访'), (61, '补调替代'), (62, '尽调替代')]
     review_sty = models.IntegerField(verbose_name='保后方式', choices=REVIEW_STY_LIST, blank=True, null=True)
     analysis = models.TextField(verbose_name='风险分析', blank=True, null=True)
     suggestion = models.TextField(verbose_name='风控建议', blank=True, null=True)

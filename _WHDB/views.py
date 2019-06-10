@@ -139,7 +139,9 @@ def authority(func):
             response['message'] = ''
             result = json.dumps(response, ensure_ascii=False)
             return HttpResponse(result)
+        print(request.user, '>', request.path, '>', resolve(request.path).url_name, '>', request.POST, )
         return func(request, *args, **kwargs)
+
     return inner
 
 

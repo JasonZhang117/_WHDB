@@ -248,7 +248,6 @@ def employee_add(request):  # 员工添加
 
 # -----------------------员工编辑-------------------------#
 def employee_edit(request, employee_id):  # 员工编辑
-    print('-------------------employee_edit----------------------------')
     if request.method == "GET":
         form_data = models.Employees.objects.get(id=employee_id)
         department = form_data.department.id
@@ -299,7 +298,6 @@ def employee_del(request, employee_id):  # 员工删除
 # -----------------------员工删除ajax-------------------------#
 def employee_del_ajax(request):  # 员工删除ajax
     nid = request.GET.get('nid')
-    print('nid:', nid)
     msg = '成功'
     try:
         models.Employees.objects.filter(id=nid).delete()

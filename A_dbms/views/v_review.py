@@ -16,7 +16,6 @@ from _WHDB.views import authority
 @login_required
 @authority
 def review(request, *args, **kwargs):  # 保后列表
-    print(request.path, '>', resolve(request.path).url_name, '>', request.user)
     current_url_name = resolve(request.path).url_name  # 获取当前URL_NAME
     authority_list = request.session.get('authority_list')  # 获取当前用户的所有权限
     menu_result = MenuHelper(request).menu_data_list()
@@ -51,8 +50,9 @@ def review(request, *args, **kwargs):  # 保后列表
         custom_list = custom_list.filter(q)
     today_year = datetime.date.today().year
     for custom in custom_list:
-        review_count = custom.review_custom.filter(review_date__year=today_year).count()  # 保后次数
-        article_count = custom.article_custom.filter(build_date__year=today_year).count()  # 上会次数
+        '''REVIEW_STY_LIST = [(1, '现场检查'), (11, '电话回访'), (61, '补调替代'), (62, '尽调替代')]'''
+        review_count = custom.review_custom.filter(review_date__year=today_year, review_sty__in=[1, 11]).count()  # 保后次数
+        article_count = custom.article_custom.filter(build_date__year=today_year).count()  # 尽调次数
         inv_count = custom.inv_custom.filter(inv_date__year=today_year).count()  # 补调次数
         models.Customes.objects.filter(id=custom.id).update(review_amount=(review_count + article_count + inv_count))
 
@@ -92,7 +92,6 @@ def review(request, *args, **kwargs):  # 保后列表
 @login_required
 @authority
 def review_scan(request, custom_id):  #
-    print(request.path, '>', resolve(request.path).url_name, '>', request.user)
     current_url_name = resolve(request.path).url_name  # 获取当前URL_NAME
     authority_list = request.session.get('authority_list')  # 获取当前用户的所有权限
     menu_result = MenuHelper(request).menu_data_list()
@@ -121,7 +120,6 @@ def review_scan(request, custom_id):  #
 @login_required
 @authority
 def review_overdue(request, *args, **kwargs):
-    print(request.path, '>', resolve(request.path).url_name, '>', request.user)
     current_url_name = resolve(request.path).url_name  # 获取当前URL_NAME
     authority_list = request.session.get('authority_list')  # 获取当前用户的所有权限
     menu_result = MenuHelper(request).menu_data_list()

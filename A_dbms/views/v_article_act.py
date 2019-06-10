@@ -34,7 +34,6 @@ def creat_article_num(custom_id):
 @login_required
 @authority
 def article_add_ajax(request):  # 添加项目
-    print(request.path, '>', resolve(request.path).url_name, '>', request.user)
     response = {'status': True, 'message': None, 'forme': None, ' skip': None, }
     post_data_str = request.POST.get('postDataStr')
     post_data = json.loads(post_data_str)
@@ -72,11 +71,9 @@ def article_add_ajax(request):  # 添加项目
 @login_required
 @authority
 def article_edit_ajax(request):  # 修改项目ajax
-    print(request.path, '>', resolve(request.path).url_name, '>', request.user)
     response = {'status': True, 'message': None, 'forme': None, }
     post_data_str = request.POST.get('postDataStr')
     post_data = json.loads(post_data_str)
-    print('post_data:', post_data)
     article_id = post_data['article_id']
     article_obj = models.Articles.objects.get(id=article_id)
     '''((1, '待反馈'), (2, '已反馈'), (3, '待上会'),
@@ -119,11 +116,9 @@ def article_edit_ajax(request):  # 修改项目ajax
 @login_required
 @authority
 def article_del_ajax(request):
-    print(request.path, '>', resolve(request.path).url_name, '>', request.user)
     response = {'status': True, 'message': None, 'forme': None, }
     post_data_str = request.POST.get('postDataStr')
     post_data = json.loads(post_data_str)
-    print('post_data:', post_data)
     article_id = post_data['article_id']
     article_obj = models.Articles.objects.get(id=article_id)
     '''((1, '待反馈'), (2, '已反馈'), (3, '待上会'),
@@ -143,11 +138,9 @@ def article_del_ajax(request):
 @login_required
 @authority
 def article_feedback_ajax(request):
-    print(request.path, '>', resolve(request.path).url_name, '>', request.user)
     response = {'status': True, 'message': None, 'forme': None, }
     post_data_str = request.POST.get('postDataStr')
     post_data = json.loads(post_data_str)
-    print('post_data:', post_data)
     article_id = post_data['article_id']
     article_list = models.Articles.objects.filter(id=article_id)
     article_obj = article_list[0]

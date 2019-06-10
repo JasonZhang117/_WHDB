@@ -16,7 +16,6 @@ from _WHDB.views import authority
 @login_required
 @authority
 def report(request, *args, **kwargs):  #
-    print(request.path, '>', resolve(request.path).url_name, '>', request.user)
     current_url_name = resolve(request.path).url_name  # 获取当前URL_NAME
     authority_list = request.session.get('authority_list')  # 获取当前用户的所有权限
     menu_result = MenuHelper(request).menu_data_list()
@@ -29,7 +28,6 @@ def report(request, *args, **kwargs):  #
 @login_required
 @authority
 def report_provide_list(request, *args, **kwargs):  #
-    print(request.path, '>', resolve(request.path).url_name, '>', request.user)
     current_url_name = resolve(request.path).url_name  # 获取当前URL_NAME
     authority_list = request.session.get('authority_list')  # 获取当前用户的所有权限
     menu_result = MenuHelper(request).menu_data_list()
@@ -60,12 +58,10 @@ def report_provide_list(request, *args, **kwargs):  #
 @login_required
 @authority
 def report_balance_class(request, *args, **kwargs):  #
-    print(request.path, '>', resolve(request.path).url_name, '>', request.user)
     current_url_name = resolve(request.path).url_name  # 获取当前URL_NAME
     authority_list = request.session.get('authority_list')  # 获取当前用户的所有权限
     menu_result = MenuHelper(request).menu_data_list()
     PAGE_TITLE = '在保分类(按放款)'
-    print('kwargs:', kwargs, kwargs['class_typ'], type(kwargs['class_typ']))
     CLASS_LIST = [(1, '品种'), (11, '授信银行'), (21, '区域'), (31, '行业'), (35, '部门'),
                   (41, '项目经理'), (51, '项目助理'), (61, '风控专员'), (71, '放款支行'), (81, '法律顾问'), ]
     provide_typ_list = models.Provides.PROVIDE_TYP_LIST  # 筛选条件
@@ -124,7 +120,6 @@ def report_balance_class(request, *args, **kwargs):  #
 @login_required
 @authority
 def report_article_class(request, *args, **kwargs):  #
-    print(request.path, '>', resolve(request.path).url_name, '>', request.user)
     current_url_name = resolve(request.path).url_name  # 获取当前URL_NAME
     authority_list = request.session.get('authority_list')  # 获取当前用户的所有权限
     menu_result = MenuHelper(request).menu_data_list()
@@ -171,12 +166,10 @@ def report_article_class(request, *args, **kwargs):  #
 @login_required
 @authority
 def report_accrual_class(request, *args, **kwargs):  #
-    print(request.path, '>', resolve(request.path).url_name, '>', request.user)
     current_url_name = resolve(request.path).url_name  # 获取当前URL_NAME
     authority_list = request.session.get('authority_list')  # 获取当前用户的所有权限
     menu_result = MenuHelper(request).menu_data_list()
     PAGE_TITLE = '在保分类(按放款)'
-    print('kwargs:', kwargs, kwargs['class_typ'], type(kwargs['class_typ']))
     CLASS_LIST = [(1, '品种'), (11, '授信银行'), (21, '区域'), (31, '行业'), (35, '部门'),
                   (41, '项目经理'), (51, '项目助理'), (61, '风控专员'), (71, '放款支行'), (81, '法律顾问'), ]
     provide_typ_list = models.Provides.PROVIDE_TYP_LIST  # 筛选条件

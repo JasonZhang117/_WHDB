@@ -17,7 +17,6 @@ from _WHDB.views import authority
 @login_required
 @authority
 def guarantee_add_ajax(request):  # 反担保措施添加ajax
-    print(request.path, '>', resolve(request.path).url_name, '>', request.user)
     current_url_name = resolve(request.path).url_name  # 获取当前URL_NAME
     authority_list = request.session.get('authority_list')  # 获取当前用户的所有权限
     response = {'status': True, 'message': None, 'forme': None, }
@@ -250,11 +249,9 @@ def guarantee_add_ajax(request):  # 反担保措施添加ajax
 @login_required
 @authority
 def guarantee_del_ajax(request):  #
-    print(request.path, '>', resolve(request.path).url_name, '>', request.user)
     response = {'status': True, 'message': None, 'forme': None, }
     post_data_str = request.POST.get('postDataStr')
     post_data = json.loads(post_data_str)
-    print('post_data:', post_data)
     lending_id = post_data['lending_id']
     sure_typ = int(post_data['sure_typ'])
 
@@ -314,7 +311,6 @@ def guarantee_del_ajax(request):  #
 @login_required
 @authority
 def comment_edit_ajax(request):  # 修改项目ajax
-    print(request.path, '>', resolve(request.path).url_name, '>', request.user)
     response = {'status': True, 'message': None, 'forme': None, }
 
     post_data_str = request.POST.get('postDataStr')
@@ -355,7 +351,6 @@ def comment_edit_ajax(request):  # 修改项目ajax
 @login_required
 @authority
 def single_quota_ajax(request):  # 单项额度ajax
-    print(request.path, '>', resolve(request.path).url_name, '>', request.user)
     response = {'status': True, 'message': None,
                 'obj_num': None, 'forme': None, }
     post_data_str = request.POST.get('postDataStr')
@@ -394,7 +389,6 @@ def single_quota_ajax(request):  # 单项额度ajax
 @login_required
 @authority
 def supply_ajax(request):  #
-    print(request.path, '>', resolve(request.path).url_name, '>', request.user)
     response = {'status': True, 'message': None, 'forme': None, }
     post_data_str = request.POST.get('postDataStr')
     post_data = json.loads(post_data_str)
@@ -428,11 +422,9 @@ def supply_ajax(request):  #
 @login_required
 @authority
 def supply_edit_ajax(request):  #
-    print(request.path, '>', resolve(request.path).url_name, '>', request.user)
     response = {'status': True, 'message': None, 'forme': None, }
     post_data_str = request.POST.get('postDataStr')
     post_data = json.loads(post_data_str)
-    print('post_data:', post_data)
     article_obj = models.Articles.objects.get(id=post_data['edit_article_id'])
     '''ARTICLE_STATE_LIST = [(1, '待反馈'), (2, '已反馈'), (3, '待上会'), (4, '已上会'), (5, '已签批'),
                           (51, '已放款'), (52, '已放完'), (55, '已解保'), (61, '待变更'), (99, '已注销')]'''
@@ -462,7 +454,6 @@ def supply_edit_ajax(request):  #
 @login_required
 @authority
 def supply_del_ajax(request):  #
-    print(request.path, '>', resolve(request.path).url_name, '>', request.user)
     response = {'status': True, 'message': None, 'forme': None, }
     post_data_str = request.POST.get('postDataStr')
     post_data = json.loads(post_data_str)
@@ -489,7 +480,6 @@ def supply_del_ajax(request):  #
 @login_required
 @authority
 def lending_order_ajax(request):  # 放款次序ajax
-    print(request.path, '>', resolve(request.path).url_name, '>', request.user)
     response = {'status': True, 'message': None, 'forme': None}
     post_data_str = request.POST.get('postDataStr')
     post_data = json.loads(post_data_str)
@@ -527,7 +517,6 @@ def lending_order_ajax(request):  # 放款次序ajax
 @login_required
 @authority
 def lending_change_ajax(request):  # 放款次序ajax
-    print(request.path, '>', resolve(request.path).url_name, '>', request.user)
     response = {'status': True, 'message': None, 'forme': None}
     post_data_str = request.POST.get('postDataStr')
     post_data = json.loads(post_data_str)
@@ -596,7 +585,6 @@ def lending_del_ajax(request):  # 放款次序删除ajax
 @login_required
 @authority
 def single_del_ajax(request):  # 单项额度删除ajax
-    print(request.path, '>', resolve(request.path).url_name, '>', request.user)
     response = {'status': True, 'message': None, 'forme': None, }
     post_data_str = request.POST.get('postDataStr')
     post_data = json.loads(post_data_str)
@@ -606,7 +594,6 @@ def single_del_ajax(request):  # 单项额度删除ajax
 
     single_obj = models.SingleQuota.objects.get(id=single_id)
     article_obj = models.Articles.objects.get(id=article_id)
-    print('single_obj:', single_obj)
     '''ARTICLE_STATE_LIST = [(1, '待反馈'), (2, '已反馈'), (3, '待上会'), (4, '已上会'), (5, '已签批'),
                           (51, '已放款'), (52, '已放完'), (55, '已解保'), (61, '待变更'), (99, '已注销')]'''
     if article_obj.article_state in [1, 2, 3, 4, 61]:
@@ -627,7 +614,6 @@ def single_del_ajax(request):  # 单项额度删除ajax
 @login_required
 @authority
 def article_sign_ajax(request):
-    print(request.path, '>', resolve(request.path).url_name, '>', request.user)
     response = {'status': True, 'message': None, 'forme': None, }
     post_data_str = request.POST.get('postDataStr')
     post_data = json.loads(post_data_str)
@@ -704,7 +690,6 @@ def article_sign_ajax(request):
 @login_required
 @authority
 def article_change_ajax(request):
-    print(request.path, '>', resolve(request.path).url_name, '>', request.user)
     response = {'status': True, 'message': None, 'forme': None, }
     post_data_str = request.POST.get('postDataStr')
     post_data = json.loads(post_data_str)

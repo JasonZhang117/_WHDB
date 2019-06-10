@@ -21,7 +21,6 @@ from _WHDB.views import authority
 @login_required
 @authority
 def article(request, *args, **kwargs):  # 项目列表
-    print(request.path, '>', resolve(request.path).url_name, '>', request.user)
     current_url_name = resolve(request.path).url_name  # 获取当前URL_NAME
     authority_list = request.session.get('authority_list')  # 获取当前用户的所有权限
     menu_result = MenuHelper(request).menu_data_list()
@@ -76,7 +75,6 @@ def article(request, *args, **kwargs):  # 项目列表
 @login_required
 @authority
 def article_scan(request, article_id):  # 项目预览
-    print(request.path, '>', resolve(request.path).url_name, '>', request.user)
     current_url_name = resolve(request.path).url_name  # 获取当前URL_NAME
     authority_list = request.session.get('authority_list')  # 获取当前用户的所有权限
     menu_result = MenuHelper(request).menu_data_list()
@@ -114,7 +112,6 @@ def article_scan(request, article_id):  # 项目预览
 @login_required
 @authority
 def article_scan_agree(request, article_id, agree_id):  # 项目预览
-    print(request.path, '>', resolve(request.path).url_name, '>', request.user)
     current_url_name = resolve(request.path).url_name  # 获取当前URL_NAME
     authority_list = request.session.get('authority_list')  # 获取当前用户的所有权限
     menu_result = MenuHelper(request).menu_data_list()
@@ -139,7 +136,6 @@ def article_scan_agree(request, article_id, agree_id):  # 项目预览
 @login_required
 @authority
 def article_scan_lending(request, article_id, lending_id):  # 项目预览
-    print(request.path, '>', resolve(request.path).url_name, '>', request.user)
     current_url_name = resolve(request.path).url_name  # 获取当前URL_NAME
     authority_list = request.session.get('authority_list')  # 获取当前用户的所有权限
     menu_result = MenuHelper(request).menu_data_list()

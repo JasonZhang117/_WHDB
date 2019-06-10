@@ -16,7 +16,6 @@ from _WHDB.views import authority
 @login_required
 @authority
 def review_plan_ajax(request):
-    print(request.path, '>', resolve(request.path).url_name, '>', request.user)
     response = {'status': True, 'message': None, 'forme': None, }
     post_data_str = request.POST.get('postDataStr')
     post_data = json.loads(post_data_str)
@@ -65,7 +64,6 @@ def review_plan_ajax(request):
 @login_required
 @authority
 def review_update_ajax(request):
-    print(request.path, '>', resolve(request.path).url_name, '>', request.user)
     response = {'status': True, 'message': None, 'forme': None, }
     post_data_str = request.POST.get('postDataStr')
     post_data = json.loads(post_data_str)
@@ -135,11 +133,9 @@ def review_update_ajax(request):
 @login_required
 @authority
 def review_del_ajax(request):
-    print(request.path, '>', resolve(request.path).url_name, '>', request.user)
     response = {'status': True, 'message': None, 'forme': None, }
     post_data_str = request.POST.get('postDataStr')
     post_data = json.loads(post_data_str)
-    print('post_data:', post_data)
 
     custom_list = models.Customes.objects.filter(id=post_data['custom_id'])
     review_list = models.Review.objects.filter(id=post_data['review_id'])
@@ -166,7 +162,6 @@ def review_del_ajax(request):
 @login_required
 @authority
 def investigate_add_ajax(request):
-    print(request.path, '>', resolve(request.path).url_name, '>', request.user)
     response = {'status': True, 'message': None, 'forme': None, }
     post_data_str = request.POST.get('postDataStr')
     post_data = json.loads(post_data_str)
@@ -185,6 +180,13 @@ def investigate_add_ajax(request):
                                                   inv_date=inv_cleaned['inv_date'],
                                                   invor=request.user)  # 创建补调信息
                 custom_list.update(lately_date=inv_cleaned['inv_date'])  # 更新客户信息
+                '''REVIEW_STATE_LIST = [(1, '待保后'), (11, '待报告'), (21, '已完成'), (81, '自主保后')]'''
+                custom_review = models.Review.objects.filter(custom=custom_obj, review_state=1)
+                if custom_review:  # 如有尚未完成的保后计划,(61, '补调替代')
+                    '''REVIEW_STY_LIST = [(1, '现场检查'), (11, '电话回访'), (61, '补调替代'), (62, '尽调替代')]'''
+                    custom_review.update(review_sty=61, review_state=21, review_date=inv_cleaned['inv_date'])
+                    '''REVIEW_STATE_LIST = [(1, '待保后'), (11, '待报告'), (21, '已完成'), (81, '自主保后')]'''
+                    custom_list.update(review_state=21, review_date=inv_cleaned['inv_date'])
             response['message'] = '补调成功！'
         except Exception as e:
             response['status'] = False
@@ -196,21 +198,20 @@ def investigate_add_ajax(request):
     result = json.dumps(response, ensure_ascii=False)
     return HttpResponse(result)
 
+
 # -----------------------删除补调ajax-------------------------#
 @login_required
 @authority
 def investigate_del_ajax(request):
-    print(request.path, '>', resolve(request.path).url_name, '>', request.user)
     response = {'status': True, 'message': None, 'forme': None, }
     post_data_str = request.POST.get('postDataStr')
     post_data = json.loads(post_data_str)
-    print('post_data:', post_data)
 
     custom_list = models.Customes.objects.filter(id=post_data['custom_id'])
     investigate_list = models.Investigate.objects.filter(id=post_data['investigate_id'])
     try:
         with transaction.atomic():
-                investigate_list.delete()
+            investigate_list.delete()
         response['message'] = '保后计划删除成功！'
     except Exception as e:
         response['status'] = False

@@ -16,7 +16,6 @@ from _WHDB.views import authority
 @login_required
 @authority
 def counter_sign_ajax(request):
-    print(request.path, '>', resolve(request.path).url_name, '>', request.user)
     response = {'status': True, 'message': None, 'forme': None, }
     post_data_str = request.POST.get('postDataStr')
     post_data = json.loads(post_data_str)
@@ -54,7 +53,6 @@ def counter_sign_ajax(request):
 @login_required
 @authority
 def ascertain_add_ajax(request):
-    print(request.path, '>', resolve(request.path).url_name, '>', request.user)
     response = {'status': True, 'message': None, 'forme': None, }
     post_data_str = request.POST.get('postDataStr')
     post_data = json.loads(post_data_str)
@@ -94,7 +92,6 @@ def ascertain_add_ajax(request):
 @login_required
 @authority
 def notify_add_ajax(request):
-    print(request.path, '>', resolve(request.path).url_name, '>', request.user)
     response = {'status': True, 'message': None, 'forme': None, }
     post_data_str = request.POST.get('postDataStr')
     post_data = json.loads(post_data_str)
@@ -183,7 +180,6 @@ def notify_add_ajax(request):
 @login_required
 @authority
 def notify_edit_ajax(request):
-    print(request.path, '>', resolve(request.path).url_name, '>', request.user)
     response = {'status': True, 'message': None, 'forme': None, }
     post_data_str = request.POST.get('postDataStr')
     post_data = json.loads(post_data_str)
@@ -216,7 +212,6 @@ def notify_edit_ajax(request):
 @login_required
 @authority
 def notify_del_ajax(request):  # 反担保人删除ajax
-    print(request.path, '>', resolve(request.path).url_name, '>', request.user)
     response = {'status': True, 'message': None, 'forme': None, }
     post_data_str = request.POST.get('postDataStr')
     post_data = json.loads(post_data_str)
@@ -246,7 +241,6 @@ def notify_del_ajax(request):  # 反担保人删除ajax
 @login_required
 @authority
 def provide_add_ajax(request):
-    print(request.path, '>', resolve(request.path).url_name, '>', request.user)
     response = {'status': True, 'message': None, 'forme': None, }
     post_data_str = request.POST.get('postDataStr')
     post_data = json.loads(post_data_str)
@@ -386,7 +380,6 @@ def provide_add_ajax(request):
 @login_required
 @authority
 def provide_del_ajax(request):  # 删除放款ajax
-    print(request.path, '>', resolve(request.path).url_name, '>', request.user)
     response = {'status': True, 'message': None, 'forme': None, }
     post_data_str = request.POST.get('postDataStr')
     post_data = json.loads(post_data_str)
@@ -562,7 +555,6 @@ def provide_del_ajax(request):  # 删除放款ajax
 @login_required
 @authority
 def repayment_add_ajax(request):
-    print(request.path, '>', resolve(request.path).url_name, '>', request.user)
     response = {'status': True, 'message': None, 'forme': None, }
     post_data_str = request.POST.get('postDataStr')
     post_data = json.loads(post_data_str)
@@ -720,7 +712,6 @@ def repayment_add_ajax(request):
 @login_required
 @authority
 def repayment_del_ajax(request):  # 删除还款信息ajax
-    print(request.path, '>', resolve(request.path).url_name, '>', request.user)
     response = {'status': True, 'message': None, 'forme': None, }
     post_data_str = request.POST.get('postDataStr')
     post_data = json.loads(post_data_str)
@@ -870,7 +861,6 @@ def repayment_del_ajax(request):  # 删除还款信息ajax
 @login_required
 @authority
 def track_plan_ajax(request):
-    print(request.path, '>', resolve(request.path).url_name, '>', request.user)
     response = {'status': True, 'message': None, 'forme': None, }
     post_data_str = request.POST.get('postDataStr')
     post_data = json.loads(post_data_str)
@@ -915,7 +905,6 @@ def track_plan_ajax(request):
 @login_required
 @authority
 def track_del_ajax(request):
-    print(request.path, '>', resolve(request.path).url_name, '>', request.user)
     response = {'status': True, 'message': None, 'forme': None, }
     post_data_str = request.POST.get('postDataStr')
     post_data = json.loads(post_data_str)
@@ -936,7 +925,6 @@ def track_del_ajax(request):
 @login_required
 @authority
 def track_update_ajax(request):
-    print(request.path, '>', resolve(request.path).url_name, '>', request.user)
     response = {'status': True, 'message': None, 'forme': None, }
     post_data_str = request.POST.get('postDataStr')
     post_data = json.loads(post_data_str)

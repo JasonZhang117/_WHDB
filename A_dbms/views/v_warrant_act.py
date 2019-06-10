@@ -13,7 +13,6 @@ from _WHDB.views import authority
 @login_required
 @authority
 def warrant_add_ajax(request):
-    print(request.path, '>', resolve(request.path).url_name, '>', request.user)
     response = {'status': True, 'message': None, 'forme': None, ' skip': None, }
     post_data_str = request.POST.get('postDataStr')
     post_data = json.loads(post_data_str)
@@ -152,9 +151,9 @@ def warrant_add_ajax(request):
                             warrant=warrant_obj, stock_buildor=request.user,
                             stock_typ=stocke_clean['stock_typ'],
                             stock_owner_id=stocke_clean['stock_owner'],
-                            target=stocke_clean['target'], registe=round(stocke_clean['registe'], 2),
-                            share=round(stocke_clean['share'], 2),
-                            ratio=round(stocke_clean['ratio'], 2))
+                            target=stocke_clean['target'], registe=stocke_clean['registe'],
+                            share=stocke_clean['share'],
+                            ratio=stocke_clean['ratio'], )
                     response['message'] = '股权创建成功！！！'
                     response['skip'] = "/dbms/warrant/scan/%s/" % warrant_obj.id
                 except Exception as e:
@@ -304,11 +303,9 @@ def warrant_add_ajax(request):
 @login_required
 @authority
 def warrant_del_ajax(request):
-    print(request.path, '>', resolve(request.path).url_name, '>', request.user)
     response = {'status': True, 'message': None, 'forme': None}
     post_data_str = request.POST.get('postDataStr')
     post_data = json.loads(post_data_str)
-    print('post_data:', post_data)
 
     warrant_id = int(post_data['warrant_id'])
     warrant_obj = models.Warrants.objects.get(id=warrant_id)
@@ -333,11 +330,9 @@ def warrant_del_ajax(request):
 @login_required
 @authority
 def warrant_edit_ajax(request):
-    print(request.path, '>', resolve(request.path).url_name, '>', request.user)
     response = {'status': True, 'message': None, 'forme': None, }
     post_data_str = request.POST.get('postDataStr')
     post_data = json.loads(post_data_str)
-    print('post_data:', post_data)
     warrant_id = int(post_data['warrant_id'])
     warrant_list = models.Warrants.objects.filter(id=warrant_id)
     warrant_obj = warrant_list.first()
@@ -444,7 +439,7 @@ def warrant_edit_ajax(request):
                         warrant_list.update(
                             warrant_num=warrant_edit_clean['warrant_num'])
                         models.Stockes.objects.filter(warrant=warrant_obj).update(
-                            target=stockes_edit_clean['target'], registe=round(stockes_edit_clean['registe'], 2),
+                            target=stockes_edit_clean['target'], registe=stockes_edit_clean['registe'],
                             share=stockes_edit_clean['share'], ratio=stockes_edit_clean['ratio'],
                             stock_typ=stockes_edit_clean['stock_typ'])
                         response['message'] = '股权信息修改该成功！！！'
@@ -556,11 +551,9 @@ def warrant_edit_ajax(request):
 @login_required
 @authority
 def owership_add_ajax(request):  # 产权证添加ajax
-    print(request.path, '>', resolve(request.path).url_name, '>', request.user)
     response = {'status': True, 'message': None, 'forme': None, }
     post_data_str = request.POST.get('postDataStr')
     post_data = json.loads(post_data_str)
-    print('post_data:', post_data)
     warrant_id = post_data['warrant_id']
     warrant_obj = models.Warrants.objects.get(id=warrant_id)
     form_owership_add = forms.OwerShipAddForm(post_data)
@@ -587,7 +580,6 @@ def owership_add_ajax(request):  # 产权证添加ajax
 @login_required
 @authority
 def owership_del_ajax(request):  # 产权证删除ajax
-    print(request.path, '>', resolve(request.path).url_name, '>', request.user)
     response = {'status': True, 'message': None, 'forme': None, }
     post_data_str = request.POST.get('postDataStr')
     post_data = json.loads(post_data_str)
@@ -622,11 +614,9 @@ def owership_del_ajax(request):  # 产权证删除ajax
 @login_required
 @authority
 def housebag_add_ajax(request):  # 产权证添加ajax
-    print(request.path, '>', resolve(request.path).url_name, '>', request.user)
     response = {'status': True, 'message': None, 'forme': None, }
     post_data_str = request.POST.get('postDataStr')
     post_data = json.loads(post_data_str)
-    print('post_data:', post_data)
     warrant_id = post_data['warrant_id']
     warrant_obj = models.Warrants.objects.get(id=warrant_id)
     form_housebag_add_edit = forms.HouseBagAddEidtForm(post_data)
@@ -654,7 +644,6 @@ def housebag_add_ajax(request):  # 产权证添加ajax
 @login_required
 @authority
 def housebag_del_ajax(request):  #
-    print(request.path, '>', resolve(request.path).url_name, '>', request.user)
     response = {'status': True, 'message': None, 'forme': None, }
     post_data_str = request.POST.get('postDataStr')
     post_data = json.loads(post_data_str)
@@ -682,11 +671,9 @@ def housebag_del_ajax(request):  #
 @login_required
 @authority
 def receivextend_add_ajax(request):  # 产权证添加ajax
-    print(request.path, '>', resolve(request.path).url_name, '>', request.user)
     response = {'status': True, 'message': None, 'forme': None, }
     post_data_str = request.POST.get('postDataStr')
     post_data = json.loads(post_data_str)
-    print('post_data:', post_data)
     receive_obj = models.Receivable.objects.get(id=post_data['receivable_id'])
 
     form_receivbag_add = forms.FormReceivExtend(post_data)
@@ -712,7 +699,6 @@ def receivextend_add_ajax(request):  # 产权证添加ajax
 @login_required
 @authority
 def receivextend_del_ajax(request):  # 产权证删除ajax
-    print(request.path, '>', resolve(request.path).url_name, '>', request.user)
     response = {'status': True, 'message': None, 'forme': None, }
     post_data_str = request.POST.get('postDataStr')
     post_data = json.loads(post_data_str)
@@ -740,11 +726,9 @@ def receivextend_del_ajax(request):  # 产权证删除ajax
 @login_required
 @authority
 def draftextend_add_ajax(request):  # 产权证添加ajax
-    print(request.path, '>', resolve(request.path).url_name, '>', request.user)
     response = {'status': True, 'message': None, 'forme': None, }
     post_data_str = request.POST.get('postDataStr')
     post_data = json.loads(post_data_str)
-    print('post_data:', post_data)
     warrant_id = post_data['warrant_id']
     warrant_obj = models.Warrants.objects.get(id=warrant_id)
     draft_obj = warrant_obj.draft_warrant
@@ -775,7 +759,6 @@ def draftextend_add_ajax(request):  # 产权证添加ajax
 @login_required
 @authority
 def draftbag_del_ajax(request):  #
-    print(request.path, '>', resolve(request.path).url_name, '>', request.user)
     response = {'status': True, 'message': None, 'forme': None, }
     post_data_str = request.POST.get('postDataStr')
     post_data = json.loads(post_data_str)
@@ -803,11 +786,9 @@ def draftbag_del_ajax(request):  #
 @login_required
 @authority
 def guaranty_add_ajax(request):  # 抵押物添加ajax
-    print(request.path, '>', resolve(request.path).url_name, '>', request.user)
     response = {'status': True, 'message': None, 'forme': None, }
     post_data_str = request.POST.get('postDataStr')
     post_data = json.loads(post_data_str)
-    print('post_data:', post_data)
     warrant_id = post_data['warrant_id']
     warrant_obj = models.Warrants.objects.get(id=warrant_id)
     try:
@@ -828,7 +809,6 @@ def guaranty_add_ajax(request):  # 抵押物添加ajax
 @login_required
 @authority
 def guaranty_del_ajax(request):  # 抵押物
-    print(request.path, '>', resolve(request.path).url_name, '>', request.user)
     response = {'status': True, 'message': None, 'forme': None, }
     post_data_str = request.POST.get('postDataStr')
     post_data = json.loads(post_data_str)
@@ -859,11 +839,9 @@ def guaranty_del_ajax(request):  # 抵押物
 @login_required
 @authority
 def storages_add_ajax(request):  # 出入库添加ajax
-    print(request.path, '>', resolve(request.path).url_name, '>', request.user)
     response = {'status': True, 'message': None, 'forme': None, }
     post_data_str = request.POST.get('postDataStr')
     post_data = json.loads(post_data_str)
-    print('post_data:', post_data)
 
     warrant_id = post_data['warrant_id']
     warrant_list = models.Warrants.objects.filter(id=warrant_id)
@@ -987,11 +965,9 @@ def storages_add_ajax(request):  # 出入库添加ajax
 @login_required
 @authority
 def storage_del_ajax(request):  #
-    print(request.path, '>', resolve(request.path).url_name, '>', request.user)
     response = {'status': True, 'message': None, 'forme': None, }
     post_data_str = request.POST.get('postDataStr')
     post_data = json.loads(post_data_str)
-    print('post_data:', post_data)
 
     warrant_list = models.Warrants.objects.filter(id=post_data['warrant_id'])
     warrant_obj = warrant_list.first()
@@ -1041,11 +1017,9 @@ def storage_del_ajax(request):  #
 @login_required
 @authority
 def evaluate_add_ajax(request):  #
-    print(request.path, '>', resolve(request.path).url_name, '>', request.user)
     response = {'status': True, 'message': None, 'forme': None, }
     post_data_str = request.POST.get('postDataStr')
     post_data = json.loads(post_data_str)
-    print('post_data:', post_data)
     warrant_id = post_data['warrant_id']
     warrant_list = models.Warrants.objects.filter(id=warrant_id)
     warrant_obj = warrant_list.first()

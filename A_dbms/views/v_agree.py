@@ -17,7 +17,6 @@ from _WHDB.views import authority
 @login_required
 @authority
 def agree(request, *args, **kwargs):  # 委托合同列表
-    print(request.path, '>', resolve(request.path).url_name, '>', request.user)
     current_url_name = resolve(request.path).url_name  # 获取当前URL_NAME
     authority_list = request.session.get('authority_list')  # 获取当前用户的所有权限
     menu_result = MenuHelper(request).menu_data_list()
@@ -61,7 +60,6 @@ def agree(request, *args, **kwargs):  # 委托合同列表
 @login_required
 @authority
 def agree_scan(request, agree_id):  # 查看合同
-    print(request.path, '>', resolve(request.path).url_name, '>', request.user)
     current_url_name = resolve(request.path).url_name  # 获取当前URL_NAME
     authority_list = request.session.get('authority_list')  # 获取当前用户的所有权限
     menu_result = MenuHelper(request).menu_data_list()
@@ -136,7 +134,6 @@ def agree_scan(request, agree_id):  # 查看合同
 @login_required
 @authority
 def agree_scan_counter(request, agree_id, counter_id):  # 查看合同
-    print(request.path, '>', resolve(request.path).url_name, '>', request.user)
     current_url_name = resolve(request.path).url_name  # 获取当前URL_NAME
     authority_list = request.session.get('authority_list')  # 获取当前用户的所有权限
     menu_result = MenuHelper(request).menu_data_list()
@@ -290,7 +287,6 @@ def credit_term_c(credit_term):
 @login_required
 @authority
 def counter_preview(request, agree_id, counter_id):
-    print(request.path, '>', resolve(request.path).url_name, '>', request.user)
     current_url_name = resolve(request.path).url_name  # 获取当前URL_NAME
     authority_list = request.session.get('authority_list')  # 获取当前用户的所有权限
     menu_result = MenuHelper(request).menu_data_list()
@@ -387,7 +383,6 @@ def counter_preview(request, agree_id, counter_id):
 @login_required
 @authority
 def agree_sign_preview(request, agree_id):
-    print(request.path, '>', resolve(request.path).url_name, '>', request.user)
     current_url_name = resolve(request.path).url_name  # 获取当前URL_NAME
     authority_list = request.session.get('authority_list')  # 获取当前用户的所有权限
     menu_result = MenuHelper(request).menu_data_list()
@@ -429,7 +424,6 @@ def agree_sign_preview(request, agree_id):
 @login_required
 @authority
 def result_preview(request, agree_id, result_id):
-    print(request.path, '>', resolve(request.path).url_name, '>', request.user)
     current_url_name = resolve(request.path).url_name  # 获取当前URL_NAME
     authority_list = request.session.get('authority_list')  # 获取当前用户的所有权限
     menu_result = MenuHelper(request).menu_data_list()

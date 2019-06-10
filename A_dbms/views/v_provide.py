@@ -16,7 +16,6 @@ from _WHDB.views import authority
 @login_required
 @authority
 def provide_agree(request, *args, **kwargs):  # 放款管理
-    print(request.path, '>', resolve(request.path).url_name, '>', request.user)
     current_url_name = resolve(request.path).url_name  # 获取当前URL_NAME
     authority_list = request.session.get('authority_list')  # 获取当前用户的所有权限
     menu_result = MenuHelper(request).menu_data_list()
@@ -64,7 +63,6 @@ def provide_agree(request, *args, **kwargs):  # 放款管理
 @login_required
 @authority
 def provide_agree_scan(request, agree_id):  # 查看放款
-    print(request.path, '>', resolve(request.path).url_name, '>', request.user)
     current_url_name = resolve(request.path).url_name  # 获取当前URL_NAME
     authority_list = request.session.get('authority_list')  # 获取当前用户的所有权限
     menu_result = MenuHelper(request).menu_data_list()
@@ -223,7 +221,6 @@ def provide_agree_scan(request, agree_id):  # 查看放款
 @login_required
 @authority
 def provide_agree_notify(request, agree_id, notify_id):  # 查看放款通知
-    print(request.path, '>', resolve(request.path).url_name, '>', request.user)
     current_url_name = resolve(request.path).url_name  # 获取当前URL_NAME
     authority_list = request.session.get('authority_list')  # 获取当前用户的所有权限
     menu_result = MenuHelper(request).menu_data_list()
@@ -295,7 +292,6 @@ def provide_agree_notify(request, agree_id, notify_id):  # 查看放款通知
 @login_required
 @authority
 def notify(request, *args, **kwargs):  #
-    print(request.path, '>', resolve(request.path).url_name, '>', request.user)
     current_url_name = resolve(request.path).url_name  # 获取当前URL_NAME
     authority_list = request.session.get('authority_list')  # 获取当前用户的所有权限
     menu_result = MenuHelper(request).menu_data_list()
@@ -340,7 +336,6 @@ def notify(request, *args, **kwargs):  #
 @login_required
 @authority
 def notify_scan(request, notify_id):  # 查看放款通知
-    print(request.path, '>', resolve(request.path).url_name, '>', request.user)
     current_url_name = resolve(request.path).url_name  # 获取当前URL_NAME
     authority_list = request.session.get('authority_list')  # 获取当前用户的所有权限
     menu_result = MenuHelper(request).menu_data_list()
@@ -416,7 +411,6 @@ def notify_scan(request, notify_id):  # 查看放款通知
 @login_required
 @authority
 def provide(request, *args, **kwargs):  # 委托合同列表
-    print(request.path, '>', resolve(request.path).url_name, '>', request.user)
     current_url_name = resolve(request.path).url_name  # 获取当前URL_NAME
     authority_list = request.session.get('authority_list')  # 获取当前用户的所有权限
     menu_result = MenuHelper(request).menu_data_list()
@@ -463,7 +457,6 @@ def provide(request, *args, **kwargs):  # 委托合同列表
 @login_required
 @authority
 def provide_scan(request, provide_id):  # 查看放款
-    print(request.path, '>', resolve(request.path).url_name, '>', request.user)
     current_url_name = resolve(request.path).url_name  # 获取当前URL_NAME
     authority_list = request.session.get('authority_list')  # 获取当前用户的所有权限
     menu_result = MenuHelper(request).menu_data_list()
@@ -491,7 +484,6 @@ def provide_scan(request, provide_id):  # 查看放款
 @login_required
 @authority
 def overdue(request, *args, **kwargs):  # 逾期列表
-    print(request.path, '>', resolve(request.path).url_name, '>', request.user)
     current_url_name = resolve(request.path).url_name  # 获取当前URL_NAME
     authority_list = request.session.get('authority_list')  # 获取当前用户的所有权限
     menu_result = MenuHelper(request).menu_data_list()
@@ -535,7 +527,6 @@ def overdue(request, *args, **kwargs):  # 逾期列表
 @login_required
 @authority
 def soondue(request, *args, **kwargs):  # 委托合同列表
-    print(request.path, '>', resolve(request.path).url_name, '>', request.user)
     current_url_name = resolve(request.path).url_name  # 获取当前URL_NAME
     authority_list = request.session.get('authority_list')  # 获取当前用户的所有权限
     menu_result = MenuHelper(request).menu_data_list()
@@ -579,7 +570,6 @@ def soondue(request, *args, **kwargs):  # 委托合同列表
 @login_required
 @authority
 def provide_follow(request, *args, **kwargs):  # 放款管理
-    print(request.path, '>', resolve(request.path).url_name, '>', request.user)
     current_url_name = resolve(request.path).url_name  # 获取当前URL_NAME
     authority_list = request.session.get('authority_list')  # 获取当前用户的所有权限
     menu_result = MenuHelper(request).menu_data_list()
@@ -628,7 +618,6 @@ def provide_follow(request, *args, **kwargs):  # 放款管理
 @login_required
 @authority
 def track_overdue(request, *args, **kwargs):  #
-    print(request.path, '>', resolve(request.path).url_name, '>', request.user)
     current_url_name = resolve(request.path).url_name  # 获取当前URL_NAME
     authority_list = request.session.get('authority_list')  # 获取当前用户的所有权限
     menu_result = MenuHelper(request).menu_data_list()
@@ -671,7 +660,6 @@ def track_overdue(request, *args, **kwargs):  #
 @login_required
 @authority
 def track_soondue(request, *args, **kwargs):  #
-    print(request.path, '>', resolve(request.path).url_name, '>', request.user)
     current_url_name = resolve(request.path).url_name  # 获取当前URL_NAME
     authority_list = request.session.get('authority_list')  # 获取当前用户的所有权限
     menu_result = MenuHelper(request).menu_data_list()

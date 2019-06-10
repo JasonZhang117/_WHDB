@@ -17,11 +17,9 @@ from _WHDB.views import authority
 @login_required
 @authority
 def pigeonhole_add_ajax(request):
-    print(request.path, '>', resolve(request.path).url_name, '>', request.user)
     response = {'status': True, 'message': None, 'forme': None, }
     post_data_str = request.POST.get('postDataStr')
     post_data = json.loads(post_data_str)
-    print('post_data:', post_data)
 
     provide_id = post_data['provide_id']
     provide_list = models.Provides.objects.filter(id=provide_id)

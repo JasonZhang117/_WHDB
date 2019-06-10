@@ -17,7 +17,6 @@ from _WHDB.views import authority
 @login_required
 @authority
 def pigeonhole(request, *args, **kwargs):  # 归档
-    print(request.path, '>', resolve(request.path).url_name, '>', request.user)
     current_url_name = resolve(request.path).url_name  # 获取当前URL_NAME
     authority_list = request.session.get('authority_list')  # 获取当前用户的所有权限
     menu_result = MenuHelper(request).menu_data_list()
@@ -64,7 +63,6 @@ def pigeonhole(request, *args, **kwargs):  # 归档
 @login_required
 @authority
 def pigeonhole_scan(request, provide_id):  # 查看放款
-    print(request.path, '>', resolve(request.path).url_name, '>', request.user)
     current_url_name = resolve(request.path).url_name  # 获取当前URL_NAME
     authority_list = request.session.get('authority_list')  # 获取当前用户的所有权限
     menu_result = MenuHelper(request).menu_data_list()
@@ -89,7 +87,6 @@ def pigeonhole_scan(request, provide_id):  # 查看放款
 @login_required
 @authority
 def pigeonhole_overdue(request, *args, **kwargs):
-    print(request.path, '>', resolve(request.path).url_name, '>', request.user)
     current_url_name = resolve(request.path).url_name  # 获取当前URL_NAME
     authority_list = request.session.get('authority_list')  # 获取当前用户的所有权限
     menu_result = MenuHelper(request).menu_data_list()

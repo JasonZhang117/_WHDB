@@ -16,7 +16,6 @@ from .v_agree import convert, convert_num
 @login_required
 @authority
 def agree_sign_ajax(request):  # 添加合同
-    print(request.path, '>', resolve(request.path).url_name, '>', request.user)
     response = {'status': True, 'message': None, 'forme': None, 'skip': None, }
     post_data_str = request.POST.get('postDataStr')
     post_data = json.loads(post_data_str)
@@ -51,7 +50,6 @@ def agree_sign_ajax(request):  # 添加合同
 @login_required
 @authority
 def agree_add_ajax(request):  # 添加合同
-    print(request.path, '>', resolve(request.path).url_name, '>', request.user)
     response = {'status': True, 'message': None, 'forme': None, 'skip': None, }
     post_data_str = request.POST.get('postDataStr')
     post_data = json.loads(post_data_str)
@@ -150,7 +148,6 @@ def agree_add_ajax(request):  # 添加合同
 @login_required
 @authority
 def agree_edit_ajax(request):  #
-    print(request.path, '>', resolve(request.path).url_name, '>', request.user)
     response = {'status': True, 'message': None, 'forme': None, 'skip': None, }
     post_data_str = request.POST.get('postDataStr')
     post_data = json.loads(post_data_str)
@@ -321,7 +318,6 @@ def agree_edit_ajax(request):  #
 # ---------------------------委托担保合同保存ajax----------------------------#
 @login_required
 def agree_save_ajax(request):  #
-    print(request.path, '>', resolve(request.path).url_name, '>', request.user)
     response = {'status': True, 'message': None, 'forme': None, 'skip': None, }
     post_data_str = request.POST.get('postDataStr')
     post_data = json.loads(post_data_str)
@@ -344,7 +340,6 @@ def agree_save_ajax(request):  #
 @login_required
 @authority
 def counter_add_ajax(request):
-    print(request.path, '>', resolve(request.path).url_name, '>', request.user)
     response = {'status': True, 'message': None, 'forme': None, }
     post_data_str = request.POST.get('postDataStr')
     post_data = json.loads(post_data_str)
@@ -554,7 +549,6 @@ def counter_add_ajax(request):
 @login_required
 @authority
 def counter_del_ajax(request):  # 删除反担保合同ajax
-    print(request.path, '>', resolve(request.path).url_name, '>', request.user)
     response = {'status': True, 'message': None, 'forme': None, }
     post_data_str = request.POST.get('postDataStr')
     post_data = json.loads(post_data_str)
@@ -595,11 +589,9 @@ def counter_del_ajax(request):  # 删除反担保合同ajax
 # ---------------------------反担保合同保存ajax----------------------------#
 @login_required
 def counter_save_ajax(request):  # 添加合同
-    print(request.path, '>', resolve(request.path).url_name, '>', request.user)
     response = {'status': True, 'message': None, 'forme': None, 'skip': None, }
     post_data_str = request.POST.get('postDataStr')
     post_data = json.loads(post_data_str)
-    print(post_data)
     counter_content = post_data['content']
     counter_obj = models.Counters.objects.filter(id=post_data['counter_id'])
     '''ARTICLE_STATE_LIST = [(1, '待反馈'), (2, '已反馈'), (3, '待上会'), (4, '已上会'), (5, '已签批'),
@@ -619,7 +611,6 @@ def counter_save_ajax(request):  # 添加合同
 @login_required
 @authority
 def result_state_ajax(request):  #
-    print(request.path, '>', resolve(request.path).url_name, '>', request.user)
     response = {'status': True, 'message': None, 'forme': None, }
     post_data_str = request.POST.get('postDataStr')
     post_data = json.loads(post_data_str)
@@ -707,8 +698,8 @@ def result_state_ajax(request):  #
                     decision = counter_custom.company_custome.decisionor
                     if decision == 11:  # (11, '股东会')
                         result_tp = 11  # (11, '股东会决议')
-                        result = '<div class="split"><div class="tt" align="center"><strong>%s股东会' \
-                                 '决议</strong></div>' % counter_custom.name
+                        result = '<div class="split"><div class="tt" align="center"><strong>%s</strong></div>' % counter_custom.name
+                        result += '<div class="split"><div class="ff" align="center"><strong>股东会决议</strong></div>'
                         result += '<p>会议时间：&nbsp&nbsp&nbsp年&nbsp&nbsp月&nbsp&nbsp日</p>'
                         result += '<p>会议地点:  公司会议室</p>'
                         result += '<p>本次股东会会议已按《中华人民共和国公司法》及公司章程的有关规定' \
@@ -719,8 +710,8 @@ def result_state_ajax(request):  #
                                   '做出如下决议：</p>'
                     elif decision == 13:  # (13, '合伙人会议')
                         result_tp = 13  # (13, '合伙人会议决议')
-                        result = '<div class="split"><div class="tt" align="center"><strong>%s合伙人' \
-                                 '决议</strong></div>' % counter_custom.name
+                        result = '<div class="split"><div class="tt" align="center"><strong>%s</strong></div>' % counter_custom.name
+                        result += '<div class="split"><div class="ff" align="center"><strong>合伙人决议</strong></div>'
                         result += '<p>会议时间：&nbsp&nbsp&nbsp年&nbsp&nbsp月&nbsp&nbsp日</p>'
                         result += '<p>会议地点:  公司会议室</p>'
                         result += '<p>本次合伙人会议已按《中华人民共和国合伙企业法》及合伙人协议的有关规定' \
@@ -731,8 +722,8 @@ def result_state_ajax(request):  #
                                   '合伙人表决通过，做出如下决议：</p>'
                     elif decision == 15:  # (15, '举办者会议')
                         result_tp = 15  # (15, '举办者会议决议')
-                        result = '<div class="split"><div class="tt" align="center"><strong>%s举办者会议' \
-                                 '决议</strong></div>' % counter_custom.name
+                        result = '<div class="split"><div class="tt" align="center"><strong>%s</strong></div>' % counter_custom.name
+                        result += '<div class="split"><div class="ff" align="center"><strong>举办者会议决议</strong></div>'
                         result += '<p>会议时间：&nbsp&nbsp&nbsp年&nbsp&nbsp月&nbsp&nbsp日</p>'
                         result += '<p>会议地点:  公司会议室</p>'
                         result += '<p>本次举办者会议已按本医院章程及相关文件规定通知全体举办者到会参加会议。' \
@@ -742,8 +733,8 @@ def result_state_ajax(request):  #
                                   '经代表<u>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</u>表决权的举办者表决通过，做出如下决议：</p>'
                     elif decision == 21:  # (21, '董事会')
                         result_tp = 21  # (21, '董事会决议')
-                        result = '<div class="split"><div class="tt" align="center"><strong>%s董事会' \
-                                 '决议</strong></div>' % counter_custom.name
+                        result = '<div class="split"><div class="tt" align="center"><strong>%s</strong></div>' % counter_custom.name
+                        result += '<div class="split"><div class="ff" align="center"><strong>董事会决议</strong></div>'
                         result += '<p>会议时间：&nbsp&nbsp&nbsp年&nbsp&nbsp月&nbsp&nbsp日</p>'
                         result += '<p>会议地点:  公司会议室</p>'
                         result += '<p>本次董事会会议已按《中华人民共和国公司法》及公司章程的有关规定' \
@@ -752,8 +743,8 @@ def result_state_ajax(request):  #
                                   '的程序和要求。经<u>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</u>名董事表决通过，做出如下决议：</p>'
                     elif decision == 23:  # (23, '管理委员会')
                         result_tp = 23  # (23, '管委会决议')
-                        result = '<div class="split"><div class="tt" align="center"><strong>%s管委会' \
-                                 '决议</strong></div>' % counter_custom.name
+                        result = '<div class="split"><div class="tt" align="center"><strong>%s</strong></div>' % counter_custom.name
+                        result += '<div class="split"><div class="ff" align="center"><strong>管委会决议</strong></div>'
                         result += '<p>会议时间：&nbsp&nbsp&nbsp年&nbsp&nbsp月&nbsp&nbsp日</p>'
                         result += '<p>会议地点:  公司会议室</p>'
                         result += '<p>本次管委会会议已按《民办非企业单位登记管理暂行条例》及本企业《章程》的有关规定' \
@@ -1259,7 +1250,6 @@ def result_state_ajax(request):  #
 @login_required
 @authority
 def result_del_ajax(request):  # 删除反担保合同ajax
-    print(request.path, '>', resolve(request.path).url_name, '>', request.user)
     response = {'status': True, 'message': None, 'forme': None, }
     post_data_str = request.POST.get('postDataStr')
     post_data = json.loads(post_data_str)

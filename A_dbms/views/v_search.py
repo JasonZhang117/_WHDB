@@ -16,15 +16,12 @@ from _WHDB.views import authority
 # -----------------------搜索客户-------------------------#
 # @login_required
 def search_custom_ajax(request):
-    print(request.path, '>', resolve(request.path).url_name, '>', request.user)
     response = {'status': True, 'message': None, 'forme': None, ' skip': None, 'custom_list': None, }
     post_data_str = request.POST.get('postDataStr')
     post_data = json.loads(post_data_str)
-    print('post_data:', post_data)
 
     '''搜索'''
     search_key = post_data['search_custom']
-    print('search_key:', search_key)
     if search_key:
         search_fields = ['name', 'short_name']
         q = Q()
@@ -35,9 +32,6 @@ def search_custom_ajax(request):
 
     custom_list_dic = list(map(lambda x: {'id': x[0], 'name': x[1]}, custom_list))
 
-    print('custom_list:', custom_list)
-    print('custom_list_dic:', custom_list_dic)
-
     response['custom_list'] = custom_list_dic
     result = json.dumps(response, ensure_ascii=False)
     return HttpResponse(result)
@@ -46,14 +40,11 @@ def search_custom_ajax(request):
 # -----------------------搜索权证-------------------------#
 # @login_required
 def search_warrant_ajax(request):
-    print(request.path, '>', resolve(request.path).url_name, '>', request.user)
     response = {'status': True, 'message': None, 'forme': None, ' skip': None, 'warrant_list': None, }
     post_data_str = request.POST.get('postDataStr')
     post_data = json.loads(post_data_str)
-    print('post_data:', post_data)
     '''搜索'''
     search_key = post_data['search_warrant']
-    print('search_key:', search_key)
     if search_key:
         search_fields = ['warrant_num']
         q = Q()
@@ -71,11 +62,9 @@ def search_warrant_ajax(request):
 # -----------------------搜索权证-------------------------#
 # @login_required
 def guarantee_warrant_ajax(request):
-    print(request.path, '>', resolve(request.path).url_name, '>', request.user)
     response = {'status': True, 'message': None, 'forme': None, ' skip': None, 'warrant_list': None, }
     post_data_str = request.POST.get('postDataStr')
     post_data = json.loads(post_data_str)
-    print('post_data:', post_data)
     '''搜索'''
     sure_typ = int(post_data['sure_typ'])
     ''' SURE_TYP_LIST = [
@@ -113,7 +102,6 @@ def guarantee_warrant_ajax(request):
         (1, '房产'), (2, '房产包'), (5, '土地'), (6, '在建工程'), (11, '应收账款'),
         (21, '股权'), (31, '票据'), (41, '车辆'), (51, '动产'), (55, '其他'), (99, '他权')]'''
     search_key = post_data['search_guarantee']
-    print('search_key:', search_key, 'sure_typ:', sure_typ)
     if sure_typ in [1, 2]:
         '''GENRE_LIST = ((1, '企业'), (2, '个人'))'''
         search_list = models.Customes.objects.filter(genre=search_typ).order_by('name')
@@ -136,7 +124,6 @@ def guarantee_warrant_ajax(request):
             for field in search_fields:
                 q.children.append(("%s__contains" % field, search_key))
         search_list = search_list.filter(q).values_list('id', 'warrant_num')
-    print('search_list:', search_list)
     search_list_dic = list(map(lambda x: {'id': x[0], 'name': x[1]}, search_list))
     response['search_list'] = search_list_dic
     result = json.dumps(response, ensure_ascii=False)

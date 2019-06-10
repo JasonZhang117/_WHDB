@@ -16,7 +16,6 @@ from _WHDB.views import authority
 @login_required
 @authority
 def meeting_add_ajax(request):
-    print(request.path, '>', resolve(request.path).url_name, '>', request.user)
     response = {'status': True, 'message': None, 'forme': None, }
     post_data_str = request.POST.get('postDataStr')
     post_data = json.loads(post_data_str)
@@ -79,7 +78,6 @@ def meeting_add_ajax(request):
 @login_required
 @authority
 def meeting_del_ajax(request):  # 取消评审会
-    print(request.path, '>', resolve(request.path).url_name, '>', request.user)
     response = {'status': True, 'message': None, 'forme': None, }
     post_data_str = request.POST.get('postDataStr')
     post_data = json.loads(post_data_str)
@@ -110,7 +108,6 @@ def meeting_del_ajax(request):  # 取消评审会
 @login_required
 @authority
 def meeting_article_add_ajax(request):  # 添加参评项目ajax
-    print(request.path, '>', resolve(request.path).url_name, '>', request.user)
     response = {'status': True, 'message': None, 'forme': None, }
     post_data_str = request.POST.get('postDataStr')
     post_data = json.loads(post_data_str)
@@ -152,7 +149,6 @@ def meeting_article_add_ajax(request):  # 添加参评项目ajax
 @login_required
 @authority
 def meeting_article_del_ajax(request):  # 取消项目上会ajax
-    print(request.path, '>', resolve(request.path).url_name, '>', request.user)
     response = {'status': True, 'message': None, 'forme': None, }
     post_data_str = request.POST.get('postDataStr')
     post_data = json.loads(post_data_str)
@@ -187,7 +183,6 @@ def meeting_article_del_ajax(request):  # 取消项目上会ajax
 @login_required
 @authority
 def meeting_allot_add_ajax(request):  # 分配评审委员
-    print(request.path, '>', resolve(request.path).url_name, '>', request.user)
     response = {'status': True, 'message': None, 'forme': None, }
     post_data_str = request.POST.get('postDataStr')
     post_data = json.loads(post_data_str)
@@ -228,8 +223,6 @@ def meeting_allot_add_ajax(request):  # 分配评审委员
 @login_required
 @authority
 def meeting_allot_del_ajax(request):  # 取消项目上会ajax
-    print(request.path, '>', resolve(request.path).url_name, '>', request.user)
-
     response = {'status': True, 'message': None, 'forme': None, }
     post_data_str = request.POST.get('postDataStr')
     post_data = json.loads(post_data_str)
@@ -260,7 +253,6 @@ def meeting_allot_del_ajax(request):  # 取消项目上会ajax
 @login_required
 @authority
 def meeting_edit_ajax(request):  # 编辑评审会ajax
-    print(request.path, '>', resolve(request.path).url_name, '>', request.user)
     response = {'status': True, 'message': None, 'forme': None, }
     post_data_str = request.POST.get('postDataStr')
     post_data = json.loads(post_data_str)
@@ -296,7 +288,6 @@ def meeting_edit_ajax(request):  # 编辑评审会ajax
 @login_required
 @authority
 def meeting_close_ajax(request):  # 完成上会ajax
-    print(request.path, '>', resolve(request.path).url_name, '>', request.user)
     response = {'status': True, 'message': None, 'forme': None, }
     post_data_str = request.POST.get('postDataStr')
     post_data = json.loads(post_data_str)
@@ -333,6 +324,18 @@ def meeting_close_ajax(request):  # 完成上会ajax
                         num = num + 1
                         summary_num = '%s-%s号' % (meeting_obj.num, num)
                         models.Articles.objects.filter(id=article.id).update(summary_num=summary_num)
+
+                        custom_list = models.Customes.objects.filter(id=article.custom.id)
+                        custom_obj = custom_list.first()
+                        custom_list.update(lately_date=meeting_obj.review_date)  # 更新客户信息
+                        '''REVIEW_STATE_LIST = [(1, '待保后'), (11, '待报告'), (21, '已完成'), (81, '自主保后')]'''
+                        custom_review = models.Review.objects.filter(custom=custom_obj, review_state=1)
+                        if custom_review:  # 如有尚未完成的保后计划,(62, '尽调替代')
+                            '''REVIEW_STY_LIST = [(1, '现场检查'), (11, '电话回访'), (61, '补调替代'), (62, '尽调替代')]'''
+                            custom_review.update(review_sty=62, review_state=21, review_date=meeting_obj.review_date)
+                            '''REVIEW_STATE_LIST = [(1, '待保后'), (11, '待报告'), (21, '已完成'), (81, '自主保后')]'''
+                            custom_list.update(review_state=21, review_date=meeting_obj.review_date)
+
                 response['message'] = '%s,完成上会！' % meeting_obj.num
             except Exception as e:
                 response['status'] = False

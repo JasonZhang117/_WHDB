@@ -48,10 +48,17 @@ p {
     text-align: center;
     font-size: 21pt;
     font-weight: bold;
-    padding-top: 15mm;
+    padding-top: 12mm;
+    /*padding-bottom: 5mm;*/
+}
+/*标题*/
+.ff {
+    text-align: center;
+    font-size: 21pt;
+    font-weight: bold;
+    /*padding-top: 15mm;*/
     padding-bottom: 5mm;
 }
-
 /*签字样本标题*/
 .ts {
     text-align: center;

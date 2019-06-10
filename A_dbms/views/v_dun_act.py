@@ -17,14 +17,12 @@ from _WHDB.views import authority
 @login_required
 @authority
 def compensatory_add_ajax(request):  # 代偿添加ajax
-    print(request.path, '>', resolve(request.path).url_name, '>', request.user)
     current_url_name = resolve(request.path).url_name  # 获取当前URL_NAME
     authority_list = request.session.get('authority_list')  # 获取当前用户的所有权限
     menu_result = MenuHelper(request).menu_data_list()
     response = {'status': True, 'message': None, 'forme': None, }
     post_data_str = request.POST.get('postDataStr')
     post_data = json.loads(post_data_str)
-    print('post_data:', post_data)
 
     provide_list = models.Provides.objects.filter(id=post_data['provide_id'])
     provide_obj = provide_list.first()
@@ -191,11 +189,9 @@ def compensatory_add_ajax(request):  # 代偿添加ajax
 @login_required
 @authority
 def dun_add_ajax(request):  # 添加参评项目ajax
-    print(request.path, '>', resolve(request.path).url_name, '>', request.user)
     response = {'status': True, 'message': None, 'forme': None, }
     post_data_str = request.POST.get('postDataStr')
     post_data = json.loads(post_data_str)
-    print('post_data:', post_data)
     form_dun_add = forms.FormDunAdd(post_data)  # 新建追偿项目
     if form_dun_add.is_valid():
         dun_cleaned = form_dun_add.cleaned_data
@@ -232,11 +228,9 @@ def dun_add_ajax(request):  # 添加参评项目ajax
 @login_required
 @authority
 def clue_add_ajax(request):  #
-    print(request.path, '>', resolve(request.path).url_name, '>', request.user)
     response = {'status': True, 'message': None, 'forme': None, }
     post_data_str = request.POST.get('postDataStr')
     post_data = json.loads(post_data_str)
-    print('post_data:', post_data)
     dun_obj = models.Dun.objects.get(id=post_data['dun_id'])
     '''DUN_STAGE_LIST = ((1, '起诉'), (11, '判决'), (21, '执行'), (31, '和解结案'),
      (41, '终止执行'), (99, '注销'))'''
@@ -276,11 +270,9 @@ def clue_add_ajax(request):  #
 @login_required
 @authority
 def clue_del_ajax(request):  # 取消项目上会ajax
-    print(request.path, '>', resolve(request.path).url_name, '>', request.user)
     response = {'status': True, 'message': None, 'forme': None, }
     post_data_str = request.POST.get('postDataStr')
     post_data = json.loads(post_data_str)
-    print('post_data:', post_data)
 
     dun_obj = models.Dun.objects.get(id=post_data['dun_id'])
     warrant_list = models.Warrants.objects.filter(id=post_data['warrant_id'])
@@ -313,11 +305,9 @@ def clue_del_ajax(request):  # 取消项目上会ajax
 @login_required
 @authority
 def defendant_add_ajax(request):  #
-    print(request.path, '>', resolve(request.path).url_name, '>', request.user)
     response = {'status': True, 'message': None, 'forme': None, }
     post_data_str = request.POST.get('postDataStr')
     post_data = json.loads(post_data_str)
-    print('post_data:', post_data)
     dun_obj = models.Dun.objects.get(id=post_data['dun_id'])
     '''DUN_STAGE_LIST = ((1, '起诉'), (11, '判决'), (21, '执行'), (31, '和解结案'),
      (41, '终止执行'), (99, '注销'))'''
@@ -354,11 +344,9 @@ def defendant_add_ajax(request):  #
 @login_required
 @authority
 def defendant_del_ajax(request):  # 删除被告人ajax
-    print(request.path, '>', resolve(request.path).url_name, '>', request.user)
     response = {'status': True, 'message': None, 'forme': None, }
     post_data_str = request.POST.get('postDataStr')
     post_data = json.loads(post_data_str)
-    print('post_data:', post_data)
 
     dun_obj = models.Dun.objects.get(id=post_data['dun_id'])
     custom_list = models.Customes.objects.filter(id=post_data['custom_id'])
@@ -386,14 +374,12 @@ def defendant_del_ajax(request):  # 删除被告人ajax
 @login_required
 @authority
 def sealup_add_ajax(request):  # 修改项目ajax
-    print(request.path, '>', resolve(request.path).url_name, '>', request.user)
     current_url_name = resolve(request.path).url_name  # 获取当前URL_NAME
     authority_list = request.session.get('authority_list')  # 获取当前用户的所有权限
     response = {'status': True, 'message': None, 'forme': None, }
 
     post_data_str = request.POST.get('postDataStr')
     post_data = json.loads(post_data_str)
-    print('post_data:', post_data)
     dun_obj = models.Dun.objects.get(id=post_data['dun_id'])
     warrant_list = models.Warrants.objects.filter(id=post_data['warrant_id'])
     warrant_obj = warrant_list.first()
@@ -461,12 +447,10 @@ def sealup_add_ajax(request):  # 修改项目ajax
 @login_required
 @authority
 def inquiry_add_ajax(request):
-    print(request.path, '>', resolve(request.path).url_name, '>', request.user)
     response = {'status': True, 'message': None, 'forme': None, }
 
     post_data_str = request.POST.get('postDataStr')
     post_data = json.loads(post_data_str)
-    print('post_data:', post_data)
     dun_obj = models.Dun.objects.get(id=post_data['dun_id'])
     warrant_list = models.Warrants.objects.filter(id=post_data['warrant_id'])
     warrant_obj = warrant_list.first()
@@ -728,14 +712,12 @@ def inquiry_add_ajax(request):
 @login_required
 @authority
 def standing_add_ajax(request):
-    print(request.path, '>', resolve(request.path).url_name, '>', request.user)
     current_url_name = resolve(request.path).url_name  # 获取当前URL_NAME
     authority_list = request.session.get('authority_list')  # 获取当前用户的所有权限
     response = {'status': True, 'message': None, 'forme': None, }
 
     post_data_str = request.POST.get('postDataStr')
     post_data = json.loads(post_data_str)
-    print('post_data:', post_data)
     dun_id = int(post_data['dun_id'])
     dun_obj = models.Dun.objects.get(id=dun_id)
     '''DUN_STAGE_LIST = ((1, '起诉'), (11, '判决'), (21, '执行'), (31, '和解结案'), 
@@ -770,11 +752,9 @@ def standing_add_ajax(request):
 @login_required
 @authority
 def standing_del_ajax(request):
-    print(request.path, '>', resolve(request.path).url_name, '>', request.user)
     response = {'status': True, 'message': None, 'forme': None, }
     post_data_str = request.POST.get('postDataStr')
     post_data = json.loads(post_data_str)
-    print('post_data:', post_data)
 
     dun_obj = models.Dun.objects.get(id=post_data['dun_id'])
     standing_obj = models.Standing.objects.get(id=post_data['standing_id'])
@@ -800,12 +780,10 @@ def standing_del_ajax(request):
 @login_required
 @authority
 def charge_add_ajax(request):
-    print(request.path, '>', resolve(request.path).url_name, '>', request.user)
     response = {'status': True, 'message': None, 'forme': None, }
 
     post_data_str = request.POST.get('postDataStr')
     post_data = json.loads(post_data_str)
-    print('post_data:', post_data)
     dun_id = int(post_data['dun_id'])
     dun_list = models.Dun.objects.filter(id=dun_id)
     dun_obj = dun_list.first()
@@ -850,13 +828,11 @@ def charge_add_ajax(request):
 @login_required
 @authority
 def charge_del_ajax(request):
-    print(request.path, '>', resolve(request.path).url_name, '>', request.user)
     current_url_name = resolve(request.path).url_name  # 获取当前URL_NAME
     authority_list = request.session.get('authority_list')  # 获取当前用户的所有权限
     response = {'status': True, 'message': None, 'forme': None, }
     post_data_str = request.POST.get('postDataStr')
     post_data = json.loads(post_data_str)
-    print('post_data:', post_data)
 
     dun_list = models.Dun.objects.filter(id=post_data['dun_id'])
     dun_obj = dun_list.first()
@@ -893,12 +869,10 @@ def charge_del_ajax(request):
 @login_required
 @authority
 def retrieve_add_ajax(request):
-    print(request.path, '>', resolve(request.path).url_name, '>', request.user)
     response = {'status': True, 'message': None, 'forme': None, }
 
     post_data_str = request.POST.get('postDataStr')
     post_data = json.loads(post_data_str)
-    print('post_data:', post_data)
     dun_id = int(post_data['dun_id'])
     dun_list = models.Dun.objects.filter(id=dun_id)
     dun_obj = dun_list.first()
@@ -944,11 +918,9 @@ def retrieve_add_ajax(request):
 @login_required
 @authority
 def retrieve_del_ajax(request):
-    print(request.path, '>', resolve(request.path).url_name, '>', request.user)
     response = {'status': True, 'message': None, 'forme': None, }
     post_data_str = request.POST.get('postDataStr')
     post_data = json.loads(post_data_str)
-    print('post_data:', post_data)
 
     dun_list = models.Dun.objects.filter(id=post_data['dun_id'])
     dun_obj = dun_list.first()
@@ -985,12 +957,10 @@ def retrieve_del_ajax(request):
 @login_required
 @authority
 def stage_add_ajax(request):
-    print(request.path, '>', resolve(request.path).url_name, '>', request.user)
     response = {'status': True, 'message': None, 'forme': None, }
 
     post_data_str = request.POST.get('postDataStr')
     post_data = json.loads(post_data_str)
-    print('post_data:', post_data)
     dun_list = models.Dun.objects.filter(id=post_data['dun_id'])
     dun_obj = dun_list.first()
     '''DUN_STAGE_LIST = ((1, '起诉'), (11, '判决'), (21, '执行'), (31, '和解结案'), 
@@ -1065,11 +1035,9 @@ def stage_add_ajax(request):
 @login_required
 @authority
 def stage_del_ajax(request):  #
-    print(request.path, '>', resolve(request.path).url_name, '>', request.user)
     response = {'status': True, 'message': None, 'forme': None, }
     post_data_str = request.POST.get('postDataStr')
     post_data = json.loads(post_data_str)
-    print('post_data:', post_data)
 
     dun_obj = models.Dun.objects.get(id=post_data['dun_id'])
     stage_obj = models.Stage.objects.get(id=post_data['stage_id'])
@@ -1095,12 +1063,10 @@ def stage_del_ajax(request):  #
 @login_required
 @authority
 def judgment_add_ajax(request):
-    print(request.path, '>', resolve(request.path).url_name, '>', request.user)
     response = {'status': True, 'message': None, 'forme': None, }
 
     post_data_str = request.POST.get('postDataStr')
     post_data = json.loads(post_data_str)
-    print('post_data:', post_data)
     dun_list = models.Dun.objects.filter(id=post_data['dun_id'])
     dun_obj = dun_list.first()
     '''DUN_STAGE_LIST = ((1, '起诉'), (11, '判决'), (21, '执行'), (31, '和解结案'), 
@@ -1139,11 +1105,9 @@ def judgment_add_ajax(request):
 @login_required
 @authority
 def judgment_del_ajax(request):  #
-    print(request.path, '>', resolve(request.path).url_name, '>', request.user)
     response = {'status': True, 'message': None, 'forme': None, }
     post_data_str = request.POST.get('postDataStr')
     post_data = json.loads(post_data_str)
-    print('post_data:', post_data)
 
     dun_obj = models.Dun.objects.get(id=post_data['dun_id'])
     judgment_obj = models.Judgment.objects.get(id=post_data['judgment_id'])
@@ -1169,12 +1133,10 @@ def judgment_del_ajax(request):  #
 @login_required
 @authority
 def agent_add_ajax(request):
-    print(request.path, '>', resolve(request.path).url_name, '>', request.user)
     response = {'status': True, 'message': None, 'forme': None, }
 
     post_data_str = request.POST.get('postDataStr')
     post_data = json.loads(post_data_str)
-    print('post_data:', post_data)
     dun_list = models.Dun.objects.filter(id=post_data['dun_id'])
     dun_obj = dun_list.first()
     '''DUN_STAGE_LIST = ((1, '起诉'), (11, '判决'), (21, '执行'), (31, '和解结案'), 
@@ -1215,12 +1177,10 @@ def agent_add_ajax(request):
 @login_required
 @authority
 def staff_add_ajax(request):
-    print(request.path, '>', resolve(request.path).url_name, '>', request.user)
     response = {'status': True, 'message': None, 'forme': None, }
 
     post_data_str = request.POST.get('postDataStr')
     post_data = json.loads(post_data_str)
-    print('post_data:', post_data)
     dun_list = models.Dun.objects.filter(id=post_data['dun_id'])
     dun_obj = dun_list.first()
     '''DUN_STAGE_LIST = ((1, '起诉'), (11, '判决'), (21, '执行'), (31, '和解结案'), 
