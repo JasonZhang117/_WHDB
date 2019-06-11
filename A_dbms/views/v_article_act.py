@@ -76,10 +76,9 @@ def article_edit_ajax(request):  # 修改项目ajax
     post_data = json.loads(post_data_str)
     article_id = post_data['article_id']
     article_obj = models.Articles.objects.get(id=article_id)
-    '''((1, '待反馈'), (2, '已反馈'), (3, '待上会'),
-        (4, '已上会'), (5, '已签批'), (6, '已注销'))
-        (5, '已签批')-->才能出合同'''
-    if article_obj.article_state in [1, 2, 3, 4]:
+    '''ARTICLE_STATE_LIST = [(1, '待反馈'), (2, '已反馈'), (3, '待上会'), (4, '已上会'), (5, '已签批'),
+                          (51, '已放款'), (52, '已放完'), (55, '已解保'), (61, '待变更'), (99, '已注销')]'''
+    if article_obj.article_state in [1, 2, 3, 4, 61]:
         form = forms.ArticlesAddForm(post_data, request.FILES)
         if form.is_valid():
             cleaned_data = form.cleaned_data

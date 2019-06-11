@@ -9,6 +9,8 @@
             <th>放款种类</th>
             <th>放款日期</th>
             <th>到期日</th>
+            <th>项目经理</th>
+            <th>项目助理</th>
             {% if PAGE_TITLE == '归档管理' %}
                 <th>档案编号</th>
             {% else %}
@@ -17,6 +19,7 @@
             {% endif %}
             <th>归档状态</th>
             <th>在保状态</th>
+
         </tr>
         </thead>
         <tbody>
@@ -35,6 +38,8 @@
                 <td>{{ provide.get_provide_typ_display }}</td>
                 <td>{{ provide.provide_date }}</td>
                 <td>{{ provide.due_date }}</td>
+                <td>{{ provide.notify.agree.lending.summary.director.name }}</td>
+                <td>{{ provide.notify.agree.lending.summary.assistant.name }}</td>
                 {% if PAGE_TITLE == '归档管理' %}
                     <td>{{ provide.file_num|default_if_none:"" }}</td>
                 {% else %}

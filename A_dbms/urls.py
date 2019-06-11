@@ -229,6 +229,7 @@ urlpatterns = [
     path('report/provide/balance/class/', views.report_balance_class, name='report_balance_class_all'),
     path('report/provide/balance/class/<int:class_typ>/', views.report_balance_class, name='report_balance_class'),
     path('report/article/balance/class/<int:class_typ>/', views.report_article_class, name='report_article_class'),
+    path('report/article/accrual/class/<int:class_typ>/', views.report_accrual_class, name='report_accrual_class'),
 
     # 员工
     path('employee/', views.employee, name='employee'),

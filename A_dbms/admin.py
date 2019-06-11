@@ -10,7 +10,7 @@ class ArticlesAdmin(admin.ModelAdmin):
         'build_date',
         'article_date', 'article_balance', 'article_state')  # 显示字段
     # list_per_page = 20  # 每页显示条目数
-    search_fields = ['article_num']  # 搜索字段
+    search_fields = ['article_num','summary_num']  # 搜索字段
     ordering = ['-build_date']  # 排序字段
 
 

@@ -65,7 +65,7 @@ from .v_custom_act import (custom_add_ajax, custom_del_ajax, custom_edit_ajax, s
 from .v_external import cooperative, cooperative_scan, soondue_cooperator, overdue_cooperator, branches
 from .v_external_act import agreement_add_ajax
 # ----------------------v_report报表管理视图--------------------#
-from .v_report import report, report_provide_list, report_balance_class, report_article_class
+from .v_report import report, report_provide_list, report_balance_class, report_article_class,report_accrual_class
 
 # 部门、员工
 from .v_interior import department, department_add, department_edit

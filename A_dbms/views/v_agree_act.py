@@ -1147,7 +1147,7 @@ def result_state_ajax(request):  #
                         result += '<p>居民身份证编号： %s</p>' % counter_custom.person_custome.license_num
                         result += '<p>家庭详细住址：%s</p>' % counter_custom.contact_addr
                         result += '<p>现本人申明：</p><p>1、截止到<u>&nbsp&nbsp&nbsp</u>年<u>&nbsp&nbsp</u>月' \
-                                  '<u>&nbsp&nbsp</u>日，本人婚姻状况为：<u>&nbsp&nbsp&nbsp&nbsp&nbsp</u>(已婚、未婚、离异、丧偶)。</p>'
+                                  '<u>&nbsp&nbsp</u>日，本人婚姻状况为：<u>&nbsp&nbsp&nbsp&nbsp&nbsp</u>(未婚、离异、丧偶)。</p>'
                         result += '<p>2、本人名下所有房屋、银行存款等资产均系本人单独所有，无其他共有人。</p>'
                         result += '<p><strong>特此申明！</strong></p><br>'
                         result += '<p class="sm">申明人：</p><br>'
