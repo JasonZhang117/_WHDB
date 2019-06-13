@@ -1,0 +1,15 @@
+<div>
+    <label>
+        {# 方式一：#}
+        {% for c_typ in CLASS_LIST %}
+            {% if c_typ.0 == kwargs.class_typ %}
+                <a class="btn btn-primary btn-sm active"
+                   href="{% url 'dbms:report_balance_class' c_typ=c_typ.0 %}">{{ c_typ.1 }}</a>
+            {% else %}
+                <a class="btn btn-primary btn-sm"
+                   href="{% url 'dbms:report_balance_class' c_typ=c_typ.0 %}">{{ c_typ.1 }} </a>
+            {% endif %}
+        {% endfor %}
+    </label>
+
+</div>

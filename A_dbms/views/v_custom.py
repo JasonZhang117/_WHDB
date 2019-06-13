@@ -79,7 +79,8 @@ def custom_scan(request, custom_id):  # 项目预览
     else:
         form_date = {
             'license_num': custom_obj.person_custome.license_num,
-            'license_addr': custom_obj.person_custome.license_addr}
+            'license_addr': custom_obj.person_custome.license_addr,
+            'marital_status': custom_obj.person_custome.marital_status}
         form_custom_p_add = forms.CustomPAddForm(initial=form_date)
     form_shareholder_add = forms.FormShareholderAdd()
     form_trustee_add = forms.FormTrusteeAdd()

@@ -1142,20 +1142,28 @@ def result_state_ajax(request):  #
                 else:
                     spouse = counter_custom.person_custome.spouses
                     if not spouse:
-                        result += '<div class="tt" align="center"><strong>个人婚姻状况及财产申明</strong></div>'
-                        result += '<p>姓名：%s</p>' % counter_custom.name
-                        result += '<p>居民身份证编号： %s</p>' % counter_custom.person_custome.license_num
-                        result += '<p>家庭详细住址：%s</p>' % counter_custom.contact_addr
-                        result += '<p>现本人申明：</p><p>1、截止到<u>&nbsp&nbsp&nbsp</u>年<u>&nbsp&nbsp</u>月' \
-                                  '<u>&nbsp&nbsp</u>日，本人婚姻状况为：<u>&nbsp&nbsp&nbsp&nbsp&nbsp</u>(未婚、离异、丧偶)。</p>'
-                        result += '<p>2、本人名下所有房屋、银行存款等资产均系本人单独所有，无其他共有人。</p>'
-                        result += '<p><strong>特此申明！</strong></p><br>'
-                        result += '<p class="sm">申明人：</p><br>'
-                        result += '<p class="sm">&nbsp&nbsp&nbsp年&nbsp&nbsp月&nbsp&nbsp日</p>'
-                        default = {'agree': agree_obj, 'custom': counter_custom, 'result_typ': 41,
-                                   'result_detail': result, 'resultor': request.user}
-                        result_obj, created = models.ResultState.objects.update_or_create(
-                            agree=agree_obj, custom=counter_custom, result_typ=41, defaults=default)
+                        marital_s_list = models.CustomesP.MARITAL_STATUS  # 婚姻状况
+                        marital_s_dic = {}
+                        for marital_s in marital_s_list:
+                            marital_s_dic[marital_s[0]] = marital_s[1]
+                        '''MARITAL_STATUS = ((1, '未婚'), (11, '已婚'), (21, '离婚'), (31, '离婚'), (41, '丧偶'),)'''
+                        marital_status = counter_custom.person_custome.marital_status
+                        if not marital_status == 11:
+                            result += '<div class="tt" align="center"><strong>个人婚姻状况及财产申明</strong></div>'
+                            result += '<p>姓名：%s</p>' % counter_custom.name
+                            result += '<p>居民身份证编号： %s</p>' % counter_custom.person_custome.license_num
+                            result += '<p>家庭详细住址：%s</p>' % counter_custom.contact_addr
+                            result += '<p>现本人申明：</p><p>1、截止到<u>&nbsp&nbsp&nbsp</u>年<u>&nbsp&nbsp</u>月' \
+                                      '<u>&nbsp&nbsp</u>日，本人婚姻状况为：<u>%s</u>。' \
+                                      '</p>' % marital_s_dic[marital_status]
+                            result += '<p>2、本人名下所有房屋、银行存款等资产均系本人单独所有，无其他共有人。</p>'
+                            result += '<p><strong>特此申明！</strong></p><br>'
+                            result += '<p class="sm">申明人：</p><br>'
+                            result += '<p class="sm">&nbsp&nbsp&nbsp年&nbsp&nbsp月&nbsp&nbsp日</p>'
+                            default = {'agree': agree_obj, 'custom': counter_custom, 'result_typ': 41,
+                                       'result_detail': result, 'resultor': request.user}
+                            result_obj, created = models.ResultState.objects.update_or_create(
+                                agree=agree_obj, custom=counter_custom, result_typ=41, defaults=default)
                     else:
                         # (1, '房产'), (2, '房产包')
                         counter_house_list = models.Warrants.objects.filter(

@@ -71,7 +71,7 @@ def custom_add_ajax(request):
                             custom_buildor=request.user)
                         custom_p_obj = models.CustomesP.objects.create(
                             custome=custom_obj, license_num=custom_p_data['license_num'],
-                            license_addr=custom_p_data['license_addr'])
+                            license_addr=custom_p_data['license_addr'], marital_status=custom_p_data['marital_status'])
                         response['message'] = '客户：%s，创建成功。请继续添加配偶信息！' % custom_add_data['name']
                         response['skip'] = "/dbms/custom/scan/%s/" % custom_obj.id
                 except Exception as e:
@@ -214,7 +214,7 @@ def trustee_del_ajax(request):  #
     return HttpResponse(result)
 
 
-# -----------------------股权信息添加-------------------------#
+# -----------------------配偶信息添加-------------------------#
 @login_required
 @authority
 def spouse_add_ajax(request):
@@ -231,8 +231,9 @@ def spouse_add_ajax(request):
             spouse_add_obj = models.Customes.objects.get(id=spouse_cleaned['spouses'])
             try:
                 with transaction.atomic():
-                    models.CustomesP.objects.filter(custome=custom_obj).update(spouses=spouse_add_obj)
-                    models.CustomesP.objects.filter(custome=spouse_add_obj).update(spouses=custom_obj)
+                    '''MARITAL_STATUS = ((1, '未婚'), (11, '已婚'), (21, '离婚'), (31, '离婚'), (41, '丧偶'),)'''
+                    models.CustomesP.objects.filter(custome=custom_obj).update(spouses=spouse_add_obj, marital_status=11)
+                    models.CustomesP.objects.filter(custome=spouse_add_obj).update(spouses=custom_obj, marital_status=11)
                 response['message'] = '成功添加配偶！'
             except Exception as e:
                 response['status'] = False
@@ -334,7 +335,7 @@ def custom_edit_ajax(request):
                             contact_num=custom_edit_data['contact_num'])
                         models.CustomesP.objects.filter(custome=custom_obj).update(
                             license_num=custom_p_data['license_num'],
-                            license_addr=custom_p_data['license_addr'])
+                            license_addr=custom_p_data['license_addr'], marital_status=custom_p_data['marital_status'])
                         response['message'] = '客户：%s，修改成功！！！' % custom_edit_data['name']
                 except Exception as e:
                     response['status'] = False

@@ -81,9 +81,10 @@ class CustomPAddForm(dform.ModelForm):  # 个人客户添加
 
     class Meta:
         model = models.CustomesP
-        fields = ['license_addr']
+        fields = ['license_addr', 'marital_status']
         widgets = {
-            'license_addr': dform.TextInput(attrs={'class': 'form-control', 'placeholder': '身份证地址'})}
+            'license_addr': dform.TextInput(attrs={'class': 'form-control', 'placeholder': '身份证地址'}),
+            'marital_status': dform.Select(attrs={'class': 'form-control'}), }
 
 
 # -----------------------配偶添加-------------------------#

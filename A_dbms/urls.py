@@ -227,9 +227,10 @@ urlpatterns = [
     path('report/provide/list/', views.report_provide_list, name='report_provide_list_all'),  # 菜单-合作机构
     path('report/provide/list/<int:provide_typ>/', views.report_provide_list, name='report_provide_list'),
     path('report/provide/balance/class/', views.report_balance_class, name='report_balance_class_all'),
-    path('report/provide/balance/class/<int:class_typ>/', views.report_balance_class, name='report_balance_class'),
+    path('report/provide/balance/class/<int:c_typ>/', views.report_balance_class, name='report_balance_class'),
     path('report/article/balance/class/<int:class_typ>/', views.report_article_class, name='report_article_class'),
-    path('report/article/accrual/class/<int:class_typ>/', views.report_accrual_class, name='report_accrual_class'),
+    # path('report/article/accrual/class/<int:c_typ>/<int:t_typ>/', views.report_accrual_class, name='report_accrual_class'),
+    path('report/article/accrual/class/<int:c_typ>/', views.report_accrual_class, name='report_accrual_class'),
 
     # 员工
     path('employee/', views.employee, name='employee'),

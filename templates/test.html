@@ -1,22 +1,24 @@
 <!doctype html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta charset="UTF-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
     <title> 页面名称 </title>
-<style type="text/css">
-header, footer {
-    display: none;
-}
-@media print {
-    header {
-        display: block;
-    }
-    footer {
-        display: block;
-    }
-}
-</style>
+    <style type="text/css">
+        header, footer {
+            display: none;
+        }
+
+        @media print {
+            header {
+                display: block;
+            }
+
+            footer {
+                display: block;
+            }
+        }
+    </style>
 </head>
 <body>
 
@@ -24,31 +26,14 @@ header, footer {
 
 
 <table>
-    <tr>
-        <th width="200pt">股东姓名（名称）</th>
-        <th>签字（盖章）</th>
-        <th>联系方式</th>
-    </tr>
-    <tr style="height: 100pt">
-        <td align="center">sdfdsf</td>
-        <td></td>
-        <td></td>
-    </tr>
-    <tr>
-        <td></td>
-        <td></td>
-        <td></td>
-    </tr>
-    <tr>
-        <td></td>
-        <td></td>
-        <td></td>
-    </tr>
-    <tr>
-        <td></td>
-        <td></td>
-        <td></td>
-    </tr>
+    {% for custom_p in custom_p_list %}
+        <tr>
+            <td>{{ custom_p }}</td>
+            <td>{{ custom_p.person_custome }}</td>
+            <td>{{ custom_p.person_custome.get_marital_status_display }}</td>
+            <td>{{ custom_p.person_custome.spouses }}</td>
+        </tr>
+    {% endfor %}
 
 
 </table>

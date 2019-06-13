@@ -139,7 +139,7 @@ def authority(func):
             response['message'] = ''
             result = json.dumps(response, ensure_ascii=False)
             return HttpResponse(result)
-        print(request.user, '>', request.path, '>', resolve(request.path).url_name, '>', request.POST, )
+        print(request.user, '>', request.path, '>', resolve(request.path).url_name, '>', request.POST, request.GET)
         return func(request, *args, **kwargs)
 
     return inner
@@ -166,7 +166,13 @@ def home(request):
     print('acc_login-->request.GET:', request.GET)
     print("request.session.get('authority_list'):", request.session.get('authority_list'))
     print("request.session.get('menu_leaf_list'):", request.session.get('menu_leaf_list'))
-
+    '''GENRE_LIST = ((1, '企业'), (2, '个人'))'''
+    custom_p_list = models.Customes.objects.filter(genre=2,person_custome__marital_status=1)
+    for custom_p in custom_p_list:
+        custom_p_s = custom_p.person_custome.spouses
+        if custom_p_s:
+            '''MARITAL_STATUS = ((1, '未婚'), (11, '已婚'), (21, '离婚'), (31, '离婚'), (41, '丧偶'),)'''
+            # custom_p_l = models.CustomesP.objects.filter(id=custom_p.person_custome.id).update(marital_status=11)
     return render(request, 'test.html', locals())
 
 
