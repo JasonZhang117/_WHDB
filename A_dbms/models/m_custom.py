@@ -135,7 +135,7 @@ class CustomesP(models.Model):  # 个人客户
                                    null=True, blank=True)
     license_num = models.CharField(verbose_name='身份证号码', max_length=18, unique=True)
     license_addr = models.CharField(verbose_name='身份证地址', max_length=64)
-    MARITAL_STATUS = ((1, '未婚'), (11, '已婚'), (21, '离婚'), (31, '离婚'), (41, '丧偶'),)
+    MARITAL_STATUS = ((1, '未婚'), (11, '已婚'), (21, '离婚'), (41, '丧偶'),(99, '------'),)
     marital_status = models.IntegerField(verbose_name='婚姻状况', choices=MARITAL_STATUS, default=1)
 
 

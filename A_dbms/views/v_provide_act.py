@@ -48,6 +48,37 @@ def counter_sign_ajax(request):
     result = json.dumps(response, ensure_ascii=False)
     return HttpResponse(result)
 
+# -----------------------------一键签订ajax------------------------------#
+@login_required
+@authority
+def sign_all_ajax(request):
+    response = {'status': True, 'message': None, 'forme': None, }
+    post_data_str = request.POST.get('postDataStr')
+    post_data = json.loads(post_data_str)
+    agree_list = models.Agrees.objects.filter(id=post_data['agree_id'])
+    agree_obj = agree_list.first()
+    '''AGREE_STATE_LIST = [(11, '待签批'), (21, '已签批'), (31, '未落实'),
+                        (41, '已落实'), (51, '待变更'), (61, '已解保'), (99, '已注销')]'''
+    agree_state = agree_obj.agree_state
+    if not agree_state in [41,61,99]:
+        counter_list = agree_obj.counter_agree.all()
+        print(counter_list)
+        '''COUNTER_STATE_LIST = [(11, '未签订'), (21, '已签订'), (31, '作废')]'''
+        try:
+            for counter in counter_list:
+                if counter.counter_state == 11:
+                    counter_l = models.Counters.objects.filter(id=counter.id)
+                    counter_l.update(
+                            counter_state=21,
+                            counter_sign_date=datetime.date.today(),)
+        except Exception as e:
+            response['status'] = False
+            response['message'] = '合同签订成功：%s' % str(e)
+    else:
+        response['status'] = False
+        response['message'] = '合同状态为%s，一键签订失败！！！' %agree_state
+    result = json.dumps(response, ensure_ascii=False)
+    return HttpResponse(result)
 
 # -----------------------------风控落实ajax------------------------------#
 @login_required

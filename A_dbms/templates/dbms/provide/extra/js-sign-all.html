@@ -1,0 +1,50 @@
+<script>
+    $(function () {
+        bindSignAllB();
+        bindSignAllModalOk();
+    });
+
+    function bindSignAllB() {
+        $('#signAllB').click(function () {
+            console.log("bindAddNotifyB");
+            $('#signAllModal').modal('show');
+        })
+    }
+
+    function bindSignAllModalOk() {
+        $('#signAllModalOk').click(function () {
+            var postData = {};
+            $('#signAllModal').find('input,select').each(function () {
+                var v = $(this).val();
+                var n = $(this).attr('name');
+                postData[n] = v;
+            });
+            var postDataStr = JSON.stringify(postData);
+            console.log(postDataStr);
+            $.ajax({
+                url: '/dbms/provide/sign/all/',
+                type: 'POST',
+                traditional: true,
+                data: {'postDataStr': postDataStr},
+                dataType: 'JSON',
+                success: function (arg) {
+                    console.log(arg);
+                    if (arg.status) {
+                        $('#signAllModal').modal('hide');
+                        alert(arg.message);
+                        {#window.location.href = arg.skip;#}
+                        window.location.reload();
+                    } else {
+                        alert(arg.message);
+                    }
+                }
+            })
+        })
+    }
+</script>
+
+
+
+
+
+

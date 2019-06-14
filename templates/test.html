@@ -29,9 +29,7 @@
     {% for custom_p in custom_p_list %}
         <tr>
             <td>{{ custom_p }}</td>
-            <td>{{ custom_p.person_custome }}</td>
-            <td>{{ custom_p.person_custome.get_marital_status_display }}</td>
-            <td>{{ custom_p.person_custome.spouses }}</td>
+            <td>{{ custom_p.get_marital_status_display }}</td>
         </tr>
     {% endfor %}
 
