@@ -222,9 +222,9 @@ def spouse_add_ajax(request):
     post_data_str = request.POST.get('postDataStr')
     post_data = json.loads(post_data_str)
     custom_obj = models.Customes.objects.get(id=post_data['custom_id'])
-    '''CUSTOM_STATE_LIST = ((1, '正常'), (99, '注销'))'''
+    '''CUSTOM_STATE_LIST = [(1, '正常'), (11, '担保客户'), (21, '反担保客户'), (99, '注销')]'''
     custom_state = custom_obj.custom_state
-    if custom_state == 1:
+    if not custom_state == 99:
         form_spouse_add = forms.FormCustomSpouseAdd(post_data)
         if form_spouse_add.is_valid():
             spouse_cleaned = form_spouse_add.cleaned_data

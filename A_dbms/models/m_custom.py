@@ -33,8 +33,10 @@ class Customes(models.Model):  # 客户
     custom_back = models.FloatField(verbose_name='_保函余额', default=0)
     entrusted_loan = models.FloatField(verbose_name='_委贷余额', default=0)
     petty_loan = models.FloatField(verbose_name='_小贷余额', default=0)
-    CUSTOM_STATE_LIST = ((1, '正常'), (99, '注销'))
-    custom_state = models.IntegerField(verbose_name='_风险分类', choices=CUSTOM_STATE_LIST, default=1)
+    amount = models.FloatField(verbose_name='_余额总额', default=0)
+
+    CUSTOM_STATE_LIST = [(11, '担保客户'), (21, '反担保客户'), (99, '注销')]
+    custom_state = models.IntegerField(verbose_name='_客户类型', choices=CUSTOM_STATE_LIST, default=21)
     managementor = models.ForeignKey(to='Employees', verbose_name="管护经理",
                                      on_delete=models.PROTECT, default=28,
                                      related_name='manage_employee')
@@ -135,9 +137,8 @@ class CustomesP(models.Model):  # 个人客户
                                    null=True, blank=True)
     license_num = models.CharField(verbose_name='身份证号码', max_length=18, unique=True)
     license_addr = models.CharField(verbose_name='身份证地址', max_length=64)
-    MARITAL_STATUS = ((1, '未婚'), (11, '已婚'), (21, '离婚'), (41, '丧偶'),(99, '------'),)
+    MARITAL_STATUS = ((1, '未婚'), (11, '已婚'), (21, '离异'), (41, '丧偶'), (99, '------'),)
     marital_status = models.IntegerField(verbose_name='婚姻状况', choices=MARITAL_STATUS, default=1)
-
 
     class Meta:
         verbose_name_plural = '客户-个人'  # 指定显示名称

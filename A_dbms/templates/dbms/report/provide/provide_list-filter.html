@@ -1,25 +1,41 @@
-<div>
+<div id="noprint">
     <label>
-        {% if kwargs.provide_typ == None %}
-            <a class="btn btn-primary btn-sm active" href="{% url 'dbms:report_provide_list_all' %}">全部</a>
-        {% else %}
-            <a class="btn btn-primary btn-sm" href="{% url 'dbms:report_provide_list_all' %}">全部</a>
-        {% endif %}
         {# 方式一：#}
-        {% for provide_typ in PROVIDE_TYP_LIST %}
-            {% if provide_typ.0 == kwargs.provide_typ %}
+        {% for p_typ in provide_typ_list %}
+            {% if p_typ.0 == kwargs.p_typ %}
                 <a class="btn btn-primary btn-sm active"
-                   href="{% url 'dbms:report_provide_list' provide_typ=provide_typ.0 %}">{{ provide_typ.1 }}</a>
+                   href="{% url 'dbms:report_provide_list' p_typ=p_typ.0 t_typ=kwargs.t_typ %}">{{ p_typ.1 }}</a>
             {% else %}
                 <a class="btn btn-primary btn-sm"
-                   href="{% url 'dbms:report_provide_list' provide_typ=provide_typ.0 %}">{{ provide_typ.1 }} </a>
+                   href="{% url 'dbms:report_provide_list' p_typ=p_typ.0 t_typ=kwargs.t_typ %}">{{ p_typ.1 }} </a>
             {% endif %}
         {% endfor %}
     </label>
 
     <label>
         <form class="navbar-form" style="display: inline">
-            <input type="search" name="_s" class="form-control" placeholder="客户,银行,合同">
+            <input type="search" name="_s" class="form-control" placeholder="客户,银行,合同"
+                   value="{{ search_key|default_if_none:'' }}">
+            <button type="submit" class="btn btn-primary btn-sm">搜索</button>
+        </form>
+    </label>
+    <label>
+        {% for t_typ in TERM_LIST %}
+            {% if t_typ.0 == kwargs.t_typ %}
+                <a class="btn btn-primary btn-sm active"
+                   href="{% url 'dbms:report_provide_list' p_typ=kwargs.p_typ  t_typ=t_typ.0 %}">{{ t_typ.1 }}</a>
+            {% else %}
+                <a class="btn btn-primary btn-sm"
+                   href="{% url 'dbms:report_provide_list' p_typ=kwargs.p_typ  t_typ=t_typ.0 %}">{{ t_typ.1 }} </a>
+            {% endif %}
+        {% endfor %}
+    </label>
+    <label>
+        <form class="navbar-form" style="display: inline">
+            <input type="date" name="tf" class="form-control" placeholder="起始日"
+                   value="{{ tf_r|default_if_none:'' }}">
+            <input type="date" name="tl" class="form-control" placeholder="结束日"
+                   value="{{ tl_r|default_if_none:'' }}">
             <button type="submit" class="btn btn-primary btn-sm">搜索</button>
         </form>
     </label>

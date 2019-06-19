@@ -1,27 +1,15 @@
 <div class="panel-heading"><label>余额类报表</label></div>
 <div class="panel-body row" style="padding: 1px;">
     <label class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
-        <a class="btn btn-primary btn-sm " target="_blank" href="{% url 'dbms:report_provide_list_all' %}">
+        <a class="btn btn-primary btn-sm " target="_blank" href="{% url 'dbms:report_provide_list' p_typ=0 t_typ=0 %}">
             在保项目明细表</a></label>
     <label class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
-        <a class="btn btn-primary btn-sm " target="_blank" href="{% url 'dbms:report_balance_class' c_typ=1 %}">
+        <a class="btn btn-primary btn-sm " target="_blank" href="{% url 'dbms:report_balance_class' c_typ=1 t_typ=0 %}">
             在保项目分类（按放款）</a></label>
     <label class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
-        <a class="btn btn-primary btn-sm " target="_blank" href="{% url 'dbms:report_article_class' class_typ=21 %}">
+        <a class="btn btn-primary btn-sm " target="_blank" href="{% url 'dbms:report_article_class' c_typ=2 %}">
             在保项目分类（按项目）</a></label>
-</div>
-<div class="panel-heading"><label>发生额类报表</label></div>
-<div class="panel-body row" style="padding: 1px;">
     <label class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
-        <a class="btn btn-primary btn-sm " target="_blank" href="#">
-            项目明细表</a></label>
-    <label class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
-        <a class="btn btn-primary btn-sm " target="_blank" href="{% url 'dbms:report_accrual_class' c_typ=1 %}">
-            项目分类统计表（按放款）</a></label>
-    <label class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
-        <a class="btn btn-primary btn-sm " target="_blank" href="#">
-            项目分类统计表（按项目）</a></label>
-    <label class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
-        <a class="btn btn-primary btn-sm " target="_blank" href="#">
-            追偿项目回款统计表</a></label>
+        <a class="btn btn-primary btn-sm " target="_blank" href="{% url 'dbms:report_article_class' c_typ=21 %}">
+            在保项目分类（按客户）</a></label>
 </div>

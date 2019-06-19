@@ -1,24 +1,36 @@
 <div class="table-responsive">
     <table class="table table-bordered table-hover table-condensed active">
-        <caption>成都武侯中小企业融资担保有限责任公司在保项目分类统计表（按项目助理）</caption>
+        <caption>{{ PAGE_TITLE }}统计表（按项目助理）</caption>
         <thead>
         <tr style="text-align: center">
             <th>序号</th>
-            <th>项目助理理</th>
+            <th>项目助理</th>
             <th>项目笔数</th>
-            <th>担保余额</th>
+            <th>新增金额</th>
+            <th>续贷金额</th>
+            <th>金额合计</th>
+            <th>通知金额</th>
+            <th>放款金额</th>
+            <th>还款金额</th>
+            <th>在保余额</th>
         </tr>
         </thead>
         <tbody>
-        {% for assistant in article_groups_assistant %}
+        {% for item in article_balance_assistant %}
             <tr>
                 <td>{{ forloop.counter }}</td>
-                <td>{{ assistant.assistant__name }}</td>
-                <td align="right">{{ assistant.con }}</td>
-                <td align="right">{{ assistant.sum|floatformat:2 }}</td>
+                <td>{{ item.assistant__name }}</td>
+                <td align="right">{{ item.con }}</td>
+                <td align="right">{{ item.sum_renewal|floatformat:2 }}</td>
+                <td align="right">{{ item.sum_augment|floatformat:2 }}</td>
+                <td align="right">{{ item.sum_amount|floatformat:2 }}</td>
+                <td align="right">{{ item.sum_notify|floatformat:2 }}</td>
+                <td align="right">{{ item.sum_provide|floatformat:2 }}</td>
+                <td align="right">{{ item.sum_repayment|floatformat:2 }}</td>
+                <td align="right">{{ item.sum_balance|floatformat:2 }}</td>
             </tr>
         {% endfor %}
-        {% include 'dbms/report/balance/balance-class.html' %}
+        {% include 'dbms/report/balance_article/article-class.html' %}
         </tbody>
     </table>
 </div>

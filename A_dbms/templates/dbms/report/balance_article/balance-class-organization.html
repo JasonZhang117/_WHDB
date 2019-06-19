@@ -1,23 +1,33 @@
 <div class="table-responsive">
     <table class="table table-bordered table-hover table-condensed active">
-        <caption>成都武侯中小企业融资担保有限责任公司在保项目分类统计表（按法律顾问）</caption>
+        <caption>{{ PAGE_TITLE }}统计表（按法律顾问）</caption>
         <thead>
         <tr style="text-align: center">
-            <th>放款银行</th>
-            <th>放款笔数</th>
-            <th>担保余额</th>
+            <th>法律顾问</th>
+            <th>项目笔数</th>
+            <th>新增金额</th>
+            <th>续贷金额</th>
+            <th>金额合计</th>
+            <th>通知金额</th>
+            <th>放款金额</th>
+            <th>还款金额</th>
+            <th>在保余额</th>
         </tr>
         </thead>
         <tbody>
-        {% for organization in article_groups_organization %}
-            {% if organization.expert__organization == '泰和泰律师事务所' or organization.expert__organization == '明之鉴律师事务所' %}
-                <tr>
-                    <td>
-                        {{ organization.expert__organization }}
-                    </td>
-                    <td align="right">{{ organization.con }}</td>
-                    <td align="right">{{ organization.sum|floatformat:2 }}</td>
-                </tr>
+        {% for item in article_balance_organization %}
+            {% if item.expert__organization == '泰和泰律师事务所' or item.expert__organization == '明之鉴律师事务所' %}
+            <tr>
+                <td>{{ item.expert__organization }}</td>
+                <td align="right">{{ item.con }}</td>
+                <td align="right">{{ item.sum_renewal|floatformat:2 }}</td>
+                <td align="right">{{ item.sum_augment|floatformat:2 }}</td>
+                <td align="right">{{ item.sum_amount|floatformat:2 }}</td>
+                <td align="right">{{ item.sum_notify|floatformat:2 }}</td>
+                <td align="right">{{ item.sum_provide|floatformat:2 }}</td>
+                <td align="right">{{ item.sum_repayment|floatformat:2 }}</td>
+                <td align="right">{{ item.sum_balance|floatformat:2 }}</td>
+            </tr>
             {% endif %}
         {% endfor %}
         </tbody>

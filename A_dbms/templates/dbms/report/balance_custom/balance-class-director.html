@@ -1,0 +1,36 @@
+<div class="table-responsive">
+    <table class="table table-bordered table-hover table-condensed active">
+        <caption>{{ PAGE_TITLE }}统计表（按管户经理）</caption>
+        <thead>
+        <tr style="text-align: center">
+            <th>序号</th>
+            <th>管户经理</th>
+            <th>客户数</th>
+            <th>授信总额</th>
+            <th>流贷余额</th>
+            <th>承兑余额</th>
+            <th>保函余额</th>
+            <th>委贷余额</th>
+            <th>小贷余额</th>
+            <th>在保总额</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for item in article_balance_director %}
+            <tr>
+                <td>{{ forloop.counter }}</td>
+                <td>{{ item.managementor__name }}</td>
+                <td align="right">{{ item.con }}</td>
+                <td align="right">{{ item.credit_amount|floatformat:2 }}</td>
+                <td align="right">{{ item.custom_flow|floatformat:2 }}</td>
+                <td align="right">{{ item.custom_accept|floatformat:2 }}</td>
+                <td align="right">{{ item.custom_back|floatformat:2 }}</td>
+                <td align="right">{{ item.entrusted_loan|floatformat:2 }}</td>
+                <td align="right">{{ item.petty_loan|floatformat:2 }}</td>
+                <td align="right">{{ item.amount|floatformat:2 }}</td>
+            </tr>
+        {% endfor %}
+        {% include 'dbms/report/balance_custom/article-class.html' %}
+        </tbody>
+    </table>
+</div>

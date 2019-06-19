@@ -1,7 +1,17 @@
 {% extends 'base.html' %}
+{% load static %}
 {% block title %}{{ PAGE_TITLE }}{% endblock %}
+{% block extra-css %}
+    <link rel="stylesheet" media="screen" href="{% static 'dbms/css/report-style.css' %}">
+    <link rel="stylesheet" media="print" href="{% static 'dbms/css/report-style.css' %}">
+    <link rel="stylesheet" media="print" href="{% static 'dbms/css/report-style-noprint.css' %}">
+{% endblock %}
 {% block  body %}
-    {% include 'dbms/report/provide/provide_list-filter.html' %}
+    {% if PAGE_TITLE == '在保明细' %}
+        {% include 'dbms/report/provide/provide_list-filter.html' %}
+    {% elif PAGE_TITLE == '放款明细' %}
+        {% include 'dbms/report/provide/provide_list-filter-a.html' %}
+    {% endif %}
     {% include 'dbms/report/provide/provide_list-table.html' %}
 {% endblock %}
 

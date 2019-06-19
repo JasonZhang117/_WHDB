@@ -166,10 +166,17 @@ def home(request):
     print('acc_login-->request.GET:', request.GET)
     print("request.session.get('authority_list'):", request.session.get('authority_list'))
     print("request.session.get('menu_leaf_list'):", request.session.get('menu_leaf_list'))
-    '''GENRE_LIST = ((1, '企业'), (2, '个人'))'''
-    '''MARITAL_STATUS = ((1, '未婚'), (11, '已婚'), (21, '离婚'),  (41, '丧偶'),)'''
-    custom_p_list = models.CustomesP.objects.filter(marital_status=31)
-    print(custom_p_list)
+
+    '''CUSTOM_STATE_LIST = [(1, '正常'), (11, '担保客户'), (21, '反担保客户'), (99, '注销')]'''
+    # custom_list = models.Customes.objects.all()
+
+    # for custom in custom_list:
+    #     custom_article = custom.article_custom.all().order_by('-build_date').first()
+    #     if custom_article:
+    #         models.Customes.objects.filter(id=custom.id).update(managementor=custom_article.director)
+
+
+
     return render(request, 'test.html', locals())
 
 

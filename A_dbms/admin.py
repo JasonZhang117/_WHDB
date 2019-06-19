@@ -10,7 +10,7 @@ class ArticlesAdmin(admin.ModelAdmin):
         'build_date',
         'article_date', 'article_balance', 'article_state')  # 显示字段
     # list_per_page = 20  # 每页显示条目数
-    search_fields = ['article_num','summary_num']  # 搜索字段
+    search_fields = ['article_num', 'summary_num']  # 搜索字段
     ordering = ['-build_date']  # 排序字段
 
 
@@ -198,8 +198,9 @@ admin.site.register(models.Inquiry)  # 查询情况
 
 # -----------------------客户-------------------------#
 class CustomesAdmin(admin.ModelAdmin):
-    list_display = ('name', 'short_name', 'genre', 'linkman', 'contact_num', 'credit_amount',
-                    'custom_flow', 'custom_accept', 'custom_back')  # 显示字段
+    list_display = (
+    'name', 'short_name', 'genre', 'custom_state', 'managementor', 'linkman', 'contact_num', 'credit_amount',
+    'custom_flow', 'custom_accept', 'custom_back')  # 显示字段
     list_per_page = 20  # 每页显示条目数
     search_fields = ['name', 'short_name']  # 搜索字段
     ordering = ['-credit_amount', 'name']  # 排序字段

@@ -1,0 +1,23 @@
+body {
+    padding-top: 3pt;
+    /*字体*/
+    font-family: SimSun;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    /*行间距*/
+    line-height: 15pt;
+}
+
+caption {
+    font-size: 15pt;
+    text-align: center;
+}
+
+th {
+    text-align: center;
+    vertical-align: middle;
+    vert-align: middle;
+}

@@ -1,0 +1,31 @@
+<div id="noprint">
+    <div>
+        <label>
+            {# 方式一：#}
+            {% for c_typ in CLASS_LIST %}
+                {% if c_typ.0 == kwargs.c_typ %}
+                    <a class="btn btn-primary btn-sm active"
+                       href="{% url 'dbms:report_custom' c_typ=c_typ.0 t_typ=kwargs.t_typ %}">{{ c_typ.1 }}</a>
+                {% else %}
+                    <a class="btn btn-primary btn-sm"
+                       href="{% url 'dbms:report_custom' c_typ=c_typ.0 t_typ=kwargs.t_typ %}">{{ c_typ.1 }} </a>
+                {% endif %}
+            {% endfor %}
+        </label>
+    </div>
+
+    <div>
+        <label>
+            {# 方式一：#}
+            {% for t_typ in TERM_LIST %}
+                {% if t_typ.0 == kwargs.t_typ %}
+                    <a class="btn btn-primary btn-sm active"
+                       href="{% url 'dbms:report_custom' c_typ=kwargs.c_typ  t_typ=t_typ.0 %}">{{ t_typ.1 }}</a>
+                {% else %}
+                    <a class="btn btn-primary btn-sm"
+                       href="{% url 'dbms:report_custom' c_typ=kwargs.c_typ  t_typ=t_typ.0 %}">{{ t_typ.1 }} </a>
+                {% endif %}
+            {% endfor %}
+        </label>
+    </div>
+</div>

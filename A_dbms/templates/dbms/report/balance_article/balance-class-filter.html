@@ -1,13 +1,13 @@
-<div>
+<div id="noprint">
     <label>
         {# 方式一：#}
-        {% for class_typ in CLASS_LIST %}
-            {% if class_typ.0 == kwargs.class_typ %}
+        {% for c_typ in CLASS_LIST %}
+            {% if c_typ.0 == kwargs.c_typ %}
                 <a class="btn btn-primary btn-sm active"
-                   href="{% url 'dbms:report_article_class' class_typ=class_typ.0 %}">{{ class_typ.1 }}</a>
+                   href="{% url 'dbms:report_article_class' c_typ=c_typ.0 %}">{{ c_typ.1 }}</a>
             {% else %}
                 <a class="btn btn-primary btn-sm"
-                   href="{% url 'dbms:report_article_class' class_typ=class_typ.0 %}">{{ class_typ.1 }} </a>
+                   href="{% url 'dbms:report_article_class' c_typ=c_typ.0 %}">{{ c_typ.1 }} </a>
             {% endif %}
         {% endfor %}
     </label>
