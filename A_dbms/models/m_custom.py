@@ -12,6 +12,13 @@ class Customes(models.Model):  # 客户
     linkman = models.CharField(verbose_name='联系人', max_length=16)
     contact_num = models.CharField(verbose_name='联系电话', max_length=13)
 
+    idustry = models.ForeignKey(to='Industries', verbose_name="所属行业",
+                                on_delete=models.PROTECT,
+                                related_name='c_idustry')
+    district = models.ForeignKey(to='Districtes', verbose_name="所属区域",
+                                 on_delete=models.PROTECT,
+                                 related_name='c_district')
+
     review_plan_date = models.DateField(verbose_name='保后计划', blank=True, null=True)
     REVIEW_STATE_LIST = [(1, '待保后'), (11, '待报告'), (21, '已完成'), (81, '自主保后')]
     review_state = models.IntegerField(verbose_name='_保后状态', choices=REVIEW_STATE_LIST, default=21)
@@ -33,10 +40,10 @@ class Customes(models.Model):  # 客户
     custom_back = models.FloatField(verbose_name='_保函余额', default=0)
     entrusted_loan = models.FloatField(verbose_name='_委贷余额', default=0)
     petty_loan = models.FloatField(verbose_name='_小贷余额', default=0)
-    amount = models.FloatField(verbose_name='_余额总额', default=0)
+    amount = models.FloatField(verbose_name='_在保总额', default=0)
 
-    CUSTOM_STATE_LIST = [(11, '担保客户'), (21, '反担保客户'), (99, '注销')]
-    custom_state = models.IntegerField(verbose_name='_客户类型', choices=CUSTOM_STATE_LIST, default=21)
+    CUSTOM_STATE_LIST = [(11, '担保客户'), (21, '反担保客户'), (99, '注销客户')]
+    custom_state = models.IntegerField(verbose_name='客户状态', choices=CUSTOM_STATE_LIST, default=21)
     managementor = models.ForeignKey(to='Employees', verbose_name="管护经理",
                                      on_delete=models.PROTECT, default=28,
                                      related_name='manage_employee')

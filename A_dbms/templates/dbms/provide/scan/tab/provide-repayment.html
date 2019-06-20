@@ -11,7 +11,7 @@
             {% endif %}
         </tr>
         </thead>
-        <tbody id="provide-repayment-tb">
+        <tbody id="repayment-tb">
         {% for repayment in provide_obj.repayment_provide.all %}
             <tr repayment-nid="{{ repayment.id }}">
                 <td>{{ forloop.counter }}</td>

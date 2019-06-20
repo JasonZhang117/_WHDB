@@ -37,6 +37,9 @@ def custom_add_ajax(request):
                             contact_addr=custom_add_data['contact_addr'],
                             linkman=custom_add_data['linkman'],
                             contact_num=custom_add_data['contact_num'],
+                            custom_state=custom_add_data['custom_state'],
+                            idustry=custom_c_data['idustry'],
+                            district=custom_c_data['district'],
                             custom_buildor=request.user)
                         custom_c_obj = models.CustomesC.objects.create(
                             custome=custom_obj,
@@ -68,6 +71,9 @@ def custom_add_ajax(request):
                             contact_addr=custom_add_data['contact_addr'],
                             linkman=custom_add_data['linkman'],
                             contact_num=custom_add_data['contact_num'],
+                            custom_state=custom_add_data['custom_state'],
+                            idustry_id=13,
+                            district_id=26,
                             custom_buildor=request.user)
                         custom_p_obj = models.CustomesP.objects.create(
                             custome=custom_obj, license_num=custom_p_data['license_num'],
@@ -302,7 +308,11 @@ def custom_edit_ajax(request):
                             # counter_only=custom_edit_data['counter_only'],
                             contact_addr=custom_edit_data['contact_addr'],
                             linkman=custom_edit_data['linkman'],
-                            contact_num=custom_edit_data['contact_num'])
+                            custom_state=custom_edit_data['custom_state'],
+                            contact_num=custom_edit_data['contact_num'],
+                            idustry=custom_c_data['idustry'],
+                            district=custom_c_data['district'],
+                        )
                         models.CustomesC.objects.filter(custome=custom_obj).update(
                             idustry=custom_c_data['idustry'],
                             district=custom_c_data['district'],
@@ -332,7 +342,11 @@ def custom_edit_ajax(request):
                             # counter_only=custom_edit_data['counter_only'],
                             contact_addr=custom_edit_data['contact_addr'],
                             linkman=custom_edit_data['linkman'],
-                            contact_num=custom_edit_data['contact_num'])
+                            custom_state=custom_edit_data['custom_state'],
+                            contact_num=custom_edit_data['contact_num'],
+                            idustry_id=13,
+                            district_id=26,
+                        )
                         models.CustomesP.objects.filter(custome=custom_obj).update(
                             license_num=custom_p_data['license_num'],
                             license_addr=custom_p_data['license_addr'], marital_status=custom_p_data['marital_status'])

@@ -19,7 +19,7 @@
         {% for item in article_balance_idustry %}
             <tr>
                 <td>{{ forloop.counter }}</td>
-                <td>{{ item.custom__company_custome__idustry__name }}</td>
+                <td>{{ item.custom__idustry__name }}</td>
                 <td align="right">{{ item.con }}</td>
                 <td align="right">{{ item.sum_renewal|floatformat:2 }}</td>
                 <td align="right">{{ item.sum_augment|floatformat:2 }}</td>

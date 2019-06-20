@@ -19,7 +19,7 @@
         {% for item in article_balance_district %}
             <tr>
                 <td>{{ forloop.counter }}</td>
-                <td>{{ item.company_custome__district__name }}</td>
+                <td>{{ item.district__name }}</td>
                 <td align="right">{{ item.con }}</td>
                 <td align="right">{{ item.credit_amount|floatformat:2 }}</td>
                 <td align="right">{{ item.custom_flow|floatformat:2 }}</td>

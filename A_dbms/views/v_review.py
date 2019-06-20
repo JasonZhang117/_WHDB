@@ -31,18 +31,13 @@ def review(request, *args, **kwargs):  # 保后列表
     custom_accept = models.FloatField(verbose_name='_承兑余额', default=0)
     custom_back = models.FloatField(verbose_name='_保函余额', default=0)
     '''
-    '''设置筛选条件'''
-    search_fields = ['custom_flow', 'custom_accept', 'custom_back']
-    q = Q()
-    q.connector = 'OR'
-    for field in search_fields:
-        q.children.append(("%s__gt" % field, 0))
-    custom_list = custom_list.filter(q).order_by('lately_date')
+    '''CUSTOM_STATE_LIST = [(11, '担保客户'), (21, '反担保客户'), (99, '注销')]'''
+    custom_list = custom_list.filter(custom_state=11, amount__gt=0).order_by('lately_date')
 
     '''搜索条件'''
     search_key = request.GET.get('_s')
     if search_key:
-        search_fields = ['name', 'short_name']
+        search_fields = ['name', 'short_name', 'managementor__name']
         q = Q()
         q.connector = 'OR'
         for field in search_fields:

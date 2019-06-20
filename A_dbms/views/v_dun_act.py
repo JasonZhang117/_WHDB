@@ -169,7 +169,18 @@ def compensatory_add_ajax(request):  # 代偿添加ajax
                                 cooperator=cooperator_obj).aggregate(
                                 Sum('branch_back'))['branch_back__sum']  # 授信银行项下，流贷余额
                             cooperator_list.update(cooperator_back=round(cooperator_branch_back_balance, 2))
-
+                        '''更新客户、放款银行、授信银行在保总额'''
+                        custom_list.update(amount=round(custom_obj.custom_flow + custom_obj.custom_accept +
+                                                        custom_obj.custom_back + custom_obj.entrusted_loan +
+                                                        custom_obj.petty_loan - compensatory_capital, 2))
+                        branch_list.update(amount=round(branch_obj.branch_flow + branch_obj.branch_accept +
+                                                        branch_obj.branch_back + branch_obj.entrusted_loan +
+                                                        branch_obj.petty_loan - compensatory_capital, 2))
+                        cooperator_list.update(amount=round(cooperator_obj.cooperator_flow +
+                                                            cooperator_obj.cooperator_accept +
+                                                            cooperator_obj.cooperator_back +
+                                                            cooperator_obj.entrusted_loan +
+                                                            cooperator_obj.petty_loan - compensatory_capital, 2))
                     response['message'] = '代偿添加成功！'
                 except Exception as e:
                     response['status'] = False

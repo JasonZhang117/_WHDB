@@ -200,7 +200,7 @@ admin.site.register(models.Inquiry)  # 查询情况
 class CustomesAdmin(admin.ModelAdmin):
     list_display = (
     'name', 'short_name', 'genre', 'custom_state', 'managementor', 'linkman', 'contact_num', 'credit_amount',
-    'custom_flow', 'custom_accept', 'custom_back')  # 显示字段
+    'custom_flow', 'custom_accept', 'custom_back','amount')  # 显示字段
     list_per_page = 20  # 每页显示条目数
     search_fields = ['name', 'short_name']  # 搜索字段
     ordering = ['-credit_amount', 'name']  # 排序字段

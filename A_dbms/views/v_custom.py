@@ -30,7 +30,8 @@ def custom(request, *args, **kwargs):  # 委托合同列表
     '''搜索'''
     search_key = request.GET.get('_s')
     if search_key:
-        search_fields = ['name', 'contact_addr', 'linkman', 'contact_num']
+        search_fields = ['name', 'managementor__name','idustry__name','district__name',
+                         'contact_addr', 'linkman', 'contact_num']
         q = Q()
         q.connector = 'OR'
         for field in search_fields:
@@ -64,7 +65,9 @@ def custom_scan(request, custom_id):  # 项目预览
         'short_name': custom_obj.short_name,
         'contact_addr': custom_obj.contact_addr,
         'linkman': custom_obj.linkman,
-        'contact_num': custom_obj.contact_num}
+        'contact_num': custom_obj.contact_num,
+        'custom_state': custom_obj.custom_state,
+    }
     form_custom_edit = forms.CustomEditForm(initial=form_date)
     if custom_obj.genre == 1:
         idustry_id = custom_obj.company_custome.idustry.id

@@ -1,41 +1,30 @@
 <div>
     <label>
-        {% if kwargs.agree_state == None %}
-            <a class="active btn btn-primary btn-sm"
-               href="{% url 'dbms:custom_all' %}">全部</a>
+        {% if kwargs.genre == None %}
+            <a class="active btn btn-primary btn-sm" href="{% url 'dbms:custom_all' %}">全部</a>
         {% else %}
-            <a class="btn btn btn-primary btn-sm"
-               href="{% url 'dbms:custom_all' %}">全部</a>
+            <a class="btn btn btn-primary btn-sm" href="{% url 'dbms:custom_all' %}">全部</a>
         {% endif %}
 
         {# 方式一：#}
         {% for genre in genre_list %}
-            {% if genre.0 == kwargs.genr %}
-                <a class="active btn btn-primary btn-sm"
-                   href="{% url 'dbms:custom' genre=genre.0 %}">
-                    {{ genre.1 }}
-                </a>
+            {% if genre.0 == kwargs.genre %}
+                <a class="active btn btn-primary btn-sm" href="{% url 'dbms:custom' genre=genre.0 %}">{{ genre.1 }}</a>
             {% else %}
-                <a class="btn btn-primary btn-sm"
-                   href="{% url 'dbms:custom' genre=genre.0 %}">
-                    {{ genre.1 }}
-                </a>
+                <a class="btn btn-primary btn-sm" href="{% url 'dbms:custom' genre=genre.0 %}">{{ genre.1 }}</a>
             {% endif %}
         {% endfor %}
     </label>
 
     <label>
         <form class="navbar-form" style="display: inline">
-            <input type="search" name="_s" class="form-control" placeholder="姓名、地址、电话"
+            <input type="search" name="_s" class="form-control" placeholder="姓名、管户人、行业、区域、地址、电话"
                    value="{{ search_key|default_if_none:'' }}">
             <button type="submit" class="btn btn-primary btn-sm">搜索</button>
         </form>
     </label>
 
     <label class="pull-right">
-
-        <a class="btn btn-primary btn-sm" id="addCustom">
-            添加客户
-        </a>
+        <a class="btn btn-primary btn-sm" id="addCustom">添加客户</a>
     </label>
 </div>

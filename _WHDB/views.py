@@ -168,14 +168,6 @@ def home(request):
     print("request.session.get('menu_leaf_list'):", request.session.get('menu_leaf_list'))
 
     '''CUSTOM_STATE_LIST = [(1, '正常'), (11, '担保客户'), (21, '反担保客户'), (99, '注销')]'''
-    # custom_list = models.Customes.objects.all()
-
-    # for custom in custom_list:
-    #     custom_article = custom.article_custom.all().order_by('-build_date').first()
-    #     if custom_article:
-    #         models.Customes.objects.filter(id=custom.id).update(managementor=custom_article.director)
-
-
 
     return render(request, 'test.html', locals())
 

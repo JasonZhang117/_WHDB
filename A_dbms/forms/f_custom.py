@@ -9,14 +9,15 @@ from django.core.exceptions import NON_FIELD_ERRORS, ValidationError
 class CustomAddForm(dform.ModelForm):
     class Meta:
         model = models.Customes
-        fields = ['name', 'short_name', 'contact_addr', 'linkman', 'contact_num', 'genre']
+        fields = ['name', 'short_name', 'contact_addr', 'linkman', 'contact_num', 'genre', 'custom_state']
         widgets = {
             'name': dform.TextInput(attrs={'class': 'form-control', 'placeholder': '客户名称'}),
             'short_name': dform.TextInput(attrs={'class': 'form-control', 'placeholder': '客户简称'}),
             'genre': dform.Select(attrs={'class': 'form-control'}),
             'contact_addr': dform.TextInput(attrs={'class': 'form-control', 'placeholder': '联系地址'}),
             'linkman': dform.TextInput(attrs={'class': 'form-control', 'placeholder': '联系人'}),
-            'contact_num': dform.TextInput(attrs={'class': 'form-control', 'placeholder': '联系电话'})}
+            'contact_num': dform.TextInput(attrs={'class': 'form-control', 'placeholder': '联系电话'}),
+            'custom_state': dform.Select(attrs={'class': 'form-control'}), }
 
 
 # -----------------------客户编辑-------------------------#
@@ -30,11 +31,13 @@ class CustomEditForm(dform.ModelForm):
 
     class Meta:
         model = models.Customes
-        fields = ['counter_only', 'contact_addr', 'linkman', 'contact_num']
+        fields = ['counter_only', 'contact_addr', 'linkman', 'contact_num', 'custom_state']
         widgets = {
             'contact_addr': dform.TextInput(attrs={'class': 'form-control', 'placeholder': '联系地址'}),
             'linkman': dform.TextInput(attrs={'class': 'form-control', 'placeholder': '联系人'}),
-            'contact_num': dform.TextInput(attrs={'class': 'form-control', 'placeholder': '联系电话'})}
+            'contact_num': dform.TextInput(attrs={'class': 'form-control', 'placeholder': '联系电话'}),
+            'custom_state': dform.Select(attrs={'class': 'form-control'}),
+        }
 
 
 # -----------------------企业客户添加-------------------------#

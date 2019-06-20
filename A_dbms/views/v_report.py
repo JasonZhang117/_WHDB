@@ -168,13 +168,13 @@ def report_balance_class(request, *args, **kwargs):  #
         con=Count('provide_money'), sum=Sum('provide_balance')).values(
         'notify__agree__lending__summary__control__name', 'con', 'sum').order_by('-sum')
     provide_groups_idustry = provide_groups.values(
-        'notify__agree__lending__summary__custom__company_custome__idustry__name').annotate(
+        'notify__agree__lending__summary__custom__idustry__name').annotate(
         con=Count('provide_money'), sum=Sum('provide_balance')).values(
-        'notify__agree__lending__summary__custom__company_custome__idustry__name', 'con', 'sum').order_by('-sum')
+        'notify__agree__lending__summary__custom__idustry__name', 'con', 'sum').order_by('-sum')
     provide_groups_district = provide_groups.values(
-        'notify__agree__lending__summary__custom__company_custome__district__name').annotate(
+        'notify__agree__lending__summary__custom__district__name').annotate(
         con=Count('provide_money'), sum=Sum('provide_balance')).values(
-        'notify__agree__lending__summary__custom__company_custome__district__name', 'con', 'sum').order_by('-sum')
+        'notify__agree__lending__summary__custom__district__name', 'con', 'sum').order_by('-sum')
     provide_groups_bank = provide_groups.values(
         'notify__agree__branch__cooperator__short_name').annotate(
         con=Count('provide_money'), sum=Sum('provide_balance')).values(
@@ -231,18 +231,18 @@ def report_article_class(request, *args, **kwargs):  #
         values('article_state', 'con', 'sum_renewal', 'sum_augment', 'sum_amount', 'sum_notify',
                'sum_provide', 'sum_repayment', 'sum_balance').order_by('article_state')  # 阶段余额分组
     article_balance_district = article_groups.values(
-        'custom__company_custome__district__name').annotate(
+        'custom__district__name').annotate(
         con=Count('amount'), sum_renewal=Sum('renewal'), sum_augment=Sum('augment'), sum_amount=Sum('amount'),
         sum_notify=Sum('article_notify_sum'), sum_provide=Sum('article_provide_sum'),
         sum_repayment=Sum('article_repayment_sum'), sum_balance=Sum('article_balance')). \
-        values('custom__company_custome__district__name', 'con', 'sum_renewal', 'sum_augment', 'sum_amount',
+        values('custom__district__name', 'con', 'sum_renewal', 'sum_augment', 'sum_amount',
                'sum_notify', 'sum_provide', 'sum_repayment', 'sum_balance').order_by('-sum_renewal')  # 区域
     article_balance_idustry = article_groups.values(
-        'custom__company_custome__idustry__name').annotate(
+        'custom__idustry__name').annotate(
         con=Count('amount'), sum_renewal=Sum('renewal'), sum_augment=Sum('augment'), sum_amount=Sum('amount'),
         sum_notify=Sum('article_notify_sum'), sum_provide=Sum('article_provide_sum'),
         sum_repayment=Sum('article_repayment_sum'), sum_balance=Sum('article_balance')). \
-        values('custom__company_custome__idustry__name', 'con', 'sum_renewal', 'sum_augment', 'sum_amount',
+        values('custom__idustry__name', 'con', 'sum_renewal', 'sum_augment', 'sum_amount',
                'sum_notify', 'sum_provide', 'sum_repayment', 'sum_balance').order_by('-sum_renewal')  # 行业
     article_balance_depart = article_groups.values(
         'director__department__name').annotate(
@@ -413,13 +413,13 @@ def report_accrual_class(request, *args, **kwargs):  #
         con=Count('provide_money'), sum=Sum('provide_money')).values(
         'notify__agree__lending__summary__control__name', 'con', 'sum').order_by('-sum')
     provide_groups_idustry = provide_groups.values(
-        'notify__agree__lending__summary__custom__company_custome__idustry__name').annotate(
+        'notify__agree__lending__summary__custom__idustry__name').annotate(
         con=Count('provide_money'), sum=Sum('provide_money')).values(
-        'notify__agree__lending__summary__custom__company_custome__idustry__name', 'con', 'sum').order_by('-sum')
+        'notify__agree__lending__summary__custom__idustry__name', 'con', 'sum').order_by('-sum')
     provide_groups_district = provide_groups.values(
-        'notify__agree__lending__summary__custom__company_custome__district__name').annotate(
+        'notify__agree__lending__summary__custom__district__name').annotate(
         con=Count('provide_money'), sum=Sum('provide_money')).values(
-        'notify__agree__lending__summary__custom__company_custome__district__name', 'con', 'sum').order_by('-sum')
+        'notify__agree__lending__summary__custom__district__name', 'con', 'sum').order_by('-sum')
     provide_groups_bank = provide_groups.values(
         'notify__agree__branch__cooperator__short_name').annotate(
         con=Count('provide_money'), sum=Sum('provide_money')).values(
@@ -508,18 +508,18 @@ def report_article(request, *args, **kwargs):  #
         values('article_state', 'con', 'sum_renewal', 'sum_augment', 'sum_amount', 'sum_notify',
                'sum_provide', 'sum_repayment', 'sum_balance').order_by('article_state')  # 阶段余额分组
     article_balance_district = article_groups.values(
-        'custom__company_custome__district__name').annotate(
+        'custom__district__name').annotate(
         con=Count('amount'), sum_renewal=Sum('renewal'), sum_augment=Sum('augment'), sum_amount=Sum('amount'),
         sum_notify=Sum('article_notify_sum'), sum_provide=Sum('article_provide_sum'),
         sum_repayment=Sum('article_repayment_sum'), sum_balance=Sum('article_balance')). \
-        values('custom__company_custome__district__name', 'con', 'sum_renewal', 'sum_augment', 'sum_amount',
+        values('custom__district__name', 'con', 'sum_renewal', 'sum_augment', 'sum_amount',
                'sum_notify', 'sum_provide', 'sum_repayment', 'sum_balance').order_by('-sum_renewal')  # 区域
     article_balance_idustry = article_groups.values(
-        'custom__company_custome__idustry__name').annotate(
+        'custom__idustry__name').annotate(
         con=Count('amount'), sum_renewal=Sum('renewal'), sum_augment=Sum('augment'), sum_amount=Sum('amount'),
         sum_notify=Sum('article_notify_sum'), sum_provide=Sum('article_provide_sum'),
         sum_repayment=Sum('article_repayment_sum'), sum_balance=Sum('article_balance')). \
-        values('custom__company_custome__idustry__name', 'con', 'sum_renewal', 'sum_augment', 'sum_amount',
+        values('custom__idustry__name', 'con', 'sum_renewal', 'sum_augment', 'sum_amount',
                'sum_notify', 'sum_provide', 'sum_repayment', 'sum_balance').order_by('-sum_renewal')  # 行业
     article_balance_depart = article_groups.values(
         'director__department__name').annotate(
@@ -562,7 +562,7 @@ def report_article(request, *args, **kwargs):  #
 
 # -----------------------客户分类统计---------------------#
 @login_required
-# @authority
+@authority
 def report_custom(request, *args, **kwargs):  #
     current_url_name = resolve(request.path).url_name  # 获取当前URL_NAME
     authority_list = request.session.get('authority_list')  # 获取当前用户的所有权限
@@ -571,47 +571,48 @@ def report_custom(request, *args, **kwargs):  #
     CLASS_LIST = [(21, '区域'), (31, '行业'), (35, '部门'), (41, '项目经理'), ]
     TERM_LIST = [(11, '在保'), (21, '所有')]
     '''CUSTOM_STATE_LIST = [(11, '担保客户'), (21, '反担保客户'), (99, '注销')]'''
+    t_typ = kwargs['t_typ']
+    if t_typ == 11:
+        custom_groups = models.Customes.objects.filter(amount__gt=0, )
+    else:
+        custom_groups = models.Customes.objects.filter(custom_state=11, )
+    c_credit = custom_groups.aggregate(Sum('credit_amount'))['credit_amount__sum']  # 授信总额
+    c_flow = custom_groups.aggregate(Sum('custom_flow'))['custom_flow__sum']  # 流贷余额
+    c_accept = custom_groups.aggregate(Sum('custom_accept'))['custom_accept__sum']  # 承兑余额
+    c_back = custom_groups.aggregate(Sum('custom_back'))['custom_back__sum']  # 保函余额
+    c_entrusted = custom_groups.aggregate(Sum('entrusted_loan'))['entrusted_loan__sum']  # 委贷余额
+    c_petty = custom_groups.aggregate(Sum('petty_loan'))['petty_loan__sum']  # 小贷余额
+    c_amount = custom_groups.aggregate(Sum('amount'))['amount__sum']  # 在保总额
+    article_count = custom_groups.aggregate(Count('credit_amount'))['credit_amount__count']  # 客户数
 
-    article_groups = models.Customes.objects.filter(custom_state=11, )
-
-    c_amount = article_groups.aggregate(Sum('credit_amount'))['credit_amount__sum']  # 授信总额
-    c_flow = article_groups.aggregate(Sum('custom_flow'))['custom_flow__sum']  # 流贷余额
-    c_accept = article_groups.aggregate(Sum('custom_accept'))['custom_accept__sum']  # 承兑余额
-    c_back = article_groups.aggregate(Sum('custom_back'))['custom_back__sum']  # 保函余额
-    c_loan = article_groups.aggregate(Sum('entrusted_loan'))['entrusted_loan__sum']  # 委贷余额
-    c_loan = article_groups.aggregate(Sum('petty_loan'))['petty_loan__sum']  # 小贷余额
-    c_amount = article_groups.aggregate(Sum('amount'))['amount__sum']  # 在保总额
-    article_count = article_groups.aggregate(Count('credit_amount'))['credit_amount__count']  # 客户数
-
-    article_balance_district = article_groups.values(
-        'company_custome__district__name').annotate(
-        con=Count('credit_amount'), credit_amount=Sum('credit_amount'), custom_flow=Sum('custom_flow'),
+    article_balance_district = custom_groups.values(
+        'district__name').annotate(
+        con=Count('id'), credit_amount=Sum('credit_amount'), custom_flow=Sum('custom_flow'),
         custom_accept=Sum('custom_accept'),
         custom_back=Sum('custom_back'), entrusted_loan=Sum('entrusted_loan'),
         petty_loan=Sum('petty_loan'), amount=Sum('amount')). \
-        values('company_custome__district__name', 'con', 'credit_amount', 'custom_flow', 'custom_accept',
+        values('district__name', 'con', 'credit_amount', 'custom_flow', 'custom_accept',
                'custom_back', 'entrusted_loan', 'petty_loan', 'amount').order_by('-credit_amount')  # 区域
-    print('ok')
 
-    article_balance_idustry = article_groups.values(
-        'company_custome__idustry__name').annotate(
-        con=Count('credit_amount'), credit_amount=Sum('credit_amount'), custom_flow=Sum('custom_flow'),
+    article_balance_idustry = custom_groups.values(
+        'idustry__name').annotate(
+        con=Count('id'), credit_amount=Sum('credit_amount'), custom_flow=Sum('custom_flow'),
         custom_accept=Sum('custom_accept'),
         custom_back=Sum('custom_back'), entrusted_loan=Sum('entrusted_loan'),
         petty_loan=Sum('petty_loan'), amount=Sum('amount')). \
-        values('company_custome__idustry__name', 'con', 'credit_amount', 'custom_flow', 'custom_accept',
+        values('idustry__name', 'con', 'credit_amount', 'custom_flow', 'custom_accept',
                'custom_back', 'entrusted_loan', 'petty_loan', 'amount').order_by('-credit_amount')  # 行业
-    article_balance_depart = article_groups.values(
+    article_balance_depart = custom_groups.values(
         'managementor__department__name').annotate(
-        con=Count('credit_amount'), credit_amount=Sum('credit_amount'), custom_flow=Sum('custom_flow'),
+        con=Count('id'), credit_amount=Sum('credit_amount'), custom_flow=Sum('custom_flow'),
         custom_accept=Sum('custom_accept'),
         custom_back=Sum('custom_back'), entrusted_loan=Sum('entrusted_loan'),
         petty_loan=Sum('petty_loan'), amount=Sum('amount')). \
         values('managementor__department__name', 'con', 'credit_amount', 'custom_flow', 'custom_accept',
                'custom_back', 'entrusted_loan', 'petty_loan', 'amount').order_by('-credit_amount')  # 部门
-    article_balance_director = article_groups.values(
+    article_balance_director = custom_groups.values(
         'managementor__name').annotate(
-        con=Count('credit_amount'), credit_amount=Sum('credit_amount'), custom_flow=Sum('custom_flow'),
+        con=Count('id'), credit_amount=Sum('credit_amount'), custom_flow=Sum('custom_flow'),
         custom_accept=Sum('custom_accept'),
         custom_back=Sum('custom_back'), entrusted_loan=Sum('entrusted_loan'),
         petty_loan=Sum('petty_loan'), amount=Sum('amount')). \

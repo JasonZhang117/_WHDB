@@ -6,7 +6,11 @@
             <th>序号</th>
             <th>授信品种</th>
             <th>放款笔数</th>
-            <th>担保余额</th>
+            {% if PAGE_TITLE == '在保分类(按放款)' %}
+                <th>担保余额</th>
+            {% elif  PAGE_TITLE == '放款分类' %}
+                <th>发放额</th>
+            {% endif %}
         </tr>
         </thead>
         <tbody>
