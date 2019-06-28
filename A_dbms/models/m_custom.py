@@ -172,6 +172,7 @@ class Districtes(models.Model):  # 区域（街道）
 class Industries(models.Model):  # 行业
     code = models.CharField(verbose_name='行业编码', max_length=16, unique=True)
     name = models.CharField(verbose_name='行业名称', max_length=32, unique=True)
+    cod_nam = models.CharField(verbose_name='代码名称', max_length=48)
 
     # Cancellation = models.BooleanField('注销', default=False)
     class Meta:

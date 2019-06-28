@@ -30,7 +30,7 @@ def custom(request, *args, **kwargs):  # 委托合同列表
     '''搜索'''
     search_key = request.GET.get('_s')
     if search_key:
-        search_fields = ['name', 'managementor__name','idustry__name','district__name',
+        search_fields = ['name', 'managementor__name', 'idustry__name', 'district__name',
                          'contact_addr', 'linkman', 'contact_num']
         q = Q()
         q.connector = 'OR'

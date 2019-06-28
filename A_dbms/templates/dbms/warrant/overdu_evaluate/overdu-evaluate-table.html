@@ -10,6 +10,7 @@
             <th>评估价值</th>
             <th>评估日期</th>
             <th>所属项目</th>
+            <th>项目状态</th>
         </tr>
         </thead>
         <tbody>
@@ -49,6 +50,7 @@
                     <a href="{% url 'dbms:article_scan_lending' article_id=warrant.lending_warrant.all.0.sure.lending.summary.id lending_id=warrant.lending_warrant.all.0.sure.lending.id %}">
                         {{ warrant.lending_warrant.all.0.sure.lending.summary }}</a>
                 </td>
+                <td>{{ warrant.lending_warrant.all.0.sure.lending.summary.get_article_state_display }}</td>
             </tr>
         {% endfor %}
         </tbody>

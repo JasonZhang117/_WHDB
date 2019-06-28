@@ -3,12 +3,13 @@
         <thead>
         <tr style="text-align: center">
             <th>客户名称({{ custom_acount }})</th>
+            <th>行业</th>
             <th>管户经理</th>
             <th>授信总额</th>
             <th>在保余额</th>
-            <th>流贷余额</th>
-            <th>承兑余额</th>
-            <th>保函余额</th>
+{#            <th>流贷余额</th>#}
+{#            <th>承兑余额</th>#}
+{#            <th>保函余额</th>#}
             <th>年调(次)</th>
             <th>最近调查</th>
             <th>风险分类</th>
@@ -25,12 +26,13 @@
                 {% if PAGE_TITLE == '保后管理' or PAGE_TITLE == '逾期保后' %}
                     <td><a href="{% url 'dbms:review_scan' custom_id=custom.id %}">{{ custom.short_name }}</a></td>
                 {% endif %}
+                <td>{{ custom.idustry.name }}</td>
                 <td align="right">{{ custom.managementor }}</td>
                 <td align="right">{{ custom.credit_amount }}</td>
                 <td align="right">{{ custom.amount }}</td>
-                <td align="right">{{ custom.custom_flow }}</td>
-                <td align="right">{{ custom.custom_accept }}</td>
-                <td align="right">{{ custom.custom_back }}</td>
+{#                <td align="right">{{ custom.custom_flow }}</td>#}
+{#                <td align="right">{{ custom.custom_accept }}</td>#}
+{#                <td align="right">{{ custom.custom_back }}</td>#}
                 <td align="right">{{ custom.review_amount }}</td>
                 <td>{{ custom.lately_date }}</td>
                 <td>{{ custom.get_classification_display }}</td>

@@ -12,6 +12,12 @@
         <label id="e_provide_money" class="pull-right">{{ form_provide_add.provide_money.errors }}</label>
     </div>
 
+    <div class="form-group"><!--新增/续贷-->
+        <label for="id_new_old" class="col-sm-3 control-label">{{ form_provide_add.new_old.label }}：</label>
+        <div class="col-sm-9">{{ form_provide_add.new_old }}</div>
+        <label id="e_new_old" class="pull-right">{{ form_provide_add.new_old.errors }}</label>
+    </div>
+
     <div class="form-group"><!--放款日期-->
         <label for="id_provide_date" class="col-sm-3 control-label">{{ form_provide_add.provide_date.label }}：</label>
         <div class="col-sm-9">{{ form_provide_add.provide_date }}</div>

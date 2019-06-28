@@ -63,7 +63,6 @@ def sign_all_ajax(request):
     agree_state = agree_obj.agree_state
     if not agree_state in [41, 61, 99]:
         counter_list = agree_obj.counter_agree.all()
-        print(counter_list)
         '''COUNTER_STATE_LIST = [(11, '未签订'), (21, '已签订'), (31, '作废')]'''
         try:
             for counter in counter_list:
@@ -72,9 +71,10 @@ def sign_all_ajax(request):
                     counter_l.update(
                         counter_state=21,
                         counter_sign_date=datetime.date.today(), )
+                response['message'] = '合同签订成功！'
         except Exception as e:
             response['status'] = False
-            response['message'] = '合同签订成功：%s' % str(e)
+            response['message'] = '合同签订失败：%s' % str(e)
     else:
         response['status'] = False
         response['message'] = '合同状态为%s，一键签订失败！！！' % agree_state
@@ -297,6 +297,7 @@ def provide_add_ajax(request):
                 with transaction.atomic():
                     provide_obj = models.Provides.objects.create(
                         notify=notify_obj, provide_typ=form_provide_cleaned['provide_typ'],
+                        new_old=form_provide_cleaned['new_old'],
                         provide_money=provide_money, provide_date=form_provide_cleaned['provide_date'],
                         due_date=form_provide_cleaned['due_date'], provide_balance=provide_money,
                         providor=request.user)

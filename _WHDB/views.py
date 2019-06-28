@@ -168,6 +168,11 @@ def home(request):
     print("request.session.get('menu_leaf_list'):", request.session.get('menu_leaf_list'))
 
     '''CUSTOM_STATE_LIST = [(1, '正常'), (11, '担保客户'), (21, '反担保客户'), (99, '注销')]'''
+    # custom_list = models.Industries.objects.all()
+    # for custom in custom_list:
+    #     cn = '%s-%s' %(custom.code,custom.name)
+    #     models.Industries.objects.filter(id=custom.id).update(cod_nam=cn)
+
 
     return render(request, 'test.html', locals())
 

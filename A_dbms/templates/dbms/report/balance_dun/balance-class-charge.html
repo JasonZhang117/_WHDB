@@ -1,0 +1,24 @@
+<div class="table-responsive">
+    <table class="table table-bordered table-hover table-condensed active">
+        <caption>{{ PAGE_TITLE }}统计表</caption>
+        <thead>
+        <tr style="text-align: center">
+            <th>序号</th>
+            <th>追偿项目</th>
+            <th>费用笔数</th>
+            <th>费用金额</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for item in charge_dun %}
+            <tr>
+                <td>{{ forloop.counter }}</td>
+                <td>{{ item.dun__compensatory__provide__notify__agree__lending__summary__custom__name }}</td>
+                <td align="right">{{ item.con }}</td>
+                <td align="right">{{ item.sum|floatformat:2 }}</td>
+            </tr>
+        {% endfor %}
+        {% include 'dbms/report/balance_dun/article-class.html' %}
+        </tbody>
+    </table>
+</div>

@@ -61,6 +61,8 @@ class Provides(models.Model):  # 放款
     provide_money = models.FloatField(verbose_name='放款金额', default=0)
     provide_date = models.DateField(verbose_name='放款日期')
     due_date = models.DateField(verbose_name='到期日')
+    NEW_OLD_LIST = [(11, '续贷'), (21, '新增'), ]
+    new_old = models.IntegerField(verbose_name='新增/续贷', choices=NEW_OLD_LIST)
 
     IMPLEMENT_LIST = [(1, '未归档'), (11, '退回'), (21, '暂存风控'), (31, '移交行政'), (41, '已归档'), (99, '无需归档')]
     implement = models.IntegerField(verbose_name='_归档状态', choices=IMPLEMENT_LIST, default=1)

@@ -114,9 +114,6 @@ def report_balance_class(request, *args, **kwargs):  #
     tf_r = request.GET.get('tf')
     tl_r = request.GET.get('tl')
     t_typ = kwargs['t_typ']
-    t_time = time.time()
-    t_ctime = time.ctime()
-    t_localtime = time.localtime()
 
     dt_today = datetime.date.today()
     if t_typ == 0:
@@ -486,8 +483,10 @@ def report_article(request, *args, **kwargs):  #
                           (51, '已放款'), (52, '已放完'), (55, '已解保'), (61, '待变更'), (99, '已注销')]'''
     article_groups = models.Articles.objects.filter(build_date__year=dt_today.year,
                                                     article_state__in=[1, 2, 3, 4, 5, 51, 52, 55, 61])
+    '''ARTICLE_STATE_LIST = [(1, '待反馈'), (2, '已反馈'), (3, '待上会'), (4, '已上会'), (5, '已签批'),
+                          (51, '已放款'), (52, '已放完'), (55, '已解保'), (61, '待变更'), (99, '已注销')]'''
     if tf_r and tl_r:
-        article_groups = models.Articles.objects.filter(article_state__in=[1, 2, 3, 4, 5, 51, 52, 55, 61],
+        article_groups = models.Articles.objects.filter(article_state__in=[1, 2, 3, 4, 5, 51, 52, 55, 61,99],
                                                         build_date__gte=tf_r, build_date__lte=tl_r)
 
     article_renewal = article_groups.aggregate(Sum('renewal'))['renewal__sum']  # 续贷金额
@@ -571,6 +570,11 @@ def report_custom(request, *args, **kwargs):  #
     CLASS_LIST = [(21, '区域'), (31, '行业'), (35, '部门'), (41, '项目经理'), ]
     TERM_LIST = [(11, '在保'), (21, '所有')]
     '''CUSTOM_STATE_LIST = [(11, '担保客户'), (21, '反担保客户'), (99, '注销')]'''
+    industry_list = models.Industries.objects.all()
+    lndustry_dic = {}
+    for industry in industry_list:
+        lndustry_dic[industry.code] = industry.name
+
     t_typ = kwargs['t_typ']
     if t_typ == 11:
         custom_groups = models.Customes.objects.filter(amount__gt=0, )
@@ -595,12 +599,12 @@ def report_custom(request, *args, **kwargs):  #
                'custom_back', 'entrusted_loan', 'petty_loan', 'amount').order_by('-credit_amount')  # 区域
 
     article_balance_idustry = custom_groups.values(
-        'idustry__name').annotate(
+        'idustry__cod_nam').annotate(
         con=Count('id'), credit_amount=Sum('credit_amount'), custom_flow=Sum('custom_flow'),
         custom_accept=Sum('custom_accept'),
         custom_back=Sum('custom_back'), entrusted_loan=Sum('entrusted_loan'),
         petty_loan=Sum('petty_loan'), amount=Sum('amount')). \
-        values('idustry__name', 'con', 'credit_amount', 'custom_flow', 'custom_accept',
+        values('idustry__cod_nam', 'con', 'credit_amount', 'custom_flow', 'custom_accept',
                'custom_back', 'entrusted_loan', 'petty_loan', 'amount').order_by('-credit_amount')  # 行业
     article_balance_depart = custom_groups.values(
         'managementor__department__name').annotate(
@@ -620,3 +624,78 @@ def report_custom(request, *args, **kwargs):  #
                'custom_back', 'entrusted_loan', 'petty_loan', 'amount').order_by('-credit_amount')  # 管户经理
 
     return render(request, 'dbms/report/balance-class-custom.html', locals())
+
+
+# -----------------------追偿分类统计---------------------#
+@login_required
+# @authority
+def report_dun(request, *args, **kwargs):  #
+    current_url_name = resolve(request.path).url_name  # 获取当前URL_NAME
+    authority_list = request.session.get('authority_list')  # 获取当前用户的所有权限
+    menu_result = MenuHelper(request).menu_data_list()
+    PAGE_TITLE = '追偿统计'
+    TERM_LIST = [(0, '全部'), (1, '本年'), (2, '本季'), (3, '本月'), (4, '本周'), (11, '上年'), (99, '自定义'), ]
+
+    tf_r = request.GET.get('tf')
+    tl_r = request.GET.get('tl')
+    t_typ = kwargs['t_typ']
+
+    dt_today = datetime.date.today()
+    if t_typ == 0:
+        pl = models.Compensatories.objects.all().order_by('compensatory_date')
+        tf_r = pl.first().compensatory_date.isoformat()  #
+        tl_r = pl.last().compensatory_date.isoformat()  #
+    elif t_typ == 1:
+        tf_r = datetime.date(dt_today.year, 1, 1).isoformat()  # 本年第一天
+        tl_r = datetime.date(dt_today.year, 12, 31).isoformat()  # 本年最后一天
+    elif t_typ == 2:
+        tf_r = datetime.date(dt_today.year, dt_today.month - (dt_today.month - 1) % 3, 1).isoformat()  # 本季第一天
+        tl_r = quarter_end_day = (datetime.date(dt_today.year, dt_today.month - (dt_today.month - 1) % 3 + 2, 1) +
+                                  relativedelta(months=1, days=-1)).isoformat()  # 本季最后一天
+    elif t_typ == 3:
+        tf_r = (dt_today - datetime.timedelta(days=dt_today.day - 1)).isoformat()  # 本月第一天
+        tl_r = (dt_today + datetime.timedelta(days=-dt_today.day + 1) +
+                relativedelta(months=1, days=-1)).isoformat()  # 本月最后一天
+    elif t_typ == 4:
+        tf_r = (dt_today - datetime.timedelta(days=dt_today.weekday())).isoformat()  # 本周第一天
+        tl_r = (dt_today + datetime.timedelta(days=6 - dt_today.weekday())).isoformat()  # 本周最后一天
+    elif t_typ == 11:
+        tf_r = datetime.date(dt_today.year - 1, 1, 1).isoformat()  # 上年第一天
+        tl_r = datetime.date(dt_today.year - 1, 12, 31).isoformat()  # 上年最后一天
+    elif t_typ == 99:
+        tf_r = tf_r
+        tl_r = tl_r
+        '''ARTICLE_STATE_LIST = [(1, '待反馈'), (2, '已反馈'), (3, '待上会'), (4, '已上会'), (5, '已签批'),
+                          (51, '已放款'), (52, '已放完'), (55, '已解保'), (61, '待变更'), (99, '已注销')]'''
+
+    compensatory_groups = models.Compensatories.objects.all()  # 代偿项目
+    charge_groups = models.Charge.objects.all()  # 追偿费用
+    retrieve_groups = models.Retrieve.objects.all()  # 案款回收
+
+    if tf_r and tl_r:
+        compensatory_groups = models.Compensatories.objects.filter(compensatory_date__gte=tf_r,
+                                                                   compensatory_date__lte=tl_r)  # 代偿项目
+        charge_groups = models.Charge.objects.filter(charge_date__gte=tf_r, charge_date__lte=tl_r)  # 追偿费用
+        retrieve_groups = models.Retrieve.objects.filter(retrieve_date__gte=tf_r, retrieve_date__lte=tl_r)  # 案款回收
+
+    compensatory_amount = compensatory_groups.aggregate(Sum('compensatory_amount'))['compensatory_amount__sum']  # 代偿合计
+    charge_amount = charge_groups.aggregate(Sum('charge_amount'))['charge_amount__sum']  # 追偿费用合计
+    retrieve_amount = retrieve_groups.aggregate(Sum('retrieve_amount'))['retrieve_amount__sum']  # 案款回收合计
+
+    compensatory_count = compensatory_groups.aggregate(Count('compensatory_amount'))[
+        'compensatory_amount__count']  # 项目数
+    charge_count = charge_groups.aggregate(Count('charge_amount'))['charge_amount__count']  # 项目数
+    retrieve_count = retrieve_groups.aggregate(Count('retrieve_amount'))['retrieve_amount__count']  # 项目数
+
+    charge_dun = charge_groups.values(
+        'dun__compensatory__provide__notify__agree__lending__summary__custom__name').annotate(
+        con=Count('charge_amount'), sum=Sum('charge_amount'), ). \
+        values('dun__compensatory__provide__notify__agree__lending__summary__custom__name',
+               'con', 'sum', ).order_by('-charge_amount')  # 追偿费用
+    retrieve_dun = retrieve_groups.values(
+        'dun__compensatory__provide__notify__agree__lending__summary__custom__name').annotate(
+        con=Count('retrieve_amount'), sum=Sum('retrieve_amount'), ). \
+        values('dun__compensatory__provide__notify__agree__lending__summary__custom__name',
+               'con', 'sum', ).order_by('-retrieve_amount')  # 案款回收
+
+    return render(request, 'dbms/report/balance-class-dun.html', locals())

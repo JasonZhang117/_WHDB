@@ -1,0 +1,47 @@
+<script>
+    $(function () {
+        bindDelAgreeB();
+        bindDelAgreeModalOk();
+    });
+
+    function bindDelAgreeB() {
+        $('#delAgreeB').click(function () {
+            $('#delAgreeModal').modal('show');
+        })
+    }
+
+    function bindDelAgreeModalOk() {
+        $('#delAgreeModalOk').click(function () {
+            var postData = {};
+            $('#delAgreeModal').find('input,select').each(function () {
+                var v = $(this).val();
+                var n = $(this).attr('name');
+                postData[n] = v;
+            });
+            var postDataStr = JSON.stringify(postData);
+            $.ajax({
+                url: '/dbms/agree/del/',
+                type: 'POST',
+                traditional: true,
+                data: {'postDataStr': postDataStr},
+                dataType: 'JSON',
+                success: function (arg) {
+                    if (arg.status) {
+                        $('#delAgreeModal').modal('hide');
+                        alert(arg.message);
+                        window.location.href = arg.skip;
+                        {#window.location.reload();#}
+                    } else {
+                        alert(arg.message);
+                    }
+                }
+            })
+        })
+    }
+</script>
+
+
+
+
+
+

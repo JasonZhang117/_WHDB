@@ -150,7 +150,7 @@ admin.site.register(models.Charges)  # 收费
 
 
 class ProvidesAdmin(admin.ModelAdmin):
-    list_display = ('notify', 'provide_typ', 'provide_money', 'provide_date', 'due_date', 'implement',
+    list_display = ('notify', 'provide_typ', 'new_old','provide_money', 'provide_date', 'due_date', 'implement',
                     'provide_repayment_sum', 'provide_balance', 'provide_status')
     # list_per_page = 20  # 每页显示条目数
     # search_fields = ['notify']  # 搜索字段
@@ -199,7 +199,7 @@ admin.site.register(models.Inquiry)  # 查询情况
 # -----------------------客户-------------------------#
 class CustomesAdmin(admin.ModelAdmin):
     list_display = (
-    'name', 'short_name', 'genre', 'custom_state', 'managementor', 'linkman', 'contact_num', 'credit_amount',
+    'name', 'short_name', 'genre', 'custom_state','idustry', 'managementor', 'linkman', 'contact_num', 'credit_amount',
     'custom_flow', 'custom_accept', 'custom_back','amount')  # 显示字段
     list_per_page = 20  # 每页显示条目数
     search_fields = ['name', 'short_name']  # 搜索字段
@@ -232,7 +232,7 @@ admin.site.register(models.Districtes)  # 区域
 
 
 class IndustriesAdmin(admin.ModelAdmin):
-    list_display = ('code', 'name')  # 显示字段
+    list_display = ('code', 'name', 'cod_nam')  # 显示字段
     # list_per_page = 20  # 每页显示条目数
     search_fields = ['code', 'name']  # 搜索字段
     ordering = ['code']  # 排序字段

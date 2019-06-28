@@ -64,6 +64,7 @@ urlpatterns = [
     path('agree/preview/result/<int:agree_id>/<int:result_id>/', views.result_preview, name='agree_result_preview'),
     path('agree/add/', views.agree_add_ajax, name='agree_add_ajax'),
     path('agree/edit/', views.agree_edit_ajax, name='agree_edit_ajax'),
+    path('agree/del/', views.agree_del_ajax, name='agree_del_ajax'),
     path('agree/save/', views.agree_save_ajax, name='agree_save_ajax'),
     path('agree/sign/', views.agree_sign_ajax, name='agree_sign_ajax'),
     path('agree/counter/add/', views.counter_add_ajax, name='agree_counter_add_ajax'),
@@ -234,6 +235,8 @@ urlpatterns = [
     path('report/accrual/class/<int:c_typ>/<int:t_typ>/', views.report_accrual_class, name='report_accrual_class'),
     path('report/article/class/<int:c_typ>/<int:t_typ>/', views.report_article, name='report_article'),
     path('report/custom/class/<int:c_typ>/<int:t_typ>/', views.report_custom, name='report_custom'),
+    path('report/dun/class/<int:t_typ>/', views.report_dun, name='report_dun'),
+
 
     # 员工
     path('employee/', views.employee, name='employee'),

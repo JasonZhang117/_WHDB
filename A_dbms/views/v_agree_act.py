@@ -315,6 +315,37 @@ def agree_edit_ajax(request):  #
     return HttpResponse(result)
 
 
+# -----------------------------删除合同ajax------------------------------#
+@login_required
+@authority
+def agree_del_ajax(request):  #
+    response = {'status': True, 'message': None, 'forme': None, 'skip': None, }
+    post_data_str = request.POST.get('postDataStr')
+    post_data = json.loads(post_data_str)
+    agree_obj = models.Agrees.objects.get(id=post_data['agree_id'])
+    '''AGREE_STATE_LIST = [(11, '待签批'), (21, '已签批'), (31, '未落实'),
+                        (41, '已落实'), (51, '待变更'), (61, '已解保'), (99, '已注销')]'''
+    agree_last = models.Agrees.objects.last().id
+    if agree_obj.agree_state in [11, 99]:
+        if agree_obj.id == agree_last:
+            try:
+                with transaction.atomic():
+                    agree_obj.delete()
+                response['message'] = '委托保证合同删除成功！'
+                response['skip'] = '/dbms/agree/'
+            except Exception as e:
+                response['status'] = False
+                response['message'] = '委托保证合同删除失败：%s' % str(e)
+        else:
+            response['status'] = False
+            response['message'] = '删除失败，只能删除最后一份委托保证合同！'
+    else:
+        response['status'] = False
+        response['message'] = '合同状态为%s，无法删除！' % agree_obj.agree_state
+    result = json.dumps(response, ensure_ascii=False)
+    return HttpResponse(result)
+
+
 # ---------------------------委托担保合同保存ajax----------------------------#
 @login_required
 def agree_save_ajax(request):  #
@@ -766,6 +797,7 @@ def result_state_ajax(request):  #
                                       '保函等），用以补充流动资金。</p>' % (
                                           agree_obj.branch.name, agree_amount_cn, agree_term_str)
                             result += '<p>  2、同意委托成都武侯中小企业融资担保有限责任公司为该授信向贷款方提供担保。</p>'
+
                         order = 2
                     else:
                         order = 0
@@ -792,28 +824,28 @@ def result_state_ajax(request):  #
                     counter_count = (counter_warrant_count + counter_receive_count + counter_target_count +
                                      counter_draft_count + counter_vehicle_count + counter_chattel_count +
                                      counter_other_count + counter_asure_count)
-                    if counter_count + order > 1:
+                    if counter_count + order > 1:  # 判断决议条目是否是一条以上
                         order += 1
                         crder_str = '%s、' % order
-                    elif agr_typ in [41, 42, 47]:
+                    elif agr_typ in [41, 42, 47]:  # 公证版本
                         order += 1
                         crder_str = '%s、' % order
                     else:
-                        crder_str = ''
+                        crder_str = ''  # 如只有一个决议条目，则无编号
+                    qqq = ''
+                    if crder_str == '' or crder_str == '1、':
+                        if agr_typ in [1, 41]:  # 单笔
+                            qqq = '为%s在%s申请的人民币%s%s贷款' % (
+                                agree_custom_obj.name, agree_obj.branch.name, agree_amount_cn, agree_term_str)
+                        elif agr_typ in [2, 42]:  # 最高额
+                            qqq = '为为%s在%s申请的最高限额为人民币%s%s银行授信' % (
+                                agree_custom_obj.name, agree_obj.branch.name, agree_amount_cn, agree_term_str)
                     # 保证反担保
                     counter_asure_list = models.CountersAssure.objects.filter(
                         counter__in=counter_agree_list, custome=counter_custom)
                     if counter_asure_list:
-                        if agr_typ in [1, 41]:
-                            result += '<p>%s同意为%s在%s申请的人民币%s%s贷款，向成都武侯' \
-                                      '中小企业融资担保有限责任公司提供连带责任保证反担保。</p>' % (
-                                          crder_str, agree_custom_obj.name, agree_obj.branch.name, agree_amount_cn,
-                                          agree_term_str)
-                        elif agr_typ in [2, 42]:
-                            result += '<p>%s同意为%s在%s申请的最高限额为人民币%s%s银行授信，向成都武侯' \
-                                      '中小企业融资担保有限责任公司提供连带责任保证反担保。</p>' % (
-                                          crder_str, agree_custom_obj.name, agree_obj.branch.name, agree_amount_cn,
-                                          agree_term_str)
+                        result += '<p>%s同意%s，向成都武侯' \
+                                  '中小企业融资担保有限责任公司提供连带责任保证反担保。</p>' % (crder_str, qqq)
                         order += 1
                         crder_str = '%s、' % order
                     # (1, '房产'), (2, '房产包')
@@ -821,9 +853,9 @@ def result_state_ajax(request):  #
                         counter_warrant__counter__in=counter_agree_list, warrant_typ__in=[1, 2],
                         ownership_warrant__owner=counter_custom)
                     if counter_house_list:
-                        result += '<p>%s同意以企业名下房产向成都武侯中小企业融资' \
+                        result += '<p>%s同意%s以企业名下房产向成都武侯中小企业融资' \
                                   '担保有限责任公司提供%s抵押反担保，签订%s抵押反担保合同，并办理%s抵押登' \
-                                  '记。房产的详细信息如下：</p>' % (crder_str, hhh, hhh, hhh)
+                                  '记。房产的详细信息如下：</p>' % (crder_str, qqq, hhh, hhh, hhh)
                         result += '<table>' \
                                   '<tr>' \
                                   '<td align="center">所有权人</td> ' \
@@ -888,9 +920,9 @@ def result_state_ajax(request):  #
                         counter_warrant__counter__in=counter_agree_list, warrant_typ=5,
                         ownership_warrant__owner=counter_custom)
                     if counter_ground_list:
-                        result += '<p>%s同意以企业名下国有土地使用权向成都武侯中小企业融资' \
+                        result += '<p>%s同意%s以企业名下国有土地使用权向成都武侯中小企业融资' \
                                   '担保有限责任公司提供%s抵押反担保，签订%s抵押反担保合同，并办理%s抵押登' \
-                                  '记。国有土地使用权的详细信息如下：</p>' % (crder_str, hhh, hhh, hhh)
+                                  '记。国有土地使用权的详细信息如下：</p>' % (crder_str, qqq, hhh, hhh, hhh)
                         result += '<table>' \
                                   '<tr>' \
                                   '<td align="center">所有权人</td> ' \
@@ -1003,9 +1035,9 @@ def result_state_ajax(request):  #
                     counter_vehicle_list = models.Vehicle.objects.filter(
                         warrant__counter_warrant__counter__in=counter_agree_list, vehicle_owner=counter_custom)
                     if counter_vehicle_list:
-                        result += '<p>%s同意以企业名下车辆向成都武侯中小企业融资' \
+                        result += '<p>%s同意%s以企业名下车辆向成都武侯中小企业融资' \
                                   '担保有限责任公司提供%s抵押反担保，签订%s抵押反担保合同，并办理%s抵押登' \
-                                  '记。车辆的详细信息如下：</p>' % (crder_str, hhh, hhh, hhh)
+                                  '记。车辆的详细信息如下：</p>' % (crder_str, qqq, hhh, hhh, hhh)
                         result += '<table>' \
                                   '<tr>' \
                                   '<td align="center">所有权人</td> ' \
@@ -1054,7 +1086,7 @@ def result_state_ajax(request):  #
                     counter_other_list = models.Others.objects.filter(
                         warrant__counter_warrant__counter__in=counter_agree_list, other_owner=counter_custom)
                     if counter_other_list:
-                        result += '<p>%s同意以本公司所有的' % crder_str
+                        result += '<p>%s同意%s以本公司所有的' % (crder_str, qqq)
                         other_count = counter_other_list.count()
                         other_num = 0
                         for other in counter_other_list:
@@ -1080,6 +1112,9 @@ def result_state_ajax(request):  #
                     elif decision == 13:
                         result += '<p><strong>本合伙企业及参会合伙人对本次合伙人会议决议的程序的合法性以及合伙人签名的真实性负责。</strong></p>'
                         result += '<p>参会合伙人（或代表）签字：</p>'
+                    elif decision == 15:
+                        result += '<p><strong>本企业及参会举办者对本次举办者会议决议的程序的合法性以及举办者签名的真实性负责。</strong></p>'
+                        result += '<p>参会举办者（或代表）签字：</p>'
                     elif decision == 21:
                         result += '<p><strong>本公司及参会董事对本次股东会决议的程序的合法性以及股东签名的真实性负责。</strong></p>'
                         result += '<p>参会董事（或代表）签字：</p>'
@@ -1087,7 +1122,7 @@ def result_state_ajax(request):  #
                         result += '<p><strong>本企业及参会管委会委员对本次管委会决议的程序的合法性以及委员签名的真实性负责。</strong></p>'
                         result += '<p>参会委员（或代表）签字：</p>'
 
-                    if decision in [11, 13]:
+                    if decision in [11, 13, 15]:
                         shareholder_list = counter_custom.company_custome.shareholder_custom_c.all()
                         shareholder_count = shareholder_list.count()
                         shareholder_num = 0
@@ -1096,6 +1131,8 @@ def result_state_ajax(request):  #
                             signature = '<table><tr><th width="200pt">股东姓名（名称）</th><th>签字（盖章）</th><th>联系方式</th></tr>'
                         elif decision == 13:
                             signature = '<table><tr><th width="200pt">合伙人姓名（名称）</th><th>签字（盖章）</th><th>联系方式</th></tr>'
+                        elif decision == 15:
+                            signature = '<table><tr><th width="200pt">举办者姓名（名称）</th><th>签字（盖章）</th><th>联系方式</th></tr>'
                         for shareholder in shareholder_list:
                             result += '%s' % shareholder.shareholder_name
                             signature += '<tr class="trs"><td align="center">%s</td><td></td><td></td></tr>' % shareholder.shareholder_name
@@ -1110,8 +1147,11 @@ def result_state_ajax(request):  #
                         elif decision == 13:
                             result += '<div class="tt" align="center">%s合伙人</div>' \
                                       '<div class="ts" align="center">签字样本</div>' % counter_custom.name
+                        elif decision == 15:
+                            result += '<div class="tt" align="center">%s举办者</div>' \
+                                      '<div class="ts" align="center">签字样本</div>' % counter_custom.name
                         result += signature
-                    elif decision in [21, 23]:
+                    elif decision in [21, 23]:  #
                         trustee_list = counter_custom.company_custome.trustee_custom_c.all()
                         trustee_count = trustee_list.count()
                         trustee_num = 0
