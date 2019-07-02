@@ -282,7 +282,9 @@ def provide_add_ajax(request):
     form_provide_add = forms.FormProvideAdd(post_data)
     if form_provide_add.is_valid():
         form_provide_cleaned = form_provide_add.cleaned_data
-        provide_money = round(form_provide_cleaned['provide_money'], 2)
+        old_amount = round(form_provide_cleaned['old_amount'], 2)
+        new_amount = round(form_provide_cleaned['new_amount'], 2)
+        provide_money = round(old_amount + new_amount, 2)
         notify_provide_amount = models.Provides.objects.filter(notify=notify_obj).aggregate(Sum('provide_money'))
         notify_provide_sum = notify_provide_amount['provide_money__sum']
         if notify_provide_sum:
@@ -297,8 +299,8 @@ def provide_add_ajax(request):
                 with transaction.atomic():
                     provide_obj = models.Provides.objects.create(
                         notify=notify_obj, provide_typ=form_provide_cleaned['provide_typ'],
-                        new_old=form_provide_cleaned['new_old'],
-                        provide_money=provide_money, provide_date=form_provide_cleaned['provide_date'],
+                        old_amount=old_amount, new_amount=new_amount,provide_money=provide_money,
+                        provide_date=form_provide_cleaned['provide_date'],
                         due_date=form_provide_cleaned['due_date'], provide_balance=provide_money,
                         providor=request.user)
 

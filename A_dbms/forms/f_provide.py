@@ -53,11 +53,11 @@ class FormNotifyEdit(dform.ModelForm):
 class FormProvideAdd(dform.ModelForm):
     class Meta:
         model = models.Provides
-        fields = ['provide_typ', 'new_old', 'provide_money', 'provide_date', 'due_date']
+        fields = ['provide_typ', 'old_amount', 'new_amount', 'provide_date', 'due_date']
         widgets = {
             'provide_typ': dform.Select(attrs={'class': 'form-control'}),
-            'provide_money': dform.NumberInput(attrs={'class': 'form-control', 'placeholder': '放款金额'}),
-            'new_old': dform.Select(attrs={'class': 'form-control'}),
+            'old_amount': dform.NumberInput(attrs={'class': 'form-control', 'placeholder': '续贷金额'}),
+            'new_amount': dform.NumberInput(attrs={'class': 'form-control', 'placeholder': '新增金额'}),
             'provide_date': dform.DateInput(attrs={'class': 'form-control', 'type': 'date'}),
             'due_date': dform.DateInput(attrs={'class': 'form-control', 'type': 'date'})}
 

@@ -172,7 +172,9 @@ def home(request):
     # for custom in custom_list:
     #     cn = '%s-%s' %(custom.code,custom.name)
     #     models.Industries.objects.filter(id=custom.id).update(cod_nam=cn)
-
+    provide_lise = models.Provides.objects.all()
+    '''NEW_OLD_LIST = [(11, '续贷'), (21, '新增'), (99, '--')]
+    new_old = models.IntegerField(verbose_name='新增/续贷', choices=NEW_OLD_LIST, default=99)'''
 
     return render(request, 'test.html', locals())
 

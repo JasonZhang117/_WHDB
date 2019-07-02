@@ -31,7 +31,7 @@ class CustomEditForm(dform.ModelForm):
 
     class Meta:
         model = models.Customes
-        fields = ['counter_only', 'contact_addr', 'linkman', 'contact_num', 'custom_state']
+        fields = ['contact_addr', 'linkman', 'contact_num', 'custom_state']
         widgets = {
             'contact_addr': dform.TextInput(attrs={'class': 'form-control', 'placeholder': '联系地址'}),
             'linkman': dform.TextInput(attrs={'class': 'form-control', 'placeholder': '联系人'}),

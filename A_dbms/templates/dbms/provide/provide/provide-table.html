@@ -5,12 +5,13 @@
             <th>合同编号</th>
             <th>客户名称</th>
             <th>放款银行</th>
-            <th>放款金额</th>
+            <th>续贷金额</th>
+            <th>新增金额</th>
+            <th>放款总额</th>
             <th>放款种类</th>
-            <th>续贷新增</th>
             <th>放款日期</th>
             <th>到期日</th>
-            <th>项目经理</th>
+{#            <th>项目经理</th>#}
             {% if PAGE_TITLE == '归档管理' %}
                 <th>档案编号</th>
             {% else %}
@@ -34,12 +35,13 @@
                 {% endif %}
                 <td>{{ provide.notify.agree.lending.summary.custom.short_name }}</td>
                 <td>{{ provide.notify.agree.branch.short_name }}</td>
+                <td align="right">{{ provide.old_amount }}</td>
+                <td align="right">{{ provide.new_amount }}</td>
                 <td align="right">{{ provide.provide_money }}</td>
                 <td>{{ provide.get_provide_typ_display }}</td>
-                <td>{{ provide.get_new_old_display }}</td>
                 <td>{{ provide.provide_date }}</td>
                 <td>{{ provide.due_date }}</td>
-                <td>{{ provide.notify.agree.lending.summary.director.name }}</td>
+{#                <td>{{ provide.notify.agree.lending.summary.director.name }}</td>#}
                 {% if PAGE_TITLE == '归档管理' %}
                     <td>{{ provide.file_num|default_if_none:"" }}</td>
                 {% else %}
