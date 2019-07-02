@@ -5,12 +5,14 @@
             <a class="btn btn-primary btn-sm " id="addStandingB">追偿台账</a>
             <a class="btn btn-primary btn-sm " id="addClueB">财产线索</a>
             <a class="btn btn-primary btn-sm " id="addDefendantB">添加被告</a>
-            <a class="btn btn-primary btn-sm " id="addStageB">资料目录</a>
+            <a class="btn btn-primary btn-sm " id="addStageB">添加资料</a>
             <a class="btn btn-primary btn-sm " id="addChargeB">追偿费用</a>
             <a class="btn btn-primary btn-sm " id="addRetrieveB">案款回收</a>
             <a class="btn btn-primary btn-sm " id="addStaffB">联系人</a>
             <a class="btn btn-primary btn-sm " id="addAgentB">代理合同</a>
             <a class="btn btn-primary btn-sm " id="addJudgmentB">判决书</a>
+            <a class="btn btn-primary btn-sm " target="_blank" id="scanStageB"
+               href="{% url 'dbms:dun_stage' dun_id=dun_obj.id %}">目录预览</a>
         </label>
     </div>
 

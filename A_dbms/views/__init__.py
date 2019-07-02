@@ -51,7 +51,7 @@ from .v_review_act import (review_plan_ajax, review_update_ajax, review_del_ajax
 # ----------------------v_dun追偿视图--------------------#
 from .v_dun import (
     compensatory, compensatory_scan, dun, dun_scan, seal, overdue_seal, soondue_seal,
-    overdue_search, seal_scan)
+    overdue_search, seal_scan, dun_stage)
 from .v_dun_act import (
     compensatory_add_ajax, dun_add_ajax, clue_add_ajax, clue_del_ajax, sealup_add_ajax, standing_add_ajax,
     standing_del_ajax, charge_add_ajax, charge_del_ajax, retrieve_add_ajax,

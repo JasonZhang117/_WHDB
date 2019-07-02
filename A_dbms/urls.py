@@ -174,6 +174,7 @@ urlpatterns = [
     path('dun/', views.dun, name='dun_all'),  # 菜单-追偿管理
     path('dun/<int:dun_stage>/', views.dun, name='dun'),
     path('dun/scan/<int:dun_id>/', views.dun_scan, name='dun_scan'),
+    path('dun/stage/<int:dun_id>/', views.dun_stage, name='dun_stage'),
     path('dun/seal/', views.seal, name='dun_seal_all'),
     path('dun/seal/<int:seal_state>/', views.seal, name='dun_seal'),
     path('dun/seal/scan/<int:dun_id>/<int:warrant_id>/', views.seal_scan, name='dun_seal_scan'),
@@ -199,6 +200,8 @@ urlpatterns = [
     path('dun/charge/del/', views.charge_del_ajax, name='dun_charge_del_ajax'),
     path('dun/retrieve/add/', views.retrieve_add_ajax, name='dun_retrieve_add_ajax'),
     path('dun/retrieve/del/', views.retrieve_del_ajax, name='dun_retrieve_del_ajax'),
+
+
     # -----------------------客户管理-------------------------#
 
     path('custom/', views.custom, name='custom_all'),  # 菜单-客户管理

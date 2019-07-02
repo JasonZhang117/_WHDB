@@ -1,0 +1,85 @@
+body {
+    /*padding-top: 3pt;*/
+    font-family: 仿宋;
+}
+
+.contain {
+    /*页面宽度 */
+    width: 210mm;
+    /*左空白*/
+    margin-left: auto;
+    /*右空白 */
+    margin-right: auto;
+    /*字体大小 */
+    font-size: 12pt;
+    /*背景色*/
+    /*background-color: #dddddd;*/
+    /*字间距  */
+    letter-spacing: 0pt;
+    /*行间距*/
+    line-height: 21pt;
+}
+
+.btl {
+    text-align: center;
+    font-size: 24pt;
+    font-weight: bolder;
+    /*行间距*/
+    /*line-height: 12pt;*/
+    /*color: red;*/
+    /*margin-bottom: 12pt;*/
+}
+
+.tbp {
+    text-align: justify;
+    text-justify: distribute;
+    text-align-last: left;
+    -moz-text-align-last: left; /* 针对 Firefox 的代码 */
+}
+
+.otr {
+    height: 27pt;
+    /*行间距*/
+    line-height: 19pt;
+    border: 1pt solid black;
+}
+
+.oi {
+    padding-top: 3pt;
+    padding-bottom: 3pt;
+    border-right: 2pt solid black;
+    border-left: 2pt solid black;
+}
+
+/*内部表格*/
+.tbi {
+    margin-left: 1pt;
+    margin-right: 1pt;
+    border-collapse: collapse;
+}
+
+.tbi td {
+    border: 1pt solid black;
+}
+
+.it {
+    height: 25pt;
+    /*行间距*/
+    line-height: 15pt;
+}
+
+/*{#tr td {#}*/
+/*{#    border: 1px solid black;#}*/
+.bto {
+    border: 1pt solid black;
+    /*padding-top: 3pt;*/
+    /*padding-bottom: 3pt;*/
+}
+
+.btt {
+    border-left: 1pt solid black;
+}
+
+table{
+    width: 100%;
+}

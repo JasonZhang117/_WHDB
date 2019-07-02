@@ -1,0 +1,182 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ article_obj.article_num }}</title>
+    <link rel="stylesheet" media="screen" href="{% static 'dbms/css/dun-stage-style.css' %}">
+    <link rel="stylesheet" media="print" href="{% static 'dbms/css/dun-stage-style.css' %}">
+</head>
+<body>
+<div class="contain">
+    <div class="btl">
+        <p>出现项目入库资料清单</p>
+    </div>
+    <div class="notice-body">
+        <table style="width: 100%; border-collapse:collapse;" cellspacing="0" cellpadding="0">
+            <tr>
+                <td width="50%">项目名称：{{ custom }}</td>
+                <td width="50%">借款金额：{{ provide_money }}</td>
+            </tr>
+            <tr>
+                <td>代偿金额：{{ compensatory_amount }}</td>
+                <td>代偿日期：{{ compensatory_date }}</td>
+            </tr>
+        </table>
+        <div>
+            <table style="width: 100%; border-collapse:collapse;" cellspacing="0" cellpadding="0">
+                <tbody style="border: 1pt solid black">
+                <tr class="bto" style="font-weight: bold" align="center">{#审保会次数#}
+                    <td class="btt">索引号</td>
+                    <td class="btt">内容</td>
+                    <td class="btt">原件/复印件</td>
+                    <td class="btt">页码</td>
+                    <td class="btt" width="120pt">文件日期</td>
+                </tr>
+                {% if dun_stage_1 %}
+                    {% for item in dun_stage_1 %}
+                        {% if forloop.first %}
+                            <tr class="bto" style="font-weight: bold" align="center">
+                                <td class="btt">A</td>
+                                <td class="btt">证据及财产线索资料</td>
+                                <td class="btt"></td>
+                                <td class="btt"></td>
+                                <td class="btt"></td>
+                            </tr>
+                        {% endif %}
+                        <tr class="bto">
+                            <td class="btt">{{ item.stage_remark }}</td>
+                            <td class="btt">{{ item.stage_file }}</td>
+                            <td class="btt">{{ item.get_stage_state_display }}</td>
+                            <td class="btt">{{ item.stage_remark }}</td>
+                            <td class="btt">{{ item.stage_date }}</td>
+                        </tr>
+                    {% endfor %}
+                {% endif %}
+                {% if dun_stage_11 %}
+                    {% for item in dun_stage_11 %}
+                        {% if forloop.first %}
+                            <tr class="bto" style="font-weight: bold" align="center">
+                                <td class="btt">B</td>
+                                <td class="btt">诉前资料</td>
+                                <td class="btt"></td>
+                                <td class="btt"></td>
+                                <td class="btt"></td>
+                            </tr>
+                        {% endif %}
+                        <tr class="bto">
+                            <td class="btt">{{ item.stage_remark }}</td>
+                            <td class="btt">{{ item.stage_file }}</td>
+                            <td class="btt">{{ item.get_stage_state_display }}</td>
+                            <td class="btt">{{ item.stage_remark }}</td>
+                            <td class="btt">{{ item.stage_date }}</td>
+                        </tr>
+                    {% endfor %}
+                {% endif %}
+                {% if dun_stage_21 %}
+                    {% for item in dun_stage_21 %}
+                        {% if forloop.first %}
+                            <tr class="bto" style="font-weight: bold" align="center">
+                                <td class="btt">C</td>
+                                <td class="btt">一审资料</td>
+                                <td class="btt"></td>
+                                <td class="btt"></td>
+                                <td class="btt"></td>
+                            </tr>
+                        {% endif %}
+                        <tr class="bto">
+                            <td class="btt">{{ item.stage_remark }}</td>
+                            <td class="btt">{{ item.stage_file }}</td>
+                            <td class="btt">{{ item.get_stage_state_display }}</td>
+                            <td class="btt">{{ item.stage_remark }}</td>
+                            <td class="btt">{{ item.stage_date }}</td>
+                        </tr>
+                    {% endfor %}
+                {% endif %}
+                {% if dun_stage_31 %}
+                    {% for item in dun_stage_31 %}
+                        {% if forloop.first %}
+                            <tr class="bto" style="font-weight: bold" align="center">
+                                <td class="btt">D</td>
+                                <td class="btt">上诉及再审资料</td>
+                                <td class="btt"></td>
+                                <td class="btt"></td>
+                                <td class="btt"></td>
+                            </tr>
+                        {% endif %}
+                        <tr class="bto">
+                            <td class="btt">{{ item.stage_remark }}</td>
+                            <td class="btt">{{ item.stage_file }}</td>
+                            <td class="btt">{{ item.get_stage_state_display }}</td>
+                            <td class="btt">{{ item.stage_remark }}</td>
+                            <td class="btt">{{ item.stage_date }}</td>
+                        </tr>
+                    {% endfor %}
+                {% endif %}
+                {% if dun_stage_41 %}
+                    {% for item in dun_stage_41 %}
+                        {% if forloop.first %}
+                            <tr class="bto" style="font-weight: bold" align="center">
+                                <td class="btt">E</td>
+                                <td class="btt">案外之诉</td>
+                                <td class="btt"></td>
+                                <td class="btt"></td>
+                                <td class="btt"></td>
+                            </tr>
+                        {% endif %}
+                        <tr class="bto">
+                            <td class="btt">{{ item.stage_remark }}</td>
+                            <td class="btt">{{ item.stage_file }}</td>
+                            <td class="btt">{{ item.get_stage_state_display }}</td>
+                            <td class="btt">{{ item.stage_remark }}</td>
+                            <td class="btt">{{ item.stage_date }}</td>
+                        </tr>
+                    {% endfor %}
+                {% endif %}
+                {% if dun_stage_51 %}
+                    {% for item in dun_stage_51 %}
+                        {% if forloop.first %}
+                            <tr class="bto" style="font-weight: bold" align="center">
+                                <td class="btt">F</td>
+                                <td class="btt">执行资料</td>
+                                <td class="btt"></td>
+                                <td class="btt"></td>
+                                <td class="btt"></td>
+                            </tr>
+                        {% endif %}
+                        <tr class="bto">
+                            <td class="btt">{{ item.stage_remark }}</td>
+                            <td class="btt">{{ item.stage_file }}</td>
+                            <td class="btt">{{ item.get_stage_state_display }}</td>
+                            <td class="btt">{{ item.stage_remark }}</td>
+                            <td class="btt">{{ item.stage_date }}</td>
+                        </tr>
+                    {% endfor %}
+                {% endif %}
+                {% if dun_stage_99 %}
+                    {% for item in dun_stage_99 %}
+                        {% if forloop.first %}
+                            <tr class="bto" style="font-weight: bold" align="center">
+                                <td class="btt">Q</td>
+                                <td class="btt">其他资料</td>
+                                <td class="btt"></td>
+                                <td class="btt"></td>
+                                <td class="btt"></td>
+                            </tr>
+                        {% endif %}
+                        <tr class="bto">
+                            <td class="btt">{{ item.stage_remark }}</td>
+                            <td class="btt">{{ item.stage_file }}</td>
+                            <td class="btt">{{ item.get_stage_state_display }}</td>
+                            <td class="btt">{{ item.stage_remark }}</td>
+                            <td class="btt">{{ item.stage_date }}</td>
+                        </tr>
+                    {% endfor %}
+                {% endif %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+</body>
+</html>

@@ -1053,7 +1053,8 @@ def stage_del_ajax(request):  #
     dun_obj = models.Dun.objects.get(id=post_data['dun_id'])
     stage_obj = models.Stage.objects.get(id=post_data['stage_id'])
 
-    '''DUN_STAGE_LIST = ((1, '起诉'), (11, '判决'), (21, '执行'), (31, '和解结案'), (41, '终止执行'), (99, '注销'))'''
+    '''DUN_STAGE_LIST = [(1, '已代偿'), (3, '诉前'), (11, '一审'), (21, '上诉及再审'), (31, '案外之诉'),
+                      (41, '执行'), (91, '结案')]'''
     dun_stage = dun_obj.dun_stage
     if not dun_stage == 99:
         try:

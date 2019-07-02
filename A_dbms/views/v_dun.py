@@ -151,7 +151,7 @@ def dun_scan(request, dun_id):  # 查看合同
     form_agent_add = forms.FormAgentAdd(initial=form_agent_data)  # 代理合同
     form_judgment_add = forms.FormJudgmentAdd(initial={'judgment_date': str(today_str)})  # 判决裁定
     standing_list = models.Standing.objects.filter(dun=dun_obj).order_by('-standingor_date')
-    stage_list = models.Stage.objects.filter(dun=dun_obj).order_by('stage_type')
+    stage_list = models.Stage.objects.filter(dun=dun_obj).order_by('stage_type', 'stage_file')
 
     '''分页'''
     paginator = Paginator(standing_list, 6)
@@ -164,6 +164,33 @@ def dun_scan(request, dun_id):  # 查看合同
         p_list = paginator.page(paginator.num_pages)
 
     return render(request, 'dbms/dun/dun-scan.html', locals())
+
+
+# -----------------------资料目录-------------------------#
+@login_required
+@authority
+def dun_stage(request, dun_id):  # 查看合同
+    current_url_name = resolve(request.path).url_name  # 获取当前URL_NAME
+    authority_list = request.session.get('authority_list')  # 获取当前用户的所有权限
+    menu_result = MenuHelper(request).menu_data_list()
+    PAGE_TITLE = '资料目录'
+    dun_obj = models.Dun.objects.get(id=dun_id)
+    custom = dun_obj.compensatory.all().first().provide.notify.agree.lending.summary.custom.name  # 客户名称
+    compensatory_amount = dun_obj.compensatory.all().first().compensatory_amount  # 代偿金额
+    compensatory_date = dun_obj.compensatory.all().first().compensatory_date  # 代偿日期
+    provide_money = dun_obj.compensatory.all().first().provide.provide_money  # 放款金额
+    STAGE_TYPE_LIST = ((1, '证据及财产线索资料'), (11, '诉前资料'), (21, '一审资料'),
+                       (31, '上诉及再审'), (41, '案外之诉'),
+                       (51, '执行资料'), (99, '其他'))
+    dun_stage_1 = models.Stage.objects.filter(stage_type=1)
+    dun_stage_11 = models.Stage.objects.filter(stage_type=11)
+    dun_stage_21 = models.Stage.objects.filter(stage_type=21)
+    dun_stage_31 = models.Stage.objects.filter(stage_type=31)
+    dun_stage_41 = models.Stage.objects.filter(stage_type=41)
+    dun_stage_51 = models.Stage.objects.filter(stage_type=51)
+    dun_stage_99 = models.Stage.objects.filter(stage_type=99)
+
+    return render(request, 'dbms/dun/dun-stage.html', locals())
 
 
 # -----------------------财产线索列表-------------------------#
