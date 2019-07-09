@@ -37,7 +37,7 @@ def review(request, *args, **kwargs):  # 保后列表
     '''搜索条件'''
     search_key = request.GET.get('_s')
     if search_key:
-        search_fields = ['name', 'short_name', 'managementor__name']
+        search_fields = ['name', 'short_name', 'district__name', 'idustry__name', 'managementor__name']
         q = Q()
         q.connector = 'OR'
         for field in search_fields:

@@ -64,11 +64,12 @@ class FormCustomAdd(dform.Form):
 class FormStageAdd(dform.ModelForm):
     class Meta:
         model = models.Stage
-        fields = ['stage_type', 'stage_file', 'stage_date', 'stage_state']
+        fields = ['stage_type', 'stage_file', 'stage_date', 'stage_state', 'page_amout']
         widgets = {
             'stage_type': dform.Select(attrs={'class': 'form-control'}),
             'stage_file': dform.TextInput(attrs={'class': 'form-control', 'placeholder': '文件'}),
             'stage_date': dform.DateInput(attrs={'class': 'form-control', 'type': 'date'}),
+            'page_amout': dform.NumberInput(attrs={'class': 'form-control', 'placeholder': '页数'}),
             'stage_state': dform.Select(attrs={'class': 'form-control'}),
         }
 

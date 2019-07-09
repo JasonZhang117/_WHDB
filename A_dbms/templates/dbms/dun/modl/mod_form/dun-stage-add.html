@@ -10,15 +10,19 @@
         <div class="col-sm-9">{{ form_stage_add.stage_file }}</div>
         <label id="e_stage_file" class="pull-right">{{ form_stage_add.stage_file.errors }}</label>
     </div>
+    <div class="form-group"><!--文件类型-->
+        <label for="id_stage_state" class="col-sm-3 control-label">{{ form_stage_add.stage_state.label }}：</label>
+        <div class="col-sm-9">{{ form_stage_add.stage_state }}</div>
+        <label id="e_stage_state" class="pull-right">{{ form_stage_add.stage_state.errors }}</label>
+    </div>
+    <div class="form-group"><!--文件页数-->
+        <label for="id_page_amout" class="col-sm-3 control-label">{{ form_stage_add.page_amout.label }}：</label>
+        <div class="col-sm-9">{{ form_stage_add.page_amout }}</div>
+        <label id="e_page_amout" class="pull-right">{{ form_stage_add.page_amout.errors }}</label>
+    </div>
     <div class="form-group"><!--文件日期-->
         <label for="id_stage_date" class="col-sm-3 control-label">{{ form_stage_add.stage_date.label }}：</label>
         <div class="col-sm-9">{{ form_stage_add.stage_date }}</div>
         <label id="e_stage_date" class="pull-right">{{ form_stage_add.stage_date.errors }}</label>
     </div>
-    <div class="form-group"><!--文件日期-->
-        <label for="id_stage_state" class="col-sm-3 control-label">{{ form_stage_add.stage_state.label }}：</label>
-        <div class="col-sm-9">{{ form_stage_add.stage_state }}</div>
-        <label id="e_stage_state" class="pull-right">{{ form_stage_add.stage_state.errors }}</label>
-    </div>
-
 </div>

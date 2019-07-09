@@ -1,0 +1,39 @@
+<div class="table-responsive">
+    <table class="table table-bordered table-hover table-condensed active">
+        <caption>{{ PAGE_TITLE }}统计表（按品种）（{{ tf_r }}至{{ tl_r }}）</caption>
+        <thead>
+        <tr style="text-align: center">
+            <th>序号</th>
+            <th>授信品种</th>
+            <th>放款笔数</th>
+            <th>续贷金额</th>
+            <th>新增金额</th>
+            <th>发放总额</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for breed in provide_groups_breed %}
+            <tr>
+                <td>{{ forloop.counter }}</td>
+                {#            PROVIDE_TYP_LIST = ((1, '流贷'), (11, '承兑'), (21, '保函'), (31, '委贷'), (41, '小贷'))#}
+                {% if breed.provide_typ == 1 %}
+                    <td>{{ provide_typ_dic.1 }}</td>
+                {% elif breed.provide_typ == 11 %}
+                    <td>{{ provide_typ_dic.11 }}</td>
+                {% elif breed.provide_typ == 21 %}
+                    <td>{{ provide_typ_dic.21 }}</td>
+                {% elif breed.provide_typ == 31 %}
+                    <td>{{ provide_typ_dic.31 }}</td>
+                {% elif breed.provide_typ == 41 %}
+                    <td>{{ provide_typ_dic.41 }}</td>
+                {% endif %}
+                <td align="right">{{ breed.con }}</td>
+                <td align="right">{{ breed.sum_old|floatformat:2  }}</td>
+                <td align="right">{{ breed.sum_new|floatformat:2  }}</td>
+                <td align="right">{{ breed.sum|floatformat:2 }}</td>
+            </tr>
+        {% endfor %}
+        {% include 'dbms/report/balance_accrual/balance-class.html' %}
+        </tbody>
+    </table>
+</div>

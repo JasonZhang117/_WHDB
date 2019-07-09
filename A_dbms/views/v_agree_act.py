@@ -601,15 +601,20 @@ def counter_del_ajax(request):  # 删除反担保合同ajax
         counter_counter_obj = counter_obj.warrant_counter
     '''AGREE_STATE_LIST = ((11, '待签批'), (21, '已签批'), (31, '未落实'),
                         (41, '已落实'), (51, '待变更'), (61, '已解保'), (99, '作废'))'''
+    counter_last_id = models.Counters.objects.filter(agree=agree_obj).last().id
     if agree_obj.agree_state in [11, 51]:
-        try:
-            with transaction.atomic():
-                counter_counter_obj.delete()  # 删除保证反担保合同
-                counter_obj.delete()  # 删除反担保合同
-            response['message'] = '反担保合同删除成功！'
-        except Exception as e:
+        if counter_obj.id == counter_last_id:
+            try:
+                with transaction.atomic():
+                    counter_counter_obj.delete()  # 删除保证反担保合同
+                    counter_obj.delete()  # 删除反担保合同
+                response['message'] = '反担保合同删除成功！'
+            except Exception as e:
+                response['status'] = False
+                response['message'] = '反担保合同删除失败:%s！' % str(e)
+        else:
             response['status'] = False
-            response['message'] = '反担保合同删除失败:%s！' % str(e)
+            response['message'] = '删除失败，只能删除最后一份反担保合同！'
     else:
         response['status'] = False
         response['message'] = '委托担保合同状态为%s，无法删除反担保合同！' % agree_obj.agree_state

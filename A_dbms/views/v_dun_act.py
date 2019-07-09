@@ -1011,6 +1011,7 @@ def stage_add_ajax(request):
                     stage_obj = models.Stage.objects.create(
                         dun=dun_obj, stage_type=stage_type, stage_file=stage_cleaned['stage_file'],
                         stage_date=stage_cleaned['stage_date'], stage_state=stage_cleaned['stage_state'],
+                        page_amout=stage_cleaned['page_amout'],
                         stage_remark=stage_remark, stagor=request.user)
                     '''STAGE_TYPE_LIST = ((1, '证据及财产线索资料'), (11, '诉前资料'), (21, '一审资料'),
                         (31, '上诉及再审'), (41, '案外之诉'), (51, '执行资料'), (99, '其他'))'''
@@ -1055,15 +1056,21 @@ def stage_del_ajax(request):  #
 
     '''DUN_STAGE_LIST = [(1, '已代偿'), (3, '诉前'), (11, '一审'), (21, '上诉及再审'), (31, '案外之诉'),
                       (41, '执行'), (91, '结案')]'''
+    stage_last_id = models.Stage.objects.filter(dun=dun_obj, stage_type=stage_obj.stage_type).last().id
+
     dun_stage = dun_obj.dun_stage
     if not dun_stage == 99:
-        try:
-            with transaction.atomic():
-                stage_obj.delete()  # 删除
-            response['message'] = '追偿资料目录信息删除成功！'
-        except Exception as e:
+        if stage_obj.id == stage_last_id:
+            try:
+                with transaction.atomic():
+                    stage_obj.delete()  # 删除
+                response['message'] = '追偿资料目录信息删除成功！'
+            except Exception as e:
+                response['status'] = False
+                response['message'] = '删除失败：%s' % str(e)
+        else:
             response['status'] = False
-            response['message'] = '删除失败：%s' % str(e)
+            response['message'] = '删除失败，只能删除该类型的最后一份资料目录！'
     else:
         response['status'] = False
         response['message'] = '状态为：%s，无法删除！！！' % dun_stage

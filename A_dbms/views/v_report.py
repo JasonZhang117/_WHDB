@@ -150,7 +150,7 @@ def report_balance_class(request, *args, **kwargs):  #
 
     provide_groups_breed = provide_groups.values(
         'provide_typ').annotate(
-        con=Count('provide_typ'), sum=Sum('provide_balance')).values(
+        con=Count('provide_money'), sum=Sum('provide_balance')).values(
         'provide_typ', 'con', 'sum').order_by('-sum')
     provide_groups_director = provide_groups.values(
         'notify__agree__lending__summary__director__name').annotate(
@@ -389,52 +389,63 @@ def report_accrual_class(request, *args, **kwargs):  #
     provide_groups = models.Provides.objects.filter(provide_date__year=dt_today.year)
     if tf_r and tl_r:
         provide_groups = models.Provides.objects.filter(provide_date__gte=tf_r, provide_date__lte=tl_r)
-
+    provide_old = provide_groups.aggregate(Sum('old_amount'))['old_amount__sum']  # 续贷金额
+    provide_new = provide_groups.aggregate(Sum('new_amount'))['new_amount__sum']  # 新增金额
     provide_balance = provide_groups.aggregate(Sum('provide_money'))['provide_money__sum']  # 放款金额
     provide_count = provide_groups.aggregate(Count('provide_money'))['provide_money__count']  # 放款项目数
 
     provide_groups_breed = provide_groups.values(
         'provide_typ').annotate(
-        con=Count('provide_typ'), sum=Sum('provide_money')).values(
-        'provide_typ', 'con', 'sum').order_by('-sum')
+        con=Count('provide_money'), sum_old=Sum('old_amount'), sum_new=Sum('new_amount'),
+        sum=Sum('provide_money')).values(
+        'provide_typ', 'con', 'sum_old', 'sum_new', 'sum').order_by('-sum')
     provide_groups_director = provide_groups.values(
         'notify__agree__lending__summary__director__name').annotate(
-        con=Count('provide_money'), sum=Sum('provide_money')).values(
-        'notify__agree__lending__summary__director__name', 'con', 'sum').order_by('-sum')
+        con=Count('provide_money'), sum_old=Sum('old_amount'), sum_new=Sum('new_amount'),
+        sum=Sum('provide_money')).values(
+        'notify__agree__lending__summary__director__name', 'con', 'sum_old', 'sum_new', 'sum').order_by('-sum')
     provide_groups_assistant = provide_groups.values(
         'notify__agree__lending__summary__assistant__name').annotate(
-        con=Count('provide_money'), sum=Sum('provide_money')).values(
-        'notify__agree__lending__summary__assistant__name', 'con', 'sum').order_by('-sum')
+        con=Count('provide_money'), sum_old=Sum('old_amount'), sum_new=Sum('new_amount'),
+        sum=Sum('provide_money')).values(
+        'notify__agree__lending__summary__assistant__name', 'con', 'sum_old', 'sum_new', 'sum').order_by('-sum')
     provide_groups_control = provide_groups.values(
         'notify__agree__lending__summary__control__name').annotate(
-        con=Count('provide_money'), sum=Sum('provide_money')).values(
-        'notify__agree__lending__summary__control__name', 'con', 'sum').order_by('-sum')
+        con=Count('provide_money'), sum_old=Sum('old_amount'), sum_new=Sum('new_amount'),
+        sum=Sum('provide_money')).values(
+        'notify__agree__lending__summary__control__name', 'con', 'sum_old', 'sum_new', 'sum').order_by('-sum')
     provide_groups_idustry = provide_groups.values(
         'notify__agree__lending__summary__custom__idustry__name').annotate(
-        con=Count('provide_money'), sum=Sum('provide_money')).values(
-        'notify__agree__lending__summary__custom__idustry__name', 'con', 'sum').order_by('-sum')
+        con=Count('provide_money'), sum_old=Sum('old_amount'), sum_new=Sum('new_amount'),
+        sum=Sum('provide_money')).values(
+        'notify__agree__lending__summary__custom__idustry__name', 'con', 'sum_old', 'sum_new', 'sum').order_by('-sum')
     provide_groups_district = provide_groups.values(
         'notify__agree__lending__summary__custom__district__name').annotate(
-        con=Count('provide_money'), sum=Sum('provide_money')).values(
-        'notify__agree__lending__summary__custom__district__name', 'con', 'sum').order_by('-sum')
+        con=Count('provide_money'), sum_old=Sum('old_amount'), sum_new=Sum('new_amount'),
+        sum=Sum('provide_money')).values(
+        'notify__agree__lending__summary__custom__district__name', 'con', 'sum_old', 'sum_new', 'sum').order_by('-sum')
     provide_groups_bank = provide_groups.values(
         'notify__agree__branch__cooperator__short_name').annotate(
-        con=Count('provide_money'), sum=Sum('provide_money')).values(
-        'notify__agree__branch__cooperator__short_name', 'con', 'sum').order_by('-sum')
+        con=Count('provide_money'),sum_old=Sum('old_amount'), sum_new=Sum('new_amount'),
+        sum=Sum('provide_money')).values(
+        'notify__agree__branch__cooperator__short_name', 'con', 'sum_old', 'sum_new', 'sum').order_by('-sum')
     provide_groups_branch = provide_groups.values(
         'notify__agree__branch__short_name').annotate(
-        con=Count('provide_money'), sum=Sum('provide_money')).values(
-        'notify__agree__branch__short_name', 'con', 'sum').order_by('-sum')
+        con=Count('provide_money'), sum_old=Sum('old_amount'), sum_new=Sum('new_amount'),
+        sum=Sum('provide_money')).values(
+        'notify__agree__branch__short_name', 'con', 'sum_old', 'sum_new', 'sum').order_by('-sum')
     provide_groups_depart = provide_groups.values(
         'notify__agree__lending__summary__director__department__name').annotate(
-        con=Count('provide_money'), sum=Sum('provide_money')).values(
-        'notify__agree__lending__summary__director__department__name', 'con', 'sum').order_by('-sum')
+        con=Count('provide_money'), sum_old=Sum('old_amount'), sum_new=Sum('new_amount'),
+        sum=Sum('provide_money')).values(
+        'notify__agree__lending__summary__director__department__name', 'con', 'sum_old', 'sum_new', 'sum').order_by('-sum')
     provide_groups_organization = provide_groups.values(
         'notify__agree__lending__summary__expert__organization').annotate(
-        con=Count('provide_money'), sum=Sum('provide_money')).values(
-        'notify__agree__lending__summary__expert__organization', 'con', 'sum').order_by('-sum')
+        con=Count('provide_money'), sum_old=Sum('old_amount'), sum_new=Sum('new_amount'),
+        sum=Sum('provide_money')).values(
+        'notify__agree__lending__summary__expert__organization', 'con', 'sum_old', 'sum_new', 'sum').order_by('-sum')
 
-    return render(request, 'dbms/report/balance-class-provide.html', locals())
+    return render(request, 'dbms/report/balance-class-accrual.html', locals())
 
 
 # -----------------------项目分类统计---------------------#
@@ -486,7 +497,7 @@ def report_article(request, *args, **kwargs):  #
     '''ARTICLE_STATE_LIST = [(1, '待反馈'), (2, '已反馈'), (3, '待上会'), (4, '已上会'), (5, '已签批'),
                           (51, '已放款'), (52, '已放完'), (55, '已解保'), (61, '待变更'), (99, '已注销')]'''
     if tf_r and tl_r:
-        article_groups = models.Articles.objects.filter(article_state__in=[1, 2, 3, 4, 5, 51, 52, 55, 61,99],
+        article_groups = models.Articles.objects.filter(article_state__in=[1, 2, 3, 4, 5, 51, 52, 55, 61, 99],
                                                         build_date__gte=tf_r, build_date__lte=tl_r)
 
     article_renewal = article_groups.aggregate(Sum('renewal'))['renewal__sum']  # 续贷金额
@@ -687,15 +698,15 @@ def report_dun(request, *args, **kwargs):  #
     charge_count = charge_groups.aggregate(Count('charge_amount'))['charge_amount__count']  # 项目数
     retrieve_count = retrieve_groups.aggregate(Count('retrieve_amount'))['retrieve_amount__count']  # 项目数
 
-    charge_dun = charge_groups.values(
-        'dun__compensatory__provide__notify__agree__lending__summary__custom__name').annotate(
-        con=Count('charge_amount'), sum=Sum('charge_amount'), ). \
-        values('dun__compensatory__provide__notify__agree__lending__summary__custom__name',
-               'con', 'sum', ).order_by('-charge_amount')  # 追偿费用
-    retrieve_dun = retrieve_groups.values(
-        'dun__compensatory__provide__notify__agree__lending__summary__custom__name').annotate(
-        con=Count('retrieve_amount'), sum=Sum('retrieve_amount'), ). \
-        values('dun__compensatory__provide__notify__agree__lending__summary__custom__name',
-               'con', 'sum', ).order_by('-retrieve_amount')  # 案款回收
+    # charge_dun = charge_groups.values(
+    #     'dun__compensatory__provide__notify__agree__lending__summary__custom__name').annotate(
+    #     con=Count('charge_amount'), sum=Sum('charge_amount'), ). \
+    #     values('dun__compensatory__provide__notify__agree__lending__summary__custom__name',
+    #            'con', 'sum', ).order_by('-charge_amount')  # 追偿费用
+    # retrieve_dun = retrieve_groups.values(
+    #     'dun__compensatory__provide__notify__agree__lending__summary__custom__name').annotate(
+    #     con=Count('retrieve_amount'), sum=Sum('retrieve_amount'), ). \
+    #     values('dun__compensatory__provide__notify__agree__lending__summary__custom__name',
+    #            'con', 'sum', ).order_by('-retrieve_amount')  # 案款回收
 
     return render(request, 'dbms/report/balance-class-dun.html', locals())

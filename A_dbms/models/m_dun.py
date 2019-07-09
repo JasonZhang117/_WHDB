@@ -172,6 +172,8 @@ class Stage(models.Model):
     stage_file = models.CharField(verbose_name='文件', max_length=64)
     stage_date = models.DateField(verbose_name='文件日期')
 
+    page_amout = models.IntegerField(verbose_name='页数')
+
     stage_remark = models.CharField(verbose_name='索引号', max_length=64, blank=True, null=True)
     stagor = models.ForeignKey(to='Employees', verbose_name="创建人", on_delete=models.PROTECT,
                                related_name='stagor_employee')
@@ -180,6 +182,7 @@ class Stage(models.Model):
     class Meta:
         verbose_name_plural = '追偿-追偿阶段'  # 指定显示名称
         db_table = 'dbms_stage'  # 指定数据表的名称
+        ordering = ['stage_type', 'stage_remark']
 
     def __str__(self):
         return '%s_%s_%s' % (self.stage_type, self.stage_file, self.stage_date)

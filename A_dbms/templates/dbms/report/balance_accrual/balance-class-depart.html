@@ -1,0 +1,30 @@
+<div class="table-responsive">
+    <table class="table table-bordered table-hover table-condensed active">
+        <caption>{{ PAGE_TITLE }}统计表（按项部门）（{{ tf_r }}至{{ tl_r }}）</caption>
+        <thead>
+        <tr style="text-align: center">
+            <th>序号</th>
+            <th>部门</th>
+            <th>放款笔数</th>
+            {% if PAGE_TITLE == '在保分类(按放款)' %}
+                <th>担保余额</th>
+            {% elif  PAGE_TITLE == '放款分类' %}
+                <th>发放额</th>
+            {% endif %}
+        </tr>
+        </thead>
+        <tbody>
+        {% for depart in provide_groups_depart %}
+            <tr>
+                <td>{{ forloop.counter }}</td>
+                <td>{{ depart.notify__agree__lending__summary__director__department__name }}</td>
+                <td align="right">{{ depart.con }}</td>
+                <td align="right">{{ depart.sum_old|floatformat:2  }}</td>
+                <td align="right">{{ depart.sum_new|floatformat:2  }}</td>
+                <td align="right">{{ depart.sum|floatformat:2 }}</td>
+            </tr>
+        {% endfor %}
+        {% include 'dbms/report/balance_accrual/balance-class.html' %}
+        </tbody>
+    </table>
+</div>

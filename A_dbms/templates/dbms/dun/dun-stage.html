@@ -30,7 +30,7 @@
                     <td class="btt">索引号</td>
                     <td class="btt">内容</td>
                     <td class="btt">原件/复印件</td>
-                    <td class="btt">页码</td>
+                    <td class="btt">页数</td>
                     <td class="btt" width="120pt">文件日期</td>
                 </tr>
                 {% if dun_stage_1 %}
@@ -48,7 +48,7 @@
                             <td class="btt">{{ item.stage_remark }}</td>
                             <td class="btt">{{ item.stage_file }}</td>
                             <td class="btt">{{ item.get_stage_state_display }}</td>
-                            <td class="btt">{{ item.stage_remark }}</td>
+                            <td class="btt" align="center">{{ item.page_amout }}</td>
                             <td class="btt">{{ item.stage_date }}</td>
                         </tr>
                     {% endfor %}
@@ -68,7 +68,7 @@
                             <td class="btt">{{ item.stage_remark }}</td>
                             <td class="btt">{{ item.stage_file }}</td>
                             <td class="btt">{{ item.get_stage_state_display }}</td>
-                            <td class="btt">{{ item.stage_remark }}</td>
+                            <td class="btt" align="center">{{ item.page_amout }}</td>
                             <td class="btt">{{ item.stage_date }}</td>
                         </tr>
                     {% endfor %}
@@ -88,7 +88,7 @@
                             <td class="btt">{{ item.stage_remark }}</td>
                             <td class="btt">{{ item.stage_file }}</td>
                             <td class="btt">{{ item.get_stage_state_display }}</td>
-                            <td class="btt">{{ item.stage_remark }}</td>
+                            <td class="btt" align="center">{{ item.page_amout }}</td>
                             <td class="btt">{{ item.stage_date }}</td>
                         </tr>
                     {% endfor %}
@@ -108,7 +108,7 @@
                             <td class="btt">{{ item.stage_remark }}</td>
                             <td class="btt">{{ item.stage_file }}</td>
                             <td class="btt">{{ item.get_stage_state_display }}</td>
-                            <td class="btt">{{ item.stage_remark }}</td>
+                            <td class="btt" align="center">{{ item.page_amout }}</td>
                             <td class="btt">{{ item.stage_date }}</td>
                         </tr>
                     {% endfor %}
@@ -128,7 +128,7 @@
                             <td class="btt">{{ item.stage_remark }}</td>
                             <td class="btt">{{ item.stage_file }}</td>
                             <td class="btt">{{ item.get_stage_state_display }}</td>
-                            <td class="btt">{{ item.stage_remark }}</td>
+                            <td class="btt" align="center">{{ item.page_amout }}</td>
                             <td class="btt">{{ item.stage_date }}</td>
                         </tr>
                     {% endfor %}
@@ -148,7 +148,7 @@
                             <td class="btt">{{ item.stage_remark }}</td>
                             <td class="btt">{{ item.stage_file }}</td>
                             <td class="btt">{{ item.get_stage_state_display }}</td>
-                            <td class="btt">{{ item.stage_remark }}</td>
+                            <td class="btt" align="center">{{ item.page_amout }}</td>
                             <td class="btt">{{ item.stage_date }}</td>
                         </tr>
                     {% endfor %}
@@ -168,7 +168,7 @@
                             <td class="btt">{{ item.stage_remark }}</td>
                             <td class="btt">{{ item.stage_file }}</td>
                             <td class="btt">{{ item.get_stage_state_display }}</td>
-                            <td class="btt">{{ item.stage_remark }}</td>
+                            <td class="btt" align="center">{{ item.page_amout }}</td>
                             <td class="btt">{{ item.stage_date }}</td>
                         </tr>
                     {% endfor %}

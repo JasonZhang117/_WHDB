@@ -6,6 +6,7 @@
             <th>流程</th>
             <th>文件</th>
             <th>文件类型</th>
+            <th>页数</th>
             <th>文件日期</th>
             <th>操作</th>
         </tr>
@@ -17,6 +18,7 @@
                 <td>{{ stag.get_stage_type_display }}</td>
                 <td>{{ stag.stage_file }}</td>
                 <td>{{ stag.get_stage_state_display }}</td>
+                <td align="center">{{ stag.page_amout }}</td>
                 <td>{{ stag.stage_date }}</td>
                 <td><a class="btn btn-primary btn-xs delStageB">删除</a></td>
             <tr>

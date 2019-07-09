@@ -8,7 +8,7 @@
             {% endif %}
             {# 方式一：#}
             {% for item in COOPERATOR_TYPE_LIST %}
-                {% if item.0 == kwargs.cooperator_state %}
+                {% if item.0 == kwargs.cooperator_type %}
                     <a class="active btn btn-primary btn-sm"
                        href="{% url 'dbms:cooperative' cooperator_type=item.0 %}">{{ item.1 }}</a>
                 {% else %}
@@ -31,6 +31,6 @@
         </label>
     {% endif %}
     <label>
-        授信额度：{{ flow_credit_amount }}，在保余额：{{ balance }}（流贷：{{ flow_amount }}，承兑：{{ accept_amount }}，保函：{{ back_amount }}）
+        授信额度：{{ flow_credit_amount|floatformat:2 }}，在保余额：{{ balance|floatformat:2 }}
     </label>
 </div>
