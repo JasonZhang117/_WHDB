@@ -32,7 +32,7 @@ def review(request, *args, **kwargs):  # 保后列表
     custom_back = models.FloatField(verbose_name='_保函余额', default=0)
     '''
     '''CUSTOM_STATE_LIST = [(11, '担保客户'), (21, '反担保客户'), (99, '注销')]'''
-    custom_list = custom_list.filter(custom_state=11, amount__gt=0).order_by('lately_date')
+    custom_list = custom_list.filter(Q(custom_state=11) | Q(amount__gt=0)).order_by('lately_date')
 
     '''搜索条件'''
     search_key = request.GET.get('_s')

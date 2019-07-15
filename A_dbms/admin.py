@@ -48,7 +48,13 @@ class SingleQuotaAdmin(admin.ModelAdmin):
 admin.site.register(models.SingleQuota, SingleQuotaAdmin)  # 单项额度
 admin.site.register(models.Supply)  # 单项额度
 admin.site.register(models.Comments)  # 评审意见
-admin.site.register(models.LendingOrder)  # 发放次序
+class LendingOrderAdmin(admin.ModelAdmin):
+    list_display = ('summary', 'order', 'order_amount', 'lending_state', 'lending_provide_sum',
+                    'lending_repayment_sum', 'lending_balance')  # 显示字段
+    list_per_page = 200  # 每页显示条目数
+    # search_fields = ['article_num']  # 搜索字段
+    # ordering = ['num']  # 排序字段
+admin.site.register(models.LendingOrder,LendingOrderAdmin)  # 发放次序
 
 
 class LendingSuresAdmin(admin.ModelAdmin):
@@ -188,7 +194,17 @@ admin.site.register(models.Agent)  # 代理情况
 admin.site.register(models.Staff)  # 人员模型
 admin.site.register(models.Charge)  # 费用情况
 admin.site.register(models.Retrieve)  # 回收情况
-admin.site.register(models.Stage)  # 阶段情况
+
+
+class StageAdmin(admin.ModelAdmin):
+    list_display = (
+    'dun', 'stage_remark', 'stage_type', 'stage_state', 'stage_file', 'stage_date', 'page_amout')  # 显示字段
+    list_per_page = 200  # 每页显示条目数
+    search_fields = ['stage_remark','stage_file']  # 搜索字段
+    # ordering = ['title']  # 排序字段
+
+
+admin.site.register(models.Stage, StageAdmin)  # 阶段情况
 admin.site.register(models.Judgment)  # 判决
 admin.site.register(models.Standing)  # 台账
 admin.site.register(models.Seal)  # 财产线索

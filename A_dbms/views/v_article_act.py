@@ -51,9 +51,11 @@ def article_add_ajax(request):  # 添加项目
                     article_num=article_num, custom_id=custom_id, renewal=renewal,
                     augment=augment, amount=amount, credit_term=cleaned_data['credit_term'],
                     director_id=cleaned_data['director_id'], assistant_id=cleaned_data['assistant_id'],
-                    control_id=cleaned_data['control_id'], article_buildor=request.user)
+                    control_id=cleaned_data['control_id'],
+                    article_buildor=request.user)
                 models.Customes.objects.filter(article_custom=article_obj).update(
-                    lately_date=datetime.date.today(), managementor_id=cleaned_data['director_id'])
+                    lately_date=datetime.date.today(), managementor_id=cleaned_data['director_id'],
+                    controler_id=cleaned_data['control_id'], )
             response['message'] = '成功创建项目：%s！' % article_obj.article_num
             response['skip'] = "/dbms/article/"
         except Exception as e:
@@ -93,7 +95,7 @@ def article_edit_ajax(request):  # 修改项目ajax
                     director_id=cleaned_data['director_id'], assistant_id=cleaned_data['assistant_id'],
                     control_id=cleaned_data['control_id'], article_buildor=request.user)
                 models.Customes.objects.filter(article_custom=article_obj).update(
-                    managementor_id=cleaned_data['director_id'])
+                    managementor_id=cleaned_data['director_id'], controler_id=cleaned_data['control_id'], )
                 response['message'] = '成功修改项目：%s！' % article_obj.article_num
             except Exception as e:
                 response['status'] = False

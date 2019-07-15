@@ -167,14 +167,13 @@ def home(request):
     print("request.session.get('authority_list'):", request.session.get('authority_list'))
     print("request.session.get('menu_leaf_list'):", request.session.get('menu_leaf_list'))
 
-    '''CUSTOM_STATE_LIST = [(1, '正常'), (11, '担保客户'), (21, '反担保客户'), (99, '注销')]'''
-    # custom_list = models.Industries.objects.all()
+    # custom_list = models.Customes.objects.filter(custom_state=11, amount__lte=0)
+    # print(custom_list)
     # for custom in custom_list:
-    #     cn = '%s-%s' %(custom.code,custom.name)
-    #     models.Industries.objects.filter(id=custom.id).update(cod_nam=cn)
-    provide_lise = models.Provides.objects.all()
-    '''NEW_OLD_LIST = [(11, '续贷'), (21, '新增'), (99, '--')]
-    new_old = models.IntegerField(verbose_name='新增/续贷', choices=NEW_OLD_LIST, default=99)'''
+    #     '''CUSTOM_STATE_LIST = [(11, '担保客户'), (21, '反担保客户'), (99, '注销客户')]'''
+    #     controlor = models.Articles.objects.filter(custom=custom).order_by('-build_date').first()
+    #     if controlor:
+    #         models.Customes.objects.filter(id=custom.id).update(controler=controlor.control)
 
     return render(request, 'test.html', locals())
 

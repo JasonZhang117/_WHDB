@@ -50,7 +50,8 @@ def article(request, *args, **kwargs):  # 项目列表
     '''搜索'''
     search_key = request.GET.get('_s')
     if search_key:
-        search_fields = ['custom__name', 'custom__name', 'director__name', 'assistant__name', 'control__name']
+        search_fields = ['article_num', 'custom__name', 'custom__name', 'director__name',
+                         'assistant__name', 'control__name']
         q = Q()
         q.connector = 'OR'
         for field in search_fields:

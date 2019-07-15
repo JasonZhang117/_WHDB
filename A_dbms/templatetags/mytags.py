@@ -239,6 +239,5 @@ def decision(agree_id):
     for field in search_fields:
         q.children.append(("%s__in" % field, counter_agree_list))
     counter_custom_list = models.Customes.objects.filter(q)
-    print('counter_custom_list:', counter_custom_list)
     if agree_custom_obj.genre == 1:
         result = '<p>%s股东会决议</p>'

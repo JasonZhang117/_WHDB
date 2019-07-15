@@ -58,14 +58,14 @@ class EmployeesAdmin(BaseUserAdmin):
     add_form = UserCreationForm
     '''The fields to be used in displaying the User model.
     These override the definitions on the base UserAdmin that reference specific fields on auth.User.'''
-    list_display = ('email', 'name', 'num',  'department', 'is_superuser')
+    list_display = ('email', 'name', 'num', 'department', 'is_superuser')
     list_filter = ('is_superuser',)
     fieldsets = (
         (None, {'fields': ('email', 'password')}),
         ('Personal info', {'fields': ('name',)}),
         ('Permissions',
          {'fields': ('is_active', 'is_staff',
-                     'is_superuser', 'employee_status','job','department',
+                     'is_superuser', 'employee_status', 'job', 'department',
                      'user_permissions', 'groups')}),)
     '''add_fieldsets is not a standard ModelAdmin attribute.
     UserAdmin overrides get_fieldsets to use this attribute when creating a user.'''
@@ -74,6 +74,6 @@ class EmployeesAdmin(BaseUserAdmin):
             'classes': ('wide',),
             'fields': ('email', 'name', 'num',
                        'password1', 'password2')}),)
-    search_fields = ('email',)
+    search_fields = ('email', 'name',)
     ordering = ('email',)
     filter_horizontal = ("job", 'user_permissions', 'groups')

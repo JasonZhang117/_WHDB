@@ -656,6 +656,11 @@ def article_sign_ajax(request):
                                     convenor_opinion=cleaned_data['convenor_opinion'],
                                     sign_date=cleaned_data['sign_date'],
                                     article_state=5)
+                                # 更新放款次序状态
+                                '''LENDING_STATE = [(3, '待上会'), (4, '已上会'), (5, '已签批'),
+                                                     (51, '已放款'), (52, '已放完'), (55, '已解保'), (61, '待变更'),
+                                                      (99, '已注销')]'''
+                                models.LendingOrder.objects.filter(summary=article_obj).update(lending_state=4)
                                 # 更新客户授信总额
                                 custom_id = article_obj.custom.id
                                 models.Customes.objects.filter(id=custom_id).update(
@@ -713,6 +718,11 @@ def article_change_ajax(request):
                         models.ArticleChange.objects.create(
                             article=article_obj, change_view=change_view, change_detail=change_cleaned['change_detail'],
                             change_date=change_cleaned['change_date'], change_buildor=request.user)
+                        # 更新放款次序状态
+                        '''LENDING_STATE = [(3, '待上会'), (4, '已上会'), (5, '已签批'),
+                                             (51, '已放款'), (52, '已放完'), (55, '已解保'), (61, '待变更'),
+                                              (99, '已注销')]'''
+                        models.LendingOrder.objects.filter(summary=article_obj).update(lending_state=61)
                     response['message'] = '项目变更成功，请重新设置方案！'
                 except Exception as e:
                     response['status'] = False

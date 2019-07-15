@@ -46,6 +46,9 @@ class Customes(models.Model):  # 客户
     managementor = models.ForeignKey(to='Employees', verbose_name="管护经理",
                                      on_delete=models.PROTECT, default=28,
                                      related_name='manage_employee')
+    controler = models.ForeignKey(to='Employees', verbose_name="风控专员",
+                                  on_delete=models.PROTECT, default=28,
+                                  related_name='controler_employee')
     custom_buildor = models.ForeignKey(to='Employees', verbose_name="_创建者",
                                        on_delete=models.PROTECT, default=28,
                                        related_name='custom_buildor_employee')

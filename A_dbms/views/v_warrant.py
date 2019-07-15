@@ -127,7 +127,7 @@ def warrant_scan(request, warrant_id):  # house_scan房产预览
             'frame_num': warrant_obj.vehicle_warrant.frame_num,
             'plate_num': warrant_obj.vehicle_warrant.plate_num,
             'vehicle_brand': warrant_obj.vehicle_warrant.vehicle_brand,
-            'vehicle_remark': warrant_obj.vehicle_warrant.vehicle_remark,}
+            'vehicle_remark': warrant_obj.vehicle_warrant.vehicle_remark, }
         form_vehicle_eidt = forms.FormVehicleEdit(initial=form_date)  # 41车辆添加
     elif warrant_typ == 51:  # 51动产添加
         form_date = {
@@ -454,8 +454,10 @@ def overdue_evaluate(request, *args, **kwargs):  #
                                (41, '拍卖评估'), (99, '无需评估')]'''
     '''ARTICLE_STATE_LIST = [(1, '待反馈'), (2, '已反馈'), (3, '待上会'), (4, '已上会'), (5, '已签批'),
                           (51, '已放款'), (52, '已放完'), (55, '已解保'), (61, '待变更'), (99, '已注销')]'''
+    '''LENDING_STATE = [(4, '已上会'), (5, '已签批'),
+                     (51, '已放款'), (52, '已放完'), (55, '已解保'), (61, '待变更'), (99, '已注销')]'''
     warrant_list = warrant_list.filter(
-        lending_warrant__sure__lending__summary__article_state__in=[4, 5, 51, 52, 61]).distinct()
+        lending_warrant__sure__lending__lending_state__in=[5, 51, 52, 61]).distinct()
     ddd = []
     for warrant in warrant_list:
         if warrant.evaluate_state == 0:
@@ -511,7 +513,7 @@ def overdue_storage(request, *args, **kwargs):  #
     '''ARTICLE_STATE_LIST = [(1, '待反馈'), (2, '已反馈'), (3, '待上会'), (4, '已上会'), (5, '已签批'),
                               (51, '已放款'), (52, '已放完'), (55, '已解保'), (61, '待变更'), (99, '已注销')]'''
     warrant_list = warrant_list.filter(
-        lending_warrant__sure__lending__summary__article_state__in=[51, 52, 61]).distinct()
+        lending_warrant__sure__lending__lending_state__in=[51, 52, 61]).distinct()
     '''搜索'''
     search_key = request.GET.get('_s')
     if search_key:

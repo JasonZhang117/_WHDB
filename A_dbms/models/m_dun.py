@@ -182,7 +182,7 @@ class Stage(models.Model):
     class Meta:
         verbose_name_plural = '追偿-追偿阶段'  # 指定显示名称
         db_table = 'dbms_stage'  # 指定数据表的名称
-        ordering = ['stage_type', 'stage_remark']
+        ordering = ['stage_type', 'id']
 
     def __str__(self):
         return '%s_%s_%s' % (self.stage_type, self.stage_file, self.stage_date)

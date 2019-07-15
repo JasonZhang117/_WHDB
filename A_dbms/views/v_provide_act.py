@@ -299,7 +299,7 @@ def provide_add_ajax(request):
                 with transaction.atomic():
                     provide_obj = models.Provides.objects.create(
                         notify=notify_obj, provide_typ=form_provide_cleaned['provide_typ'],
-                        old_amount=old_amount, new_amount=new_amount,provide_money=provide_money,
+                        old_amount=old_amount, new_amount=new_amount, provide_money=provide_money,
                         provide_date=form_provide_cleaned['provide_date'],
                         due_date=form_provide_cleaned['due_date'], provide_balance=provide_money,
                         providor=request.user)
@@ -325,8 +325,19 @@ def provide_add_ajax(request):
                         notify__agree__lending=lending_obj).aggregate(Sum('provide_money'))['provide_money__sum']
                     lending_provide_balance = models.Provides.objects.filter(
                         notify__agree__lending=lending_obj).aggregate(Sum('provide_balance'))['provide_balance__sum']
-                    lending_list.update(lending_provide_sum=round(lending_provide_amount, 2),
-                                        lending_balance=round(lending_provide_balance, 2))  # 放款次序，更新放款总额
+                    '''LENDING_STATE = [(3, '待上会'), (4, '已上会'), (5, '已签批'),
+                                             (51, '已放款'), (52, '已放完'), (55, '已解保'), (61, '待变更'),
+                                              (99, '已注销')]'''
+                    lending_weight_amount = models.Notify.objects.filter(
+                        agree__lending=lending_obj).aggregate(Sum('weighting'))['weighting__sum']
+                    if round(lending_weight_amount, 2) == round(lending_obj.order_amount, 2):
+                        lending_list.update(lending_provide_sum=round(lending_provide_amount, 2),
+                                            lending_balance=round(lending_provide_balance, 2),
+                                            lending_state=52)  # 放款次序，更新放款总额,状态
+                    else:
+                        lending_list.update(lending_provide_sum=round(lending_provide_amount, 2),
+                                            lending_balance=round(lending_provide_balance, 2),
+                                            lending_state=51)  # 放款次序，更新放款总额,状态
                     '''article_provide_sum，更新项目放款信息'''
                     article_list = models.Articles.objects.filter(lending_summary=lending_obj)  # 项目
                     article_obj = article_list.first()
@@ -475,7 +486,10 @@ def provide_del_ajax(request):  # 删除放款ajax
                 lending_list.update(lending_provide_sum=round(lending_provide_amount, 2),
                                     lending_balance=round(lending_provide_balance, 2))  # 放款次序，更新放款总额
             else:
-                lending_list.update(lending_provide_sum=0, lending_balance=0)  # 放款次序，更新放款总额
+                '''LENDING_STATE = [(3, '待上会'), (4, '已上会'), (5, '已签批'),
+                                                             (51, '已放款'), (52, '已放完'), (55, '已解保'),
+                                                              (61, '待变更'),(99, '已注销')]'''
+                lending_list.update(lending_provide_sum=0, lending_balance=0, lending_state=5)  # 放款次序，更新放款总额
             '''article_provide_sum，更新项目放款信息'''
             article_list = models.Articles.objects.filter(lending_summary=lending_obj)  # 项目
             article_obj = article_list.first()
@@ -687,8 +701,16 @@ def repayment_add_ajax(request):
                         Sum('repayment_money'))['repayment_money__sum']
                     lending_provide_balance = models.Provides.objects.filter(
                         notify__agree__lending=lending_obj).aggregate(Sum('provide_balance'))['provide_balance__sum']
-                    lending_list.update(lending_repayment_sum=round(lending_repayment_amount, 2),
-                                        lending_balance=round(lending_provide_balance, 2))  # 放款次序，更新还款总额
+                    if round(lending_provide_balance) == 0:  # 在保余额为0
+                        '''LENDING_STATE = [(3, '待上会'), (4, '已上会'), (5, '已签批'),
+                                            (51, '已放款'), (52, '已放完'), (55, '已解保'), 
+                                            (61, '待变更'),(99, '已注销')]'''
+                        lending_list.update(lending_repayment_sum=round(lending_repayment_amount, 2),
+                                            lending_balance=round(lending_provide_balance, 2),
+                                            lending_state=55)  # 放款次序，更新还款总额
+                    else:
+                        lending_list.update(lending_repayment_sum=round(lending_repayment_amount, 2),
+                                            lending_balance=round(lending_provide_balance, 2))  # 放款次序，更新还款总额
                     '''article_repayment_sum，更新项目还款信息'''
                     article_list = models.Articles.objects.filter(lending_summary=lending_obj)  # 项目
                     article_obj = article_list.first()
@@ -846,11 +868,19 @@ def repayment_del_ajax(request):  # 删除还款信息ajax
                     Sum('repayment_money'))['repayment_money__sum']
                 lending_provide_balance = models.Provides.objects.filter(
                     notify__agree__lending=lending_obj).aggregate(Sum('provide_balance'))['provide_balance__sum']
+
+                lending_weight_amount = models.Notify.objects.filter(
+                    agree__lending=lending_obj).aggregate(Sum('weighting'))['weighting__sum']
+                if round(lending_weight_amount, 2) == round(lending_obj.order_amount, 2):
+                    lending_state_n = 52  # 加权通知金额合计与放款次序金额对比
+                else:
+                    lending_state_n = 51
                 if lending_repayment_amount:
                     lending_list.update(lending_repayment_sum=round(lending_repayment_amount, 2),
+                                        lending_state=lending_state_n,
                                         lending_balance=round(lending_provide_balance, 2))  # 放款次序，更新还款总额
                 else:
-                    lending_list.update(lending_repayment_sum=0,
+                    lending_list.update(lending_repayment_sum=0, lending_state=lending_state_n,
                                         lending_balance=round(lending_provide_balance, 2))  # 放款次序，更新还款总额
                 '''article_repayment_sum，更新项目还款信息'''
                 article_list = models.Articles.objects.filter(lending_summary=lending_obj)  # 项目

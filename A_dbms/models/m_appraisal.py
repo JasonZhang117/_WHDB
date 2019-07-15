@@ -104,6 +104,9 @@ class LendingOrder(models.Model):
     order = models.IntegerField(verbose_name='发放次序', choices=ORDER_LIST, default=1)
     order_amount = models.FloatField(verbose_name='拟放金额')
     remark = models.CharField(verbose_name='备注', max_length=128, null=True, blank=True)
+    LENDING_STATE = [(4, '已上会'), (5, '已签批'),
+                     (51, '已放款'), (52, '已放完'), (55, '已解保'), (61, '待变更'), (99, '已注销')]
+    lending_state = models.IntegerField(verbose_name='_次序状态', choices=LENDING_STATE, default=4)
     lending_provide_sum = models.FloatField(verbose_name='_放款金额', default=0)
     lending_repayment_sum = models.FloatField(verbose_name='_还款金额', default=0)
     lending_balance = models.FloatField(verbose_name='_在保余额', default=0)
@@ -119,7 +122,7 @@ class LendingOrder(models.Model):
         unique_together = ('summary', 'order')
 
     def __str__(self):
-        return "%s_%s" % (self.summary.summary_num, self.order)
+        return "%s_%s" % (self.summary.article_num, self.order)
 
 
 # ------------------------反担保措施--------------------------#

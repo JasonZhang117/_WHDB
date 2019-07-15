@@ -64,8 +64,12 @@ def report_provide_list(request, *args, **kwargs):  #
         tf_r = datetime.date(dt_today.year - 1, 1, 1).isoformat()  # 上年第一天
         tl_r = datetime.date(dt_today.year - 1, 12, 31).isoformat()  # 上年最后一天
     elif t_typ == 99:
-        tf_r = tf_r
-        tl_r = tl_r
+        if tf_r and tl_r:
+            tf_r = tf_r
+            tl_r = tl_r
+        else:
+            tf_r = datetime.date(dt_today.year, 1, 1).isoformat()  # 本年第一天
+            tl_r = datetime.date(dt_today.year, 12, 31).isoformat()  # 本年最后一天
     provide_list = models.Provides.objects.filter(provide_status=1).select_related('notify').order_by('-provide_date')
     if tf_r and tl_r:
         if p_typ:
@@ -90,6 +94,7 @@ def report_provide_list(request, *args, **kwargs):  #
             q.children.append(("%s__contains" % field, search_key))
         provide_list = provide_list.filter(q)
     provide_balance = provide_list.aggregate(Sum('provide_balance'))['provide_balance__sum']  # 放款金额
+    provide_provide = provide_list.aggregate(Sum('provide_money'))['provide_money__sum']  # 放款金额
 
     return render(request, 'dbms/report/provide_list.html', locals())
 
@@ -138,8 +143,12 @@ def report_balance_class(request, *args, **kwargs):  #
         tf_r = datetime.date(dt_today.year - 1, 1, 1).isoformat()  # 上年第一天
         tl_r = datetime.date(dt_today.year - 1, 12, 31).isoformat()  # 上年最后一天
     elif t_typ == 99:
-        tf_r = tf_r
-        tl_r = tl_r
+        if tf_r and tl_r:
+            tf_r = tf_r
+            tl_r = tl_r
+        else:
+            tf_r = datetime.date(dt_today.year, 1, 1).isoformat()  # 本年第一天
+            tl_r = datetime.date(dt_today.year, 12, 31).isoformat()  # 本年最后一天
     provide_groups = models.Provides.objects.filter(provide_status=1)
     if tf_r and tl_r:
         provide_groups = models.Provides.objects.filter(provide_status=1, provide_date__gte=tf_r,
@@ -315,8 +324,12 @@ def report_provide_accrual(request, *args, **kwargs):  #
         tf_r = datetime.date(dt_today.year - 1, 1, 1).isoformat()  # 上年第一天
         tl_r = datetime.date(dt_today.year - 1, 12, 31).isoformat()  # 上年最后一天
     elif t_typ == 99:
-        tf_r = tf_r
-        tl_r = tl_r
+        if tf_r and tl_r:
+            tf_r = tf_r
+            tl_r = tl_r
+        else:
+            tf_r = datetime.date(dt_today.year, 1, 1).isoformat()  # 本年第一天
+            tl_r = datetime.date(dt_today.year, 12, 31).isoformat()  # 本年最后一天
     provide_list = models.Provides.objects.filter(provide_date__year=dt_today.year). \
         select_related('notify').order_by('-provide_date')
     if tf_r and tl_r:
@@ -339,7 +352,8 @@ def report_provide_accrual(request, *args, **kwargs):  #
         for field in search_fields:
             q.children.append(("%s__contains" % field, search_key))
         provide_list = provide_list.filter(q)
-    provide_balance = provide_list.aggregate(Sum('provide_money'))['provide_money__sum']  # 放款金额
+    provide_balance = provide_list.aggregate(Sum('provide_balance'))['provide_balance__sum']  # 放款金额
+    provide_provide = provide_list.aggregate(Sum('provide_money'))['provide_money__sum']  # 放款金额
 
     return render(request, 'dbms/report/provide_list.html', locals())
 
@@ -384,8 +398,12 @@ def report_accrual_class(request, *args, **kwargs):  #
         tf_r = datetime.date(dt_today.year - 1, 1, 1).isoformat()  # 上年第一天
         tl_r = datetime.date(dt_today.year - 1, 12, 31).isoformat()  # 上年最后一天
     elif t_typ == 99:
-        tf_r = tf_r
-        tl_r = tl_r
+        if tf_r and tl_r:
+            tf_r = tf_r
+            tl_r = tl_r
+        else:
+            tf_r = datetime.date(dt_today.year, 1, 1).isoformat()  # 本年第一天
+            tl_r = datetime.date(dt_today.year, 12, 31).isoformat()  # 本年最后一天
     provide_groups = models.Provides.objects.filter(provide_date__year=dt_today.year)
     if tf_r and tl_r:
         provide_groups = models.Provides.objects.filter(provide_date__gte=tf_r, provide_date__lte=tl_r)
@@ -426,7 +444,7 @@ def report_accrual_class(request, *args, **kwargs):  #
         'notify__agree__lending__summary__custom__district__name', 'con', 'sum_old', 'sum_new', 'sum').order_by('-sum')
     provide_groups_bank = provide_groups.values(
         'notify__agree__branch__cooperator__short_name').annotate(
-        con=Count('provide_money'),sum_old=Sum('old_amount'), sum_new=Sum('new_amount'),
+        con=Count('provide_money'), sum_old=Sum('old_amount'), sum_new=Sum('new_amount'),
         sum=Sum('provide_money')).values(
         'notify__agree__branch__cooperator__short_name', 'con', 'sum_old', 'sum_new', 'sum').order_by('-sum')
     provide_groups_branch = provide_groups.values(
@@ -438,7 +456,8 @@ def report_accrual_class(request, *args, **kwargs):  #
         'notify__agree__lending__summary__director__department__name').annotate(
         con=Count('provide_money'), sum_old=Sum('old_amount'), sum_new=Sum('new_amount'),
         sum=Sum('provide_money')).values(
-        'notify__agree__lending__summary__director__department__name', 'con', 'sum_old', 'sum_new', 'sum').order_by('-sum')
+        'notify__agree__lending__summary__director__department__name', 'con', 'sum_old', 'sum_new', 'sum').order_by(
+        '-sum')
     provide_groups_organization = provide_groups.values(
         'notify__agree__lending__summary__expert__organization').annotate(
         con=Count('provide_money'), sum_old=Sum('old_amount'), sum_new=Sum('new_amount'),
@@ -488,8 +507,12 @@ def report_article(request, *args, **kwargs):  #
         tf_r = datetime.date(dt_today.year - 1, 1, 1).isoformat()  # 上年第一天
         tl_r = datetime.date(dt_today.year - 1, 12, 31).isoformat()  # 上年最后一天
     elif t_typ == 99:
-        tf_r = tf_r
-        tl_r = tl_r
+        if tf_r and tl_r:
+            tf_r = tf_r
+            tl_r = tl_r
+        else:
+            tf_r = datetime.date(dt_today.year, 1, 1).isoformat()  # 本年第一天
+            tl_r = datetime.date(dt_today.year, 12, 31).isoformat()  # 本年最后一天
         '''ARTICLE_STATE_LIST = [(1, '待反馈'), (2, '已反馈'), (3, '待上会'), (4, '已上会'), (5, '已签批'),
                           (51, '已放款'), (52, '已放完'), (55, '已解保'), (61, '待变更'), (99, '已注销')]'''
     article_groups = models.Articles.objects.filter(build_date__year=dt_today.year,
@@ -578,7 +601,7 @@ def report_custom(request, *args, **kwargs):  #
     authority_list = request.session.get('authority_list')  # 获取当前用户的所有权限
     menu_result = MenuHelper(request).menu_data_list()
     PAGE_TITLE = '客户分类'
-    CLASS_LIST = [(21, '区域'), (31, '行业'), (35, '部门'), (41, '项目经理'), ]
+    CLASS_LIST = [(21, '区域'), (31, '行业'), (35, '部门'), (41, '管户经理'), (45, '风控经理'), ]
     TERM_LIST = [(11, '在保'), (21, '所有')]
     '''CUSTOM_STATE_LIST = [(11, '担保客户'), (21, '反担保客户'), (99, '注销')]'''
     industry_list = models.Industries.objects.all()
@@ -634,12 +657,21 @@ def report_custom(request, *args, **kwargs):  #
         values('managementor__name', 'con', 'credit_amount', 'custom_flow', 'custom_accept',
                'custom_back', 'entrusted_loan', 'petty_loan', 'amount').order_by('-credit_amount')  # 管户经理
 
+    article_balance_control = custom_groups.values(
+        'controler__name').annotate(
+        con=Count('id'), credit_amount=Sum('credit_amount'), custom_flow=Sum('custom_flow'),
+        custom_accept=Sum('custom_accept'),
+        custom_back=Sum('custom_back'), entrusted_loan=Sum('entrusted_loan'),
+        petty_loan=Sum('petty_loan'), amount=Sum('amount')). \
+        values('controler__name', 'con', 'credit_amount', 'custom_flow', 'custom_accept',
+               'custom_back', 'entrusted_loan', 'petty_loan', 'amount').order_by('-credit_amount')  # 管户经理
+
     return render(request, 'dbms/report/balance-class-custom.html', locals())
 
 
 # -----------------------追偿分类统计---------------------#
 @login_required
-# @authority
+@authority
 def report_dun(request, *args, **kwargs):  #
     current_url_name = resolve(request.path).url_name  # 获取当前URL_NAME
     authority_list = request.session.get('authority_list')  # 获取当前用户的所有权限
@@ -674,8 +706,12 @@ def report_dun(request, *args, **kwargs):  #
         tf_r = datetime.date(dt_today.year - 1, 1, 1).isoformat()  # 上年第一天
         tl_r = datetime.date(dt_today.year - 1, 12, 31).isoformat()  # 上年最后一天
     elif t_typ == 99:
-        tf_r = tf_r
-        tl_r = tl_r
+        if tf_r and tl_r:
+            tf_r = tf_r
+            tl_r = tl_r
+        else:
+            tf_r = datetime.date(dt_today.year, 1, 1).isoformat()  # 本年第一天
+            tl_r = datetime.date(dt_today.year, 12, 31).isoformat()  # 本年最后一天
         '''ARTICLE_STATE_LIST = [(1, '待反馈'), (2, '已反馈'), (3, '待上会'), (4, '已上会'), (5, '已签批'),
                           (51, '已放款'), (52, '已放完'), (55, '已解保'), (61, '待变更'), (99, '已注销')]'''
 

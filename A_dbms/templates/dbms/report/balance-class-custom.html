@@ -20,6 +20,8 @@
             {% include 'dbms/report/balance_custom/balance-class-depart.html' %}
         {% elif  kwargs.c_typ == 41 %}
             {% include 'dbms/report/balance_custom/balance-class-director.html' %}
+        {% elif  kwargs.c_typ == 45 %}
+            {% include 'dbms/report/balance_custom/balance-class-controlor.html' %}
         {% endif %}
     </div>
 {% endblock %}

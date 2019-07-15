@@ -7,7 +7,7 @@
             <th>最近上会日</th>
             {#            <th>描述</th>#}
             <th>库存情况</th>
-            <th>所属项目</th>
+            <th>所属项目次序</th>
             <th>项目状态</th>
         </tr>
         </thead>
@@ -42,8 +42,9 @@
                 {#                </td>#}
                 <td>{{ warrant.meeting_date|default_if_none:'' }}</td>
                 <td>{{ warrant.get_warrant_state_display}}</td>
-                <td>{{ warrant.lending_warrant.all.0.sure.lending.summary }}</td>
-                <td>{{ warrant.lending_warrant.all.0.sure.lending.summary.get_article_state_display }}</td>
+                <td><a href="{% url 'dbms:article_scan_lending' article_id=warrant.lending_warrant.all.0.sure.lending.summary.id lending_id=warrant.lending_warrant.all.0.sure.lending.id %}">
+                    {{ warrant.lending_warrant.all.0.sure.lending }}</a></td>
+                <td>{{ warrant.lending_warrant.all.0.sure.lending.get_lending_state_display }}</td>
             </tr>
         {% endfor %}
         </tbody>

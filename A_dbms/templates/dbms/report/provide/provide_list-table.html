@@ -39,7 +39,9 @@
             </tr>
         {% endfor %}
         <tr>
-            <td colspan="13">合计</td>
+            <td colspan="3">合计</td>
+            <td align="right">{{ provide_provide|floatformat:'2' }}</td>
+            <td colspan="9"></td>
             <td align="right">{{ provide_balance|floatformat:'2' }}</td>
         </tr>
         </tbody>

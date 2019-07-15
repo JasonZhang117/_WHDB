@@ -1006,6 +1006,9 @@ def stage_add_ajax(request):
             elif stage_type == 51:
                 stage_remark = 'F-%s' % stage_type_count
                 dun_state_n = 41
+            elif stage_type == 99:
+                stage_remark = 'Q-%s' % stage_type_count
+                # dun_state_n = 41
             try:
                 with transaction.atomic():
                     stage_obj = models.Stage.objects.create(

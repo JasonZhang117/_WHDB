@@ -1,15 +1,27 @@
 <div id="noprint">
     <label>
         {# 方式一：#}
-        {% for p_typ in provide_typ_list %}
-            {% if p_typ.0 == kwargs.p_typ %}
-                <a class="btn btn-primary btn-sm active"
-                   href="{% url 'dbms:report_provide_list' p_typ=p_typ.0 t_typ=kwargs.t_typ %}">{{ p_typ.1 }}</a>
-            {% else %}
-                <a class="btn btn-primary btn-sm"
-                   href="{% url 'dbms:report_provide_list' p_typ=p_typ.0 t_typ=kwargs.t_typ %}">{{ p_typ.1 }} </a>
-            {% endif %}
-        {% endfor %}
+        {% if t_typ == 99 %}
+            {% for p_typ in provide_typ_list %}
+                {% if p_typ.0 == kwargs.p_typ %}
+                    <a class="btn btn-primary btn-sm active"
+                       href="{% url 'dbms:report_provide_list' p_typ=p_typ.0 t_typ=kwargs.t_typ %}?tf={{ tf_r }}&tl={{ tl_r }}">{{ p_typ.1 }}</a>
+                {% else %}
+                    <a class="btn btn-primary btn-sm"
+                       href="{% url 'dbms:report_provide_list' p_typ=p_typ.0 t_typ=kwargs.t_typ %}?tf={{ tf_r }}&tl={{ tl_r }}">{{ p_typ.1 }} </a>
+                {% endif %}
+            {% endfor %}
+        {% else %}
+            {% for p_typ in provide_typ_list %}
+                {% if p_typ.0 == kwargs.p_typ %}
+                    <a class="btn btn-primary btn-sm active"
+                       href="{% url 'dbms:report_provide_list' p_typ=p_typ.0 t_typ=kwargs.t_typ %}">{{ p_typ.1 }}</a>
+                {% else %}
+                    <a class="btn btn-primary btn-sm"
+                       href="{% url 'dbms:report_provide_list' p_typ=p_typ.0 t_typ=kwargs.t_typ %}">{{ p_typ.1 }} </a>
+                {% endif %}
+            {% endfor %}
+        {% endif %}
     </label>
 
     <label>

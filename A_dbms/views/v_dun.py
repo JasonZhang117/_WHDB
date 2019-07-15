@@ -151,7 +151,7 @@ def dun_scan(request, dun_id):  # 查看合同
     form_agent_add = forms.FormAgentAdd(initial=form_agent_data)  # 代理合同
     form_judgment_add = forms.FormJudgmentAdd(initial={'judgment_date': str(today_str)})  # 判决裁定
     standing_list = models.Standing.objects.filter(dun=dun_obj).order_by('-standingor_date')
-    stage_list = models.Stage.objects.filter(dun=dun_obj).order_by('stage_type', 'stage_remark')
+    stage_list = models.Stage.objects.filter(dun=dun_obj)
 
     '''分页'''
     paginator = Paginator(standing_list, 6)
