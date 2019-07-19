@@ -622,6 +622,8 @@ def article_sign_ajax(request):
     sign_type = int(post_data['sign_type'])
     article_id = post_data['article_id']
     article_obj = models.Articles.objects.get(id=article_id)
+    custom_list = models.Customes.objects.filter(id=article_obj.custom.id)
+
     '''ARTICLE_STATE_LIST = [(1, '待反馈'), (2, '已反馈'), (3, '待上会'), (4, '已上会'), (5, '已签批'),
                           (51, '已放款'), (52, '已放完'), (55, '已解保'), (61, '待变更'), (99, '已注销')]'''
     if article_obj.article_state in [4, 61]:
@@ -637,8 +639,8 @@ def article_sign_ajax(request):
                 '''COMMENT_TYPE_LIST = ((0, ''), (1, '同意'), (2, '复议'), (3, '不同意'))'''
                 article_comment_amount = article_obj.comment_summary.exclude(comment_type=0).count()  # 发表意见的评委数
                 if article_expert_amount == article_comment_amount:
-                    renewal = cleaned_data['renewal']
-                    augment = cleaned_data['augment']
+                    renewal = round(cleaned_data['renewal'], 2)
+                    augment = round(cleaned_data['augment'], 2)
                     article_amount = renewal + augment
                     single_quota_amount = models.SingleQuota.objects.filter(
                         summary__id=article_id).aggregate(Sum('credit_amount'))
@@ -647,6 +649,14 @@ def article_sign_ajax(request):
                         summary__id=article_id).aggregate(Sum('order_amount'))
                     lending_amount = lending_amount['order_amount__sum']
                     if single_quota_amount == article_amount and lending_amount == article_amount:
+                        custom_typ_n = 1
+                        if renewal > 0 and augment > 0:
+                            '''CUSTOM_TYP = ((1, '--'), (11, '新增'), (21, '存量'), (31, '存量新增'))'''
+                            custom_typ_n = 31
+                        elif renewal > 0:
+                            custom_typ_n = 21
+                        elif augment > 0:
+                            custom_typ_n = 11
                         try:
                             with transaction.atomic():
                                 models.Articles.objects.filter(id=article_id).update(
@@ -661,10 +671,9 @@ def article_sign_ajax(request):
                                                      (51, '已放款'), (52, '已放完'), (55, '已解保'), (61, '待变更'),
                                                       (99, '已注销')]'''
                                 models.LendingOrder.objects.filter(summary=article_obj).update(lending_state=4)
-                                # 更新客户授信总额
-                                custom_id = article_obj.custom.id
-                                models.Customes.objects.filter(id=custom_id).update(
-                                    credit_amount=cleaned_data['credit_amount'],
+                                # 更新客户授信总额，存量/新增情况
+                                custom_list.update(
+                                    credit_amount=cleaned_data['credit_amount'], custom_typ=custom_typ_n,
                                     lately_date=article_obj.review_date)
                                 models.Warrants.objects.filter(
                                     lending_warrant__sure__lending__summary=article_obj).update(

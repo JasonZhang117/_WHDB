@@ -11,7 +11,9 @@
 {#            <th>流贷余额</th>#}
 {#            <th>承兑余额</th>#}
 {#            <th>保函余额</th>#}
-            <th>年调(次)</th>
+            <th>类型</th>
+            <th>补调(次)</th>
+            <th>保后(次)</th>
             <th>最近调查</th>
             <th>风险分类</th>
             <th>计划时间</th>
@@ -35,6 +37,8 @@
 {#                <td align="right">{{ custom.custom_flow }}</td>#}
 {#                <td align="right">{{ custom.custom_accept }}</td>#}
 {#                <td align="right">{{ custom.custom_back }}</td>#}
+                <td>{{ custom.get_custom_typ_display }}</td>
+                <td align="right">{{ custom.add_amount }}</td>
                 <td align="right">{{ custom.review_amount }}</td>
                 <td>{{ custom.lately_date }}</td>
                 <td>{{ custom.get_classification_display }}</td>

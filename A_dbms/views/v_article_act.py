@@ -41,8 +41,8 @@ def article_add_ajax(request):  # 添加项目
     if form.is_valid():
         cleaned_data = form.cleaned_data
         custom_id = cleaned_data['custom_id']
-        renewal = cleaned_data['renewal']
-        augment = cleaned_data['augment']
+        renewal = round(cleaned_data['renewal'], 2)
+        augment = round(cleaned_data['augment'], 2)
         article_num = creat_article_num(custom_id)
         amount = renewal + augment
         try:
@@ -51,11 +51,10 @@ def article_add_ajax(request):  # 添加项目
                     article_num=article_num, custom_id=custom_id, renewal=renewal,
                     augment=augment, amount=amount, credit_term=cleaned_data['credit_term'],
                     director_id=cleaned_data['director_id'], assistant_id=cleaned_data['assistant_id'],
-                    control_id=cleaned_data['control_id'],
-                    article_buildor=request.user)
-                models.Customes.objects.filter(article_custom=article_obj).update(
+                    control_id=cleaned_data['control_id'], article_buildor=request.user)
+                models.Customes.objects.filter(id=custom_id).update(
                     lately_date=datetime.date.today(), managementor_id=cleaned_data['director_id'],
-                    controler_id=cleaned_data['control_id'], )
+                    controler_id=cleaned_data['control_id'], custom_state=11)
             response['message'] = '成功创建项目：%s！' % article_obj.article_num
             response['skip'] = "/dbms/article/"
         except Exception as e:

@@ -93,7 +93,7 @@ def pigeonhole_overdue(request, *args, **kwargs):
     job_list = request.session.get('job_list')  # 获取当前用户的所有角色
     PAGE_TITLE = '逾期归档'
 
-    date_15_leter = datetime.date.today() - datetime.timedelta(days=20)  # 15天前
+    date_15_leter = datetime.date.today() - datetime.timedelta(days=30)  # 15天前
     pigeonhole_overdue_list = models.Provides.objects.filter(
         implement__in=[1, 11], provide_date__lt=date_15_leter).order_by('-provide_date')  # 逾期归档
     if '项目经理' in job_list:

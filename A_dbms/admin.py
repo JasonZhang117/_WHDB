@@ -208,7 +208,13 @@ admin.site.register(models.Stage, StageAdmin)  # 阶段情况
 admin.site.register(models.Judgment)  # 判决
 admin.site.register(models.Standing)  # 台账
 admin.site.register(models.Seal)  # 财产线索
-admin.site.register(models.Sealup)  # 查封情况
+class SealupAdmin(admin.ModelAdmin):
+    list_display = ('seal',
+    'sealup_type', 'sealup_date', 'due_date', 'sealup_remark', 'sealupor')  # 显示字段
+    list_per_page = 200  # 每页显示条目数
+    search_fields = ['sealup_type','sealup_date']  # 搜索字段
+    # ordering = ['title']  # 排序字段
+admin.site.register(models.Sealup,SealupAdmin)  # 查封情况
 admin.site.register(models.Inquiry)  # 查询情况
 
 

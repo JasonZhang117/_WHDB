@@ -240,6 +240,7 @@ class Stockes(models.Model):  # 股权
     ratio = models.FloatField(verbose_name='比例（%）')
     registe = models.FloatField(verbose_name='认缴资本（万）', default=0)
     share = models.FloatField(verbose_name='实缴资本（万）', default=0)
+    remark = models.CharField(verbose_name='备注', max_length=64, null=True, blank=True)
     stock_buildor = models.ForeignKey(to='Employees', verbose_name="创建者", default=1,
                                       on_delete=models.PROTECT,
                                       related_name='stock_buildor_employee')

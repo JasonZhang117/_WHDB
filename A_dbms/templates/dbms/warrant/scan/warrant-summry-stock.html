@@ -21,6 +21,9 @@
         实收资本（万）：{{ warrant_obj.stock_warrant.share }}
     </label>
     <label class="col-lg-3 col-md-4 col-sm-12 col-xs-12">
+        备注：{{ warrant_obj.stock_warrant.remark|default_if_none:"" }}
+    </label>
+    <label class="col-lg-3 col-md-4 col-sm-12 col-xs-12">
         状态：{{ warrant_obj.get_warrant_state_display }}
     </label>
 </div>

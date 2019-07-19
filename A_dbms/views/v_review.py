@@ -37,7 +37,8 @@ def review(request, *args, **kwargs):  # 保后列表
     '''搜索条件'''
     search_key = request.GET.get('_s')
     if search_key:
-        search_fields = ['name', 'short_name', 'district__name', 'idustry__name', 'managementor__name']
+        search_fields = ['name', 'short_name', 'district__name', 'idustry__name', 'managementor__name',
+                         'controler__name']
         q = Q()
         q.connector = 'OR'
         for field in search_fields:
@@ -47,9 +48,10 @@ def review(request, *args, **kwargs):  # 保后列表
     for custom in custom_list:
         '''REVIEW_STY_LIST = [(1, '现场检查'), (11, '电话回访'), (61, '补调替代'), (62, '尽调替代')]'''
         review_count = custom.review_custom.filter(review_date__year=today_year, review_sty__in=[1, 11]).count()  # 保后次数
-        article_count = custom.article_custom.filter(build_date__year=today_year).count()  # 尽调次数
+        # article_count = custom.article_custom.filter(build_date__year=today_year).count()  # 尽调次数
         inv_count = custom.inv_custom.filter(inv_date__year=today_year).count()  # 补调次数
-        models.Customes.objects.filter(id=custom.id).update(review_amount=(review_count + article_count + inv_count))
+        custom_ll = models.Customes.objects.filter(id=custom.id).update(review_amount=review_count,
+                                                                        add_amount=inv_count)
 
     flow_amount = custom_list.aggregate(Sum('custom_flow'))['custom_flow__sum']  # 流贷余额
     accept_amount = custom_list.aggregate(Sum('custom_accept'))['custom_accept__sum']  # 承兑余额

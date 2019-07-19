@@ -8,6 +8,8 @@ class Customes(models.Model):  # 客户
     short_name = models.CharField(verbose_name='客户简称', max_length=16, unique=True)
     GENRE_LIST = ((1, '企业'), (2, '个人'))
     genre = models.IntegerField(verbose_name='客户类型', choices=GENRE_LIST, default=1)
+    CUSTOM_TYP = ((1, '--'), (11, '新增'), (21, '存量'), (31, '存量新增'))
+    custom_typ = models.IntegerField(verbose_name='新增标志', choices=CUSTOM_TYP, default=1)
     contact_addr = models.CharField(verbose_name='联系地址', max_length=64)
     linkman = models.CharField(verbose_name='联系人', max_length=16)
     contact_num = models.CharField(verbose_name='联系电话', max_length=13)
@@ -23,7 +25,8 @@ class Customes(models.Model):  # 客户
     REVIEW_STATE_LIST = [(1, '待保后'), (11, '待报告'), (21, '已完成'), (81, '自主保后')]
     review_state = models.IntegerField(verbose_name='_保后状态', choices=REVIEW_STATE_LIST, default=21)
     review_date = models.DateField(verbose_name='保后日期', blank=True, null=True)
-    review_amount = models.IntegerField(verbose_name='年度调查', default=0)
+    review_amount = models.IntegerField(verbose_name='保后', default=0)
+    add_amount = models.IntegerField(verbose_name='补调', default=0)
 
     CLASSIFICATION_LIST = [(1, '正常'), (11, '关注'), (21, '次级'), (31, '可疑'), (41, '损失')]
     classification = models.IntegerField(verbose_name='_风险分类', choices=CLASSIFICATION_LIST, default=1)

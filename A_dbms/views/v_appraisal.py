@@ -141,7 +141,7 @@ def appraisal_scan_lending(request, article_id, lending_id):  # 评审项目预�
                                                             warrant_typ=51)
     warrant_lending_o_list = models.Warrants.objects.filter(lending_warrant__sure__lending=lending_obj,
                                                             warrant_typ=55)
-    print('warrant_lending_o_list:',warrant_lending_o_list)
+    print('warrant_lending_o_list:', warrant_lending_o_list)
     form_lendingcustoms_c_add = models.Customes.objects.exclude(
         id=article_obj.custom.id).filter(genre=1).values_list('id', 'name')
     form_lendingcustoms_p_add = models.Customes.objects.exclude(
@@ -720,10 +720,19 @@ def summary_scan(request, article_id):  # 评审项目预览
                 warrant_s_c = 0
                 for warrant_s in warrant_s_32_list:
                     warrant_s_c += 1
-                    summary += '%s持有的%s%s' % (warrant_s.stock_warrant.stock_owner.name,
-                                              warrant_s.stock_warrant.target,
-                                              warrant_s.stock_warrant.ratio)
-                    summary = summary + '%股权'
+                    '''STOCK_TYP_LIST = ((1, '有限公司股权'), (11, '股份公司股份'), (21, '举办者权益'))'''
+                    if warrant_s.stock_warrant.stock_typ == 1:
+                        summary += '%s持有的%s%s' % (warrant_s.stock_warrant.stock_owner.name,
+                                                  warrant_s.stock_warrant.target,
+                                                  warrant_s.stock_warrant.ratio)
+                        summary = summary + '%股权'
+                    elif warrant_s.stock_warrant.stock_typ == 11:
+                        summary += '%s持有的%s%s' % (warrant_s.stock_warrant.stock_owner.name,
+                                                  warrant_s.stock_warrant.target,
+                                                  warrant_s.stock_warrant.share)
+                        summary = summary + '万股股权'
+                        if warrant_s.stock_warrant.remark:
+                            summary = summary + '（%s）' % warrant_s.stock_warrant.remark
                     if warrant_s_c < warrant_s_count:
                         summary += '、'
                 summary += '质押给我公司，签订质押反担保合同并办理质押登记。</td></tr>'

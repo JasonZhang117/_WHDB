@@ -28,7 +28,6 @@ def warrant_add_ajax(request):
         (1, '房产'), (2, '房产包'), (5, '土地使用权'), (6, '在建工程'), (11, '应收账款'),
         (21, '股权'), (31, '票据'), (41, '车辆'), (51, '动产'), (55, '其他'), (99, '他权')]'''
         if warrant_typ == 1:  # 房产
-            print('warrant_typ == 1')
             form_house_add_edit = forms.HouseAddEidtForm(post_data)
             if form_house_add_edit.is_valid():
                 house_add_edit_clean = form_house_add_edit.cleaned_data
@@ -53,7 +52,6 @@ def warrant_add_ajax(request):
                 response['message'] = '表单信息有误！！！'
                 response['forme'] = form_house_add_edit.errors
         elif warrant_typ == 2:  # 房产包
-            print('warrant_typ == 2')
             try:
                 warrant_obj = models.Warrants.objects.create(
                     warrant_num=warrant_add_clean['warrant_num'],
@@ -64,7 +62,6 @@ def warrant_add_ajax(request):
                 response['status'] = False
                 response['message'] = '土地创建失败：%s' % str(e)
         elif warrant_typ == 5:  # 土地
-            print('warrant_typ == 5')
             form_ground_add_edit = forms.GroundAddEidtForm(post_data)
             if form_ground_add_edit.is_valid():
                 ground_add_edit_clean = form_ground_add_edit.cleaned_data
@@ -88,7 +85,6 @@ def warrant_add_ajax(request):
                 response['message'] = '表单信息有误！！！'
                 response['forme'] = form_ground_add_edit.errors
         elif warrant_typ == 6:  # 在建工程
-            print('warrant_typ == 6')
             form_construct_add_edit = forms.ConstructionAddForm(post_data)  # 在建工程
             if form_construct_add_edit.is_valid():
                 construct_clean = form_construct_add_edit.cleaned_data
@@ -115,7 +111,6 @@ def warrant_add_ajax(request):
                 response['message'] = '表单信息有误！！！'
                 response['forme'] = form_construct_add_edit.errors
         elif warrant_typ == 11:  # 应收
-            print('warrant_typ == 11')
             form_receivable_add_edit = forms.FormReceivable(post_data)
             if form_receivable_add_edit.is_valid():
                 receivable_clean = form_receivable_add_edit.cleaned_data
@@ -138,7 +133,6 @@ def warrant_add_ajax(request):
                 response['message'] = '表单信息有误！！！'
                 response['forme'] = form_receivable_add_edit.errors
         elif warrant_typ == 21:  # 股权
-            print('warrant_typ == 21')
             form_stockes_add_edit = forms.FormStockes(post_data)
             if form_stockes_add_edit.is_valid():
                 stocke_clean = form_stockes_add_edit.cleaned_data
@@ -152,8 +146,8 @@ def warrant_add_ajax(request):
                             stock_typ=stocke_clean['stock_typ'],
                             stock_owner_id=stocke_clean['stock_owner'],
                             target=stocke_clean['target'], registe=stocke_clean['registe'],
-                            share=stocke_clean['share'],
-                            ratio=stocke_clean['ratio'], )
+                            share=stocke_clean['share'], ratio=stocke_clean['ratio'],
+                            remark=stocke_clean['remark'], )
                     response['message'] = '股权创建成功！！！'
                     response['skip'] = "/dbms/warrant/scan/%s/" % warrant_obj.id
                 except Exception as e:
@@ -164,7 +158,6 @@ def warrant_add_ajax(request):
                 response['message'] = '表单信息有误！！！'
                 response['forme'] = form_stockes_add_edit.errors
         elif warrant_typ == 31:  # 票据
-            print('warrant_typ == 31')
             form_draft_add_eidt = forms.FormDraft(post_data)
             if form_draft_add_eidt.is_valid():
                 draft_clean = form_draft_add_eidt.cleaned_data
@@ -441,7 +434,8 @@ def warrant_edit_ajax(request):
                         models.Stockes.objects.filter(warrant=warrant_obj).update(
                             target=stockes_edit_clean['target'], registe=stockes_edit_clean['registe'],
                             share=stockes_edit_clean['share'], ratio=stockes_edit_clean['ratio'],
-                            stock_typ=stockes_edit_clean['stock_typ'])
+                            stock_typ=stockes_edit_clean['stock_typ'],
+                            remark=stockes_edit_clean['remark'])
                         response['message'] = '股权信息修改该成功！！！'
                 except Exception as e:
                     response['status'] = False

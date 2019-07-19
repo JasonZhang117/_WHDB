@@ -125,12 +125,13 @@ class FormStockes(dform.ModelForm):  # 股权
 
     class Meta:
         model = models.Stockes
-        fields = ['target', 'ratio', 'registe', 'share', 'stock_typ']
+        fields = ['target', 'ratio', 'registe', 'share', 'stock_typ', 'remark']
         widgets = {'target': dform.TextInput(attrs={'class': 'form-control', 'placeholder': '目标企业'}),
                    'ratio': dform.NumberInput(attrs={'class': 'form-control', 'placeholder': '占比'}),
                    'registe': dform.NumberInput(attrs={'class': 'form-control', 'placeholder': '万元或万股'}),
                    'share': dform.NumberInput(attrs={'class': 'form-control', 'placeholder': '万元或万股'}),
-                   'stock_typ': dform.Select(attrs={'class': 'form-control'})}
+                   'stock_typ': dform.Select(attrs={'class': 'form-control'}),
+                   'remark': dform.TextInput(attrs={'class': 'form-control', 'placeholder': '备注'}), }
 
     def __init__(self, *args, **kwargs):
         super(FormStockes, self).__init__(*args, **kwargs)
@@ -141,12 +142,13 @@ class FormStockes(dform.ModelForm):  # 股权
 class FormStockesEdit(dform.ModelForm):  #
     class Meta:
         model = models.Stockes
-        fields = ['target', 'ratio', 'registe', 'share', 'stock_typ']
+        fields = ['target', 'ratio', 'registe', 'share', 'stock_typ', 'remark']
         widgets = {'target': dform.TextInput(attrs={'class': 'form-control', 'placeholder': '目标企业'}),
                    'ratio': dform.NumberInput(attrs={'class': 'form-control', 'placeholder': '占比'}),
                    'registe': dform.NumberInput(attrs={'class': 'form-control', 'placeholder': '万元或万股'}),
                    'share': dform.NumberInput(attrs={'class': 'form-control', 'placeholder': '万元或万股'}),
-                   'stock_typ': dform.Select(attrs={'class': 'form-control'})}
+                   'stock_typ': dform.Select(attrs={'class': 'form-control'}),
+                   'remark': dform.TextInput(attrs={'class': 'form-control', 'placeholder': '备注'}), }
 
 
 # ------------------------票据31--------------------------#

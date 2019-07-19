@@ -115,7 +115,8 @@ def warrant_scan(request, warrant_id):  # house_scan房产预览
             'share': warrant_obj.stock_warrant.share,
             'registe': warrant_obj.stock_warrant.registe,
             'ratio': warrant_obj.stock_warrant.ratio,
-            'stock_typ': warrant_obj.stock_warrant.stock_typ}
+            'stock_typ': warrant_obj.stock_warrant.stock_typ,
+            'remark': warrant_obj.stock_warrant.remark, }
         form_stockes_edit = forms.FormStockesEdit(form_date)
     elif warrant_typ == 31:  # 31票据添加
         form_date = {'draft_detail': warrant_obj.draft_warrant.draft_detail,

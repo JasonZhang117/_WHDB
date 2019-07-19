@@ -421,7 +421,7 @@ def sealup_add_ajax(request):  # 修改项目ajax
                             'due_date': due_date, 'sealup_remark': sealup_remark,
                             'sealupor': request.user}
                         sealup_obj, created = models.Sealup.objects.update_or_create(
-                            seal=seal_obj, sealup_type=sealup_type, sealup_date=sealup_date, defaults=sealup_default)
+                            seal=seal_obj, sealup_date=sealup_date, defaults=sealup_default)
                         warrant_list.update(auction_state=2)
                     else:
                         sealup_default = {

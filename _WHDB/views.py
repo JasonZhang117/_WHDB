@@ -166,14 +166,26 @@ def home(request):
     print('acc_login-->request.GET:', request.GET)
     print("request.session.get('authority_list'):", request.session.get('authority_list'))
     print("request.session.get('menu_leaf_list'):", request.session.get('menu_leaf_list'))
-
-    # custom_list = models.Customes.objects.filter(custom_state=11, amount__lte=0)
-    # print(custom_list)
+    #
+    # custom_list = models.Customes.objects.filter(custom_state=11)
+    # custom_list.update(custom_typ=1)
     # for custom in custom_list:
     #     '''CUSTOM_STATE_LIST = [(11, '担保客户'), (21, '反担保客户'), (99, '注销客户')]'''
-    #     controlor = models.Articles.objects.filter(custom=custom).order_by('-build_date').first()
+    #     controlor = models.Articles.objects.filter(custom=custom, review_date__year=2019).order_by(
+    #         '-build_date').first()
     #     if controlor:
-    #         models.Customes.objects.filter(id=custom.id).update(controler=controlor.control)
+    #         renewal_n = round(controlor.renewal, 2)
+    #         augment_n = round(controlor.augment, 2)
+    #         if renewal_n > 0 and augment_n > 0:
+    #             '''CUSTOM_TYP = ((1, '--'), (11, '新增'), (21, '存量'), (31, '存量新增'))'''
+    #             custom_typ_n = 31
+    #         elif renewal_n > 0:
+    #             custom_typ_n = 21
+    #         elif augment_n > 0:
+    #             custom_typ_n = 11
+    #         models.Customes.objects.filter(id=custom.id).update(custom_typ=custom_typ_n)
+    #     else:
+    #         models.Customes.objects.filter(id=custom.id).update(custom_typ=21)
 
     return render(request, 'test.html', locals())
 

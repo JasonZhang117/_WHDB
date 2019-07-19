@@ -1,12 +1,9 @@
 <div id="form_stockes_edit" class="warrant-extend" style="display: none">
-
     <div class="form-group"><!--标的公司-->
         <label for="id_target" class="col-sm-3 control-label">{{ form_stockes_edit.target.label }}：</label>
         <div class="col-sm-9">{{ form_stockes_edit.target }}</div>
         <label id="e_target" class="pull-right">{{ form_stockes_edit.target.errors }}</label>
     </div>
-
-
     <div class="form-group"><!--股权比例-->
         <label for="id_ratio" class="col-sm-3 control-label">{{ form_stockes_edit.ratio.label }}：</label>
         <div class="col-sm-9">{{ form_stockes_edit.ratio }}</div>
@@ -27,5 +24,11 @@
         <div class="col-sm-9">{{ form_stockes_edit.stock_typ }}</div>
         <label id="e_stock_typ" class="pull-right">{{ form_stockes_edit.stock_typ.errors }}</label>
     </div>
+    <div class="form-group"><!--备注-->
+        <label for="id_remark" class="col-sm-3 control-label">{{ form_stockes_edit.remark.label }}：</label>
+        <div class="col-sm-9">{{ form_stockes_edit.remark }}</div>
+        <label id="e_remark" class="pull-right">{{ form_stockes_edit.remark.errors }}</label>
+    </div>
+
 
 </div>
