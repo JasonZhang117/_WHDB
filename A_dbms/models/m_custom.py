@@ -32,6 +32,7 @@ class Customes(models.Model):  # 客户
     classification = models.IntegerField(verbose_name='_风险分类', choices=CLASSIFICATION_LIST, default=1)
 
     lately_date = models.DateField(verbose_name='最近调查', null=True, blank=True)
+    provide_date = models.DateField(verbose_name='最近放款', null=True, blank=True)
 
     CUSTOM_DUN_LIST = ((1, '正常'), (11, '被告'), (99, '注销'))
     custom_dun_state = models.IntegerField(verbose_name='_风险分类', choices=CUSTOM_DUN_LIST, default=1)

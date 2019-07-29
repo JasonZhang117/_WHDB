@@ -87,6 +87,7 @@ class Houses(models.Model):  # 房产
                       (46, '非生产性工业科研用房'),
                       (51, '科研'), (52, '车间'), (53, '消防通道'), (54, '倒班房'), (61, '车库'),
                       (62, '车位'), (63, '首层机动车停车场'), (71, '仓储'), (72, '仓储用房及配送用房'),
+                      (73, '物流配送中心用房'),
                       (81, '在建工程'), (91, '其他'), (99, '期房')]
     house_app = models.IntegerField(verbose_name='房产用途', choices=HOUSE_APP_LIST, default=1)
     house_area = models.FloatField(verbose_name='建筑面积')

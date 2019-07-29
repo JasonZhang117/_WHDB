@@ -168,24 +168,13 @@ def home(request):
     print("request.session.get('menu_leaf_list'):", request.session.get('menu_leaf_list'))
     #
     # custom_list = models.Customes.objects.filter(custom_state=11)
-    # custom_list.update(custom_typ=1)
     # for custom in custom_list:
     #     '''CUSTOM_STATE_LIST = [(11, '担保客户'), (21, '反担保客户'), (99, '注销客户')]'''
-    #     controlor = models.Articles.objects.filter(custom=custom, review_date__year=2019).order_by(
-    #         '-build_date').first()
+    #     controlor = models.Provides.objects.filter(notify__agree__lending__summary__custom=custom).order_by(
+    #         '-provide_date').first()
     #     if controlor:
-    #         renewal_n = round(controlor.renewal, 2)
-    #         augment_n = round(controlor.augment, 2)
-    #         if renewal_n > 0 and augment_n > 0:
-    #             '''CUSTOM_TYP = ((1, '--'), (11, '新增'), (21, '存量'), (31, '存量新增'))'''
-    #             custom_typ_n = 31
-    #         elif renewal_n > 0:
-    #             custom_typ_n = 21
-    #         elif augment_n > 0:
-    #             custom_typ_n = 11
-    #         models.Customes.objects.filter(id=custom.id).update(custom_typ=custom_typ_n)
-    #     else:
-    #         models.Customes.objects.filter(id=custom.id).update(custom_typ=21)
+    #         print(controlor, controlor.provide_date)
+    #         models.Customes.objects.filter(id=custom.id).update(provide_date=str(controlor.provide_date))
 
     return render(request, 'test.html', locals())
 

@@ -34,7 +34,6 @@ def pigeonhole_add_ajax(request):
         if form_implement_add.is_valid():
             implement_cleaned = form_implement_add.cleaned_data
             implement = implement_cleaned['implement']
-            print('implement:', implement)
             '''IMPLEMENT_LIST = [(1, '未归档'), (11, '退回'), (21, '暂存风控'), (31, '移交行政'), 
             (41, '已归档'), (99, '无需归档')]'''
             if implement in [1, 11, 21, 31, 99]:
