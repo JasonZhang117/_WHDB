@@ -106,19 +106,25 @@ def agree_add_ajax(request):  # 添加合同
             '''成武担[2016]018④W6-1'''
             agree_num_prefix = "成武担[%s]%s%s" % (agree_year, agree_order, guarantee_typ)
             agree_num = "%sW%s-1" % (agree_num_prefix, agree_copies)
-            '''AGREE_TYP_LIST = [(1, '单笔'), (2, '最高额'), (3, '保函'), (7, '小贷'),
-                                 (41, '单笔(公证)'), (42, '最高额(公证)'), (47, '小贷(公证)')]'''
+            '''AGREE_TYP_LIST = [(1, '单笔'), (2, '最高额'),  (4, '委贷'), (7, '小贷'),
+                      (21, '分离式保函'), (22, '担保公司保函'), (23, '银行保函'),
+                      (41, '单笔(公证)'), (42, '最高额(公证)'), (47, '小贷(公证)')]'''
             ''' AGREE_NAME_LIST = [(1, '委托保证合同'), (11, '最高额委托保证合同'),
-                       (21, '委托出具分离式保函合同'), (31, '借款合同')]'''
+                       (21, '委托出具分离式保函合同'), (22, '开立保函合同'),
+                       (31, '借款合同'), (41, '委托贷款合同'), ]'''
             agree_name = ''
             if agree_typ in [1, 41]:
                 agree_name = 1
             elif agree_typ in [2, 42]:
                 agree_name = 11
-            elif agree_typ == 3:
-                agree_name = 21
+            elif agree_typ == 4:
+                agree_name = 41
             elif agree_typ in [7, 47]:
                 agree_name = 31
+            elif agree_typ == 21:
+                agree_name = 21
+            elif agree_typ == 22:
+                agree_name = 22
             try:
                 agree_obj = models.Agrees.objects.create(
                     agree_num=agree_num, agree_name=agree_name, num_prefix=agree_num_prefix,
@@ -170,8 +176,9 @@ def agree_edit_ajax(request):  #
             agree_typ = agree_add_cleaned['agree_typ']
             branche_obj = models.Branches.objects.get(id=branch_id)
             cooperator_up_scale = branche_obj.cooperator.up_scale
-            '''AGREE_TYP_LIST = [(1, '单笔'), (2, '最高额'), (3, '保函'), (7, '小贷'),
-                                 (41, '单笔(公证)'), (42, '最高额(公证)'), (47, '小贷(公证)')]'''
+            '''AGREE_TYP_LIST = [(1, '单笔'), (2, '最高额'),  (4, '委贷'), (7, '小贷'),
+                      (21, '分离式保函'), (22, '担保公司保函'), (23, '银行保函'),
+                      (41, '单笔(公证)'), (42, '最高额(公证)'), (47, '小贷(公证)')]'''
             order_amount = round(lending_obj.order_amount, 2)  # 放款次序金额
             if agree_typ == 2:  # (2, '最高额')
                 order_amount_up = round(order_amount * (1 + cooperator_up_scale), 2)  # 最高允许的合同金额
@@ -189,19 +196,25 @@ def agree_edit_ajax(request):  #
                 response['message'] = '放款限额（%s）超过审批额度（%s）！' % (amount_limit, order_amount,)
                 result = json.dumps(response, ensure_ascii=False)
                 return HttpResponse(result)
-            '''AGREE_TYP_LIST = [(1, '单笔'), (2, '最高额'), (3, '保函'), (7, '小贷'),
-                                 (41, '单笔(公证)'), (42, '最高额(公证)'), (47, '小贷(公证)')]'''
-            '''AGREE_NAME_LIST = [(1, '委托保证合同'), (11, '最高额委托保证合同'),
-                       (21, '委托出具分离式保函合同'), (31, '借款合同')]'''
+            '''AGREE_TYP_LIST = [(1, '单笔'), (2, '最高额'),  (4, '委贷'), (7, '小贷'),
+                      (21, '分离式保函'), (22, '担保公司保函'), (23, '银行保函'),
+                      (41, '单笔(公证)'), (42, '最高额(公证)'), (47, '小贷(公证)')]'''
+            ''' AGREE_NAME_LIST = [(1, '委托保证合同'), (11, '最高额委托保证合同'),
+                       (21, '委托出具分离式保函合同'), (22, '开立保函合同'),
+                       (31, '借款合同'), (41, '委托贷款合同'), ]'''
             agree_name = ''
             if agree_typ in [1, 41]:
                 agree_name = 1
             elif agree_typ in [2, 42]:
                 agree_name = 11
-            elif agree_typ == 3:
-                agree_name = 21
+            elif agree_typ == 4:
+                agree_name = 41
             elif agree_typ in [7, 47]:
                 agree_name = 31
+            elif agree_typ == 21:
+                agree_name = 21
+            elif agree_typ == 22:
+                agree_name = 22
             agree_num_prefix = agree_obj.num_prefix
             agree_num = "%sW%s-1" % (agree_num_prefix, agree_copies)
             try:
@@ -230,7 +243,7 @@ def agree_edit_ajax(request):  #
                     for counter in agree_obj.counter_agree.all():
                         counter_typ = counter.counter_typ
                         counter_name = ''
-                        if agree_typ in [1, 41]:
+                        if agree_typ in [1, 41, 22]:
                             if counter_typ == 1:
                                 counter_name = 1
                             elif counter_typ == 2:
@@ -247,7 +260,7 @@ def agree_edit_ajax(request):  #
                                 counter_name = 9
                             elif counter_typ == 59:
                                 counter_name = 59
-                        elif agree_typ in [2, 42]:
+                        elif agree_typ in [2, 42, 21]:
                             if counter_typ == 1:
                                 counter_name = 21
                             elif counter_typ == 2:
@@ -264,24 +277,7 @@ def agree_edit_ajax(request):  #
                                 counter_name = 9
                             elif counter_typ == 59:
                                 counter_name = 59
-                        elif agree_typ == 3:
-                            if counter_typ == 1:
-                                counter_name = 21
-                            elif counter_typ == 2:
-                                counter_name = 2
-                            elif counter_typ in [11, 12, 13, 14, 15]:
-                                counter_name = 23
-                            elif counter_typ == 31:
-                                counter_name = 24
-                            elif counter_typ == 32:
-                                counter_name = 25
-                            elif counter_typ in [33, 34, 39, 41]:
-                                counter_name = 26
-                            elif counter_typ in [51, 52, 53]:
-                                counter_name = 9
-                            elif counter_typ == 59:
-                                counter_name = 59
-                        elif agree_typ in [7, 47]:
+                        elif agree_typ in [4, 7, 47]:
                             if counter_typ == 1:
                                 counter_name = 41
                             elif counter_typ == 2:
@@ -298,6 +294,7 @@ def agree_edit_ajax(request):  #
                                 counter_name = 9
                             elif counter_typ == 59:
                                 counter_name = 59
+
                         models.Counters.objects.filter(id=counter.id).update(counter_name=counter_name)
                 response['skip'] = "/dbms/agree/scan/%s" % agree_obj.id
                 response['message'] = '成功修改合同：%s！' % agree_obj.agree_num
@@ -408,10 +405,8 @@ def counter_add_ajax(request):
                          (45, '股权质押合同'), (46, '质押合同'),
                          (59, '举办者权益转让协议'),]'''
     counter_name = ''
-    if agree_typ in [1, 41]:
+    if agree_typ in [1, 41, 22]:
         if counter_typ == 1:
-            counter_name = 1
-        elif counter_typ == 2 and agree_typ == 41:
             counter_name = 1
         elif counter_typ == 2:
             counter_name = 2
@@ -421,17 +416,15 @@ def counter_add_ajax(request):
             counter_name = 4
         elif counter_typ == 32:
             counter_name = 5
-        elif counter_typ in [33, 34, 39, 41]:
+        elif counter_typ in [33, 34, 41]:
             counter_name = 6
         elif counter_typ in [51, 52, 53]:
             counter_name = 9
         elif counter_typ == 59:
             counter_name = 59
-    elif agree_typ in [2, 42]:
+    elif agree_typ in [2, 42, 21]:
         if counter_typ == 1:
             counter_name = 21
-        elif counter_typ == 2 and agree_typ == 42:
-            counter_name = 2
         elif counter_typ == 2:
             counter_name = 2
         elif counter_typ in [11, 12, 13, 14, 15]:
@@ -446,11 +439,9 @@ def counter_add_ajax(request):
             counter_name = 9
         elif counter_typ == 59:
             counter_name = 59
-    elif agree_typ in [7, 47]:
+    elif agree_typ in [4, 7, 47]:
         if counter_typ == 1:
             counter_name = 41
-        elif counter_typ == 2 and agree_typ == 47:
-            counter_name = 1
         elif counter_typ == 2:
             counter_name = 2
         elif counter_typ in [11, 12, 13, 14, 15]:

@@ -166,16 +166,12 @@ def home(request):
     print('acc_login-->request.GET:', request.GET)
     print("request.session.get('authority_list'):", request.session.get('authority_list'))
     print("request.session.get('menu_leaf_list'):", request.session.get('menu_leaf_list'))
-    #
-    # custom_list = models.Customes.objects.filter(custom_state=11)
-    # for custom in custom_list:
-    #     '''CUSTOM_STATE_LIST = [(11, '担保客户'), (21, '反担保客户'), (99, '注销客户')]'''
-    #     controlor = models.Provides.objects.filter(notify__agree__lending__summary__custom=custom).order_by(
-    #         '-provide_date').first()
-    #     if controlor:
-    #         print(controlor, controlor.provide_date)
-    #         models.Customes.objects.filter(id=custom.id).update(provide_date=str(controlor.provide_date))
-
+    # lending_list = models.LendingOrder.objects.all()
+    # for lending in lending_list:
+    #     '''ARTICLE_STATE_LIST = [(1, '待反馈'), (2, '已反馈'), (3, '待上会'), (4, '已上会'), (5, '已签批'),
+    #                       (51, '已放款'), (52, '已放完'), (55, '已解保'), (61, '待变更'), (99, '已注销')]'''
+    #     if lending.summary.article_state in [5, 51, 52, 55] and lending.lending_state == 4:
+    #         models.LendingOrder.objects.filter(id=lending.id).update(lending_state=5)
     return render(request, 'test.html', locals())
 
 

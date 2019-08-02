@@ -45,13 +45,16 @@ def review(request, *args, **kwargs):  # 保后列表
             q.children.append(("%s__contains" % field, search_key))
         custom_list = custom_list.filter(q)
     today_year = datetime.date.today().year
+    today_day = datetime.date.today()
     for custom in custom_list:
+        custom_lately_date = custom.lately_date
+        day_space = today_day - custom_lately_date
         '''REVIEW_STY_LIST = [(1, '现场检查'), (11, '电话回访'), (61, '补调替代'), (62, '尽调替代')]'''
         review_count = custom.review_custom.filter(review_date__year=today_year, review_sty__in=[1, 11]).count()  # 保后次数
         # article_count = custom.article_custom.filter(build_date__year=today_year).count()  # 尽调次数
         inv_count = custom.inv_custom.filter(inv_date__year=today_year).count()  # 补调次数
-        custom_ll = models.Customes.objects.filter(id=custom.id).update(review_amount=review_count,
-                                                                        add_amount=inv_count)
+        custom_ll = models.Customes.objects.filter(id=custom.id).update(
+            review_amount=review_count, add_amount=inv_count, day_space=day_space.days)
 
     flow_amount = custom_list.aggregate(Sum('custom_flow'))['custom_flow__sum']  # 流贷余额
     accept_amount = custom_list.aggregate(Sum('custom_accept'))['custom_accept__sum']  # 承兑余额

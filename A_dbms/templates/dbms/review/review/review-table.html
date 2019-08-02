@@ -14,8 +14,8 @@
             <th>类型</th>
             <th>补调(次)</th>
             <th>保后(次)</th>
-            <th>最近调查日期</th>
-            <th>最近放款日期</th>
+            <th>更新日期</th>
+            <th>间隔(日)</th>
             <th>风险分类</th>
             <th>计划时间</th>
             <th>保后状态</th>
@@ -42,7 +42,7 @@
                 <td align="right">{{ custom.add_amount }}</td>
                 <td align="right">{{ custom.review_amount }}</td>
                 <td>{{ custom.lately_date }}</td>
-                <td>{{ custom.provide_date|default_if_none:"" }}</td>
+                <td align="right">{{ custom.day_space|default_if_none:"" }}</td>
                 <td>{{ custom.get_classification_display }}</td>
                 <td>{{ custom.review_plan_date|default_if_none:"" }}</td>
                 <td>{{ custom.get_review_state_display }}</td>

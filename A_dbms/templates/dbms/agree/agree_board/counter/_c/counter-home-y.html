@@ -65,7 +65,7 @@
                 {#(55, '其他')#}
             {% elif warrant.warrant_typ == 55 %}
                 <p><strong>出质人（乙方）：{{ warrant.other_warrant.other_owner.name }}</strong></p>
-                <p>住所（地址）：<{{ warrant.other_warrant.other_owner.company_custome.registered_addr }}</p>
+                <p>住所（地址）：{{ warrant.other_warrant.other_owner.company_custome.registered_addr }}</p>
                 <p>法定代表人：{{ warrant.other_warrant.other_owner.company_custome.representative }}</p>
             {% else %}
                 <p><strong>？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？</strong></p>

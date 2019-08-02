@@ -374,7 +374,8 @@ def provide_add_ajax(request):
                     cooperator_list = models.Cooperators.objects.filter(branch_cooperator=branch_obj)
                     cooperator_obj = cooperator_list.first()
                     '''PROVIDE_TYP_LIST = [(1, '流贷'), (11, '承兑'), (21, '保函'), (31, '委贷'), (41, '小贷')]'''
-                    custom_list.update(provide_date=form_provide_cleaned['provide_date'])  # 客户，更新流贷余额
+                    custom_list.update(provide_date=form_provide_cleaned['provide_date'],
+                                       lately_date=form_provide_cleaned['provide_date'])  # 客户，更新流贷余额
                     if provide_typ == 1:  # (1, '流贷')
                         custom_list.update(custom_flow=round(custom_provide_balance, 2))  # 客户，更新流贷余额
                         branch_list.update(branch_flow=round(branch_provide_balance, 2))  # 放款银行，更新流贷余额

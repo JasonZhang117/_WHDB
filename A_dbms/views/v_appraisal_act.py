@@ -670,7 +670,7 @@ def article_sign_ajax(request):
                                 '''LENDING_STATE = [(3, '待上会'), (4, '已上会'), (5, '已签批'),
                                                      (51, '已放款'), (52, '已放完'), (55, '已解保'), (61, '待变更'),
                                                       (99, '已注销')]'''
-                                models.LendingOrder.objects.filter(summary=article_obj).update(lending_state=4)
+                                models.LendingOrder.objects.filter(summary=article_obj).update(lending_state=5)
                                 # 更新客户授信总额，存量/新增情况
                                 custom_list.update(
                                     credit_amount=cleaned_data['credit_amount'], custom_typ=custom_typ_n,

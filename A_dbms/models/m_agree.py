@@ -12,7 +12,8 @@ def limit_agree_choices():
 class Agrees(models.Model):  # 委托合同
     agree_num = models.CharField(verbose_name='_合同编号', max_length=32, unique=True)
     AGREE_NAME_LIST = [(1, '委托保证合同'), (11, '最高额委托保证合同'),
-                       (21, '委托出具分离式保函合同'), (31, '借款合同')]
+                       (21, '委托出具分离式保函合同'), (22, '开立保函合同'),
+                       (31, '借款合同'), (41, '委托贷款合同'), ]
     agree_name = models.IntegerField(verbose_name='合同种类', choices=AGREE_NAME_LIST)
     num_prefix = models.CharField(verbose_name='_编号前缀', max_length=32)
     lending = models.ForeignKey(to='LendingOrder', verbose_name="放款纪要",
@@ -25,7 +26,8 @@ class Agrees(models.Model):  # 委托合同
                                # limit_choices_to={'branch_state': 1},
                                related_name='agree_branch')
     agree_term = models.IntegerField(verbose_name='合同期限（月）')
-    AGREE_TYP_LIST = [(1, '单笔'), (2, '最高额'), (3, '保函'), (7, '小贷'),
+    AGREE_TYP_LIST = [(1, '单笔'), (2, '最高额'), (4, '委贷'), (7, '小贷'),
+                      (21, '分离式保函'), (22, '公司保函'), (23, '银行保函'),
                       (41, '单笔(公证)'), (42, '最高额(公证)'), (47, '小贷(公证)')]
     agree_typ = models.IntegerField(verbose_name='合同种类', choices=AGREE_TYP_LIST)
     GUARANTEE_TYP_LIST = (('①', '①'), ('②', '②'), ('③', '③'), ('④', '④'),
@@ -75,7 +77,7 @@ class Counters(models.Model):  # 反担保合同
                          (41, '保证合同'),
                          (43, '抵押合同'), (44, '应收账款质押合同'),
                          (45, '股权质押合同'), (46, '质押合同'),
-                         (59, '举办者权益转让协议'),]
+                         (59, '举办者权益转让协议'), ]
     counter_name = models.IntegerField(verbose_name='合同种类', choices=COUNTER_NAME_LIST, null=True, blank=True)
     agree = models.ForeignKey(to='Agrees', verbose_name="委托保证合同",
                               on_delete=models.PROTECT, related_name='counter_agree')
@@ -167,7 +169,7 @@ class ResultState(models.Model):  # 房产抵押反担保合同
     custom = models.ForeignKey(to='Customes', verbose_name="客户",
                                on_delete=models.PROTECT,
                                related_name='result_custom')
-    RESULT_TYP_LIST = [(11, '股东会决议'), (13, '合伙人会议决议'), (15, '举办者会议决议'),(21, '董事会决议'),
+    RESULT_TYP_LIST = [(11, '股东会决议'), (13, '合伙人会议决议'), (15, '举办者会议决议'), (21, '董事会决议'),
                        (23, '管委会决议'),
                        (31, '声明书'), (41, '个人婚姻状况及财产申明')]
     result_typ = models.IntegerField(verbose_name='决议类型', choices=RESULT_TYP_LIST)
