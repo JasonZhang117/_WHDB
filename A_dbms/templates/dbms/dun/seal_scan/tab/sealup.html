@@ -8,17 +8,19 @@
             <th>备注</th>
             <th>创建人</th>
             <th>创建日期</th>
+            <th>操作</th>
         </tr>
         </thead>
-        <tbody>
+        <tbody id="sealup-tb">
         {% for sealup in seal_obj.sealup_seal.all %}
-            <tr>
+            <tr sealup-nid="{{ sealup.id }}">
                 <td>{{ sealup.get_sealup_type_display }}</td>
                 <td>{{ sealup.sealup_date|default_if_none:"" }}</td>
                 <td>{{ sealup.due_date|default_if_none:"" }}</td>
                 <td>{{ sealup.sealup_remark|default_if_none:"" }}</td>
                 <td>{{ sealup.sealupor.name }}</td>
                 <td>{{ sealup.sealupor_date }}</td>
+                <td><a class="btn btn-primary btn-xs delSealupB">删除</a></td>
             <tr>
         {% endfor %}
 

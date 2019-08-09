@@ -1,0 +1,18 @@
+<div class="modal fade bs-example-modal-sm" id="delSealupModal"
+     tabindex="-1" role="dialog" aria-labelledby="delSealupModal">
+    <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="delSealupModalLabel">删除查封信息
+                    <input style="display: none" name="seal_id" value="{{ seal_obj.id }}">
+                    <input style="display: none" name="sealup_id" id="delSealupId">
+                </h4>
+            </div>
+            <div class="modal-body">是否确定删除该查封信息？</div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                <button type="button" class="btn btn-primary" id="delSealupModalOk">确定</button>
+            </div>
+        </div>
+    </div>
+</div>

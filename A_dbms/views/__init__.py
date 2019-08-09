@@ -53,8 +53,8 @@ from .v_dun import (
     compensatory, compensatory_scan, dun, dun_scan, seal, overdue_seal, soondue_seal,
     overdue_search, seal_scan, dun_stage)
 from .v_dun_act import (
-    compensatory_add_ajax, dun_add_ajax, clue_add_ajax, clue_del_ajax, sealup_add_ajax, standing_add_ajax,
-    standing_del_ajax, charge_add_ajax, charge_del_ajax, retrieve_add_ajax,
+    compensatory_add_ajax, dun_add_ajax, clue_add_ajax, clue_del_ajax, sealup_add_ajax, sealup_del_ajax,
+    standing_add_ajax, standing_del_ajax, charge_add_ajax, charge_del_ajax, retrieve_add_ajax,
     retrieve_del_ajax, inquiry_add_ajax, defendant_add_ajax, defendant_del_ajax,
     stage_add_ajax, stage_del_ajax, judgment_add_ajax, judgment_del_ajax, agent_add_ajax,
     staff_add_ajax)

@@ -217,7 +217,7 @@ def seal(request, *args, **kwargs):
         seal_list = seal_list.filter(q)
     compensatory_amount = seal_list.count()  # 信息数目
     '''分页'''
-    paginator = Paginator(seal_list, 19)
+    paginator = Paginator(seal_list, 119)
     page = request.GET.get('page')
     try:
         p_list = paginator.page(page)

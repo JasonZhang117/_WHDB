@@ -193,6 +193,7 @@ urlpatterns = [
     path('dun/agent/add/', views.agent_add_ajax, name='dun_agent_add_ajax'),
     path('dun/staff/add/', views.staff_add_ajax, name='dun_staff_add_ajax'),
     path('dun/sealup/add/', views.sealup_add_ajax, name='dun_sealup_add_ajax'),
+    path('dun/sealup/del/', views.sealup_del_ajax, name='dun_sealup_del_ajax'),
     path('dun/inquiry/add/', views.inquiry_add_ajax, name='dun_inquiry_add_ajax'),
     path('dun/standing/add/', views.standing_add_ajax, name='dun_standing_add_ajax'),
     path('dun/standing/del/', views.standing_del_ajax, name='dun_standing_del_ajax'),
@@ -200,7 +201,6 @@ urlpatterns = [
     path('dun/charge/del/', views.charge_del_ajax, name='dun_charge_del_ajax'),
     path('dun/retrieve/add/', views.retrieve_add_ajax, name='dun_retrieve_add_ajax'),
     path('dun/retrieve/del/', views.retrieve_del_ajax, name='dun_retrieve_del_ajax'),
-
 
     # -----------------------客户管理-------------------------#
 
@@ -231,7 +231,8 @@ urlpatterns = [
     # ------------------------------报表--------------------------------------#
     path('report/', views.report, name='report'),  #
     path('report/provide/list/<int:p_typ>/<int:t_typ>/', views.report_provide_list, name='report_provide_list'),
-    path('report/provide/balance/class/<int:c_typ>/<int:t_typ>/', views.report_balance_class, name='report_balance_class'),
+    path('report/provide/balance/class/<int:c_typ>/<int:t_typ>/', views.report_balance_class,
+         name='report_balance_class'),
     path('report/article/balance/class/<int:c_typ>/', views.report_article_class, name='report_article_class'),
 
     path('report/accrual/list/<int:p_typ>/<int:t_typ>/', views.report_provide_accrual, name='report_provide_accrual'),
@@ -239,7 +240,6 @@ urlpatterns = [
     path('report/article/class/<int:c_typ>/<int:t_typ>/', views.report_article, name='report_article'),
     path('report/custom/class/<int:c_typ>/<int:t_typ>/', views.report_custom, name='report_custom'),
     path('report/dun/class/<int:t_typ>/', views.report_dun, name='report_dun'),
-
 
     # 员工
     path('employee/', views.employee, name='employee'),

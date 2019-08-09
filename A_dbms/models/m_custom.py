@@ -25,14 +25,14 @@ class Customes(models.Model):  # 客户
     REVIEW_STATE_LIST = [(1, '待保后'), (11, '待报告'), (21, '已完成'), (81, '自主保后')]
     review_state = models.IntegerField(verbose_name='_保后状态', choices=REVIEW_STATE_LIST, default=21)
     review_date = models.DateField(verbose_name='保后日期', blank=True, null=True)
-    review_amount = models.IntegerField(verbose_name='保后', default=0)
-    add_amount = models.IntegerField(verbose_name='补调', default=0)
+    review_amount = models.IntegerField(verbose_name='保后次数', default=0)
+    add_amount = models.IntegerField(verbose_name='补调次数', default=0)
 
     CLASSIFICATION_LIST = [(1, '正常'), (11, '关注'), (21, '次级'), (31, '可疑'), (41, '损失')]
     classification = models.IntegerField(verbose_name='_风险分类', choices=CLASSIFICATION_LIST, default=1)
-
-    lately_date = models.DateField(verbose_name='最近调查', null=True, blank=True)
     provide_date = models.DateField(verbose_name='最近放款', null=True, blank=True)
+    # 含上会，放款，补调，保后
+    lately_date = models.DateField(verbose_name='最近更新', null=True, blank=True)
     day_space = models.IntegerField(verbose_name='间隔（日）', default=0)
 
     CUSTOM_DUN_LIST = ((1, '正常'), (11, '被告'), (99, '注销'))
@@ -113,6 +113,7 @@ class Shareholders(models.Model):
         verbose_name_plural = '客户-股东信息'  # 指定显示名称
         db_table = 'dbms_shareholders'  # 指定数据表的名称
         unique_together = ['custom', 'shareholder_name']
+        ordering = ['-shareholding_ratio', ]
 
     def __str__(self):
         return '%s-%s' % (self.custom, self.shareholder_name)

@@ -277,7 +277,9 @@ class Sealup(models.Model):
 
     class Meta:
         verbose_name_plural = '追偿-查封明细'  # 指定显示名称
+        ordering = ['-sealupor_date']
         db_table = 'dbms_sealup'  # 指定数据表的名称
+
 
     def __str__(self):
         return '%s_%s_%s_%s' % (self.seal.dun.title, self.seal.warrant.warrant_num, self.sealup_type, self.sealup_date)

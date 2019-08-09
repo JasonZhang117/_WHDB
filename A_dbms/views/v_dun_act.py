@@ -453,6 +453,33 @@ def sealup_add_ajax(request):  # 修改项目ajax
     result = json.dumps(response, ensure_ascii=False)
     return HttpResponse(result)
 
+# -----------------------删除查封情况ajax-------------------------#
+@login_required
+@authority
+def sealup_del_ajax(request):
+    response = {'status': True, 'message': None, 'forme': None, }
+    post_data_str = request.POST.get('postDataStr')
+    post_data = json.loads(post_data_str)
+
+    sealup_obj = models.Sealup.objects.get(id=post_data['sealup_id'])
+    seal_obj = models.Seal.objects.get(id=post_data['seal_id'])
+    '''DUN_STAGE_LIST = ((1, '起诉'), (11, '判决'), (21, '执行'), (31, '和解结案'), (41, '终止执行'), (99, '注销'))'''
+    sealup_latest = seal_obj.sealup_seal.all().order_by('-sealup_date').first()
+    # if not sealup_obj == sealup_latest:
+    if True:
+        try:
+            with transaction.atomic():
+                sealup_obj.delete()  # 删除追偿跟进信息
+            response['message'] = '查封信息删除成功！'
+        except Exception as e:
+            response['status'] = False
+            response['message'] = '删除失败：%s' % str(e)
+    else:
+        response['status'] = False
+        response['message'] = '不能删除最新的查封记录！！！'
+    result = json.dumps(response, ensure_ascii=False)
+    return HttpResponse(result)
+
 
 # -----------------------------查询情况ajax------------------------#
 @login_required

@@ -87,7 +87,7 @@ def review_update_ajax(request):
                         classification=review_cleaned['classification'],
                         review_date=review_cleaned['review_date'],
                         reviewor=request.user)
-                    custom_list.update(review_state=81, review_date=today_str,
+                    custom_list.update(review_state=81, review_date=review_cleaned['review_date'],
                                        lately_date=review_cleaned['review_date'], )  # 更新客户信息
                 response['message'] = '自主保后提交成功！'
             except Exception as e:
@@ -115,7 +115,7 @@ def review_update_ajax(request):
                                        classification=review_cleaned['classification'],
                                        review_date=review_cleaned['review_date'],
                                        review_state=21)  # 更新保后信息
-                    custom_list.update(review_state=21, review_date=today_str,
+                    custom_list.update(review_state=21, review_date=review_cleaned['review_date'],
                                        lately_date=review_cleaned['review_date'])  # 更新客户信息
                 response['message'] = '保后成功！'
             except Exception as e:
