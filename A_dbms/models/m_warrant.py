@@ -11,8 +11,8 @@ class Warrants(models.Model):  # 担保物
     '''其他-存货、设备、合格证、'''
     warrant_typ = models.IntegerField(verbose_name='权证类型', choices=WARRANT_TYP_LIST, default=1)
 
-    EVALUATE_STATE_LIST = [(0, '待评估'), (1, '机构评估'), (11, '机构预估'), (21, '综合询价'), (31, '购买成本'),
-                           (41, '拍卖评估'), (99, '无需评估')]
+    EVALUATE_STATE_LIST = [(0, '待评估'), (1, '机构评估'), (11, '机构预估'),(12, '机构口评'),
+                           (21, '综合询价'), (31, '购买成本'), (41, '拍卖评估'), (99, '无需评估')]
     evaluate_state = models.IntegerField(verbose_name='评估方式', choices=EVALUATE_STATE_LIST, default=0)
     evaluate_value = models.FloatField(verbose_name='评估价值', null=True, blank=True)
     evaluate_date = models.DateField(verbose_name='评估日期', null=True, blank=True)
@@ -87,8 +87,8 @@ class Houses(models.Model):  # 房产
                       (46, '非生产性工业科研用房'),
                       (51, '科研'), (52, '车间'), (53, '消防通道'), (54, '倒班房'), (61, '车库'),
                       (62, '车位'), (63, '首层机动车停车场'), (71, '仓储'), (72, '仓储用房及配送用房'),
-                      (73, '物流配送中心用房'),
-                      (81, '在建工程'), (91, '其他'), (99, '期房')]
+                      (73, '物流配送中心用房'), (74, '连廊'), (75, '自行车库'), (76, '生产用房'),
+                      (77, '库房'), (81, '在建工程'), (91, '其他'), (99, '期房')]
     house_app = models.IntegerField(verbose_name='房产用途', choices=HOUSE_APP_LIST, default=1)
     house_area = models.FloatField(verbose_name='建筑面积')
     house_name = models.CharField(verbose_name='备注', max_length=64, null=True, blank=True)
