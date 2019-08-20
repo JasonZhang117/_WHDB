@@ -72,17 +72,17 @@ class MenuHelper(object):
 
 def acc_login(request):
     ''':param request::return:'''
-    print(request.path, '>', resolve(request.path).url_name, '>', request.user)
+    # print(request.path, '>', resolve(request.path).url_name, '>', request.user)
     error_msg = ''
     if request.method == "POST":
         username = request.POST.get('username')
         password = request.POST.get('password')
         code = request.POST.get('code')
-        print("acc_login-->request.POST.get('username'):", username)
-        print("acc_login-->request.POST.get('password'):", password)
-        print("acc_login-->request.POST.get('code'):", code)
+        # print("acc_login-->request.POST.get('username'):", username)
+        # print("acc_login-->request.POST.get('password'):", password)
+        # print("acc_login-->request.POST.get('code'):", code)
         user = authenticate(username=username, password=password)
-        print('user:', user)
+        # print('user:', user)
         if user:
             job_list_d = list(user.job.all().values('name'))  # 角色列表
             job_list = []
@@ -139,7 +139,7 @@ def authority(func):
             response['message'] = ''
             result = json.dumps(response, ensure_ascii=False)
             return HttpResponse(result)
-        print(request.user, '>', request.path, '>', resolve(request.path).url_name, '>', request.POST, request.GET)
+        # print(request.user, '>', request.path, '>', resolve(request.path).url_name, '>', request.POST, request.GET)
         return func(request, *args, **kwargs)
 
     return inner
