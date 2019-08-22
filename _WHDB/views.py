@@ -153,19 +153,19 @@ def acc_logout(request):
 @login_required
 # @authority
 def home(request):
-    print(request.path, '>', resolve(request.path).url_name, '>', request.user)
-    print('request.path_info', request.path_info)  # 当前url
-    print('request.path:', request.path)
-    print('resolve(request.path):', resolve(request.path))  # 路径转换为url_name等
-    print('resolve(request.path):', resolve(request.path).url_name)  # 路径转换为url_name、app_name
-    print('reverse(request.path):', reverse('home'))  # 将路径名转换为路径
-    print('request.get_host:', request.get_host())
-    print('request.GET.items():', request.GET.items())  # 获取get传递的参数对
-    print('acc_login-->request.COOKIES:', request.COOKIES)
-    print('acc_login-->request.session:', request.session)
-    print('acc_login-->request.GET:', request.GET)
-    print("request.session.get('authority_list'):", request.session.get('authority_list'))
-    print("request.session.get('menu_leaf_list'):", request.session.get('menu_leaf_list'))
+    # print(request.path, '>', resolve(request.path).url_name, '>', request.user)
+    # print('request.path_info', request.path_info)  # 当前url
+    # print('request.path:', request.path)
+    # print('resolve(request.path):', resolve(request.path))  # 路径转换为url_name等
+    # print('resolve(request.path):', resolve(request.path).url_name)  # 路径转换为url_name、app_name
+    # print('reverse(request.path):', reverse('home'))  # 将路径名转换为路径
+    # print('request.get_host:', request.get_host())
+    # print('request.GET.items():', request.GET.items())  # 获取get传递的参数对
+    # print('acc_login-->request.COOKIES:', request.COOKIES)
+    # print('acc_login-->request.session:', request.session)
+    # print('acc_login-->request.GET:', request.GET)
+    # print("request.session.get('authority_list'):", request.session.get('authority_list'))
+    # print("request.session.get('menu_leaf_list'):", request.session.get('menu_leaf_list'))
     # lending_list = models.LendingOrder.objects.all()
     # for lending in lending_list:
     #     '''ARTICLE_STATE_LIST = [(1, '待反馈'), (2, '已反馈'), (3, '待上会'), (4, '已上会'), (5, '已签批'),
