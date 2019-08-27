@@ -86,7 +86,7 @@
                             {% for custome in counter.assure_counter.custome.all %}
                                 {{ custome.contact_addr }}
                                 {% if custome.person_custome.spouses %}
-                                    {#                                    、{{ custome.person_custome.spouses.contact_addr }}#}
+                                    、{{ custome.person_custome.spouses.contact_addr }}
                                 {% endif %}
                             {% endfor %}
                         </td>
@@ -123,7 +123,7 @@
                             {% for custome in counter.assure_counter.custome.all %}
                                 {{ custome.linkman }}
                                 {% if custome.person_custome.spouses %}
-                                    {#                                    、{{ custome.person_custome.spouses.linkman }}#}
+                                    、{{ custome.person_custome.spouses.linkman }}
                                 {% endif %}
                             {% endfor %}
                         </td>
@@ -160,7 +160,7 @@
                             {% for custome in counter.assure_counter.custome.all %}
                                 {{ custome.contact_num }}
                                 {% if custome.person_custome.spouses %}
-                                    {#                                    、{{ custome.person_custome.spouses.contact_num }}#}
+                                    、{{ custome.person_custome.spouses.contact_num }}
                                 {% endif %}
                             {% endfor %}
                         </td>
