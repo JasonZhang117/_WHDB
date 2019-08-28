@@ -31,6 +31,6 @@
     {#        </label>#}
     {#    {% endif %}#}
     <label>
-        在保余额：{{ balance }}（流贷：{{ flow_amount }}，承兑：{{ accept_amount }}，保函：{{ back_amount }}）
+        在保余额：{{ balance|floatformat:2  }}
     </label>
 </div>

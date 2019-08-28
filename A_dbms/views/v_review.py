@@ -56,24 +56,7 @@ def review(request, *args, **kwargs):  # 保后列表
         custom_ll = models.Customes.objects.filter(id=custom.id).update(
             review_amount=review_count, add_amount=inv_count, day_space=day_space.days)
 
-    flow_amount = custom_list.aggregate(Sum('custom_flow'))['custom_flow__sum']  # 流贷余额
-    accept_amount = custom_list.aggregate(Sum('custom_accept'))['custom_accept__sum']  # 承兑余额
-    back_amount = custom_list.aggregate(Sum('custom_back'))['custom_back__sum']  # 保函余额
-
-    if flow_amount:
-        flow_amount = flow_amount
-    else:
-        flow_amount = 0
-    if accept_amount:
-        accept_amount = accept_amount
-    else:
-        accept_amount = 0
-    if back_amount:
-        back_amount = back_amount
-    else:
-        back_amount = 0
-
-    balance = flow_amount + accept_amount + back_amount
+    balance = custom_list.aggregate(Sum('amount'))['amount__sum']  # 在保余额
 
     custom_acount = custom_list.count()
     paginator = Paginator(custom_list, 119)

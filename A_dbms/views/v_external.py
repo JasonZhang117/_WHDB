@@ -51,19 +51,7 @@ def cooperative(request, *args, **kwargs):  # 合作机构
     flow_amount = cooperator_list.aggregate(Sum('cooperator_flow'))['cooperator_flow__sum']  # 流贷余额
     accept_amount = cooperator_list.aggregate(Sum('cooperator_accept'))['cooperator_accept__sum']  # 承兑余额
     back_amount = cooperator_list.aggregate(Sum('cooperator_back'))['cooperator_back__sum']  # 保函余额
-    if flow_amount:
-        flow_amount = flow_amount
-    else:
-        flow_amount = 0
-    if accept_amount:
-        accept_amount = accept_amount
-    else:
-        accept_amount = 0
-    if back_amount:
-        back_amount = back_amount
-    else:
-        back_amount = 0
-    balance = flow_amount + accept_amount + back_amount
+    balance = cooperator_list.aggregate(Sum('amount'))['amount__sum']  # 保函余额
 
     compensatory_amount = cooperator_list.count()  # 信息数目
 
@@ -199,20 +187,7 @@ def branches(request, *args, **kwargs):  #
     flow_amount = branch_list.aggregate(Sum('branch_flow'))['branch_flow__sum']  # 流贷余额
     accept_amount = branch_list.aggregate(Sum('branch_accept'))['branch_accept__sum']  # 承兑余额
     back_amount = branch_list.aggregate(Sum('branch_back'))['branch_back__sum']  # 保函余额
-
-    if flow_amount:
-        flow_amount = flow_amount
-    else:
-        flow_amount = 0
-    if accept_amount:
-        accept_amount = accept_amount
-    else:
-        accept_amount = 0
-    if back_amount:
-        back_amount = back_amount
-    else:
-        back_amount = 0
-    balance = flow_amount + accept_amount + back_amount
+    balance = branch_list.aggregate(Sum('amount'))['amount__sum']  # 保函余额
 
     compensatory_amount = branch_list.count()  # 信息数目
 
