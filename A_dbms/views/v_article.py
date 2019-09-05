@@ -193,5 +193,9 @@ def article_scan_lending(request, article_id, lending_id):  # 项目预览
                                                             warrant_typ=55)
 
     form_agree_add = forms.ArticleAgreeAddForm()
+    today_str = datetime.date.today()
+    date_th_later = today_str + datetime.timedelta(days=365)
+    from_letter_data = {'starting_date': str(today_str), 'due_date': str(date_th_later)}
+    form_letter_add = forms.LetterGuaranteeAddForm(initial=from_letter_data)
 
     return render(request, 'dbms/article/article-scan-lending.html', locals())

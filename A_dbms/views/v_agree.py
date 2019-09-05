@@ -249,12 +249,17 @@ def agree_preview(request, agree_id):
     agree_typ = agree_obj.agree_typ
     agree_amount = agree_obj.agree_amount
     agree_amount_cn = convert(agree_amount)
-    '''AGREE_TYP_LIST = [(1, '单笔'), (2, '最高额'), (3, '保函'), (7, '小贷'),
+    '''AGREE_TYP_LIST = [(1, '单笔'), (2, '最高额'), (4, '委贷'), (7, '小贷'),
+                      (21, '分离式保函'), (22, '公司保函'), (23, '银行保函'),
                       (41, '单笔(公证)'), (42, '最高额(公证)'), (47, '小贷(公证)')]'''
+    if agree_typ in [22,]:
+        page_home_y_y = '申请人'
+    else:
+        page_home_y_y = '被担保人'
     agree_amount_str = str(agree_amount / 10000).rstrip('0').rstrip('.')  # 续贷（万元）
     agree_copy_cn = convert_num(agree_obj.agree_copies)
     notarization_typ = False
-    if agree_typ in [1, 2, 3, 7]:
+    if agree_typ in [1, 2, 3, 4, 7, 21, 22, 23]:
         agree_copy_jy_cn = convert_num(agree_obj.agree_copies - 2)
     else:
         notarization_typ = True
@@ -291,7 +296,8 @@ def counter_preview(request, agree_id, counter_id):
     menu_result = MenuHelper(request).menu_data_list()
     agree_obj = models.Agrees.objects.get(id=agree_id)  # 委托合同
     counter_obj = models.Counters.objects.get(id=counter_id)  # 反担保合同
-    '''AGREE_TYP_LIST = [(1, '单笔'), (2, '最高额'), (3, '保函'), (7, '小贷'),
+    '''AGREE_TYP_LIST = [(1, '单笔'), (2, '最高额'), (4, '委贷'), (7, '小贷'),
+                      (21, '分离式保函'), (22, '公司保函'), (23, '银行保函'),
                       (41, '单笔(公证)'), (42, '最高额(公证)'), (47, '小贷(公证)')]'''
     agree_typ = agree_obj.agree_typ
     notarization_typ = False
@@ -302,7 +308,7 @@ def counter_preview(request, agree_id, counter_id):
         (11, '房产抵押'), (12, '土地抵押'), (13, '动产抵押'), (14, '在建工程抵押'), (15, '车辆抵押'),
         (31, '应收质押'), (32, '股权质押'), (33, '票据质押'), (34, '动产质押'),
         (41, '其他权利质押'),
-        (51, '股权预售'), (52, '房产预售'), (53, '土地预售')]'''
+        (51, '股权预售'), (52, '房产预售'), (53, '土地预售'), (59, '其他预售')]'''
     counter_typ = counter_obj.counter_typ
     X_COUNTER_TYP_LIST = [1, 2, ]
     D_COUNTER_TYP_LIST = [11, 12, 13, 14, 15, ]
@@ -368,7 +374,11 @@ def counter_preview(request, agree_id, counter_id):
                 counter_property_type = '购房合同'
             elif other_typ == 21:
                 counter_property_type = '车辆合格证'
-
+    counter_home_b_b = ''
+    if agree_typ == 22:
+        counter_home_b_b = '被担保人'
+    else:
+        counter_home_b_b = '借款人'
     agree_amount = agree_obj.agree_amount
     agree_amount_cn = convert(agree_amount)
     agree_amount_str = str(agree_amount / 10000).rstrip('0').rstrip('.')  # 续贷（万元）

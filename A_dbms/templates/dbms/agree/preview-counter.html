@@ -16,6 +16,7 @@
     </div>
     <div id="view-save">
         {% if agree_typ == 1 %}
+{#            (1, '单笔')#}
             {% if counter_typ == 1 %}
                 {% include 'dbms/agree/agree_board/counter/c-s-x.html' %}
             {% elif counter_typ == 2 %}
@@ -28,6 +29,7 @@
                 <p>！！！！！！！还未添加合同模板，请联系系统管理员！！！！！！！</p>
             {% endif %}
         {% elif agree_typ == 2 %}
+{#            (2, '最高额')#}
             {% if counter_typ == 1 %}
                 {% include 'dbms/agree/agree_board/counter/c-m-x.html' %}
             {% elif counter_typ == 2 %}
@@ -45,7 +47,21 @@
             <p>！！！！！！！agree_typ == 4还未添加合同模板，请联系系统管理员！！！！！！！</p>
         {% elif agree_typ == 7 %}
             <p>！！！！！！！agree_typ == 7还未添加合同模板，请联系系统管理员！！！！！！！</p>
+        {% elif agree_typ == 22 %}
+{#            (22, '公司保函')#}
+            {% if counter_typ == 1 %}
+                {% include 'dbms/agree/agree_board/counter/c-s-x-l.html' %}
+            {% elif counter_typ == 2 %}
+                {% include 'dbms/agree/agree_board/counter/c-s-g-l.html' %}
+            {% elif counter_typ in D_COUNTER_TYP_LIST %}
+                {% include 'dbms/agree/agree_board/counter/c-s-d-l.html' %}
+            {% elif counter_typ in Z_COUNTER_TYP_LIST %}
+                {% include 'dbms/agree/agree_board/counter/c-s-z-l.html' %}
+            {% else %}
+                <p>！！！！！！！还未添加合同模板，请联系系统管理员！！！！！！！</p>
+            {% endif %}
         {% elif agree_typ == 41 %}
+{#            (41, '单笔(公证)')#}
             {% if counter_typ == 1 %}
                 {% include 'dbms/agree/agree_board/counter/c-s-x-n.html' %}
             {% elif counter_typ == 2 %}

@@ -10,30 +10,39 @@
 </head>
 <body>
 {% if agree_obj.agree_state == 11 or agree_obj.agree_state == 51 %}
-{#{% if 1 %}#}
+    {#{% if 1 %}#}
     <div class="container-fluid">
         <input style="display: none" name="agree_id" id="id_agree_id" value={{ agree_obj.id }}>
     </div>
     <div id="view-save">
         <div class="contain">
-            {#AGREE_TYP_LIST = [(1, '单笔'), (2, '最高额'), (3, '保函'), (7, '小贷'),#}
-            {#(41, '单笔(公证)'), (42, '最高额(公证)'), (47, '小贷(公证)')]#}
+            {#            AGREE_TYP_LIST = [(1, '单笔'), (2, '最高额'), (4, '委贷'), (7, '小贷'),#}
+            {#                      (21, '分离式保函'), (22, '公司保函'), (23, '银行保函'),#}
+            {#                      (41, '单笔(公证)'), (42, '最高额(公证)'), (47, '小贷(公证)')]#}
             {% if agree_typ == 1 %}
                 {% include 'dbms/agree/agree_board/entrust-single.html' %}
             {% elif agree_typ == 2 %}
                 {% include 'dbms/agree/agree_board/entrust-maximum.html' %}
             {% elif agree_typ == 3 %}
-                <p>？？？？？？？？？尚未添加保函委托合同模板？？？？？？？？？？？？？？</p>
+                <p>？？？？？？？？？？？？？？？？？？？？？？？</p>
             {% elif agree_typ == 4 %}
                 <p>？？？？？？？？？无需委托保证合同？？？？？？？？？？？？？？</p>
             {% elif agree_typ == 7 %}
-                <p>？？？？？？？？？尚未添加小贷借款合同模板？？？？？？？？？？？？？？</p>
+                <p>？？？？？？？？？尚未添加分离式保函合同模板？？？？？？？？？？？？？？</p>
+            {% elif agree_typ == 21 %}
+                <p>？？？？？？？？？尚未添加分离式保函合同模板？？？？？？？？？？？？？？</p>
+            {% elif agree_typ == 22 %}
+                {% include 'dbms/agree/agree_board/entrust-single-l.html' %}
+            {% elif agree_typ == 23 %}
+                <p>？？？？？？？？？尚未添加银行保函合同模板？？？？？？？？？？？？？？</p>
             {% elif agree_typ == 41 %}
                 {% include 'dbms/agree/agree_board/entrust-single-n.html' %}
             {% elif agree_typ == 42 %}
                 <p>？？？？？？？？？尚未添加最高额公证版本模板？？？？？？？？？？？？？</p>
             {% elif agree_typ == 47 %}
                 <p>？？？？？？？？？尚未添加小贷借款合同公证模板？？？？？？？？？？？？</p>
+            {% else %}
+                <p>？？？？？？？？？？无该类型合同模板，请联系管理员？？？？？？？？？？？</p>
             {% endif %}
         </div>
     </div>

@@ -1,0 +1,23 @@
+<div class="contain">
+    <div class="split">
+        <div style="text-align: center; font-size: 21pt; margin-bottom: 21pt;"><strong>{{ counter_obj.get_counter_name_display }}</strong></div>
+        <p style="text-indent: 0pt">致：成都武侯中小企业融资担保有限责任公司</p>
+        <p><strong><u>{{ agree_obj.lending.summary.custom.name }}</u></strong>（以下简称申请人）与贵公司于{% include 'dbms/agree/agree_board/date-period.html' %}签订了《{{ agree_obj.get_agree_name_display }}》（以下简称合同，合同编号：<u><strong>{{ agree_obj.agree_num }}</strong></u>），合同约定贵公司为申请人开立{{ credit_term_cn }}期<u><strong>{{ agree_obj.guarantee_agree.get_letter_typ_display }}</strong></u>，担保金额为：<u><strong>人民币{{ agree_amount_cn }}</strong></u>。对此，本反担保人无条件地不可撤销地保证：</p>
+        <p>一、如申请人不能按约向受益人履行义务，在贵公司履行保证责任后，或者申请人违反<u><strong>{{ agree_obj.guarantee_agree.basic_contract }}（编号：{{ agree_obj.guarantee_agree.basic_contract_num }}）</strong></u>（以下简称“基础合同”）、开立保函合同约定义务，以及申请人或其他反担保人按照反担保合同约定需承担担保义务等情形。本反担保人对贵公司代为向受益人支付的所有款项、担保费、申请人应承担的违约金（代为支付款项部分的<u><strong>5%</strong></u>）和赔偿金、贵公司实现债权的费用的合计金额承担连带保证责任。</p>
+        <p>二、当贵公司凭履行保证责任的有关证据，及申请人违反基础合同、开立保函合同义务或出现反担保合同约定情况要求本反担保人履行反担保责任时，本反担保人将立即履行保证责任。</p>
+        <p>三、本反担保函保证方式为连带责任保证。</p>
+        <p><strong>四、贵公司与申请人将该保函形成的债权转让后，本人在原保证担保的范围内对债权受让人继续承担连带保证责任。</strong></p>
+        <p><strong>五、申请人与受益人的合同期限延长的，本人对期限延长后的债务继续承担保证责任，保证期间自延长期限相关补充协议约定的债务履行期限届满后，贵公司实际代偿担保债务后，给予申请人宽限期届满之日起或依合同约定提前行使反担保权之日起两年。</strong></p>
+        <p>六、本反担保函项下的责任是不可撤销的，亦不因任何事由而免除，仅因申请人或本反担保人的付款而减少或消灭。</p>
+        <p>七、{% include 'dbms/agree/agree_board/counter/g/g-7.html' %}</p>
+        <p>八、{% include 'dbms/agree/agree_board/counter/g/g-8.html' %}</p>
+        <p>九、{% include 'dbms/agree/agree_board/counter/g/g-9-0.html' %}</p>
+        <div>{% include 'dbms/agree/agree_board/counter/g/g-9-1.html' %}</div>
+        <div>{% include 'dbms/agree/agree_board/counter/g/g-sign.html' %}</div>
+    </div>
+    <div class="split">
+        <div>{% include 'dbms/agree/agree_board/counter/g/g-appendix.html' %}</div>
+    </div>
+</div>
+
+

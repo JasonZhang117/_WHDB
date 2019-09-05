@@ -1,0 +1,45 @@
+<div id="form_agree_letter_add" class="agree-extend" style="display: none">
+
+    <div class="form-group"><!--保函类型-->
+        <label for="id_letter_typ"
+               class="col-sm-3 control-label">{{ form_letter_add.letter_typ.label }}：</label>
+        <div class="col-sm-9">{{ form_letter_add.letter_typ }}</div>
+        <label id="e_letter_typ" class="pull-right">{{ form_letter_add.letter_typ.errors }}</label>
+    </div>
+
+    <div class="form-group"><!--受益人-->
+        <label for="id_beneficiary"
+               class="col-sm-3 control-label">{{ form_letter_add.beneficiary.label }}：</label>
+        <div class="col-sm-9">{{ form_letter_add.beneficiary }}</div>
+        <label id="e_beneficiary" class="pull-right">{{ form_letter_add.beneficiary.errors }}</label>
+    </div>
+
+    <div class="form-group"><!--基础合同名称-->
+        <label for="id_basic_contract"
+               class="col-sm-3 control-label">{{ form_letter_add.basic_contract.label }}：</label>
+        <div class="col-sm-9">{{ form_letter_add.basic_contract }}</div>
+        <label id="e_basic_contract" class="pull-right">{{ form_letter_add.basic_contract.errors }}</label>
+    </div>
+
+    <div class="form-group"><!--基础合同编号-->
+        <label for="id_basic_contract_num"
+               class="col-sm-3 control-label">{{ form_letter_add.basic_contract_num.label }}：</label>
+        <div class="col-sm-9">{{ form_letter_add.basic_contract_num }}</div>
+        <label id="e_basic_contract_num" class="pull-right">{{ form_letter_add.basic_contract_num.errors }}</label>
+    </div>
+
+    <div class="form-group"><!--保函起始日-->
+        <label for="id_starting_date"
+               class="col-sm-3 control-label">{{ form_letter_add.starting_date.label }}：</label>
+        <div class="col-sm-9">{{ form_letter_add.starting_date }}</div>
+        <label id="e_starting_date" class="pull-right">{{ form_letter_add.starting_date.errors }}</label>
+    </div>
+
+    <div class="form-group"><!--保函到期日-->
+        <label for="id_due_date"
+               class="col-sm-3 control-label">{{ form_letter_add.due_date.label }}：</label>
+        <div class="col-sm-9">{{ form_letter_add.due_date }}</div>
+        <label id="e_due_date" class="pull-right">{{ form_letter_add.due_date.errors }}</label>
+    </div>
+
+</div>

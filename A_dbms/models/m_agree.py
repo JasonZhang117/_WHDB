@@ -65,6 +65,34 @@ class Agrees(models.Model):  # 委托合同
         return "%s_%s_(%s)" % (self.agree_num, self.agree_amount, self.lending)
 
 
+class LetterGuarantee(models.Model):
+    agree = models.OneToOneField(to='Agrees', verbose_name="委托保证合同",
+                              on_delete=models.CASCADE, related_name='guarantee_agree')
+    LETTER_TYP_LIST = [
+        (1, '履约保函'), (11, '投标保函'), (21, '预付款保函'), ]
+    letter_typ = models.IntegerField(verbose_name='保函类型', choices=LETTER_TYP_LIST)
+    beneficiary = models.CharField(verbose_name='受益人', max_length=32)
+    basic_contract = models.CharField(verbose_name='基础合同名称', max_length=64)
+    basic_contract_num = models.CharField(verbose_name='基础合同编号', max_length=64)
+    starting_date = models.DateField(verbose_name='起始日期', null=True, blank=True)
+    due_date = models.DateField(verbose_name='到期日', default=datetime.date.today)
+
+    guarantee_number = models.CharField(verbose_name='保函编号', max_length=32)
+    counter_view = models.TextField(verbose_name='保函预览', null=True, blank=True)
+
+    creator = models.ForeignKey(to='Employees', verbose_name="创建者", default=1,
+                                on_delete=models.PROTECT,
+                                related_name='creator_employee')
+    create_date = models.DateField(verbose_name='创建日期', default=datetime.date.today)
+
+    class Meta:
+        verbose_name_plural = '合同-保函'  # 指定显示名称
+        db_table = 'dbms_letter_guarantee'  # 指定数据表的名称
+
+    def __str__(self):
+        return self.guarantee_number
+
+
 # -----------------------反担保合同模型-------------------------#
 class Counters(models.Model):  # 反担保合同
     counter_num = models.CharField(verbose_name='_合同编号', max_length=32, unique=True)

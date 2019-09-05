@@ -53,6 +53,7 @@ def agree_add_ajax(request):  # 添加合同
     response = {'status': True, 'message': None, 'forme': None, 'skip': None, }
     post_data_str = request.POST.get('postDataStr')
     post_data = json.loads(post_data_str)
+    print(post_data)
     lending_obj = models.LendingOrder.objects.get(id=post_data['lending'])
     article_state_lending = lending_obj.summary.article_state
     '''ARTICLE_STATE_LIST = [(1, '待反馈'), (2, '已反馈'), (3, '待上会'), (4, '已上会'), (5, '已签批'),
@@ -61,6 +62,7 @@ def agree_add_ajax(request):  # 添加合同
     if article_state_lending in [4, 5, 51, 61]:
         # form_agree_add = forms.AgreeAddForm(post_data, request.FILES)
         form_agree_add = forms.ArticleAgreeAddForm(post_data, request.FILES)
+        form_letter_add = forms.LetterGuaranteeAddForm(post_data, request.FILES)
         if form_agree_add.is_valid():
             agree_add_cleaned = form_agree_add.cleaned_data
             # lending_obj = agree_add_cleaned['lending']
@@ -106,10 +108,10 @@ def agree_add_ajax(request):  # 添加合同
             '''成武担[2016]018④W6-1'''
             agree_num_prefix = "成武担[%s]%s%s" % (agree_year, agree_order, guarantee_typ)
             agree_num = "%sW%s-1" % (agree_num_prefix, agree_copies)
-            '''AGREE_TYP_LIST = [(1, '单笔'), (2, '最高额'),  (4, '委贷'), (7, '小贷'),
-                      (21, '分离式保函'), (22, '担保公司保函'), (23, '银行保函'),
+            '''AGREE_TYP_LIST = [(1, '单笔'), (2, '最高额'), (4, '委贷'), (7, '小贷'),
+                      (21, '分离式保函'), (22, '公司保函'), (23, '银行保函'),
                       (41, '单笔(公证)'), (42, '最高额(公证)'), (47, '小贷(公证)')]'''
-            ''' AGREE_NAME_LIST = [(1, '委托保证合同'), (11, '最高额委托保证合同'),
+            '''AGREE_NAME_LIST = [(1, '委托保证合同'), (11, '最高额委托保证合同'),
                        (21, '委托出具分离式保函合同'), (22, '开立保函合同'),
                        (31, '借款合同'), (41, '委托贷款合同'), ]'''
             agree_name = ''
@@ -125,17 +127,40 @@ def agree_add_ajax(request):  # 添加合同
                 agree_name = 21
             elif agree_typ == 22:
                 agree_name = 22
+
             try:
-                agree_obj = models.Agrees.objects.create(
-                    agree_num=agree_num, agree_name=agree_name, num_prefix=agree_num_prefix,
-                    lending=lending_obj, branch_id=branch_id, agree_typ=agree_typ,
-                    agree_term=agree_add_cleaned['agree_term'],
-                    amount_limit=amount_limit, agree_rate=agree_add_cleaned['agree_rate'],
-                    agree_amount=agree_amount, guarantee_typ=guarantee_typ, agree_copies=agree_copies,
-                    agree_buildor=request.user)
+                with transaction.atomic():
+                    agree_obj = models.Agrees.objects.create(
+                        agree_num=agree_num, agree_name=agree_name, num_prefix=agree_num_prefix,
+                        lending=lending_obj, branch_id=branch_id, agree_typ=agree_typ,
+                        agree_term=agree_add_cleaned['agree_term'],
+                        amount_limit=amount_limit, agree_rate=agree_add_cleaned['agree_rate'],
+                        agree_amount=agree_amount, guarantee_typ=guarantee_typ, agree_copies=agree_copies,
+                        agree_buildor=request.user)
+                    if agree_typ == 22:
+                        if form_letter_add.is_valid():
+                            letter_add_cleaned = form_letter_add.cleaned_data
+                            letter_typ = letter_add_cleaned['letter_typ']
+                            '''LETTER_TYP_LIST = [(1, '履约保函'), (11, '投标保函'), (21, '预付款保函'), ]'''
+                            guarantee_num_f = ''
+                            if letter_typ==1:
+                                guarantee_num_f = '-LY'
+                            elif letter_typ==11:
+                                guarantee_num_f = '-TB'
+                            elif letter_typ==21:
+                                guarantee_num_f = '-YF'
+
+                            guarantee_num = agree_num + guarantee_num_f + '1'
+                            letter_obj = models.LetterGuarantee.objects.create(
+                                agree=agree_obj, letter_typ=letter_typ, beneficiary=letter_add_cleaned['beneficiary'],
+                                basic_contract=letter_add_cleaned['basic_contract'],
+                                basic_contract_num=letter_add_cleaned['basic_contract_num'],
+                                starting_date=letter_add_cleaned['starting_date'],
+                                due_date=letter_add_cleaned['due_date'],
+                                guarantee_number=guarantee_num,
+                                creator=request.user, create_date=datetime.date.today())
                 response['skip'] = "/dbms/agree/scan/%s" % agree_obj.id
                 response['message'] = '成功创建合同：%s！' % agree_obj.agree_num
-
             except Exception as e:
                 response['status'] = False
                 response['message'] = '委托合同创建失败：%s' % str(e)
@@ -788,13 +813,17 @@ def result_state_ajax(request):  #
                             result += '<p>  1、同意向%s申请人民币%s%s贷款，用以补充流动资金。</p>' % (
                                 agree_obj.branch.name, agree_amount_cn, agree_term_str)
                             result += '<p>  2、同意委托成都武侯中小企业融资担保有限责任公司为该贷款向贷款方提供担保。</p>'
+                            order = 2
                         elif agr_typ in [2, 42]:
                             result += '<p>  1、同意向%s申请最高限额为人民币%s%s的银行授信（包括借款或银行承兑汇票、' \
                                       '保函等），用以补充流动资金。</p>' % (
                                           agree_obj.branch.name, agree_amount_cn, agree_term_str)
                             result += '<p>  2、同意委托成都武侯中小企业融资担保有限责任公司为该授信向贷款方提供担保。</p>'
-
-                        order = 2
+                            order = 2
+                        elif agr_typ in [22,]: #公司保函
+                            result += '<p>  同意向成都武侯中小企业融资担保有限责任公司人民币%s%s的保函。</p>' % (
+                                          agree_amount_cn, agree_term_str)
+                            order = 1
                     else:
                         order = 0
                     '''WARRANT_TYP_LIST = [
@@ -834,7 +863,10 @@ def result_state_ajax(request):  #
                             qqq = '为%s在%s申请的人民币%s%s贷款' % (
                                 agree_custom_obj.name, agree_obj.branch.name, agree_amount_cn, agree_term_str)
                         elif agr_typ in [2, 42]:  # 最高额
-                            qqq = '为为%s在%s申请的最高限额为人民币%s%s银行授信' % (
+                            qqq = '为%s在%s申请的最高限额为人民币%s%s银行授信' % (
+                                agree_custom_obj.name, agree_obj.branch.name, agree_amount_cn, agree_term_str)
+                        elif agr_typ in [22, ]:  # 公司保函
+                            qqq = '为%s在%s申请的人民币%s%s保函业务' % (
                                 agree_custom_obj.name, agree_obj.branch.name, agree_amount_cn, agree_term_str)
                     # 保证反担保
                     counter_asure_list = models.CountersAssure.objects.filter(

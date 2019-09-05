@@ -1,6 +1,7 @@
 <script>
     $(function () {
         bindAddAgree();
+        bind_id_agree_typ();
         bindAddAgreeModalOk();
     });
 
@@ -10,6 +11,22 @@
             $('#addAgreeModal').modal('show');
         })
     }
+
+    function bind_id_agree_typ() {
+        $('#id_agree_typ').change(function () {
+            console.log("bind_id_agree_typ");
+            $('.agree-extend').hide();
+            var selected_agree_typ = $('#id_agree_typ').val();
+            switch (selected_agree_typ) {
+                case ('22'):
+                    $('#form_agree_letter_add').show();
+                    break;
+                default:
+                    $('.agree-extend').hide()
+            }
+        })
+    }
+
 
     function bindAddAgreeModalOk() {
         $('#addAgreeModalOk').click(function () {
@@ -40,6 +57,12 @@
                         alert(arg.message);
                         $('#e_agree_amount').text(arg.forme.agree_amount);
                         $('#e_amount_limit').text(arg.forme.amount_limit);
+                        $('#e_letter_typ').text(arg.forme.letter_typ);
+                        $('#e_beneficiary').text(arg.forme.beneficiary);
+                        $('#e_basic_contract').text(arg.forme.basic_contract);
+                        $('#e_basic_contract_num').text(arg.forme.basic_contract_num);
+                        $('#e_starting_date').text(arg.forme.starting_date);
+                        $('#e_due_date').text(arg.forme.due_date);
                     }
                 }
             })

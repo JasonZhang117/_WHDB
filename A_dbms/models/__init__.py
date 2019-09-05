@@ -6,7 +6,7 @@ from .m_appraisal import (
     LendingCustoms, LendingWarrants, )
 # -----------------------m_agree合同模型---------------------#
 from .m_agree import (
-    Agrees, Counters, CountersAssure, CountersWarrants, ResultState)
+    Agrees, LetterGuarantee, Counters, CountersAssure, CountersWarrants, ResultState)
 # -------------------v_warrant担保物模型---------------------#
 from .m_warrant import (
     Warrants, Ownership, Houses, HouseBag, Grounds, Construction, Stockes, Receivable, ReceiveExtend, Draft,

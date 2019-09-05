@@ -84,3 +84,17 @@ class ArticleAgreeAddForm(dform.ModelForm):
     def __init__(self, *args, **kwargs):
         super(ArticleAgreeAddForm, self).__init__(*args, **kwargs)
         self.fields['branch'].choices = models.Branches.objects.filter(branch_state=1).values_list('id', 'name')
+
+class LetterGuaranteeAddForm(dform.ModelForm):
+
+    class Meta:
+        model = models.LetterGuarantee
+        fields = ['letter_typ', 'beneficiary', 'basic_contract', 'basic_contract_num', 'starting_date',
+                  'due_date']
+        widgets = {
+            'letter_typ': dform.Select(attrs={'class': 'form-control'}),
+            'beneficiary': dform.TextInput(attrs={'class': 'form-control', 'placeholder': '受益人'}),
+            'basic_contract': dform.TextInput(attrs={'class': 'form-control', 'placeholder': '基础合同名称'}),
+            'basic_contract_num': dform.TextInput(attrs={'class': 'form-control', 'placeholder': '基础合同编号'}),
+            'starting_date': dform.DateInput(attrs={'class': 'form-control', 'type': 'date'}),
+            'due_date': dform.DateInput(attrs={'class': 'form-control', 'type': 'date'}),}
