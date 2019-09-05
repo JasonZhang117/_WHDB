@@ -82,6 +82,14 @@ class AgreesAdmin(admin.ModelAdmin):
 
 admin.site.register(models.Agrees, AgreesAdmin)  # 合同
 
+class LetterGuaranteeAdmin(admin.ModelAdmin):
+    list_display = (
+        'agree', 'letter_typ', 'beneficiary', 'basic_contract', 'basic_contract_num', 'starting_date', 'due_date',
+        'guarantee_number', )  # 显示字段
+    list_per_page = 20  # 每页显示条目数
+    search_fields = ['basic_contract_num']  # 搜索字段
+    ordering = ['-create_date']  # 排序字段
+admin.site.register(models.LetterGuarantee,LetterGuaranteeAdmin)  # 公司保函
 
 class AgreesResultState(admin.ModelAdmin):
     list_display = (
@@ -91,7 +99,7 @@ class AgreesResultState(admin.ModelAdmin):
     ordering = ['-agree']  # 排序字段
 
 
-admin.site.register(models.ResultState, AgreesResultState)  # 合同
+admin.site.register(models.ResultState, AgreesResultState)  # 决议及声明模型
 
 
 class CountersAdmin(admin.ModelAdmin):
@@ -100,6 +108,8 @@ class CountersAdmin(admin.ModelAdmin):
     # list_per_page = 20  # 每页显示条目数
     search_fields = ['counter_num']  # 搜索字段
     # ordering = ['-agree_date']  # 排序字段
+
+
 
 
 admin.site.register(models.Counters, CountersAdmin)  # 反担保合同
