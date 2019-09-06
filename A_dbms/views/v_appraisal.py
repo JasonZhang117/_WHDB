@@ -776,6 +776,17 @@ def summary_scan(request, article_id):  # 评审项目预览
                 lending_warrant__sure__lending=lending, lending_warrant__sure__sure_typ=44)  # 票据监管
             if warrant_d_44_list:
                 rowspan_count += 1
+                summary += '<tr class="ot tbp"><td class="oi" colspan="4">&nbsp&nbsp%s、票据监管：' % sure_or
+                warrant_d_count = warrant_d_44_list.count()
+                warrant_d_c = 0
+                for warrant_d in warrant_d_44_list:
+                    warrant_d_c += 1
+                    summary += '%s提供%s' % (warrant_d.draft_warrant.draft_owner.name,
+                                           warrant_d.draft_warrant.draft_detail)
+                    if warrant_d_c < warrant_d_count:
+                        summary += '、'
+                summary += '存放于我公司进行监管。</td></tr>'
+                sure_or += 1
             warrant_c_47_list = models.Warrants.objects.filter(
                 lending_warrant__sure__lending=lending, lending_warrant__sure__sure_typ=47)  # 动产监管
             if warrant_c_47_list:
