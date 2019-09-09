@@ -667,6 +667,7 @@ def result_state_ajax(request):  #
     post_data_str = request.POST.get('postDataStr')
     post_data = json.loads(post_data_str)
     agree_obj = models.Agrees.objects.get(id=post_data['agree_id'])
+    LITRER_TYT_DIC = dict(models.LetterGuarantee.LETTER_TYP_LIST)
     '''AGREE_TYP_LIST = [(1, '单笔'), (2, '最高额'), (3, '保函'), (7, '小贷'),
                       (41, '单笔(公证)'), (42, '最高额(公证)'), (47, '小贷(公证)')]'''
     '''SURE_TYP_LIST = [
@@ -821,8 +822,9 @@ def result_state_ajax(request):  #
                             result += '<p>  2、同意委托成都武侯中小企业融资担保有限责任公司为该授信向贷款方提供担保。</p>'
                             order = 2
                         elif agr_typ in [22,]: #公司保函
-                            result += '<p>  同意向成都武侯中小企业融资担保有限责任公司人民币%s%s的保函。</p>' % (
-                                          agree_amount_cn, agree_term_str)
+                            result += '<p>  同意向成都武侯中小企业融资担保有限责任公司申请开立人民币%s%s的%s。</p>' % (
+                                          agree_amount_cn, agree_term_str,
+                                          LITRER_TYT_DIC[agree_obj.guarantee_agree.letter_typ])
                             order = 1
                     else:
                         order = 0
@@ -866,8 +868,9 @@ def result_state_ajax(request):  #
                             qqq = '为%s在%s申请的最高限额为人民币%s%s银行授信' % (
                                 agree_custom_obj.name, agree_obj.branch.name, agree_amount_cn, agree_term_str)
                         elif agr_typ in [22, ]:  # 公司保函
-                            qqq = '为%s在%s申请的人民币%s%s保函业务' % (
-                                agree_custom_obj.name, agree_obj.branch.name, agree_amount_cn, agree_term_str)
+                            qqq = '为%s在%s申请开立的人民币%s%s%s业务' % (
+                                agree_custom_obj.name, agree_obj.branch.name, agree_amount_cn, agree_term_str,
+                                LITRER_TYT_DIC[agree_obj.guarantee_agree.letter_typ])
                     # 保证反担保
                     counter_asure_list = models.CountersAssure.objects.filter(
                         counter__in=counter_agree_list, custome=counter_custom)

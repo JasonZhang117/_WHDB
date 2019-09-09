@@ -8,7 +8,7 @@
     <p>1.1保函的各项内容：</p>
     <p>（1）保函类型： <u><strong>{{ agree_obj.guarantee_agree.get_letter_typ_display }}</strong></u></p>
     <p>（2）受益人名称：<u><strong>{{ agree_obj.guarantee_agree.beneficiary }}</strong></u></p>
-    <p>（3）合同名称：<u><strong>{{ agree_obj.guarantee_agree.basic_contract }}（编号：{{ agree_obj.guarantee_agree.basic_contract_num }}）</strong></u></p>
+    <p>（3）合同名称：<u><strong>{{ agree_obj.guarantee_agree.basic_contract }}{% if not agree_obj.guarantee_agree.basic_contract_num == '无'%}（编号：{{ agree_obj.guarantee_agree.basic_contract_num }}）{% endif %}</strong></u></p>
     <p>（4）担保金额（币种及大写金额）<u><strong>人民币{{ agree_amount_cn }}</strong></u></p>
     <p>（5）担保范围：见<u><strong>{{ agree_obj.guarantee_agree.guarantee_number }}</strong></u>号<u><strong>{{ agree_obj.guarantee_agree.get_letter_typ_display }}</strong></u></p>
     <p>（6）索赔条件及文件：见<u><strong>{{ agree_obj.guarantee_agree.guarantee_number }}</strong></u>号<u><strong>{{ agree_obj.guarantee_agree.get_letter_typ_display }}</strong></u></p>
