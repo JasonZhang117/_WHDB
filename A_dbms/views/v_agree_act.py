@@ -790,8 +790,9 @@ def result_state_ajax(request):  #
                         result += '<div class="split"><div class="ff" align="center"><strong>董事会决议</strong></div>'
                         result += '<p>会议时间：&nbsp&nbsp&nbsp年&nbsp&nbsp月&nbsp&nbsp日</p>'
                         result += '<p>会议地点:  公司会议室</p>'
-                        result += '<p>本次董事会会议已按《中华人民共和国公司法》及公司章程的有关规定' \
-                                  '事<u>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</u>名，与会董事占公司董事的' \
+                        result += '<p>本次董事会会议已按《中华人民共和国公司法》及公司章程的有关规定通知全体董事到会参' \
+                                  '加会议。本公司共有董事<u>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</u>名，与会董' \
+                                  '事<u>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</u>名，占公司董事的' \
                                   '<u>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</u>，符合《公司法》和本公司章程规定' \
                                   '的程序和要求。经<u>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</u>名董事表决通过，做出如下决议：</p>'
                     elif decision == 23:  # (23, '管理委员会')
@@ -1147,7 +1148,7 @@ def result_state_ajax(request):  #
                         result += '<p><strong>本企业及参会举办者对本次举办者会议决议的程序的合法性以及举办者签名的真实性负责。</strong></p>'
                         result += '<p>参会举办者（或代表）签字：</p>'
                     elif decision == 21:
-                        result += '<p><strong>本公司及参会董事对本次股东会决议的程序的合法性以及股东签名的真实性负责。</strong></p>'
+                        result += '<p><strong>本公司及参会董事对本次董事会决议的程序的合法性以及股东签名的真实性负责。</strong></p>'
                         result += '<p>参会董事（或代表）签字：</p>'
                     elif decision == 23:
                         result += '<p><strong>本企业及参会管委会委员对本次管委会决议的程序的合法性以及委员签名的真实性负责。</strong></p>'
