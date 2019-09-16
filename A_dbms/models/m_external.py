@@ -6,7 +6,7 @@ import datetime
 class Cooperators(models.Model):  # 授信银行
     name = models.CharField(verbose_name='合作机构', max_length=32, unique=True)
     short_name = models.CharField(verbose_name='机构简称', max_length=32, unique=True)
-    COOPERATOR_TYPE_LIST = ((1, '金融机构'), (11, '律师事务所'), (21, '评估事务所'))
+    COOPERATOR_TYPE_LIST = ((1, '金融机构'), (11, '律师事务所'), (21, '评估事务所'), (91, '其他机构'))
     cooperator_type = models.IntegerField(verbose_name='机构类型', choices=COOPERATOR_TYPE_LIST, default=1)
     flow_credit = models.FloatField(verbose_name='综合额度', blank=True, null=True)
     flow_limit = models.FloatField(verbose_name='单笔限额（综合）', blank=True, null=True)
