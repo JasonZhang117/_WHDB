@@ -724,13 +724,17 @@ def summary_scan(request, article_id):  # 评审项目预览
                     if warrant_s.stock_warrant.stock_typ == 1:
                         summary += '%s持有的%s%s' % (warrant_s.stock_warrant.stock_owner.name,
                                                   warrant_s.stock_warrant.target,
-                                                  warrant_s.stock_warrant.ratio)
-                        summary = summary + '%股权'
+                                                  warrant_s.stock_warrant.share)
+                        summary = summary + '万元股权（占注册资本'
+                        summary = summary + '%s' % warrant_s.stock_warrant.share
+                        summary = summary + '%）'
                     elif warrant_s.stock_warrant.stock_typ == 11:
                         summary += '%s持有的%s%s' % (warrant_s.stock_warrant.stock_owner.name,
                                                   warrant_s.stock_warrant.target,
                                                   warrant_s.stock_warrant.share)
-                        summary = summary + '万股股权'
+                        summary = summary + '万股股权（占注册资本'
+                        summary = summary + '%s' % warrant_s.stock_warrant.share
+                        summary = summary + '%）'
                         if warrant_s.stock_warrant.remark:
                             summary = summary + '（%s）' % warrant_s.stock_warrant.remark
                     if warrant_s_c < warrant_s_count:
