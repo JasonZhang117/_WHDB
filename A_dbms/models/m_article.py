@@ -21,8 +21,10 @@ class Articles(models.Model):  # 项目、纪要
     control = models.ForeignKey(to='Employees', verbose_name="风控专员",
                                 on_delete=models.PROTECT,
                                 related_name='control_employee')
-    article_date = models.DateField(verbose_name='反馈日期', null=True, blank=True)
 
+    article_date = models.DateField(verbose_name='反馈日期', null=True, blank=True)
+    ARTICLE_TYP_LIST = [(1, '担保'), (5, '小贷'), (11, '租赁'), (21, '保险'), ]
+    article_typ = models.IntegerField(verbose_name='_项目状态', choices=ARTICLE_TYP_LIST, default=1)
     # 自动创建第三张表
     expert = models.ManyToManyField(to='Experts', verbose_name="评审委员",
                                     related_name='article_expert')
