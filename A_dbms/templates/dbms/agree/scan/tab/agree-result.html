@@ -5,6 +5,7 @@
             <th>序号</th>
             <th>决议/声明人</th>
             <th>决议类型</th>
+            <th>签字人</th>
             <th>操作</th>
         </tr>
         </thead>
@@ -16,6 +17,15 @@
                        href="{% url 'dbms:custom_scan' custom_id=result.custom.id %}">
                     {{ result.custom.name }}</a></td>
                 <td>{{ result.get_result_typ_display }}</td>
+                <td>
+                    {% if result.custom.genre == 1 %}
+                        {% for holder in result.custom.company_custome.shareholder_custom_c.all %}
+                            {{ holder.shareholder_name }} {% if not forloop.last %}、{% endif %}
+                        {% endfor %}
+                    {% else %}
+                        {{ result.custom.short_name }}
+                    {% endif %}
+                </td>
                 <td>
                     <a class="btn btn-primary btn-xs scanResultB" target="_blank"
                        href="{% url 'dbms:agree_result_preview' agree_id=agree_obj.id  result_id=result.id %}">预览</a>
