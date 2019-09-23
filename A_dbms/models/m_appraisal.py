@@ -7,7 +7,7 @@ class Appraisals(models.Model):  # 评审会
     num = models.CharField(verbose_name='评审会编号', max_length=32, unique=True)
     review_year = models.IntegerField(verbose_name='评审年份', default=datetime.date.today().year)
     review_order = models.IntegerField(verbose_name='评审次序')
-    REVIEW_MODEL_LIST = ((1, '内审'), (2, '外审'))
+    REVIEW_MODEL_LIST = [(1, '内审'), (2, '外审'), (5, '签批'), (21, '小贷-评审'), (25, '小贷-签批'), ]
     review_model = models.IntegerField(verbose_name='评审类型', choices=REVIEW_MODEL_LIST)
     review_date = models.DateField(verbose_name='评审日期', default=datetime.date.today)
     '''ARTICLE_STATE_LIST = ((1, '待反馈'), (2, '已反馈'), (3, '待上会'), (4, '已上会'), (5, '已签批'),
@@ -18,7 +18,8 @@ class Appraisals(models.Model):  # 评审会
                                      null=True, blank=True)
     compere = models.ForeignKey(to='Employees', verbose_name="主持人",
                                 on_delete=models.PROTECT,
-                                related_name='compere_employee')
+                                related_name='compere_employee',
+                                limit_choices_to={'employee_status': 1},)
     MEETING_STATE_LIST = ((1, '待上会'), (2, '已上会'))
     meeting_state = models.IntegerField(verbose_name='会议状态', choices=MEETING_STATE_LIST, default=1)
     meeting_buildor = models.ForeignKey(to='Employees', verbose_name="创建人",

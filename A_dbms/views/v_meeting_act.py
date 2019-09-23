@@ -23,17 +23,12 @@ def meeting_add_ajax(request):
 
     if form.is_valid():
         cleaned_data = form.cleaned_data
-        REVIEW_MODEL_LIST = models.Appraisals.REVIEW_MODEL_LIST
         review_model = cleaned_data['review_model']
         review_date = cleaned_data['review_date']
 
         ###上会类型(r_mod)
-        r_mod = "内审"
-        for i in REVIEW_MODEL_LIST:
-            x, y = i
-            if x == review_model:
-                r_mod = y
-
+        review_model_dic = dict(models.Appraisals.REVIEW_MODEL_LIST)
+        '''REVIEW_MODEL_LIST = ((1, '内审'), (2, '外审'), (5, '签批'), (21, '小贷-评审'), (25, '小贷-签批'))'''
         ###上会年份(r_year)
         today_str = time.strptime(str(review_date), "%Y-%m-%d")
         r_year = today_str.tm_year
@@ -52,8 +47,13 @@ def meeting_add_ajax(request):
         else:
             r_order = '%s' % order_max_x
         ###评审会编号拼接
-        review_num = "(%s)[%s]%s" % (r_mod, r_year, r_order)
-
+        review_num = ''
+        if review_model in [1, 2, 5, ]:
+            review_num = "(%s)[%s]%s" % (review_model_dic[review_model], r_year, r_order)
+        elif review_model == 21:
+            review_num = "[%s]%s" % (r_year, r_order)
+        elif review_model == 25:
+            review_num = "[%s]%s(签批)" % (r_year, r_order)
         article_list_l = cleaned_data['article']
         try:
             with transaction.atomic():
@@ -303,18 +303,24 @@ def meeting_close_ajax(request):  # 完成上会ajax
         for article_obj in article_list:
             aec = article_obj.expert.count()
             rm = meeting_obj.review_model
-            if rm == 1:
+            '''REVIEW_MODEL_LIST = ((1, '内审'), (2, '外审'), (5, '签批'), (21, '小贷-上会'), (25, '小贷-签批'))'''
+            if rm in [1, 5, 21, 25, ]:
                 if not aec == 5:
                     response['status'] = False
                     response['message'] = '项目：%s有%s位评委，评委数量不对！' % (article_obj.article_num, aec)
                     result = json.dumps(response, ensure_ascii=False)
                     return HttpResponse(result)
-            else:
+            elif rm == 2:
                 if not aec == 7:
                     response['status'] = False
                     response['message'] = '项目：%s有%s位评委，评委数量不对！' % (article_obj.article_num, aec)
                     result = json.dumps(response, ensure_ascii=False)
                     return HttpResponse(result)
+            else:
+                response['status'] = False
+                response['message'] = '请核对评委人数！'
+                result = json.dumps(response, ensure_ascii=False)
+                return HttpResponse(result)
             try:
                 with transaction.atomic():
                     article_list.update(article_state=4, review_date=meeting_obj.review_date)  # 更新项目状态
