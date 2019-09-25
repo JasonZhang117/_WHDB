@@ -23,13 +23,15 @@
                             {{ holder.shareholder_name }} {% if not forloop.last %}、{% endif %}
                         {% endfor %}
                     {% else %}
-                        {{ result.custom.short_name }}
+                        {{ result.custom.name }}
                     {% endif %}
                 </td>
                 <td>
                     <a class="btn btn-primary btn-xs scanResultB" target="_blank"
                        href="{% url 'dbms:agree_result_preview' agree_id=agree_obj.id  result_id=result.id %}">预览</a>
                     <a class="btn btn-primary btn-xs delResultB">删除</a>
+                    <a class="btn btn-primary btn-xs scanResultB" target="_blank"
+                       href="https://www.tianyancha.com/search?key={{ result.custom.name }}">天眼查</a>
                 </td>
             <tr>
         {% endfor %}
