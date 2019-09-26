@@ -8,7 +8,7 @@
     <link rel="stylesheet" media="print" href="{% static 'dbms/css/summary-style.css' %}">
 </head>
 <body>
-<div class="contain">
+<div class="contain split">
     <div class="headline">
         <p>成都武侯中小企业融资担保有限责任公司</p>
         <p style="margin-bottom: 15pt">担保审查委员会项目审查意见书</p>
@@ -25,11 +25,17 @@
             </table>
             <table style="width: 100%;">
                 <tbody>
-                <tr><td style="width: 70%">记录人：</td><td>核对人：</td></tr>
+                <tr>
+                    <td style="width: 70%">记录人：</td>
+                    <td>核对人：</td>
+                </tr>
                 </tbody>
             </table>
         </div>
     </div>
+</div>
+<div class="contain-t">
+    {% include 'dbms/appraisal/appraisal-sign.html' %}
 </div>
 </body>
 </html>

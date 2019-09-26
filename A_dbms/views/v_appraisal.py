@@ -254,6 +254,8 @@ def summary_scan(request, article_id):  # 评审项目预览
     lending_count = lending_list.count()  # 放款笔数
     '''ARTICLE_STATE_LIST = [(1, '待反馈'), (2, '已反馈'), (3, '待上会'), (4, '已上会'), (5, '已签批'),
                           (51, '已放款'), (52, '已放完'), (55, '已解保'), (61, '待变更'), (99, '已注销')]'''
+    new = round(article_obj.augment, 2)
+
     # if True:
     if article_obj.article_state in [1, 2, 3, 4, 61]:
         rowspan_count = 3
