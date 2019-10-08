@@ -374,8 +374,7 @@ def provide_add_ajax(request):
                     cooperator_list = models.Cooperators.objects.filter(branch_cooperator=branch_obj)
                     cooperator_obj = cooperator_list.first()
                     '''PROVIDE_TYP_LIST = [(1, '流贷'), (11, '承兑'), (21, '保函'), (31, '委贷'), (41, '小贷')]'''
-                    custom_list.update(provide_date=form_provide_cleaned['provide_date'],
-                                       lately_date=form_provide_cleaned['provide_date'])  # 客户，更新流贷余额
+                    custom_list.update(provide_date=form_provide_cleaned['provide_date'],)  # 客户，更新流贷余额
                     if provide_typ == 1:  # (1, '流贷')
                         custom_list.update(custom_flow=round(custom_provide_balance, 2))  # 客户，更新流贷余额
                         branch_list.update(branch_flow=round(branch_provide_balance, 2))  # 放款银行，更新流贷余额
@@ -391,16 +390,14 @@ def provide_add_ajax(request):
                             Sum('branch_accept'))['branch_accept__sum']  # 授信银行项下，流贷余额
                         cooperator_list.update(cooperator_accept=round(cooperator_branch_accept_balance, 2))
                     elif provide_typ == 21:  # (21, '保函')
-                        custom_list.update(custom_back=round(custom_provide_balance, 2),
-                                           lately_date=form_provide_cleaned['provide_date'])  # 客户，更新保函余额
+                        custom_list.update(custom_back=round(custom_provide_balance, 2),)  # 客户，更新保函余额
                         branch_list.update(branch_back=round(branch_provide_balance, 2))  # 放款银行，更新保函余额
                         cooperator_branch_back_balance = models.Branches.objects.filter(
                             cooperator=cooperator_obj).aggregate(
                             Sum('branch_back'))['branch_back__sum']  # 授信银行项下，保函余额
                         cooperator_list.update(cooperator_back=round(cooperator_branch_back_balance, 2))
                     elif provide_typ == 31:  # (31, '委贷')
-                        custom_list.update(entrusted_loan=round(custom_provide_balance, 2),
-                                           lately_date=form_provide_cleaned['provide_date'])  # 客户，更新委贷余额
+                        custom_list.update(entrusted_loan=round(custom_provide_balance, 2),)  # 客户，更新委贷余额
                         branch_list.update(entrusted_loan=round(branch_provide_balance, 2))  # 放款银行，更新委贷余额
                         cooperator_entrusted_loan_balance = models.Branches.objects.filter(
                             cooperator=cooperator_obj).aggregate(
