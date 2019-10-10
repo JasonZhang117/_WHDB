@@ -1,5 +1,8 @@
 <label class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
-    客户名称：<a href="{% url 'dbms:custom_scan' custom_id=article_obj.custom.id %}">{{ article_obj.custom.short_name }}</a></label>
+    客户名称：<a href="{% url 'dbms:custom_scan' custom_id=article_obj.custom.id %}">{{ article_obj.custom.short_name }}</a>
+<a style="color: red" target="_blank"
+                       href="https://www.tianyancha.com/search?key={{ article_obj.custom.name }}">天眼查</a>
+</label>
 <label class="col-lg-3 col-md-4 col-sm-6 col-xs-12">项目编号：{{ article_obj.article_num }}</label>
 <label class="col-lg-3 col-md-4 col-sm-6 col-xs-12">纪要编号：{{ article_obj.summary_num }}</label>
 <label class="col-lg-3 col-md-4 col-sm-6 col-xs-12">金额合计：{{ article_obj.amount }}</label>
