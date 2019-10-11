@@ -1148,7 +1148,7 @@ def result_state_ajax(request):  #
                         result += '<p><strong>本企业及参会举办者对本次举办者会议决议的程序的合法性以及举办者签名的真实性负责。</strong></p>'
                         result += '<p>参会举办者（或代表）签字：</p>'
                     elif decision == 21:
-                        result += '<p><strong>本公司及参会董事对本次董事会决议的程序的合法性以及股东签名的真实性负责。</strong></p>'
+                        result += '<p><strong>本公司及参会董事对本次董事会决议的程序的合法性以及董事签名的真实性负责。</strong></p>'
                         result += '<p>参会董事（或代表）签字：</p>'
                     elif decision == 23:
                         result += '<p><strong>本企业及参会管委会委员对本次管委会决议的程序的合法性以及委员签名的真实性负责。</strong></p>'
