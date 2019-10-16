@@ -89,7 +89,8 @@ def article_scan(request, article_id):  # 项目预览
         if not request.user in user_list:
             return HttpResponse('你无权访问该项目')
     form_date = {
-        'custom_id': article_obj.custom.id, 'renewal': article_obj.renewal,
+        'custom_id': article_obj.custom.id,'product_id': article_obj.product.id,
+        'renewal': article_obj.renewal,'process_id': article_obj.process.id,
         'augment': article_obj.augment, 'credit_term': article_obj.credit_term,
         'director_id': article_obj.director.id,
         'assistant_id': article_obj.assistant.id, 'control_id': article_obj.control.id,

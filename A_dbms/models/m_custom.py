@@ -4,7 +4,7 @@ import datetime
 
 # -----------------------客户模型-------------------------#
 class Customes(models.Model):  # 客户
-    name = models.CharField(verbose_name='客户名称', max_length=32, unique=True)
+    name = models.CharField(verbose_name='客户名称', max_length=32)
     short_name = models.CharField(verbose_name='客户简称', max_length=16, unique=True)
     GENRE_LIST = ((1, '企业'), (2, '个人'))
     genre = models.IntegerField(verbose_name='客户类型', choices=GENRE_LIST, default=1)

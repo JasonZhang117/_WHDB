@@ -1,5 +1,7 @@
+# ----------------------m_process流程模型--------------------#
+from .m_process import (Process, ProcessSet,ProcessArticle)
 # ----------------------m_article项目模型--------------------#
-from .m_article import (Articles, Feedback, ArticleChange)
+from .m_article import (Product, Articles, Feedback, ArticleChange)
 # ----------------------m_appraisal评审管理--------------------#
 from .m_appraisal import (
     Appraisals, SingleQuota, Comments, LendingOrder, LendingSures, Supply,

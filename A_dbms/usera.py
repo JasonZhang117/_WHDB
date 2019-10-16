@@ -58,7 +58,7 @@ class EmployeesAdmin(BaseUserAdmin):
     add_form = UserCreationForm
     '''The fields to be used in displaying the User model.
     These override the definitions on the base UserAdmin that reference specific fields on auth.User.'''
-    list_display = ('email', 'name', 'num', 'department', 'is_superuser')
+    list_display = ('id', 'email', 'name', 'num', 'department', 'is_superuser')
     list_filter = ('is_superuser',)
     fieldsets = (
         (None, {'fields': ('email', 'password')}),

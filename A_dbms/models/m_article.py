@@ -2,6 +2,25 @@ from django.db import models
 import datetime
 
 
+# -----------------------------产品模型------------------------------#
+class Product(models.Model):  # 项产品
+    name = models.CharField(verbose_name='产品名称',
+                            max_length=32,
+                            unique=True)
+    creator = models.ForeignKey(to='Employees', verbose_name="创建人",
+                                on_delete=models.PROTECT,
+                                related_name='product_creator_employee')
+    create_date = models.DateField(verbose_name='创建日期',
+                                   default=datetime.date.today)
+
+    class Meta:
+        verbose_name_plural = '项目-产品'  # 指定显示名称
+        db_table = 'dbms_product'  # 指定数据表的名称
+
+    def __str__(self):
+        return "%s" % (self.name,)
+
+
 # -----------------------------项目模型------------------------------#
 class Articles(models.Model):  # 项目、纪要
     article_num = models.CharField(verbose_name='_项目编号', max_length=32, unique=True)
@@ -12,6 +31,18 @@ class Articles(models.Model):  # 项目、纪要
     augment = models.FloatField(verbose_name='新增金额（元）', default=0)
     amount = models.FloatField(verbose_name='_总额度（元）', default=0)
     credit_term = models.IntegerField(verbose_name='授信期限（月）', default=12)
+    product = models.ForeignKey(to='Product', verbose_name="产品种类",
+                                on_delete=models.PROTECT,
+                                related_name='article_product', default=1)
+    process = models.ForeignKey(to='Process', verbose_name="审批流程",
+                                on_delete=models.PROTECT,
+                                related_name='article_process', default=1)
+    currentor = models.ForeignKey(to='Employees', verbose_name="当前审批人",
+                                  on_delete=models.PROTECT,
+                                  related_name='article_currentor_employee', default=1)
+    frontor = models.ForeignKey(to='Employees', verbose_name="上一审批人",
+                                on_delete=models.PROTECT,
+                                related_name='article_frontor_employee', default=1)
     director = models.ForeignKey(to='Employees', verbose_name="项目经理",
                                  on_delete=models.PROTECT,
                                  related_name='director_employee')
@@ -23,8 +54,6 @@ class Articles(models.Model):  # 项目、纪要
                                 related_name='control_employee')
 
     article_date = models.DateField(verbose_name='反馈日期', null=True, blank=True)
-    ARTICLE_TYP_LIST = [(1, '担保'), (5, '小贷'), (11, '租赁'), (21, '保险'), ]
-    article_typ = models.IntegerField(verbose_name='_项目状态', choices=ARTICLE_TYP_LIST, default=1)
     # 自动创建第三张表
     expert = models.ManyToManyField(to='Experts', verbose_name="评审委员",
                                     related_name='article_expert')

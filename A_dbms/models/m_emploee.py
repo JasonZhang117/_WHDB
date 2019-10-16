@@ -78,7 +78,7 @@ class Employees(AbstractBaseUser, PermissionsMixin):
             ('article_scan_agree', '添加项目'), ]
 
 
-# -----------------------------岗位模型------------------------------#
+# -----------------------------岗位（角色）模型------------------------------#
 class Jobs(models.Model):  # 岗位（角色）
     name = models.CharField(verbose_name='岗位名称', max_length=16, unique=True)
     authority = models.ManyToManyField(to="Authorities", verbose_name="权限", null=True, blank=True)

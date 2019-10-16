@@ -24,6 +24,7 @@ def creat_article_num(custom_id):
         n_mon = '0' + str(article_date.tm_mon)
     else:
         n_mon = str(article_date.tm_mon)
+
     r_order = models.Articles.objects.filter(
         custom=custom_id, article_date__year=n_year).count() + 1
     article_num = '%s-%s%s-%s' % (custom.short_name, str(n_year), n_mon, r_order)
@@ -41,6 +42,7 @@ def article_add_ajax(request):  # 添加项目
     if form.is_valid():
         cleaned_data = form.cleaned_data
         custom_id = cleaned_data['custom_id']
+        director_id = cleaned_data['director_id']
         renewal = round(cleaned_data['renewal'], 2)
         augment = round(cleaned_data['augment'], 2)
         article_num = creat_article_num(custom_id)
@@ -48,12 +50,16 @@ def article_add_ajax(request):  # 添加项目
         try:
             with transaction.atomic():
                 article_obj = models.Articles.objects.create(
-                    article_num=article_num, custom_id=custom_id, renewal=renewal,
+                    article_num=article_num, custom_id=custom_id,
+                    product_id=cleaned_data['product_id'], renewal=renewal,
                     augment=augment, amount=amount, credit_term=cleaned_data['credit_term'],
-                    director_id=cleaned_data['director_id'], assistant_id=cleaned_data['assistant_id'],
-                    control_id=cleaned_data['control_id'], article_buildor=request.user)
+                    process_id=cleaned_data['process_id'],
+                    director_id=director_id, assistant_id=cleaned_data['assistant_id'],
+                    control_id=cleaned_data['control_id'],
+                    currentor_id=cleaned_data['director_id'], frontor_id=cleaned_data['director_id'],
+                    article_buildor=request.user)
                 models.Customes.objects.filter(id=custom_id).update(
-                    lately_date=datetime.date.today(), managementor_id=cleaned_data['director_id'],
+                    managementor_id=cleaned_data['director_id'],
                     controler_id=cleaned_data['control_id'], custom_state=11)
             response['message'] = '成功创建项目：%s！' % article_obj.article_num
             response['skip'] = "/dbms/article/"
@@ -89,10 +95,12 @@ def article_edit_ajax(request):  # 修改项目ajax
             try:
                 article_list = models.Articles.objects.filter(id=article_id)
                 article_list.update(
-                    custom_id=cleaned_data['custom_id'], renewal=renewal,
+                    custom_id=cleaned_data['custom_id'], product_id=cleaned_data['product_id'], renewal=renewal,
                     augment=augment, amount=amount, credit_term=cleaned_data['credit_term'],
                     director_id=cleaned_data['director_id'], assistant_id=cleaned_data['assistant_id'],
-                    control_id=cleaned_data['control_id'], article_buildor=request.user)
+                    control_id=cleaned_data['control_id'], process_id=cleaned_data['process_id'],
+                    currentor_id=cleaned_data['director_id'], frontor_id=cleaned_data['director_id'],
+                    article_buildor=request.user)
                 models.Customes.objects.filter(article_custom=article_obj).update(
                     managementor_id=cleaned_data['director_id'], controler_id=cleaned_data['control_id'], )
                 response['message'] = '成功修改项目：%s！' % article_obj.article_num

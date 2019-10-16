@@ -3,12 +3,45 @@ from A_dbms import models
 from .usera import EmployeesAdmin
 
 
+# -----------------------流程-------------------------#
+class ProcessAdmin(admin.ModelAdmin):
+    list_display = ['name', ]  # 显示字段
+    # list_per_page = 20  # 每页显示条目数
+    search_fields = ['name', ]  # 搜索字段
+    ordering = ['name']  # 排序字段
+
+
+admin.site.register(models.Process, ProcessAdmin)  # 流程
+
+
+class ProcessSetAdmin(admin.ModelAdmin):
+    list_display = ['id', 'process', 'approver', 'step', ]  # 显示字段
+    # list_per_page = 20  # 每页显示条目数
+    # search_fields = ['name', ]  # 搜索字段
+    ordering = ['id', ]  # 排序字段id
+
+
+admin.site.register(models.ProcessSet, ProcessSetAdmin)  # 流程步骤
+
+
+class ProcessArticleAdmin(admin.ModelAdmin):
+    list_display = ['id', 'article', 'process_set', 'employee', ]  # 显示字段
+    # list_per_page = 20  # 每页显示条目数
+    # search_fields = ['name', ]  # 搜索字段
+    ordering = ['id', ]  # 排序字段id
+
+
+admin.site.register(models.ProcessArticle, ProcessArticleAdmin)  # 流程步骤
+
 # -----------------------项目-------------------------#
+admin.site.register(models.Product)  # 产品
+
+
 class ArticlesAdmin(admin.ModelAdmin):
-    list_display = (
+    list_display = [
         'article_num', 'summary_num', 'custom', 'amount', 'article_provide_sum', 'director', 'article_state',
         'build_date',
-        'article_date', 'article_balance', 'article_state')  # 显示字段
+        'article_date', 'article_balance', 'article_state',]  # 显示字段
     # list_per_page = 20  # 每页显示条目数
     search_fields = ['article_num', 'summary_num']  # 搜索字段
     ordering = ['-build_date']  # 排序字段
@@ -48,13 +81,17 @@ class SingleQuotaAdmin(admin.ModelAdmin):
 admin.site.register(models.SingleQuota, SingleQuotaAdmin)  # 单项额度
 admin.site.register(models.Supply)  # 单项额度
 admin.site.register(models.Comments)  # 评审意见
+
+
 class LendingOrderAdmin(admin.ModelAdmin):
     list_display = ('summary', 'order', 'order_amount', 'lending_state', 'lending_provide_sum',
                     'lending_repayment_sum', 'lending_balance')  # 显示字段
     list_per_page = 200  # 每页显示条目数
     # search_fields = ['article_num']  # 搜索字段
     # ordering = ['num']  # 排序字段
-admin.site.register(models.LendingOrder,LendingOrderAdmin)  # 发放次序
+
+
+admin.site.register(models.LendingOrder, LendingOrderAdmin)  # 发放次序
 
 
 class LendingSuresAdmin(admin.ModelAdmin):
@@ -82,14 +119,18 @@ class AgreesAdmin(admin.ModelAdmin):
 
 admin.site.register(models.Agrees, AgreesAdmin)  # 合同
 
+
 class LetterGuaranteeAdmin(admin.ModelAdmin):
     list_display = (
         'agree', 'letter_typ', 'beneficiary', 'basic_contract', 'basic_contract_num', 'starting_date', 'due_date',
-        'guarantee_number', )  # 显示字段
+        'guarantee_number',)  # 显示字段
     list_per_page = 20  # 每页显示条目数
     search_fields = ['basic_contract_num']  # 搜索字段
     ordering = ['-create_date']  # 排序字段
-admin.site.register(models.LetterGuarantee,LetterGuaranteeAdmin)  # 公司保函
+
+
+admin.site.register(models.LetterGuarantee, LetterGuaranteeAdmin)  # 公司保函
+
 
 class AgreesResultState(admin.ModelAdmin):
     list_display = (
@@ -108,8 +149,6 @@ class CountersAdmin(admin.ModelAdmin):
     # list_per_page = 20  # 每页显示条目数
     search_fields = ['counter_num']  # 搜索字段
     # ordering = ['-agree_date']  # 排序字段
-
-
 
 
 admin.site.register(models.Counters, CountersAdmin)  # 反担保合同
@@ -208,9 +247,9 @@ admin.site.register(models.Retrieve)  # 回收情况
 
 class StageAdmin(admin.ModelAdmin):
     list_display = (
-    'dun', 'stage_remark', 'stage_type', 'stage_state', 'stage_file', 'stage_date', 'page_amout')  # 显示字段
+        'dun', 'stage_remark', 'stage_type', 'stage_state', 'stage_file', 'stage_date', 'page_amout')  # 显示字段
     list_per_page = 200  # 每页显示条目数
-    search_fields = ['stage_remark','stage_file']  # 搜索字段
+    search_fields = ['stage_remark', 'stage_file']  # 搜索字段
     # ordering = ['title']  # 排序字段
 
 
@@ -218,13 +257,17 @@ admin.site.register(models.Stage, StageAdmin)  # 阶段情况
 admin.site.register(models.Judgment)  # 判决
 admin.site.register(models.Standing)  # 台账
 admin.site.register(models.Seal)  # 财产线索
+
+
 class SealupAdmin(admin.ModelAdmin):
     list_display = ('seal',
-    'sealup_type', 'sealup_date', 'due_date', 'sealup_remark', 'sealupor')  # 显示字段
+                    'sealup_type', 'sealup_date', 'due_date', 'sealup_remark', 'sealupor')  # 显示字段
     list_per_page = 200  # 每页显示条目数
-    search_fields = ['sealup_type','sealup_date']  # 搜索字段
+    search_fields = ['sealup_type', 'sealup_date']  # 搜索字段
     # ordering = ['title']  # 排序字段
-admin.site.register(models.Sealup,SealupAdmin)  # 查封情况
+
+
+admin.site.register(models.Sealup, SealupAdmin)  # 查封情况
 admin.site.register(models.Inquiry)  # 查询情况
 
 
