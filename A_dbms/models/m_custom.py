@@ -6,7 +6,7 @@ import datetime
 class Customes(models.Model):  # 客户
     name = models.CharField(verbose_name='客户名称', max_length=32)
     short_name = models.CharField(verbose_name='客户简称', max_length=16, unique=True)
-    GENRE_LIST = ((1, '企业'), (2, '个人'))
+    GENRE_LIST = [(1, '企业'), (2, '个人')]
     genre = models.IntegerField(verbose_name='客户类型', choices=GENRE_LIST, default=1)
     CUSTOM_TYP = ((1, '--'), (11, '新增'), (21, '存量'), (31, '存量新增'))
     custom_typ = models.IntegerField(verbose_name='新增标志', choices=CUSTOM_TYP, default=1)

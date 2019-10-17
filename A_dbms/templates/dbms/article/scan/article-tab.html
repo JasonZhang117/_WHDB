@@ -11,21 +11,23 @@
             <a href="#comment" style="background-color: #f5f5f5"
                aria-controls="messages" role="tab" data-toggle="tab">评委意见</a></li>
         <li role="presentation">
-            <a href="#sign" style="background-color: #f5f5f5"
-               aria-controls="messages" role="tab" data-toggle="tab">签批情况</a></li>
+            <a href="#supply" style="background-color: #f5f5f5"
+               aria-controls="profile" role="tab" data-toggle="tab">补调问题</a></li>
         <li role="presentation">
             <a href="#single" style="background-color: #f5f5f5"
                aria-controls="settings" role="tab" data-toggle="tab">单项额度</a></li>
         <li role="presentation" class="active">
             <a href="#lenging" style="background-color: #f5f5f5"
                aria-controls="settings" role="tab" data-toggle="tab">放款次序</a></li>
-        {#        <li role="presentation">#}
-        {#            <a href="#agree" style="background-color: #f5f5f5"#}
-        {#               aria-controls="settings" role="tab" data-toggle="tab">委托合同</a></li>#}
+        <li role="presentation">
+            <a href="#sign" style="background-color: #f5f5f5"
+               aria-controls="messages" role="tab" data-toggle="tab">签批情况</a></li>
         <li role="presentation">
             <a href="#article-change" style="background-color: #f5f5f5"
                aria-controls="messages" role="tab" data-toggle="tab">变更情况</a></li>
-
+        <li role="presentation">
+            <a href="#investigate" style="background-color: #f5f5f5"
+               aria-controls="settings" role="tab" data-toggle="tab">补调</a></li>
     </ul>
     <!-- Tab panes -->
     <div class="tab-content">
@@ -35,15 +37,17 @@
             {% include 'dbms/article/scan/tab/meeting.html' %} </div>
         <div role="tabpanel" class="tab-pane" id="comment"> <!--评审意见-->
             {% include 'dbms/appraisal/scan/tab/comment.html' %} </div>
-        <div role="tabpanel" class="tab-pane" id="sign"> <!--签批情况-->
-            {% include 'dbms/appraisal/scan/tab/sign.html' %} </div>
+        <div role="tabpanel" class="tab-pane" id="supply"><!--补调问题-->
+            {% include 'dbms/appraisal/scan/tab/supply.html' %} </div>
         <div role="tabpanel" class="tab-pane" id="single"> <!--单项额度-->
             {% include 'dbms/appraisal/scan/tab/single.html' %} </div>
         <div role="tabpanel" class="tab-pane active" id="lenging"> <!--放款次序-->
             {% include 'dbms/article/scan/tab/lending.html' %} </div>
-        {#        <div role="tabpanel" class="tab-pane" id="agree"> <!--委托合同-->#}
-        {#            {% include 'dbms/article/scan/tab/agree.html' %} </div>#}
+        <div role="tabpanel" class="tab-pane" id="sign"> <!--签批情况-->
+            {% include 'dbms/appraisal/scan/tab/sign.html' %} </div>
         <div role="tabpanel" class="tab-pane" id="article-change"><!--项目变更-->
             {% include 'dbms/appraisal/scan/tab/article-change.html' %} </div>
+        <div role="tabpanel" class="tab-pane" id="investigate"> <!--补调-->
+            {% include 'dbms/review/scan/tab/investigate.html' %}</div>
     </div>
 </div>

@@ -8,9 +8,7 @@
             <th>风险分类</th>
             <th>补调日期</th>
             <th>添加人</th>
-            {% if PAGE_TITLE == '保后详情' or PAGE_TITLE == '项目评审'%}
-                <th>操作</th>
-            {% endif %}
+            <th>操作</th>
         </tr>
         </thead>
         <tbody id="investigate-tb">
@@ -22,9 +20,7 @@
                 <td>{{ investigate.get_i_classification_display|default_if_none:"" }}</td>
                 <td>{{ investigate.inv_date|default_if_none:"" }}</td>
                 <td>{{ investigate.invor }}</td>
-                {% if PAGE_TITLE == '保后详情' or  PAGE_TITLE == '项目评审' %}
-                    <td><a class="btn btn-primary btn-xs delInvestigateB">删除</a></td>
-                {% endif %}
+                <td><a class="btn btn-primary btn-xs delInvestigateB">删除</a></td>
             </tr>
         {% endfor %}
         </tbody>

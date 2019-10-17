@@ -53,12 +53,10 @@ def agree_add_ajax(request):  # 添加合同
     response = {'status': True, 'message': None, 'forme': None, 'skip': None, }
     post_data_str = request.POST.get('postDataStr')
     post_data = json.loads(post_data_str)
-    print(post_data)
     lending_obj = models.LendingOrder.objects.get(id=post_data['lending'])
     article_state_lending = lending_obj.summary.article_state
     '''ARTICLE_STATE_LIST = [(1, '待反馈'), (2, '已反馈'), (3, '待上会'), (4, '已上会'), (5, '已签批'),
                           (51, '已放款'), (52, '已放完'), (55, '已解保'), (61, '待变更'), (99, '已注销')]'''
-
     if article_state_lending in [4, 5, 51, 61]:
         # form_agree_add = forms.AgreeAddForm(post_data, request.FILES)
         form_agree_add = forms.ArticleAgreeAddForm(post_data, request.FILES)

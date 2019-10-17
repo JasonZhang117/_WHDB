@@ -9,9 +9,8 @@ from django.db.models import Q, F
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.db import transaction
 from django.urls import resolve, reverse
-from _WHDB.views import MenuHelper
-from _WHDB.views import authority
 from .v_agree import convert_num
+from _WHDB.views import MenuHelper, authority, article_right, article_list_screen
 
 
 # -----------------------appraisal评审情况-------------------------#
@@ -21,6 +20,7 @@ def appraisal(request, *args, **kwargs):  # 评审情况
     current_url_name = resolve(request.path).url_name  # 获取当前URL_NAME
     authority_list = request.session.get('authority_list')  # 获取当前用户的所有权限
     menu_result = MenuHelper(request).menu_data_list()
+    job_list = request.session.get('job_list')  # 获取当前用户的所有角色
     PAGE_TITLE = '评审管理'  # 页面标题
     '''模态框'''
     '''ARTICLE_STATE_LIST = ((1, '待反馈'), (2, '已反馈'), (3, '待上会'), (4, '已上会'), (5, '已签批'),
@@ -29,6 +29,7 @@ def appraisal(request, *args, **kwargs):  # 评审情况
     '''筛选'''
     appraisal_list = models.Articles.objects.filter(**kwargs).select_related(
         'custom', 'director', 'assistant', 'control').order_by('-review_date')
+    appraisal_list = article_list_screen(appraisal_list, job_list, request.user)  # 项目筛选
     # appraisal_list = appraisal_list.filter(article_state__in=[4, 5, 51, 61])
     '''搜索'''
     search_key = request.GET.get('_s')
@@ -56,6 +57,7 @@ def appraisal(request, *args, **kwargs):  # 评审情况
 # -----------------------appraisal_scan评审项目-------------------------#
 @login_required
 @authority
+@article_right
 def appraisal_scan(request, article_id):  # 评审项目预览
     current_url_name = resolve(request.path).url_name  # 获取当前URL_NAME
     authority_list = request.session.get('authority_list')  # 获取当前用户的所有权限
@@ -93,6 +95,7 @@ def appraisal_scan(request, article_id):  # 评审项目预览
 # -----------------------appraisal_scan_lending评审项目预览-------------------------#
 @login_required
 @authority
+@article_right
 def appraisal_scan_lending(request, article_id, lending_id):  # 评审项目预览
     current_url_name = resolve(request.path).url_name  # 获取当前URL_NAME
     authority_list = request.session.get('authority_list')  # 获取当前用户的所有权限
@@ -122,6 +125,7 @@ def appraisal_scan_lending(request, article_id, lending_id):  # 评审项目预�
     VEHICLE_LIST = [15, ]  # 车辆类
     CHATTEL_LIST = [13, 24, 34, 47]  # 动产类
     OTHER_LIST = [39, 49, 59]  # 其他类
+
     custom_lending_list = models.Customes.objects.filter(lending_custom__sure__lending=lending_obj)
     warrant_lending_h_list = models.Warrants.objects.filter(lending_warrant__sure__lending=lending_obj,
                                                             warrant_typ__in=[1, 2])
@@ -141,7 +145,6 @@ def appraisal_scan_lending(request, article_id, lending_id):  # 评审项目预�
                                                             warrant_typ=51)
     warrant_lending_o_list = models.Warrants.objects.filter(lending_warrant__sure__lending=lending_obj,
                                                             warrant_typ=55)
-    print('warrant_lending_o_list:', warrant_lending_o_list)
     form_lendingcustoms_c_add = models.Customes.objects.exclude(
         id=article_obj.custom.id).filter(genre=1).values_list('id', 'name')
     form_lendingcustoms_p_add = models.Customes.objects.exclude(

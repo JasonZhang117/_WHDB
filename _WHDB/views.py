@@ -115,7 +115,40 @@ def acc_login(request):
     return render(request, 'login.html', {'error_msg': error_msg})
 
 
-def authority(func):
+def article_list_screen(article_list, job_list, request_user):  # 项目筛选
+    if '业务部门负责人' in job_list:  # 如果为业务部门负责人
+        user_department = models.Departments.objects.get(employee_department=request_user)  # 用户所属部门
+        article_list = article_list.filter(director__department=user_department)  # 项目经理部门与用户所属部门相同项目
+        return article_list
+    elif '项目经理' in job_list:
+        article_list = article_list.filter(Q(director=request_user) | Q(assistant=request_user))  # 用户为项目经理或助理项目
+        return article_list
+    else:
+        return article_list
+
+
+def article_right(func): #项目权限控制
+    def inner(request, *args, **kwargs):
+        article_obj = models.Articles.objects.get(id=kwargs['article_id'])  # 项目
+        job_list = request.session.get('job_list')  # 获取当前用户的所有角色
+        article_manager_department = article_obj.director.department  # 项目经理所属部门
+        user_department = models.Departments.objects.get(employee_department=request.user)
+        if '业务部门负责人' in job_list:  # 如果为业务部门负责人
+            if not article_manager_department == user_department:  # 项目经理不属于部门负责人所属部门
+                return HttpResponse('该项目部归属你部门，无权访问！')
+
+        if '项目经理' in job_list:
+            user_list = models.Employees.objects.filter(
+                Q(director_employee=article_obj) | Q(assistant_employee=article_obj)).distinct()  # 项目经理及助理列表
+            if not request.user in user_list:
+                return HttpResponse('你不是该项目的项目经理或助理，无权访问！')
+        return func(request, *args, **kwargs)
+
+    return inner
+
+
+
+def authority(func): #权限控制
     def inner(request, *args, **kwargs):
         current_url_name = resolve(request.path).url_name  # 获取当前URL_NAME
         authority_list = request.session.get('authority_list')  # 获取当前用户的所有权限

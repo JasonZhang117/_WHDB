@@ -11,7 +11,7 @@
                 <th>他权情况</th>
             {% endif %}
             <th>入库情况</th>
-            {% if PAGE_TITLE == '放款次序' or PAGE_TITAL == '权证管理' %}
+            {% if PAGE_TITLE == '项目次序' or PAGE_TITLE == '权证管理' or PAGE_TITLE == '放款次序' %}
                 <td>操作</td>
             {% endif %}
         </tr>
@@ -38,7 +38,7 @@
                             </td>
                         {% endif %}
                         <td>{{ warrant.get_warrant_state_display }}</td>
-                        {% if PAGE_TITLE == '放款次序' %}
+                        {% if PAGE_TITLE == '项目次序' or PAGE_TITLE == '放款次序' %}
                             <td><a class="btn btn-primary btn-xs delGuaranteeB">删除</a></td>
                         {% endif %}
                         {% if PAGE_TITLE == '权证管理' %}

@@ -12,7 +12,7 @@
                 <th>他权情况</th>
             {% endif %}
             <th>入库情况</th>
-            {% if PAGE_TITLE == '放款次序' or PAGE_TITLE == '权证管理' %}
+            {% if PAGE_TITLE == '项目次序' or PAGE_TITLE == '权证管理' or PAGE_TITLE == '放款次序' %}
                 <td>操作</td>
             {% endif %}
         </tr>
@@ -25,7 +25,8 @@
                         <td><a target="_blank" href="{% url 'dbms:warrant_scan' warrant_id=warrant.id %}">
                             {{ forloop.counter }}</a></td>
                         <td>{{ lending_sure.get_sure_typ_display }}</td>
-                        <td><a target="_blank" href="{% url 'dbms:custom_scan' custom_id=warrant.other_warrant.other_owner.id %}">
+                        <td><a target="_blank"
+                               href="{% url 'dbms:custom_scan' custom_id=warrant.other_warrant.other_owner.id %}">
                             {{ warrant.other_warrant.other_owner.short_name }}</a></td>
                         <td>{{ warrant.other_warrant.get_other_typ_display }}</td>
                         <td>{{ warrant.other_warrant.other_detail }}</td>
@@ -39,7 +40,7 @@
                             </td>
                         {% endif %}
                         <td>{{ warrant.get_warrant_state_display }}</td>
-                        {% if PAGE_TITLE == '放款次序' %}
+                        {% if PAGE_TITLE == '项目次序' or PAGE_TITLE == '放款次序' %}
                             <td><a class="btn btn-primary btn-xs delGuaranteeB">删除</a></td>
                         {% endif %}
                         {% if PAGE_TITLE == '权证管理' %}

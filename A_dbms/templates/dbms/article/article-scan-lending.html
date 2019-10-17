@@ -8,12 +8,21 @@
         {% include 'dbms/article/scan/article-summry.html' %}
         {% include 'dbms/article/scan/article-tab.html' %}
         {% include 'dbms/article/lending/article-lending-tab.html' %}
+
         {% include 'dbms/article/modl/article-agree-add-mod.html' %}
 
+        {% include 'dbms/appraisal/modl/guarantee-add-mod.html' %}
+        {% include 'dbms/appraisal/modl/guarantee-del-mod.html' %}
+        {% include 'dbms/appraisal/modl/lending-change-mod.html' %}
     </div>
 
     {% block extra-js %}
         {% include 'dbms/agree/extra/js-agree-add.html' %}
+
+        {% include 'dbms/appraisal/extra/js-guarantee-add.html' %}
+        {% include 'dbms/appraisal/extra/js-guarantee-del.html' %}
+        {% include 'dbms/appraisal/extra/js-lending-change.html' %}
+        {% include 'dbms/js/js-guarantee-warrant.html' %}
     {% endblock %}
 
 {% endblock %}

@@ -59,6 +59,7 @@ def article_add_ajax(request):  # 添加项目
                     currentor_id=cleaned_data['director_id'], frontor_id=cleaned_data['director_id'],
                     article_buildor=request.user)
                 models.Customes.objects.filter(id=custom_id).update(
+                    lately_date=datetime.date.today(),
                     managementor_id=cleaned_data['director_id'],
                     controler_id=cleaned_data['control_id'], custom_state=11)
             response['message'] = '成功创建项目：%s！' % article_obj.article_num

@@ -14,8 +14,8 @@
             <th>联系地址</th>
             <th>联系人</th>
             <th>联系电话</th>
-            {% if PAGE_TITLE == '放款次序' or PAGE_TITLE == '项目次序' %}
-                <th>操作</th>
+            {% if PAGE_TITLE == '项目次序' or PAGE_TITLE == '权证管理' or PAGE_TITLE == '放款次序' %}
+                <td>操作</td>
             {% endif %}
         </tr>
         </thead>
@@ -38,11 +38,10 @@
                         <td>{{ custom.contact_addr }}</td>
                         <td>{{ custom.linkman }}</td>
                         <td>{{ custom.contact_num }}</td>
-                        {% if PAGE_TITLE == '放款次序' %}
-                            <td><a class="btn btn-primary btn-xs delGuaranteeB">删除</a></td>
-                        {% elif PAGE_TITLE == '项目次序' %}
-                            <td><a class="btn btn-danger btn-xs scanResultB" target="_blank"
-                       href="https://www.tianyancha.com/search?key={{ custom.name }}">天眼查</a></td>
+                        {% if PAGE_TITLE == '放款次序' or PAGE_TITLE == '项目次序' %}
+                            <td><a class="btn btn-primary btn-xs delGuaranteeB">删除</a>
+                                <a class="btn btn-danger btn-xs scanResultB" target="_blank"
+                                   href="https://www.tianyancha.com/search?key={{ custom.name }}">天眼</a></td>
                         {% endif %}
                     </tr>
                 {% endfor %}

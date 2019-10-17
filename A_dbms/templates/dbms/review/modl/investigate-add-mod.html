@@ -7,7 +7,7 @@
                     <span aria-hidden="true">&times;</span>
                 </button>
                 <h4 class="modal-title" id="addReviewModalLabel">补充调查
-                    {% if PAGE_TITLE == '项目评审' %}
+                    {% if PAGE_TITLE == '项目详情' or PAGE_TITLE == '项目评审' %}
                         <input style="display: none" name="custom_id" value="{{ article_obj.custom.id }}">
                     {% elif  PAGE_TITLE == '保后详情' %}
                         <input style="display: none" name="custom_id" value="{{ custom_obj.id }}">

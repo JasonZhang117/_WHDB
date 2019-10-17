@@ -1,51 +1,26 @@
-{% if not PAGE_TITLE == '放款次序' %}
-    {% if not PAGE_TITLE == '项目次序' %}
-        {% if not PAGE_TITLE == '权证管理' %}
-            <div role="tabpanel" class="tab-pane" id="provide-article"><!--项目情况-->
-                {% include 'dbms/provide/agree/scan/tab/provide-article.html' %}</div>
-            <div role="tabpanel" class="tab-pane" id="agree"><!--合同-->
-                {% include 'dbms/agree/scan/tab/agree-counters.html' %}</div>
-        {% else %}
-            <div role="tabpanel" class="tab-pane active" id="provide-article"><!--项目情况-->
-                {% include 'dbms/provide/agree/scan/tab/provide-article.html' %}</div>
-        {% endif %}
-    {% else %}
-        <div role="tabpanel" class="tab-pane active" id="agree"><!--委托合同-->
-            {% include 'dbms/article/lending/tab/lending-agree.html' %}</div>
+{% if PAGE_TITLE == '权证管理' %}
+    <div role="tabpanel" class="tab-pane active" id="provide-article"><!--项目情况-->
+        {% include 'dbms/provide/agree/scan/tab/provide-article.html' %}</div>
+{% else %}
+    {% if PAGE_TITLE == '风控落实' %}
+        <div role="tabpanel" class="tab-pane" id="provide-article"><!--项目情况-->
+            {% include 'dbms/provide/agree/scan/tab/provide-article.html' %}</div>
     {% endif %}
+{% endif %}
 
+{% if PAGE_TITLE == '项目次序' or  PAGE_TITLE == '放款次序' %}
+    <div role="tabpanel" class="tab-pane active" id="agree"><!--委托合同-->
+        {% include 'dbms/article/lending/tab/lending-agree.html' %}</div>
+{% endif %}
+
+{% if hypothec_agree_list %}
     <div role="tabpanel" class="tab-pane" id="provide-hypothec"><!--他权-->
         {% include 'dbms/provide/agree/scan/tab/provide-war-hypothec.html' %}</div>
 {% endif %}
 
-{% if not PAGE_TITLE == '权证管理' %}
-    {% if PAGE_TITLE == '放款次序' %}
-        <div role="tabpanel" class="tab-pane active" id="provide-ensure"><!--保证反担保-->
-    {% else %}
-        <div role="tabpanel" class="tab-pane" id="provide-ensure"><!--保证反担保-->
-    {% endif %}
-{% include 'dbms/provide/agree/scan/tab/provide-app-ensure.html' %}</div>
-{% endif %}
-<div role="tabpanel" class="tab-pane" id="provide-house"><!--房产反担保-->
-    {% include 'dbms/provide/agree/scan/tab/provide-app-house.html' %}</div>
-<div role="tabpanel" class="tab-pane" id="provide-ground"><!--土地反担保-->
-    {% include 'dbms/provide/agree/scan/tab/provide-app-ground.html' %}</div>
-<div role="tabpanel" class="tab-pane" id="provide-construct"><!--在建工程-->
-    {% include 'dbms/provide/agree/scan/tab/provide-app-construct.html' %}</div>
-<div role="tabpanel" class="tab-pane" id="provide-receive"><!--应收质押-->
-    {% include 'dbms/provide/agree/scan/tab/provide-app-receive.html' %}</div>
-<div role="tabpanel" class="tab-pane" id="provide-stock"><!--股权质押-->
-    {% include 'dbms/provide/agree/scan/tab/provide-app-stock.html' %}</div>
-<div role="tabpanel" class="tab-pane" id="provide-draft"><!--票据质押-->
-    {% include 'dbms/provide/agree/scan/tab/provide-app-draft.html' %}</div>
-<div role="tabpanel" class="tab-pane" id="provide-vehicle"><!--车辆-->
-    {% include 'dbms/provide/agree/scan/tab/provide-app-vehicle.html' %}</div>
-<div role="tabpanel" class="tab-pane" id="provide-chattel"><!--动产抵押-->
-    {% include 'dbms/provide/agree/scan/tab/provide-app-chattel.html' %}</div>
-<div role="tabpanel" class="tab-pane" id="provide-other"><!--其他-->
-    {% include 'dbms/provide/agree/scan/tab/provide-app-other.html' %}</div>
+{% include 'dbms/provide/agree/scan/tab-con-guarantee.html' %} {#反担保#}
 
-{% if PAGE_TITLE == '风控落实' or PAGE_TITLE == '放款通知'%}
+{% if PAGE_TITLE == '风控落实' or PAGE_TITLE == '放款通知' %}
     <div role="tabpanel" class="tab-pane active" id="loan-notice"><!--放款通知-->
         {% include 'dbms/provide/agree/scan/tab/provide-notice.html' %}</div>
 {% endif %}

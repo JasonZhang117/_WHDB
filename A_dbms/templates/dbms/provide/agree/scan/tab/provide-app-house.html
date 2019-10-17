@@ -16,7 +16,7 @@
             <th>评估价值</th>
             <th>评估日期</th>
             <th>入库情况</th>
-            {% if PAGE_TITLE == '放款次序' or PAGE_TITLE == '权证管理' %}
+            {% if PAGE_TITLE == '项目次序' or PAGE_TITLE == '权证管理' or PAGE_TITLE == '放款次序' %}
                 <td>操作</td>
             {% endif %}
 
@@ -57,7 +57,7 @@
                         <td>{{ warrant.evaluate_value|default_if_none:'' }}</td>
                         <td>{{ warrant.evaluate_date|default_if_none:'' }}</td>
                         <td>{{ warrant.get_warrant_state_display }}</td>
-                        {% if PAGE_TITLE == '放款次序' %}
+                        {% if PAGE_TITLE == '项目次序' or PAGE_TITLE == '放款次序' %}
                             <td><a class="btn btn-primary btn-xs delGuaranteeB">删除</a></td>
                         {% endif %}
                         {% if PAGE_TITLE == '权证管理' %}

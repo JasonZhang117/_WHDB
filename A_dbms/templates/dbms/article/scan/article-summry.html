@@ -2,15 +2,65 @@
     <div class="panel-heading">
         <label>项目情况</label>
         <label class="navbar-right">
-            {% if  PAGE_TITLE == '项目详情' %}
+            {% if PAGE_TITLE == '项目详情' %}
                 {% if 'article_feedback_ajax' in authority_list %}
                     <a class="btn btn-primary btn-sm " id="feedbackArticle">反馈</a><!--#path('article/del/'-->
                 {% endif %}
-                <a class="btn btn-primary btn-sm " id="editArticle">修改</a><!--#path('article/del/'-->
-                <a class="btn btn-danger btn-sm " id="delArticle">删除</a><!--#path('article/del/'-->
-            {% elif  PAGE_TITLE == '项目次序' %}
-                <a class="btn btn-primary btn-sm" id="addAgree">出合同</a>
+                {% if 'article_edit_ajax' in authority_list %}
+                    <a class="btn btn-primary btn-sm " id="editArticle">修改</a><!--#path('article/del/'-->
+                {% endif %}
+                {% if 'article_del_ajax' in authority_list %}
+                    <a class="btn btn-danger btn-sm " id="delArticle">删除</a><!--#path('article/del/'-->
+                {% endif %}
+                {% if 'appraisal_supply_ajax' in authority_list %}
+                    <a class="btn btn-primary btn-sm " id="addSupplyB">补调问题</a>
+                {% endif %}
+                {% if 'appraisal_single_quota_ajax' in authority_list %}
+                    <a class="btn btn-primary btn-sm " id="singleQuota">单项额度</a><!--#path('appraisal/single/add/'-->
+                {% endif %}
+                {% if 'appraisal_lending_order_ajax' in authority_list %}
+                    <a class="btn btn-primary btn-sm " id="lendingOrder">放款次序</a><!--#path('appraisal/lending/add/'-->
+                {% endif %}
+                {% if 'appraisal_article_sign_ajax' in authority_list %}
+                    <a class="btn btn-primary btn-sm " id="articleSignB">项目签批</a><!--#path('appraisal/sign/'-->
+                {% endif %}
+                {% if 'appraisal_article_change_ajax' in authority_list %}
+                    <a class="btn btn-primary btn-sm " id="articleChangeB">项目变更</a><!--#path('appraisal/sign/'-->
+                {% endif %}
+                {% if 'investigate_add_ajax' in authority_list %}
+                    <a class="btn btn-primary btn-sm " id="investigateB">补充调查</a><!--#path('custom/del/'-->
+                {% endif %}
             {% endif %}
+            {% if PAGE_TITLE == '项目次序' %}
+                {% if 'appraisal_guarantee_add_ajax' in authority_list %}
+                    <a class="btn btn-primary btn-sm " id="guaranteeB">添加反担保</a><!--#path('appraisal/guarantee/add/'-->
+                {% endif %}
+                {% if 'appraisal_lending_change_ajax' in authority_list %}
+                    <a class="btn btn-primary btn-sm " id="changeLendingOrderB">变更次序</a>
+                {% endif %}
+                {% if 'agree_add_ajax' in authority_list %}
+                    <a class="btn btn-primary btn-sm" id="addAgree">出合同</a>
+                {% endif %}
+            {% endif %}
+            {% if PAGE_TITLE == '项目评审' %}
+                <a class="btn btn-primary btn-sm " id="summaryScan" target="_blank"
+                   href="{% url 'dbms:appraisal_summary_scan' article_id=article_obj.id %}">意见书</a><!--#path(' '-->
+                <a class="btn btn-primary btn-sm " id="signScan" target="_blank"
+                   href="{% url 'dbms:appraisal_sign_scan' article_id=article_obj.id %}">签批单</a><!--#path(' '-->
+                {% if 'appraisal_supply_ajax' in authority_list %}
+                    <a class="btn btn-primary btn-sm " id="addSupplyB">补调问题</a>
+                {% endif %}
+                {% if 'appraisal_article_sign_ajax' in authority_list %}
+                    <a class="btn btn-primary btn-sm " id="articleSignB">项目签批</a><!--#path('appraisal/sign/'-->
+                {% endif %}
+                {% if 'appraisal_article_change_ajax' in authority_list %}
+                    <a class="btn btn-primary btn-sm " id="articleChangeB">项目变更</a><!--#path('appraisal/sign/'-->
+                {% endif %}
+                {% if 'investigate_add_ajax' in authority_list %}
+                    <a class="btn btn-primary btn-sm " id="investigateB">补充调查</a><!--#path('custom/del/'-->
+                {% endif %}
+            {% endif %}
+
         </label>
     </div>
 

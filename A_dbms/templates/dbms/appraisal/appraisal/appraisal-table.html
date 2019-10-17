@@ -19,7 +19,8 @@
         {% for article in p_list %}
             <tr>
                 <td>
-                    <a href="{% url 'dbms:appraisal_scan' article_id=article.id %}">
+                    {#                    <a href="{% url 'dbms:appraisal_scan' article_id=article.id %}">#}
+                    <a href="{% url 'dbms:article_scan' article_id=article.id %}">
                         {{ article.article_num }}
                     </a>
                 </td>
@@ -29,9 +30,9 @@
                 <td>{{ article.director.name }}</td>
                 <td>{{ article.assistant.name }}</td>
                 <td>{{ article.control.name }}</td>
-                <td>{{ article.review_date|default_if_none:""  }}</td>
+                <td>{{ article.review_date|default_if_none:"" }}</td>
                 <td>{{ article.sign_date|default_if_none:"" }}</td>
-                <td>{{ article.summary_num|default_if_none:""  }}</td>
+                <td>{{ article.summary_num|default_if_none:"" }}</td>
                 <td>{{ article.get_article_state_display }}</td>
             </tr>
         {% endfor %}
