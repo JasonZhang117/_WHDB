@@ -43,6 +43,15 @@ class ArticlesAddForm(dform.Form):  # 项目添加
             job__name='风控专员', employee_status=1).values_list('id', 'name')
 
 
+# -----------------------项目提交-------------------------#
+class ArticleSubForm(dform.ModelForm):  # 项目提交
+    class Meta:
+        model = models.ProcessArticle
+        fields = ['conclusion', 'detail', ]
+        widgets = {'conclusion': dform.Select(attrs={'class': 'form-control'}),
+                   'detail': dform.Textarea(attrs={'class': 'form-control', 'rows': '3', 'placeholder': '审批意见'})}
+
+
 # -----------------------风控反馈添加-------------------------#
 class FeedbackAddForm(dform.Form):  # 风控反馈添加
     PROPOSE_LIST = models.Feedback.PROPOSE_LIST
@@ -91,8 +100,9 @@ class ArticleAgreeAddForm(dform.ModelForm):
         super(ArticleAgreeAddForm, self).__init__(*args, **kwargs)
         self.fields['branch'].choices = models.Branches.objects.filter(branch_state=1).values_list('id', 'name')
 
-class LetterGuaranteeAddForm(dform.ModelForm):
 
+# -----------------------委托出具保函合同-------------------------#
+class LetterGuaranteeAddForm(dform.ModelForm):
     class Meta:
         model = models.LetterGuarantee
         fields = ['letter_typ', 'beneficiary', 'basic_contract', 'basic_contract_num', 'starting_date',
@@ -103,4 +113,4 @@ class LetterGuaranteeAddForm(dform.ModelForm):
             'basic_contract': dform.TextInput(attrs={'class': 'form-control', 'placeholder': '基础合同名称'}),
             'basic_contract_num': dform.TextInput(attrs={'class': 'form-control', 'placeholder': '基础合同编号'}),
             'starting_date': dform.DateInput(attrs={'class': 'form-control', 'type': 'date'}),
-            'due_date': dform.DateInput(attrs={'class': 'form-control', 'type': 'date'}),}
+            'due_date': dform.DateInput(attrs={'class': 'form-control', 'type': 'date'}), }

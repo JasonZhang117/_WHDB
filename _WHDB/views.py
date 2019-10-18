@@ -70,6 +70,7 @@ class MenuHelper(object):
         return menu_result
 
 
+# ---------------------------登陆函数----------------------------#
 def acc_login(request):
     ''':param request::return:'''
     # print(request.path, '>', resolve(request.path).url_name, '>', request.user)
@@ -115,6 +116,13 @@ def acc_login(request):
     return render(request, 'login.html', {'error_msg': error_msg})
 
 
+# ---------------------------登出函数----------------------------#
+def acc_logout(request):
+    logout(request)
+    return redirect('login')
+
+
+# ---------------------------项目筛选函数----------------------------#
 def article_list_screen(article_list, job_list, request_user):  # 项目筛选
     if '业务部门负责人' in job_list:  # 如果为业务部门负责人
         user_department = models.Departments.objects.get(employee_department=request_user)  # 用户所属部门
@@ -127,28 +135,8 @@ def article_list_screen(article_list, job_list, request_user):  # 项目筛选
         return article_list
 
 
-def article_right(func): #项目权限控制
-    def inner(request, *args, **kwargs):
-        article_obj = models.Articles.objects.get(id=kwargs['article_id'])  # 项目
-        job_list = request.session.get('job_list')  # 获取当前用户的所有角色
-        article_manager_department = article_obj.director.department  # 项目经理所属部门
-        user_department = models.Departments.objects.get(employee_department=request.user)
-        if '业务部门负责人' in job_list:  # 如果为业务部门负责人
-            if not article_manager_department == user_department:  # 项目经理不属于部门负责人所属部门
-                return HttpResponse('该项目部归属你部门，无权访问！')
-
-        if '项目经理' in job_list:
-            user_list = models.Employees.objects.filter(
-                Q(director_employee=article_obj) | Q(assistant_employee=article_obj)).distinct()  # 项目经理及助理列表
-            if not request.user in user_list:
-                return HttpResponse('你不是该项目的项目经理或助理，无权访问！')
-        return func(request, *args, **kwargs)
-
-    return inner
-
-
-
-def authority(func): #权限控制
+# ---------------------------功能权限----------------------------#
+def authority(func):  # 权限控制
     def inner(request, *args, **kwargs):
         current_url_name = resolve(request.path).url_name  # 获取当前URL_NAME
         authority_list = request.session.get('authority_list')  # 获取当前用户的所有权限
@@ -178,9 +166,43 @@ def authority(func): #权限控制
     return inner
 
 
-def acc_logout(request):
-    logout(request)
-    return redirect('login')
+# ---------------------------项目访问权限----------------------------#
+def article_right(func):  # 项目权限控制
+    def inner(request, *args, **kwargs):
+        article_obj = models.Articles.objects.get(id=kwargs['article_id'])  # 项目
+        job_list = request.session.get('job_list')  # 获取当前用户的所有角色
+        article_manager_department = article_obj.director.department  # 项目经理所属部门
+        user_department = models.Departments.objects.get(employee_department=request.user)
+        if '业务部门负责人' in job_list:  # 如果为业务部门负责人
+            if not article_manager_department == user_department:  # 项目经理不属于部门负责人所属部门
+                return HttpResponse('该项目部归属你部门，无权访问！')
+        if '项目经理' in job_list:
+            user_list = models.Employees.objects.filter(
+                Q(director_employee=article_obj) | Q(assistant_employee=article_obj)).distinct()  # 项目经理及助理列表
+            if not request.user in user_list:
+                return HttpResponse('你不是该项目的项目经理或助理，无权访问！')
+        return func(request, *args, **kwargs)
+
+    return inner
+
+
+# ---------------------------项目流程权限----------------------------#
+def sub_article_right(func):
+    def inner(request, *args, **kwargs):
+        response = {'status': True, 'message': None, 'forme': None, }
+        post_data_str = request.POST.get('postDataStr')
+        post_data = json.loads(post_data_str)
+        article_id = post_data['article_id']
+        article_obj = models.Articles.objects.get(id=article_id)  # 项目
+        currentor = article_obj.currentor  # 项目当前审批人
+        if not currentor == request.user:  # 登陆用户不是当前审批人
+            response['status'] = False
+            response['message'] = '你不是当前审批人，无权提交项目审批！'
+            result = json.dumps(response, ensure_ascii=False)
+            return HttpResponse(result)
+        return func(request, *args, **kwargs)
+
+    return inner
 
 
 @login_required

@@ -64,7 +64,7 @@ class Agrees(models.Model):  # 委托合同
     def __str__(self):
         return "%s_%s_(%s)" % (self.agree_num, self.agree_amount, self.lending)
 
-
+# -----------------------委托出具保函合同-------------------------#
 class LetterGuarantee(models.Model):
     agree = models.OneToOneField(to='Agrees', verbose_name="委托保证合同",
                               on_delete=models.CASCADE, related_name='guarantee_agree')

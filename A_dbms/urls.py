@@ -16,6 +16,7 @@ urlpatterns = [
     path('article/del/', views.article_del_ajax, name='article_del_ajax'),
     path('article/edit/', views.article_edit_ajax, name='article_edit_ajax'),
     path('article/feedback/', views.article_feedback_ajax, name='article_feedback_ajax'),
+    path('article/sub/', views.article_sub_ajax, name='article_sub_ajax'),
     # -----------------------meeting评审会-------------------------#
     path('meeting/', views.meeting, name='meeting_all'),  # 菜单-评审管理-评审会
     path('meeting/<int:review_model>', views.meeting, name='meeting'),
@@ -252,9 +253,10 @@ urlpatterns = [
     path('department/add/', views.department_add, name='department_add'),
     path('department/edit/<int:department_id>/', views.department_edit, name='department_edit'),
     path('department/del/<int:department_id>/', views.department_del, name='department_del'),
-
+    # 全局收索
     path('search/custom/', views.search_custom_ajax, name='search_custom_ajax'),
     path('search/warrant/', views.search_warrant_ajax, name='search_warrant_ajax'),
     path('search/guarantee/', views.guarantee_warrant_ajax, name='search_guarantee_ajax'),
+    # sub
 
 ]

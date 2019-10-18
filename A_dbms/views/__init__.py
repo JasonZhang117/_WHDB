@@ -4,7 +4,7 @@ from .v_index import index
 from .v_article import (
     article, article_scan, article_scan_agree, article_scan_lending)
 from .v_article_act import (
-    article_add_ajax, article_feedback_ajax, article_edit_ajax, article_del_ajax)
+    article_add_ajax, article_feedback_ajax, article_edit_ajax, article_del_ajax,article_sub_ajax)
 # ----------------------v_meeting评审会视图--------------------#
 from .v_meeting import (
     meeting, meeting_scan, meeting_notice, meeting_scan_article, experts)

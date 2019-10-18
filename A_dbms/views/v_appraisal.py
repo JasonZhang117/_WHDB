@@ -28,7 +28,7 @@ def appraisal(request, *args, **kwargs):  # 评审情况
     ARTICLE_STATE_LIST = models.Articles.ARTICLE_STATE_LIST  # 筛选条件
     '''筛选'''
     appraisal_list = models.Articles.objects.filter(**kwargs).select_related(
-        'custom', 'director', 'assistant', 'control').order_by('-review_date')
+        'custom', 'director', 'assistant', 'control')
     appraisal_list = article_list_screen(appraisal_list, job_list, request.user)  # 项目筛选
     # appraisal_list = appraisal_list.filter(article_state__in=[4, 5, 51, 61])
     '''搜索'''
@@ -210,14 +210,15 @@ def summary_scan(request, article_id):  # 评审项目预览
 
     article_list = models.Articles.objects.filter(id=article_id)
     article_obj = article_list.first()
-    review_date = article_obj.review_date
-    review_year = article_obj.appraisal_article.all()[0].review_year
+    review_date = article_obj.review_date #上会日期
+    review_year = article_obj.appraisal_article.all()[0].review_year #上会年份
     review_order = article_obj.appraisal_article.all()[0].review_order
     review_order_cn = convert_str(review_order)
     single_list = article_obj.single_quota_summary.all()
     single_count = single_list.count()
 
     credit_term = article_obj.credit_term  # 授信期限（月）
+
     credit_term_exactly = credit_term % 12
     credit_term_cn = ''
     if credit_term_exactly == 0:

@@ -105,6 +105,8 @@ class LendingOrder(models.Model):
     order = models.IntegerField(verbose_name='发放次序', choices=ORDER_LIST, default=1)
     order_amount = models.FloatField(verbose_name='拟放金额')
     remark = models.CharField(verbose_name='备注', max_length=128, null=True, blank=True)
+    '''ARTICLE_STATE_LIST = [(1, '待反馈'), (2, '已反馈'), (3, '待上会'), (4, '已上会'), (5, '已签批'),
+                          (51, '已放款'), (52, '已放完'), (55, '已解保'), (61, '待变更'), (99, '已注销')]'''
     LENDING_STATE = [(4, '已上会'), (5, '已签批'),
                      (51, '已放款'), (52, '已放完'), (55, '已解保'), (61, '待变更'), (99, '已注销')]
     lending_state = models.IntegerField(verbose_name='_次序状态', choices=LENDING_STATE, default=4)

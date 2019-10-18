@@ -1,12 +1,11 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, HttpResponse, redirect
 from django.contrib.auth.decorators import login_required
-import datetime, time
+import datetime, time, json
 from .. import models
 from .. import forms
 from django.db.models import Q, F
 from django.urls import resolve
-from _WHDB.views import MenuHelper
-from _WHDB.views import authority
+from _WHDB.views import MenuHelper, authority, article_right, sub_article_right
 
 
 # -----------------------首页-------------------------#
@@ -131,3 +130,5 @@ def index(request):
             Q(provide__notify__agree__lending__summary__assistant=request.user))
     track_overdue_count = track_overdue.count()
     return render(request, 'dbms/index_dbms.html', locals())
+
+

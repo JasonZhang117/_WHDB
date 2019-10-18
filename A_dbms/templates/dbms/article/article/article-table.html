@@ -6,12 +6,13 @@
             <th>客户</th>
             <th>项目金额</th>
             <th>期限</th>
+            <th>业务品种</th>
             <th>项目经理</th>
             <th>项目助理</th>
             <th>风控专员</th>
             <th>提交日期</th>
             {#            <th>反馈日期</th>#}
-            <th>加权通知金额</th>
+            {#            <th>加权通知金额</th>#}
             <th>放款金额</th>
             <th>还款金额</th>
             <th>在保余额</th>
@@ -30,12 +31,13 @@
                 <td>{{ article.custom.short_name }}</td>
                 <td align="right">{{ article.amount }}</td>
                 <td align="right">{{ article.credit_term }}</td>
+                <td>{{ article.product }}</td>
                 <td>{{ article.director.name }}</td>
                 <td>{{ article.assistant.name }}</td>
                 <td>{{ article.control.name }}</td>
                 <td>{{ article.build_date }}</td>
                 {#                <td>{{ article.article_date|default_if_none:"" }}</td>#}
-                <td align="right">{{ article.article_notify_sum }}</td>
+                {#                <td align="right">{{ article.article_notify_sum }}</td>#}
                 <td align="right">{{ article.article_provide_sum }}</td>
                 <td align="right">{{ article.article_repayment_sum }}</td>
                 <td align="right">{{ article.article_balance }}</td>

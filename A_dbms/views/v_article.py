@@ -25,7 +25,8 @@ def article(request, *args, **kwargs):  # 项目列表
 
     form_article_add_edit = forms.ArticlesAddForm()
     for k, v in request.GET.items():  # 获取传递参数
-        print(k, ' ', v)
+        pass
+        # print(k, ' ', v)
     condition = {
         # 'article_state' : 0, #查询字段及值的字典，空字典查询所有
     }  # 建立空的查询字典
@@ -112,6 +113,7 @@ def article_scan(request, article_id):  # 项目预览
             'convenor_opinion': article_obj.convenor_opinion, 'sign_detail': article_obj.sign_detail,
             'sign_date': str(article_obj.sign_date)}
         form_article_sign = forms.ArticlesSignForm(initial=form_date)  # 项目签批form
+    form_article_sub = forms.ArticleSubForm()  # 添加审批意见form
     form_comment = forms.CommentsAddForm()  # 添加评审意见form
     form_single = forms.SingleQuotaForm()  # 添加单项额度form
     form_supply = forms.FormAddSupply()  # 添加补调问题form

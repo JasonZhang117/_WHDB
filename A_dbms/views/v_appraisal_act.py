@@ -27,10 +27,10 @@ def guarantee_add_ajax(request):  # 反担保措施添加ajax
     lending_obj = models.LendingOrder.objects.get(id=lending_id)
 
     form_lendingsures = forms.LendingSuresForm(post_data)
-    '''ARTICLE_STATE_LIST = ((1, '待反馈'), (2, '已反馈'), (3, '待上会'), (4, '已上会'), (5, '已签批'),
-                          (51, '已放款'), (52, '已放完'), (55, '已解保'), (61, '待变更'), (99, '已注销'))'''
+    '''ARTICLE_STATE_LIST = [(1, '待反馈'), (2, '已反馈'), (3, '待上会'), (4, '已上会'), (5, '已签批'),
+                          (51, '已放款'), (52, '已放完'), (55, '已解保'), (61, '待变更'), (99, '已注销')]'''
     article_state = lending_obj.summary.article_state
-    '''  SURE_TYP_LIST = [
+    '''SURE_TYP_LIST = [
         (1, '企业保证'), (2, '个人保证'),
         (11, '房产抵押'), (12, '土地抵押'), (13, '动产抵押'), (14, '在建工程抵押'), (15, '车辆抵押'),
         (21, '房产顺位'), (22, '土地顺位'), (23, '在建工程顺位'), (24, '动产顺位'),
@@ -364,7 +364,7 @@ def single_quota_ajax(request):  # 单项额度ajax
     article_obj = models.Articles.objects.get(id=article_id)
     '''ARTICLE_STATE_LIST = ((1, '待反馈'), (2, '已反馈'), (3, '待上会'), (4, '已上会'), (5, '已签批'),
                           (51, '已放完'), (61, '待变更'), (99, '已注销'))'''
-    if article_obj.article_state in [4, 61]:
+    if article_obj.article_state in [1, 2, 3, 4, 61]:
         form = forms.SingleQuotaForm(post_data)
         if form.is_valid():
             cleaned_data = form.cleaned_data
@@ -488,7 +488,7 @@ def lending_order_ajax(request):  # 放款次序ajax
     article_obj = models.Articles.objects.get(id=article_id)
     '''ARTICLE_STATE_LIST = ((1, '待反馈'), (2, '已反馈'), (3, '待上会'), (4, '已上会'), (5, '已签批'),
                           (51, '已放完'), (61, '待变更'), (99, '已注销'))'''
-    if article_obj.article_state in [4, 61]:
+    if article_obj.article_state in [1, 2, 3, 4, 61]:
         form = forms.FormLendingOrder(post_data)
         if form.is_valid():
             cleaned_data = form.cleaned_data
@@ -554,7 +554,6 @@ def lending_change_ajax(request):  # 放款次序ajax
 @login_required
 @authority
 def lending_del_ajax(request):  # 放款次序删除ajax
-    print(request.path, '>', resolve(request.path).url_name, '>', request.user)
     response = {'status': True, 'message': None, 'forme': None, }
     post_data_str = request.POST.get('postDataStr')
     post_data = json.loads(post_data_str)
@@ -564,7 +563,6 @@ def lending_del_ajax(request):  # 放款次序删除ajax
 
     lending_obj = models.LendingOrder.objects.get(id=lending_id)
     article_obj = models.Articles.objects.get(id=article_id)
-    print('lending_obj:', lending_obj)
     '''ARTICLE_STATE_LIST = [(1, '待反馈'), (2, '已反馈'), (3, '待上会'), (4, '已上会'), (5, '已签批'),
                           (51, '已放款'), (52, '已放完'), (55, '已解保'), (61, '待变更'), (99, '已注销')]'''
     if article_obj.article_state in [1, 2, 3, 4, 61]:
@@ -617,8 +615,6 @@ def article_sign_ajax(request):
     response = {'status': True, 'message': None, 'forme': None, }
     post_data_str = request.POST.get('postDataStr')
     post_data = json.loads(post_data_str)
-
-    '''((1, '同意'), (2, '不同意'))'''
     sign_type = int(post_data['sign_type'])
     article_id = post_data['article_id']
     article_obj = models.Articles.objects.get(id=article_id)
@@ -626,28 +622,32 @@ def article_sign_ajax(request):
 
     '''ARTICLE_STATE_LIST = [(1, '待反馈'), (2, '已反馈'), (3, '待上会'), (4, '已上会'), (5, '已签批'),
                           (51, '已放款'), (52, '已放完'), (55, '已解保'), (61, '待变更'), (99, '已注销')]'''
-    if article_obj.article_state in [4, 61]:
-        if sign_type == 2:
-            models.Articles.objects.filter(id=article_id).update(
-                sign_type=sign_type, sign_date=post_data['sign_date'], article_state=6)
-            response['message'] = '%s项目被否决，更新为注销状态！' % article_obj.article_num
-        else:
-            form = forms.ArticlesSignForm(post_data)
-            if form.is_valid():
-                cleaned_data = form.cleaned_data
-                article_expert_amount = article_obj.expert.all().count()
-                '''COMMENT_TYPE_LIST = ((0, ''), (1, '同意'), (2, '复议'), (3, '不同意'))'''
-                article_comment_amount = article_obj.comment_summary.exclude(comment_type=0).count()  # 发表意见的评委数
-                if article_expert_amount == article_comment_amount:
-                    renewal = round(cleaned_data['renewal'], 2)
-                    augment = round(cleaned_data['augment'], 2)
-                    article_amount = renewal + augment
+    '''TYP_LIST = [(1, '签批 '), (11, '内审'),  (21, '外审'), ]'''
+    endorsement_list = models.Process.objects.filter(typ=1)  # 签批类型流程
+    arter_endorsement_list = models.Process.objects.exclude(typ=1)  # 签批类型以外流程
+    internal_audit = models.Process.objects.filter(typ=11)  # 内审批类型流程
+    external_audit = models.Process.objects.filter(typ=21)  # 外审批类型流程
+    process_article = article_obj.process  # 项目流程
+    if process_article in endorsement_list:  # 如果项目流程属于签批类型流程
+        if article_obj.article_state in [1, 2, 3, 61]:
+            if sign_type == 2:  # [(1, '同意'), (2, '不同意')]
+                models.Articles.objects.filter(id=article_id).update(
+                    sign_type=sign_type, sign_date=post_data['sign_date'], article_state=6)
+                response['message'] = '%s项目被否决，更新为注销状态！' % article_obj.article_num
+            else:
+                form = forms.ArticlesSignForm(post_data)
+                if form.is_valid():
+                    cleaned_data = form.cleaned_data
+                    '''COMMENT_TYPE_LIST = ((0, ''), (1, '同意'), (2, '复议'), (3, '不同意'))'''
+                    renewal = round(cleaned_data['renewal'], 2)  # 续贷金额
+                    augment = round(cleaned_data['augment'], 2)  # 新增金额
+                    article_amount = renewal + augment  # 总额度
                     single_quota_amount = models.SingleQuota.objects.filter(
                         summary__id=article_id).aggregate(Sum('credit_amount'))
-                    single_quota_amount = single_quota_amount['credit_amount__sum']
+                    single_quota_amount = single_quota_amount['credit_amount__sum']  # 单项额度金额合计
                     lending_amount = models.LendingOrder.objects.filter(
                         summary__id=article_id).aggregate(Sum('order_amount'))
-                    lending_amount = lending_amount['order_amount__sum']
+                    lending_amount = lending_amount['order_amount__sum']  # 放款次序金额合计
                     if single_quota_amount == article_amount and lending_amount == article_amount:
                         custom_typ_n = 1
                         if renewal > 0 and augment > 0:
@@ -667,9 +667,8 @@ def article_sign_ajax(request):
                                     sign_date=cleaned_data['sign_date'],
                                     article_state=5)
                                 # 更新放款次序状态
-                                '''LENDING_STATE = [(3, '待上会'), (4, '已上会'), (5, '已签批'),
-                                                     (51, '已放款'), (52, '已放完'), (55, '已解保'), (61, '待变更'),
-                                                      (99, '已注销')]'''
+                                '''LENDING_STATE = [(4, '已上会'), (5, '已签批'),
+                     (51, '已放款'), (52, '已放完'), (55, '已解保'), (61, '待变更'), (99, '已注销')]'''
                                 models.LendingOrder.objects.filter(summary=article_obj).update(lending_state=5)
                                 # 更新客户授信总额，存量/新增情况
                                 custom_list.update(
@@ -688,14 +687,82 @@ def article_sign_ajax(request):
                         response['message'] = msg
                 else:
                     response['status'] = False
-                    response['message'] = '还有评审委员没有发表评审意见，项目签批不成功！！！'
+                    response['message'] = '表单信息有误！！！'
+                    response['forme'] = form.errors
+        else:
+            response['status'] = False
+            response['message'] = '项目状态为：%s，本次签批失败！！！' % article_obj.article_state
+    elif process_article in arter_endorsement_list:  # 如果项目流程属于非签批类型流程
+        if article_obj.article_state in [4, 61]:
+            if sign_type == 2:  # [(1, '同意'), (2, '不同意')]
+                models.Articles.objects.filter(id=article_id).update(
+                    sign_type=sign_type, sign_date=post_data['sign_date'], article_state=6)
+                response['message'] = '%s项目被否决，更新为注销状态！' % article_obj.article_num
             else:
-                response['status'] = False
-                response['message'] = '表单信息有误！！！'
-                response['forme'] = form.errors
-    else:
-        response['status'] = False
-        response['message'] = '项目状态为：%s，本次签批失败！！！' % article_obj.article_state
+                form = forms.ArticlesSignForm(post_data)
+                if form.is_valid():
+                    cleaned_data = form.cleaned_data
+                    article_expert_amount = article_obj.expert.all().count()  # 评委数量
+                    '''COMMENT_TYPE_LIST = ((0, ''), (1, '同意'), (2, '复议'), (3, '不同意'))'''
+                    article_comment_amount = article_obj.comment_summary.exclude(comment_type=0).count()  # 发表意见的评委数
+                    if article_expert_amount == article_comment_amount:
+                        renewal = round(cleaned_data['renewal'], 2)  # 续贷金额
+                        augment = round(cleaned_data['augment'], 2)  # 新增金额
+                        article_amount = renewal + augment  # 总额度
+                        single_quota_amount = models.SingleQuota.objects.filter(
+                            summary__id=article_id).aggregate(Sum('credit_amount'))
+                        single_quota_amount = single_quota_amount['credit_amount__sum']  # 单项额度金额合计
+                        lending_amount = models.LendingOrder.objects.filter(
+                            summary__id=article_id).aggregate(Sum('order_amount'))
+                        lending_amount = lending_amount['order_amount__sum']  # 放款次序金额合计
+                        if single_quota_amount == article_amount and lending_amount == article_amount:
+                            custom_typ_n = 1
+                            if renewal > 0 and augment > 0:
+                                '''CUSTOM_TYP = ((1, '--'), (11, '新增'), (21, '存量'), (31, '存量新增'))'''
+                                custom_typ_n = 31
+                            elif renewal > 0:
+                                custom_typ_n = 21
+                            elif augment > 0:
+                                custom_typ_n = 11
+                            try:
+                                with transaction.atomic():
+                                    models.Articles.objects.filter(id=article_id).update(
+                                        sign_type=sign_type, renewal=renewal, augment=augment, amount=article_amount,
+                                        sign_detail=cleaned_data['sign_detail'],
+                                        rcd_opinion=cleaned_data['rcd_opinion'],
+                                        convenor_opinion=cleaned_data['convenor_opinion'],
+                                        sign_date=cleaned_data['sign_date'],
+                                        article_state=5)
+                                    # 更新放款次序状态
+                                    '''LENDING_STATE = [(3, '待上会'), (4, '已上会'), (5, '已签批'),
+                                                         (51, '已放款'), (52, '已放完'), (55, '已解保'), (61, '待变更'),
+                                                          (99, '已注销')]'''
+                                    models.LendingOrder.objects.filter(summary=article_obj).update(lending_state=5)
+                                    # 更新客户授信总额，存量/新增情况
+                                    custom_list.update(
+                                        credit_amount=cleaned_data['credit_amount'], custom_typ=custom_typ_n,
+                                        lately_date=article_obj.review_date)
+                                    models.Warrants.objects.filter(
+                                        lending_warrant__sure__lending__summary=article_obj).update(
+                                        meeting_date=article_obj.review_date)
+                                response['message'] = '成功签批项目：%s！' % article_obj.article_num
+                            except Exception as e:
+                                response['status'] = False
+                                response['message'] = '项目签批失败失败：%s' % str(e)
+                        else:
+                            msg = '单项额度或放款次序金额合计与签批总额不相等，项目签批不成功！！！'
+                            response['status'] = False
+                            response['message'] = msg
+                    else:
+                        response['status'] = False
+                        response['message'] = '还有评审委员没有发表评审意见，项目签批不成功！！！'
+                else:
+                    response['status'] = False
+                    response['message'] = '表单信息有误！！！'
+                    response['forme'] = form.errors
+        else:
+            response['status'] = False
+            response['message'] = '项目状态为：%s，本次签批失败！！！' % article_obj.article_state
     result = json.dumps(response, ensure_ascii=False)
     return HttpResponse(result)
 

@@ -1,0 +1,53 @@
+<script>
+    $(function () {
+        bindSubArticle();
+        bindArticleSubModalOk();
+
+    });
+
+    function bindSubArticle() {
+        $('#subArticle').click(function () {
+            $('#articleSubModal').modal('show');
+        })
+    }
+
+    function bindArticleSubModalOk() {
+        $('#articleSubModalOk').click(function () {
+            var postData = {};
+            $('#articleSubModal').find('input,select').each(function () {
+                var v = $(this).val();
+                var n = $(this).attr('name');
+                postData[n] = v;
+            });
+            var detail_text = $('#id_detail').val();
+            postData['detail'] = detail_text;
+            var postDataStr = JSON.stringify(postData);
+            console.log(postDataStr);
+            $.ajax({
+                url: '/dbms/article/sub/',
+                type: 'POST',
+                data: {'postDataStr': postDataStr},
+                success: function (arg) {
+                    var dict = JSON.parse(arg);
+                    console.log(dict);
+                    if (dict.status) {
+                        $('#articleSubModal').modal('hide');
+                        alert(dict.message);
+                        window.location.reload();
+                    } else {
+                        alert(dict.message);
+                        $('#e_conclusion').text(dict.forme.conclusion);
+                        $('#e_detail').text(dict.forme.detail);
+                    }
+                }
+            })
+        })
+    }
+
+</script>
+
+
+
+
+
+
