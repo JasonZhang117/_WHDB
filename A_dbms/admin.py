@@ -33,15 +33,24 @@ class ProcessArticleAdmin(admin.ModelAdmin):
 
 admin.site.register(models.ProcessArticle, ProcessArticleAdmin)  # 流程步骤
 
+
 # -----------------------项目-------------------------#
-admin.site.register(models.Product)  # 产品
+class ProductAdmin(admin.ModelAdmin):
+    list_display = [
+        'id', 'name', 'ind', ]  # 显示字段
+    # list_per_page = 20  # 每页显示条目数
+    search_fields = ['name',]  # 搜索字段
+    ordering = ['-ind','id']  # 排序字段
+
+
+admin.site.register(models.Product, ProductAdmin)  # 产品
 
 
 class ArticlesAdmin(admin.ModelAdmin):
     list_display = [
         'article_num', 'summary_num', 'custom', 'amount', 'article_provide_sum', 'director', 'article_state',
         'build_date',
-        'article_date', 'article_balance', 'article_state',]  # 显示字段
+        'article_date', 'article_balance', 'article_state', ]  # 显示字段
     # list_per_page = 20  # 每页显示条目数
     search_fields = ['article_num', 'summary_num']  # 搜索字段
     ordering = ['-build_date']  # 排序字段

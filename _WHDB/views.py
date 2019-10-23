@@ -8,7 +8,8 @@ from django.db.models import Q, F
 from django.db.models import Avg, Min, Sum, Max, Count
 from django.db import transaction
 
-
+UND = '成都武侯中小企业融资担保有限责任公司'
+UNX = '成都武侯武兴小额贷款有限责任公司'
 class MenuHelper(object):
     def __init__(self, request):
         self.request = request  # 当前请求的request对象
@@ -243,3 +244,63 @@ def Caltime(date1, date2):
     date2 = datetime.datetime(date2[0], date2[1], date2[2])
     # 返回两个变量相差的值，就是相差天数
     return date2 - date1
+
+# -------------------------合同期限-------------------------#
+def credit_term_c(credit_term):
+    credit_term_exactly = credit_term % 12
+    credit_term_cn = ''
+    if credit_term_exactly == 0:
+        credit_term_cn = '%s年' % convert_num(credit_term / 12)
+    else:
+        credit_term_cn = '%s个月' % convert_num(credit_term)
+    return credit_term_cn
+
+# -----------------------------金额小写转大写------------------------------#
+def convert(n):
+    units = ['', '万', '亿']
+    nums = ['零', '壹', '贰', '叁', '肆', '伍', '陆', '柒', '捌', '玖']
+    decimal_label = ['角', '分']
+    small_int_label = ['', '拾', '佰', '仟']
+    int_part, decimal_part = str(int(n)), str(round(n - int(n), 2))[2:]  # 分离整数和小数部分
+    res = []
+    if decimal_part:
+        res.append(''.join([nums[int(x)] + y for x, y in list(zip(decimal_part, decimal_label)) if x != '0']))
+    if int_part != '0':
+        res.append('圆')
+        while int_part:
+            small_int_part, int_part = int_part[-4:], int_part[:-4]
+            tmp = ''.join(
+                [nums[int(x)] + (y if x != '0' else '') for x, y in
+                 list(zip(small_int_part[::-1], small_int_label))[::-1]])
+            tmp = tmp.rstrip('零').replace('零零零', '零').replace('零零', '零')
+            unit = units.pop(0)
+            if tmp:
+                tmp += unit
+                res.append(tmp)
+    result = ''.join(res[::-1])
+    # print('len(result):',len(result),result,result[-1])
+    if not result[-1] == '分':
+        result += '整'
+    return result
+
+# -----------------------------数字小写转大写------------------------------#
+def convert_num(n):
+    units = ['', '万', '亿']
+    nums = ['零', '壹', '贰', '叁', '肆', '伍', '陆', '柒', '捌', '玖']
+    small_int_label = ['', '拾', '佰', '仟']
+    int_part, decimal_part = str(int(n)), str(round(n - int(n), 2))[2:]  # 分离整数和小数部分
+    res = []
+    if int_part != '0':
+        while int_part:
+            small_int_part, int_part = int_part[-4:], int_part[:-4]
+            tmp = ''.join(
+                [nums[int(x)] + (y if x != '0' else '') for x, y in
+                 list(zip(small_int_part[::-1], small_int_label))[::-1]])
+            tmp = tmp.rstrip('零').replace('零零零', '零').replace('零零', '零')
+            unit = units.pop(0)
+            if tmp:
+                tmp += unit
+                res.append(tmp)
+    result = ''.join(res[::-1])
+
+    return result

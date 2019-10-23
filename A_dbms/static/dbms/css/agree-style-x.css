@@ -1,0 +1,152 @@
+body {
+    padding-top: 3pt;
+    /*字体*/
+    font-family: SimSun;
+}
+
+.contain {
+    /*页面宽度*/
+    width: 180mm;
+    /*左空白*/
+    margin-left: auto;
+    /*右空白*/
+    margin-right: auto;
+    /*字体大小*/
+    font-size: 12pt;
+    /*背景色 */
+    /*background-color: #dddddd;*/
+    /*字间距*/
+    letter-spacing: 0pt;
+    /*行间距*/
+    line-height: 21pt;
+    /*背景图片*/
+    /*background-image: url("../images/bjj.png");*/
+    /*background-repeat: repeat-y;*/
+}
+
+p {
+    margin-top: 8pt;
+    margin-bottom: 0pt;
+    /*缩进*/
+    text-indent: 26pt;
+    /*两端对齐文本*/
+    text-align: justify;
+    text-justify: distribute;
+    text-align-last: left;
+    -moz-text-align-last: left; /* 针对 Firefox 的代码 */
+}
+
+/*换页打印*/
+.split {
+    page-break-after: always;
+}
+
+/*委托合同标题*/
+.agree-title-w {
+    text-align: center;
+    font-size: 27.5pt;
+    padding-top: 25mm;
+    padding-bottom: 25mm;
+}
+
+/*合同标题*/
+.agree-title {
+    text-align: center;
+    font-size: 27.5pt;
+    padding-top: 15mm;
+    padding-bottom: 15mm;
+}
+
+.page-home p {
+    /*{#padding-top: 0pt;#} */
+    text-indent: 0pt;
+}
+
+/*合同封面-甲方*/
+.page-home-j {
+    font-size: 13.75pt;
+    padding-top: 15mm;
+    padding-bottom: 15mm;
+    text-indent: 0pt;
+}
+
+/*合同封面-乙方*/
+.page-home-y {
+    font-size: 13.75pt;
+    padding-top: 15mm;
+    padding-bottom: 15mm;
+    text-indent: 0pt;
+}
+
+/*合同封面-丙方*/
+.page-home-b {
+    font-size: 13.75pt;
+    padding-top: 15mm;
+    padding-bottom: 0mm;
+    text-indent: 0pt;
+}
+
+/*合同签字页*/
+.sign-page {
+    padding-top: 30pt;
+}
+
+.sign-page-j {
+
+}
+
+.sign-page-y {
+
+}
+
+.sign-page-b {
+
+}
+
+.sign-page div {
+    margin-top: 15pt;
+    margin-bottom: 15pt;
+}
+
+.sign-page p {
+    padding-bottom: 15pt;
+    text-indent: 0pt;
+}
+
+.sign-date {
+    padding-left: 300pt;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    /*行间距*/
+    line-height: 15pt;
+}
+
+tr td {
+    border: 1px solid black;
+    height: 24pt;
+}
+
+/*表格样式*/
+.receive-tab p {
+    margin-top: 0pt;
+    margin-bottom: 0pt;
+    /*缩进*/
+    text-indent: 26pt;
+    /*{#行间距#} */
+    line-height: 21pt;
+}
+
+.pro-tab tr td {
+    border: 0px solid black;
+}
+
+.nt td {
+    border: 1px solid red;
+    text-align: justify;
+    text-justify: distribute-all-lines;
+    text-align-last: justify;
+    -moz-text-align-last: right;
+}

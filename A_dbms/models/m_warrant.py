@@ -11,7 +11,7 @@ class Warrants(models.Model):  # 担保物
     '''其他-存货、设备、合格证、'''
     warrant_typ = models.IntegerField(verbose_name='权证类型', choices=WARRANT_TYP_LIST, default=1)
 
-    EVALUATE_STATE_LIST = [(0, '待评估'), (1, '机构评估'), (11, '机构预估'),(12, '机构口评'),
+    EVALUATE_STATE_LIST = [(0, '待评估'), (1, '机构评估'), (11, '机构预估'), (12, '机构口评'),
                            (21, '综合询价'), (31, '购买成本'), (41, '拍卖评估'), (99, '无需评估')]
     evaluate_state = models.IntegerField(verbose_name='评估方式', choices=EVALUATE_STATE_LIST, default=0)
     evaluate_value = models.FloatField(verbose_name='评估价值', null=True, blank=True)
@@ -82,12 +82,12 @@ class Houses(models.Model):  # 房产
                                    limit_choices_to={'warrant_typ': 1},
                                    related_name='house_warrant')
     house_locate = models.CharField(verbose_name='房产坐落', max_length=128, unique=True)
-    HOUSE_APP_LIST = [(1, '住宅'), (11, '商业'), (21, '办公'), (31, '公寓'), (41, '生产性工业用房'),
+    HOUSE_APP_LIST = [(1, '住宅'), (11, '商业'), (12, '商业服务'), (21, '办公'), (31, '公寓'), (41, '生产性工业用房'),
                       (42, '非生产性工业用房'), (43, '厂房'), (44, '工业性科研用房'), (45, '工业'),
-                      (46, '非生产性工业科研用房'),(47, '营业房'),(48, '研发中心'),(49, '研发楼'),
+                      (46, '非生产性工业科研用房'), (47, '营业房'), (48, '研发中心'), (49, '研发楼'),
                       (51, '科研'), (52, '车间'), (53, '消防通道'), (54, '倒班房'), (54, '倒班房及食堂'),
                       (61, '车库'),
-                      (62, '车位'), (63, '首层机动车停车场'),(64, '机动车库'),(64, '机动车停车库'),
+                      (62, '车位'), (63, '首层机动车停车场'), (64, '机动车库'), (64, '机动车停车库'),
                       (71, '仓储'), (72, '仓储用房及配送用房'),
                       (73, '物流配送中心用房'), (74, '连廊'), (75, '自行车库'), (76, '生产用房'),
                       (77, '库房'), (81, '在建工程'), (91, '其他'), (99, '期房')]
@@ -266,8 +266,9 @@ class Draft(models.Model):  # 应收票据
     draft_owner = models.ForeignKey(to='Customes', verbose_name="所有权人",
                                     on_delete=models.PROTECT,
                                     related_name='draft_custome')
-    TYP_LIST = ((11, '商业承兑汇票'), (21, '银行承兑汇票'), (31, '支票'))
+    TYP_LIST = [(11, '商业承兑汇票'), (21, '银行承兑汇票'), (31, '支票')]
     typ = models.IntegerField(verbose_name='票据种类', choices=TYP_LIST, default=11)
+    TYP_DIC = {11: '商业承兑汇票', 21: '银行承兑汇票', 31: '支票'}
     denomination = models.FloatField(verbose_name="票面总额")
     draft_detail = models.TextField(verbose_name="票据描述")
     draft_buildor = models.ForeignKey(to='Employees', verbose_name="创建者", default=1,
@@ -346,8 +347,9 @@ class Chattel(models.Model):  # 动产
     chattel_owner = models.ForeignKey(to='Customes', verbose_name="所有权人",
                                       on_delete=models.PROTECT,
                                       related_name='chattel_custome')
-    CHATTEL_TYP_LIST = [(1, '存货'), (11, '机器设备'), (21, '医疗设备'), (99, '其他')]
+    CHATTEL_TYP_LIST = [(1, '存货'), (11, '机器设备'), (21, '医疗设备'), (99, '动产')]
     chattel_typ = models.IntegerField(verbose_name='动产种类', choices=CHATTEL_TYP_LIST, default=1)
+    TYP_DIC = {1: '存货', 11: '机器设备', 21: '医疗设备', 99: '动产'}
     chattel_detail = models.TextField(verbose_name="动产具体描述")
     chattel_buildor = models.ForeignKey(to='Employees', verbose_name="创建者", default=1,
                                         on_delete=models.PROTECT,

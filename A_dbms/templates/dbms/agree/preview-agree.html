@@ -4,8 +4,13 @@
 <head>
     <meta charset="UTF-8">
     <title>{{ agree_obj.agree_num }}</title>
-    <link rel="stylesheet" media="screen" href="{% static 'dbms/css/agree-style.css' %}">
-    <link rel="stylesheet" media="print" href="{% static 'dbms/css/agree-style.css' %}">
+    {% if agree_obj.agree_typ in AGREE_TYP_D %}
+        <link rel="stylesheet" media="screen" href="{% static 'dbms/css/agree-style.css' %}">
+        <link rel="stylesheet" media="print" href="{% static 'dbms/css/agree-style.css' %}">
+    {% elif agree_obj.agree_typ in AGREE_TYP_X %}
+        <link rel="stylesheet" media="screen" href="{% static 'dbms/css/agree-style-x.css' %}">
+        <link rel="stylesheet" media="print" href="{% static 'dbms/css/agree-style-x.css' %}">
+    {% endif %}
     <script src="{% static 'js/jquery-3.3.1.min.js' %}"></script>
 </head>
 <body>
@@ -16,33 +21,35 @@
     </div>
     <div id="view-save">
         <div class="contain">
-            {#            AGREE_TYP_LIST = [(1, '单笔'), (2, '最高额'), (4, '委贷'), (7, '小贷'),#}
-            {#                      (21, '分离式保函'), (22, '公司保函'), (23, '银行保函'),#}
-            {#                      (41, '单笔(公证)'), (42, '最高额(公证)'), (47, '小贷(公证)')]#}
-            {% if agree_typ == 1 %}
+            {#        AGREE_TYP_LIST = [#}
+            {#        (1, 'D-单笔'), (2, 'D-最高额'), (4, 'D-委贷'),#}
+            {#        (21, 'D-分离式保函'), (22, 'D-公司保函'), (23, 'D-银行保函'),#}
+            {#        (41, 'D-单笔(公证)'), (42, 'D-最高额(公证)'),#}
+            {#        (51, 'X-小贷单笔'), (52, 'X-小贷最高额'), ]#}
+            {% if agree_typ == 1 %} <!--(1, 'D-单笔')-->
                 {% include 'dbms/agree/agree_board/entrust-single.html' %}
-            {% elif agree_typ == 2 %}
+            {% elif agree_typ == 2 %} <!--(1, 'D-单笔')-->
                 {% include 'dbms/agree/agree_board/entrust-maximum.html' %}
-            {% elif agree_typ == 3 %}
-                <p>？？？？？？？？？？？？？？？？？？？？？？？</p>
-            {% elif agree_typ == 4 %}
-                <p>？？？？？？？？？无需委托保证合同？？？？？？？？？？？？？？</p>
-            {% elif agree_typ == 7 %}
-                <p>？？？？？？？？？尚未添加分离式保函合同模板？？？？？？？？？？？？？？</p>
-            {% elif agree_typ == 21 %}
-                <p>？？？？？？？？？尚未添加分离式保函合同模板？？？？？？？？？？？？？？</p>
-            {% elif agree_typ == 22 %}
+            {% elif agree_typ == 4 %} <!--(4, 'D-委贷'))-->
+                <p>！！！！！！！！！！ (4, 'D-委贷')！！！！！！！！！！</p>
+            {% elif agree_typ == 21 %} <!--(21, 'D-分离式保函')-->
+                {% include 'dbms/agree/agree_board/separate-guarantee.html' %}
+            {% elif agree_typ == 22 %} <!--(22, 'D-公司保函')-->
                 {% include 'dbms/agree/agree_board/entrust-single-l.html' %}
-            {% elif agree_typ == 23 %}
-                <p>？？？？？？？？？尚未添加银行保函合同模板？？？？？？？？？？？？？？</p>
-            {% elif agree_typ == 41 %}
+            {% elif agree_typ == 23 %} <!--(23, 'D-银行保函')-->
+                <p>！！！！！！！！！！ (23, 'D-银行保函')！！！！！！！！！！？</p>
+            {% elif agree_typ == 41 %} <!--(41, 'D-单笔(公证)')-->
                 {% include 'dbms/agree/agree_board/entrust-single-n.html' %}
-            {% elif agree_typ == 42 %}
-                <p>？？？？？？？？？尚未添加最高额公证版本模板？？？？？？？？？？？？？</p>
-            {% elif agree_typ == 47 %}
-                <p>？？？？？？？？？尚未添加小贷借款合同公证模板？？？？？？？？？？？？</p>
+            {% elif agree_typ == 42 %}<!--(42, 'D-最高额(公证)-->
+                <p>！！！！！！！！！！ (42, 'D-最高额(公证)')！！！！！！！！！！</p>
+            {% elif agree_typ == 51 %}<!--(51, 'X-小贷单笔')-->
+                {% if agree_obj.lending.summary.custom.genre == 1 %} <!--(1, '企业')-->
+                    {% include 'dbms/agree/agree_board/loan-single-c.html' %}
+                {% elif agree_obj.lending.summary.custom.genre == 2 %} <!--(2, '个人')-->
+                    {% include 'dbms/agree/agree_board/loan-single-p.html' %}
+                {% endif %}
             {% else %}
-                <p>？？？？？？？？？？无该类型合同模板，请联系管理员？？？？？？？？？？？</p>
+                <p>！！！！！！！！！！无该类型合同模板，请联系管理员！！！！！！！！！！</p>
             {% endif %}
         </div>
     </div>

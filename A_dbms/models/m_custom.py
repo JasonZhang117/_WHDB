@@ -13,14 +13,12 @@ class Customes(models.Model):  # 客户
     contact_addr = models.CharField(verbose_name='联系地址', max_length=64)
     linkman = models.CharField(verbose_name='联系人', max_length=16)
     contact_num = models.CharField(verbose_name='联系电话', max_length=13)
-
     idustry = models.ForeignKey(to='Industries', verbose_name="所属行业",
                                 on_delete=models.PROTECT,
                                 related_name='c_idustry')
     district = models.ForeignKey(to='Districtes', verbose_name="所属区域",
                                  on_delete=models.PROTECT,
                                  related_name='c_district')
-
     review_plan_date = models.DateField(verbose_name='保后计划', blank=True, null=True)
     REVIEW_STATE_LIST = [(1, '待保后'), (11, '待报告'), (21, '已完成'), (81, '自主保后')]
     review_state = models.IntegerField(verbose_name='_保后状态', choices=REVIEW_STATE_LIST, default=21)

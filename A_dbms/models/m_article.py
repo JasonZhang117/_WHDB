@@ -7,6 +7,7 @@ class Product(models.Model):  # 项产品
     name = models.CharField(verbose_name='产品名称',
                             max_length=32,
                             unique=True)
+    ind = models.IntegerField(verbose_name='排序', default=1)
     creator = models.ForeignKey(to='Employees', verbose_name="创建人",
                                 on_delete=models.PROTECT,
                                 related_name='product_creator_employee')
@@ -16,6 +17,7 @@ class Product(models.Model):  # 项产品
     class Meta:
         verbose_name_plural = '项目-产品'  # 指定显示名称
         db_table = 'dbms_product'  # 指定数据表的名称
+        ordering = ['-ind', ]
 
     def __str__(self):
         return "%s" % (self.name,)
