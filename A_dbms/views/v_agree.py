@@ -210,6 +210,7 @@ def agree_preview(request, agree_id):
     UN, ADD = un_dex(agree_typ)  # 不同合同种类下主体适用
     if agree_typ in [22, ]:  # (22, 'D-公司保函'),
         page_home_y_y = '申请人（乙方）'
+        page_home_y_j = '担保人（甲方）'
     elif agree_typ in [21, ]:  # (21, 'D-分离式保函'),
         page_home_y_y = '乙方'
         page_home_y_j = '甲方'
@@ -248,6 +249,7 @@ def counter_preview(request, agree_id, counter_id):
         (41, 'D-单笔(公证)'), (42, 'D-最高额(公证)'),
         (51, 'X-小贷单笔'), (52, 'X-小贷最高额'), ]'''
     agree_typ = agree_obj.agree_typ
+    UN, ADD = un_dex(agree_typ)  # 不同合同种类下主体适用
     notarization_typ = False
     if agree_typ in [41, 42, 47]:
         notarization_typ = True
@@ -261,6 +263,7 @@ def counter_preview(request, agree_id, counter_id):
     X_COUNTER_TYP_LIST = models.Counters.COUNTER_TYP_X  # 保证类（反）担保合同类型
     D_COUNTER_TYP_LIST = models.Counters.COUNTER_TYP_D  # 抵押类（反）担保合同类型
     Z_COUNTER_TYP_LIST = models.Counters.COUNTER_TYP_Z  # 质押类（反）担保合同类型
+    AGREE_TYP_H = models.Agrees.AGREE_TYP_H
 
     credit_term = agree_obj.agree_term  # 授信期限（月）
     credit_term_cn = credit_term_c(credit_term)
@@ -322,7 +325,7 @@ def counter_preview(request, agree_id, counter_id):
             elif other_typ in [21,]:
                 counter_property_type = '车辆合格证'
     counter_home_b_b = ''
-    if agree_typ == 22: # (22, 'D-公司保函'),
+    if agree_typ == 21 or agree_typ == 22: # (21, 'D-分离式保函'), (22, 'D-公司保函'),
         counter_home_b_b = '被担保人'
     else:
         counter_home_b_b = '借款人'

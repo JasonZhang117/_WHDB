@@ -170,6 +170,7 @@ def appraisal_scan_lending(request, article_id, lending_id):  # 评审项目预�
     return render(request, 'dbms/appraisal/appraisal-scan-lending.html', locals())
 
 
+# -----------------------阿拉伯数字转换-------------------------#
 def convert_str(n):
     units = ['', '万', '亿']
     nums = ['0', '一', '二', '三', '四', '五', '六', '七', '八', '九']
@@ -197,6 +198,7 @@ def convert_str(n):
             result_l = result[1]
             result = result_l
     return result
+
 
 # -----------------------房产列表-------------------------#
 def house_d(house_list):
@@ -260,6 +262,7 @@ def house_d(house_list):
     summ += '</table></td></tr>'
     return summ
 
+
 # -----------------------监管房产列表-------------------------#
 def house_j(house_list):
     summ = '<tr class="it"><td colspan="4"><table class="tbi" cellspacing="0" cellpadding="0" >'
@@ -319,15 +322,16 @@ def house_j(house_list):
     summ += '</table></td></tr>'
     return summ
 
+
 # -----------------------土地列表-------------------------#
 def ground_d(ground_list):
     summ = '<tr class="it"><td colspan="4"><table class="tbi" cellspacing="0" cellpadding="0" >'
     summ += '<tr class="it">' \
-               '<td class="bb" align="center">所有权人</td> ' \
-               '<td class="bb" align="center">座落</td> ' \
-               '<td class="bb" align="center">面积(㎡)</td> ' \
-               '<td class="bb" align="center">产权证编号</td> ' \
-               '</tr>'
+            '<td class="bb" align="center">所有权人</td> ' \
+            '<td class="bb" align="center">座落</td> ' \
+            '<td class="bb" align="center">面积(㎡)</td> ' \
+            '<td class="bb" align="center">产权证编号</td> ' \
+            '</tr>'
     for warrant_ground in ground_list:
         # rowspan_count += 1
         owership_list = warrant_ground.ownership_warrant.all()
@@ -347,14 +351,47 @@ def ground_d(ground_list):
         ground_app = ground.ground_app
         ground_area = ground.ground_area
         summ += '<tr class="it">' \
+                '<td class="bb">%s</td> ' \
+                '<td class="bb">%s</td> ' \
+                '<td class="bb" align="right">%s</td> ' \
+                '<td class="bb">%s</td> ' \
+                '</tr>' % (
+                    owership_name, ground_locate, ground_area, owership_num)
+    summ += '</table></td></tr>'
+    return summ
+
+# -----------------------在建工程列表-------------------------#
+def create_d(create_list):
+    summ = '<tr class="it"><td colspan="4"><table class="tbi" cellspacing="0" cellpadding="0" >'
+    summ += '<tr class="it">' \
+               '<td class="bb" align="center">所有权人</td> ' \
+               '<td class="bb" align="center">座落</td> ' \
+               '<td class="bb" align="center">面积(㎡)</td> ' \
+               '<td class="bb" align="center">备注</td> ' \
+               '</tr>'
+    for warrant_c in create_list:
+        # rowspan_count += 1
+        owership_list = warrant_c.ownership_warrant.all()
+        owership_list_count = owership_list.count()
+        owership_name = ''
+        owership_list_order = 0
+        for owership in owership_list:
+            owership_name += '%s' % owership.owner.name
+            owership_list_order += 1
+            if owership_list_order < owership_list_count:
+                owership_name += '、'
+        coustruct = warrant_c.coustruct_warrant
+        coustruct_locate = coustruct.coustruct_locate
+        coustruct_area = coustruct.coustruct_area
+        summ += '<tr class="it">' \
                    '<td class="bb">%s</td> ' \
                    '<td class="bb">%s</td> ' \
                    '<td class="bb" align="right">%s</td> ' \
-                   '<td class="bb">%s</td> ' \
-                   '</tr>' % (
-                       owership_name, ground_locate, ground_area, owership_num)
+                   '<td class="bb">最终以实际抵押面积为准</td> ' \
+                   '</tr>' % (owership_name, coustruct_locate, coustruct_area)
     summ += '</table></td></tr>'
     return summ
+
 # -----------------------summary_scan意见书-------------------------#
 @login_required
 @authority
@@ -382,9 +419,9 @@ def summary_scan(request, article_id):  # 评审项目预览
     else:
         credit_term_cn = '%s个月' % convert_num(credit_term)
 
-    renewal_str = str(article_obj.renewal / 10000).rstrip('0').rstrip('.')  # 续贷（万元）
-    augment_str = str(article_obj.augment / 10000).rstrip('0').rstrip('.')  # 新增（万元）
-    amount_str = str(article_obj.amount / 10000).rstrip('0').rstrip('.')  # 总额（万元）
+    renewal_str = amount_s(article_obj.renewal)  # 新增金额
+    augment_str = amount_s(article_obj.augment)  # 续贷金额
+    amount_str = amount_s(article_obj.amount)  # 金额合计
 
     CREDIT_MODEL_LIST = models.SingleQuota.CREDIT_MODEL_LIST
     CREDIT_MODEL_DIC = {}
@@ -537,34 +574,7 @@ def summary_scan(request, article_id):  # 评审项目预览
                 summary += '<tr class="ot tbp"><td class="oi" colspan="4">' \
                            '&nbsp&nbsp%s、在建工程抵押：以下在建工程抵押给我公司，签订抵押反担保合同并办理抵押登记' \
                            '</td></tr>' % sure_or
-                summary += '<tr class="it"><td colspan="4"><table class="tbi" cellspacing="0" cellpadding="0" >'
-                summary += '<tr class="it">' \
-                           '<td class="bb" align="center">所有权人</td> ' \
-                           '<td class="bb" align="center">座落</td> ' \
-                           '<td class="bb" align="center">面积(㎡)</td> ' \
-                           '<td class="bb" align="center">备注</td> ' \
-                           '</tr>'
-                for warrant_c in warrant_c_14_list:
-                    # rowspan_count += 1
-                    owership_list = warrant_c.ownership_warrant.all()
-                    owership_list_count = owership_list.count()
-                    owership_name = ''
-                    owership_list_order = 0
-                    for owership in owership_list:
-                        owership_name += '%s' % owership.owner.name
-                        owership_list_order += 1
-                        if owership_list_order < owership_list_count:
-                            owership_name += '、'
-                    coustruct = warrant_c.coustruct_warrant
-                    coustruct_locate = coustruct.coustruct_locate
-                    coustruct_area = coustruct.coustruct_area
-                    summary += '<tr class="it">' \
-                               '<td class="bb">%s</td> ' \
-                               '<td class="bb">%s</td> ' \
-                               '<td class="bb" align="right">%s</td> ' \
-                               '<td class="bb">最终以实际抵押面积为准</td> ' \
-                               '</tr>' % (owership_name, coustruct_locate, coustruct_area)
-                summary += '</table></td></tr>'
+                summary = create_d(warrant_c_14_list)
                 sure_or += 1
             warrant_c_13_list = models.Warrants.objects.filter(
                 lending_warrant__sure__lending=lending, lending_warrant__sure__sure_typ=13)  # 动产抵押
@@ -635,35 +645,7 @@ def summary_scan(request, article_id):  # 评审项目预览
                 summary += '<tr class="ot tbp"><td class="oi" colspan="4">' \
                            '&nbsp&nbsp%s、在建工程顺位抵押：以下在建工程抵押给我公司，签订抵押反担保合同并办理顺位抵押登记' \
                            '</td></tr>' % sure_or
-                summary += '<tr class="it"><td colspan="4"><table class="tbi" cellspacing="0" cellpadding="0" >'
-                summary += '<tr class="it">' \
-                           '<td class="bb" align="center">所有权人</td> ' \
-                           '<td class="bb" align="center">座落</td> ' \
-                           '<td class="bb" align="center">面积(㎡)</td> ' \
-                           '<td class="bb" align="center">备注</td> ' \
-                           '</tr>'
-                for warrant_c in warrant_c_23_list:
-                    rowspan_count += 1
-                    owership_list = warrant_c.ownership_warrant.all()
-                    owership_list_count = owership_list.count()
-                    owership_name = ''
-                    owership_list_order = 0
-                    for owership in owership_list:
-                        owership_name += '%s' % owership.owner.name
-                        owership_list_order += 1
-                        if owership_list_order < owership_list_count:
-                            owership_name += '、'
-                    coustruct = warrant_c.coustruct_warrant
-                    coustruct_locate = coustruct.coustruct_locate
-                    coustruct_area = coustruct.coustruct_area
-                    summary += '<tr class="it">' \
-                               '<td class="bb">%s</td> ' \
-                               '<td class="bb">%s</td> ' \
-                               '<td class="bb" align="right">%s</td> ' \
-                               '<td class="bb">最终以实际抵押面积为准</td> ' \
-                               '</tr>' % (owership_name, coustruct_locate, coustruct_area)
-
-                summary += '</table></td></tr>'
+                summary = create_d(warrant_c_23_list)
                 sure_or += 1
             warrant_c_24_list = models.Warrants.objects.filter(
                 lending_warrant__sure__lending=lending, lending_warrant__sure__sure_typ=24)  # 动产顺位

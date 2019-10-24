@@ -3,9 +3,7 @@
 <div class="agree-title" style="text-align: center"><strong>{{ counter_obj.get_counter_name_display }}</strong></div>
 <div class="page-home">
     <div class="page-home-j">
-        <p><strong>
-            {% if  counter_typ in X_COUNTER_TYP_LIST %}
-                担保人{% elif counter_typ in D_COUNTER_TYP_LIST %}抵押权人{% elif counter_typ in Z_COUNTER_TYP_LIST %}质权人{% endif %}（甲方）：成都武侯中小企业融资担保有限责任公司</strong></p>
+        <p><strong>{% if  counter_typ in X_COUNTER_TYP_LIST %}担保人{% elif counter_typ in D_COUNTER_TYP_LIST %}抵押权人{% elif counter_typ in Z_COUNTER_TYP_LIST %}质权人{% endif %}（甲方）：成都武侯中小企业融资担保有限责任公司</strong></p>
         <p>住所（地址）：成都市武侯区武青南路33号(武侯新城管委会内)</p>
         <p>法定代表人：何长见</p>
     </div>

@@ -46,7 +46,7 @@ class Agrees(models.Model):  # 委托合同
     agree_rate = models.CharField(verbose_name='收费', max_length=128)
     agree_sign_date = models.DateField(verbose_name='签批日期', null=True, blank=True)
     charge = models.FloatField(verbose_name='应收保费（元）', default=0)
-
+    other = models.TextField(verbose_name='其他约定', null=True, blank=True)
     ascertain_date = models.DateField(verbose_name='落实日期', null=True, blank=True)
     agree_remark = models.TextField(verbose_name='落实情况', null=True, blank=True)
 
@@ -139,6 +139,7 @@ class Counters(models.Model):  # 反担保合同
     COUNTER_TYP_D = [11, 12, 13, 14, 15, ]  # 抵押类（反）担保合同类型
     COUNTER_TYP_Z = [31, 32, 33, 34, 41, ]  # 质押类（反）担保合同类型
     counter_copies = models.IntegerField(verbose_name='合同份数')
+    other = models.TextField(verbose_name='其他约定', null=True, blank=True)
     COUNTER_STATE_LIST = [(11, '未签订'), (21, '已签订'), (31, '作废')]
     counter_state = models.IntegerField(verbose_name='签订状态', choices=COUNTER_STATE_LIST, default=11)
     counter_sign_date = models.DateField(verbose_name='签订日期', null=True, blank=True)

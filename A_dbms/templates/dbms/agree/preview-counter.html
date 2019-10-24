@@ -44,7 +44,18 @@
         {% elif agree_typ == 4 %}
             <p>！！！！！！！(4, 'D-委贷'),！！！！！！！</p>
         {% elif agree_typ == 21 %}
-            <p>！！！！！！！(21, 'D-分离式保函'), ！！！！！！！</p>
+            {#            (21, 'D-分离式保函'),#}
+            {% if counter_typ == 1 %}
+                {% include 'dbms/agree/agree_board/counter/c-m-x.html' %}
+            {% elif counter_typ == 2 %}
+                {% include 'dbms/agree/agree_board/counter/c-m-g.html' %}
+            {% elif counter_typ in D_COUNTER_TYP_LIST %}
+                {% include 'dbms/agree/agree_board/counter/c-m-d.html' %}
+            {% elif counter_typ in Z_COUNTER_TYP_LIST %}
+                {% include 'dbms/agree/agree_board/counter/c-m-z.html' %}
+            {% else %}
+                <p>！！！！！！！还未添加合同模板，请联系系统管理员！！！！！！！</p>
+            {% endif %}
         {% elif agree_typ == 22 %}
             {#            (22, '公司保函')#}
             {% if counter_typ == 1 %}
@@ -52,9 +63,9 @@
             {% elif counter_typ == 2 %}
                 {% include 'dbms/agree/agree_board/counter/c-s-g-l.html' %}
             {% elif counter_typ in D_COUNTER_TYP_LIST %}
-                {% include 'dbms/agree/agree_board/counter/c-s-d-l.html' %}
+                <p>！！！！！！！(22, '公司保函'),counter_typ in D_COUNTER_TYP_LIST！！！！！！！</p>
             {% elif counter_typ in Z_COUNTER_TYP_LIST %}
-                {% include 'dbms/agree/agree_board/counter/c-s-z-l.html' %}
+                {% include 'dbms/agree/agree_board/counter/c-s-z.html' %}
             {% else %}
                 <p>！！！！！！！还未添加合同模板，请联系系统管理员！！！！！！！</p>
             {% endif %}

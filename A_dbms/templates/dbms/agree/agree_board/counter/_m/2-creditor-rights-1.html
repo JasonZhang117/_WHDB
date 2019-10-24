@@ -1,4 +1,4 @@
-<p>1、乙方自愿对甲方担保的丙方自{% include 'dbms/agree/agree_board/date-period.html' %}至{% include 'dbms/agree/agree_board/date-period.html' %}期间，向<strong><u>{{ agree_obj.branch.name }}</u></strong>申请的最高额为<strong><u class="frap">人民币{{ agree_amount_str }}万元</u></strong>（大写：<strong><u>人民币{{ agree_amount_cn }}</u></strong>，具体金额以银行放款凭证为准）的一系列债务（包括但不限于：人民币借款、银行承兑汇票、银行保函、履约保函等）向甲方提供{% if counter_obj.counter_typ in MORTGAGE_COUNTER_TYP_LIST %}最高额抵押{% elif counter_obj.counter_typ == 1 or counter_obj.counter_typ == 2 %}不可撤销的连带责任保证{% endif %}反担保。上述一系列债务保证合同包括但不限于：
+<p>1、乙方自愿对甲方担保的丙方自{% include 'dbms/agree/agree_board/date-period.html' %}至{% include 'dbms/agree/agree_board/date-period.html' %}期间，向<strong><u>{{ agree_obj.branch.name }}</u></strong>申请的最高额为<strong><u class="frap">人民币{{ agree_amount_str }}万元</u></strong>（大写：<strong><u>人民币{{ agree_amount_cn }}</u></strong>，具体金额以银行放款凭证为准）的一系列债务（包括但不限于：人民币借款、银行承兑汇票、保函等）向甲方提供{% if counter_obj.counter_typ in D_COUNTER_TYP_LIST %}最高额抵押{% elif counter_obj.counter_typ in X_COUNTER_TYP_LIST %}不可撤销的连带责任保证{% elif counter_obj.counter_typ in Z_COUNTER_TYP_LIST %}最高额质押{% endif %}反担保。上述一系列债务保证合同包括但不限于：
     <u>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
         &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
         &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
@@ -7,11 +7,8 @@
         &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
     &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</u>
 </p>
-<p>2、在上述期间内的任一时点，只要甲方对丙方的担保不超过最高限额，甲方可以连续、循环地为丙方提供保证担保，不论次数和金额，乙方对甲方实际承担的担保责任均承担{% if counter_obj.counter_typ in MORTGAGE_COUNTER_TYP_LIST %}抵押{% elif counter_obj.counter_typ == 1 or counter_obj.counter_typ == 2 %}连带反担保{% endif %}责任。
-</p>
-<p>
-    3、不论甲方担保的丙方债务是否还拥有其他反担保，甲方有权直接要求乙方承担{% if counter_obj.counter_typ in MORTGAGE_COUNTER_TYP_LIST %}抵押{% elif counter_obj.counter_typ == 1 or counter_obj.counter_typ == 2 %}连带清偿{% endif %}责任。
-</p>
+<p>2、在上述期间内的任一时点，只要甲方对丙方的担保不超过最高限额，甲方可以连续、循环地为丙方提供保证担保，不论次数和金额，乙方对甲方实际承担的担保责任均承担{% if counter_obj.counter_typ in MORTGAGE_COUNTER_TYP_LIST %}抵押{% elif counter_obj.counter_typ == 1 or counter_obj.counter_typ == 2 %}连带反担保{% endif %}责任。</p>
+<p>3、不论甲方担保的丙方债务是否还拥有其他反担保，甲方有权直接要求乙方承担{% if counter_obj.counter_typ in MORTGAGE_COUNTER_TYP_LIST %}抵押{% elif counter_obj.counter_typ == 1 or counter_obj.counter_typ == 2 %}连带清偿{% endif %}责任。</p>
 <p>
     {% if counter_obj.counter_typ in MORTGAGE_COUNTER_TYP_LIST %}
         4、本项抵押如未能办理登记的不影响本抵押合同的效力。
