@@ -10,7 +10,7 @@ import datetime
 from django.db.models import Avg, Min, Sum, Max, Count
 from django.urls import resolve, reverse
 from _WHDB.views import MenuHelper
-from _WHDB.views import authority, credit_term_c, convert, convert_num
+from _WHDB.views import authority, credit_term_c, convert, convert_num, un_dex, amount_s
 
 
 # -----------------------委托合同列表---------------------#
@@ -198,7 +198,8 @@ def agree_preview(request, agree_id):
     agree_obj = models.Agrees.objects.get(id=agree_id)
     agree_typ = agree_obj.agree_typ
     agree_amount = agree_obj.agree_amount
-    agree_amount_cn = convert(agree_amount)
+    agree_amount_cn = convert(agree_amount)  # 转换为金额大写
+    agree_amount_str = amount_s(agree_amount)  # 元转换为万元并去掉小数点后面的零
     '''AGREE_TYP_LIST = [
         (1, 'D-单笔'), (2, 'D-最高额'), (4, 'D-委贷'),
         (21, 'D-分离式保函'), (22, 'D-公司保函'), (23, 'D-银行保函'),
@@ -206,14 +207,17 @@ def agree_preview(request, agree_id):
         (51, 'X-小贷单笔'), (52, 'X-小贷最高额'), ]'''
     AGREE_TYP_D = models.Agrees.AGREE_TYP_D
     AGREE_TYP_X = models.Agrees.AGREE_TYP_X
-    if agree_typ in [22, ]:
-        page_home_y_y = '申请人'
+    UN, ADD = un_dex(agree_typ)  # 不同合同种类下主体适用
+    if agree_typ in [22, ]:  # (22, 'D-公司保函'),
+        page_home_y_y = '申请人（乙方）'
+    elif agree_typ in [21, ]:  # (21, 'D-分离式保函'),
+        page_home_y_y = '乙方'
+        page_home_y_j = '甲方'
     else:
-        page_home_y_y = '被担保人'
-    agree_amount_str = str(agree_amount / 10000).rstrip('0').rstrip('.')  # 续贷（万元）
+        page_home_y_y = '被担保人（乙方）'
     agree_copy_cn = convert_num(agree_obj.agree_copies)
-    notarization_typ = False
-    if agree_typ in [1, 2, 3, 4, 7, 21, 22, 23]:
+    notarization_typ = False #是否公证
+    if agree_typ in [1, 2, 3, 4, 21, 22, 23]:
         agree_copy_jy_cn = convert_num(agree_obj.agree_copies - 2)
     else:
         notarization_typ = True
@@ -238,9 +242,11 @@ def counter_preview(request, agree_id, counter_id):
     menu_result = MenuHelper(request).menu_data_list()
     agree_obj = models.Agrees.objects.get(id=agree_id)  # 委托合同
     counter_obj = models.Counters.objects.get(id=counter_id)  # 反担保合同
-    '''AGREE_TYP_LIST = [(1, '单笔'), (2, '最高额'), (4, '委贷'), (7, '小贷'),
-                      (21, '分离式保函'), (22, '公司保函'), (23, '银行保函'),
-                      (41, '单笔(公证)'), (42, '最高额(公证)'), (47, '小贷(公证)')]'''
+    '''AGREE_TYP_LIST = [
+        (1, 'D-单笔'), (2, 'D-最高额'), (4, 'D-委贷'),
+        (21, 'D-分离式保函'), (22, 'D-公司保函'), (23, 'D-银行保函'),
+        (41, 'D-单笔(公证)'), (42, 'D-最高额(公证)'),
+        (51, 'X-小贷单笔'), (52, 'X-小贷最高额'), ]'''
     agree_typ = agree_obj.agree_typ
     notarization_typ = False
     if agree_typ in [41, 42, 47]:
@@ -258,7 +264,7 @@ def counter_preview(request, agree_id, counter_id):
 
     credit_term = agree_obj.agree_term  # 授信期限（月）
     credit_term_cn = credit_term_c(credit_term)
-    if counter_typ in [1, 2]:
+    if counter_typ in [1, 2]: #个人反担保
         assure_counter_obj = counter_obj.assure_counter
         custom_obj = assure_counter_obj.custome
     else:
@@ -274,30 +280,29 @@ def counter_preview(request, agree_id, counter_id):
         for counter_warrant in counter_warrant_list:
             if counter_warrant.warrant_typ == 2:  # (2, '房产包')
                 counter_warrant_list_count += counter_warrant.housebag_warrant.all().count() - 1
-
         counter_property_type = ''
-        if counter_warrant_typ in [1, 2]:
+        if counter_warrant_typ in [1, 2]: #(1, '房产'), (2, '房产包'),
             counter_property_type = '房产'
-        elif counter_warrant_typ in [5, ]:
+        elif counter_warrant_typ in [5, ]: #(5, '土地'),
             counter_property_type = '土地使用权'
-        elif counter_warrant_typ in [6, ]:
+        elif counter_warrant_typ in [6, ]: #(6, '在建工程'),
             counter_property_type = '在建工程'
-        elif counter_warrant_typ in [11, ]:
+        elif counter_warrant_typ in [11, ]: #(11, '应收账款'),
             counter_receive_obj = counter_warrant_obj.receive_warrant
             receive_extend_list = counter_receive_obj.extend_receiveable.all()
-        elif counter_warrant_typ in [21, ]:
+        elif counter_warrant_typ in [21, ]: #(21, '股权'),
             counter_stock_obj = counter_warrant_obj.stock_warrant
             stock_registe_str = str(counter_stock_obj.registe).rstrip('0').rstrip('.')
             stock_share_str = str(counter_stock_obj.share).rstrip('0').rstrip('.')
             agree_share_cn = convert(counter_stock_obj.share * 10000)
-        elif counter_warrant_typ in [31, ]:
+        elif counter_warrant_typ in [31, ]: #(31, '票据'),
             counter_draft_obj = counter_warrant_obj.draft_warrant
             counter_draft_bag_list = counter_draft_obj.extend_draft.all()
             denomination_str = str(counter_draft_obj.denomination / 10000).rstrip('0').rstrip('.')
             denomination_cn = convert(counter_draft_obj.denomination)
-        elif counter_warrant_typ in [41, ]:
+        elif counter_warrant_typ in [41, ]: #(41, '车辆'),
             counter_vehicle_obj = counter_warrant_obj.vehicle_warrant
-        elif counter_warrant_typ in [51, ]:
+        elif counter_warrant_typ in [51, ]: #(51, '动产'),
             '''CHATTEL_TYP_LIST = [(1, '存货'), (11, '机器设备'), (99, '其他')]'''
             chattel_typ = counter_warrant_obj.chattel_warrant.chattel_typ  # 动产种类
             if chattel_typ == 1:
@@ -312,18 +317,18 @@ def counter_preview(request, agree_id, counter_id):
             other_typ = counter_other_obj.other_typ  # 其他种类
             cost_str = str(counter_other_obj.cost / 10000).rstrip('0').rstrip('.')
             cost_cn = convert(counter_other_obj.cost)
-            if other_typ == 11:
+            if other_typ in [11,]:
                 counter_property_type = '购房合同'
-            elif other_typ == 21:
+            elif other_typ in [21,]:
                 counter_property_type = '车辆合格证'
     counter_home_b_b = ''
-    if agree_typ == 22:
+    if agree_typ == 22: # (22, 'D-公司保函'),
         counter_home_b_b = '被担保人'
     else:
         counter_home_b_b = '借款人'
     agree_amount = agree_obj.agree_amount
     agree_amount_cn = convert(agree_amount)
-    agree_amount_str = str(agree_amount / 10000).rstrip('0').rstrip('.')  # 续贷（万元）
+    agree_amount_str = amount_s(agree_amount)
     agree_term = agree_obj.agree_term
     agree_term_str = convert_num(agree_term)
 

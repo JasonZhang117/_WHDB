@@ -40,9 +40,9 @@
                 <p>！！！！！！！！！！ (23, 'D-银行保函')！！！！！！！！！！？</p>
             {% elif agree_typ == 41 %} <!--(41, 'D-单笔(公证)')-->
                 {% include 'dbms/agree/agree_board/entrust-single-n.html' %}
-            {% elif agree_typ == 42 %}<!--(42, 'D-最高额(公证)-->
+                {% elif agree_typ == 42 %}<!--(42, 'D-最高额(公证)-->
                 <p>！！！！！！！！！！ (42, 'D-最高额(公证)')！！！！！！！！！！</p>
-            {% elif agree_typ == 51 %}<!--(51, 'X-小贷单笔')-->
+                {% elif agree_typ == 51 %}<!--(51, 'X-小贷单笔')-->
                 {% if agree_obj.lending.summary.custom.genre == 1 %} <!--(1, '企业')-->
                     {% include 'dbms/agree/agree_board/loan-single-c.html' %}
                 {% elif agree_obj.lending.summary.custom.genre == 2 %} <!--(2, '个人')-->

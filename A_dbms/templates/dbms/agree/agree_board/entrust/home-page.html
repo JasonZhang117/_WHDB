@@ -2,17 +2,18 @@
 <div class="agree-title-w"><strong>{{ agree_obj.get_agree_name_display }}</strong></div>
 <div class="page-home">
     <div class="page-home-j">
-        <p class="page-home-p">担保人（甲方）：成都武侯中小企业融资担保有限责任公司</p>
-        <p class="page-home-p">住所（地址）：成都市武侯区武青南路33号(武侯新城管委会内)</p>
+        <p class="page-home-p">{{ page_home_y_j }}：{{ UN }}</p>
+        <p class="page-home-p">住所（地址）：{{ ADD }}</p>
         <p class="page-home-p">法定代表人：何长见</p>
     </div>
     <div class="page-home-y">
         <p class="str-p page-home-p">
-            <strong>{{ page_home_y_y }}（乙方）：{{ agree_obj.lending.summary.custom.name }}</strong></p>
+            <strong>{{ page_home_y_y }}：{{ agree_obj.lending.summary.custom.name }}</strong></p>
         <p class="page-home-p">住所（地址）：{{ agree_obj.lending.summary.custom.company_custome.registered_addr }}</p>
         <p class="page-home-p">法定代表人：{{ agree_obj.lending.summary.custom.company_custome.representative }}</p>
     </div>
-    {% if agree_typ == 22 %}
-        <p style="text-indent: 26pt;padding-top: 65pt"><strong>声明：乙方已阅读本合同所有条款。应乙方要求，甲方已经就本合同做了相应的条款说明。乙方对本合同条款的含义及相应的法律后果已全部通晓并充分理解。</strong></p>
+    {% if agree_typ == 21 or agree_typ == 22 %}
+        <p style="text-indent: 26pt;padding-top: 65pt"><strong>声明：乙方已阅读本合同所有条款。应乙方要求，甲方已经就本合同做了相应的条款说明。乙方对本合同条款的含义及相应的法律后果已全部通晓并充分理解。</strong>
+        </p>
     {% endif %}
 </div>

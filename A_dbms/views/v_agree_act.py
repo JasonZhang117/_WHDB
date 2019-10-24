@@ -638,8 +638,11 @@ def result_state_ajax(request):  #
     post_data = json.loads(post_data_str)
     agree_obj = models.Agrees.objects.get(id=post_data['agree_id'])
     LITRER_TYT_DIC = dict(models.LetterGuarantee.LETTER_TYP_LIST)
-    '''AGREE_TYP_LIST = [(1, '单笔'), (2, '最高额'), (3, '保函'), (7, '小贷'),
-                      (41, '单笔(公证)'), (42, '最高额(公证)'), (47, '小贷(公证)')]'''
+    '''AGREE_TYP_LIST = [
+        (1, 'D-单笔'), (2, 'D-最高额'), (4, 'D-委贷'),
+        (21, 'D-分离式保函'), (22, 'D-公司保函'), (23, 'D-银行保函'),
+        (41, 'D-单笔(公证)'), (42, 'D-最高额(公证)'),
+        (51, 'X-小贷单笔'), (52, 'X-小贷最高额'), ]'''
     '''SURE_TYP_LIST = [
         (1, '企业保证'), (2, '个人保证'),
         (11, '房产抵押'), (12, '土地抵押'), (13, '动产抵押'), (14, '在建工程抵押'), (15, '车辆抵押'),
@@ -655,14 +658,6 @@ def result_state_ajax(request):  #
         (51, '股权预售'), (52, '房产预售'), (53, '土地预售')]'''
     '''AGREE_STATE_LIST = [(11, '待签批'), (21, '已签批'), (31, '未落实'),
                         (41, '已落实'), (51, '待变更'), (61, '已解保'), (99, '已注销')]'''
-    # --------------------------------------------------------------#
-    # if not agree_obj.agree_state in [11, 51]:
-    #     response['status'] = False
-    #     response['message'] = '委托担保合同状态为%s，无法生成相关决议及声明！' % agree_obj.agree_state
-    #     result = json.dumps(response, ensure_ascii=False)
-    #     return HttpResponse(result)
-    # --------------------------------------------------------------#
-    # if False:
     if agree_obj.agree_state in [21, 31, 41, 61, 99]:
         response['status'] = False
         response['message'] = '合同状态为%s，无法生成决议及声明！' % agree_obj.agree_state
@@ -819,18 +814,22 @@ def result_state_ajax(request):  #
                             (41, 'D-单笔(公证)'), (42, 'D-最高额(公证)'),
                             (51, 'X-小贷单笔'), (52, 'X-小贷最高额'), ]'''
                         if agr_typ in AGREE_TYP_D:
-                            if agr_typ in [1, 41]:  # 单笔
+                            if agr_typ in [1, 41]:  # (1, 'D-单笔'), (51, 'X-小贷单笔'),
                                 result += '<p>  1、同意向%s申请人民币%s%s期贷款，用以补充流动资金。</p>' % (
                                     agree_obj.branch.name, agree_amount_cn, agree_term_str)
                                 result += '<p>  2、同意委托%s为该贷款向贷款方提供担保。</p>' % UN
                                 order = 2
-                            elif agr_typ in [2, 42]:  # 最高额
-                                result += '<p>  1、同意向%s申请最高限额为人民币%s%s期的银行授信（包括借款或银行承兑汇票、' \
-                                          '保函等），用以补充流动资金。</p>' % (
+                            elif agr_typ in [2, 42]:  # (2, 'D-最高额'),  (42, 'D-最高额(公证)'),
+                                result += '<p>  1、同意向%s申请最高限额为人民币%s%s期的银行授信（包括借款或银行' \
+                                          '承兑汇票、保函等），用以补充流动资金。</p>' % (
                                               agree_obj.branch.name, agree_amount_cn, agree_term_str)
                                 result += '<p>  2、同意委托%s为该授信向贷款方提供担保。</p>' % UN
                                 order = 2
-                            elif agr_typ in [22, ]:  # 公司保函
+                            elif agr_typ in [21, ]:  # (21, 'D-分离式保函'),
+                                result += '<p>  %s同意委托%s向%s申请开立最高限额为人民币%s的保函。</p>' % (
+                                    oo, UN, agree_obj.branch.name, agree_amount_cn)
+                                order = 1
+                            elif agr_typ in [22, ]:  # (22, 'D-公司保函'),
                                 result += '<p>  %s同意向%s申请开立人民币%s%s期的%s。</p>' % (
                                     oo, UN, agree_amount_cn, agree_term_str,
                                     LITRER_TYT_DIC[agree_obj.guarantee_agree.letter_typ])

@@ -10,7 +10,7 @@ from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.db import transaction
 from django.urls import resolve, reverse
 from .v_agree import convert_num
-from _WHDB.views import MenuHelper, authority, article_right, article_list_screen
+from _WHDB.views import MenuHelper, authority, article_right, article_list_screen, amount_s
 
 
 # -----------------------appraisal评审情况-------------------------#
@@ -198,7 +198,163 @@ def convert_str(n):
             result = result_l
     return result
 
+# -----------------------房产列表-------------------------#
+def house_d(house_list):
+    summ = '<tr class="it"><td colspan="4"><table class="tbi" cellspacing="0" cellpadding="0" >'
+    summ += '<tr class="it">' \
+            '<td class="bb" align="center">所有权人</td> ' \
+            '<td class="bb" align="center">处所</td> ' \
+            '<td class="bb" align="center">面积(㎡)</td> ' \
+            '<td class="bb" align="center">产权证编号</td> ' \
+            '</tr>'
+    for warrant_house in house_list:
+        owership_list = warrant_house.ownership_warrant.all()
+        owership_list_count = owership_list.count()
+        owership_name = ''
+        owership_num = ''
+        owership_list_order = 0
+        for owership in owership_list:
+            owership_name += '%s' % owership.owner.name
+            owership_num += '%s' % owership.ownership_num
+            owership_list_order += 1
+            if owership_list_order < owership_list_count:
+                owership_name += '、'
+                owership_num += '、'
+        if warrant_house.warrant_typ == 1:
+            # rowspan_count += 1
+            house = warrant_house.house_warrant
+            house_locate = house.house_locate
+            house_app = house.house_app
+            house_area = house.house_area
+            summ += '<tr class="it">' \
+                    '<td class="bb">%s</td> ' \
+                    '<td class="bb">%s</td> ' \
+                    '<td class="bb" align="right">%s</td> ' \
+                    '<td class="bb">%s</td> ' \
+                    '</tr>' % (owership_name, house_locate, house_area, owership_num)
+        else:
+            housebag_list = warrant_house.housebag_warrant.all()
+            housebag_count = housebag_list.count()
+            housebag_num = 1
+            for housebag in housebag_list:
+                # rowspan_count += 1
+                housebag_locate = housebag.housebag_locate
+                housebag_app = housebag.housebag_app
+                housebag_area = housebag.housebag_area
+                if housebag_num == 1:
+                    summ += '<tr class="it">' \
+                            '<td class="bb" rowspan="%s">%s</td> ' \
+                            '<td class="bb">%s</td> ' \
+                            '<td class="bb" align="right">%s</td> ' \
+                            '<td class="bb" rowspan="%s">%s</td> ' \
+                            '</tr>' % (
+                                housebag_count, owership_name, housebag_locate,
+                                housebag_area, housebag_count, owership_num)
+                    housebag_num += 1
+                else:
+                    summ += '<tr class="it">' \
+                            '<td class="bb">%s</td> ' \
+                            '<td class="bb" align="right">%s</td> ' \
+                            '</tr>' % (
+                                housebag_locate, housebag_area)
+    summ += '</table></td></tr>'
+    return summ
 
+# -----------------------监管房产列表-------------------------#
+def house_j(house_list):
+    summ = '<tr class="it"><td colspan="4"><table class="tbi" cellspacing="0" cellpadding="0" >'
+    summ += '<tr class="it">' \
+            '<td class="bb" align="center">所有权人</td> ' \
+            '<td class="bb" align="center">处所</td> ' \
+            '<td class="bb" align="center">面积(㎡)</td> ' \
+            '</tr>'
+    for warrant_house in house_list:
+        owership_list = warrant_house.ownership_warrant.all()
+        owership_list_count = owership_list.count()
+        owership_name = ''
+        owership_num = ''
+        owership_list_order = 0
+        for owership in owership_list:
+            owership_name += '%s' % owership.owner.name
+            owership_num += '%s' % owership.ownership_num
+            owership_list_order += 1
+            if owership_list_order < owership_list_count:
+                owership_name += '、'
+                owership_num += '、'
+        if warrant_house.warrant_typ == 1:
+            # rowspan_count += 1
+            house = warrant_house.house_warrant
+            house_locate = house.house_locate
+            house_app = house.house_app
+            house_area = house.house_area
+            summ += '<tr class="it">' \
+                    '<td class="bb">%s</td> ' \
+                    '<td class="bb">%s</td> ' \
+                    '<td class="bb" align="right">%s(具体面积以产权证为准)</td> ' \
+                    '</tr>' % (owership_name, house_locate, house_area)
+        else:
+            housebag_list = warrant_house.housebag_warrant.all()
+            housebag_count = housebag_list.count()
+            housebag_num = 1
+            for housebag in housebag_list:
+                # rowspan_count += 1
+                housebag_locate = housebag.housebag_locate
+                housebag_app = housebag.housebag_app
+                housebag_area = housebag.housebag_area
+                if housebag_num == 1:
+                    summ += '<tr class="it">' \
+                            '<td class="bb" rowspan="%s">%s</td> ' \
+                            '<td class="bb">%s</td> ' \
+                            '<td class="bb" align="right">%s(具体面积以产权证为准)</td> ' \
+                            '</tr>' % (
+                                housebag_count, owership_name, housebag_locate,
+                                housebag_area)
+                    housebag_num += 1
+                else:
+                    summ += '<tr class="it">' \
+                            '<td class="bb">%s</td> ' \
+                            '<td class="bb" align="right">%s(具体面积以产权证为准)</td> ' \
+                            '</tr>' % (
+                                housebag_locate, housebag_area)
+    summ += '</table></td></tr>'
+    return summ
+
+# -----------------------土地列表-------------------------#
+def ground_d(ground_list):
+    summ = '<tr class="it"><td colspan="4"><table class="tbi" cellspacing="0" cellpadding="0" >'
+    summ += '<tr class="it">' \
+               '<td class="bb" align="center">所有权人</td> ' \
+               '<td class="bb" align="center">座落</td> ' \
+               '<td class="bb" align="center">面积(㎡)</td> ' \
+               '<td class="bb" align="center">产权证编号</td> ' \
+               '</tr>'
+    for warrant_ground in ground_list:
+        # rowspan_count += 1
+        owership_list = warrant_ground.ownership_warrant.all()
+        owership_list_count = owership_list.count()
+        owership_name = ''
+        owership_num = ''
+        owership_list_order = 0
+        for owership in owership_list:
+            owership_name += '%s' % owership.owner.name
+            owership_num += '%s' % owership.ownership_num
+            owership_list_order += 1
+            if owership_list_order < owership_list_count:
+                owership_name += '、'
+                owership_num += '、'
+        ground = warrant_ground.ground_warrant
+        ground_locate = ground.ground_locate
+        ground_app = ground.ground_app
+        ground_area = ground.ground_area
+        summ += '<tr class="it">' \
+                   '<td class="bb">%s</td> ' \
+                   '<td class="bb">%s</td> ' \
+                   '<td class="bb" align="right">%s</td> ' \
+                   '<td class="bb">%s</td> ' \
+                   '</tr>' % (
+                       owership_name, ground_locate, ground_area, owership_num)
+    summ += '</table></td></tr>'
+    return summ
 # -----------------------summary_scan意见书-------------------------#
 @login_required
 @authority
@@ -210,8 +366,8 @@ def summary_scan(request, article_id):  # 评审项目预览
 
     article_list = models.Articles.objects.filter(id=article_id)
     article_obj = article_list.first()
-    review_date = article_obj.review_date #上会日期
-    review_year = article_obj.appraisal_article.all()[0].review_year #上会年份
+    review_date = article_obj.review_date  # 上会日期
+    review_year = article_obj.appraisal_article.all()[0].review_year  # 上会年份
     review_order = article_obj.appraisal_article.all()[0].review_order
     review_order_cn = convert_str(review_order)
     single_list = article_obj.single_quota_summary.all()
@@ -363,64 +519,7 @@ def summary_scan(request, article_id):  # 评审项目预览
                 rowspan_count += 2
                 summary += '<tr class="ot tbp"><td class="oi" colspan="4">&nbsp&nbsp%s、房产抵押：' \
                            '以下房产抵押给我公司，签订抵押反担保合同并办理抵押登记</td></tr>' % sure_or
-                summary += '<tr class="it"><td colspan="4"><table class="tbi" cellspacing="0" cellpadding="0" >'
-                summary += '<tr class="it">' \
-                           '<td class="bb" align="center">所有权人</td> ' \
-                           '<td class="bb" align="center">处所</td> ' \
-                           '<td class="bb" align="center">面积(㎡)</td> ' \
-                           '<td class="bb" align="center">产权证编号</td> ' \
-                           '</tr>'
-                for warrant_house in warrant_h_11_list:
-                    owership_list = warrant_house.ownership_warrant.all()
-                    owership_list_count = owership_list.count()
-                    owership_name = ''
-                    owership_num = ''
-                    owership_list_order = 0
-                    for owership in owership_list:
-                        owership_name += '%s' % owership.owner.name
-                        owership_num += '%s' % owership.ownership_num
-                        owership_list_order += 1
-                        if owership_list_order < owership_list_count:
-                            owership_name += '、'
-                            owership_num += '、'
-                    if warrant_house.warrant_typ == 1:
-                        # rowspan_count += 1
-                        house = warrant_house.house_warrant
-                        house_locate = house.house_locate
-                        house_app = house.house_app
-                        house_area = house.house_area
-                        summary += '<tr class="it">' \
-                                   '<td class="bb">%s</td> ' \
-                                   '<td class="bb">%s</td> ' \
-                                   '<td class="bb" align="right">%s</td> ' \
-                                   '<td class="bb">%s</td> ' \
-                                   '</tr>' % (owership_name, house_locate, house_area, owership_num)
-                    else:
-                        housebag_list = warrant_house.housebag_warrant.all()
-                        housebag_count = housebag_list.count()
-                        housebag_num = 1
-                        for housebag in housebag_list:
-                            # rowspan_count += 1
-                            housebag_locate = housebag.housebag_locate
-                            housebag_app = housebag.housebag_app
-                            housebag_area = housebag.housebag_area
-                            if housebag_num == 1:
-                                summary += '<tr class="it">' \
-                                           '<td class="bb" rowspan="%s">%s</td> ' \
-                                           '<td class="bb">%s</td> ' \
-                                           '<td class="bb" align="right">%s</td> ' \
-                                           '<td class="bb" rowspan="%s">%s</td> ' \
-                                           '</tr>' % (
-                                               housebag_count, owership_name, housebag_locate,
-                                               housebag_area, housebag_count, owership_num)
-                                housebag_num += 1
-                            else:
-                                summary += '<tr class="it">' \
-                                           '<td class="bb">%s</td> ' \
-                                           '<td class="bb" align="right">%s</td> ' \
-                                           '</tr>' % (
-                                               housebag_locate, housebag_area)
-                summary += '</table></td></tr>'
+                summary += house_d(warrant_h_11_list)  # 房产列表
                 sure_or += 1
             warrant_g_12_list = models.Warrants.objects.filter(
                 lending_warrant__sure__lending=lending, lending_warrant__sure__sure_typ=12)  # 土地抵押
@@ -429,39 +528,7 @@ def summary_scan(request, article_id):  # 评审项目预览
                 summary += '<tr class="ot tbp"><td class="oi" colspan="4">' \
                            '&nbsp&nbsp%s、土地抵押：以下国有土地使用权抵押给我公司，签订抵押反担保合同并办理抵押登记' \
                            '</td></tr>' % sure_or
-                summary += '<tr class="it"><td colspan="4"><table class="tbi" cellspacing="0" cellpadding="0" >'
-                summary += '<tr class="it">' \
-                           '<td class="bb" align="center">所有权人</td> ' \
-                           '<td class="bb" align="center">座落</td> ' \
-                           '<td class="bb" align="center">面积(㎡)</td> ' \
-                           '<td class="bb" align="center">产权证编号</td> ' \
-                           '</tr>'
-                for warrant_ground in warrant_g_12_list:
-                    # rowspan_count += 1
-                    owership_list = warrant_ground.ownership_warrant.all()
-                    owership_list_count = owership_list.count()
-                    owership_name = ''
-                    owership_num = ''
-                    owership_list_order = 0
-                    for owership in owership_list:
-                        owership_name += '%s' % owership.owner.name
-                        owership_num += '%s' % owership.ownership_num
-                        owership_list_order += 1
-                        if owership_list_order < owership_list_count:
-                            owership_name += '、'
-                            owership_num += '、'
-                    ground = warrant_ground.ground_warrant
-                    ground_locate = ground.ground_locate
-                    ground_app = ground.ground_app
-                    ground_area = ground.ground_area
-                    summary += '<tr class="it">' \
-                               '<td class="bb">%s</td> ' \
-                               '<td class="bb">%s</td> ' \
-                               '<td class="bb" align="right">%s</td> ' \
-                               '<td class="bb">%s</td> ' \
-                               '</tr>' % (
-                                   owership_name, ground_locate, ground_area, owership_num)
-                summary += '</table></td></tr>'
+                summary + ground_d(warrant_g_12_list)
                 sure_or += 1
             warrant_c_14_list = models.Warrants.objects.filter(
                 lending_warrant__sure__lending=lending, lending_warrant__sure__sure_typ=14)  # 在建工程抵押
@@ -550,64 +617,7 @@ def summary_scan(request, article_id):  # 评审项目预览
                 rowspan_count += 2
                 summary += '<tr class="ot tbp"><td class="oi" colspan="4">&nbsp&nbsp%s、房产顺位抵押：' \
                            '以下房产抵押给我公司，签订抵押反担保合同并办理顺位抵押登记</td></tr>' % sure_or
-                summary += '<tr class="it"><td colspan="4"><table class="tbi" cellspacing="0" cellpadding="0" >'
-                summary += '<tr class="it">' \
-                           '<td class="bb" align="center">所有权人</td> ' \
-                           '<td class="bb" align="center">处所</td> ' \
-                           '<td class="bb" align="center">面积(㎡)</td> ' \
-                           '<td class="bb" align="center">产权证编号</td> ' \
-                           '</tr>'
-                for warrant_house in warrant_h_21_list:
-                    owership_list = warrant_house.ownership_warrant.all()
-                    owership_list_count = owership_list.count()
-                    owership_name = ''
-                    owership_num = ''
-                    owership_list_order = 0
-                    for owership in owership_list:
-                        owership_name += '%s' % owership.owner.name
-                        owership_num += '%s' % owership.ownership_num
-                        owership_list_order += 1
-                        if owership_list_order < owership_list_count:
-                            owership_name += '、'
-                            owership_num += '、'
-                    if warrant_house.warrant_typ == 1:
-                        # rowspan_count += 1
-                        house = warrant_house.house_warrant
-                        house_locate = house.house_locate
-                        house_app = house.house_app
-                        house_area = house.house_area
-                        summary += '<tr class="it">' \
-                                   '<td class="bb">%s</td> ' \
-                                   '<td class="bb">%s</td> ' \
-                                   '<td class="bb" align="right">%s</td> ' \
-                                   '<td class="bb">%s</td> ' \
-                                   '</tr>' % (owership_name, house_locate, house_area, owership_num)
-                    else:
-                        housebag_list = warrant_house.housebag_warrant.all()
-                        housebag_count = housebag_list.count()
-                        housebag_num = 1
-                        for housebag in housebag_list:
-                            # rowspan_count += 1
-                            housebag_locate = housebag.housebag_locate
-                            housebag_app = housebag.housebag_app
-                            housebag_area = housebag.housebag_area
-                            if housebag_num == 1:
-                                summary += '<tr class="it">' \
-                                           '<td class="bb" rowspan="%s">%s</td> ' \
-                                           '<td class="bb">%s</td> ' \
-                                           '<td class="bb" align="right">%s</td> ' \
-                                           '<td class="bb" rowspan="%s">%s</td> ' \
-                                           '</tr>' % (
-                                               housebag_count, owership_name, housebag_locate,
-                                               housebag_area, housebag_count, owership_num)
-                                housebag_num += 1
-                            else:
-                                summary += '<tr class="it">' \
-                                           '<td class="bb">%s</td> ' \
-                                           '<td class="bb" align="right">%s</td> ' \
-                                           '</tr>' % (
-                                               housebag_locate, housebag_area)
-                summary += '</table></td></tr>'
+                summary += house_d(warrant_h_21_list)  # 房产列表
                 sure_or += 1
             warrant_g_22_list = models.Warrants.objects.filter(
                 lending_warrant__sure__lending=lending, lending_warrant__sure__sure_typ=22)  # 土地顺位
@@ -616,39 +626,7 @@ def summary_scan(request, article_id):  # 评审项目预览
                 summary += '<tr class="ot tbp"><td class="oi" colspan="4">' \
                            '&nbsp&nbsp%s、土地顺位抵押：以下国有土地使用权抵押给我公司，签订抵押反担保合同并办理顺位抵押登记' \
                            '</td></tr>' % sure_or
-                summary += '<tr class="it"><td colspan="4"><table class="tbi" cellspacing="0" cellpadding="0" >'
-                summary += '<tr class="it">' \
-                           '<td class="bb" align="center">所有权人</td> ' \
-                           '<td class="bb" align="center">座落</td> ' \
-                           '<td class="bb" align="center">面积(㎡)</td> ' \
-                           '<td class="bb" align="center">产权证编号</td> ' \
-                           '</tr>'
-                for warrant_ground in warrant_g_22_list:
-                    # rowspan_count += 1
-                    owership_list = warrant_ground.ownership_warrant.all()
-                    owership_list_count = owership_list.count()
-                    owership_name = ''
-                    owership_num = ''
-                    owership_list_order = 0
-                    for owership in owership_list:
-                        owership_name += '%s' % owership.owner.name
-                        owership_num += '%s' % owership.ownership_num
-                        owership_list_order += 1
-                        if owership_list_order < owership_list_count:
-                            owership_name += '、'
-                            owership_num += '、'
-                    ground = warrant_ground.ground_warrant
-                    ground_locate = ground.ground_locate
-                    ground_app = ground.ground_app
-                    ground_area = ground.ground_area
-                    summary += '<tr class="it">' \
-                               '<td class="bb">%s</td> ' \
-                               '<td class="bb">%s</td> ' \
-                               '<td class="bb" align="right">%s</td> ' \
-                               '<td class="bb">%s</td> ' \
-                               '</tr>' % (
-                                   owership_name, ground_locate, ground_area, owership_num)
-                summary += '</table></td></tr>'
+                summary + ground_d(warrant_g_22_list)
                 sure_or += 1
             warrant_c_23_list = models.Warrants.objects.filter(
                 lending_warrant__sure__lending=lending, lending_warrant__sure__sure_typ=23)  # 在建工程顺位
@@ -774,8 +752,11 @@ def summary_scan(request, article_id):  # 评审项目预览
                 lending_warrant__sure__lending=lending, lending_warrant__sure__sure_typ=42)  # 房产监管
             if warrant_h_42_list:
                 rowspan_count += 2
-                warrant_count = warrant_h_42_list.count()
-                rowspan_count += warrant_count
+                summary += '<tr class="ot tbp"><td class="oi" colspan="4">&nbsp&nbsp%s、房产监管：' \
+                           '以下房产签订抵押反担保合同，收取购房合同等资料并承诺配合我公司' \
+                           '办理相抵押登记关手续</td></tr>' % sure_or
+                summary += house_j(warrant_h_42_list)  # 房产列表
+                sure_or += 1
             warrant_g_43_list = models.Warrants.objects.filter(
                 lending_warrant__sure__lending=lending, lending_warrant__sure__sure_typ=43)  # 土地监管
             if warrant_g_43_list:
@@ -940,7 +921,7 @@ def summary_sign_scan(request, article_id):  #
     PAGE_TITLE = '签批单'
 
     article_obj = models.Articles.objects.get(id=article_id)
-    amount_str = str(article_obj.amount / 10000).rstrip('0').rstrip('.')  # 总额（万元）
+    amount_str = amount_s(article_obj.amount)
     new = round(article_obj.augment, 2)
 
     return render(request, 'dbms/appraisal/appraisal-sign-scan.html', locals())

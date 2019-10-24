@@ -29,7 +29,7 @@
                 <p>！！！！！！！还未添加合同模板，请联系系统管理员！！！！！！！</p>
             {% endif %}
         {% elif agree_typ == 2 %}
-{#            (2, '最高额')#}
+            {#            (2, '最高额')#}
             {% if counter_typ == 1 %}
                 {% include 'dbms/agree/agree_board/counter/c-m-x.html' %}
             {% elif counter_typ == 2 %}
@@ -41,14 +41,12 @@
             {% else %}
                 <p>！！！！！！！还未添加合同模板，请联系系统管理员！！！！！！！</p>
             {% endif %}
-        {% elif agree_typ == 3 %}
-            <p>！！！！！！！agree_typ == 3还未添加合同模板，请联系系统管理员！！！！！！！</p>
         {% elif agree_typ == 4 %}
-            <p>！！！！！！！agree_typ == 4还未添加合同模板，请联系系统管理员！！！！！！！</p>
-        {% elif agree_typ == 7 %}
-            <p>！！！！！！！agree_typ == 7还未添加合同模板，请联系系统管理员！！！！！！！</p>
+            <p>！！！！！！！(4, 'D-委贷'),！！！！！！！</p>
+        {% elif agree_typ == 21 %}
+            <p>！！！！！！！(21, 'D-分离式保函'), ！！！！！！！</p>
         {% elif agree_typ == 22 %}
-{#            (22, '公司保函')#}
+            {#            (22, '公司保函')#}
             {% if counter_typ == 1 %}
                 {% include 'dbms/agree/agree_board/counter/c-s-x-l.html' %}
             {% elif counter_typ == 2 %}
@@ -61,12 +59,11 @@
                 <p>！！！！！！！还未添加合同模板，请联系系统管理员！！！！！！！</p>
             {% endif %}
         {% elif agree_typ == 41 %}
-{#            (41, '单笔(公证)')#}
+            {#            (41, '单笔(公证)')#}
             {% if counter_typ == 1 %}
                 {% include 'dbms/agree/agree_board/counter/c-s-x-n.html' %}
             {% elif counter_typ == 2 %}
                 {% include 'dbms/agree/agree_board/counter/c-s-x-n-g.html' %}
-{#                {% include 'dbms/agree/agree_board/counter/c-s-g-n.html' %}#}
             {% elif counter_typ in D_COUNTER_TYP_LIST %}
                 {% include 'dbms/agree/agree_board/counter/c-s-d-n.html' %}
             {% elif counter_typ in Z_COUNTER_TYP_LIST %}
@@ -75,9 +72,13 @@
                 <p>！！！！！！！还未添加合同模板，请联系系统管理员！！！！！！！</p>
             {% endif %}
         {% elif agree_typ == 42 %}
-            <p>！！！！！！！agree_typ == 42还未添加合同模板，请联系系统管理员！！！！！！！</p>
-        {% elif agree_typ == 47 %}
-            <p>！！！！！！！agree_typ == 47还未添加合同模板，请联系系统管理员！！！！！！！</p>
+            <p>！！！！！！！(42, 'D-最高额(公证)'),！！！！！！！</p>
+        {% elif agree_typ == 51 %}
+            <p>！！！！！！！(51, 'X-小贷单笔'),！！！！！！！</p>
+        {% elif agree_typ == 52 %}
+            <p>！！！！！！！(52, 'X-小贷最高额'),！！！！！！！</p>
+        {% else %}
+            <p>！！！！！！！还未添加合同模板，请联系系统管理员！！！！！！！</p>
         {% endif %}
     </div>
     {% include 'dbms/agree/extra/js-view-save-counter.html' %}

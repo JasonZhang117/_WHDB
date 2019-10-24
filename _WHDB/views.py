@@ -10,6 +10,8 @@ from django.db import transaction
 
 UND = '成都武侯中小企业融资担保有限责任公司'
 UNX = '成都武侯武兴小额贷款有限责任公司'
+
+
 class MenuHelper(object):
     def __init__(self, request):
         self.request = request  # 当前请求的request对象
@@ -245,6 +247,7 @@ def Caltime(date1, date2):
     # 返回两个变量相差的值，就是相差天数
     return date2 - date1
 
+
 # -------------------------合同期限-------------------------#
 def credit_term_c(credit_term):
     credit_term_exactly = credit_term % 12
@@ -254,6 +257,7 @@ def credit_term_c(credit_term):
     else:
         credit_term_cn = '%s个月' % convert_num(credit_term)
     return credit_term_cn
+
 
 # -----------------------------金额小写转大写------------------------------#
 def convert(n):
@@ -283,6 +287,7 @@ def convert(n):
         result += '整'
     return result
 
+
 # -----------------------------数字小写转大写------------------------------#
 def convert_num(n):
     units = ['', '万', '亿']
@@ -304,3 +309,20 @@ def convert_num(n):
     result = ''.join(res[::-1])
 
     return result
+
+
+def un_dex(agree_typ):
+    AGREE_TYP_D = models.Agrees.AGREE_TYP_D
+    AGREE_TYP_X = models.Agrees.AGREE_TYP_X
+    if agree_typ in AGREE_TYP_D:
+        un = '成都武侯中小企业融资担保有限责任公司'
+        add = '成都市武侯区武青南路33号(武侯新城管委会内)'
+    elif agree_typ in AGREE_TYP_X:
+        un = '成都武侯武兴小额贷款有限责任公司'
+        add = '成都市武侯区武科西五路360号西部智谷B区2栋3单元10楼'
+    return (un, add)
+
+
+def amount_s(amount):
+    amount_str = str(amount / 10000).rstrip('0').rstrip('.')  # 总额（万元）
+    return amount_str

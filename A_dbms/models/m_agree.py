@@ -134,11 +134,10 @@ class Counters(models.Model):  # 反担保合同
         (31, '应收质押'), (32, '股权质押'), (33, '票据质押'), (34, '动产质押'),
         (41, '其他权利质押'),
         (51, '股权预售'), (52, '房产预售'), (53, '土地预售'), (59, '其他预售')]
+    counter_typ = models.IntegerField(verbose_name='合同类型', choices=COUNTER_TYP_LIST)
     COUNTER_TYP_X = [1, 2, ]  # 保证类（反）担保合同类型
     COUNTER_TYP_D = [11, 12, 13, 14, 15, ]  # 抵押类（反）担保合同类型
     COUNTER_TYP_Z = [31, 32, 33, 34, 41, ]  # 质押类（反）担保合同类型
-
-    counter_typ = models.IntegerField(verbose_name='合同类型', choices=COUNTER_TYP_LIST)
     counter_copies = models.IntegerField(verbose_name='合同份数')
     COUNTER_STATE_LIST = [(11, '未签订'), (21, '已签订'), (31, '作废')]
     counter_state = models.IntegerField(verbose_name='签订状态', choices=COUNTER_STATE_LIST, default=11)
