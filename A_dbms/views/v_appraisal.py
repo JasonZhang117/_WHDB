@@ -80,14 +80,14 @@ def appraisal_scan(request, article_id):  # 评审项目预览
             'rcd_opinion': article_obj.rcd_opinion,
             'convenor_opinion': article_obj.convenor_opinion, 'sign_detail': article_obj.sign_detail,
             'sign_date': str(article_obj.sign_date)}
-        form_article_sign = forms.ArticlesSignForm(initial=form_date)
-    form_comment = forms.CommentsAddForm()
-    form_single = forms.SingleQuotaForm()
-    form_supply = forms.FormAddSupply()
-    form_lending = forms.FormLendingOrder()
-    form_article_change = forms.ArticleChangeForm(initial={'change_date': str(datetime.date.today())})
-    form_inv_add = forms.FormInvestigateAdd(initial={'inv_date': str(datetime.date.today())})
-    investigate_custom_list = article_obj.custom.inv_custom.all().order_by('-inv_date')
+        form_article_sign = forms.ArticlesSignForm(initial=form_date)  # 项目签批form
+    form_comment = forms.CommentsAddForm()  # 评委意见form
+    form_single = forms.SingleQuotaForm()  # 单项额度form
+    form_supply = forms.FormAddSupply()  # 补调问题form
+    form_lending = forms.FormLendingOrder()  # 放款次序form
+    form_article_change = forms.ArticleChangeForm(initial={'change_date': str(datetime.date.today())})  # 项目变更form
+    form_inv_add = forms.FormInvestigateAdd(initial={'inv_date': str(datetime.date.today())})  # 补调添加form
+    investigate_custom_list = article_obj.custom.inv_custom.all().order_by('-inv_date')  # 补调列表
 
     return render(request, 'dbms/appraisal/appraisal-scan.html', locals())
 
@@ -360,15 +360,16 @@ def ground_d(ground_list):
     summ += '</table></td></tr>'
     return summ
 
+
 # -----------------------在建工程列表-------------------------#
 def create_d(create_list):
     summ = '<tr class="it"><td colspan="4"><table class="tbi" cellspacing="0" cellpadding="0" >'
     summ += '<tr class="it">' \
-               '<td class="bb" align="center">所有权人</td> ' \
-               '<td class="bb" align="center">座落</td> ' \
-               '<td class="bb" align="center">面积(㎡)</td> ' \
-               '<td class="bb" align="center">备注</td> ' \
-               '</tr>'
+            '<td class="bb" align="center">所有权人</td> ' \
+            '<td class="bb" align="center">座落</td> ' \
+            '<td class="bb" align="center">面积(㎡)</td> ' \
+            '<td class="bb" align="center">备注</td> ' \
+            '</tr>'
     for warrant_c in create_list:
         # rowspan_count += 1
         owership_list = warrant_c.ownership_warrant.all()
@@ -384,13 +385,73 @@ def create_d(create_list):
         coustruct_locate = coustruct.coustruct_locate
         coustruct_area = coustruct.coustruct_area
         summ += '<tr class="it">' \
-                   '<td class="bb">%s</td> ' \
-                   '<td class="bb">%s</td> ' \
-                   '<td class="bb" align="right">%s</td> ' \
-                   '<td class="bb">最终以实际抵押面积为准</td> ' \
-                   '</tr>' % (owership_name, coustruct_locate, coustruct_area)
+                '<td class="bb">%s</td> ' \
+                '<td class="bb">%s</td> ' \
+                '<td class="bb" align="right">%s</td> ' \
+                '<td class="bb">最终以实际抵押面积为准</td> ' \
+                '</tr>' % (owership_name, coustruct_locate, coustruct_area)
     summ += '</table></td></tr>'
     return summ
+
+
+def sum_g(lending):
+    custom_c_count = models.Customes.objects.filter(lending_custom__sure__lending=lending, genre=1).count()  # 企业
+    custom_p_count = models.Customes.objects.filter(lending_custom__sure__lending=lending, genre=2).count()  # 个人
+    warrant_h_11_count = models.Warrants.objects.filter(
+        lending_warrant__sure__lending=lending, lending_warrant__sure__sure_typ=11).count()  # 抵押房产
+    warrant_g_12_count = models.Warrants.objects.filter(
+        lending_warrant__sure__lending=lending, lending_warrant__sure__sure_typ=12).count()  # 土地抵押
+    warrant_c_14_count = models.Warrants.objects.filter(
+        lending_warrant__sure__lending=lending, lending_warrant__sure__sure_typ=14).count()  # 在建工程抵押
+    warrant_c_13_count = models.Warrants.objects.filter(
+        lending_warrant__sure__lending=lending, lending_warrant__sure__sure_typ=13).count()  # 动产抵押
+    warrant_v_15_count = models.Warrants.objects.filter(
+        lending_warrant__sure__lending=lending, lending_warrant__sure__sure_typ=15).count()  # 车辆抵押
+    warrant_h_21_countt = models.Warrants.objects.filter(
+        lending_warrant__sure__lending=lending, lending_warrant__sure__sure_typ=21).count()  # 房产顺位
+    warrant_g_22_count = models.Warrants.objects.filter(
+        lending_warrant__sure__lending=lending, lending_warrant__sure__sure_typ=22).count()  # 土地顺位
+    warrant_c_23_count = models.Warrants.objects.filter(
+        lending_warrant__sure__lending=lending, lending_warrant__sure__sure_typ=23).count()  # 在建工程顺位
+    warrant_c_24_count = models.Warrants.objects.filter(
+        lending_warrant__sure__lending=lending, lending_warrant__sure__sure_typ=24).count()  # 动产顺位
+    warrant_r_31_count = models.Warrants.objects.filter(
+        lending_warrant__sure__lending=lending, lending_warrant__sure__sure_typ=31).count()  # 应收质押
+    warrant_s_32_count = models.Warrants.objects.filter(
+        lending_warrant__sure__lending=lending, lending_warrant__sure__sure_typ=32).count()  # 股权质押
+    warrant_d_33_count = models.Warrants.objects.filter(
+        lending_warrant__sure__lending=lending, lending_warrant__sure__sure_typ=33).count()  # 票据质押
+    warrant_c_34_count = models.Warrants.objects.filter(
+        lending_warrant__sure__lending=lending, lending_warrant__sure__sure_typ=34).count()  # 动产质押
+    warrant_o_39_count = models.Warrants.objects.filter(
+        lending_warrant__sure__lending=lending, lending_warrant__sure__sure_typ=39).count()  # 其他权利质押
+    warrant_h_42_count = models.Warrants.objects.filter(
+        lending_warrant__sure__lending=lending, lending_warrant__sure__sure_typ=42).count()  # 房产监管
+    warrant_g_43_count = models.Warrants.objects.filter(
+        lending_warrant__sure__lending=lending, lending_warrant__sure__sure_typ=43).count()  # 土地监管
+    warrant_d_44_count = models.Warrants.objects.filter(
+        lending_warrant__sure__lending=lending, lending_warrant__sure__sure_typ=44).count()  # 票据监管
+    warrant_c_47_count = models.Warrants.objects.filter(
+        lending_warrant__sure__lending=lending, lending_warrant__sure__sure_typ=47).count()  # 动产监管
+    warrant_o_49_count = models.Warrants.objects.filter(
+        lending_warrant__sure__lending=lending, lending_warrant__sure__sure_typ=49).count()  # 其他监管
+    warrant_s_51_count = models.Warrants.objects.filter(
+        lending_warrant__sure__lending=lending, lending_warrant__sure__sure_typ=51).count()  # 股权预售
+    warrant_h_52_count = models.Warrants.objects.filter(
+        lending_warrant__sure__lending=lending, lending_warrant__sure__sure_typ=52).count()  # 房产预售
+    warrant_g_53_count = models.Warrants.objects.filter(
+        lending_warrant__sure__lending=lending, lending_warrant__sure__sure_typ=53).count()  # 土地预售
+    warrant_o_59_count = models.Warrants.objects.filter(
+        lending_warrant__sure__lending=lending, lending_warrant__sure__sure_typ=59).count()  # 其他预售
+    sum_gg = (custom_c_count + custom_p_count + warrant_h_11_count + warrant_g_12_count +
+              warrant_c_14_count + warrant_c_13_count + warrant_v_15_count + warrant_h_21_countt +
+              warrant_g_22_count + warrant_c_23_count + warrant_c_24_count + warrant_r_31_count +
+              warrant_s_32_count + warrant_d_33_count + warrant_c_34_count +
+              warrant_o_39_count + warrant_h_42_count + warrant_g_43_count +
+              warrant_d_44_count + warrant_c_47_count + warrant_o_49_count +
+              warrant_s_51_count + warrant_h_52_count + warrant_g_53_count + warrant_o_59_count)
+    return sum_gg
+
 
 # -----------------------summary_scan意见书-------------------------#
 @login_required
@@ -455,9 +516,16 @@ def summary_scan(request, article_id):  # 评审项目预览
 
     # if True:
     if article_obj.article_state in [1, 2, 3, 4, 61]:
-        rowspan_count = 3
+        rowspan_count = 2
+        ss = 0
+        for lending in lending_list:
+            ss += sum_g(lending)
+        if ss:
+            tt = '一、'
+        else:
+            tt = ''
         summary = ''
-        summary += '<tr class="ot tbp"><td class="oi" colspan="4">&nbsp&nbsp一、同意为该客户'
+        summary += '<tr class="ot tbp"><td class="oi" colspan="4">&nbsp&nbsp%s同意为该客户' % tt
         single_dic_count = len(single_dic_list)
         single_dic_c = 0
         for single in single_dic_list:
@@ -493,8 +561,10 @@ def summary_scan(request, article_id):  # 评审项目预览
                 if lending_c < lending_count:
                     summary += '、'
         summary += '。</td></tr>'
-        summary += '<tr class="ot tbp"><td class="oi" colspan="4">&nbsp&nbsp二、落实以下反担保措施</td></tr>'
 
+        if ss:
+            rowspan_count += 1
+            summary += '<tr class="ot tbp"><td class="oi" colspan="4">&nbsp&nbsp二、落实以下反担保措施</td></tr>'
         lend_or = 0
         for lending in lending_list:
             order_amount = lending.order_amount
@@ -634,7 +704,8 @@ def summary_scan(request, article_id):  # 评审项目预览
             if warrant_g_22_list:
                 rowspan_count += 2
                 summary += '<tr class="ot tbp"><td class="oi" colspan="4">' \
-                           '&nbsp&nbsp%s、土地顺位抵押：以下国有土地使用权抵押给我公司，签订抵押反担保合同并办理顺位抵押登记' \
+                           '&nbsp&nbsp%s、土地顺位抵押：以下国有土地使用权抵押给我公司，签' \
+                           '订抵押反担保合同并办理顺位抵押登记' \
                            '</td></tr>' % sure_or
                 summary + ground_d(warrant_g_22_list)
                 sure_or += 1
@@ -643,7 +714,8 @@ def summary_scan(request, article_id):  # 评审项目预览
             if warrant_c_23_list:
                 rowspan_count += 2
                 summary += '<tr class="ot tbp"><td class="oi" colspan="4">' \
-                           '&nbsp&nbsp%s、在建工程顺位抵押：以下在建工程抵押给我公司，签订抵押反担保合同并办理顺位抵押登记' \
+                           '&nbsp&nbsp%s、在建工程顺位抵押：以下在建工程抵押给我公司，签' \
+                           '订抵押反担保合同并办理顺位抵押登记' \
                            '</td></tr>' % sure_or
                 summary = create_d(warrant_c_23_list)
                 sure_or += 1

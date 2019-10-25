@@ -113,9 +113,9 @@ def agree_scan(request, agree_id):  # 查看合同
     warrants_o_lending_list = models.Warrants.objects.filter(
         lending_warrant__sure__lending=agree_lending_obj, warrant_typ=55).exclude(
         counter_warrant__counter__agree=agree_obj).values_list('id', 'warrant_num').order_by('warrant_num')
-    from_counter = forms.AddCounterForm()
+    from_counter = forms.AddCounterForm() #添加反担保合同form
     form_agree_sign_data = {'agree_sign_date': str(datetime.date.today())}
-    form_agree_sign = forms.FormAgreeSign(initial=form_agree_sign_data)
+    form_agree_sign = forms.FormAgreeSign(initial=form_agree_sign_data) #添加反担保合同form
     form_agree_edit_date = {
         'branch': agree_obj.branch,
         'agree_typ': agree_obj.agree_typ,
@@ -124,8 +124,10 @@ def agree_scan(request, agree_id):  # 查看合同
         'agree_rate': agree_obj.agree_rate,
         'agree_term': agree_obj.agree_term,
         'guarantee_typ': agree_obj.guarantee_typ,
-        'agree_copies': agree_obj.agree_copies}
-    form_agree_edit = forms.AgreeEditForm(initial=form_agree_edit_date)
+        'agree_copies': agree_obj.agree_copies,
+        'other': agree_obj.other,
+    }
+    form_agree_edit = forms.AgreeEditForm(initial=form_agree_edit_date) #添加反担保合同form
 
     return render(request, 'dbms/agree/agree-scan.html', locals())
 
@@ -200,6 +202,16 @@ def agree_preview(request, agree_id):
     agree_amount = agree_obj.agree_amount
     agree_amount_cn = convert(agree_amount)  # 转换为金额大写
     agree_amount_str = amount_s(agree_amount)  # 元转换为万元并去掉小数点后面的零
+    bank_name = agree_obj.branch.cooperator.name
+    if '民生银行' in bank_name:
+        file_name = '《开立保函申请书》或《开立保函协议》'
+    elif '建设银行' == bank_name:
+        file_name = '《开立保函/备用信用证申请书》或《开立保函/备用信用证协议》'
+    agree_other = agree_obj.other
+    if agree_other:
+        other = agree_obj.other
+    else:
+        other = '_____________\______________'
     '''AGREE_TYP_LIST = [
         (1, 'D-单笔'), (2, 'D-最高额'), (4, 'D-委贷'),
         (21, 'D-分离式保函'), (22, 'D-公司保函'), (23, 'D-银行保函'),
@@ -217,7 +229,7 @@ def agree_preview(request, agree_id):
     else:
         page_home_y_y = '被担保人（乙方）'
     agree_copy_cn = convert_num(agree_obj.agree_copies)
-    notarization_typ = False #是否公证
+    notarization_typ = False  # 是否公证
     if agree_typ in [1, 2, 3, 4, 21, 22, 23]:
         agree_copy_jy_cn = convert_num(agree_obj.agree_copies - 2)
     else:
@@ -267,7 +279,7 @@ def counter_preview(request, agree_id, counter_id):
 
     credit_term = agree_obj.agree_term  # 授信期限（月）
     credit_term_cn = credit_term_c(credit_term)
-    if counter_typ in [1, 2]: #个人反担保
+    if counter_typ in [1, 2]:  # 个人反担保
         assure_counter_obj = counter_obj.assure_counter
         custom_obj = assure_counter_obj.custome
     else:
@@ -284,28 +296,28 @@ def counter_preview(request, agree_id, counter_id):
             if counter_warrant.warrant_typ == 2:  # (2, '房产包')
                 counter_warrant_list_count += counter_warrant.housebag_warrant.all().count() - 1
         counter_property_type = ''
-        if counter_warrant_typ in [1, 2]: #(1, '房产'), (2, '房产包'),
+        if counter_warrant_typ in [1, 2]:  # (1, '房产'), (2, '房产包'),
             counter_property_type = '房产'
-        elif counter_warrant_typ in [5, ]: #(5, '土地'),
+        elif counter_warrant_typ in [5, ]:  # (5, '土地'),
             counter_property_type = '土地使用权'
-        elif counter_warrant_typ in [6, ]: #(6, '在建工程'),
+        elif counter_warrant_typ in [6, ]:  # (6, '在建工程'),
             counter_property_type = '在建工程'
-        elif counter_warrant_typ in [11, ]: #(11, '应收账款'),
+        elif counter_warrant_typ in [11, ]:  # (11, '应收账款'),
             counter_receive_obj = counter_warrant_obj.receive_warrant
             receive_extend_list = counter_receive_obj.extend_receiveable.all()
-        elif counter_warrant_typ in [21, ]: #(21, '股权'),
+        elif counter_warrant_typ in [21, ]:  # (21, '股权'),
             counter_stock_obj = counter_warrant_obj.stock_warrant
             stock_registe_str = str(counter_stock_obj.registe).rstrip('0').rstrip('.')
             stock_share_str = str(counter_stock_obj.share).rstrip('0').rstrip('.')
             agree_share_cn = convert(counter_stock_obj.share * 10000)
-        elif counter_warrant_typ in [31, ]: #(31, '票据'),
+        elif counter_warrant_typ in [31, ]:  # (31, '票据'),
             counter_draft_obj = counter_warrant_obj.draft_warrant
             counter_draft_bag_list = counter_draft_obj.extend_draft.all()
             denomination_str = str(counter_draft_obj.denomination / 10000).rstrip('0').rstrip('.')
             denomination_cn = convert(counter_draft_obj.denomination)
-        elif counter_warrant_typ in [41, ]: #(41, '车辆'),
+        elif counter_warrant_typ in [41, ]:  # (41, '车辆'),
             counter_vehicle_obj = counter_warrant_obj.vehicle_warrant
-        elif counter_warrant_typ in [51, ]: #(51, '动产'),
+        elif counter_warrant_typ in [51, ]:  # (51, '动产'),
             '''CHATTEL_TYP_LIST = [(1, '存货'), (11, '机器设备'), (99, '其他')]'''
             chattel_typ = counter_warrant_obj.chattel_warrant.chattel_typ  # 动产种类
             if chattel_typ == 1:
@@ -320,12 +332,12 @@ def counter_preview(request, agree_id, counter_id):
             other_typ = counter_other_obj.other_typ  # 其他种类
             cost_str = str(counter_other_obj.cost / 10000).rstrip('0').rstrip('.')
             cost_cn = convert(counter_other_obj.cost)
-            if other_typ in [11,]:
+            if other_typ in [11, ]:
                 counter_property_type = '购房合同'
-            elif other_typ in [21,]:
+            elif other_typ in [21, ]:
                 counter_property_type = '车辆合格证'
     counter_home_b_b = ''
-    if agree_typ == 21 or agree_typ == 22: # (21, 'D-分离式保函'), (22, 'D-公司保函'),
+    if agree_typ == 21 or agree_typ == 22:  # (21, 'D-分离式保函'), (22, 'D-公司保函'),
         counter_home_b_b = '被担保人'
     else:
         counter_home_b_b = '借款人'

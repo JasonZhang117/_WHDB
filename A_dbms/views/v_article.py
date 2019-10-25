@@ -218,15 +218,15 @@ def article_scan_lending(request, article_id, lending_id):  # 项目预览
     form_lendingsures = forms.LendingSuresForm() #反担保类型form
     # form_lendingcustoms_c_add = forms.LendingCustomsCForm()
     # form_lendingcustoms_p_add = forms.LendingCustomsPForm()
-    form_lendinghouse_add = forms.LendingHouseForm()  # 添加放担保-房产form
-    form_lendingground_add = forms.LendingGroundForm()  # 添加放担保-土地form
-    form_lendingconstruct_add = forms.LendingConstructForm()  # 添加放担保-在建工程form
-    form_lendinggreceivable_add = forms.LendinReceivableForm()  # 添加放担保-应收账款form
-    form_lendingstock_add = forms.LendinStockForm()  # 添加放担保-股权form
-    form_lendingdraft_add = forms.LendinDraftForm()  # 添加放担保-票据form
-    form_lendingvehicle_add = forms.LendinVehicleForm()  # 添加放担保-车辆form
-    form_lendingchattel_add = forms.LendinChattelForm()  # 添加放担保-动产form
-    form_lendingother_add = forms.LendinOtherForm()  # 添加放担保-其他form
+    form_lendinghouse_add = forms.LendingHouseForm()  # 添加（反）担保-房产form
+    form_lendingground_add = forms.LendingGroundForm()  # 添加（反）担保-土地form
+    form_lendingconstruct_add = forms.LendingConstructForm()  # 添加（反）担保-在建工程form
+    form_lendinggreceivable_add = forms.LendinReceivableForm()  # 添加（反）担保-应收账款form
+    form_lendingstock_add = forms.LendinStockForm()  # 添加（反）担保-股权form
+    form_lendingdraft_add = forms.LendinDraftForm()  # 添加（反）担保-票据form
+    form_lendingvehicle_add = forms.LendinVehicleForm()  # 添加（反）担保-车辆form
+    form_lendingchattel_add = forms.LendinChattelForm()  # 添加（反）担保-动产form
+    form_lendingother_add = forms.LendinOtherForm()  # 添加（反）担保-其他form
     form_lending = forms.FormLendingOrder(
         initial={'order': lending_obj.order,
                  'remark': lending_obj.remark,

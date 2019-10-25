@@ -6,7 +6,6 @@
 
     function bindEditAgreeB() {
         $('#editAgreeB').click(function () {
-            console.log("bindAddAgree");
             $('#editAgreeModal').modal('show');
         })
     }
@@ -19,10 +18,10 @@
                 var n = $(this).attr('name');
                 postData[n] = v;
             });
+            var other_g = $('#id_other').val();
+            postData['other'] = other_g;
+
             var postDataStr = JSON.stringify(postData);
-
-            console.log(postDataStr);
-
             $.ajax({
                 url: '/dbms/agree/edit/',
                 type: 'POST',

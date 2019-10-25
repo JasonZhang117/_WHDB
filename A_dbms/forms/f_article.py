@@ -86,7 +86,7 @@ class ArticleAgreeAddForm(dform.ModelForm):
     class Meta:
         model = models.Agrees
         fields = ['agree_typ', 'guarantee_typ', 'agree_copies', 'agree_amount', 'amount_limit',
-                  'agree_rate', 'agree_term']
+                  'agree_rate', 'agree_term', 'other']
         widgets = {
             'agree_typ': dform.Select(attrs={'class': 'form-control'}),
             'guarantee_typ': dform.Select(attrs={'class': 'form-control'}),
@@ -94,7 +94,9 @@ class ArticleAgreeAddForm(dform.ModelForm):
             'agree_term': dform.NumberInput(attrs={'class': 'form-control', 'placeholder': '期限'}),
             'agree_rate': dform.TextInput(attrs={'class': 'form-control', 'placeholder': '如为单项合同输入纯数字'}),
             'agree_amount': dform.NumberInput(attrs={'class': 'form-control', 'placeholder': '合同金额（元）'}),
-            'amount_limit': dform.NumberInput(attrs={'class': 'form-control', 'placeholder': '放款限额（元）'})}
+            'amount_limit': dform.NumberInput(attrs={'class': 'form-control', 'placeholder': '放款限额（元）'}),
+            'other': dform.Textarea(attrs={'class': 'form-control', 'rows': '2', 'placeholder': '其他合同约定事项'}),
+        }
 
     def __init__(self, *args, **kwargs):
         super(ArticleAgreeAddForm, self).__init__(*args, **kwargs)

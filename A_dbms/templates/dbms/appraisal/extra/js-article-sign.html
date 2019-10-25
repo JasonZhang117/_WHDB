@@ -7,7 +7,6 @@
 
     function bindArticleSignB() {
         $('#articleSignB').click(function () {
-            console.log("bindArticleSignB");
             $('#articleSignModal').modal('show');
         })
     }
@@ -26,8 +25,8 @@
             postData['convenor_opinion'] = convenor;
             var sign = $('#id_sign_detail').val();
             postData['sign_detail'] = sign;
+
             var postDataStr = JSON.stringify(postData);
-            console.log(postDataStr);
             $.ajax({
                 url: '/dbms/appraisal/sign/',
                 type: 'POST',

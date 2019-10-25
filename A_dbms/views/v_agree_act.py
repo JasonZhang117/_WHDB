@@ -182,7 +182,8 @@ def agree_add_ajax(request):  # 添加合同
                         lending=lending_obj, branch_id=branch_id, agree_typ=agree_typ,
                         agree_term=agree_add_cleaned['agree_term'],
                         amount_limit=amount_limit, agree_rate=agree_add_cleaned['agree_rate'],
-                        agree_amount=agree_amount, guarantee_typ=guarantee_typ, agree_copies=agree_copies,
+                        agree_amount=agree_amount, guarantee_typ=guarantee_typ,
+                        agree_copies=agree_copies, other=agree_add_cleaned['other'],
                         agree_buildor=request.user)
                     if agree_typ == 22:
                         if form_letter_add.is_valid():
@@ -338,7 +339,8 @@ def agree_edit_ajax(request):  #
                         agree_name=agree_name, branch_id=branch_id, agree_typ=agree_typ,
                         agree_term=agree_add_cleaned['agree_term'],
                         amount_limit=amount_limit, agree_rate=agree_add_cleaned['agree_rate'],
-                        agree_amount=agree_amount, guarantee_typ=guarantee_typ, agree_copies=agree_copies,
+                        agree_amount=agree_amount, guarantee_typ=guarantee_typ,
+                        agree_copies=agree_copies, other=agree_add_cleaned['other'],
                         agree_buildor=request.user)
                     for counter in agree_obj.counter_agree.all():
                         counter_typ = counter.counter_typ

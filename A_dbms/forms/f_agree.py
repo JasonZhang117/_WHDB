@@ -12,14 +12,17 @@ class AgreeAddForm(dform.ModelForm):
 
     class Meta:
         model = models.Agrees
-        fields = ['lending', 'agree_typ', 'guarantee_typ', 'agree_copies', 'agree_amount', 'amount_limit', 'agree_term']
+        fields = ['lending', 'agree_typ', 'guarantee_typ', 'agree_copies', 'agree_amount',
+                  'amount_limit', 'agree_term', 'other']
         widgets = {'lending': dform.Select(attrs={'class': 'form-control'}),
                    'agree_typ': dform.Select(attrs={'class': 'form-control'}),
                    'guarantee_typ': dform.Select(attrs={'class': 'form-control'}),
                    'agree_copies': dform.NumberInput(attrs={'class': 'form-control', 'placeholder': '合同份数'}),
                    'agree_term': dform.NumberInput(attrs={'class': 'form-control', 'placeholder': '期限'}),
                    'agree_amount': dform.NumberInput(attrs={'class': 'form-control', 'placeholder': '合同金额（元）'}),
-                   'amount_limit': dform.NumberInput(attrs={'class': 'form-control', 'placeholder': '放款限额（元）'})}
+                   'amount_limit': dform.NumberInput(attrs={'class': 'form-control', 'placeholder': '放款限额（元）'}),
+                   'other': dform.Textarea(attrs={'class': 'form-control', 'rows': '2', 'placeholder': '其他合同约定事项'}),
+                   }
 
     def __init__(self, *args, **kwargs):
         super(AgreeAddForm, self).__init__(*args, **kwargs)
@@ -27,12 +30,12 @@ class AgreeAddForm(dform.ModelForm):
             'id', 'name').order_by('name')
 
 
-# -----------------------委托合同添加-------------------------#
+# -----------------------委托合同修改-------------------------#
 class AgreeEditForm(dform.ModelForm):
     class Meta:
         model = models.Agrees
         fields = ['branch', 'agree_typ', 'agree_amount', 'amount_limit', 'agree_rate', 'agree_term',
-                  'guarantee_typ', 'agree_copies']
+                  'guarantee_typ', 'agree_copies', 'other']
         widgets = {
             'branch': dform.Select(attrs={'class': 'form-control'}),
             'agree_typ': dform.Select(attrs={'class': 'form-control'}),
@@ -41,7 +44,9 @@ class AgreeEditForm(dform.ModelForm):
             'agree_rate': dform.TextInput(attrs={'class': 'form-control', 'placeholder': '如为单项合同输入纯数字'}),
             'agree_term': dform.NumberInput(attrs={'class': 'form-control', 'placeholder': '期限'}),
             'guarantee_typ': dform.Select(attrs={'class': 'form-control'}),
-            'agree_copies': dform.NumberInput(attrs={'class': 'form-control', 'placeholder': '合同份数'}), }
+            'agree_copies': dform.NumberInput(attrs={'class': 'form-control', 'placeholder': '合同份数'}),
+            'other': dform.Textarea(attrs={'class': 'form-control', 'rows': '2', 'placeholder': '其他合同约定事项'}),
+        }
 
 
 # -----------------------合同签批-------------------------#
