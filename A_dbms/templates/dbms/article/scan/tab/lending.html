@@ -5,32 +5,38 @@
             <th>发放次序</th>
             <th>授信金额（元）</th>
             <th>放款金额（元）</th>
-            <th>还款金额（元）</th>
+            <th>备注</th>
+            <th>操作</th>
         </tr>
         </thead>
-        <tbody>
+        <tbody id="lending-tb">
         {% for lending in article_obj.lending_summary.all %}
-            <tr>
+            <tr lending-nid={{ lending.id }}>
                 {% if lending_id %}
-                    {% if lending_id == lending.id %}
-                        <td><a class="active"
-                               href="{% url 'dbms:article_scan_lending' article_id=article_obj.id lending_id=lending.id %}">
-                            {{ lending.get_order_display }}*
-                        </a></td>
+                    {% if lending.id == lending_id %}
+                        <td>
+                            <a href="{% url 'dbms:article_scan_lending' article_id=article_obj.id lending_id=lending.id %}">
+                                {{ lending.get_order_display }}*
+                            </a>
+                        </td>
                     {% else %}
                         <td>
                             <a href="{% url 'dbms:article_scan_lending' article_id=article_obj.id lending_id=lending.id %}">
                                 {{ lending.get_order_display }}
-                            </a></td>
+                            </a>
+                        </td>
                     {% endif %}
                 {% else %}
-                    <td><a href="{% url 'dbms:article_scan_lending' article_id=article_obj.id lending_id=lending.id %}">
-                        {{ lending.get_order_display }}
-                    </a></td>
+                    <td>
+                        <a href="{% url 'dbms:article_scan_lending' article_id=article_obj.id lending_id=lending.id %}">
+                            {{ lending.get_order_display }}
+                        </a>
+                    </td>
                 {% endif %}
                 <td>{{ lending.order_amount }}</td>
                 <td>{{ lending.lending_provide_sum }}</td>
-                <td>{{ lending.lending_repayment_sum }}</td>
+                <td>{{ lending.remark|default_if_none:"" }}</td>
+                <td><a class="btn btn-primary btn-xs delLendingOrderB">删除</a></td>
             <tr>
         {% endfor %}
         </tbody>

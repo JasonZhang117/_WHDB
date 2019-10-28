@@ -3,13 +3,10 @@
         <thead>
         <tr style="text-align: center">
             <th>发放次序</th>
-            <th>拟放金额（元）</th>
-            <th>已放金额（元）</th>
+            <th>授信金额（元）</th>
+            <th>放款金额（元）</th>
             <th>备注</th>
-            {% if PAGE_TITLE == '项目评审' %}
-                <th>操作</th>
-            {% endif %}
-
+            <th>操作</th>
         </tr>
         </thead>
         <tbody id="lending-tb">
@@ -39,12 +36,7 @@
                 <td>{{ lending.order_amount }}</td>
                 <td>{{ lending.lending_provide_sum }}</td>
                 <td>{{ lending.remark|default_if_none:"" }}</td>
-                {% if PAGE_TITLE == '项目评审' %}
-                    <td>
-{#                        <a class="btn btn-primary btn-xs editLendingOrderB">修改</a>#}
-                        <a class="btn btn-primary btn-xs delLendingOrderB">删除</a>
-                    </td>
-                {% endif %}
+                <td><a class="btn btn-primary btn-xs delLendingOrderB">删除</a></td>
             <tr>
         {% endfor %}
         </tbody>
