@@ -10,9 +10,9 @@
         </thead>
         <tbody id="supply-tb">
         {% for supply in article_obj.supply_summary.all %}
-            <tr supply-nid={{ supply.id }} supply-detail={{ supply.detail }}>
+            <tr supply-nid={{ supply.id }} supply-detail={{ supply.supply_detail }}>
                 <td>{{ forloop.counter }}</td>
-                <td>{{ supply.detail }}</td>
+                <td>{{ supply.supply_detail }}</td>
                 <td>{{ supply.supplyor.name }}</td>
                 <td>
                     <a class="btn btn-primary btn-xs editSupplyB">修改</a>

@@ -20,8 +20,8 @@ class CommentsAddForm(dform.Form):  # 评审会添加
 class FormAddSupply(dform.ModelForm):  #
     class Meta:
         model = models.Supply
-        fields = ['detail', ]
-        widgets = {'detail': dform.Textarea(attrs={'class': 'form-control', 'rows': '5', 'placeholder': '补调问题'})}
+        fields = ['supply_detail', ]
+        widgets = {'supply_detail': dform.Textarea(attrs={'class': 'form-control', 'rows': '5', 'placeholder': '补调问题'})}
 
 
 # -----------------------项目签批-------------------------#

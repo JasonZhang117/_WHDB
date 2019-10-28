@@ -890,7 +890,12 @@ def summary_scan(request, article_id):  # 评审项目预览
             for supply in supply_list:
                 rowspan_count += 1
                 supply_c += 1
-                summary += '<tr class="ot tbp"><td class="oi" colspan="4">&nbsp&nbsp%s、%s' % (supply_c, supply.detail)
+                if supply_count > 1:
+                    supply_c_c = supply_c + '、';
+                else:
+                    supply_c_c = ''
+                summary += '<tr class="ot tbp"><td class="oi" colspan="4">&nbsp&nbsp%s%s' % (
+                    supply_c_c, supply.supply_detail)
                 if supply_c < supply_count:
                     summary += '；</td></tr>'
                 else:

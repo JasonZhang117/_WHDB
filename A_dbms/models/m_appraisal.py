@@ -74,7 +74,7 @@ class Supply(models.Model):
                                 on_delete=models.PROTECT,
                                 # limit_choices_to=limit_article_choices,
                                 related_name='supply_summary')
-    detail = models.TextField(verbose_name='补调问题')
+    supply_detail = models.TextField(verbose_name='补调问题')
     supplyor = models.ForeignKey(to='Employees', verbose_name="创建人",
                                  on_delete=models.PROTECT,
                                  related_name='supplyor_employee')

@@ -392,7 +392,7 @@ def supply_ajax(request):  #
     response = {'status': True, 'message': None, 'forme': None, }
     post_data_str = request.POST.get('postDataStr')
     post_data = json.loads(post_data_str)
-
+    print('post_data:',post_data)
     article_obj = models.Articles.objects.get(id=post_data['article_id'])
     '''ARTICLE_STATE_LIST = [(1, '待反馈'), (2, '已反馈'), (3, '待上会'), (4, '已上会'), (5, '已签批'),
                           (51, '已放款'), (52, '已放完'), (55, '已解保'), (61, '待变更'), (99, '已注销')]'''
@@ -402,7 +402,7 @@ def supply_ajax(request):  #
             supply_data = form_supply.cleaned_data
             try:
                 models.Supply.objects.create(
-                    summary=article_obj, detail=supply_data['detail'], supplyor=request.user)
+                    summary=article_obj, supply_detail=supply_data['supply_detail'], supplyor=request.user)
                 response['message'] = '补调问题添加成功！'
             except Exception as e:
                 response['status'] = False
