@@ -182,7 +182,6 @@ def warrant_add_ajax(request):
                 response['message'] = '表单信息有误！！！'
                 response['forme'] = form_draft_add_eidt.errors
         elif warrant_typ == 41:  # 车辆
-            print('warrant_typ == 41')
             form_vehicle_add_eidt = forms.FormVehicle(post_data)
             if form_vehicle_add_eidt.is_valid():
                 vehicle_clean = form_vehicle_add_eidt.cleaned_data
@@ -208,7 +207,6 @@ def warrant_add_ajax(request):
                 response['message'] = '表单信息有误！！！'
                 response['forme'] = form_vehicle_add_eidt.errors
         elif warrant_typ == 51:  # 动产
-            print('warrant_typ == 51')
             form_chattel_add_eidt = forms.FormChattel(post_data)
             if form_chattel_add_eidt.is_valid():
                 chattel_clean = form_chattel_add_eidt.cleaned_data
@@ -235,7 +233,6 @@ def warrant_add_ajax(request):
                 response['message'] = '表单信息有误！！！'
                 response['forme'] = form_chattel_add_eidt.errors
         elif warrant_typ == 55:  # 其他
-            print('warrant_typ == 55')
             form_other_add_eidt = forms.FormOthers(post_data)  # 55其他添加
             if form_other_add_eidt.is_valid():
                 other_clean = form_other_add_eidt.cleaned_data
@@ -263,7 +260,6 @@ def warrant_add_ajax(request):
                 response['message'] = '表单信息有误！！！'
                 response['forme'] = form_other_add_eidt.errors
         elif warrant_typ == 99:  # 他权
-            print('warrant_typ == 99')
             form_hypothecs_add_eidt = forms.HypothecsAddEidtForm(post_data)
             if form_hypothecs_add_eidt.is_valid():
                 hypothecs_add_edit_clean = form_hypothecs_add_eidt.cleaned_data
@@ -553,7 +549,6 @@ def owership_add_ajax(request):  # 产权证添加ajax
     form_owership_add = forms.OwerShipAddForm(post_data)
     if form_owership_add.is_valid():
         owership_add_clean = form_owership_add.cleaned_data
-        print('warrant_add_clean:', owership_add_clean)
         try:
             owership_obj = models.Ownership.objects.create(
                 warrant=warrant_obj, ownership_num=owership_add_clean['ownership_num'],
@@ -616,7 +611,6 @@ def housebag_add_ajax(request):  # 产权证添加ajax
     form_housebag_add_edit = forms.HouseBagAddEidtForm(post_data)
     if form_housebag_add_edit.is_valid():
         housebag_clean = form_housebag_add_edit.cleaned_data
-        print('housebag_clean:', housebag_clean)
         try:
             housebag_obj = models.HouseBag.objects.create(
                 warrant=warrant_obj, housebag_locate=housebag_clean['housebag_locate'],
@@ -729,7 +723,6 @@ def draftextend_add_ajax(request):  # 产权证添加ajax
     form_draftbag_add_edit = forms.FormDraftExtend(post_data)
     if form_draftbag_add_edit.is_valid():
         draftbag_clean = form_draftbag_add_edit.cleaned_data
-        print('draftbag_clean:', draftbag_clean)
         try:
             draftbag_obj = models.DraftExtend.objects.create(
                 draft=draft_obj, draft_typ=draftbag_clean['draft_typ'],
@@ -1044,7 +1037,6 @@ def evaluate_add_ajax(request):  #
         except Exception as e:
             response['status'] = False
             response['message'] = '评估失败：%s' % str(e)
-            print(response['message'])
     else:
         response['status'] = False
         response['message'] = '表单信息有误！！！'

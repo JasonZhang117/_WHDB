@@ -228,6 +228,7 @@ def agree_preview(request, agree_id):
         page_home_y_j = '甲方'
     else:
         page_home_y_y = '被担保人（乙方）'
+        page_home_y_j = '担保人（甲方）'
     agree_copy_cn = convert_num(agree_obj.agree_copies)
     notarization_typ = False  # 是否公证
     if agree_typ in [1, 2, 3, 4, 21, 22, 23]:

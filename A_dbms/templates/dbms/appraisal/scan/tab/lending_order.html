@@ -15,20 +15,20 @@
                 {% if lending_id %}
                     {% if lending.id == lending_id %}
                         <td>
-                            <a href="{% url 'dbms:appraisal_scan_lending' article_id=article_obj.id lending_id=lending.id %}">
+                            <a href="{% url 'dbms:article_scan_lending' article_id=article_obj.id lending_id=lending.id %}">
                                 {{ lending.get_order_display }}*
                             </a>
                         </td>
                     {% else %}
                         <td>
-                            <a href="{% url 'dbms:appraisal_scan_lending' article_id=article_obj.id lending_id=lending.id %}">
+                            <a href="{% url 'dbms:article_scan_lending' article_id=article_obj.id lending_id=lending.id %}">
                                 {{ lending.get_order_display }}
                             </a>
                         </td>
                     {% endif %}
                 {% else %}
                     <td>
-                        <a href="{% url 'dbms:appraisal_scan_lending' article_id=article_obj.id lending_id=lending.id %}">
+                        <a href="{% url 'dbms:article_scan_lending' article_id=article_obj.id lending_id=lending.id %}">
                             {{ lending.get_order_display }}
                         </a>
                     </td>
