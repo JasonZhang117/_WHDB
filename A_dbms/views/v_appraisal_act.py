@@ -434,7 +434,7 @@ def supply_edit_ajax(request):  #
             supply_data = form_supply.cleaned_data
             try:
                 models.Supply.objects.filter(id=post_data['edit_supply_id']).update(
-                    detail=supply_data['detail'], supplyor=request.user)
+                    supply_detail=supply_data['supply_detail'], supplyor=request.user)
                 response['message'] = '补调问题修改成功！'
             except Exception as e:
                 response['status'] = False

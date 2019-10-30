@@ -22,7 +22,7 @@
                 var n = $(this).attr('name');
                 postData[n] = v;
             });
-            postData['detail'] = $('#id_edit_detail').val();
+            postData['supply_detail'] = $('#id_edit_detail').val();
             var postDataStr = JSON.stringify(postData);
             console.log(postDataStr);
             $.ajax({
