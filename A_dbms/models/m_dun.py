@@ -225,6 +225,7 @@ class Standing(models.Model):
     class Meta:
         verbose_name_plural = '追偿-跟进台账'  # 指定显示名称
         db_table = 'dbms_standing'  # 指定数据表的名称
+        ordering = ['-standingor_date',]
 
     def __str__(self):
         return '%s_%s' % (self.dun.title, self.standingor_date)

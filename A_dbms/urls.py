@@ -182,6 +182,7 @@ urlpatterns = [
     path('dun/seal/overdue/', views.overdue_seal, name='dun_overdue_seal_all'),
     path('dun/seal/soondue/', views.soondue_seal, name='dun_soondue_seal_all'),
     path('dun/search/overdue/', views.overdue_search, name='dun_overdue_search_all'),
+    path('dun/ledge/', views.dun_ledge, name='dun_ledge_all'),
     path('dun/add/', views.dun_add_ajax, name='dun_add_ajax'),
     path('dun/clue/add/', views.clue_add_ajax, name='dun_clue_add_ajax'),
     path('dun/clue/del/', views.clue_del_ajax, name='dun_clue_del_ajax'),

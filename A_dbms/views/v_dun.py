@@ -349,3 +349,23 @@ def overdue_search(request, *args, **kwargs):
         p_list = paginator.page(paginator.num_pages)
 
     return render(request, 'dbms/dun/overdu-seal.html', locals())
+
+
+# -----------------------追偿最新台账-------------------------#
+@login_required
+# @authority
+def dun_ledge(request, *args, **kwargs):  # 追偿最新台账
+    current_url_name = resolve(request.path).url_name  # 获取当前URL_NAME
+    authority_list = request.session.get('authority_list')  # 获取当前用户的所有权限
+    menu_result = MenuHelper(request).menu_data_list()
+    PAGE_TITLE = '追偿列表'
+
+    dun_stage_list = models.Dun.DUN_STAGE_LIST
+    dun_list = models.Dun.objects.filter(**kwargs).order_by('title')
+    newest_ledge_list = []
+    for dun_obj in dun_list:
+        newest_ledge_obj = dun_obj.standing_dun.first()
+        if newest_ledge_obj:
+            newest_ledge_list.append(newest_ledge_obj)
+
+    return render(request, 'dbms/dun/dun-newest-ledger.html', locals())

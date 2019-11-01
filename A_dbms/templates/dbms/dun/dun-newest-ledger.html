@@ -1,0 +1,37 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ dun_obj.title }}</title>
+    <link rel="stylesheet" media="screen" href="{% static 'dbms/css/dun-stage-style.css' %}">
+    <link rel="stylesheet" media="print" href="{% static 'dbms/css/dun-stage-style.css' %}">
+</head>
+<body>
+<div class="contain">
+
+    <div class="table-responsive">
+        <table class="table table-bordered table-hover table-condensed active">
+            <thead>
+            <tr style="text-align: center">
+                <th>追偿项目</th>
+                <th>更新日期</th>
+                <th>追偿情况</th>
+                <th>创建人</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for newest_ledge in newest_ledge_list %}
+                <tr>
+                    <td><a href="{% url 'dbms:dun_scan' dun_id=newest_ledge.dun.id %}">{{ newest_ledge.dun.title }}</a>
+                    </td>
+                    <td>{{ newest_ledge.standingor_date }}</td>
+                    <td>{{ newest_ledge.standing_detail }}</td>
+                    <td>{{ newest_ledge.standingor }}</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+</body>
