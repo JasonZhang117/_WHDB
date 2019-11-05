@@ -118,6 +118,7 @@ def article_scan(request, article_id):  # 项目预览
     form_single = forms.SingleQuotaForm()  # 添加单项额度form
     form_supply = forms.FormAddSupply()  # 添加补调问题form
     form_lending = forms.FormLendingOrder()  # 添加放款次序form
+    form_borrower_add = forms.FormBorrowerAdd() #添加共借人form
     form_article_change = forms.ArticleChangeForm(initial={'change_date': str(datetime.date.today())})  # 变更项目form
     form_inv_add = forms.FormInvestigateAdd(initial={'inv_date': str(datetime.date.today())})  # 添加补充调查form
 

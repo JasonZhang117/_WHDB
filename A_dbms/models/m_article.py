@@ -59,6 +59,8 @@ class Articles(models.Model):  # 项目、纪要
     # 自动创建第三张表
     expert = models.ManyToManyField(to='Experts', verbose_name="评审委员",
                                     related_name='article_expert')
+    borrower = models.ManyToManyField(to='Customes', verbose_name="共借人",
+                                    related_name='borrower_custom')
     review_date = models.DateField(verbose_name='上会日期', null=True, blank=True)
     summary_num = models.CharField(verbose_name='_纪要编号', max_length=32, unique=True, null=True, blank=True)
     summary = models.TextField(verbose_name='_纪要', null=True, blank=True)

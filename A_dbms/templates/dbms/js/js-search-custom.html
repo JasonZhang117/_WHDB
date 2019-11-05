@@ -12,7 +12,6 @@
                 postData[n] = v;
             });
             var postDataStr = JSON.stringify(postData);
-
             $.ajax({
                 url: '/dbms/search/custom/',
                 type: 'POST',
@@ -20,7 +19,6 @@
                 data: {'postDataStr': postDataStr},
                 dataType: 'JSON',
                 success: function (arg) {
-                    console.log(arg);
                     if (arg.status) {
                         $("#id_custom").empty();
                         var custom_list = arg.custom_list;

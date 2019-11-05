@@ -9,25 +9,23 @@
 </head>
 <body>
 <div class="contain">
-
     <div class="table-responsive">
-        <table class="table table-bordered table-hover table-condensed active">
-            <thead>
-            <tr style="text-align: center">
-                <th>追偿项目</th>
-                <th>更新日期</th>
-                <th>追偿情况</th>
-                <th>创建人</th>
+        <table style="width: 100%; border-collapse:collapse;" cellspacing="0" cellpadding="0">
+            <thead  style="border: 1pt solid black">
+            <tr class="bto" style="text-align: center">
+                <th class="btt">追偿项目</th>
+                <th class="btt">更新日期</th>
+                <th class="btt">追偿情况</th>
+                <th class="btt">创建人</th>
             </tr>
             </thead>
-            <tbody>
+            <tbody style="border: 1pt solid black">
             {% for newest_ledge in newest_ledge_list %}
-                <tr>
-                    <td><a href="{% url 'dbms:dun_scan' dun_id=newest_ledge.dun.id %}">{{ newest_ledge.dun.title }}</a>
-                    </td>
-                    <td>{{ newest_ledge.standingor_date }}</td>
-                    <td>{{ newest_ledge.standing_detail }}</td>
-                    <td>{{ newest_ledge.standingor }}</td>
+                <tr class="bto">
+                    <td class="btt"><a href="{% url 'dbms:dun_scan' dun_id=newest_ledge.dun.id %}">{{ newest_ledge.dun.title }}</a></td>
+                    <td class="btt">{{ newest_ledge.standingor_date }}</td>
+                    <td class="btt">{{ newest_ledge.standing_detail }}</td>
+                    <td class="btt">{{ newest_ledge.standingor }}</td>
                 </tr>
             {% endfor %}
             </tbody>

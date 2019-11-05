@@ -100,3 +100,5 @@ class FormCustomSpouseAdd(dform.Form):  # 项目添加
         '''GENRE_LIST = ((1, '企业'), (2, '个人'))'''
         self.fields['spouses'].choices = models.Customes.objects.filter(genre=2).values_list(
             'id', 'name').order_by('name')
+
+

@@ -116,3 +116,14 @@ class LetterGuaranteeAddForm(dform.ModelForm):
             'basic_contract_num': dform.TextInput(attrs={'class': 'form-control', 'placeholder': '基础合同编号'}),
             'starting_date': dform.DateInput(attrs={'class': 'form-control', 'type': 'date'}),
             'due_date': dform.DateInput(attrs={'class': 'form-control', 'type': 'date'}), }
+
+# -----------------------共借人添加-------------------------#
+class FormBorrowerAdd(dform.Form):  # 共借人添加
+    borrower = fields.ChoiceField(
+        label="共借人", label_suffix="：", widget=widgets.Select(attrs={'class': 'form-control'}))
+
+    def __init__(self, *args, **kwargs):
+        super(FormBorrowerAdd, self).__init__(*args, **kwargs)
+        '''GENRE_LIST = ((1, '企业'), (2, '个人'))'''
+        self.fields['borrower'].choices = models.Customes.objects.values_list(
+            'id', 'name').order_by('name')

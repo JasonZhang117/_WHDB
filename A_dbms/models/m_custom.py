@@ -12,7 +12,7 @@ class Customes(models.Model):  # 客户
     custom_typ = models.IntegerField(verbose_name='新增标志', choices=CUSTOM_TYP, default=1)
     contact_addr = models.CharField(verbose_name='联系地址', max_length=64)
     linkman = models.CharField(verbose_name='联系人', max_length=16)
-    contact_num = models.CharField(verbose_name='联系电话', max_length=13)
+    contact_num = models.CharField(verbose_name='联系电话', max_length=32)
     idustry = models.ForeignKey(to='Industries', verbose_name="所属行业",
                                 on_delete=models.PROTECT,
                                 related_name='c_idustry')

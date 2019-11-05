@@ -1,18 +1,18 @@
 <script>
     $(function () {
-        bindAddSpouseB();
-        bindAddSpouseModalOk();
+        bindAddCoBorrowerB();
+        bindAddCoBorrowerOk();
 
     });
 
-    function bindAddSpouseB() {
-        $('#addSpouseB').click(function () {
+    function bindAddCoBorrowerB() {
+        $('#addCoBorrowerB').click(function () {
             $('#addCustomModal').modal('show');
         })
     }
 
-    function bindAddSpouseModalOk() {
-        $('#addSpouseModalOk').click(function () {
+    function bindAddCoBorrowerOk() {
+        $('#addCoBorrowerOk').click(function () {
             var postData = {};
 
             $('#addCustomModal').find('input,select').each(function () {
@@ -23,7 +23,7 @@
             var postDataStr = JSON.stringify(postData);
             console.log(postDataStr);
             $.ajax({
-                url: '/dbms/custom/spouse/add/',
+                url: '/dbms/custom/borrower/add/',
                 type: 'POST',
                 data: {'postDataStr': postDataStr},
                 dataType: 'JSON',
@@ -35,7 +35,7 @@
                         window.location.reload();
                     } else {
                         alert(arg.message);
-                        $('#e_spouses').text(arg.forme.spouses);
+                        $('#e_borrower').text(arg.forme.borrower);
                     }
                 }
             })
