@@ -25,8 +25,10 @@
                 {% if 'appraisal_lending_order_ajax' in authority_list %}
                     <a class="btn btn-primary btn-sm " id="lendingOrder">放款次序</a><!--#path('appraisal/lending/add/'-->
                 {% endif %}
-                <a class="btn btn-primary btn-sm " id="summaryScan" target="_blank"
-                   href="{% url 'dbms:appraisal_summary_scan' article_id=article_obj.id %}">意见书</a>
+                {% if article_obj.article_state in SHOW_SUM_LIST %}
+                    <a class="btn btn-primary btn-sm " id="summaryScan" target="_blank"
+                       href="{% url 'dbms:appraisal_summary_scan' article_id=article_obj.id %}">意见书</a>
+                {% endif %}
                 {% if 'appraisal_article_sign_ajax' in authority_list %}
                     <a class="btn btn-primary btn-sm " id="articleSignB">项目签批</a><!--#path('appraisal/sign/'-->
                 {% endif %}

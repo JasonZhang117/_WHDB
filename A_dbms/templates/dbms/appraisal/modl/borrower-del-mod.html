@@ -1,0 +1,18 @@
+<div class="modal fade bs-example-modal-sm" id="delBorrowerModal"
+     tabindex="-1" role="dialog" aria-labelledby="delBorrowerModal">
+    <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="delBorrowerModalLabel">删除共借人
+                    <input style="display: none" name="article_id" value="{{ article_obj.id }}">
+                    <input style="display: none" name="borrower_id" id="delBorrowerModalId">
+                </h4>
+            </div>
+            <div class="modal-body">是否确定删除该共借人？</div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                <button type="button" class="btn btn-primary" id="delBorrowerModalOk">确定</button>
+            </div>
+        </div>
+    </div>
+</div>

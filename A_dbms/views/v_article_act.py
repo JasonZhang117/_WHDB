@@ -75,6 +75,73 @@ def article_add_ajax(request):  # 添加项目
     return HttpResponse(result)
 
 
+# -----------------------添加共借人ajax-------------------------#
+@login_required
+@authority
+def borrower_add_ajax(request):  # 添加共借人ajax
+    response = {'status': True, 'message': None, 'forme': None, }
+    post_data_str = request.POST.get('postDataStr')
+    post_data = json.loads(post_data_str)
+    article_id = post_data['article_id']
+    '''ARTICLE_STATE_LIST = ((1, '待反馈'), (2, '已反馈'), (3, '待上会'),
+                          (4, '已上会'), (5, '已签批'), (6, '已注销'))
+                          (5, '已签批')-->才能出合同'''
+    article_obj = models.Articles.objects.get(id=article_id)
+    article_meeting_obj = article_obj.appraisal_article.all().first()
+    if article_obj.article_state in [1, 2, 3, 4, ]:
+        form_borrower_add = forms.FormBorrowerAdd(post_data, request.FILES)
+        if form_borrower_add.is_valid():
+            borrower_cleaned = form_borrower_add.cleaned_data
+            borrower_add_list = borrower_cleaned['borrower']
+            borrower_add_obj_list = models.Customes.objects.filter(id=borrower_add_list)
+            try:
+                with transaction.atomic():
+                    for borrower_obj in borrower_add_obj_list:
+                        article_obj.borrower.add(borrower_obj)
+                response['message'] = '成功为项目：%s添加共借人！' % article_obj.article_num
+            except Exception as e:
+                response['status'] = False
+                response['message'] = '添加共借人失败：%s' % str(e)
+        else:
+            response['status'] = False
+            response['message'] = '表单信息有误！！！'
+            response['forme'] = form_borrower_add.errors
+    else:
+        response['status'] = False
+        response['message'] = '项目状态为：%s，无法添加共借人！！！' % article_obj.article_state
+    result = json.dumps(response, ensure_ascii=False)
+    return HttpResponse(result)
+
+
+# -----------------------删除共借人ajax-------------------------#
+@login_required
+@authority
+def borrower_del_ajax(request):  # 取消项目上会ajax
+    response = {'status': True, 'message': None, 'forme': None, }
+    post_data_str = request.POST.get('postDataStr')
+    post_data = json.loads(post_data_str)
+    print('post_data:',post_data)
+    article_id = post_data['article_id']
+    borrower_id = post_data['borrower_id']
+    article_obj = models.Articles.objects.get(id=article_id)
+    borrower_obj = models.Customes.objects.get(id=borrower_id)
+    '''((1, '待反馈'), (2, '已反馈'), (3, '待上会'),
+       (4, '已上会'), (5, '已签批'), (6, '已注销'))'''
+    if article_obj.article_state in [1, 2, 3, 4]:
+        try:
+            with transaction.atomic():
+                article_obj.borrower.remove(borrower_obj)  # 删除共借人
+            response['message'] = '共借人：%s删除成功' % borrower_obj.name
+        except Exception as e:
+            response['status'] = False
+            response['message'] = '删除共借人失败：%s' % str(e)
+    else:
+        response['status'] = False
+        response['message'] = '项目状态为：%s，无法删除共借人！！！' % article_obj.article_state
+    result = json.dumps(response, ensure_ascii=False)
+    return HttpResponse(result)
+
+
 # -----------------------------修改项目ajax------------------------------#
 @login_required
 @authority

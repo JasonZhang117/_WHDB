@@ -79,11 +79,10 @@ def article_scan(request, article_id):  # 项目预览
     job_list = request.session.get('job_list')  # 获取当前用户的所有角色
     PAGE_TITLE = '项目详情'
     article_obj = models.Articles.objects.get(id=article_id)  # 项目
-
     expert_list = article_obj.expert.values_list('id')  # 项目评委列表
     feedbac_list = article_obj.feedback_article.all()  # 项目反馈列表
     investigate_custom_list = article_obj.custom.inv_custom.all().order_by('-inv_date')  # 客户补调列表
-
+    SHOW_SUM_LIST = [4, 5, 51, 52, 55, 61, ]
     form_date = {
         'custom_id': article_obj.custom.id, 'product_id': article_obj.product.id,
         'renewal': article_obj.renewal, 'process_id': article_obj.process.id,
@@ -118,7 +117,7 @@ def article_scan(request, article_id):  # 项目预览
     form_single = forms.SingleQuotaForm()  # 添加单项额度form
     form_supply = forms.FormAddSupply()  # 添加补调问题form
     form_lending = forms.FormLendingOrder()  # 添加放款次序form
-    form_borrower_add = forms.FormBorrowerAdd() #添加共借人form
+    form_borrower_add = forms.FormBorrowerAdd()  # 添加共借人form
     form_article_change = forms.ArticleChangeForm(initial={'change_date': str(datetime.date.today())})  # 变更项目form
     form_inv_add = forms.FormInvestigateAdd(initial={'inv_date': str(datetime.date.today())})  # 添加补充调查form
 
@@ -187,25 +186,25 @@ def article_scan_lending(request, article_id, lending_id):  # 项目预览
     OTHER_LIST = [39, 49, 59]  # 其他类
     '''反担保情况'''
     custom_lending_list = models.Customes.objects.filter(
-        lending_custom__sure__lending=lending_obj) #放款次序下-反担保人列表
+        lending_custom__sure__lending=lending_obj)  # 放款次序下-反担保人列表
     warrant_lending_h_list = models.Warrants.objects.filter(
-        lending_warrant__sure__lending=lending_obj, warrant_typ__in=[1, 2])  #放款次序下-房产列表
+        lending_warrant__sure__lending=lending_obj, warrant_typ__in=[1, 2])  # 放款次序下-房产列表
     warrant_lending_g_list = models.Warrants.objects.filter(
-        lending_warrant__sure__lending=lending_obj, warrant_typ=5) #放款次序下-土地列表
+        lending_warrant__sure__lending=lending_obj, warrant_typ=5)  # 放款次序下-土地列表
     warrant_lending_6_list = models.Warrants.objects.filter(
-        lending_warrant__sure__lending=lending_obj, warrant_typ=6) #放款次序下-在建工程列表
+        lending_warrant__sure__lending=lending_obj, warrant_typ=6)  # 放款次序下-在建工程列表
     warrant_lending_r_list = models.Warrants.objects.filter(
-        lending_warrant__sure__lending=lending_obj, warrant_typ=11) #放款次序下-应收账款列表
+        lending_warrant__sure__lending=lending_obj, warrant_typ=11)  # 放款次序下-应收账款列表
     warrant_lending_s_list = models.Warrants.objects.filter(
-        lending_warrant__sure__lending=lending_obj, warrant_typ=21) #放款次序下-股权列表
+        lending_warrant__sure__lending=lending_obj, warrant_typ=21)  # 放款次序下-股权列表
     warrant_lending_d_list = models.Warrants.objects.filter(
-        lending_warrant__sure__lending=lending_obj, warrant_typ=31) #放款次序下-票据列表
+        lending_warrant__sure__lending=lending_obj, warrant_typ=31)  # 放款次序下-票据列表
     warrant_lending_v_list = models.Warrants.objects.filter(
-        lending_warrant__sure__lending=lending_obj, warrant_typ=41) #放款次序下-车辆列表
+        lending_warrant__sure__lending=lending_obj, warrant_typ=41)  # 放款次序下-车辆列表
     warrant_lending_c_list = models.Warrants.objects.filter(
-        lending_warrant__sure__lending=lending_obj, warrant_typ=51) #放款次序下-动产列表
+        lending_warrant__sure__lending=lending_obj, warrant_typ=51)  # 放款次序下-动产列表
     warrant_lending_o_list = models.Warrants.objects.filter(
-        lending_warrant__sure__lending=lending_obj, warrant_typ=55) #放款次序下-其他列表
+        lending_warrant__sure__lending=lending_obj, warrant_typ=55)  # 放款次序下-其他列表
     form_agree_add = forms.ArticleAgreeAddForm()  # 创建合同form
     today_str = datetime.date.today()
     date_th_later = today_str + datetime.timedelta(days=365)
@@ -213,10 +212,10 @@ def article_scan_lending(request, article_id, lending_id):  # 项目预览
     form_letter_add = forms.LetterGuaranteeAddForm(initial=from_letter_data)  # 创建公司保函合同
     '''GENRE_LIST = [(1, '企业'), (2, '个人')]'''
     form_lendingcustoms_c_add = models.Customes.objects.exclude(
-        id=article_obj.custom.id).filter(genre=1).values_list('id', 'name') #除项目客户外的企业
+        id=article_obj.custom.id).filter(genre=1).values_list('id', 'name')  # 除项目客户外的企业
     form_lendingcustoms_p_add = models.Customes.objects.exclude(
-        id=article_obj.custom.id).filter(genre=2).values_list('id', 'name') #除项目客户外的个人
-    form_lendingsures = forms.LendingSuresForm() #反担保类型form
+        id=article_obj.custom.id).filter(genre=2).values_list('id', 'name')  # 除项目客户外的个人
+    form_lendingsures = forms.LendingSuresForm()  # 反担保类型form
     # form_lendingcustoms_c_add = forms.LendingCustomsCForm()
     # form_lendingcustoms_p_add = forms.LendingCustomsPForm()
     form_lendinghouse_add = forms.LendingHouseForm()  # 添加（反）担保-房产form
@@ -231,6 +230,6 @@ def article_scan_lending(request, article_id, lending_id):  # 项目预览
     form_lending = forms.FormLendingOrder(
         initial={'order': lending_obj.order,
                  'remark': lending_obj.remark,
-                 'order_amount': lending_obj.order_amount}) #放款次序变更form
+                 'order_amount': lending_obj.order_amount})  # 放款次序变更form
 
     return render(request, 'dbms/article/article-scan-lending.html', locals())

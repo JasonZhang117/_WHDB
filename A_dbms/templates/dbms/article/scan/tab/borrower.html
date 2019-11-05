@@ -1,0 +1,28 @@
+<div class="table-responsive">
+    <table class="table table-bordered table-hover table-condensed active">
+        <thead>
+        <tr style="text-align: center">
+            <th>序号</th>
+            <th>名称</th>
+            <th>联系地址</th>
+            <th>联系人</th>
+            <th>联系电话</th>
+            <th>操作</th>
+        </tr>
+        </thead>
+        <tbody id="borrower-tb">
+        {% for borrower in article_obj.borrower.all %}
+            <tr borrower-nid={{ borrower.id }}>
+                <td>{{ forloop.counter }}</td>
+                <td><a target="_blank" href="{% url 'dbms:custom_scan' custom_id=borrower.id %}">{{ borrower.name }}</a></td>
+                <td>{{ borrower.contact_addr }}</td>
+                <td>{{ borrower.linkman }}</td>
+                <td>{{ borrower.contact_num }}</td>
+                <td>
+                    <a class="btn btn-primary btn-xs delBorrowerB">删除</a>
+                </td>
+            <tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>

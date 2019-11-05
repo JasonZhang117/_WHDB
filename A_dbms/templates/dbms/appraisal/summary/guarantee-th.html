@@ -29,7 +29,7 @@
 </tr>
 <tr class="otr">{#项目名称#}
     <td class="bb">项目名称</td>
-    <td class="bb" colspan="4">{{ article_obj.custom.name }}</td>
+    <td class="bb" colspan="4">{{ article_obj.custom.name }}{% if article_obj.borrower.all %}{% for borrower in article_obj.borrower.all %}{% if forloop.first %}、{% endif %}{{ borrower.name }}{% if not forloop.last %}、{% endif %}{% endfor %}{% endif %}</td>
 </tr>
 <tr class="otr">{#所属行业#}
     <td class="bb">所属行业</td>

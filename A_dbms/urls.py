@@ -17,6 +17,9 @@ urlpatterns = [
     path('article/edit/', views.article_edit_ajax, name='article_edit_ajax'),
     path('article/feedback/', views.article_feedback_ajax, name='article_feedback_ajax'),
     path('article/sub/', views.article_sub_ajax, name='article_sub_ajax'),
+    path('article/borrower/add/', views.borrower_add_ajax, name='article_borrower_add_ajax'),
+    path('article/borrower/del/', views.borrower_del_ajax, name='article_borrower_del_ajax'),
+
     # -----------------------meeting评审会-------------------------#
     path('meeting/', views.meeting, name='meeting_all'),  # 菜单-评审管理-评审会
     path('meeting/<int:review_model>', views.meeting, name='meeting'),

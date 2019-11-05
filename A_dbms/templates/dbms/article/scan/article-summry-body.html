@@ -3,6 +3,9 @@
 <a style="color: red" target="_blank"
                        href="https://www.tianyancha.com/search?key={{ article_obj.custom.name }}">天眼</a>
 </label>
+{#{% if brodder_list %}#}
+{#    <label class="col-lg-3 col-md-4 col-sm-6 col-xs-12">共借人：{% for brodder in brodder_list %}{{ brodder.short_name }}{% if not forloop.last %}、{% endif %}{% endfor %}</label>#}
+{#{% endif %}#}
 <label class="col-lg-3 col-md-4 col-sm-6 col-xs-12">项目编号：{{ article_obj.article_num }}</label>
 <label class="col-lg-3 col-md-4 col-sm-6 col-xs-12">业务品种：{{ article_obj.product }}</label>
 <label class="col-lg-3 col-md-4 col-sm-6 col-xs-12">审批流程：{{ article_obj.process }}</label>

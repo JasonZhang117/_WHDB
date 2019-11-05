@@ -48,7 +48,7 @@ class Investigate(models.Model):
     class Meta:
         verbose_name_plural = '项目-补调'  # 指定显示名称
         db_table = 'dbms_investigate'  # 指定数据表的名称
-        ordering = ['inv_date', ]
+        ordering = ['-inv_date', ]
 
     def __str__(self):
         return '%s_%s_%s' % (self.custom, self.inv_typ, self.inv_date)

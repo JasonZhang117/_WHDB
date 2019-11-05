@@ -1,0 +1,50 @@
+<script>
+    $(function () {
+        bindDelBorrowerB();
+        bindDelBorrowerModalOkk();
+    });
+
+    function bindDelBorrowerB() {
+        $('#borrower-tb').on('click', '.delBorrowerB', function () {
+            delBorrowerModalNid = $(this).parent().parent().attr('borrower-nid');
+            $('#delBorrowerModalId').val(delBorrowerModalNid);
+            $('#delBorrowerModal').modal('show');
+        })
+    }
+
+    function bindDelBorrowerModalOkk() {
+        $('#delBorrowerModalOk').click(function () {
+            var postData = {};
+            $('#delBorrowerModal').find('input,select').each(function () {
+                var v = $(this).val();
+                var n = $(this).attr('name');
+                postData[n] = v;
+            });
+            var postDataStr = JSON.stringify(postData);
+            $.ajax({
+                url: '/dbms/article/borrower/del/',
+                type: 'POST',
+                data: {'postDataStr': postDataStr},
+                dataType: 'JSON',
+                success: function (arg) {
+                    if (arg.status) {
+                        $('#delBorrowerModal').modal('hide');
+                        alert(arg.message);
+                        window.location.reload();
+                    } else {
+                        $('#delBorrowerModal').modal('hide');
+                        alert(arg.message);
+                        {#window.location.reload();#}
+                    }
+                }
+            })
+
+        })
+    }
+</script>
+
+
+
+
+
+
