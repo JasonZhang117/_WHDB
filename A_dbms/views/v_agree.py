@@ -207,18 +207,13 @@ def agree_preview(request, agree_id):
         file_name = '《开立保函申请书》或《开立保函协议》'
     elif '建设银行' == bank_name:
         file_name = '《开立保函/备用信用证申请书》或《开立保函/备用信用证协议》'
-    agree_other = agree_obj.other
-    if agree_other:
-        other = agree_obj.other
-    else:
-        other = '_____________\______________'
     '''AGREE_TYP_LIST = [
         (1, 'D-单笔'), (2, 'D-最高额'), (4, 'D-委贷'),
         (21, 'D-分离式保函'), (22, 'D-公司保函'), (23, 'D-银行保函'),
         (41, 'D-单笔(公证)'), (42, 'D-最高额(公证)'),
         (51, 'X-小贷单笔'), (52, 'X-小贷最高额'), ]'''
-    AGREE_TYP_D = models.Agrees.AGREE_TYP_D
-    AGREE_TYP_X = models.Agrees.AGREE_TYP_X
+    AGREE_TYP_D = models.Agrees.AGREE_TYP_D # 担保公司合同类型
+    AGREE_TYP_X = models.Agrees.AGREE_TYP_X # 小贷公司合同类型
     UN, ADD = un_dex(agree_typ)  # 不同合同种类下主体适用
     if agree_typ in [22, ]:  # (22, 'D-公司保函'),
         page_home_y_y = '申请人（乙方）'

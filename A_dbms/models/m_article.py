@@ -54,11 +54,10 @@ class Articles(models.Model):  # 项目、纪要
     control = models.ForeignKey(to='Employees', verbose_name="风控专员",
                                 on_delete=models.PROTECT,
                                 related_name='control_employee')
-
     article_date = models.DateField(verbose_name='反馈日期', null=True, blank=True)
     # 自动创建第三张表
     expert = models.ManyToManyField(to='Experts', verbose_name="评审委员",
-                                    related_name='article_expert')
+                                    related_name='article_expert', blank=True, null=True)
     borrower = models.ManyToManyField(to='Customes', verbose_name="共借人",
                                       related_name='borrower_custom', blank=True, null=True)
     review_date = models.DateField(verbose_name='上会日期', null=True, blank=True)

@@ -44,6 +44,7 @@ def review(request, *args, **kwargs):  # 保后列表
         for field in search_fields:
             q.children.append(("%s__contains" % field, search_key))
         custom_list = custom_list.filter(q)
+    custom_list = custom_list.filter(credit_amount_gt=0)
     today_year = datetime.date.today().year
     today_day = datetime.date.today()
     for custom in custom_list:

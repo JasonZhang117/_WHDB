@@ -18,14 +18,14 @@ body {
     /*字间距*/
     letter-spacing: 0pt;
     /*行间距*/
-    line-height: 21pt;
+    line-height: 17pt;
     /*背景图片*/
     /*background-image: url("../images/bjj.png");*/
     /*background-repeat: repeat-y;*/
 }
 
 p {
-    margin-top: 8pt;
+    margin-top: 5pt;
     margin-bottom: 0pt;
     /*缩进*/
     text-indent: 26pt;
@@ -41,20 +41,59 @@ p {
     page-break-after: always;
 }
 
-/*委托合同标题*/
-.agree-title-w {
-    text-align: center;
-    font-size: 27.5pt;
-    padding-top: 25mm;
+/*合同封面-合同编号*/
+.agree-cover-num {
+    /*文字对齐*/
+    text-align: right;
+    /*文字大小*/
+    font-size: 13.75pt;
+    /*顶部空白*/
+    padding-top: 0mm;
+    /*底部空白*/
     padding-bottom: 25mm;
+}
+/*合同封面-合同标题*/
+.agree-cover-tit {
+    /*文字对齐*/
+    text-align: center;
+    /*文字大小*/
+    font-size: 47.5pt;
+    /*顶部空白*/
+    padding-top: 50mm;
+    /*底部空白*/
+    padding-bottom: 5mm;
+}
+
+/*合同封面-版本*/
+.agree-cover-edition {
+    /*文字对齐*/
+    text-align: center;
+    /*文字大小*/
+    font-size: 13.75pt;
+    /*顶部空白*/
+    padding-top: 25mm;
+    /*底部空白*/
+    padding-bottom: 50mm;
+}
+
+/*合同封面-底部*/
+.agree-cover-bot {
+    /*文字对齐*/
+    text-align: center;
+    /*文字大小*/
+    font-size: 17.5pt;
+    /*顶部空白*/
+    padding-top: 50mm;
+    /*底部空白*/
+    padding-bottom: 5mm;
 }
 
 /*合同标题*/
-.agree-title {
+.agree-tit {
     text-align: center;
-    font-size: 27.5pt;
-    padding-top: 15mm;
-    padding-bottom: 15mm;
+    font-size: 17.5pt;
+    padding-top: 2mm;
+    padding-bottom: 2mm;
 }
 
 .page-home p {
