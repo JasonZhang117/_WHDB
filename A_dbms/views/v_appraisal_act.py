@@ -673,7 +673,7 @@ def article_sign_ajax(request):
                                 # 更新客户授信总额，存量/新增情况
                                 custom_list.update(
                                     credit_amount=cleaned_data['credit_amount'], custom_typ=custom_typ_n,
-                                    lately_date=article_obj.review_date)
+                                    lately_date=cleaned_data['sign_date'])
                                 models.Warrants.objects.filter(
                                     lending_warrant__sure__lending__summary=article_obj).update(
                                     meeting_date=article_obj.review_date)
