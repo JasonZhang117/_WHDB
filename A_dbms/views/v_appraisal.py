@@ -10,7 +10,8 @@ from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.db import transaction
 from django.urls import resolve, reverse
 from .v_agree import convert_num
-from _WHDB.views import MenuHelper, authority, article_right, article_list_screen, amount_s
+from _WHDB.views import (MenuHelper, authority, article_right, article_list_screen,
+                         amount_s, credit_term_c)
 
 
 # -----------------------appraisal评审情况-------------------------#
@@ -472,13 +473,7 @@ def summary_scan(request, article_id):  # 评审项目预览
     single_count = single_list.count()
 
     credit_term = article_obj.credit_term  # 授信期限（月）
-
-    credit_term_exactly = credit_term % 12
-    credit_term_cn = ''
-    if credit_term_exactly == 0:
-        credit_term_cn = '%s年' % convert_num(credit_term / 12)
-    else:
-        credit_term_cn = '%s个月' % convert_num(credit_term)
+    credit_term_cn = credit_term_c(credit_term) # 授信期限转换
 
     renewal_str = amount_s(article_obj.renewal)  # 新增金额
     augment_str = amount_s(article_obj.augment)  # 续贷金额
