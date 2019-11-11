@@ -122,7 +122,7 @@ def dun(request, *args, **kwargs):  #
     return render(request, 'dbms/dun/dun.html', locals())
 
 
-# -----------------------追偿列表-------------------------#
+# -----------------------追偿详情-------------------------#
 @login_required
 @authority
 def dun_scan(request, dun_id):  # 查看合同

@@ -202,6 +202,7 @@ def agree_preview(request, agree_id):
     agree_amount = agree_obj.agree_amount
     agree_amount_cn = convert(agree_amount)  # 转换为金额大写
     agree_amount_str = amount_s(agree_amount)  # 元转换为万元并去掉小数点后面的零
+    agree_term_cn = convert_num(agree_obj.agree_term)
     bank_name = agree_obj.branch.cooperator.name
     if '民生银行' in bank_name:
         file_name = '《开立保函申请书》或《开立保函协议》'

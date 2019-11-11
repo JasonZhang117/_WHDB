@@ -27,6 +27,13 @@ class Agrees(models.Model):  # 委托合同
                                # limit_choices_to={'branch_state': 1},
                                related_name='agree_branch')
     agree_term = models.IntegerField(verbose_name='合同期限（月）')
+
+    start_date = models.DateField(verbose_name='起始日', null=True, blank=True)
+    due_date = models.DateField(verbose_name='到期日', null=True, blank=True)
+    purpose = models.CharField(verbose_name='借款用途', max_length=32, null=True, blank=True)
+    acc_name = models.CharField(verbose_name='开户名', max_length=32, null=True, blank=True)
+    acc_num = models.CharField(verbose_name='账号', max_length=32, null=True, blank=True)
+    acc_bank = models.CharField(verbose_name='开户行', max_length=64, null=True, blank=True)
     AGREE_TYP_LIST = [
         (1, 'D-单笔'), (2, 'D-最高额'), (4, 'D-委贷'),
         (21, 'D-分离式保函'), (22, 'D-公司保函'), (23, 'D-银行保函'),
@@ -43,7 +50,7 @@ class Agrees(models.Model):  # 委托合同
     agree_copies = models.IntegerField(verbose_name='合同份数')
     agree_amount = models.FloatField(verbose_name='合同金额')
     amount_limit = models.FloatField(verbose_name='放款限额')
-    agree_rate = models.CharField(verbose_name='收费', max_length=128)
+    agree_rate = models.CharField(verbose_name='收费（利率）', max_length=128)
     agree_sign_date = models.DateField(verbose_name='签批日期', null=True, blank=True)
     charge = models.FloatField(verbose_name='应收保费（元）', default=0)
     other = models.TextField(verbose_name='其他约定', null=True, blank=True)
