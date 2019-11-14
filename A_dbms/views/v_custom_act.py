@@ -19,6 +19,7 @@ def custom_add_ajax(request):
     response = {'status': True, 'message': None, 'forme': None, ' skip': None, }
     post_data_str = request.POST.get('postDataStr')
     post_data = json.loads(post_data_str)
+    print(post_data)
 
     form_custom_add = forms.CustomAddForm(post_data)
     if form_custom_add.is_valid():
@@ -37,14 +38,13 @@ def custom_add_ajax(request):
                             contact_addr=custom_add_data['contact_addr'],
                             linkman=custom_add_data['linkman'],
                             contact_num=custom_add_data['contact_num'],
-                            custom_state=custom_add_data['custom_state'],
-                            idustry=custom_c_data['idustry'],
-                            district=custom_c_data['district'],
+                            idustry=custom_add_data['idustry'],
+                            district=custom_add_data['district'],
+                            managementor=request.user,
+                            controler=request.user,
                             custom_buildor=request.user)
                         custom_c_obj = models.CustomesC.objects.create(
                             custome=custom_obj,
-                            idustry=custom_c_data['idustry'],
-                            district=custom_c_data['district'],
                             decisionor=custom_c_data['decisionor'],
                             capital=custom_c_data['capital'],
                             registered_addr=custom_c_data['registered_addr'],
@@ -72,12 +72,15 @@ def custom_add_ajax(request):
                             linkman=custom_add_data['linkman'],
                             contact_num=custom_add_data['contact_num'],
                             custom_state=custom_add_data['custom_state'],
-                            idustry_id=13,
-                            district_id=26,
+                            idustry=custom_add_data['idustry'],
+                            district=custom_add_data['district'],
+                            managementor=request.user,
+                            controler=request.user,
                             custom_buildor=request.user)
                         custom_p_obj = models.CustomesP.objects.create(
                             custome=custom_obj, license_num=custom_p_data['license_num'],
-                            license_addr=custom_p_data['license_addr'], marital_status=custom_p_data['marital_status'])
+                            license_addr=custom_p_data['license_addr'],
+                            marital_status=custom_p_data['marital_status'])
                         response['message'] = '客户：%s，创建成功。请继续添加配偶信息！' % custom_add_data['name']
                         response['skip'] = "/dbms/custom/scan/%s/" % custom_obj.id
                 except Exception as e:
@@ -308,10 +311,9 @@ def custom_edit_ajax(request):
                             # counter_only=custom_edit_data['counter_only'],
                             contact_addr=custom_edit_data['contact_addr'],
                             linkman=custom_edit_data['linkman'],
-                            custom_state=custom_edit_data['custom_state'],
                             contact_num=custom_edit_data['contact_num'],
-                            idustry=custom_c_data['idustry'],
-                            district=custom_c_data['district'],
+                            idustry=custom_edit_data['idustry'],
+                            district=custom_edit_data['district'],
                         )
                         models.CustomesC.objects.filter(custome=custom_obj).update(
                             idustry=custom_c_data['idustry'],
@@ -342,10 +344,9 @@ def custom_edit_ajax(request):
                             # counter_only=custom_edit_data['counter_only'],
                             contact_addr=custom_edit_data['contact_addr'],
                             linkman=custom_edit_data['linkman'],
-                            custom_state=custom_edit_data['custom_state'],
                             contact_num=custom_edit_data['contact_num'],
-                            idustry_id=13,
-                            district_id=26,
+                            idustry=custom_edit_data['idustry'],
+                            district=custom_edit_data['district'],
                         )
                         models.CustomesP.objects.filter(custome=custom_obj).update(
                             license_num=custom_p_data['license_num'],

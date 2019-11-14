@@ -9,7 +9,8 @@ from django.core.exceptions import NON_FIELD_ERRORS, ValidationError
 class CustomAddForm(dform.ModelForm):
     class Meta:
         model = models.Customes
-        fields = ['name', 'short_name', 'contact_addr', 'linkman', 'contact_num', 'genre', 'custom_state']
+        fields = ['name', 'short_name', 'contact_addr', 'linkman', 'contact_num', 'genre',
+                  'idustry', 'district', ]
         widgets = {
             'name': dform.TextInput(attrs={'class': 'form-control', 'placeholder': '客户名称'}),
             'short_name': dform.TextInput(attrs={'class': 'form-control', 'placeholder': '客户简称'}),
@@ -17,7 +18,9 @@ class CustomAddForm(dform.ModelForm):
             'contact_addr': dform.TextInput(attrs={'class': 'form-control', 'placeholder': '联系地址'}),
             'linkman': dform.TextInput(attrs={'class': 'form-control', 'placeholder': '联系人'}),
             'contact_num': dform.TextInput(attrs={'class': 'form-control', 'placeholder': '联系电话'}),
-            'custom_state': dform.Select(attrs={'class': 'form-control'}), }
+            'idustry': dform.Select(attrs={'class': 'form-control'}),
+            'district': dform.Select(attrs={'class': 'form-control'}),
+        }
 
 
 # -----------------------客户编辑-------------------------#
@@ -31,12 +34,13 @@ class CustomEditForm(dform.ModelForm):
 
     class Meta:
         model = models.Customes
-        fields = ['contact_addr', 'linkman', 'contact_num', 'custom_state']
+        fields = ['contact_addr', 'linkman', 'contact_num','idustry', 'district', ]
         widgets = {
             'contact_addr': dform.TextInput(attrs={'class': 'form-control', 'placeholder': '联系地址'}),
             'linkman': dform.TextInput(attrs={'class': 'form-control', 'placeholder': '联系人'}),
             'contact_num': dform.TextInput(attrs={'class': 'form-control', 'placeholder': '联系电话'}),
-            'custom_state': dform.Select(attrs={'class': 'form-control'}),
+            'idustry': dform.Select(attrs={'class': 'form-control'}),
+            'district': dform.Select(attrs={'class': 'form-control'}),
         }
 
 
@@ -45,13 +49,11 @@ class CustomCAddForm(dform.ModelForm):  # 企业客户
 
     class Meta:
         model = models.CustomesC
-        fields = ['district', 'capital', 'idustry', 'decisionor', 'registered_addr', 'representative']
+        fields = ['capital', 'decisionor', 'registered_addr', 'representative']
         widgets = {
             'capital': dform.TextInput(attrs={'class': 'form-control', 'placeholder': '注册资本'}),
             'registered_addr': dform.TextInput(attrs={'class': 'form-control', 'placeholder': '注册地址'}),
             'representative': dform.TextInput(attrs={'class': 'form-control', 'placeholder': '法人代表'}),
-            'idustry': dform.Select(attrs={'class': 'form-control'}),
-            'district': dform.Select(attrs={'class': 'form-control'}),
             'decisionor': dform.Select(attrs={'class': 'form-control'}),
         }
 
@@ -100,5 +102,3 @@ class FormCustomSpouseAdd(dform.Form):  # 项目添加
         '''GENRE_LIST = ((1, '企业'), (2, '个人'))'''
         self.fields['spouses'].choices = models.Customes.objects.filter(genre=2).values_list(
             'id', 'name').order_by('name')
-
-

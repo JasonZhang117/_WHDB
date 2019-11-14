@@ -2,6 +2,7 @@ import datetime
 from django.db import models
 
 
+# 审批流程
 class Process(models.Model):  # 审批流程
     name = models.CharField(verbose_name='流程名称',
                             max_length=32,
@@ -21,7 +22,7 @@ class Process(models.Model):  # 审批流程
     def __str__(self):
         return "%s-%s" % (self.name, self.typ)
 
-
+# 流程配置
 class ProcessSet(models.Model):  # 流程配置
     process = models.ForeignKey(to='Process', verbose_name="流程名称",
                                 on_delete=models.PROTECT,
@@ -45,7 +46,7 @@ class ProcessSet(models.Model):  # 流程配置
     def __str__(self):
         return "%s-%s-%s" % (self.process, self.approver, self.step)
 
-
+# 项目审批列表
 class ProcessArticle(models.Model):  # 项目审批列表
     article = models.ForeignKey(to='Articles', verbose_name="项目",
                                 on_delete=models.PROTECT,

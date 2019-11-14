@@ -129,7 +129,7 @@ class Authorities(models.Model):
         verbose_name_plural = '内部-权限'
         db_table = 'dbms_authorities'
         unique_together = ('name', 'url_name')
-        ordering = ['name', ]
+        ordering = ['url_name', ]
 
     def __str__(self):
         return '%s-%s' % (self.name, self.url_name)

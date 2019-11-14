@@ -24,10 +24,15 @@
         <div class="col-sm-9"> {{ form_custom_edit.contact_num }}</div>
         <label id="e_contact_num" class="pull-right">{{ form_custom_edit.contact_num.errors }}</label>
     </div>
-    <div class="form-group"><!--客户类型-->
-        <label for="id_custom_state" class="col-sm-3 control-label"> {{ form_custom_edit.custom_state.label }}： </label>
-        <div class="col-sm-9"> {{ form_custom_edit.custom_state }}</div>
-        <label id="e_custom_state" class="pull-right">{{ form_custom_edit.custom_state.errors }}</label>
+    <div class="form-group"><!--所属行业-->
+        <label for="id_idustry" class="col-sm-3 control-label">{{ form_custom_edit.idustry.label }}： </label>
+        <div class="col-sm-9"> {{ form_custom_edit.idustry }} </div>
+        <label id="e_idustry" class="pull-right">{{ form_custom_edit.idustry.errors }} </label>
+    </div>
+    <div class="form-group"><!--所属区域-->
+        <label for="id_district" class="col-sm-3 control-label">{{ form_custom_edit.district.label }}： </label>
+        <div class="col-sm-9"> {{ form_custom_edit.district }} </div>
+        <label id="e_district" class="pull-right">{{ form_custom_edit.district.errors }} </label>
     </div>
 
 </div>

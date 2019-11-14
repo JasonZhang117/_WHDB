@@ -66,7 +66,8 @@ def custom_scan(request, custom_id):  # 项目预览
         'contact_addr': custom_obj.contact_addr,
         'linkman': custom_obj.linkman,
         'contact_num': custom_obj.contact_num,
-        'custom_state': custom_obj.custom_state,
+        'idustry': custom_obj.idustry,
+        'district': custom_obj.district,
     }
     form_custom_edit = forms.CustomEditForm(initial=form_date)
     if custom_obj.genre == 1:
