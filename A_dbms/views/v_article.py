@@ -82,7 +82,9 @@ def article_scan(request, article_id):  # 项目预览
     expert_list = article_obj.expert.values_list('id')  # 项目评委列表
     feedbac_list = article_obj.feedback_article.all()  # 项目反馈列表
     investigate_custom_list = article_obj.custom.inv_custom.all().order_by('-inv_date')  # 客户补调列表
-    SHOW_SUM_LIST = [4, 5, 51, 52, 55, 61, ]
+    '''ARTICLE_STATE_LIST = [(1, '待反馈'), (2, '已反馈'), (3, '待上会'), (4, '已上会'), (5, '已签批'),
+                          (51, '已放款'), (52, '已放完'), (55, '已解保'), (61, '待变更'), (99, '已注销')]'''
+    SHOW_SUM_LIST = [4, 5, 51, 52, 55, 61, ] #显示纪要的项目状态列表
     form_date = {
         'custom_id': article_obj.custom.id, 'product_id': article_obj.product.id,
         'renewal': article_obj.renewal, 'process_id': article_obj.process.id,

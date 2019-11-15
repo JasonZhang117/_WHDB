@@ -71,7 +71,6 @@ def custom_add_ajax(request):
                             contact_addr=custom_add_data['contact_addr'],
                             linkman=custom_add_data['linkman'],
                             contact_num=custom_add_data['contact_num'],
-                            custom_state=custom_add_data['custom_state'],
                             idustry=custom_add_data['idustry'],
                             district=custom_add_data['district'],
                             managementor=request.user,

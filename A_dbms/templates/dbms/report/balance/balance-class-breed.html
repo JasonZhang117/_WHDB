@@ -17,7 +17,8 @@
         {% for breed in provide_groups_breed %}
             <tr>
                 <td>{{ forloop.counter }}</td>
-                {#            PROVIDE_TYP_LIST = ((1, '流贷'), (11, '承兑'), (21, '保函'), (31, '委贷'), (41, '小贷'))#}
+                {#                PROVIDE_TYP_LIST = [(1, '流贷'), (11, '承兑'), (21, '保函'), (31, '委贷'),#}
+                {#                        (41, '过桥贷'), (52, '房抵贷'), (53, '担保贷')]#}
                 {% if breed.provide_typ == 1 %}
                     <td>{{ provide_typ_dic.1 }}</td>
                 {% elif breed.provide_typ == 11 %}
@@ -28,6 +29,10 @@
                     <td>{{ provide_typ_dic.31 }}</td>
                 {% elif breed.provide_typ == 41 %}
                     <td>{{ provide_typ_dic.41 }}</td>
+                {% elif breed.provide_typ == 52 %}
+                    <td>{{ provide_typ_dic.52 }}</td>
+                {% elif breed.provide_typ == 53 %}
+                    <td>{{ provide_typ_dic.53 }}</td>
                 {% endif %}
                 <td align="right">{{ breed.con }}</td>
                 <td align="right">{{ breed.sum|floatformat:2 }}</td>

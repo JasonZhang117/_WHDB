@@ -33,7 +33,10 @@ def report_provide_list(request, *args, **kwargs):  #
     authority_list = request.session.get('authority_list')  # 获取当前用户的所有权限
     menu_result = MenuHelper(request).menu_data_list()
     PAGE_TITLE = '在保明细'
-    provide_typ_list = [(0, '全部'), (1, '流贷'), (11, '承兑'), (21, '保函'), (31, '委贷'), (41, '小贷')]  # 筛选条件
+    '''PROVIDE_TYP_LIST = [(1, '流贷'), (11, '承兑'), (21, '保函'), (31, '委贷'),
+                        (41, '过桥贷'), (52, '房抵贷'), (53, '担保贷')]'''
+    provide_typ_list = [(0, '全部'), (1, '流贷'), (11, '承兑'), (21, '保函'), (31, '委贷'),
+                        (41, '过桥贷'), (52, '房抵贷'), (53, '担保贷')]  # 筛选条件
     TERM_LIST = [(0, '全部'), (1, '本年'), (2, '本季'), (3, '本月'), (4, '本周'), (11, '上年'), (99, '自定义'), ]
 
     tf_r = request.GET.get('tf')
@@ -110,8 +113,8 @@ def report_balance_class(request, *args, **kwargs):  #
     CLASS_LIST = [(1, '品种'), (11, '授信银行'), (21, '区域'), (31, '行业'), (35, '部门'),
                   (41, '项目经理'), (51, '项目助理'), (61, '风控专员'), (71, '放款支行'), (81, '法律顾问'), ]
     TERM_LIST = [(0, '全部'), (1, '本年'), (2, '本季'), (3, '本月'), (4, '本周'), (11, '上年'), (99, '自定义'), ]
-
     provide_typ_list = models.Provides.PROVIDE_TYP_LIST  # 筛选条件
+
     provide_typ_dic = {}
     for provide_typ in provide_typ_list:
         provide_typ_dic[provide_typ[0]] = provide_typ[1]
@@ -613,7 +616,7 @@ def report_custom(request, *args, **kwargs):  #
     if t_typ == 11:
         custom_groups = models.Customes.objects.filter(amount__gt=0, )
     else:
-        custom_groups = models.Customes.objects.filter(custom_state=11, )
+        custom_groups = models.Customes.objects.filter(credit_amount__gt=0, )
     c_credit = custom_groups.aggregate(Sum('credit_amount'))['credit_amount__sum']  # 授信总额
     c_flow = custom_groups.aggregate(Sum('custom_flow'))['custom_flow__sum']  # 流贷余额
     c_accept = custom_groups.aggregate(Sum('custom_accept'))['custom_accept__sum']  # 承兑余额
