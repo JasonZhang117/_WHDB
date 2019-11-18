@@ -20,6 +20,12 @@
                 case ('22'):
                     $('#form_agree_letter_add').show();
                     break;
+                case ('51'):
+                    $('#form_agree_jk_add').show();
+                    break;
+                case ('52'):
+                    $('#form_agree_jk_add').show();
+                    break;
                 default:
                     $('.agree-extend').hide()
             }
@@ -62,6 +68,8 @@
                         $('#e_basic_contract_num').text(arg.forme.basic_contract_num);
                         $('#e_starting_date').text(arg.forme.starting_date);
                         $('#e_due_date').text(arg.forme.due_date);
+
+
                     }
                 }
             })

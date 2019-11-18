@@ -288,14 +288,20 @@ def convert(n):
     return result
 
 
-# -----------------------------数字小写转大写------------------------------#
+# -----------------------------数字小写转大写（含小数点）------------------------------#
 def convert_num(n):
     units = ['', '万', '亿']
     nums = ['零', '壹', '贰', '叁', '肆', '伍', '陆', '柒', '捌', '玖']
+    decimal_label = ['角', '分']
     small_int_label = ['', '拾', '佰', '仟']
     int_part, decimal_part = str(int(n)), str(round(n - int(n), 2))[2:]  # 分离整数和小数部分
     res = []
+    if decimal_part:
+        res.append(''.join([nums[int(x)] for x in list(decimal_part) if x != '0']))
+
     if int_part != '0':
+        if decimal_part and decimal_part != '0':
+            res.append('点')
         while int_part:
             small_int_part, int_part = int_part[-4:], int_part[:-4]
             tmp = ''.join(
@@ -306,9 +312,14 @@ def convert_num(n):
             if tmp:
                 tmp += unit
                 res.append(tmp)
+    else:
+        if decimal_part != 0:
+            res.append('点')
+            res.append('零')
     result = ''.join(res[::-1])
-
+    # print('len(result):',len(result),result,result[-1])
     return result
+
 
 
 def un_dex(agree_typ):
@@ -317,12 +328,18 @@ def un_dex(agree_typ):
     if agree_typ in AGREE_TYP_D:
         un = '成都武侯中小企业融资担保有限责任公司'
         add = '成都市武侯区武青南路33号(武侯新城管委会内)'
+        cnb = '028-85566171'
     elif agree_typ in AGREE_TYP_X:
         un = '成都武侯武兴小额贷款有限责任公司'
         add = '成都市武侯区武科西五路360号西部智谷B区2栋3单元10楼'
-    return (un, add)
+        cnb = '028-85566171'
+    return (un, add, cnb)
 
 
 def amount_s(amount):
     amount_str = str(amount / 10000).rstrip('0').rstrip('.')  # 总额（万元）
+    return amount_str
+
+def amount_y(amount):
+    amount_str = str(amount).rstrip('0').rstrip('.')  # 总额（元）
     return amount_str

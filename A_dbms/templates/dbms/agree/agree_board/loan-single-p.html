@@ -1,21 +1,35 @@
 <div class="split">
     <div class="agree-cover-num"><strong>编号：<u>{{ agree_obj.agree_num }}</u></strong></div>
     <div class="agree-cover-tit"><strong>{{ agree_obj.get_agree_name_display }}</strong></div>
-    <div class="agree-cover-edition">（适用于企业贷款）</div>
+    <div class="agree-cover-edition">（适用于个人及个体工商户贷款）</div>
     <div class="agree-cover-bot"><strong>成都武侯武兴小额贷款有限责任公司</strong></div>
 </div>
 <div class="split">
     <div class="agree-tit"><strong>{{ agree_obj.get_agree_name_display }}</strong></div>
     <div style="padding-bottom: 15pt">
-        <p>借 款 人：<u>{{ agree_obj.lending.summary.custom.name }}</u> </p>
+        <p>借 款 人：<u><strong>{{ agree_obj.lending.summary.custom.name }}</strong></u> </p>
         {% if agree_obj.lending.summary.custom.genre == 2 %}
-            <p>证件种类：<u>身份证</u>，证件号码：<u>{{  agree_obj.lending.summary.custom.person_custome.license_num }}</u> </p>
+            <p>证件种类：<u><strong>身份证</strong></u>，证件号码：<u><strong>{{ agree_obj.lending.summary.custom.person_custome.license_num }}</strong></u> </p>
         {% endif %}
         {% if agree_obj.lending.summary.custom.genre == 1 %}
-            <p>法定代表人（负责人）：<u>{{ agree_obj.lending.summary.custom.company_custome.representative }}</u> </p>
-            <p>住所：<u>{{ agree_obj.lending.summary.custom.company_custome.registered_addr }}</u> </p>
+            <p>法定代表人（负责人）：<u><strong>{{ agree_obj.lending.summary.custom.company_custome.representative }}</strong></u> </p>
+            <p>住所：<u><strong>{{ agree_obj.lending.summary.custom.company_custome.registered_addr }}</strong></u> </p>
         {% endif %}
     </div>
+    {% if borrower_list %}
+        {% for borrower in borrower_list %}
+            <div style="padding-bottom: 15pt">
+                <p>借 款 人：<u><strong>{{ borrower.name }}</strong></u> </p>
+                {% if borrower.genre == 2 %}
+                    <p>证件种类：<u><strong>身份证</strong></u>，证件号码：<u><strong>{{  borrower.person_custome.license_num }}</strong></u> </p>
+                {% endif %}
+                {% if borrower.genre == 1 %}
+                    <p>法定代表人（负责人）：<u><strong>{{ borrower.company_custome.representative }}</strong></u> </p>
+                    <p>住所：<u><strong>{{ borrower.company_custome.registered_addr }}</strong></u> </p>
+                {% endif %}
+            </div>
+        {% endfor %}
+    {% endif %}
     <div style="padding-bottom: 15pt">
         <p>贷 款 人：<u>成都武侯武兴小额贷款有限责任公司</u></p>
         <p>法定代表人（负责人）：<u>黄一平</u></p>
@@ -23,12 +37,12 @@
     </div>
     <p>鉴于借款人向贷款人申请贷款，为明确双方权利义务，借款人与贷款人经协商一致，特订立本合同。</p>
     <p><strong>第一条  贷款金额、贷款期限与贷款用途</strong></p>
-    <p>1.1贷款金额：本合同项下的贷款金额为人民币（大写）<u>{{ agree_amount_cn }}</u>（RMB<u>{{ agree_amount }}</u>元）。</p>
-    <p>1.2贷款期限：贷款期限为<u>{{ agree_term_cn }}</u>个月零<u>&nbsp/&nbsp</u>天，自{% include 'dbms/agree/agree_board/date-period.html' %}始至{% include 'dbms/agree/agree_board/date-period.html' %}止。《借款凭证》是贷款人向借款人实际提供资金的最终证明，是本合同的组成部分，与本合同具有同等法律效力。若《借款凭证》记载的贷款起始日期、到期日期与本合同约定的贷款起始日期、到期日期不一致的，以《借款凭证》的记载为准。</p>
-    <p>1.3贷款用途为：<u>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</u>。未经贷款人书面同意，借款人不得以任何理由将贷款挪作他用。</p>
+    <p>1.1贷款金额：本合同项下的贷款金额为人民币（大写）<u><strong>{{ agree_amount_cn }}</strong></u>（RMB<u>{{ agree_amount_y }}</u>元）。</p>
+    <p>1.2贷款期限：贷款期限为<u><strong>{{ agree_term_cn }}</strong></u>个月零<u><strong>/</strong></u>天，自<strong><u>{{ agree_obj.agree_start_date }}</u></strong>始至<strong><u>{{ agree_obj.agree_due_date }}</u></strong>止。《借款凭证》是贷款人向借款人实际提供资金的最终证明，是本合同的组成部分，与本合同具有同等法律效力。若《借款凭证》记载的贷款起始日期、到期日期与本合同约定的贷款起始日期、到期日期不一致的，以《借款凭证》的记载为准。</p>
+    <p>1.3贷款用途为：<u><strong>流动资金贷款</strong></u>。未经贷款人书面同意，借款人不得以任何理由将贷款挪作他用。</p>
     <p>1.4 <strong>本合同一经签署，在贷款发放之前，借款人若欲取消本合同项下部分或全部贷款，应书面通知贷款人并取得贷款人的书面同意；取消贷款受理期间为距离取消贷款日不少于七个贷款人营业日前。</strong></p>
     <p><strong>第二条  贷款利率、计息期间</strong></p>
-    <p>2.1本合同项下贷款利率为<strong>月利率<u>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</u>‰</strong>（大写<strong>千分之<u>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</u>），在贷款期限内保持不变。</strong></p>
+    <p>2.1本合同项下贷款利率为<strong>月利率<u>{{ agree_obj.agree_rate }}</u>‰</strong>（大写<strong><u>千分之{{ agree_rate_cn_q }}</u></strong>），在贷款期限内保持不变。</p>
     <p><strong>贷款到期日前若遇中国人民银行调整贷款基准利率，本合同项下贷款利率若需依据新的相应档次贷款基准利率作相应调整的，由贷款人、借款人另行以书面补充协议确认确定；未另行以书面补充协议确认确定的，则本合同项下贷款利率仍执行本款明确载明的贷款利率。</strong></p>
     <p>2.2计息期间自贷款人指定的银行划款或现金交付之日始，至借款人实际偿付贷款本息前一日止。若贷款人发放贷款划拨日与实际到达借款人账户日不一致的，则以划拨日为准；若借款人偿付贷款本息划拨日与贷款人实际收到日不一致的，则以贷款人实际收到日推算计息截止日。</p>
     <p>2.3经贷款人同意的贷款展期，期限累计计算。</p>
@@ -63,9 +77,9 @@
     <p>5.2正常的分期还款由借款人开户银行直接从借款人账户上将本合同5.1款约定的每月还款金额划转至贷款人指定账户。</p>
     <p>借款人应与其开户银行签订符合贷款人要求的还款扣划协议（无论其名称如何），该还款扣划协议应明确借款人开户银行应按照贷款人还款通知或还款指示在借款人于其本行（营业机构）或其所属银行系统开立的任意一个或多个账户中进行扣划（包括但不限于利息与本金、各项费用、违约金）。</p>
     <p>5.3借款人指定下列账户为提款账户和还款专用账户（“借款人账户”）：</p>
-    <p>户名：<u>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</u></p>
-    <p>账号：<u>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</u></p>
-    <p>开户行：<u>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</u></p>
+    <p>户名：<u><strong>{{ agree_obj.acc_name }}</strong></u></p>
+    <p>账号：<u><strong>{{ agree_obj.acc_num }}</strong></u></p>
+    <p>开户行：<u><strong>{{ agree_obj.acc_bank }}</strong></u></p>
     <p>（1）借款人承诺并保证，还款日前将该期应还款项足额存入还款账户；</p>
     <p>（2）借款人承诺并保证，在整个借款合同有效期内或全部清偿完所有本息及相关费用之前，借款人不会注销上述账户；若上述借款人账户发生挂失、冻结、止付、结清或借款人需要变更上述账户的，借款人应及时书面通知贷款人并办理还款账户变更手续；因借款人未及时书面通知并变更还款账户或其他任何原因导致未按期足额清偿到期借款本息及其他费用的，借款人应承担违约责任；</p>
     <p>（3）借款人承诺并保证，上述开户行应按贷款人还款通知或还款指示将借款人当期应当归还的还款金额划入贷款人指定的账户。上述银行因任何原因拒绝划款或未按要求划款视为借款人违约。</p>
@@ -142,15 +156,15 @@
     <p>（11）突破约定的财务指标约束、信用状况下降等情形；</p>
     <p>（12）贷款人认为借款人违反本合同的其他约定事项或有任何情势发生或持续而可能导致贷款人于本合同项下的债权实现受到不利威胁或实质性损害的情形。</p>
     <p>12.2上述12.1款下任一违约情形出现时，贷款人有权酌情给予借款人及/或担保人三至十五日的宽限期，由借款人及/或担保人进行整改或对因违约行为造成的损害后果进行有效补救，贷款人也有权不给予任何该等宽限期而立即采取以下任何一项或一项以上的违约救济措施：</p>
-    <p>（1）	要求借款人限期提供贷款人可以接受的其他担保；</p>
-    <p>（2）	暂缓放款；</p>
-    <p>（3）	宣布取消全部或部分贷款；</p>
-    <p>（4）	宣布已贷出款项提前到期，借款人须立即偿还全部或部分欠款；</p>
-    <p>（5）	要求借款人按本合同约定的标准向贷款人支付违约金；</p>
+    <p>（1）要求借款人限期提供贷款人可以接受的其他担保；</p>
+    <p>（2）暂缓放款；</p>
+    <p>（3）宣布取消全部或部分贷款；</p>
+    <p>（4）宣布已贷出款项提前到期，借款人须立即偿还全部或部分欠款；</p>
+    <p>（5）要求借款人按本合同约定的标准向贷款人支付违约金；</p>
     <p>（6）与物的担保人协议折价担保物或以拍卖、变卖担保物所得价款优先受偿行使担保物权或向保证人求偿；</p>
     <p>（7）直接要求买卖合同／租赁合同的买受人／承租人或其他租金保管人以及总承包合同的承包人等向贷款人履行相关合同项下所有未尽的义务，贷款人在此过程中所发生的一切费用概由借款人承担；</p>
     <p>（8）处置、变卖借款人存货或其他财产或直接控制、接管借款人经营权、承租店铺使用权、店铺转租费、存货、机动车辆及其它生产工具等权利和资产抵偿未付应付款项；</p>
-    <p>（9）	解除本合同；</p>
+    <p>（9）解除本合同；</p>
     <p>（10）直接向人民法院提起诉讼；</p>
     <p>（11）其他贷款人有权采取的救济措施。</p>
     <p>12.3如发生12.1款所规定的任何一项违约事件、本合同其他条款已明确约定了违约金的，借款人应按本合同约定的标准向贷款人支付违约金，直至违约行为得以完全纠正；借款人还应赔偿贷款人因借款人违约而遭受的损失以及贷款人因实现权利而支出的所有费用（有关费用事项详见本合同第三条的约定）。</p>

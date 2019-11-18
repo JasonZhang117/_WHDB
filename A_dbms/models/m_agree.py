@@ -28,12 +28,17 @@ class Agrees(models.Model):  # 委托合同
                                related_name='agree_branch')
     agree_term = models.IntegerField(verbose_name='合同期限（月）')
 
-    start_date = models.DateField(verbose_name='起始日', null=True, blank=True)
-    due_date = models.DateField(verbose_name='到期日', null=True, blank=True)
+    agree_start_date = models.DateField(verbose_name='起始日', null=True, blank=True)
+    agree_due_date = models.DateField(verbose_name='到期日', null=True, blank=True)
     purpose = models.CharField(verbose_name='借款用途', max_length=32, null=True, blank=True)
     acc_name = models.CharField(verbose_name='开户名', max_length=32, null=True, blank=True)
+
     acc_num = models.CharField(verbose_name='账号', max_length=32, null=True, blank=True)
     acc_bank = models.CharField(verbose_name='开户行', max_length=64, null=True, blank=True)
+    REPAY_METHOD_LIST = [
+        (11, '按月付息、到期一次还本'), (21, '等额本息'), (31, '按月付息、分期还本'), ]
+    repay_method = models.IntegerField(verbose_name='还款方式', choices=REPAY_METHOD_LIST, null=True, blank=True)
+    repay_ex = models.TextField(verbose_name='还款描述', null=True, blank=True)
     AGREE_TYP_LIST = [
         (1, 'D-单笔'), (2, 'D-最高额'), (4, 'D-委贷'),
         (21, 'D-分离式保函'), (22, 'D-公司保函'), (23, 'D-银行保函'),

@@ -132,9 +132,10 @@ def agree_add_ajax(request):  # 添加合同
     if article_state_lending in [4, 5, 51, 61]:
         # form_agree_add = forms.AgreeAddForm(post_data, request.FILES)
         form_agree_add = forms.ArticleAgreeAddForm(post_data, request.FILES)
-        form_letter_add = forms.LetterGuaranteeAddForm(post_data, request.FILES)
-        if form_agree_add.is_valid():
+        from_agree_jk_add = forms.AgreeJkAddForm(post_data)
+        if form_agree_add.is_valid() and from_agree_jk_add.is_valid():
             agree_add_cleaned = form_agree_add.cleaned_data
+            jk_add_cleaned = from_agree_jk_add.cleaned_data
             # lending_obj = agree_add_cleaned['lending']
             agree_amount = round(agree_add_cleaned['agree_amount'], 2)  # 合同金额
             guarantee_typ = agree_add_cleaned['guarantee_typ']
@@ -167,8 +168,8 @@ def agree_add_ajax(request):  # 添加合同
                       (21, 'D-分离式保函'), (22, 'D-公司保函'), (23, 'D-银行保函'),
                       (41, 'D-单笔(公证)'), (42, 'D-最高额(公证)'),
                       (51, 'X-小贷单笔'), (52, 'X-小贷最高额'), ]'''
-            AGREE_TYP_D = [1, 2, 4, 21, 22, 23, 41, 42, ]  # 担保类合同
-            AGREE_TYP_X = [51, 52, ]  # 小贷类合同
+            AGREE_TYP_D = models.Agrees.AGREE_TYP_D  # 担保类合同
+            AGREE_TYP_X = models.Agrees.AGREE_TYP_X  # 小贷类合同
             if agree_typ in AGREE_TYP_D:  # 属于担保类合同
                 agree_num_prefix, agree_num = agree_num_f(AGREE_TYP_D, '成武担', 'W', guarantee_typ, agree_copies)
             elif agree_typ in AGREE_TYP_X:  # 属于小贷类合同
@@ -184,8 +185,17 @@ def agree_add_ajax(request):  # 添加合同
                         amount_limit=amount_limit, agree_rate=agree_add_cleaned['agree_rate'],
                         agree_amount=agree_amount, guarantee_typ=guarantee_typ,
                         agree_copies=agree_copies, other=agree_add_cleaned['other'],
+                        agree_start_date = jk_add_cleaned['agree_start_date'],
+                        agree_due_date = jk_add_cleaned['agree_due_date'], acc_name = jk_add_cleaned['acc_name'],
+                        acc_num = jk_add_cleaned['acc_num'], acc_bank = jk_add_cleaned['acc_bank'],
                         agree_buildor=request.user)
+                    '''AGREE_TYP_LIST = [
+                        (1, 'D-单笔'), (2, 'D-最高额'), (4, 'D-委贷'),
+                        (21, 'D-分离式保函'), (22, 'D-公司保函'), (23, 'D-银行保函'),
+                        (41, 'D-单笔(公证)'), (42, 'D-最高额(公证)'),
+                        (51, 'X-小贷单笔'), (52, 'X-小贷最高额'), ]'''
                     if agree_typ == 22:
+                        form_letter_add = forms.LetterGuaranteeAddForm(post_data, request.FILES)
                         if form_letter_add.is_valid():
                             letter_add_cleaned = form_letter_add.cleaned_data
                             letter_typ = letter_add_cleaned['letter_typ']

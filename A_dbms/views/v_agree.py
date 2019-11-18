@@ -10,7 +10,7 @@ import datetime
 from django.db.models import Avg, Min, Sum, Max, Count
 from django.urls import resolve, reverse
 from _WHDB.views import MenuHelper
-from _WHDB.views import authority, credit_term_c, convert, convert_num, un_dex, amount_s
+from _WHDB.views import authority, credit_term_c, convert, convert_num, un_dex, amount_s,amount_y
 
 
 # -----------------------委托合同列表---------------------#
@@ -202,10 +202,14 @@ def agree_preview(request, agree_id):
     agree_amount = agree_obj.agree_amount
     agree_amount_cn = convert(agree_amount)  # 转换为金额大写
     agree_amount_str = amount_s(agree_amount)  # 元转换为万元并去掉小数点后面的零
-    agree_term_cn = convert_num(agree_obj.agree_term)
-    bank_name = agree_obj.branch.cooperator.name
+    agree_amount_y = amount_y(agree_amount)  # 元转换为万元并去掉小数点后面的零
+    agree_term_cn = convert_num(agree_obj.agree_term) #合同期限转大写
+
+
+    bank_name = agree_obj.branch.cooperator.name #合作银行
+    borrower_list = agree_obj.lending.summary.borrower.all()
     if '民生银行' in bank_name:
-        file_name = '《开立保函申请书》或《开立保函协议》'
+        file_name = '《开立保函/备用信用证申请书》或《开立保函/备用信用证协议》'
     elif '建设银行' == bank_name:
         file_name = '《开立保函/备用信用证申请书》或《开立保函/备用信用证协议》'
     '''AGREE_TYP_LIST = [
@@ -215,7 +219,7 @@ def agree_preview(request, agree_id):
         (51, 'X-小贷单笔'), (52, 'X-小贷最高额'), ]'''
     AGREE_TYP_D = models.Agrees.AGREE_TYP_D # 担保公司合同类型
     AGREE_TYP_X = models.Agrees.AGREE_TYP_X # 小贷公司合同类型
-    UN, ADD = un_dex(agree_typ)  # 不同合同种类下主体适用
+    UN, ADD, CNB = un_dex(agree_typ)  # 不同合同种类下主体适用
     if agree_typ in [22, ]:  # (22, 'D-公司保函'),
         page_home_y_y = '申请人（乙方）'
         page_home_y_j = '担保人（甲方）'
@@ -232,14 +236,18 @@ def agree_preview(request, agree_id):
     else:
         notarization_typ = True
         agree_copy_jy_cn = convert_num(agree_obj.agree_copies - 3)
+    '''利率（费率）处理'''
+    agree_rate_cn_q = ''
     try:
         rate_b = True
         single_quota_rate = float(agree_obj.agree_rate)
         charge = round(agree_amount * single_quota_rate / 100, 2)
+        agree_rate_cn_q = convert_num(float(agree_obj.agree_rate))  # 合同利率转换为千分之，大写
         charge_cn = convert(charge)
     except ValueError:
         rate_b = False
         single_quota_rate = agree_obj.agree_rate
+        agree_rate_cn_q = agree_obj.agree_rate
     return render(request, 'dbms/agree/preview-agree.html', locals())
 
 

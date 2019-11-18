@@ -1,5 +1,5 @@
 from .f_article import (ArticlesAddForm, FeedbackAddForm, ArticleChangeForm, ArticleAgreeAddForm,
-                        LetterGuaranteeAddForm, ArticleSubForm, FormBorrowerAdd)
+                        LetterGuaranteeAddForm, ArticleSubForm, FormBorrowerAdd,AgreeJkAddForm)
 from .f_meeting import (
     MeetingAddForm, MeetingEditForm, MeetingAllotForm, SingleQuotaForm, MeetingArticleAddForm,
     SingleQuotaForm, FormLendingOrder)

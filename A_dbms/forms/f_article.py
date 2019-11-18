@@ -117,6 +117,21 @@ class LetterGuaranteeAddForm(dform.ModelForm):
             'starting_date': dform.DateInput(attrs={'class': 'form-control', 'type': 'date'}),
             'due_date': dform.DateInput(attrs={'class': 'form-control', 'type': 'date'}), }
 
+
+# -----------------------小贷借款合同补充资料-------------------------#
+class AgreeJkAddForm(dform.ModelForm):
+    class Meta:
+        model = models.Agrees
+        fields = ['agree_start_date', 'agree_due_date', 'acc_name', 'acc_num', 'acc_bank', ]
+        widgets = {
+            'agree_start_date': dform.DateInput(attrs={'class': 'form-control', 'type': 'date'}),
+            'agree_due_date': dform.DateInput(attrs={'class': 'form-control', 'type': 'date'}),
+            'acc_name': dform.TextInput(attrs={'class': 'form-control', 'placeholder': '户名'}),
+            'acc_num': dform.TextInput(attrs={'class': 'form-control', 'placeholder': '账号'}),
+            'acc_bank': dform.TextInput(attrs={'class': 'form-control', 'placeholder': '开户行名称'}),
+        }
+
+
 # -----------------------共借人添加-------------------------#
 class FormBorrowerAdd(dform.Form):  # 共借人添加
     borrower = fields.ChoiceField(

@@ -212,6 +212,10 @@ def article_scan_lending(request, article_id, lending_id):  # 项目预览
     date_th_later = today_str + datetime.timedelta(days=365)
     from_letter_data = {'starting_date': str(today_str), 'due_date': str(date_th_later)}
     form_letter_add = forms.LetterGuaranteeAddForm(initial=from_letter_data)  # 创建公司保函合同
+    from_jk_data = {'agree_start_date': str(today_str), 'agree_due_date': str(date_th_later),
+                    'acc_name': str(article_obj.custom.name),}
+    form_agree_jk_add = forms.AgreeJkAddForm(initial=from_jk_data) # 创建小贷借款合同扩展
+
     '''GENRE_LIST = [(1, '企业'), (2, '个人')]'''
     form_lendingcustoms_c_add = models.Customes.objects.exclude(
         id=article_obj.custom.id).filter(genre=1).values_list('id', 'name')  # 除项目客户外的企业
