@@ -39,8 +39,8 @@ class ProductAdmin(admin.ModelAdmin):
     list_display = [
         'id', 'name', 'ind', ]  # 显示字段
     # list_per_page = 20  # 每页显示条目数
-    search_fields = ['name',]  # 搜索字段
-    ordering = ['-ind','id']  # 排序字段
+    search_fields = ['name', ]  # 搜索字段
+    ordering = ['-ind', 'id']  # 排序字段
 
 
 admin.site.register(models.Product, ProductAdmin)  # 产品
@@ -295,10 +295,10 @@ admin.site.register(models.Customes, CustomesAdmin)  # 客户
 
 
 class CustomesCAdmin(admin.ModelAdmin):
-    list_display = ('custome', 'idustry', 'district', 'capital', 'representative')  # 显示字段
+    list_display = ('custome', 'capital', 'representative')  # 显示字段
     # list_per_page = 20  # 每页显示条目数
     # search_fields = ['name', 'short_name']  # 搜索字段
-    ordering = ['idustry', 'district']  # 排序字段
+    ordering = ['custome', 'capital']  # 排序字段
 
 
 admin.site.register(models.CustomesC, CustomesCAdmin)  # 企业客户
@@ -313,11 +313,20 @@ class CustomesPAdmin(admin.ModelAdmin):
 
 
 admin.site.register(models.CustomesP, CustomesPAdmin)  # 个人客户
-admin.site.register(models.Districtes)  # 区域
+
+
+class DistrictesAdmin(admin.ModelAdmin):
+    list_display = ['id', 'name', ]  # 显示字段
+    # list_per_page = 20  # 每页显示条目数
+    search_fields = ['name']  # 搜索字段
+    ordering = ['name']  # 排序字段
+
+
+admin.site.register(models.Districtes, DistrictesAdmin)  # 区域
 
 
 class IndustriesAdmin(admin.ModelAdmin):
-    list_display = ('code', 'name', 'cod_nam')  # 显示字段
+    list_display = ['id', 'code', 'name', 'cod_nam']  # 显示字段
     # list_per_page = 20  # 每页显示条目数
     search_fields = ['code', 'name']  # 搜索字段
     ordering = ['code']  # 排序字段

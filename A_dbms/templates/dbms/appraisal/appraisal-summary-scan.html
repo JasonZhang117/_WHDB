@@ -10,11 +10,11 @@
 <body>
 <div class="contain split">
     <div class="headline">
-        <p>成都武侯中小企业融资担保有限责任公司</p>
-        <p style="margin-bottom: 15pt">担保审查委员会项目审查意见书</p>
+        <p>{{ UN }}</p>
+        <p style="margin-bottom: 15pt">{{ UN_I }}</p>
     </div>
     <div class="notice-body">
-        <p style="margin-bottom: 0px;margin-top: 0px;">编号：成武担审保会{{ article_obj.summary_num }}</p>
+        <p style="margin-bottom: 0px;margin-top: 0px;">编号：{{ UN_F }}{{ article_obj.summary_num }}</p>
         <div>
             <table class="ot" style="width: 100%; border-collapse:collapse;" cellspacing="0" cellpadding="0">
                 <tbody style="border: 2pt solid black">
@@ -35,7 +35,11 @@
     </div>
 </div>
 <div class="contain-t">
-    {% include 'dbms/appraisal/appraisal-sign.html' %}
+    {% if product_name in PROCESS_LIST_XD %}
+        {% include 'dbms/appraisal/appraisal-sign-x.html' %}
+    {% else %}
+        {% include 'dbms/appraisal/appraisal-sign.html' %}
+    {% endif %}
 </div>
 </body>
 </html>

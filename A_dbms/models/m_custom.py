@@ -74,12 +74,6 @@ class CustomesC(models.Model):
                                    on_delete=models.CASCADE,
                                    limit_choices_to={'genre': 1},
                                    related_name='company_custome')
-    idustry = models.ForeignKey(to='Industries', verbose_name="所属行业",
-                                on_delete=models.PROTECT,
-                                related_name='custome_idustry',default=1)
-    district = models.ForeignKey(to='Districtes', verbose_name="所属区域",
-                                 on_delete=models.PROTECT,
-                                 related_name='custome_district',default=1)
     DECISIONOR_LIST = [(11, '股东会'), (13, '合伙人会议'), (15, '举办者会议'), (21, '董事会'), (23, '管理委员会')]
     decisionor = models.IntegerField(verbose_name='决策机构', choices=DECISIONOR_LIST, default=11)
     capital = models.FloatField(verbose_name='注册资本')

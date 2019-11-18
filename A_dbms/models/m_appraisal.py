@@ -19,7 +19,7 @@ class Appraisals(models.Model):  # 评审会
     compere = models.ForeignKey(to='Employees', verbose_name="主持人",
                                 on_delete=models.PROTECT,
                                 related_name='compere_employee',
-                                limit_choices_to={'employee_status': 1},)
+                                limit_choices_to={'employee_status': 1}, )
     MEETING_STATE_LIST = ((1, '待上会'), (2, '已上会'))
     meeting_state = models.IntegerField(verbose_name='会议状态', choices=MEETING_STATE_LIST, default=1)
     meeting_buildor = models.ForeignKey(to='Employees', verbose_name="创建人",
@@ -141,6 +141,7 @@ class LendingSures(models.Model):
         (42, '房产监管'), (43, '土地监管'), (44, '票据监管'), (47, '动产监管'), (49, '其他监管'),
         (51, '股权预售'), (52, '房产预售'), (53, '土地预售'), (59, '其他预售')]
     sure_typ = models.IntegerField(verbose_name='担保类型', choices=SURE_TYP_LIST)
+    sure_remark = models.TextField(verbose_name='备注', null=True, blank=True)
     sure_buildor = models.ForeignKey(to='Employees', verbose_name="创建人",
                                      on_delete=models.PROTECT, default=1,
                                      related_name='sure_buildor_employee')

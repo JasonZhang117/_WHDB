@@ -19,7 +19,6 @@ def custom_add_ajax(request):
     response = {'status': True, 'message': None, 'forme': None, ' skip': None, }
     post_data_str = request.POST.get('postDataStr')
     post_data = json.loads(post_data_str)
-    print(post_data)
 
     form_custom_add = forms.CustomAddForm(post_data)
     if form_custom_add.is_valid():
