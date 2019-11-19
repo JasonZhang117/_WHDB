@@ -188,6 +188,7 @@ def agree_add_ajax(request):  # 添加合同
                         agree_start_date = jk_add_cleaned['agree_start_date'],
                         agree_due_date = jk_add_cleaned['agree_due_date'], acc_name = jk_add_cleaned['acc_name'],
                         acc_num = jk_add_cleaned['acc_num'], acc_bank = jk_add_cleaned['acc_bank'],
+                        repay_method = jk_add_cleaned['repay_method'], repay_ex = jk_add_cleaned['repay_ex'],
                         agree_buildor=request.user)
                     '''AGREE_TYP_LIST = [
                         (1, 'D-单笔'), (2, 'D-最高额'), (4, 'D-委贷'),
@@ -261,7 +262,10 @@ def counter_name_f(agree_typ, counter_typ):
         if counter_typ in [1, ]:  # (1, '企业担保'),
             counter_name = 1  # (1, '保证反担保合同'),
         elif counter_typ in [2, ]:  # (2, '个人保证'),
-            counter_name = 2  # (2, '不可撤销的反担保函'),
+            if agree_typ in [41, ]:
+                counter_name = 1  # (1, '保证反担保合同'),
+            else:
+                counter_name = 2  # (2, '不可撤销的反担保函'),
             ''' (11, '房产抵押'), (12, '土地抵押'), (13, '动产抵押'), (14, '在建工程抵押'), (15, '车辆抵押'),'''
         elif counter_typ in [11, 12, 13, 14, 15]:
             counter_name = 3  # (3, '抵押反担保合同'),
@@ -279,7 +283,10 @@ def counter_name_f(agree_typ, counter_typ):
         if counter_typ in [1, ]:  # (1, '企业担保'),
             counter_name = 21  # (21, '最高额保证反担保合同'),
         elif counter_typ in [2, ]:  # (2, '个人保证'),
-            counter_name = 2  # (2, '不可撤销的反担保函'),
+            if agree_typ in [42, ]:
+                counter_name = 1  # (1, '保证反担保合同'),
+            else:
+                counter_name = 2  # (2, '不可撤销的反担保函'),
             ''' (11, '房产抵押'), (12, '土地抵押'), (13, '动产抵押'), (14, '在建工程抵押'), (15, '车辆抵押'),'''
         elif counter_typ in [11, 12, 13, 14, 15]:
             counter_name = 23  # (23, '最高额抵押反担保合同'),
@@ -328,8 +335,10 @@ def agree_edit_ajax(request):  #
     if agree_state in [11, 51]:
         # form_agree_add = forms.AgreeAddForm(post_data, request.FILES)
         form_agree_add = forms.ArticleAgreeAddForm(post_data, request.FILES)
-        if form_agree_add.is_valid():
+        from_agree_jk_add = forms.AgreeJkAddForm(post_data)
+        if form_agree_add.is_valid() and from_agree_jk_add.is_valid():
             agree_add_cleaned = form_agree_add.cleaned_data
+            jk_add_cleaned = from_agree_jk_add.cleaned_data
             # lending_obj = agree_add_cleaned['lending']
             agree_amount = round(agree_add_cleaned['agree_amount'], 2)
             guarantee_typ = agree_add_cleaned['guarantee_typ']
@@ -351,7 +360,42 @@ def agree_edit_ajax(request):  #
                         amount_limit=amount_limit, agree_rate=agree_add_cleaned['agree_rate'],
                         agree_amount=agree_amount, guarantee_typ=guarantee_typ,
                         agree_copies=agree_copies, other=agree_add_cleaned['other'],
+                        agree_start_date=jk_add_cleaned['agree_start_date'],
+                        agree_due_date=jk_add_cleaned['agree_due_date'], acc_name=jk_add_cleaned['acc_name'],
+                        acc_num=jk_add_cleaned['acc_num'], acc_bank=jk_add_cleaned['acc_bank'],
+                        repay_method=jk_add_cleaned['repay_method'], repay_ex=jk_add_cleaned['repay_ex'],
                         agree_buildor=request.user)
+                    if agree_obj.agree_typ == 22: #(22, 'D-公司保函')
+                        form_letter_add = forms.LetterGuaranteeAddForm(post_data)
+                        if form_letter_add.is_valid():
+                            letter_add_cleaned = form_letter_add.cleaned_data
+                            letter_typ = letter_add_cleaned['letter_typ']
+                            '''LETTER_TYP_LIST = [(1, '履约保函'), (11, '投标保函'), (21, '预付款保函'), ]'''
+                            guarantee_num_f = ''
+                            if letter_typ == 1:
+                                guarantee_num_f = '-LY'
+                            elif letter_typ == 11:
+                                guarantee_num_f = '-TB'
+                            elif letter_typ == 21:
+                                   guarantee_num_f = '-YF'
+                            guarantee_num = agree_obj.agree_num + guarantee_num_f + '1'
+
+                            letter_clean = form_letter_add.cleaned_data
+                            default = {
+                                'agree_id': agree_obj.id, 'letter_typ': letter_typ,
+                                'beneficiary': letter_add_cleaned['beneficiary'],
+                                'basic_contract': letter_add_cleaned['basic_contract'],
+                                'basic_contract_num': letter_add_cleaned['basic_contract_num'],
+                                'starting_date': letter_add_cleaned['starting_date'],
+                                'due_date': letter_add_cleaned['due_date'],
+                                'guarantee_number' : guarantee_num,
+                                'creator': request.user}
+                            letter, created = models.LetterGuarantee.objects.update_or_create(
+                                agree=agree_obj, defaults=default)
+                        else:
+                            response['status'] = False
+                            response['message'] = '表单信息有误！！！'
+                            response['forme'] = form_agree_add.errors
                     for counter in agree_obj.counter_agree.all():
                         counter_typ = counter.counter_typ
                         counter_name = counter_name_f(agree_typ, counter_typ)

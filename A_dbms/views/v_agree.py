@@ -128,6 +128,27 @@ def agree_scan(request, agree_id):  # 查看合同
         'other': agree_obj.other,
     }
     form_agree_edit = forms.AgreeEditForm(initial=form_agree_edit_date) #添加反担保合同form
+    if agree_obj.agree_typ == 22: #(22, 'D-公司保函')
+        from_letter_data = {'starting_date': str(agree_obj.guarantee_agree.starting_date),
+                            'due_date': str(agree_obj.guarantee_agree.due_date),
+                            'letter_typ': agree_obj.guarantee_agree.letter_typ,
+                            'beneficiary': agree_obj.guarantee_agree.beneficiary,
+                            'basic_contract': agree_obj.guarantee_agree.basic_contract,
+                            'basic_contract_num': agree_obj.guarantee_agree.basic_contract_num,}
+        form_letter_add = forms.LetterGuaranteeAddForm(initial=from_letter_data)  # 创建公司保函合同
+    else:
+        today_str = datetime.date.today()
+        date_th_later = today_str + datetime.timedelta(days=365)
+        from_letter_data = {'starting_date': str(today_str), 'due_date': str(date_th_later)}
+        form_letter_add = forms.LetterGuaranteeAddForm(initial=from_letter_data)  # 创建公司保函合同
+    from_jk_data = {'agree_start_date': str(agree_obj.agree_start_date),
+                    'agree_due_date': str(agree_obj.agree_due_date),
+                    'acc_name': agree_obj.acc_name, 'acc_num': agree_obj.acc_num,
+                    'acc_bank': agree_obj.acc_bank, 'repay_method': agree_obj.repay_method,
+                    'repay_ex': agree_obj.repay_ex,}
+    form_agree_jk_add = forms.AgreeJkAddForm(initial=from_jk_data)  # 创建小贷借款合同扩展
+
+
 
     return render(request, 'dbms/agree/agree-scan.html', locals())
 
@@ -204,10 +225,8 @@ def agree_preview(request, agree_id):
     agree_amount_str = amount_s(agree_amount)  # 元转换为万元并去掉小数点后面的零
     agree_amount_y = amount_y(agree_amount)  # 元转换为万元并去掉小数点后面的零
     agree_term_cn = convert_num(agree_obj.agree_term) #合同期限转大写
-
-
     bank_name = agree_obj.branch.cooperator.name #合作银行
-    borrower_list = agree_obj.lending.summary.borrower.all()
+
     if '民生银行' in bank_name:
         file_name = '《开立保函/备用信用证申请书》或《开立保函/备用信用证协议》'
     elif '建设银行' == bank_name:
@@ -243,11 +262,13 @@ def agree_preview(request, agree_id):
         single_quota_rate = float(agree_obj.agree_rate)
         charge = round(agree_amount * single_quota_rate / 100, 2)
         agree_rate_cn_q = convert_num(float(agree_obj.agree_rate))  # 合同利率转换为千分之，大写
+        agree_rate_w = convert_num(round(((20-float(agree_obj.agree_rate))/30*10),4))
         charge_cn = convert(charge)
     except ValueError:
         rate_b = False
         single_quota_rate = agree_obj.agree_rate
         agree_rate_cn_q = agree_obj.agree_rate
+        agree_rate_w = '叁点叁叁叁叁'
     return render(request, 'dbms/agree/preview-agree.html', locals())
 
 
@@ -266,7 +287,7 @@ def counter_preview(request, agree_id, counter_id):
         (41, 'D-单笔(公证)'), (42, 'D-最高额(公证)'),
         (51, 'X-小贷单笔'), (52, 'X-小贷最高额'), ]'''
     agree_typ = agree_obj.agree_typ
-    UN, ADD = un_dex(agree_typ)  # 不同合同种类下主体适用
+    UN, ADD, CNB = un_dex(agree_typ)  # 不同合同种类下主体适用
     notarization_typ = False
     if agree_typ in [41, 42, 47]:
         notarization_typ = True

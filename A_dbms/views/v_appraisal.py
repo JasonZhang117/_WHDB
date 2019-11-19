@@ -555,7 +555,7 @@ def summary_scan(request, article_id):  # 评审项目预览
                 lk = ''
             summary += '提供%s%s。期限%s,' % (TEXT_O, lk, credit_term_cn)
         else:
-            summary += '提供%s。期限%s,' % (TEXT_O, redit_term_cn)
+            summary += '提供%s。期限%s,' % (TEXT_O, credit_term_cn)
 
         single_dic_c = 0
         for single in single_dic_list:

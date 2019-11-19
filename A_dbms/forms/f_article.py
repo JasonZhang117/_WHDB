@@ -95,7 +95,7 @@ class ArticleAgreeAddForm(dform.ModelForm):
             'agree_rate': dform.TextInput(attrs={'class': 'form-control', 'placeholder': '如为单项合同输入纯数字'}),
             'agree_amount': dform.NumberInput(attrs={'class': 'form-control', 'placeholder': '合同金额（元）'}),
             'amount_limit': dform.NumberInput(attrs={'class': 'form-control', 'placeholder': '放款限额（元）'}),
-            'other': dform.Textarea(attrs={'class': 'form-control', 'rows': '2', 'placeholder': '其他合同约定事项'}),
+            'other': dform.Textarea(attrs={'class': 'form-control', 'rows': '1', 'placeholder': '其他合同约定事项'}),
         }
 
     def __init__(self, *args, **kwargs):
@@ -122,13 +122,16 @@ class LetterGuaranteeAddForm(dform.ModelForm):
 class AgreeJkAddForm(dform.ModelForm):
     class Meta:
         model = models.Agrees
-        fields = ['agree_start_date', 'agree_due_date', 'acc_name', 'acc_num', 'acc_bank', ]
+        fields = ['agree_start_date', 'agree_due_date', 'acc_name', 'acc_num', 'acc_bank',
+                  'repay_method', 'repay_ex']
         widgets = {
             'agree_start_date': dform.DateInput(attrs={'class': 'form-control', 'type': 'date'}),
             'agree_due_date': dform.DateInput(attrs={'class': 'form-control', 'type': 'date'}),
             'acc_name': dform.TextInput(attrs={'class': 'form-control', 'placeholder': '户名'}),
             'acc_num': dform.TextInput(attrs={'class': 'form-control', 'placeholder': '账号'}),
             'acc_bank': dform.TextInput(attrs={'class': 'form-control', 'placeholder': '开户行名称'}),
+            'repay_method': dform.Select(attrs={'class': 'form-control', 'placeholder': '还本付息方式'}),
+            'repay_ex': dform.Textarea(attrs={'class': 'form-control', 'rows': '1', 'placeholder': '还本付息描述'}),
         }
 
 

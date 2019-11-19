@@ -29,5 +29,17 @@
         <div class="col-sm-9">{{ form_agree_jk_add.acc_bank }}</div>
         <label id="e_acc_bank" class="pull-right">{{ form_agree_jk_add.acc_bank.errors }}</label>
     </div>
+     <div class="form-group"><!--还本付息方式-->
+        <label for="id_repay_method"
+               class="col-sm-3 control-label">{{ form_agree_jk_add.repay_method.label }}：</label>
+        <div class="col-sm-9">{{ form_agree_jk_add.repay_method }}</div>
+        <label id="e_repay_method" class="pull-right">{{ form_agree_jk_add.repay_method.errors }}</label>
+    </div>
+     <div class="form-group"><!--还本付息描述-->
+        <label for="id_repay_ex"
+               class="col-sm-3 control-label">{{ form_agree_jk_add.repay_ex.label }}：</label>
+        <div class="col-sm-9">{{ form_agree_jk_add.repay_ex }}</div>
+        <label id="e_repay_ex" class="pull-right">{{ form_agree_jk_add.repay_ex.errors }}</label>
+    </div>
 
 </div>

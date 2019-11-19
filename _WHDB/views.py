@@ -294,7 +294,7 @@ def convert_num(n):
     nums = ['零', '壹', '贰', '叁', '肆', '伍', '陆', '柒', '捌', '玖']
     decimal_label = ['角', '分']
     small_int_label = ['', '拾', '佰', '仟']
-    int_part, decimal_part = str(int(n)), str(round(n - int(n), 2))[2:]  # 分离整数和小数部分
+    int_part, decimal_part = str(int(n)), str(round(n - int(n), 4))[2:]  # 分离整数和小数部分
     res = []
     if decimal_part:
         res.append(''.join([nums[int(x)] for x in list(decimal_part) if x != '0']))

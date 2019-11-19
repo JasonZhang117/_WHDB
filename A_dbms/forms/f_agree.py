@@ -45,7 +45,7 @@ class AgreeEditForm(dform.ModelForm):
             'agree_term': dform.NumberInput(attrs={'class': 'form-control', 'placeholder': '期限'}),
             'guarantee_typ': dform.Select(attrs={'class': 'form-control'}),
             'agree_copies': dform.NumberInput(attrs={'class': 'form-control', 'placeholder': '合同份数'}),
-            'other': dform.Textarea(attrs={'class': 'form-control', 'rows': '2', 'placeholder': '其他合同约定事项'}),
+            'other': dform.Textarea(attrs={'class': 'form-control', 'rows': '1', 'placeholder': '其他合同约定事项'}),
         }
 
 

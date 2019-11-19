@@ -1,7 +1,9 @@
 <script>
     $(function () {
         bindEditAgreeB();
-        bindAddAgreeModalOk();
+        bindEditAgreeModalOk();
+        bind_id_agree_typ_n();
+        bind_id_agree_typ();
     });
 
     function bindEditAgreeB() {
@@ -10,7 +12,42 @@
         })
     }
 
-    function bindAddAgreeModalOk() {
+    function bind_id_agree_typ_n() {
+        var selected_agree_typ_n = $('#id_agree_typ_n').val();
+        $('.agree-extend').hide();
+        switch (selected_agree_typ_n) {
+            case ('22'):
+                $('#form_agree_letter_add').show();
+                break;
+            case ('51'):
+                $('#form_agree_jk_add').show();
+                break;
+            default:
+                $('.agree-extend').hide()
+        }
+    }
+
+    function bind_id_agree_typ() {
+        $('#id_agree_typ').change(function () {
+            $('.agree-extend').hide();
+            var selected_agree_typ = $('#id_agree_typ').val();
+            switch (selected_agree_typ) {
+                case ('22'):
+                    $('#form_agree_letter_add').show();
+                    break;
+                case ('51'):
+                    $('#form_agree_jk_add').show();
+                    break;
+                case ('52'):
+                    $('#form_agree_jk_add').show();
+                    break;
+                default:
+                    $('.agree-extend').hide()
+            }
+        })
+    }
+
+    function bindEditAgreeModalOk() {
         $('#editAgreeModalOk').click(function () {
             var postData = {};
             $('#editAgreeModal').find('input,select').each(function () {
@@ -19,8 +56,9 @@
                 postData[n] = v;
             });
             var other_g = $('#id_other').val();
+            var repay_ex_g = $('#id_repay_ex').val();
             postData['other'] = other_g;
-
+            postData['repay_ex'] = repay_ex_g;
             var postDataStr = JSON.stringify(postData);
             $.ajax({
                 url: '/dbms/agree/edit/',
