@@ -6,6 +6,11 @@
                 <a href="#brodder" style="background-color: #f5f5f5"
                    aria-controls="profile" role="tab" data-toggle="tab">共借人</a></li>
         {% endif %}
+        {% if article_obj.opinion %}
+            <li role="presentation">
+                <a href="#opinion" style="background-color: #f5f5f5"
+                   aria-controls="profile" role="tab" data-toggle="tab">项目意见</a></li>
+        {% endif %}
         {% if article_obj.feedback_article.all %}
             <li role="presentation">
                 <a href="#feedback" style="background-color: #f5f5f5"
@@ -57,6 +62,10 @@
         {% if article_obj.borrower.all %}
             <div role="tabpanel" class="tab-pane" id="brodder"> <!--共借人-->
                 {% include 'dbms/article/scan/tab/borrower.html' %} </div>
+        {% endif %}
+        {% if article_obj.opinion %}
+            <div role="tabpanel" class="tab-pane" id="opinion"> <!--项目意见-->
+                {% include 'dbms/article/scan/tab/opinion.html' %} </div>
         {% endif %}
         {% if article_obj.feedback_article.all %}
             <div role="tabpanel" class="tab-pane" id="feedback"> <!--反馈结论-->

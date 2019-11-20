@@ -57,8 +57,10 @@ class ArticlesSignForm(dform.Form):  # 项目签批
 class LendingSuresForm(dform.ModelForm):
     class Meta:
         model = models.LendingSures
-        fields = ['sure_typ']
-        widgets = {'sure_typ': dform.Select(attrs={'class': 'form-control'})}
+        fields = ['sure_typ','sure_remark']
+        widgets = {'sure_typ': dform.Select(attrs={'class': 'form-control'}),
+                   'sure_remark': dform.Textarea(attrs={'class': 'form-control',
+                                                        'rows': '2', 'placeholder': '意见详情'}),}
 
 
 # -----------------------企业保证担保form-------------------------#

@@ -16,6 +16,7 @@ urlpatterns = [
     path('article/del/', views.article_del_ajax, name='article_del_ajax'),
     path('article/edit/', views.article_edit_ajax, name='article_edit_ajax'),
     path('article/feedback/', views.article_feedback_ajax, name='article_feedback_ajax'),
+    path('article/opinion/', views.article_opinion_ajax, name='article_opinion_ajax'),
     path('article/sub/', views.article_sub_ajax, name='article_sub_ajax'),
     path('article/borrower/add/', views.borrower_add_ajax, name='article_borrower_add_ajax'),
     path('article/borrower/del/', views.borrower_del_ajax, name='article_borrower_del_ajax'),

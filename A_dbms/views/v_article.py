@@ -122,7 +122,7 @@ def article_scan(request, article_id):  # 项目预览
     form_borrower_add = forms.FormBorrowerAdd()  # 添加共借人form
     form_article_change = forms.ArticleChangeForm(initial={'change_date': str(datetime.date.today())})  # 变更项目form
     form_inv_add = forms.FormInvestigateAdd(initial={'inv_date': str(datetime.date.today())})  # 添加补充调查form
-    form_opinion = forms.FormOpinion()  # 添加放款次序form
+    form_opinion = forms.FormOpinion(initial={'opinion': article_obj.opinion})  # 添加放款次序form
 
     return render(request, 'dbms/article/article-scan.html', locals())
 
