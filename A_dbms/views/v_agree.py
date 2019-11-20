@@ -287,6 +287,8 @@ def counter_preview(request, agree_id, counter_id):
         (41, 'D-单笔(公证)'), (42, 'D-最高额(公证)'),
         (51, 'X-小贷单笔'), (52, 'X-小贷最高额'), ]'''
     agree_typ = agree_obj.agree_typ
+    AGREE_TYP_D = models.Agrees.AGREE_TYP_D  # 担保公司合同类型
+    AGREE_TYP_X = models.Agrees.AGREE_TYP_X  # 小贷公司合同类型
     UN, ADD, CNB = un_dex(agree_typ)  # 不同合同种类下主体适用
     notarization_typ = False
     if agree_typ in [41, 42, 47]:
@@ -372,6 +374,21 @@ def counter_preview(request, agree_id, counter_id):
     agree_amount_str = amount_s(agree_amount)
     agree_term = agree_obj.agree_term
     agree_term_str = convert_num(agree_term)
+
+    agree_rate_cn_q = ''
+    try:
+        rate_b = True
+        single_quota_rate = float(agree_obj.agree_rate)
+        charge = round(agree_amount * single_quota_rate / 100, 2)
+        agree_rate_cn_q = convert_num(float(agree_obj.agree_rate))  # 合同利率转换为千分之，大写
+        agree_rate_w = convert_num(round(((20 - float(agree_obj.agree_rate)) / 30 * 10), 4))
+        charge_cn = convert(charge)
+    except ValueError:
+        rate_b = False
+        single_quota_rate = agree_obj.agree_rate
+        agree_rate_cn_q = agree_obj.agree_rate
+        agree_rate_w = '叁点叁叁叁叁'
+
 
     return render(request, 'dbms/agree/preview-counter.html', locals())
 

@@ -1,45 +1,8 @@
-<div class="split">
-    <div class="agree-cover-num"><strong>编号：<u>{{ agree_obj.agree_num }}</u></strong></div>
-    <div class="agree-cover-tit"><strong>{{ agree_obj.get_agree_name_display }}</strong></div>
-    <div class="agree-cover-edition">（适用于个人及个体工商户贷款）</div>
-    <div class="agree-cover-bot"><strong>成都武侯武兴小额贷款有限责任公司</strong></div>
-</div>
-<div class="split">
-    <div class="agree-tit"><strong>{{ agree_obj.get_agree_name_display }}</strong></div>
-    <div style="padding-bottom: 15pt">
-        <p>借 款 人：<u><strong>{{ agree_obj.lending.summary.custom.name }}</strong></u> </p>
-        {% if agree_obj.lending.summary.custom.genre == 2 %}
-            <p>证件种类：<u><strong>身份证</strong></u>，证件号码：<u><strong>{{ agree_obj.lending.summary.custom.person_custome.license_num }}</strong></u> </p>
-        {% endif %}
-        {% if agree_obj.lending.summary.custom.genre == 1 %}
-            <p>法定代表人（负责人）：<u><strong>{{ agree_obj.lending.summary.custom.company_custome.representative }}</strong></u> </p>
-            <p>住所：<u><strong>{{ agree_obj.lending.summary.custom.company_custome.registered_addr }}</strong></u> </p>
-        {% endif %}
-    </div>
-    {% if agree_obj.lending.summary.borrower.all %}
-        {% for borrower in agree_obj.lending.summary.borrower.all %}
-            <div style="padding-bottom: 15pt">
-                <p>借 款 人：<u><strong>{{ borrower.name }}</strong></u> </p>
-                {% if borrower.genre == 2 %}
-                    <p>证件种类：<u><strong>身份证</strong></u>，证件号码：<u><strong>{{  borrower.person_custome.license_num }}</strong></u> </p>
-                {% endif %}
-                {% if borrower.genre == 1 %}
-                    <p>法定代表人（负责人）：<u><strong>{{ borrower.company_custome.representative }}</strong></u> </p>
-                    <p>住所：<u><strong>{{ borrower.company_custome.registered_addr }}</strong></u> </p>
-                {% endif %}
-            </div>
-        {% endfor %}
-    {% endif %}
-    <div style="padding-bottom: 15pt">
-        <p>贷 款 人：<u>成都武侯武兴小额贷款有限责任公司</u></p>
-        <p>法定代表人（负责人）：<u>黄一平</u></p>
-        <p>住所：<u>成都市武侯区武科西五路360号西部智谷B区2栋3单元10楼</u></p>
-    </div>
     <p>鉴于借款人向贷款人申请贷款，为明确双方权利义务，借款人与贷款人经协商一致，特订立本合同。</p>
     <p><strong>第一条  贷款金额、贷款期限与贷款用途</strong></p>
     <p>1.1贷款金额：本合同项下的贷款金额为人民币（大写）<u><strong>{{ agree_amount_cn }}</strong></u>（RMB<u>{{ agree_amount_y }}</u>元）。</p>
     <p>1.2贷款期限：贷款期限为<u><strong>{{ agree_term_cn }}</strong></u>个月零<u><strong>/</strong></u>天，自<strong><u>{{ agree_obj.agree_start_date }}</u></strong>始至<strong><u>{{ agree_obj.agree_due_date }}</u></strong>止。《借款凭证》是贷款人向借款人实际提供资金的最终证明，是本合同的组成部分，与本合同具有同等法律效力。若《借款凭证》记载的贷款起始日期、到期日期与本合同约定的贷款起始日期、到期日期不一致的，以《借款凭证》的记载为准。</p>
-    <p>1.3贷款用途为：<u><strong>流动资金贷款</strong></u>。未经贷款人书面同意，借款人不得以任何理由将贷款挪作他用。</p>
+    <p>1.3贷款用途为：<u><strong>流动资金</strong></u>。未经贷款人书面同意，借款人不得以任何理由将贷款挪作他用。</p>
     <p>1.4 <strong>本合同一经签署，在贷款发放之前，借款人若欲取消本合同项下部分或全部贷款，应书面通知贷款人并取得贷款人的书面同意；取消贷款受理期间为距离取消贷款日不少于七个贷款人营业日前。</strong></p>
     <p><strong>第二条  贷款利率、计息期间</strong></p>
     <p>2.1本合同项下贷款利率为<strong>月利率<u>{{ agree_obj.agree_rate }}</u>‰</strong>（大写<strong><u>千分之{{ agree_rate_cn_q }}</u></strong>），在贷款期限内保持不变。</p>
@@ -59,7 +22,7 @@
     <p>（2） 本合同第八条之陈述和保证真实、合法、有效；</p>
     <p>（3）<strong>本合同项下担保合同已生效并完成抵（质）押登记、交付致担保权持续有效；</strong></p>
     <p>（4）借款人在实际提款之前应将符合5.2款贷款人要求的还款扣划协议副本提供给贷款人；</p>
-    <p>（5）借款人、担保人已授权贷款人查询征信系统，提供了借款人、担保人相关资料，且查询结果令贷款人满意；</p>
+    <p>（5）借款人、担保人已授权贷款人查询征信系统，提供了借款人、担保人相关资料，且查询结果符合贷款人要求；</p>
     <p>（6）本合同已经各方有权人（授权代表）签署及加盖公章，并经公证赋予强制执行效力；</p>
     <p>（7）贷款人或其指定之律师认为必要的及合理要求的其他先决条件。</p>
     <p>若上述手续未完全齐备，或所有必须的文件尚未达到贷款人或相关法律机构的要求，则贷款人有权不予发放本合同项下贷款，相应后果由借款人全部承担。</p>
@@ -68,6 +31,7 @@
     <p>本合同采取以下第<u><strong>（{% if agree_obj.repay_method == 11 %}1{% elif agree_obj.repay_method == 21 %}2{% elif agree_obj.repay_method == 31 %}3{% endif %}）</strong></u>项方式还款：</p>
     <p>（1）按月付息、到期一次还本法：借款人每月付息，贷款到期日一次性偿还贷款本金。当月利息=贷款本金×日利率×占用天数。</p>
     <p>（2）等额本息法：即贷款期限内每期以相等的额度偿还贷款本息，每期还款额计算公式为：</p>
+    <img src="debx.png">
     <p>每期还款额为人民币（大写金额）：<u><strong>{% if agree_obj.repay_method == 21 %}{{ agree_obj.repay_ex }}{% else %}/{% endif %}</strong></u>。</p>
     <p>（3）按月付息、分期还本法：<u><strong>{% if agree_obj.repay_method == 31 %}{{ agree_obj.repay_ex }}{% else %}/{% endif %}</strong></u>。</p>
     <p>选择按月付息、到期一次还本法和按月付息、分期还本法的，本合同项下的贷款按每月的二十日为结息日，结息日为付息日，如遇法定节假日，则顺延至下一工作日。</p>
@@ -172,11 +136,11 @@
     <p>借款人、贷款人双方均同意自本合同签署后3个工作日内到贷款人所在地公证机构申请对本合同办理具有强制执行效力的公证。</p>
     <p>13.2<strong>若借款人及/或担保人出现第十一条、12.1款规定的违约情形，则贷款人有权向公证本合同的公证机构申请执行证书并凭本合同的公证书和执行证书向有管辖权的人民法院申请强制执行，借款人自愿接受该有管辖权的人民法院强制执行；同时贷款人有权按照公证书赋予的强制执行效力直接向人民法院申请强制执行相关担保合同中约定的抵（质）押物或要求保证人承担连带清偿责任，借款人对此不得提出任何抗辩。</strong></p>
     <p>13.3<strong>若借款人及/或担保人出现第十一条、12.1款规定的违约情形，贷款人也有权不选择13.2款规定的方式而径行依据现行法律规定向有管辖权的人民法院申请实现担保物权。</strong></p>
-    <p>13.4若因任何原因，本合同不能/未以强制执行公证书直接由人民法院强制执行或贷款人不能/未以直接向人民法院申请实现担保物权的，关于本合同的所有争议、纠纷，选择下列第（2）项方式解决：</p>
-    <p>（1）提交 <u>/</u> 仲裁委员会仲裁；</p>
+    <p>13.4若因任何原因，本合同不能/未以强制执行公证书直接由人民法院强制执行或贷款人不能/未以直接向人民法院申请实现担保物权的，关于本合同的所有争议、纠纷，选择下列第<u><strong>（2）</strong></u>项方式解决：</p>
+    <p>（1）提交 <strong><u>/</u></strong> 仲裁委员会仲裁；</p>
     <p>（2）向贷款人所在地有管辖权的法院提起诉讼。</p>
     <p><strong>第十四条  通讯及送达</strong></p>
-    {% include 'dbms/agree/agree_board/entrust/12-service-clause.html' %}
+    {% include 'dbms/agree/agree_board/loan_en/12-service-clause.html' %}
     <p><strong>第十五条  其他条款</strong></p>
     <p>15.1若借款人为2人及2人以上，各借款人不分份额、不分顺序地对本合同项下的全部贷款本息及相关费用承担偿还责任，即贷款人有权要求其中的任何一个借款人承担全部偿还责任，被要求承担偿还责任的借款人负有清偿贷款人全部债权的义务。</p>
     <p>15.2本合同所约定的借款人应承担的贷款人所花费律师费（律师代理费）是指贷款人依据四川省现行律师服务收费规定如/即《四川省律师服务收费管理实施办法》（川价发〔2008〕246号，含附件《四川省律师服务收费项目及标准》）所计算并承担/支付/花费的费用；如果确实由于案情需要，贷款人采用了其他付费标准或计费方式，借款人应据实承担。</p>
@@ -186,20 +150,6 @@
     <p>15.6本合同正本一式<strong><u>{{ agree_copy_cn }}</u></strong>份，具有同等法律效力。</p>
     <p><strong>第十六条  其他约定事项</strong></p>
     <div>{% include 'dbms/agree/agree_board/blank-space.html' %}</div>
-     <p> </p>
+    <p> </p>
     <p><strong>借款人声明：借款人已通读上述条款，贷款人已应借款人的要求作了相应说明，借款人对所有内容无异议且已全部通晓并充分理解各条款的含义及相应法律后果。</strong></p>
     <p><strong>本合同项下所有条款，借款人、贷款人都进行了充分和平等的协商，是双方真实的意思表示，不存在任何欺诈、胁迫或乘人之危的情形，双方对本合同条款的理解完全一致。借款人对本合同的签署意味着对声明内容的确认，否则应不予签署。</strong></p>
-</div>
-<div class="split">
-    <p> 本页为签字页（无正文）。</p>
-    <p> </p>
-    <p>借款人（公章）：{{ agree_obj.lending.summary.custom.name }}   贷款人（公章）：成都武侯武兴小额贷款有限责任公司</p>
-    <p> </p>
-    <p> </p>
-
-    <p>法定代表人或负责人或授权代表                      法定代表人或负责人或授权代表</p>
-     <p>（签字或盖章）{{ agree_obj.lending.summary.custom.company_custome.representative }}                                     （签字或盖章）</p>
-    <p> </p>
-    <p> </p>
-    <p>签署日：{% include 'dbms/agree/agree_board/date-period.html' %}  签署日：{% include 'dbms/agree/agree_board/date-period.html' %}
-</div>

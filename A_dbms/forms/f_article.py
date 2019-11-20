@@ -67,6 +67,13 @@ class FeedbackAddForm(dform.Form):  # 风控反馈添加
             attrs={'class': 'form-control', 'rows': '5',
                    'placeholder': '提出项目风控措施建议（额度、担保措施、过程控制、保后要求等）'}))
 
+# -----------------------项目意见添加-------------------------#
+class FormOpinion(dform.ModelForm):  # 风控反馈添加
+    class Meta:
+        model = models.Articles
+        fields = ['opinion',]
+        widgets = {'opinion': dform.Textarea(attrs={'class': 'form-control', 'rows': '3', 'placeholder': '审批意见'})}
+
 
 # -----------------------项目变更-------------------------#
 class ArticleChangeForm(dform.ModelForm):  # 项目变更

@@ -44,9 +44,9 @@
                 <p>！！！！！！！！！！ (42, 'D-最高额(公证)')！！！！！！！！！！</p>
             {% elif agree_typ == 51 %}<!--(51, 'X-小贷单笔')-->
                 {% if agree_obj.lending.summary.custom.genre == 1 %} <!--(1, '企业')-->
-                    {% include 'dbms/agree/agree_board/loan-single-c.html' %}
+                    {% include 'dbms/agree/agree_board/loan_en/loan-single-c.html' %}
                 {% elif agree_obj.lending.summary.custom.genre == 2 %} <!--(2, '个人')-->
-                    {% include 'dbms/agree/agree_board/loan-single-p.html' %}
+                    {% include 'dbms/agree/agree_board/loan_en/loan-single-p.html' %}
                 {% endif %}
             {% else %}
                 <p>！！！！！！！！！！无该类型合同模板，请联系管理员！！！！！！！！！！</p>

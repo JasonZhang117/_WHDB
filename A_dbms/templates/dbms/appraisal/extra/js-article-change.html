@@ -30,7 +30,6 @@
                 data: {'postDataStr': postDataStr},
                 dataType: 'JSON',
                 success: function (arg) {
-                    console.log(arg);
                     if (arg.status) {
                         $('#articleChangeModal').modal('hide');
                         alert(arg.message);

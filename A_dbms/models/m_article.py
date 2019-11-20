@@ -63,6 +63,7 @@ class Articles(models.Model):  # 项目、纪要
     review_date = models.DateField(verbose_name='上会日期', null=True, blank=True)
     summary_num = models.CharField(verbose_name='_纪要编号', max_length=32, unique=True, null=True, blank=True)
     summary = models.TextField(verbose_name='_纪要', null=True, blank=True)
+    opinion = models.TextField(verbose_name='项目意见', null=True, blank=True)
     SIGN_TYPE_LIST = ((1, '同意'), (2, '不同意'))
     sign_type = models.IntegerField(verbose_name='签批结论', choices=SIGN_TYPE_LIST, null=True, blank=True)
     rcd_opinion = models.TextField(verbose_name='风控部意见', null=True, blank=True)

@@ -210,6 +210,38 @@ def article_del_ajax(request):
     return HttpResponse(result)
 
 
+# -----------------------------项目意见ajax------------------------------#
+@login_required
+@authority
+def article_opinion_ajax(request):
+    response = {'status': True, 'message': None, 'forme': None, }
+    post_data_str = request.POST.get('postDataStr')
+    post_data = json.loads(post_data_str)
+    article_id = post_data['article_id']
+    article_list = models.Articles.objects.filter(id=article_id)
+    article_obj = article_list[0]
+    '''ARTICLE_STATE_LIST = [(1, '待反馈'), (2, '已反馈'), (3, '待上会'), (4, '已上会'), (5, '已签批'),
+                          (51, '已放款'), (52, '已放完'), (55, '已解保'), (61, '待变更'), (99, '已注销')]'''
+    if article_obj.article_state in [1,]:
+        form = forms.FormOpinion(post_data)
+        if form.is_valid():
+            cleaned_data = form.cleaned_data
+            try:
+                article_list.update(opinion=cleaned_data['opinion'], )
+                response['message'] = '成功提交项目意见：%s！' % article_obj.article_num
+            except Exception as e:
+                response['status'] = False
+                response['message'] = "项目意见未提交成功：%s" % str(e)
+        else:
+            response['status'] = False
+            response['message'] = '表单信息有误！！！'
+            response['forme'] = form.errors
+    else:
+        response['status'] = False
+        response['message'] = '项目状态为：%s，无法提交项目意见！！！' % article_obj.article_state
+    result = json.dumps(response, ensure_ascii=False)
+    return HttpResponse(result)
+
 # -----------------------------反馈项目ajax------------------------------#
 @login_required
 @authority

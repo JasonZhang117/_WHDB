@@ -819,14 +819,14 @@ def summary_scan(request, article_id):  # 评审项目预览
                 lending_warrant__sure__lending=lending, lending_warrant__sure__sure_typ=39)  # 其他权利质押
             if warrant_o_39_list:
                 rowspan_count += 1
-                summary += '<tr class="ot tbp"><td class="oi" colspan="4">&nbsp&nbsp%s、其他监管：' % sure_or
+                summary += '<tr class="ot tbp"><td class="oi" colspan="4">&nbsp&nbsp%s、其他权利质押：' % sure_or
                 warrant_o_39_count = warrant_o_39_list.count()
                 warrant_o_39_c = 0
                 for warrant_o_39 in warrant_o_39_list:
                     warrant_o_39_c += 1
                     summary += '%s提供%s' % (warrant_o_39.other_warrant.other_owner.name,
                                            warrant_o_39.other_warrant.other_detail)
-                    if warrant_o_39 < warrant_o_39_count:
+                    if warrant_o_39_c < warrant_o_39_count:
                         summary += '、'
                 summary += '</td></tr>'
                 sure_or += 1

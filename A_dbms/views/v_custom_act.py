@@ -314,8 +314,6 @@ def custom_edit_ajax(request):
                             district=custom_edit_data['district'],
                         )
                         models.CustomesC.objects.filter(custome=custom_obj).update(
-                            idustry=custom_c_data['idustry'],
-                            district=custom_c_data['district'],
                             decisionor=custom_c_data['decisionor'],
                             capital=custom_c_data['capital'],
                             registered_addr=custom_c_data['registered_addr'],
