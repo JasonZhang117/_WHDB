@@ -52,7 +52,7 @@ class SingleQuota(models.Model):  # 单项额度
                          (4, '综合授信额度（含流贷、银承、保函）'), (31, '委托贷款'), ]
     credit_model = models.IntegerField(verbose_name='授信类型', choices=CREDIT_MODEL_LIST, default=1)
     credit_amount = models.FloatField(verbose_name='授信额度（元）')
-    flow_rate = models.CharField(verbose_name='费率', max_length=128, null=True, blank=True)
+    flow_rate = models.TextField(verbose_name='费率', null=True, blank=True)
 
     single_buildor = models.ForeignKey(to='Employees', verbose_name="创建人",
                                        on_delete=models.PROTECT,

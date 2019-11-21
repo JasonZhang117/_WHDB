@@ -319,7 +319,35 @@ def convert_num(n):
     result = ''.join(res[::-1])
     # print('len(result):',len(result),result,result[-1])
     return result
+# -----------------------阿拉伯数字转换-------------------------#
 
+def convert_str(n):
+    units = ['', '万', '亿']
+    nums = ['0', '一', '二', '三', '四', '五', '六', '七', '八', '九']
+    small_int_label = ['', '十', '百', '千']
+    int_part, decimal_part = str(int(n)), str(round(n - int(n), 2))[2:]  # 分离整数和小数部分
+    res = []
+    if int_part != '0':
+        while int_part:
+            small_int_part, int_part = int_part[-4:], int_part[:-4]
+            tmp = ''.join(
+                [nums[int(x)] + (y if x != '0' else '') for x, y in
+                 list(zip(small_int_part[::-1], small_int_label))[::-1]])
+            tmp = tmp.rstrip('0').replace('000', '0').replace('00', '0')
+            unit = units.pop(0)
+            if tmp:
+                tmp += unit
+                res.append(tmp)
+    result = ''.join(res[::-1])
+    if len(result) == 3:
+        if result[0] == '一':
+            result_l = result[1] + result[2]
+            result = result_l
+    elif len(result) == 2:
+        if result[0] == '一':
+            result_l = result[1]
+            result = result_l
+    return result
 
 
 def un_dex(agree_typ):

@@ -11,6 +11,7 @@ urlpatterns = [
     path('article/scan/<int:article_id>/', views.article_scan, name='article_scan'),
     path('article/agree/<int:article_id>/<int:agree_id>/', views.article_scan_agree, name='article_scan_agree'),
     path('article/lending/<int:article_id>/<int:lending_id>/', views.article_scan_lending, name='article_scan_lending'),
+    path('article/endor/<int:article_id>/', views.endor_list_scan, name='article_endor_list_scan'),
 
     path('article/add/', views.article_add_ajax, name='article_add_ajax'),
     path('article/del/', views.article_del_ajax, name='article_del_ajax'),

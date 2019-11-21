@@ -20,7 +20,8 @@
                 var n = $(this).attr('name');
                 postData[n] = v;
             });
-
+            var flow_rate_g = $('#id_flow_rate').val();
+            postData['flow_rate'] = flow_rate_g;
             var postDataStr = JSON.stringify(postData);
             $.ajax({
                 url: '/dbms/appraisal/single/add/',

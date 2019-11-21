@@ -291,7 +291,7 @@ def counter_preview(request, agree_id, counter_id):
     AGREE_TYP_X = models.Agrees.AGREE_TYP_X  # 小贷公司合同类型
     UN, ADD, CNB = un_dex(agree_typ)  # 不同合同种类下主体适用
     notarization_typ = False
-    if agree_typ in [41, 42, 47]:
+    if agree_typ in [41, 42, ]:
         notarization_typ = True
     '''COUNTER_TYP_LIST = [
         (1, '企业担保'), (2, '个人保证'),
@@ -370,10 +370,11 @@ def counter_preview(request, agree_id, counter_id):
     else:
         counter_home_b_b = '借款人'
     agree_amount = agree_obj.agree_amount
-    agree_amount_cn = convert(agree_amount)
-    agree_amount_str = amount_s(agree_amount)
+    agree_amount_cn = convert(agree_amount) # 转换为货币大写
+    agree_amount_str = amount_s(agree_amount) # 元转换为万元并去掉小数点后面的零
+    agree_amount_y = amount_y(agree_amount)  # 元去掉小数点后面的零
     agree_term = agree_obj.agree_term
-    agree_term_str = convert_num(agree_term)
+    agree_term_str = convert_num(agree_term) # 转换为数字大写
 
     agree_rate_cn_q = ''
     try:

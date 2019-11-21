@@ -81,18 +81,15 @@ class MeetingAllotForm(dform.Form):  # 分配项目评委
 
 
 # -----------------------单项额度-------------------------#
-class SingleQuotaForm(dform.Form):  # 分配项目评委
-    CREDIT_MODEL_LIST = models.SingleQuota.CREDIT_MODEL_LIST
-    credit_model = fields.IntegerField(
-        label='授信类型', label_suffix="：",
-        widget=widgets.Select(choices=CREDIT_MODEL_LIST, attrs={'class': 'form-control'}))
-    credit_amount = fields.FloatField(
-        label='授信额度（元）', label_suffix="：",
-        widget=widgets.NumberInput(attrs={'class': 'form-control', 'placeholder': '授信额度（元）'}))
-    flow_rate = fields.CharField(
-        label='费率（%）', label_suffix="：",
-        widget=widgets.TextInput(attrs={'class': 'form-control', 'placeholder': '费率'}))
-
+class SingleQuotaForm(dform.ModelForm):  # 分配项目评委
+    class Meta:
+        model = models.SingleQuota
+        fields = ['credit_model', 'credit_amount', 'flow_rate',]
+        widgets = {
+            'credit_model': dform.Select(attrs={'class': 'form-control'}),
+            'credit_amount': dform.NumberInput(attrs={'class': 'form-control', 'placeholder': '授信额度（元）'}),
+            'flow_rate': dform.Textarea(attrs={'class': 'form-control', 'rows': '5', 'placeholder': '其他合同约定事项'}),
+        }
 
 # -----------------------放款次序-------------------------#
 class FormLendingOrder(dform.ModelForm):  # 放款次序

@@ -5,7 +5,7 @@
         <div class="agree-cover-edition"></div>
         <div class="agree-cover-bot"><strong>成都武侯武兴小额贷款有限责任公司</strong></div>
     </div>
-    <div>
+    <div class="split">
         <div>
             <div class="agree-tit"><strong>{{ counter_obj.get_counter_name_display }}</strong></div>
             <div style="padding-bottom: 15pt">
@@ -22,6 +22,7 @@
                                     <p>证件种类：<u><strong>身份证</strong></u>，证件号码：<u><strong>{{ agree_obj.lending.summary.custom.person_custome.license_num }}</strong></u></p>
                                 {% endif %}
                             {% endfor %}
+                            {#(11, '应收账款')#}
                         {% elif warrant.warrant_typ == 11 %}
                             <p>出质人：<u><strong>{{ warrant.receive_warrant.receive_owner.name }}</strong></u></p>
                             <p>法定代表人（负责人）：{{ warrant.receive_warrant.receive_owner.company_custome.representative }}</p>
@@ -68,19 +69,22 @@
             <p>1.3抵押权的效力及于抵押物及其从物、从权利、附着物、附合物、加工物、孳息及代位物。</p>
             <p>1.4抵押人保证对抵押物依法享有所有权或处分权，并保证抵押物不存在任何权属争议、被查封、被扣押、已出租等情况。</p>
             <p>1.5（如有共有人）共有人均同意以抵押物为主合同项下债权提供抵押担保，并接受本合同约束。</p>
-            <p>共有人：
-                {% for warrant in counter_obj.warrant_counter.warrant.all %}
-                    {% for ownership in warrant.ownership_warrant.all %}
-                        <strong><u>
+            <p>共有人：<strong><u>
+                {% if counter_obj.warrant_counter.warrant.all.0.ownership_warrant.all %}
+                    {% for warrant in counter_obj.warrant_counter.warrant.all %}
+                        {% for ownership in warrant.ownership_warrant.all %}
                             {% if ownership.owner.genre == 2 and ownership.owner.spouses%}
                                 、{{ ownership.owner.spouses.name }}
                             {% endif %}
-                        </u></strong>
+                        {% endfor %}
                     {% endfor %}
-                {% endfor %}
+                {% else %}
+                    /
+                {% endif %}
+            </u></strong>
                 （签字）</p>
             <p><strong>第二条  担保的主债权及担保范围</strong></p>
-            <p>2.1抵押担保的主债权为主合同项下贷款本金（大写）人民币<u><strong>{{ agree_amount_cn }}</strong></u>（RMB<u>{{ agree_amount_y }}元</u>）；<strong>月利率<u>{{ agree_obj.agree_rate }}</u>‰（千分之<u>{{ agree_rate_cn_q }}</u>）</strong>；贷款期限为<strong><u>{{ agree_obj.agree_start_date }}</u></strong>始至<strong><u>{{ agree_obj.agree_due_date }}</u></strong>止（若主合同约定的《借款凭证》记载的贷款起始日期、到期日期与本起始日期、到期日期不一致的，以《借款凭证》的记载为准），共<u><strong>{{ agree_term_cn }}</strong></u>个月零<u><strong>/</strong></u>天。</p>
+            <p>2.1抵押担保的主债权为主合同项下贷款本金（大写）人民币<u><strong>{{ agree_amount_cn }}</strong></u>（RMB<u>{{ agree_amount_y }}元</u>）；<strong>月利率<u>{{ agree_obj.agree_rate }}</u>‰（千分之<u>{{ agree_rate_cn_q }}</u>）</strong>；贷款期限为<strong><u>{{ agree_obj.agree_start_date }}</u></strong>始至<strong><u>{{ agree_obj.agree_due_date }}</u></strong>止（若主合同约定的《借款凭证》记载的贷款起始日期、到期日期与本起始日期、到期日期不一致的，以《借款凭证》的记载为准），共<u><strong>{{ agree_term_str }}</strong></u>个月零<u><strong>/</strong></u>天。</p>
             <p>2.2抵押权的存续期间至被担保的主债权诉讼时效届满之日止。</p>
             <p>2.3抵押人担保的范围为主合同项下贷款本金及利息、违约金、损害赔偿金和实现债权的费用（包括但不限于诉讼费、财产保全费、执行费、仲裁费、律师费、差旅费、保险费、评估费、拍卖费、公告费、抵押物处置费、过户费、其他费用）以及其他所有主合同债务人的应付费用。</p>
             <p>2.4<strong>当主合同债务人未按主合同约定按时清偿本合同担保范围内债务时，无论抵押权人对主合同项下的债权是否拥有其它担保或放弃、变更其他担保权或担保权顺位，且无论其他担保是否有主合同债务人自己所提供，抵押权人均有权直接要求抵押人以抵押物在其担保范围内承担担保责任。</strong></p>
@@ -90,7 +94,7 @@
             <p><strong>第三条  抵押物的登记</strong></p>
             <p>抵押人应在本合同签订后立即向登记机关（构）办理本合同项下抵押物的抵押登记手续，并在登记手续办妥后三日内将他项权利证书、抵押登记证明文件正本及抵押物权属证明正本交抵押权人保管。</p>
             <p><strong>第四条  保险</strong></p>
-            <p>签订本合同之时，抵押人则按下述第<u><strong>（2）</strong></u>项对抵押物进行财产保险：</p>
+            <p>签订本合同之时，抵押人则按下述第<u><strong>（1）</strong></u>项对抵押物进行财产保险：</p>
             <p>（1）无须对抵押物购买财产保险；</p>
             <p>若抵押物原已办有财产损失险，则出现抵押物赔付事故后保险人对抵押人的赔付金优先抵偿给抵押权人；若抵押物的价值减损或者有减损可能，应抵押权人要求抵押人须购买保险。</p>
             <p>（2）对抵押物向抵押权人认可的保险公司投保各种合适的保险，并达到如下要求：</p>
@@ -240,7 +244,6 @@
             <p>电话：{{ CNB }}</p>
             <p>邮政编码：610041</p>
             <p>收件人：{{ UN }}</p>
-
             <p>10.3抵押权人对抵押人发出的函件在以下时间通知被视为已经送达：</p>
             <p>（1）如果以当面递交方式送达，送达指定地址并签署回执或其他送达证明；</p>
             <p>（2）如果是以专递信函方式送达，为递交日后的第三个工作日；</p>
@@ -260,5 +263,11 @@
             <div>{% include 'dbms/agree/agree_board/blank-space.html' %}</div>
             <p><strong>抵押人声明：抵押人已对本合同各条款作全面、准确的理解，抵押权人应抵押人的要求作了相应的条款说明，签约各方对本合同含义理解认识一致，不存在任何歧义。抵押人对本合同的签署意味着对本合同条款的全面理解、接受和对声明内容的确认，否则应不予签署。</strong></p>
         </div>
+        <div>
+
+        </div>
+    </div>
+    <div class="split">
+        {% include 'dbms/agree/agree_board/counter/d/d-appendix-1.html' %}
     </div>
 </div>

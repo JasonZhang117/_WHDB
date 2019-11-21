@@ -10,7 +10,8 @@ from django.db.utils import IntegrityError
 from django.db import transaction
 from django.db.models import Avg, Min, Sum, Max, Count
 from django.urls import resolve
-from _WHDB.views import MenuHelper, authority, article_right, article_list_screen
+from _WHDB.views import (MenuHelper, authority, article_right, article_list_screen, UNX, UND,
+                         convert_str, amount_s, amount_y, un_dex, convert_num, convert)
 
 
 # -----------------------------项目列表------------------------------#
@@ -84,7 +85,7 @@ def article_scan(request, article_id):  # 项目预览
     investigate_custom_list = article_obj.custom.inv_custom.all().order_by('-inv_date')  # 客户补调列表
     '''ARTICLE_STATE_LIST = [(1, '待反馈'), (2, '已反馈'), (3, '待上会'), (4, '已上会'), (5, '已签批'),
                           (51, '已放款'), (52, '已放完'), (55, '已解保'), (61, '待变更'), (99, '已注销')]'''
-    SHOW_SUM_LIST = [4, 5, 51, 52, 55, 61, ] #显示纪要的项目状态列表
+    SHOW_SUM_LIST = [4, 5, 51, 52, 55, 61, ]  # 显示纪要的项目状态列表
     form_date = {
         'custom_id': article_obj.custom.id, 'product_id': article_obj.product.id,
         'renewal': article_obj.renewal, 'process_id': article_obj.process.id,
@@ -214,8 +215,8 @@ def article_scan_lending(request, article_id, lending_id):  # 项目预览
     from_letter_data = {'starting_date': str(today_str), 'due_date': str(date_th_later)}
     form_letter_add = forms.LetterGuaranteeAddForm(initial=from_letter_data)  # 创建公司保函合同
     from_jk_data = {'agree_start_date': str(today_str), 'agree_due_date': str(date_th_later),
-                    'acc_name': str(article_obj.custom.name),}
-    form_agree_jk_add = forms.AgreeJkAddForm(initial=from_jk_data) # 创建小贷借款合同扩展
+                    'acc_name': str(article_obj.custom.name), }
+    form_agree_jk_add = forms.AgreeJkAddForm(initial=from_jk_data)  # 创建小贷借款合同扩展
 
     '''GENRE_LIST = [(1, '企业'), (2, '个人')]'''
     form_lendingcustoms_c_add = models.Customes.objects.exclude(
@@ -240,3 +241,84 @@ def article_scan_lending(request, article_id, lending_id):  # 项目预览
                  'order_amount': lending_obj.order_amount})  # 放款次序变更form
 
     return render(request, 'dbms/article/article-scan-lending.html', locals())
+
+
+# -----------------------endor_list_scan签批单-------------------------#
+@login_required
+@authority
+def endor_list_scan(request, article_id):  # 签批单
+    current_url_name = resolve(request.path).url_name  # 获取当前URL_NAME
+    authority_list = request.session.get('authority_list')  # 获取当前用户的所有权限
+    menu_result = MenuHelper(request).menu_data_list()
+    PAGE_TITLE = '签批单'
+
+    article_list = models.Articles.objects.filter(id=article_id)
+    article_obj = article_list.first()
+
+    amount_str_w = amount_s(article_obj.amount)  # 转化为万为单位，并且去掉小数点后面的零
+    credit_term_str = amount_y(article_obj.credit_term)  # 去掉小数点后面的零
+    single_quota_list = article_obj.single_quota_summary.all()  # 单项额度列表
+    flow_rate = single_quota_list[0].flow_rate  # 费率
+    product_name = article_obj.product.name  # 产品名称
+    lending_list = article_obj.lending_summary.all()  # 放款次序列表
+    sure_lending_list = lending_list[0].sure_lending.all()
+    sure_typ_dic = dict(models.LendingSures.SURE_TYP_LIST)  # 反担保类型
+
+    ttt = '由'
+    for lending in article_obj.lending_summary.all():
+        sure_lending_list = lending.sure_lending.all()  # 担保措施下客户列表
+        sure_lending_count = sure_lending_list.count()  # 担保措施下客户数量
+        sure_lending_c = 0
+        for sure in lending.sure_lending.all():
+            sure_lending_c += 1
+            if sure.sure_typ in [1, 2]: #(1, '企业保证'), (2, '个人保证'),
+                sure_custom_list = sure.custom_sure.custome.all()  # 担保措施下客户列表
+                sure_custom_count = sure_custom_list.count()  # 担保措施下客户数量
+                sure_custom_c = 0
+                for custom in sure_custom_list:
+                    sure_custom_c += 1
+                    ttt += custom.name
+                    if sure_custom_c < sure_custom_count:
+                        ttt += '、'
+                ttt += '提供%s%s' % (sure_typ_dic[sure.sure_typ], '担保；')
+            elif sure.sure_typ in [11,21]: #(11, '房产抵押'), (21, '房产顺位'),
+                sure_warrant_list = sure.warrant_sure.warrant.all()  # 担保措施下权证列表
+                sure_warrant_count = sure_warrant_list.count()  # 担保措施下权证数量
+                sure_warrant_c = 0
+                for warrant in sure_warrant_list:
+                    sure_warrant_c += 1
+                    owner_ship_list = warrant.ownership_warrant.all() # 权证项下权证列表
+                    owner_ship_count = sure_warrant_list.count()  # 权证项下权证数量
+                    owner_ship_c = 0
+                    for owner_ship in owner_ship_list:
+                        owner_ship_c += 1
+                        ttt += owner_ship.owner.name
+                        if owner_ship_c < owner_ship_count:
+                            print(owner_ship_c, owner_ship_count)
+                            ttt += '、'
+                    ttt += '提供%s的%s' %(warrant.house_warrant.house_locate,'住宅')
+                    if sure_warrant_c < sure_warrant_count:
+                        print(sure_warrant_c,sure_warrant_count)
+                        ttt += '、'
+            if sure_lending_c < sure_lending_count:
+                ttt += '、'
+    PROCESS_LIST_XD = ['房抵贷', '担保贷', '过桥贷', ]
+    UN = '？？？？？？？？？？？'
+    if product_name in PROCESS_LIST_XD:  # 小贷
+        UN = UNX
+        UN_I = '贷款审查委员会项目审查意见书'
+        UN_F = '成武兴贷审会'
+        TH_I = '贷审会'
+        DF = ''
+        TEXT_O = '授信'
+        SIGN_G = '贷审会协调人审核意见'
+    else:
+        UN = UND
+        UN_I = '担保审查委员会项目审查意见书'
+        UN_F = '成武担审保会'
+        TH_I = '审保会'
+        DF = '反'
+        TEXT_O = '担保'
+        SIGN_G = '审保会召集人审核意见'
+
+    return render(request, 'dbms/appraisal/endor-list.html', locals())

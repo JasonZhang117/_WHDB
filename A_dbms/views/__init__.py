@@ -2,10 +2,10 @@
 from .v_index import index
 # ----------------------v_article合项目管理视图--------------------#
 from .v_article import (
-    article, article_scan, article_scan_agree, article_scan_lending)
+    article, article_scan, article_scan_agree, article_scan_lending, endor_list_scan)
 from .v_article_act import (
     article_add_ajax, article_feedback_ajax, article_edit_ajax, article_del_ajax, article_sub_ajax,
-    borrower_add_ajax,borrower_del_ajax,article_opinion_ajax)
+    borrower_add_ajax, borrower_del_ajax, article_opinion_ajax)
 # ----------------------v_meeting评审会视图--------------------#
 from .v_meeting import (
     meeting, meeting_scan, meeting_notice, meeting_scan_article, experts)
@@ -14,7 +14,8 @@ from .v_meeting_act import (
     meeting_del_ajax, meeting_close_ajax, meeting_add_ajax, meeting_allot_add_ajax,
     meeting_allot_del_ajax)
 # ----------------------v_appraisal评审视图--------------------#
-from .v_appraisal import (appraisal, appraisal_scan, appraisal_scan_lending, summary_scan, summary_sign_scan)
+from .v_appraisal import (appraisal, appraisal_scan, appraisal_scan_lending, summary_scan,
+                          summary_sign_scan, )
 from .v_appraisal_act import (
     article_sign_ajax, supply_ajax, supply_edit_ajax, supply_del_ajax, guarantee_add_ajax, guarantee_del_ajax,
     single_del_ajax, comment_edit_ajax,

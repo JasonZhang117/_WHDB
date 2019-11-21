@@ -1,0 +1,79 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}{{ article_obj }}{% endblock %}
+{% block extra-css %}
+    <link rel="stylesheet" media="screen" href="{% static 'dbms/css/endor-style.css' %}">
+    <link rel="stylesheet" media="print" href="{% static 'dbms/css/endor-style.css' %}">
+{% endblock %}
+{% block body %}
+    <div class="sign-tab">
+        <div class="split">
+            <div style="font-size: 20pt">
+                <p align="center"><strong>成都武侯武兴小额贷款有限责任公司</strong></p>
+                <p align="center"><strong>个人住房抵押贷款审批表</strong></p>
+            </div>
+            <div align="right">单位：万元</div>
+            <table>
+                <tr>
+                    <td align="center" width="12.5%">客户名称</td>
+                    <td align="center" colspan="4">
+                        {{ article_obj.custom.name}}
+                        {% if article_obj.borrower.all %}
+                            {% for borrower in article_obj.borrower.all %}
+                                、{{ borrower.name }}
+                            {% endfor %}
+                        {% endif %}
+                    </td>
+                    <td align="center" width="12.5%">贷款品种</td>
+                    <td align="center" colspan="2">{{ product_name }}</td>
+                </tr>
+                <tr>
+                    <td align="center" width="12.5%">金额</td>
+                    <td align="center" width="12.5%">{{ amount_str_w }}万</td>
+                    <td align="center" width="12.5%">期限</td>
+                    <td align="center" colspan="2">{{ credit_term_str }}个月</td>
+                    <td align="center" colspan="2">月利率（‰）</td>
+                    <td align="center" width="12.5%">{{ flow_rate }}</td>
+                </tr>
+                <tr>
+                    <td align="center" width="12.5%">担保方式</td>
+                    <td align="center" colspan="4">{{ ttt }}</td>
+                    <td align="center" width="12.5%">还款方式</td>
+                    <td align="center" colspan="2">？？？？？？</td>
+                </tr>
+                <tr>
+                    <td colspan="3">调查意见：<br><br><br><br><br><br>
+                        <div align="right" style="padding-right: 45pt"><span>客户经理：</span></div>
+                    </td>
+                    <td colspan="2">业务部意见：<br><br><br><br><br><br>
+                        <div align="right" style="padding-right: 45pt"><span>负责人：</span></div>
+                    </td>
+                    <td colspan="3">分管领导意见：<br><br><br><br><br><br>
+                        <div align="right" style="padding-right: 45pt"><span>分管领导：</span></div>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="3">专职评审意见：<br><br><br><br><br><br>
+                        <div align="right" style="padding-right: 45pt"><span>专职评审：</span></div>
+                    </td>
+                    <td colspan="2">风控部意见：<br><br><br><br><br><br>
+                        <div align="right" style="padding-right: 45pt"><span>负责人：</span></div>
+                    </td>
+                    <td colspan="3">分管领导意见：<br><br><br><br><br><br>
+                        <div align="right" style="padding-right: 45pt"><span>分管领导：</span></div>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="8">总经理意见：<br><br><br><br><br>
+                        <div align="right" style="padding-right: 85pt"><span>总经理：</span></div>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="8">董事长意见：<br><br><br><br><br><br>
+                        <div align="right" style="padding-right: 85pt"><span>董事长：</span></div>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+{% endblock %}
