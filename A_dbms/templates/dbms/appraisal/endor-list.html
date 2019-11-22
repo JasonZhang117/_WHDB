@@ -15,8 +15,8 @@
             <div align="right">单位：万元</div>
             <table>
                 <tr>
-                    <td align="center" width="12.5%">客户名称</td>
-                    <td align="center" colspan="4">
+                    <td class="bb tc" width="12.5%">客户名称</td>
+                    <td class="bb tc" colspan="4">
                         {{ article_obj.custom.name}}
                         {% if article_obj.borrower.all %}
                             {% for borrower in article_obj.borrower.all %}
@@ -24,52 +24,58 @@
                             {% endfor %}
                         {% endif %}
                     </td>
-                    <td align="center" width="12.5%">贷款品种</td>
-                    <td align="center" colspan="2">{{ product_name }}</td>
+                    <td class="bb tc" width="12.5%">贷款品种</td>
+                    <td class="bb tc" colspan="2">{{ product_name }}</td>
                 </tr>
                 <tr>
-                    <td align="center" width="12.5%">金额</td>
-                    <td align="center" width="12.5%">{{ amount_str_w }}万</td>
-                    <td align="center" width="12.5%">期限</td>
-                    <td align="center" colspan="2">{{ credit_term_str }}个月</td>
-                    <td align="center" colspan="2">月利率（‰）</td>
-                    <td align="center" width="12.5%">{{ flow_rate }}</td>
+                    <td class="bb tc" width="12.5%">金额</td>
+                    <td class="bb tc" width="12.5%">{{ amount_str_w }}万</td>
+                    <td class="bb tc" width="12.5%">期限</td>
+                    <td class="bb tc" colspan="2">{{ credit_term_str }}个月</td>
+                    <td class="bb tc" colspan="2">月利率（‰）</td>
+                    <td class="bb tc" width="12.5%">{{ flow_rate }}</td>
                 </tr>
                 <tr>
-                    <td align="center" width="12.5%">担保方式</td>
-                    <td align="center" colspan="4">{{ ttt }}</td>
-                    <td align="center" width="12.5%">还款方式</td>
-                    <td align="center" colspan="2">？？？？？？</td>
+                    <td class="bb tc" width="12.5%">担保方式</td>
+                    <td class="bb tc indal" colspan="4">{{ ttt }}</td>
+                    <td class="bb tc" width="12.5%">还款方式</td>
+                    <td class="bb tc" colspan="2">？？？？？？</td>
                 </tr>
                 <tr>
-                    <td colspan="3">调查意见：<br><br><br><br><br><br>
-                        <div align="right" style="padding-right: 45pt"><span>客户经理：</span></div>
-                    </td>
-                    <td colspan="2">业务部意见：<br><br><br><br><br><br>
-                        <div align="right" style="padding-right: 45pt"><span>负责人：</span></div>
-                    </td>
-                    <td colspan="3">分管领导意见：<br><br><br><br><br><br>
-                        <div align="right" style="padding-right: 45pt"><span>分管领导：</span></div>
-                    </td>
+                    <td class="bbb" colspan="3">调查意见：</td>
+                    <td class="bbb" colspan="2">业务部意见：</td>
+                    <td class="bbb" colspan="3">分管领导意见：</td>
                 </tr>
                 <tr>
-                    <td colspan="3">专职评审意见：<br><br><br><br><br><br>
+                    <td class="brl indal" colspan="3">{{ article_obj.opinion }}</td>
+                    <td class="brl" colspan="2"></td>
+                    <td class="brl" colspan="3"></td>
+                </tr>
+                <tr>
+                    <td class="brt" colspan="3"><div align="right" style="padding-right: 45pt"><span>负责人：</span></div></td>
+                    <td class="brt" colspan="2"><div align="right" style="padding-right: 45pt"><span>负责人：</span></div></td>
+                    <td class="brt" colspan="3"><div align="right" style="padding-right: 45pt"><span>负责人：</span></div></td>
+                </tr>
+                <tr>
+                    <td class="bb" colspan="3">专职评审意见：<br><br><br><br><br><br>
                         <div align="right" style="padding-right: 45pt"><span>专职评审：</span></div>
                     </td>
-                    <td colspan="2">风控部意见：<br><br><br><br><br><br>
+                    <td class="bb" colspan="2">风控部意见：<br><br><br><br><br><br>
                         <div align="right" style="padding-right: 45pt"><span>负责人：</span></div>
                     </td>
-                    <td colspan="3">分管领导意见：<br><br><br><br><br><br>
+                    <td class="bb" colspan="3">分管领导意见：<br><br><br><br><br><br>
                         <div align="right" style="padding-right: 45pt"><span>分管领导：</span></div>
                     </td>
                 </tr>
+
+
                 <tr>
-                    <td colspan="8">总经理意见：<br><br><br><br><br>
+                    <td class="bb" colspan="8">总经理意见：<br><br><br><br><br>
                         <div align="right" style="padding-right: 85pt"><span>总经理：</span></div>
                     </td>
                 </tr>
                 <tr>
-                    <td colspan="8">董事长意见：<br><br><br><br><br><br>
+                    <td class="bb" colspan="8">董事长意见：<br><br><br><br><br><br>
                         <div align="right" style="padding-right: 85pt"><span>董事长：</span></div>
                     </td>
                 </tr>

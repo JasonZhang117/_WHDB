@@ -5,9 +5,9 @@
             {% if PAGE_TITLE == '项目详情' %}
 {#                <a class="btn btn-danger btn-sm " id="subArticle">提交</a>#}
                 <a class="btn btn-primary btn-sm " id="subOpinion">项目意见</a>
-                {% if 'article_endor_list_scan' in authority_list %}
-                    <a class="btn btn-primary btn-sm " id="endorList" target="_blank"
-                   href="{% url 'dbms:article_endor_list_scan' article_id=article_obj.id %}">审批表</a>
+                {% if 'article_endor_list_scan' in authority_list and process_typ == 1%}
+                    <a class="btn btn-success btn-sm " id="endorList" target="_blank"
+                   href="{% url 'dbms:article_endor_list_scan' article_id=article_obj.id %}">签批表</a>
                 {% endif %}
                 {% if 'article_feedback_ajax' in authority_list %}
                     <a class="btn btn-primary btn-sm " id="feedbackArticle">反馈</a><!--#path('article/del/'-->
@@ -19,7 +19,7 @@
                     <a class="btn btn-primary btn-sm " id="editArticle">修改</a><!--#path('article/del/'-->
                 {% endif %}
                 {% if 'article_del_ajax' in authority_list %}
-                    <a class="btn btn-primary btn-sm " id="delArticle">删除</a><!--#path('article/del/'-->
+                    <a class="btn btn-warning btn-sm " id="delArticle">删除</a><!--#path('article/del/'-->
                 {% endif %}
                 {% if 'appraisal_supply_ajax' in authority_list %}
                     <a class="btn btn-primary btn-sm " id="addSupplyB">补调问题</a>
@@ -31,7 +31,7 @@
                     <a class="btn btn-primary btn-sm " id="lendingOrder">放款次序</a><!--#path('appraisal/lending/add/'-->
                 {% endif %}
                 {% if article_obj.article_state in SHOW_SUM_LIST %}
-                    <a class="btn btn-default btn-sm " id="summaryScan" target="_blank"
+                    <a class="btn btn-success btn-sm " id="summaryScan" target="_blank"
                        href="{% url 'dbms:appraisal_summary_scan' article_id=article_obj.id %}">意见书</a>
                 {% endif %}
                 {% if 'appraisal_article_sign_ajax' in authority_list %}

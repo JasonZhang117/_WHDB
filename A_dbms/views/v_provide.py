@@ -8,8 +8,7 @@ from django.contrib.auth.decorators import login_required
 from django.db.models import Q, F
 from django.db.models import Avg, Min, Sum, Max, Count
 from django.urls import resolve
-from _WHDB.views import MenuHelper
-from _WHDB.views import authority
+from _WHDB.views import (MenuHelper, authority, amount_s, amount_y, convert)
 
 
 # -----------------------放款管理---------------------#
@@ -286,6 +285,33 @@ def provide_agree_notify(request, agree_id, notify_id):  # 查看放款通知
     form_provide_add = forms.FormProvideAdd(initial=form_provide_data)
 
     return render(request, 'dbms/provide/provide-agree-notify.html', locals())
+
+
+# -----------------------放款通知---------------------#
+@login_required
+@authority
+def notify_show(request, notify_id):  # 查看放款通知
+    current_url_name = resolve(request.path).url_name  # 获取当前URL_NAME
+    authority_list = request.session.get('authority_list')  # 获取当前用户的所有权限
+    menu_result = MenuHelper(request).menu_data_list()
+    job_list = request.session.get('job_list')  # 获取当前用户的所有角色
+    PAGE_TITLE = '放款通知'
+
+    notify_obj = models.Notify.objects.get(id=notify_id)
+    agree_obj = notify_obj.agree
+    article_obj = agree_obj.lending.summary
+
+    amount_str_w = amount_s(article_obj.amount)  # 转化为万为单位，并且去掉小数点后面的零
+    credit_term_str = amount_y(article_obj.credit_term)  # 去掉小数点后面的零
+    single_quota_list = article_obj.single_quota_summary.all()  # 单项额度列表
+    flow_rate = single_quota_list[0].flow_rate  # 费率
+    product_name = article_obj.product.name  # 产品名称
+    lending_list = article_obj.lending_summary.all()  # 放款次序列表
+    sure_lending_list = lending_list[0].sure_lending.all()
+    sure_typ_dic = dict(models.LendingSures.SURE_TYP_LIST)  # 反担保类型
+    process_typ = article_obj.process.typ  # 流程类型
+
+    return render(request, 'dbms/provide/provide-notify-show.html', locals())
 
 
 # -----------------------通知列表---------------------#

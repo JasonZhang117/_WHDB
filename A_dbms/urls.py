@@ -126,6 +126,8 @@ urlpatterns = [
          name='provide_agree_notify'),
     path('provide/notify/', views.notify, name='provide_notify_all'),  #
     path('provide/notify/scan/<int:notify_id>/', views.notify_scan, name='provide_notify_scan'),
+    path('provide/notify/show/<int:notify_id>/', views.notify_show, name='provide_notify_show'),
+
     path('provide/', views.provide, name='provide_all'),  # 菜单-放款管理-放款
     path('provide/<int:provide_status>/', views.provide, name='provide'),  # /dbms/grant/(0-9)
     path('provide/scan/<int:provide_id>/', views.provide_scan, name='provide_scan'),
