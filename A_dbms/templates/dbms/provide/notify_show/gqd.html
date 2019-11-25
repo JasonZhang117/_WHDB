@@ -1,0 +1,57 @@
+<div style="font-size: 20pt">
+    <p align="center"><strong>成都武侯武兴小额贷款有限责任公司</strong></p>
+    <p style="padding-bottom: 25pt" align="center"><strong>放款通知审批单</strong></p>
+</div>
+<div>会计财务部：</div>
+<p class="indent arg-bn">根据我公司与<u>{{ notify_obj.agree.lending.summary.custom.name }}{% if notify_obj.agree.lending.summary.borrower.all %}{% for borrower in notify_obj.agree.lending.summary.borrower.all %}、{{ borrower.name }}{% endfor %}{% endif %}</u>于<u>{{ notify_obj.agree.sign_date }}</u>签订的编号为<u>{{ notify_obj.agree.agree_num }}</u>《<u>{{ notify_obj.agree.get_agree_name_display }}</u>》约定，已完成放款前的全部手续，同意发放贷款（大写）<u>{{ agree_amount_cn }}</u>，期限<u>{{ agree_term_cn }}</u>个月<u>零</u>天，月利率<u>{{ agree_rate_str }}</u>‰。</p>
+<table>
+    <tr>
+        <td class="bb tc" width="15%">借款人名称</td>
+        <td class="bb tc" width="35%">
+            {{ notify_obj.agree.lending.summary.custom.name }}
+            {% if notify_obj.agree.lending.summary.borrower.all %}
+                {% for borrower in notify_obj.agree.lending.summary.borrower.all %}
+                    、{{ borrower.name }}
+                {% endfor %}
+            {% endif %}
+        </td>
+        <td class="bb tc" width="15%">收款账号</td>
+        <td class="bb tc" width="35%">{{ notify_obj.agree.acc_num }}</td>
+    </tr>
+    <tr>
+        <td class="bb tc">开户行</td>
+        <td class="bb tc" width="35%">{{ notify_obj.agree.acc_bank }}</td>
+        <td class="bb tc" width="15%">户名</td>
+        <td class="bb tc" width="35%">{{ notify_obj.agree.acc_name }}</td>
+    </tr>
+    <tr>
+        <td class="bbb" colspan="2">放款岗意见：</td>
+        <td class="bbb" colspan="2">风控部负责人意见：</td>
+    </tr>
+    <tr>
+        <td class="brl" colspan="2"></td>
+        <td class="brl" colspan="2"></td>
+    </tr>
+    <tr>
+        <td class="brt" colspan="2">
+            <div align="right" style="padding-right: 45pt"><span>放款岗：</span></div>
+        </td>
+        <td class="brt" colspan="2">
+            <div align="right" style="padding-right: 45pt"><span>部门负责人：</span></div>
+        </td>
+    </tr>
+    <tr>
+        <td class="bb" colspan="4">业务分管领导意见：<br><br><br><br><br>
+        </td>
+    </tr>
+    <tr>
+        <td class="bb" colspan="4">总经理意见：<br><br><br><br><br>
+        </td>
+    </tr>
+    <tr>
+        <td class="bb" colspan="4">董事长意见：<br><br><br><br><br><br>
+        </td>
+    </tr>
+</table>
+<div>本通知书一式二联，财务部、风控部各持一份。</div>
+<div align="right">______年___月___日</div>

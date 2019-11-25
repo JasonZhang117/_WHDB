@@ -24,6 +24,8 @@
     签批日期：{{ agree_obj.agree_sign_date|default_if_none:'' }}</label>
 <label class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
     合同状态：{{ agree_obj.get_agree_state_display }}</label>
+<label class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
+    签订日期：{{ agree_obj.sign_date }}</label>
 {% if not PAGE_TITLE == '合同详情' %}
     <label class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
         通知金额：{{ agree_obj.agree_notify_sum }}</label>

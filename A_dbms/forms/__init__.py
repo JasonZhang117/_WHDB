@@ -16,7 +16,7 @@ from .f_warrant import (
 from .f_agree import (AgreeAddForm, AddCounterForm, FormAgreeSign, AgreeEditForm)
 from .f_provide import (FormCounterSignAdd, FormAscertainAdd, FormNotifyAdd, FormNotifyEdit,
                         FormProvideAdd, FormPigeonholeAdd, FormTrackPlan, FormTrackAdd,
-                        FormImplementAdd, FormPigeonholeNumAdd, FormRepaymentAdd)
+                        FormImplementAdd, FormPigeonholeNumAdd, FormRepaymentAdd,FormAgreeSignAdd)
 
 from .f_custom import (CustomAddForm, CustomCAddForm, CustomPAddForm, CustomEditForm, FormShareholderAdd,
                        FormCustomSpouseAdd, FormTrusteeAdd)

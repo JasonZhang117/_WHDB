@@ -15,6 +15,37 @@ from _WHDB.views import authority
 # -----------------------------合同签订ajax------------------------------#
 @login_required
 @authority
+def provide_agree_sign_ajax(request):
+    response = {'status': True, 'message': None, 'forme': None, }
+    post_data_str = request.POST.get('postDataStr')
+    post_data = json.loads(post_data_str)
+    agree_list = models.Agrees.objects.filter(id=post_data['agree_id'])
+    agree_obj = agree_list.first()
+    from_agree_sign = forms.FormAgreeSignAdd(post_data)
+    '''AGREE_STATE_LIST = [(11, '待签批'), (21, '已签批'), (25, '已签订'), (31, '未落实'),
+                        (41, '已落实'), (51, '待变更'), (61, '已解保'), (99, '已注销')]'''
+    if from_agree_sign.is_valid():
+        counter_sign_cleaned = from_agree_sign.cleaned_data
+        if agree_obj.agree_state in [21, 51, ]:
+            try:
+                agree_list.update(agree_state=25,
+                                  sign_date=counter_sign_cleaned['sign_date'], )
+                response['message'] = '合同签订成功！'
+            except Exception as e:
+                response['status'] = False
+                response['message'] = '合同签订成功：%s' % str(e)
+    else:
+        response['status'] = False
+        response['message'] = '表单信息有误！！！'
+        response['forme'] = from_agree_sign.errors
+
+    result = json.dumps(response, ensure_ascii=False)
+    return HttpResponse(result)
+
+
+# -----------------------------反担保合同签订ajax------------------------------#
+@login_required
+@authority
 def counter_sign_ajax(request):
     response = {'status': True, 'message': None, 'forme': None, }
     post_data_str = request.POST.get('postDataStr')
@@ -58,13 +89,14 @@ def sign_all_ajax(request):
     post_data = json.loads(post_data_str)
     agree_list = models.Agrees.objects.filter(id=post_data['agree_id'])
     agree_obj = agree_list.first()
-    '''AGREE_STATE_LIST = [(11, '待签批'), (21, '已签批'), (31, '未落实'),
+    '''AGREE_STATE_LIST = [(11, '待签批'), (21, '已签批'), (25, '已签订'), (31, '未落实'),
                         (41, '已落实'), (51, '待变更'), (61, '已解保'), (99, '已注销')]'''
-    agree_state = agree_obj.agree_state
-    if not agree_state in [41, 61, 99]:
+    if agree_obj.agree_state in [21, 25, 31, 51, ]:
         counter_list = agree_obj.counter_agree.all()
         '''COUNTER_STATE_LIST = [(11, '未签订'), (21, '已签订'), (31, '作废')]'''
         try:
+            agree_list.update(agree_state=25,
+                              sign_date=post_data['sign_date'], )
             for counter in counter_list:
                 if counter.counter_state == 11:
                     counter_l = models.Counters.objects.filter(id=counter.id)
@@ -77,7 +109,7 @@ def sign_all_ajax(request):
             response['message'] = '合同签订失败：%s' % str(e)
     else:
         response['status'] = False
-        response['message'] = '合同状态为%s，一键签订失败！！！' % agree_state
+        response['message'] = '合同状态为%s，一键签订失败！！！' % agree_obj.agree_state
     result = json.dumps(response, ensure_ascii=False)
     return HttpResponse(result)
 
@@ -98,10 +130,10 @@ def ascertain_add_ajax(request):
         ascertain_cleaned = form_ascertain_add.cleaned_data
         agree_state = ascertain_cleaned['agree_state']
         agree_remark = ascertain_cleaned['agree_remark']
-        '''AGREE_STATE_LIST = [(11, '待签批'), (21, '已签批'), (31, '未落实'),
+        '''AGREE_STATE_LIST = [(11, '待签批'), (21, '已签批'), (25, '已签订'), (31, '未落实'),
                         (41, '已落实'), (51, '待变更'), (61, '已解保'), (99, '已注销')]'''
         agree_state_y = agree_obj.agree_state
-        if agree_state_y in [21, 31, 51]:
+        if agree_state_y in [21, 25, 31, 51]:
             try:
                 today_str = time.strftime("%Y-%m-%d", time.gmtime())
                 agree_list.update(
@@ -374,7 +406,7 @@ def provide_add_ajax(request):
                     cooperator_list = models.Cooperators.objects.filter(branch_cooperator=branch_obj)
                     cooperator_obj = cooperator_list.first()
                     '''PROVIDE_TYP_LIST = [(1, '流贷'), (11, '承兑'), (21, '保函'), (31, '委贷'), (41, '小贷')]'''
-                    custom_list.update(provide_date=form_provide_cleaned['provide_date'],)  # 客户，更新流贷余额
+                    custom_list.update(provide_date=form_provide_cleaned['provide_date'], )  # 客户，更新流贷余额
                     if provide_typ == 1:  # (1, '流贷')
                         custom_list.update(custom_flow=round(custom_provide_balance, 2))  # 客户，更新流贷余额
                         branch_list.update(branch_flow=round(branch_provide_balance, 2))  # 放款银行，更新流贷余额
@@ -390,14 +422,14 @@ def provide_add_ajax(request):
                             Sum('branch_accept'))['branch_accept__sum']  # 授信银行项下，流贷余额
                         cooperator_list.update(cooperator_accept=round(cooperator_branch_accept_balance, 2))
                     elif provide_typ == 21:  # (21, '保函')
-                        custom_list.update(custom_back=round(custom_provide_balance, 2),)  # 客户，更新保函余额
+                        custom_list.update(custom_back=round(custom_provide_balance, 2), )  # 客户，更新保函余额
                         branch_list.update(branch_back=round(branch_provide_balance, 2))  # 放款银行，更新保函余额
                         cooperator_branch_back_balance = models.Branches.objects.filter(
                             cooperator=cooperator_obj).aggregate(
                             Sum('branch_back'))['branch_back__sum']  # 授信银行项下，保函余额
                         cooperator_list.update(cooperator_back=round(cooperator_branch_back_balance, 2))
                     elif provide_typ == 31:  # (31, '委贷')
-                        custom_list.update(entrusted_loan=round(custom_provide_balance, 2),)  # 客户，更新委贷余额
+                        custom_list.update(entrusted_loan=round(custom_provide_balance, 2), )  # 客户，更新委贷余额
                         branch_list.update(entrusted_loan=round(branch_provide_balance, 2))  # 放款银行，更新委贷余额
                         cooperator_entrusted_loan_balance = models.Branches.objects.filter(
                             cooperator=cooperator_obj).aggregate(

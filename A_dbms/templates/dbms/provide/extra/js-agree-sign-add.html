@@ -1,0 +1,48 @@
+<script>
+    $(function () {
+        bindSignAgreeB();
+        bindAddAgreeSignModalOk();
+    });
+
+    function bindSignAgreeB() {
+        $('#signAgreeB').click(function () {
+            $('#addAgreeSignModal').modal('show');
+        })
+    }
+
+    function bindAddAgreeSignModalOk() {
+        $('#addAgreeSignModalOk').click(function () {
+            var postData = {};
+            $('#addAgreeSignModal').find('input,select').each(function () {
+                var v = $(this).val();
+                var n = $(this).attr('name');
+                postData[n] = v;
+            });
+            var postDataStr = JSON.stringify(postData);
+            $.ajax({
+                url: '/dbms/provide/agree/sign/',
+                type: 'POST',
+                traditional: true,
+                data: {'postDataStr': postDataStr},
+                dataType: 'JSON',
+                success: function (arg) {
+                    console.log(arg);
+                    if (arg.status) {
+                        $('#signAllModal').modal('hide');
+                        alert(arg.message);
+                        {#window.location.href = arg.skip;#}
+                        window.location.reload();
+                    } else {
+                        alert(arg.message);
+                    }
+                }
+            })
+        })
+    }
+</script>
+
+
+
+
+
+

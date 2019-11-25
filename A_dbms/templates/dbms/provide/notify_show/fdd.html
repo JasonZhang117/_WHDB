@@ -1,0 +1,56 @@
+<div style="font-size: 20pt">
+    <p align="center"><strong>成都武侯武兴小额贷款有限责任公司</strong></p>
+    <p style="padding-bottom: 25pt" align="center"><strong>个人住房抵押贷款项目贷款放款通知单</strong></p>
+</div>
+<div align="right">{{ date_today_str }}</div>
+<table>
+    <tr>
+        <td class="bb tc">借款人名称</td>
+        <td class="bb tc">
+            {{ notify_obj.agree.lending.summary.custom.name }}
+            {% if notify_obj.agree.lending.summary.borrower.all %}
+                {% for borrower in notify_obj.agree.lending.summary.borrower.all %}
+                    、{{ borrower.name }}
+                {% endfor %}
+            {% endif %}
+        </td>
+        <td class="bb tc" >放款金额</td>
+        <td class="bb tc" colspan="2">{{ notify_money_cn }}</td>
+    </tr>
+    <tr>
+
+        <td class="bb tc" width="15%">开户行</td>
+        <td class="bb tc" width="35%">{{ notify_obj.agree.acc_bank }}</td>
+        <td class="bb tc" width="15%">收款账号</td>
+        <td class="bb tc" width="35%">{{ notify_obj.agree.acc_num }}（{{ notify_obj.agree.acc_name }}）</td>
+    </tr>
+
+    <tr>
+        <td class="bb arg-bn" colspan="6" style="line-height: 18pt">
+            审核材料：□贷款调查报告、□贷款项目评审意见书、□贷款审批表、□合同用印审批表、□借款和抵押合同原件、□抵押物房产证原件和他项权证原件、□抵押查档信息、□评估报告原件、□借款人和抵押人身份征复印件、□户口簿复印件、<br>□结婚证或离婚证复印件（如有）
+        </td>
+    </tr>
+    <tr>
+        <td class="bb" colspan="6">放款岗意见：<br><br><br><br><br>
+        </td>
+    </tr>
+    <tr>
+        <td class="bb" colspan="6">风控部负责人意见：<br><br><br><br><br>
+        </td>
+    </tr>
+
+    <tr>
+        <td class="bb" colspan="6">公司业务分管领导意见：<br><br><br><br><br>
+        </td>
+    </tr>
+    <tr>
+        <td class="bb" colspan="6">总经理意见：<br><br><br><br><br>
+        </td>
+    </tr>
+    <tr>
+        <td class="bb" colspan="6">董事长意见：<br><br><br><br><br><br>
+        </td>
+    </tr>
+</table>
+<div align="right">成都武侯武兴小额贷款有限责任公司</div>
+<div align="right">______年___月___日</div>

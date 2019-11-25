@@ -8,7 +8,7 @@ from django.contrib.auth.decorators import login_required
 from django.db.models import Q, F
 from django.db.models import Avg, Min, Sum, Max, Count
 from django.urls import resolve
-from _WHDB.views import (MenuHelper, authority, amount_s, amount_y, convert)
+from _WHDB.views import (MenuHelper, authority, amount_s, amount_y, convert, convert_num)
 
 
 # -----------------------放款管理---------------------#
@@ -212,6 +212,8 @@ def provide_agree_scan(request, agree_id):  # 查看放款
     today_str = str(datetime.date.today())
     form_notify_add = forms.FormNotifyAdd(initial={'notify_date': today_str})  # 添加放款通知
     form_ascertain_add = forms.FormAscertainAdd()  # 风控落实
+
+    from_agree_sign = forms.FormAgreeSignAdd(initial={'sign_date': today_str})  # 反担保合同签订
     from_counter_sign = forms.FormCounterSignAdd(initial={'counter_sign_date': today_str})  # 反担保合同签订
     return render(request, 'dbms/provide/provide-agree-scan.html', locals())
 
@@ -298,18 +300,12 @@ def notify_show(request, notify_id):  # 查看放款通知
     PAGE_TITLE = '放款通知'
 
     notify_obj = models.Notify.objects.get(id=notify_id)
-    agree_obj = notify_obj.agree
-    article_obj = agree_obj.lending.summary
-
-    amount_str_w = amount_s(article_obj.amount)  # 转化为万为单位，并且去掉小数点后面的零
-    credit_term_str = amount_y(article_obj.credit_term)  # 去掉小数点后面的零
-    single_quota_list = article_obj.single_quota_summary.all()  # 单项额度列表
-    flow_rate = single_quota_list[0].flow_rate  # 费率
-    product_name = article_obj.product.name  # 产品名称
-    lending_list = article_obj.lending_summary.all()  # 放款次序列表
-    sure_lending_list = lending_list[0].sure_lending.all()
-    sure_typ_dic = dict(models.LendingSures.SURE_TYP_LIST)  # 反担保类型
-    process_typ = article_obj.process.typ  # 流程类型
+    product_name_list = ['房抵贷', '担保贷', '过桥贷', ]
+    agree_amount_cn = convert(notify_obj.agree.agree_amount)
+    notify_money_cn = convert(notify_obj.notify_money)
+    agree_term_cn = convert_num(notify_obj.agree.agree_term)
+    agree_rate_str = notify_obj.agree.agree_rate
+    date_today_str = str(datetime.date.today())
 
     return render(request, 'dbms/provide/provide-notify-show.html', locals())
 

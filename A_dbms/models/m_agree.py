@@ -59,10 +59,11 @@ class Agrees(models.Model):  # 委托合同
     agree_sign_date = models.DateField(verbose_name='签批日期', null=True, blank=True)
     charge = models.FloatField(verbose_name='应收保费（元）', default=0)
     other = models.TextField(verbose_name='其他约定', null=True, blank=True)
+    sign_date = models.DateField(verbose_name='签订日期', null=True, blank=True)
     ascertain_date = models.DateField(verbose_name='落实日期', null=True, blank=True)
     agree_remark = models.TextField(verbose_name='落实情况', null=True, blank=True)
 
-    AGREE_STATE_LIST = [(11, '待签批'), (21, '已签批'), (31, '未落实'),
+    AGREE_STATE_LIST = [(11, '待签批'), (21, '已签批'), (25, '已签订'), (31, '未落实'),
                         (41, '已落实'), (51, '待变更'), (61, '已解保'), (99, '已注销')]
     agree_state = models.IntegerField(verbose_name='合同状态', choices=AGREE_STATE_LIST, default=11)
     agree_notify_sum = models.FloatField(verbose_name='_通知金额', default=0)

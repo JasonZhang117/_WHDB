@@ -138,6 +138,7 @@ urlpatterns = [
     path('provide/track/overdue/', views.track_overdue, name='provide_track_overdue'),
     path('provide/track/soondue/', views.track_soondue, name='provide_track_soondue'),
 
+    path('provide/agree/sign/', views.provide_agree_sign_ajax, name='provide_agree_sign_ajax'),
     path('provide/counter/sign/', views.counter_sign_ajax, name='provide_counter_sign_ajax'),
     path('provide/sign/all/', views.sign_all_ajax, name='provide_sign_all_ajax'),
 

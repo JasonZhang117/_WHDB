@@ -23,8 +23,8 @@ def agree_sign_ajax(request):  # 添加合同
     agree_id = post_data['agree_id']
     agree_list = models.Agrees.objects.filter(id=agree_id)
     agree_obj = agree_list.first()
-    '''AGREE_STATE_LIST = ((11, '待签批'), (21, '已签批'), (31, '已落实，未放款'), (41, '已落实，放款'),
-                        (42, '未落实，放款'), (51, '待变更'), (61, '已解保'), (99, '已作废'))'''
+    '''AGREE_STATE_LIST = [(11, '待签批'), (21, '已签批'), (25, '已签订'), (31, '未落实'),
+                        (41, '已落实'), (51, '待变更'), (61, '已解保'), (99, '已注销')]'''
     if agree_obj.agree_state == 11:
         form_agree_sign = forms.FormAgreeSign(post_data, request.FILES)
         if form_agree_sign.is_valid():
