@@ -100,7 +100,7 @@ def index(request):
                 notify__agree__lending__summary__director=request.user))
     no_pigeonhole_count = no_pigeonhole_list.count()  # 未归档
     # 逾期归档
-    pigeonhole_overdue = models.Provides.objects.filter(implement__in=[1, 11], provide_date__lt=date_30_befor)
+    pigeonhole_overdue = models.Provides.objects.filter(implement__in=[1, 11], provide_date__lt=date_20_leter)
     if '项目经理' in job_list:
         pigeonhole_overdue = pigeonhole_overdue.filter(
             Q(notify__agree__lending__summary__director=request.user) | Q(
