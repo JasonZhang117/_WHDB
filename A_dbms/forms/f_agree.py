@@ -64,5 +64,6 @@ initial = str(datetime.date.today()),
 class AddCounterForm(dform.ModelForm):  # 反担保合同添加
     class Meta:
         model = models.Counters
-        fields = ['counter_typ']
-        widgets = {'counter_typ': dform.Select(attrs={'class': 'form-control'})}
+        fields = ['counter_typ','counter_other']
+        widgets = {'counter_typ': dform.Select(attrs={'class': 'form-control'}),
+                   'counter_other': dform.Textarea(attrs={'class': 'form-control', 'rows': '1', 'placeholder': '其他合同约定事项'}),}

@@ -75,7 +75,7 @@
                 <p>！！！！！！！还未添加合同模板，请联系系统管理员！！！！！！！</p>
             {% endif %}
         {% elif agree_typ == 41 %}
-            {#            (41, '单笔(公证)')#}
+            {#(41, '单笔(公证)')#}
             {% if counter_typ == 1 %}
                 {% include 'dbms/agree/agree_board/counter/c-s-x-n.html' %}
             {% elif counter_typ == 2 %}
@@ -90,6 +90,7 @@
         {% elif agree_typ == 42 %}
             <p>！！！！！！！(42, 'D-最高额(公证)'),！！！！！！！</p>
         {% elif agree_typ == 51 %}
+            {#(51, 'X-小贷单笔')#}
             {% if counter_typ == 1 and counter_typ == 2 %}
                 {% include 'dbms/agree/agree_board/loan_co/l-c-s-x.html' %}
             {% elif counter_typ in D_COUNTER_TYP_LIST %}

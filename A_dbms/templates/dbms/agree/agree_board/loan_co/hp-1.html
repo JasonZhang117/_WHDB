@@ -1,0 +1,55 @@
+<div class="agree-tit"><strong>{{ counter_obj.get_counter_name_display }}</strong></div>
+<div style="padding-bottom: 15pt">
+    {% for warrant in counter_obj.warrant_counter.warrant.all %}
+        {% if forloop.first %}
+            {#(1, '房产'), (2, '房产包'), (5, '土地'), (6, '在建工程')#}
+            {% if warrant.ownership_warrant.all %}
+                {% for ownership in warrant.ownership_warrant.all %}
+                    <p>抵押人：<u><strong>{{ ownership.owner.name }}</strong></u></p>
+                    {% if ownership.owner.genre == 1 %}
+                        <p>法定代表人（负责人）：<u><strong>{{ ownership.owner.company_custome.representative }}</strong></u></p>
+                        <p>住所：<u><strong>{{ ownership.owner.company_custome.registered_addr }}</strong></u></p>
+                    {% elif ownership.owner.genre == 2 %}
+                        <p>
+                            证件种类：<u><strong>身份证</strong></u>，证件号码：<u><strong>{{ agree_obj.lending.summary.custom.person_custome.license_num }}</strong></u>
+                        </p>
+                    {% endif %}
+                {% endfor %}
+                {#(11, '应收账款')#}
+            {% elif warrant.warrant_typ == 11 %}
+                <p>出质人：<u><strong>{{ warrant.receive_warrant.receive_owner.name }}</strong></u></p>
+                <p>法定代表人（负责人）：{{ warrant.receive_warrant.receive_owner.company_custome.representative }}</p>
+                <p>住所：{{ warrant.receive_warrant.receive_owner.company_custome.registered_addr }}</p>
+                {#(21, '股权')#}
+            {% elif warrant.warrant_typ == 21 %}
+                <p>出质人：<u><strong>{{ warrant.stock_warrant.stock_owner.name }}</strong></u></p>
+                <p>法定代表人（负责人）：{{ warrant.stock_warrant.stock_owner.company_custome.representative }}</p>
+                <p>住所：{{ warrant.stock_warrant.stock_owner.company_custome.registered_addr }}</p>
+                {#(31, '票据')#}
+            {% elif warrant.warrant_typ == 31 %}
+                <p>出质人：<u><strong>{{ warrant.draft_warrant.draft_owner.name }}</strong></u></p>
+                <p>法定代表人（负责人）：{{ warrant.draft_warrant.draft_owner.company_custome.representative }}</p>
+                <p>住所：{{ warrant.draft_warrant.draft_owner.company_custome.registered_addr }}</p>
+                {#(41, '车辆')#}
+            {% elif warrant.warrant_typ == 41 %}
+                <p>抵押人：<u><strong>{{ warrant.vehicle_warrant.vehicle_owner.name }}</strong></u></p>
+                <p>法定代表人（负责人）：{{ warrant.vehicle_warrant.vehicle_owner.company_custome.representative }}</p>
+                <p>住所：{{ warrant.vehicle_warrant.vehicle_owner.company_custome.registered_addr }}</p>
+                {#(51, '动产')#}
+            {% elif warrant.warrant_typ == 51 %}
+                <p>抵押人：<u><strong>{{ warrant.chattel_warrant.chattel_owner.name }}</strong></u></p>
+                <p>法定代表人（负责人）：{{ warrant.chattel_warrant.chattel_owner.company_custome.representative }}</p>
+                <p>住所：{{ warrant.chattel_warrant.chattel_owner.company_custome.registered_addr }}</p>
+                {#(55, '其他')#}
+            {% elif warrant.warrant_typ == 55 %}
+                <p>出质人：<u><strong>{{ warrant.other_warrant.other_owner.name }}</strong></u></p>
+                <p>法定代表人（负责人）：{{ warrant.other_warrant.other_owner.company_custome.representative }}</p>
+                <p>住所：{{ warrant.other_warrant.other_owner.company_custome.registered_addr }}</p>
+            {% else %}
+                <p><strong>？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？</strong></p>
+                <p><strong>？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？</strong></p>
+                <p><strong>？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？</strong></p>
+            {% endif %}
+        {% endif %}
+    {% endfor %}
+</div>

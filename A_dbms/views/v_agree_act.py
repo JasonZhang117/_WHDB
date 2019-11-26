@@ -540,7 +540,6 @@ def counter_add_ajax(request):
     counter_typ = int(post_data['counter_typ'])
     agree_obj = models.Agrees.objects.get(id=agree_id)
     agree_typ = agree_obj.agree_typ
-
     from_counter_add = forms.AddCounterForm(post_data)
     counter_prefix = agree_obj.num_prefix  # 合同前缀
     counter_name = counter_name_f(agree_typ, counter_typ)  # 生成合同名称
@@ -549,72 +548,81 @@ def counter_add_ajax(request):
     agree_state_counter = agree_obj.agree_state  # 主合同状态
     '''AGREE_STATE_LIST = [(11, '待签批'), (21, '已签批'), (31, '未落实'),
                         (41, '已落实'), (51, '待变更'), (61, '已解保'), (99, '已注销')]'''
-    if agree_state_counter in [11, 51]:
-        if counter_typ in [1, 2]:  # 保证反担保
-            if counter_typ in [1, ]:
-                custom_list = post_data['custom_c']  #
+
+    if from_counter_add.is_valid():
+        counter_clean = from_counter_add.cleaned_data
+        if agree_state_counter in [11, 51]:
+            if counter_typ in [1, 2]:  # 保证反担保
+                if counter_typ in [1, ]:
+                    custom_list = post_data['custom_c']  #
+                else:
+                    custom_list = post_data['custom_p']
+                try:
+                    with transaction.atomic():
+                        '''创建反担保合同'''
+                        counter_obj = models.Counters.objects.create(
+                            counter_num=counter_num, counter_name=counter_name, agree=agree_obj,
+                            counter_typ=counter_typ, counter_other=counter_clean['counter_other'],
+                            counter_copies=counter_copies, counter_buildor=request.user)
+                        '''创建保证反担保合同'''
+                        counter_assure_obj = models.CountersAssure.objects.create(
+                            counter=counter_obj, counter_assure_buildor=request.user)
+                        '''添加反担保人'''
+                        for custom in custom_list:
+                            counter_assure_obj.custome.add(custom)
+                    response['message'] = '成功创建反担保合同：%s！' % counter_obj.counter_num
+                except Exception as e:
+                    response['status'] = False
+                    response['message'] = '委托合同创建失败：%s' % str(e)
             else:
-                custom_list = post_data['custom_p']
-            try:
-                with transaction.atomic():
-                    '''创建反担保合同'''
-                    counter_obj = models.Counters.objects.create(
-                        counter_num=counter_num, counter_name=counter_name, agree=agree_obj, counter_typ=counter_typ,
-                        counter_copies=counter_copies, counter_buildor=request.user)
-                    '''创建保证反担保合同'''
-                    counter_assure_obj = models.CountersAssure.objects.create(
-                        counter=counter_obj, counter_assure_buildor=request.user)
-                    '''添加反担保人'''
-                    for custom in custom_list:
-                        counter_assure_obj.custome.add(custom)
-                response['message'] = '成功创建反担保合同：%s！' % counter_obj.counter_num
-            except Exception as e:
-                response['status'] = False
-                response['message'] = '委托合同创建失败：%s' % str(e)
+                '''COUNTER_TYP_LIST = [
+            (1, '企业担保'), (2, '个人保证'),
+            (11, '房产抵押'), (12, '土地抵押'), (13, '动产抵押'), (14, '在建工程抵押'), (15, '车辆抵押'),
+            (31, '应收质押'), (32, '股权质押'), (33, '票据质押'), (34, '动产质押'),
+            (41, '其他权利质押'),
+            (51, '股权预售'), (52, '房产预售'), (53, '土地预售'), (59, '其他预售')]'''
+                if counter_typ in [11, 52]:  # (11, '房产抵押'),(52, '房产预售'),
+                    warrant_list = post_data['house']
+                elif counter_typ in [12, 53]:  # (12, '土地抵押'),(53, '土地预售')
+                    warrant_list = post_data['ground']
+                elif counter_typ in [14, ]:  # (14, '在建工程抵押')
+                    warrant_list = post_data['coustruct']
+                elif counter_typ in [31, ]:  # (31, '应收质押')
+                    warrant_list = post_data['receivable']
+                elif counter_typ in [32, 51]:  # (32, '股权质押'), (51, '股权预售')
+                    warrant_list = post_data['stock']
+                elif counter_typ in [33, ]:  # (33, '票据质押')
+                    warrant_list = post_data['draft']
+                elif counter_typ in [15, ]:  # (15, '车辆抵押')
+                    warrant_list = post_data['vehicle']
+                elif counter_typ in [13, 34]:  # (13, '动产抵押'), (34, '动产质押')
+                    warrant_list = post_data['chattel']
+                elif counter_typ in [41, 59]:  # (41, '其他权利质押')
+                    warrant_list = post_data['other']
+                try:
+                    with transaction.atomic():
+                        '''创建反担保合同'''
+                        counter_obj = models.Counters.objects.create(
+                            counter_num=counter_num, counter_name=counter_name, agree=agree_obj,
+                            counter_typ=counter_typ,counter_other=counter_clean['counter_other'],
+                            counter_copies=counter_copies, counter_buildor=request.user)
+                        '''创建抵质押反担保合同'''
+                        counter_warrant_obj = models.CountersWarrants.objects.create(
+                            counter=counter_obj, counter_warrant_buildor=request.user)
+                        '''添加抵质押权证'''
+                        for warrant in warrant_list:
+                            counter_warrant_obj.warrant.add(warrant)
+                    response['message'] = '成功创建反担保合同：%s！' % counter_obj.counter_num
+                except Exception as e:
+                    response['status'] = False
+                    response['message'] = '委托合同创建失败：%s' % str(e)
         else:
-            '''COUNTER_TYP_LIST = [
-        (1, '企业担保'), (2, '个人保证'),
-        (11, '房产抵押'), (12, '土地抵押'), (13, '动产抵押'), (14, '在建工程抵押'), (15, '车辆抵押'),
-        (31, '应收质押'), (32, '股权质押'), (33, '票据质押'), (34, '动产质押'),
-        (41, '其他权利质押'),
-        (51, '股权预售'), (52, '房产预售'), (53, '土地预售'), (59, '其他预售')]'''
-            if counter_typ in [11, 52]:  # (11, '房产抵押'),(52, '房产预售'),
-                warrant_list = post_data['house']
-            elif counter_typ in [12, 53]:  # (12, '土地抵押'),(53, '土地预售')
-                warrant_list = post_data['ground']
-            elif counter_typ in [14, ]:  # (14, '在建工程抵押')
-                warrant_list = post_data['coustruct']
-            elif counter_typ in [31, ]:  # (31, '应收质押')
-                warrant_list = post_data['receivable']
-            elif counter_typ in [32, 51]:  # (32, '股权质押'), (51, '股权预售')
-                warrant_list = post_data['stock']
-            elif counter_typ in [33, ]:  # (33, '票据质押')
-                warrant_list = post_data['draft']
-            elif counter_typ in [15, ]:  # (15, '车辆抵押')
-                warrant_list = post_data['vehicle']
-            elif counter_typ in [13, 34]:  # (13, '动产抵押'), (34, '动产质押')
-                warrant_list = post_data['chattel']
-            elif counter_typ in [41, 59]:  # (41, '其他权利质押')
-                warrant_list = post_data['other']
-            try:
-                with transaction.atomic():
-                    '''创建反担保合同'''
-                    counter_obj = models.Counters.objects.create(
-                        counter_num=counter_num, counter_name=counter_name, agree=agree_obj, counter_typ=counter_typ,
-                        counter_copies=counter_copies, counter_buildor=request.user)
-                    '''创建抵质押反担保合同'''
-                    counter_warrant_obj = models.CountersWarrants.objects.create(
-                        counter=counter_obj, counter_warrant_buildor=request.user)
-                    '''添加抵质押权证'''
-                    for warrant in warrant_list:
-                        counter_warrant_obj.warrant.add(warrant)
-                response['message'] = '成功创建反担保合同：%s！' % counter_obj.counter_num
-            except Exception as e:
-                response['status'] = False
-                response['message'] = '委托合同创建失败：%s' % str(e)
+            response['status'] = False
+            response['message'] = '委托合同状态为：%s，反担保合同创建失败！！！' % agree_state_counter
     else:
         response['status'] = False
-        response['message'] = '委托合同状态为：%s，反担保合同创建失败！！！' % agree_state_counter
+        response['message'] = '表单信息有误！！！'
+        response['forme'] = from_counter_add.errors
     result = json.dumps(response, ensure_ascii=False)
     return HttpResponse(result)
 

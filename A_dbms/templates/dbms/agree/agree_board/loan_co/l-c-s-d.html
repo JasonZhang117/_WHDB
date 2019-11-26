@@ -7,58 +7,11 @@
     </div>
     <div class="split">
         <div>
-            <div class="agree-tit"><strong>{{ counter_obj.get_counter_name_display }}</strong></div>
+            <div>{% include 'dbms/agree/agree_board/loan_co/hp-1.html' %}</div>
             <div style="padding-bottom: 15pt">
-                {% for warrant in counter_obj.warrant_counter.warrant.all %}
-                    {% if forloop.first %}
-                        {#(1, '房产'), (2, '房产包'), (5, '土地'), (6, '在建工程')#}
-                        {% if warrant.ownership_warrant.all %}
-                            {% for ownership in warrant.ownership_warrant.all %}
-                                <p>抵押人：<u><strong>{{ ownership.owner.name }}</strong></u></p>
-                                {% if ownership.owner.genre == 1 %}
-                                    <p>法定代表人（负责人）：<u><strong>{{ ownership.owner.company_custome.representative }}</strong></u></p>
-                                    <p>住所：<u><strong>{{ ownership.owner.company_custome.registered_addr }}</strong></u></p>
-                                {% elif ownership.owner.genre == 2 %}
-                                    <p>证件种类：<u><strong>身份证</strong></u>，证件号码：<u><strong>{{ agree_obj.lending.summary.custom.person_custome.license_num }}</strong></u></p>
-                                {% endif %}
-                            {% endfor %}
-                            {#(11, '应收账款')#}
-                        {% elif warrant.warrant_typ == 11 %}
-                            <p>出质人：<u><strong>{{ warrant.receive_warrant.receive_owner.name }}</strong></u></p>
-                            <p>法定代表人（负责人）：{{ warrant.receive_warrant.receive_owner.company_custome.representative }}</p>
-                            <p>住所：{{ warrant.receive_warrant.receive_owner.company_custome.registered_addr }}</p>
-                            {#(21, '股权')#}
-                        {% elif warrant.warrant_typ == 21 %}
-                            <p>出质人：<u><strong>{{ warrant.stock_warrant.stock_owner.name }}</strong></u></p>
-                            <p>法定代表人（负责人）：{{ warrant.stock_warrant.stock_owner.company_custome.representative }}</p>
-                            <p>住所：{{ warrant.stock_warrant.stock_owner.company_custome.registered_addr }}</p>
-                            {#(31, '票据')#}
-                        {% elif warrant.warrant_typ == 31 %}
-                            <p>出质人：<u><strong>{{ warrant.draft_warrant.draft_owner.name }}</strong></u></p>
-                            <p>法定代表人（负责人）：{{ warrant.draft_warrant.draft_owner.company_custome.representative }}</p>
-                            <p>住所：{{ warrant.draft_warrant.draft_owner.company_custome.registered_addr }}</p>
-                            {#(41, '车辆')#}
-                        {% elif warrant.warrant_typ == 41 %}
-                            <p>抵押人：<u><strong>{{ warrant.vehicle_warrant.vehicle_owner.name }}</strong></u></p>
-                            <p>法定代表人（负责人）：{{ warrant.vehicle_warrant.vehicle_owner.company_custome.representative }}</p>
-                            <p>住所：{{ warrant.vehicle_warrant.vehicle_owner.company_custome.registered_addr }}</p>
-                            {#(51, '动产')#}
-                        {% elif warrant.warrant_typ == 51 %}
-                            <p>抵押人：<u><strong>{{ warrant.chattel_warrant.chattel_owner.name }}</strong></u></p>
-                            <p>法定代表人（负责人）：{{ warrant.chattel_warrant.chattel_owner.company_custome.representative }}</p>
-                            <p>住所：{{ warrant.chattel_warrant.chattel_owner.company_custome.registered_addr }}</p>
-                            {#(55, '其他')#}
-                        {% elif warrant.warrant_typ == 55 %}
-                            <p>出质人：<u><strong>{{ warrant.other_warrant.other_owner.name }}</strong></u></p>
-                            <p>法定代表人（负责人）：{{ warrant.other_warrant.other_owner.company_custome.representative }}</p>
-                            <p>住所：{{ warrant.other_warrant.other_owner.company_custome.registered_addr }}</p>
-                        {% else %}
-                            <p><strong>？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？</strong></p>
-                            <p><strong>？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？</strong></p>
-                            <p><strong>？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？</strong></p>
-                        {% endif %}
-                    {% endif %}
-                {% endfor %}
+                <p>抵押权人：<u>成都武侯武兴小额贷款有限责任公司</u></p>
+                <p>法定代表人（负责人）：<u>黄一平</u></p>
+                <p>住所：<u>成都市武侯区武科西五路360号西部智谷B区2栋3单元10楼</u></p>
             </div>
         </div>
         <div>
@@ -186,59 +139,7 @@
             <p><strong>第十条  通讯及送达</strong></p>
             <p>10.1本合同规定一方向相对方发出的通知或书面函件可通过当面递交、专递信函、传真或电子邮件、手机短信等电子通讯方式送达。</p>
             <p>10.2本合同双方确认的有效送达地址如下：</p>
-                {% for warrant in counter_obj.warrant_counter.warrant.all %}
-                    {% if forloop.first %}
-                        {#(1, '房产'), (2, '房产包'), (5, '土地'), (6, '在建工程')#}
-                        {% if warrant.ownership_warrant.all %}
-                            <p>如至抵押人：</p>
-                            {% for ownership in warrant.ownership_warrant.all %}
-                                <p>地址：<strong><u>{{ ownership.owner.contact_addr }}</u></strong></p>
-                                <p>电话：<strong><u>{{ ownership.owner.contact_num }}</u></strong></p>
-                                <p>收件人：<strong><u>{{ ownership.owner.linkman }}</u></strong></p>
-                            {% endfor %}
-                        {#(11, '应收账款')#}
-                    {% elif warrant.warrant_typ == 11 %}
-                        <p>如至质押人：</p>
-                        <p>地址：<strong><u>{{ warrant.receive_warrant.receive_owner.contact_addr }}</u></strong></p>
-                        <p>电话：<strong><u>{{ warrant.receive_warrant.receive_owner.contact_num }}</u></strong></p>
-                        <p>收件人：<strong><u>{{ warrant.receive_warrant.receive_owner.linkman }}</u></strong></p>
-                        {#(21, '股权')#}
-                    {% elif warrant.warrant_typ == 21 %}
-                        <p>如至质押人：</p>
-                        <p>地址：<strong><u>{{ warrant.stock_warrant.stock_owner.contact_addr }}</u></strong></p>
-                        <p>电话：<strong><u>{{ warrant.stock_warrant.stock_owner.contact_num }}</u></strong></p>
-                        <p>收件人：<strong><u>{{ warrant.stock_warrant.stock_owner.linkman }}</u></strong></p>
-                        {#(31, '票据')#}
-                    {% elif warrant.warrant_typ == 31 %}
-                        <p>如至质押人：</p>
-                        <p>地址：<strong><u>{{ warrant.draft_warrant.draft_owner.contact_addr }}</u></strong></p>
-                        <p>电话：<strong><u>{{ warrant.draft_warrant.draft_owner.contact_num }}</u></strong></p>
-                        <p>收件人：<strong><u>{{ warrant.draft_warrant.draft_owner.linkman }}</u></strong></p>
-                        {#(41, '车辆')#}
-                    {% elif warrant.warrant_typ == 41 %}
-                        <p>如至抵押人：</p>
-                        <p>地址：<strong><u>{{ warrant.vehicle_warrant.vehicle_owner.contact_addr }}</u></strong></p>
-                        <p>电话：<strong><u>{{ warrant.vehicle_warrant.vehicle_owner.contact_num }}</u></strong></p>
-                        <p>收件人：<strong><u>{{ warrant.vehicle_warrant.vehicle_owner.linkman }}</u></strong></p>
-                        {#(51, '动产')#}
-                    {% elif warrant.warrant_typ == 51 %}
-                        <p>如至质押人：</p>
-                        <p>地址：<strong><u>{{ warrant.chattel_warrant.chattel_owner.contact_addr }}</u></strong></p>
-                        <p>电话：<strong><u>{{ warrant.chattel_warrant.chattel_owner.contact_num }}</u></strong></p>
-                        <p>收件人：<strong><u>{{ warrant.chattel_warrant.chattel_owner.linkman }}</u></strong></p>
-                        {#(55, '其他')#}
-                    {% elif warrant.warrant_typ == 55 %}
-                        <p>如至质押人：</p>
-                        <p>地址：<strong><u>{{ warrant.other_warrant.other_owner.contact_addr }}</u></strong></p>
-                        <p>电话：<strong><u>{{ warrant.other_warrant.other_owner.contact_num }}</u></strong></p>
-                        <p>收件人：<strong><u>{{ warrant.other_warrant.other_owner.linkman }}</u></strong></p>
-                    {% else %}
-                        <p><strong>？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？</strong></p>
-                        <p><strong>？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？</strong></p>
-                        <p><strong>？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？</strong></p>
-                    {% endif %}
-                    {% endif %}
-                {% endfor %}
+            <div>{% include 'dbms/agree/agree_board/loan_co/notify-1.html' %}</div>
             <p>如至抵押权人：</p>
             <p>地址：{{ ADD }}</p>
             <p>电话：{{ CNB }}</p>
@@ -260,14 +161,11 @@
             <p>11.6<strong>本合同经企业或者其他组织抵押人法定代表人或负责人或授权代表签字（或盖章）并加盖公章（自然人抵押人本人或授权代表签字）、抵押权人法定代表人或负责人或授权代表签字（或盖章）并加盖公章后生效。</strong></p>
             <p>11.7本合同正本一式<strong><u>{{ counter_obj.counter_copies }}</u></strong>份，具有同等效力。</p>
             <p><strong>第十二条  其他约定事项</strong></p>
-            <div>{% include 'dbms/agree/agree_board/blank-space.html' %}</div>
+            <div>{% include 'dbms/agree/agree_board/counter-other-space.html' %}</div>
             <p><strong>抵押人声明：抵押人已对本合同各条款作全面、准确的理解，抵押权人应抵押人的要求作了相应的条款说明，签约各方对本合同含义理解认识一致，不存在任何歧义。抵押人对本合同的签署意味着对本合同条款的全面理解、接受和对声明内容的确认，否则应不予签署。</strong></p>
-        </div>
-        <div>
-
         </div>
     </div>
     <div class="split">
-        {% include 'dbms/agree/agree_board/counter/d/d-appendix-1.html' %}
+        <div>{% include 'dbms/agree/agree_board/loan_co/mortgage-list.html' %}</div>
     </div>
 </div>

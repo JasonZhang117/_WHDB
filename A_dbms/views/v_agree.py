@@ -394,7 +394,7 @@ def counter_preview(request, agree_id, counter_id):
         single_quota_rate = agree_obj.agree_rate
         agree_rate_cn_q = agree_obj.agree_rate
         agree_rate_w = '叁点叁叁叁叁'
-
+    print(counter_obj.counter_other)
     return render(request, 'dbms/agree/preview-counter.html', locals())
 
 

@@ -2,23 +2,77 @@
     $(function () {
         bindAddCounterB();
         bind_id_counter_typ();
+        bind_id_counter_typ_n();
         bindAddCounterModalOk();
     });
 
     function bindAddCounterB() {
-        console.log("bindAddCounterB");
         $('#addCounterB').click(function () {
-            {#console.log("bindAddCounterB")#}
             $('#addCounterModal').modal('show');
         })
     }
 
+    function bind_id_counter_typ_n() {
+        var selected_counter_typ_n = $('#id_counter_typ').val();
+        $('.extend').hide();
+        switch (selected_counter_typ_n) {
+            case ('1'): {#企业保证#}
+                    $('#form_counter_assure_c').show();
+                    break;
+                case ('2'):{#个人保证#}
+                    $('#form_counter_assure_p').show();
+                    break;
+                case ('11'):{#房产抵押#}
+                    $('#form_counter_house').show();
+                    break;
+                case ('52'):{#房产预售#}
+                    $('#form_counter_house').show();
+                    break;
+                case ('12'):{#土地抵押#}
+                    $('#form_counter_ground').show();
+                    break;
+                case ('53'):{#土地预售#}
+                    $('#form_counter_ground').show();
+                    break;
+                case ('14'):{#在建工程抵押#}
+                    $('#form_counter_coustruct').show();
+                    break;
+                case ('31'):{#应收质押#}
+                    $('#form_counter_receivable').show();
+                    break;
+                case ('32'):{#股权质押#}
+                    $('#form_counter_stock').show();
+                    break;
+                case ('51'):{#股权预售#}
+                    $('#form_counter_stock').show();
+                    break;
+                case ('33'):{#票据质押#}
+                    $('#form_counter_draft').show();
+                    break;
+                case ('15'):{#车辆抵押#}
+                    $('#form_counter_vehicle').show();
+                    break;
+                case ('13'):{#动产抵押#}
+                    $('#form_counter_chattel').show();
+                    break;
+                case ('34'):{#动产质押#}
+                    $('#form_counter_chattel').show();
+                    break;
+                case ('41'):{#其他权利质押#}
+                    $('#form_counter_other').show();
+                    break;
+                case ('59'):{#其他权利质押#}
+                    $('#form_counter_other').show();
+                    break;
+                default:
+                    $('.extend').hide()
+        }
+    }
+
     function bind_id_counter_typ() {
         $('#id_counter_typ').change(function () {
-            console.log("bind_id_counter_typ");
             $('.extend').hide();
             var selected_counter_typ = $('#id_counter_typ').val();
-            console.log(selected_counter_typ);
             {#COUNTER_TYP_LIST = (#}
             {#(1, '企业担保'), (2, '个人保证'),#}
             {#(11, '房产抵押'), (12, '土地抵押'), (13, '动产抵押'), (14, '在建工程抵押'), (15, '车辆抵押'),#}
@@ -87,6 +141,8 @@
                 var n = $(this).attr('name');
                 postData[n] = v;
             });
+            var counter_other_g = $('#id_counter_other').val();
+            postData['counter_other'] = counter_other_g;
             var postDataStr = JSON.stringify(postData);
             console.log(postDataStr);
             $.ajax({
