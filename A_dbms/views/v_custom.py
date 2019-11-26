@@ -8,7 +8,7 @@ from django.db.models import Q, F
 from django.contrib.auth.decorators import login_required
 from django.urls import resolve
 from _WHDB.views import MenuHelper
-from _WHDB.views import authority
+from _WHDB.views import (authority, custom_list_screen,custom_right)
 
 
 # -----------------------客户管理-------------------------#
@@ -27,6 +27,7 @@ def custom(request, *args, **kwargs):  # 委托合同列表
     genre_list = models.Customes.GENRE_LIST  # 筛选条件
     '''筛选'''
     custom_list = models.Customes.objects.filter(**kwargs).order_by('-credit_amount', '-name')
+    custom_list = custom_list_screen(custom_list, request)
     '''搜索'''
     search_key = request.GET.get('_s')
     if search_key:
@@ -52,6 +53,7 @@ def custom(request, *args, **kwargs):  # 委托合同列表
 # -----------------------------客户预览------------------------------#
 @login_required
 @authority
+@custom_right
 def custom_scan(request, custom_id):  # 项目预览
     current_url_name = resolve(request.path).url_name  # 获取当前URL_NAME
     authority_list = request.session.get('authority_list')  # 获取当前用户的所有权限

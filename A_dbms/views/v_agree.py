@@ -10,7 +10,8 @@ import datetime
 from django.db.models import Avg, Min, Sum, Max, Count
 from django.urls import resolve, reverse
 from _WHDB.views import MenuHelper
-from _WHDB.views import authority, credit_term_c, convert, convert_num, un_dex, amount_s,amount_y
+from _WHDB.views import (authority, credit_term_c, convert, convert_num, un_dex, amount_s, amount_y,
+                         agree_list_screen, agree_right)
 
 
 # -----------------------委托合同列表---------------------#
@@ -19,6 +20,7 @@ from _WHDB.views import authority, credit_term_c, convert, convert_num, un_dex, 
 def agree(request, *args, **kwargs):  # 委托合同列表
     current_url_name = resolve(request.path).url_name  # 获取当前URL_NAME
     authority_list = request.session.get('authority_list')  # 获取当前用户的所有权限
+    job_list = request.session.get('job_list')  # 获取当前用户的所有角色
     menu_result = MenuHelper(request).menu_data_list()
     PAGE_TITLE = '合同列表'
     operate_agree_add = True
@@ -29,6 +31,7 @@ def agree(request, *args, **kwargs):  # 委托合同列表
     AGREE_STATE_LIST = models.Agrees.AGREE_STATE_LIST  # 筛选条件
     '''筛选'''
     agree_list = models.Agrees.objects.filter(**kwargs).select_related('lending', 'branch').order_by('-agree_num')
+    agree_list = agree_list_screen(agree_list, request)
     '''搜索'''
     search_key = request.GET.get('_s')
     if search_key:
@@ -59,6 +62,7 @@ def agree(request, *args, **kwargs):  # 委托合同列表
 # -----------------------------查看合同------------------------------#
 @login_required
 @authority
+@agree_right
 def agree_scan(request, agree_id):  # 查看合同
     current_url_name = resolve(request.path).url_name  # 获取当前URL_NAME
     authority_list = request.session.get('authority_list')  # 获取当前用户的所有权限
@@ -113,9 +117,9 @@ def agree_scan(request, agree_id):  # 查看合同
     warrants_o_lending_list = models.Warrants.objects.filter(
         lending_warrant__sure__lending=agree_lending_obj, warrant_typ=55).exclude(
         counter_warrant__counter__agree=agree_obj).values_list('id', 'warrant_num').order_by('warrant_num')
-    from_counter = forms.AddCounterForm() #添加反担保合同form
+    from_counter = forms.AddCounterForm()  # 添加反担保合同form
     form_agree_sign_data = {'agree_sign_date': str(datetime.date.today())}
-    form_agree_sign = forms.FormAgreeSign(initial=form_agree_sign_data) #添加反担保合同form
+    form_agree_sign = forms.FormAgreeSign(initial=form_agree_sign_data)  # 添加反担保合同form
     form_agree_edit_date = {
         'branch': agree_obj.branch,
         'agree_typ': agree_obj.agree_typ,
@@ -127,14 +131,14 @@ def agree_scan(request, agree_id):  # 查看合同
         'agree_copies': agree_obj.agree_copies,
         'other': agree_obj.other,
     }
-    form_agree_edit = forms.AgreeEditForm(initial=form_agree_edit_date) #添加反担保合同form
-    if agree_obj.agree_typ == 22: #(22, 'D-公司保函')
+    form_agree_edit = forms.AgreeEditForm(initial=form_agree_edit_date)  # 添加反担保合同form
+    if agree_obj.agree_typ == 22:  # (22, 'D-公司保函')
         from_letter_data = {'starting_date': str(agree_obj.guarantee_agree.starting_date),
                             'due_date': str(agree_obj.guarantee_agree.due_date),
                             'letter_typ': agree_obj.guarantee_agree.letter_typ,
                             'beneficiary': agree_obj.guarantee_agree.beneficiary,
                             'basic_contract': agree_obj.guarantee_agree.basic_contract,
-                            'basic_contract_num': agree_obj.guarantee_agree.basic_contract_num,}
+                            'basic_contract_num': agree_obj.guarantee_agree.basic_contract_num, }
         form_letter_add = forms.LetterGuaranteeAddForm(initial=from_letter_data)  # 创建公司保函合同
     else:
         today_str = datetime.date.today()
@@ -145,10 +149,8 @@ def agree_scan(request, agree_id):  # 查看合同
                     'agree_due_date': str(agree_obj.agree_due_date),
                     'acc_name': agree_obj.acc_name, 'acc_num': agree_obj.acc_num,
                     'acc_bank': agree_obj.acc_bank, 'repay_method': agree_obj.repay_method,
-                    'repay_ex': agree_obj.repay_ex,}
+                    'repay_ex': agree_obj.repay_ex, }
     form_agree_jk_add = forms.AgreeJkAddForm(initial=from_jk_data)  # 创建小贷借款合同扩展
-
-
 
     return render(request, 'dbms/agree/agree-scan.html', locals())
 
@@ -156,6 +158,7 @@ def agree_scan(request, agree_id):  # 查看合同
 # -----------------------------查看合同------------------------------#
 @login_required
 @authority
+@agree_right
 def agree_scan_counter(request, agree_id, counter_id):  # 查看合同
     current_url_name = resolve(request.path).url_name  # 获取当前URL_NAME
     authority_list = request.session.get('authority_list')  # 获取当前用户的所有权限
@@ -214,6 +217,7 @@ def agree_scan_counter(request, agree_id, counter_id):  # 查看合同
 # -------------------------合同预览-------------------------#
 @login_required
 @authority
+@agree_right
 def agree_preview(request, agree_id):
     current_url_name = resolve(request.path).url_name  # 获取当前URL_NAME
     authority_list = request.session.get('authority_list')  # 获取当前用户的所有权限
@@ -224,8 +228,8 @@ def agree_preview(request, agree_id):
     agree_amount_cn = convert(agree_amount)  # 转换为金额大写
     agree_amount_str = amount_s(agree_amount)  # 元转换为万元并去掉小数点后面的零
     agree_amount_y = amount_y(agree_amount)  # 元转换为万元并去掉小数点后面的零
-    agree_term_cn = convert_num(agree_obj.agree_term) #合同期限转大写
-    bank_name = agree_obj.branch.cooperator.name #合作银行
+    agree_term_cn = convert_num(agree_obj.agree_term)  # 合同期限转大写
+    bank_name = agree_obj.branch.cooperator.name  # 合作银行
 
     if '民生银行' in bank_name:
         file_name = '《开立保函/备用信用证申请书》或《开立保函/备用信用证协议》'
@@ -236,8 +240,8 @@ def agree_preview(request, agree_id):
         (21, 'D-分离式保函'), (22, 'D-公司保函'), (23, 'D-银行保函'),
         (41, 'D-单笔(公证)'), (42, 'D-最高额(公证)'),
         (51, 'X-小贷单笔'), (52, 'X-小贷最高额'), ]'''
-    AGREE_TYP_D = models.Agrees.AGREE_TYP_D # 担保公司合同类型
-    AGREE_TYP_X = models.Agrees.AGREE_TYP_X # 小贷公司合同类型
+    AGREE_TYP_D = models.Agrees.AGREE_TYP_D  # 担保公司合同类型
+    AGREE_TYP_X = models.Agrees.AGREE_TYP_X  # 小贷公司合同类型
     UN, ADD, CNB = un_dex(agree_typ)  # 不同合同种类下主体适用
     if agree_typ in [22, ]:  # (22, 'D-公司保函'),
         page_home_y_y = '申请人（乙方）'
@@ -262,7 +266,7 @@ def agree_preview(request, agree_id):
         single_quota_rate = float(agree_obj.agree_rate)
         charge = round(agree_amount * single_quota_rate / 100, 2)
         agree_rate_cn_q = convert_num(float(agree_obj.agree_rate))  # 合同利率转换为千分之，大写
-        agree_rate_w = convert_num(round(((20-float(agree_obj.agree_rate))/30*10),4))
+        agree_rate_w = convert_num(round(((20 - float(agree_obj.agree_rate)) / 30 * 10), 4))
         charge_cn = convert(charge)
     except ValueError:
         rate_b = False
@@ -275,6 +279,7 @@ def agree_preview(request, agree_id):
 # -------------------------反担保合同预览-------------------------#
 @login_required
 @authority
+@agree_right
 def counter_preview(request, agree_id, counter_id):
     current_url_name = resolve(request.path).url_name  # 获取当前URL_NAME
     authority_list = request.session.get('authority_list')  # 获取当前用户的所有权限
@@ -370,11 +375,11 @@ def counter_preview(request, agree_id, counter_id):
     else:
         counter_home_b_b = '借款人'
     agree_amount = agree_obj.agree_amount
-    agree_amount_cn = convert(agree_amount) # 转换为货币大写
-    agree_amount_str = amount_s(agree_amount) # 元转换为万元并去掉小数点后面的零
+    agree_amount_cn = convert(agree_amount)  # 转换为货币大写
+    agree_amount_str = amount_s(agree_amount)  # 元转换为万元并去掉小数点后面的零
     agree_amount_y = amount_y(agree_amount)  # 元去掉小数点后面的零
     agree_term = agree_obj.agree_term
-    agree_term_str = convert_num(agree_term) # 转换为数字大写
+    agree_term_str = convert_num(agree_term)  # 转换为数字大写
 
     agree_rate_cn_q = ''
     try:
@@ -390,13 +395,13 @@ def counter_preview(request, agree_id, counter_id):
         agree_rate_cn_q = agree_obj.agree_rate
         agree_rate_w = '叁点叁叁叁叁'
 
-
     return render(request, 'dbms/agree/preview-counter.html', locals())
 
 
 # -------------------------审签表预览-------------------------#
 @login_required
 @authority
+@agree_right
 def agree_sign_preview(request, agree_id):
     current_url_name = resolve(request.path).url_name  # 获取当前URL_NAME
     authority_list = request.session.get('authority_list')  # 获取当前用户的所有权限
@@ -438,6 +443,7 @@ def agree_sign_preview(request, agree_id):
 # -------------------------决议声明预览-------------------------#
 @login_required
 @authority
+@agree_right
 def result_preview(request, agree_id, result_id):
     current_url_name = resolve(request.path).url_name  # 获取当前URL_NAME
     authority_list = request.session.get('authority_list')  # 获取当前用户的所有权限

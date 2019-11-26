@@ -10,7 +10,7 @@ from django.db import transaction
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.urls import resolve
 from _WHDB.views import MenuHelper
-from _WHDB.views import authority
+from _WHDB.views import (authority,provide_list_screen,provide_right)
 
 
 # -----------------------归档列表---------------------#
@@ -26,10 +26,7 @@ def pigeonhole(request, *args, **kwargs):  # 归档
     IMPLEMENT_LIST = models.Provides.IMPLEMENT_LIST  # 筛选条件
     '''筛选'''
     provide_list = models.Provides.objects.filter(**kwargs).select_related('notify').order_by('-provide_date')
-    if '项目经理' in job_list:
-        provide_list = provide_list.filter(
-            Q(notify__agree__lending__summary__director=request.user) | Q(
-                notify__agree__lending__summary__director=request.user))
+    provide_list = provide_list_screen(provide_list,request)
     '''搜索'''
     search_key = request.GET.get('_s')
     if search_key:
@@ -62,6 +59,7 @@ def pigeonhole(request, *args, **kwargs):  # 归档
 # -----------------------------查看归档------------------------------#
 @login_required
 @authority
+@provide_right
 def pigeonhole_scan(request, provide_id):  # 查看放款
     current_url_name = resolve(request.path).url_name  # 获取当前URL_NAME
     authority_list = request.session.get('authority_list')  # 获取当前用户的所有权限
@@ -70,12 +68,6 @@ def pigeonhole_scan(request, provide_id):  # 查看放款
     PAGE_TITLE = '归档管理'
 
     provide_obj = models.Provides.objects.get(id=provide_id)
-    if '项目经理' in job_list:
-        user_list = models.Employees.objects.filter(
-            Q(director_employee__lending_summary__agree_lending__notify_agree__provide_notify=provide_obj) | Q(
-                director_employee__lending_summary__agree_lending__notify_agree__provide_notify=provide_obj)).distinct()
-        if not request.user in user_list:
-            return HttpResponse('你无权访问该项目')
     form_implement_add = forms.FormImplementAdd()
     form_pigeonhole_add = forms.FormPigeonholeAdd()
     form_pigeonhole_num = forms.FormPigeonholeNumAdd()
@@ -96,10 +88,7 @@ def pigeonhole_overdue(request, *args, **kwargs):
     date_15_leter = datetime.date.today() - datetime.timedelta(days=20)  # 15天前
     pigeonhole_overdue_list = models.Provides.objects.filter(
         implement__in=[1, 11], provide_date__lt=date_15_leter).order_by('-provide_date')  # 逾期归档
-    if '项目经理' in job_list:
-        pigeonhole_overdue_list = pigeonhole_overdue_list.filter(
-            Q(notify__agree__lending__summary__director=request.user) | Q(
-                notify__agree__lending__summary__director=request.user))
+    pigeonhole_overdue_list = provide_list_screen(pigeonhole_overdue_list, request)
     '''搜索'''
     search_key = request.GET.get('_s')
     if search_key:

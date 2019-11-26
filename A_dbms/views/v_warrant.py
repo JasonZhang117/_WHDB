@@ -9,7 +9,7 @@ from django.db.models import Q, F
 from django.urls import resolve
 from _WHDB.views import MenuHelper
 from django.views import View
-from _WHDB.views import authority
+from _WHDB.views import (authority, warrant_list_screen, warrant_right, agree_right)
 
 
 # -----------------------权证列表-------------------------#
@@ -44,6 +44,7 @@ def warrant(request, *args, **kwargs):  # 房产列表
     warrant_typ_list = models.Warrants.WARRANT_TYP_LIST  # 筛选条件
     '''筛选'''
     warrant_list = models.Warrants.objects.filter(**kwargs).order_by('warrant_num')
+    warrant_list = warrant_list_screen(warrant_list, request)
     '''搜索'''
     search_key = request.GET.get('_s')
     if search_key:
@@ -70,6 +71,7 @@ def warrant(request, *args, **kwargs):  # 房产列表
 # ---------------------warrant_scan权证预览------------------------#
 @login_required
 @authority
+@warrant_right
 def warrant_scan(request, warrant_id):  # house_scan房产预览
     current_url_name = resolve(request.path).url_name  # 获取当前URL_NAME
     authority_list = request.session.get('authority_list')  # 获取当前用户的所有权限
@@ -202,6 +204,7 @@ def warrant_agree(request, *args, **kwargs):  # 按合同入库
 # --------------------------按合同入库-按合同查看--------------------------#
 @login_required
 @authority
+@agree_right
 def warrant_agree_scan(request, agree_id):  # 查看合同
     current_url_name = resolve(request.path).url_name  # 获取当前URL_NAME
     authority_list = request.session.get('authority_list')  # 获取当前用户的所有权限
@@ -395,7 +398,7 @@ def soondue_draft(request, *args, **kwargs):  #
     return render(request, 'dbms/warrant/overdu-draft.html', locals())
 
 
-# -----------------------即将到期票据列表-------------------------#
+# -----------------------过期票据列表-------------------------#
 @login_required
 @authority
 def overdue_draft(request, *args, **kwargs):  #
@@ -451,6 +454,7 @@ def overdue_evaluate(request, *args, **kwargs):  #
     '''筛选'''
     warrant_list = models.Warrants.objects.filter(**kwargs).exclude(
         evaluate_state__in=[41, 99])
+    warrant_list = warrant_list_screen(warrant_list, request)
     '''EVALUATE_STATE_LIST = [(0, '待评估'), (5, '机构评估'), (11, '机构预估'), (21, '综合询价'), (31, '购买成本'),
                                (41, '拍卖评估'), (99, '无需评估')]'''
     '''ARTICLE_STATE_LIST = [(1, '待反馈'), (2, '已反馈'), (3, '待上会'), (4, '已上会'), (5, '已签批'),
@@ -515,6 +519,7 @@ def overdue_storage(request, *args, **kwargs):  #
                               (51, '已放款'), (52, '已放完'), (55, '已解保'), (61, '待变更'), (99, '已注销')]'''
     warrant_list = warrant_list.filter(
         lending_warrant__sure__lending__lending_state__in=[51, 52, 61]).distinct()
+    warrant_list = warrant_list_screen(warrant_list, request)
     '''搜索'''
     search_key = request.GET.get('_s')
     if search_key:

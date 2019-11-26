@@ -126,16 +126,230 @@ def acc_logout(request):
 
 
 # ---------------------------项目筛选函数----------------------------#
-def article_list_screen(article_list, job_list, request_user):  # 项目筛选
-    if '业务部门负责人' in job_list:  # 如果为业务部门负责人
+def article_list_screen(article_list, request):  # 项目筛选
+    job_list = request.session.get('job_list')  # 获取当前用户的所有角色
+    request_user = request.user
+    if '业务部负责人' in job_list:  # 如果为业务部门负责人
         user_department = models.Departments.objects.get(employee_department=request_user)  # 用户所属部门
         article_list = article_list.filter(director__department=user_department)  # 项目经理部门与用户所属部门相同项目
         return article_list
     elif '项目经理' in job_list:
-        article_list = article_list.filter(Q(director=request_user) | Q(assistant=request_user))  # 用户为项目经理或助理项目
+        article_list = article_list.filter(
+            Q(director=request_user) |
+            Q(assistant=request_user))  # 用户为项目经理或助理项目
         return article_list
     else:
         return article_list
+
+
+# ---------------------------合同筛选函数----------------------------#
+def agree_list_screen(agree_list, request):  # 项目筛选
+    job_list = request.session.get('job_list')  # 获取当前用户的所有角色
+    request_user = request.user
+    if '业务部负责人' in job_list:  # 如果为业务部门负责人
+        user_department = models.Departments.objects.get(employee_department=request_user)  # 用户所属部门
+        agree_list = agree_list.filter(lending__summary__director__department=user_department)  # 项目经理部门与用户所属部门相同项目
+        return agree_list
+    elif '项目经理' in job_list:
+        agree_list = agree_list.filter(
+            Q(lending__summary__director=request_user) |
+            Q(lending__summary__assistant=request_user))  # 用户为项目经理或助理项目
+        return agree_list
+    else:
+        return agree_list
+
+
+# ---------------------------放款通知筛选函数----------------------------#
+def notify_list_screen(notify_list, request):  # 项目筛选
+    job_list = request.session.get('job_list')  # 获取当前用户的所有角色
+    request_user = request.user
+    if '业务部负责人' in job_list:  # 如果为业务部门负责人
+        user_department = models.Departments.objects.get(employee_department=request_user)  # 用户所属部门
+        notify_list = notify_list.filter(
+            agree__lending__summary__director__department=user_department)  # 项目经理部门与用户所属部门相同项目
+        return notify_list
+    elif '项目经理' in job_list:
+        notify_list = notify_list.filter(
+            Q(agree__lending__summary__director=request_user) |
+            Q(agree__lending__summary__assistant=request_user))  # 用户为项目经理或助理项目
+        return notify_list
+    else:
+        return notify_list
+
+
+# ---------------------------放款筛选函数----------------------------#
+def provide_list_screen(provide_list, request):  # 项目筛选
+    job_list = request.session.get('job_list')  # 获取当前用户的所有角色
+    request_user = request.user
+    if '业务部负责人' in job_list:  # 如果为业务部门负责人
+        user_department = models.Departments.objects.get(employee_department=request_user)  # 用户所属部门
+        provide_list = provide_list.filter(
+            notify__agree__lending__summary__director__department=user_department)  # 项目经理部门与用户所属部门相同项目
+        return provide_list
+    elif '项目经理' in job_list:
+        provide_list = provide_list.filter(
+            Q(notify__agree__lending__summary__director=request_user) |
+            Q(notify__agree__lending__summary__assistant=request_user))  # 用户为项目经理或助理项目
+        return provide_list
+    else:
+        return provide_list
+
+
+# ---------------------------客户筛选函数----------------------------#
+def custom_list_screen(custom_list, request):  # 项目筛选
+    job_list = request.session.get('job_list')  # 获取当前用户的所有角色
+    request_user = request.user
+    if '业务部负责人' in job_list:  # 如果为业务部门负责人
+        user_department = models.Departments.objects.get(employee_department=request_user)  # 用户所属部门
+        custom_list = custom_list.filter(
+            managementor__department=user_department)  # 项目经理部门与用户所属部门相同项目
+        return custom_list
+    elif '项目经理' in job_list:
+        custom_list = custom_list.filter(managementor=request_user)  # 用户为项目经理或助理项目
+        return custom_list
+    else:
+        return custom_list
+
+
+# ---------------------------权证筛选函数----------------------------#
+def warrant_list_screen(warrant_list, request):  # 项目筛选
+    job_list = request.session.get('job_list')  # 获取当前用户的所有角色
+    request_user = request.user
+    if '业务部负责人' in job_list:  # 如果为业务部门负责人
+        user_department = models.Departments.objects.get(employee_department=request_user)  # 用户所属部门
+        warrant_list = warrant_list.filter(warrant_buildor__department=user_department)  # 项目经理部门与用户所属部门相同项目
+        return warrant_list
+    elif '项目经理' in job_list:
+        warrant_list = warrant_list.filter(warrant_buildor=request_user)  # 用户为项目经理或助理项目
+        return warrant_list
+    else:
+        return warrant_list
+
+
+# ---------------------------项目访问权限----------------------------#
+def article_right(func):  # 项目权限控制
+    def inner(request, *args, **kwargs):
+        article_obj = models.Articles.objects.get(id=kwargs['article_id'])  # 项目
+        job_list = request.session.get('job_list')  # 获取当前用户的所有角色
+        article_manager_department = article_obj.director.department  # 项目经理所属部门
+        user_department = models.Departments.objects.get(employee_department=request.user)
+        if '业务部负责人' in job_list:  # 如果为业务部门负责人
+            if not article_manager_department == user_department:  # 项目经理不属于部门负责人所属部门
+                return HttpResponse('该项目部归属你部门，无权访问！')
+        if '项目经理' in job_list:
+            user_list = models.Employees.objects.filter(
+                Q(director_employee=article_obj) |
+                Q(assistant_employee=article_obj)).distinct()  # 项目经理及助理列表
+            if not request.user in user_list:
+                return HttpResponse('你不是该项目的项目经理或助理，无权访问！')
+        return func(request, *args, **kwargs)
+
+    return inner
+
+
+# ---------------------------合同访问权限----------------------------#
+def agree_right(func):  # 合同权限控制
+    def inner(request, *args, **kwargs):
+        agree_obj = models.Agrees.objects.get(id=kwargs['agree_id'])  # 项目
+        job_list = request.session.get('job_list')  # 获取当前用户的所有角色
+        article_manager_department = agree_obj.lending.summary.director.department  # 项目经理所属部门
+        user_department = models.Departments.objects.get(employee_department=request.user)
+        if '业务部负责人' in job_list:  # 如果为业务部门负责人
+            if not article_manager_department == user_department:  # 项目经理不属于部门负责人所属部门
+                return HttpResponse('该项目部归属你部门，无权访问！')
+        if '项目经理' in job_list:
+            user_list = models.Employees.objects.filter(
+                Q(director_employee__lending_summary__agree_lending=agree_obj) |
+                Q(assistant_employee__lending_summary__agree_lending=agree_obj)).distinct()  # 项目经理及助理列表
+            if not request.user in user_list:
+                return HttpResponse('你不是该项目的项目经理或助理，无权访问！')
+        return func(request, *args, **kwargs)
+
+    return inner
+
+
+# ---------------------------放款通知访问权限----------------------------#
+def notify_right(func):  # 合同权限控制
+    def inner(request, *args, **kwargs):
+        notify_obj = models.Notify.objects.get(id=kwargs['notify_id'])  # 项目
+        job_list = request.session.get('job_list')  # 获取当前用户的所有角色
+        article_manager_department = notify_obj.agree.lending.summary.director.department  # 项目经理所属部门
+        user_department = models.Departments.objects.get(employee_department=request.user)
+        if '业务部负责人' in job_list:  # 如果为业务部门负责人
+            if not article_manager_department == user_department:  # 项目经理不属于部门负责人所属部门
+                return HttpResponse('该项目部归属你部门，无权访问！')
+        if '项目经理' in job_list:
+            user_list = models.Employees.objects.filter(
+                Q(director_employee__lending_summary__agree_lending__notify_agree=notify_obj) |
+                Q(assistant_employee__lending_summary__agree_lending__notify_agree=notify_obj)).distinct()  # 项目经理及助理列表
+            if not request.user in user_list:
+                return HttpResponse('你不是该项目的项目经理或助理，无权访问！')
+        return func(request, *args, **kwargs)
+
+    return inner
+
+
+# ---------------------------放款访问权限----------------------------#
+def provide_right(func):  # 合同权限控制
+    def inner(request, *args, **kwargs):
+        provide_obj = models.Provides.objects.get(id=kwargs['provide_id'])  # 项目
+        job_list = request.session.get('job_list')  # 获取当前用户的所有角色
+        article_manager_department = provide_obj.notify.lending.summary.director.department  # 项目经理所属部门
+        user_department = models.Departments.objects.get(employee_department=request.user)
+        if '业务部负责人' in job_list:  # 如果为业务部门负责人
+            if not article_manager_department == user_department:  # 项目经理不属于部门负责人所属部门
+                return HttpResponse('该项目部归属你部门，无权访问！')
+        if '项目经理' in job_list:
+            user_list = models.Employees.objects.filter(
+                Q(director_employee__lending_summary__agree_lending__provide_notify=provide_obj) |
+                Q(
+                    assistant_employee__lending_summary__agree_lending__provide_notify=provide_obj)).distinct()  # 项目经理及助理列表
+            if not request.user in user_list:
+                return HttpResponse('你不是该项目的项目经理或助理，无权访问！')
+        return func(request, *args, **kwargs)
+
+    return inner
+
+
+# ---------------------------客户访问权限----------------------------#
+def custom_right(func):  # 项目权限控制
+    def inner(request, *args, **kwargs):
+        custom_obj = models.Customes.objects.get(id=kwargs['custom_id'])  # 项目
+        job_list = request.session.get('job_list')  # 获取当前用户的所有角色
+        custom_managementor_department = custom_obj.managementor.department  # 项目经理所属部门
+        user_department = models.Departments.objects.get(employee_department=request.user)
+        if '业务部负责人' in job_list:  # 如果为业务部门负责人
+            if not custom_managementor_department == user_department:  # 项目经理不属于部门负责人所属部门
+                return HttpResponse('该客户不归属你部门，无权访问！')
+        if '项目经理' in job_list:
+            user_list = models.Employees.objects.filter(
+                Q(manage_employee=custom_obj) |
+                Q(manage_employee=custom_obj)).distinct()  # 项目经理及助理列表
+            if not request.user in user_list:
+                return HttpResponse('你不是该客户的管护经理或助理，无权访问！')
+        return func(request, *args, **kwargs)
+
+    return inner
+
+
+# ---------------------------权证访问权限----------------------------#
+def warrant_right(func):  # 权证访问权限
+    def inner(request, *args, **kwargs):
+        warrant_obj = models.Warrants.objects.get(id=kwargs['warrant_id'])  # 项目
+        job_list = request.session.get('job_list')  # 获取当前用户的所有角色
+        warrant_manager_department = warrant_obj.warrant_buildor.department  # 项目经理所属部门
+        user_department = models.Departments.objects.get(employee_department=request.user)
+        if '业务部负责人' in job_list:  # 如果为业务部门负责人
+            if not warrant_manager_department == user_department:  # 项目经理不属于部门负责人所属部门
+                return HttpResponse('该项目部归属你部门，无权访问！')
+        if '项目经理' in job_list:
+            user_list = models.Employees.objects.filter(
+                warrant_buildor_employee=warrant_obj).distinct()  # 项目经理及助理列表
+            if not request.user in user_list:
+                return HttpResponse('你不是该项目的项目经理或助理，无权访问！')
+        return func(request, *args, **kwargs)
+
+    return inner
 
 
 # ---------------------------功能权限----------------------------#
@@ -164,26 +378,6 @@ def authority(func):  # 权限控制
             result = json.dumps(response, ensure_ascii=False)
             return HttpResponse(result)
         # print(request.user, '>', request.path, '>', resolve(request.path).url_name, '>', request.POST, request.GET)
-        return func(request, *args, **kwargs)
-
-    return inner
-
-
-# ---------------------------项目访问权限----------------------------#
-def article_right(func):  # 项目权限控制
-    def inner(request, *args, **kwargs):
-        article_obj = models.Articles.objects.get(id=kwargs['article_id'])  # 项目
-        job_list = request.session.get('job_list')  # 获取当前用户的所有角色
-        article_manager_department = article_obj.director.department  # 项目经理所属部门
-        user_department = models.Departments.objects.get(employee_department=request.user)
-        if '业务部门负责人' in job_list:  # 如果为业务部门负责人
-            if not article_manager_department == user_department:  # 项目经理不属于部门负责人所属部门
-                return HttpResponse('该项目部归属你部门，无权访问！')
-        if '项目经理' in job_list:
-            user_list = models.Employees.objects.filter(
-                Q(director_employee=article_obj) | Q(assistant_employee=article_obj)).distinct()  # 项目经理及助理列表
-            if not request.user in user_list:
-                return HttpResponse('你不是该项目的项目经理或助理，无权访问！')
         return func(request, *args, **kwargs)
 
     return inner
@@ -319,6 +513,8 @@ def convert_num(n):
     result = ''.join(res[::-1])
     # print('len(result):',len(result),result,result[-1])
     return result
+
+
 # -----------------------阿拉伯数字转换-------------------------#
 
 def convert_str(n):
@@ -367,6 +563,7 @@ def un_dex(agree_typ):
 def amount_s(amount):
     amount_str = str(amount / 10000).rstrip('0').rstrip('.')  # 总额（万元）
     return amount_str
+
 
 def amount_y(amount):
     amount_str = str(amount).rstrip('0').rstrip('.')  # 总额（元）

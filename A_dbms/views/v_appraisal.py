@@ -30,7 +30,7 @@ def appraisal(request, *args, **kwargs):  # 评审情况
     '''筛选'''
     appraisal_list = models.Articles.objects.filter(**kwargs).select_related(
         'custom', 'director', 'assistant', 'control')
-    appraisal_list = article_list_screen(appraisal_list, job_list, request.user)  # 项目筛选
+    appraisal_list = article_list_screen(appraisal_list, request)  # 项目筛选
     # appraisal_list = appraisal_list.filter(article_state__in=[4, 5, 51, 61])
     '''搜索'''
     search_key = request.GET.get('_s')
@@ -427,6 +427,7 @@ def sum_g(lending):
 # -----------------------summary_scan意见书-------------------------#
 @login_required
 @authority
+@article_right
 def summary_scan(request, article_id):  # 评审项目预览
     current_url_name = resolve(request.path).url_name  # 获取当前URL_NAME
     authority_list = request.session.get('authority_list')  # 获取当前用户的所有权限
@@ -1078,6 +1079,7 @@ def summary_scan(request, article_id):  # 评审项目预览
 # -----------------------sign_scan签批单-------------------------#
 @login_required
 @authority
+@article_right
 def summary_sign_scan(request, article_id):  #
     current_url_name = resolve(request.path).url_name  # 获取当前URL_NAME
     authority_list = request.session.get('authority_list')  # 获取当前用户的所有权限

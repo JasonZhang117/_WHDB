@@ -43,7 +43,7 @@ def article(request, *args, **kwargs):  # 项目列表
     # 列表或元组转换为字典并添加key[{'id': 1, 'name': '待反馈'}, {'id': 2, 'name': '已反馈'}]
     '''筛选'''
     article_list = models.Articles.objects.filter(**kwargs).select_related('custom', 'director', 'assistant', 'control')
-    article_list = article_list_screen(article_list, job_list, request.user)  # 项目筛选
+    article_list = article_list_screen(article_list, request)  # 项目筛选
     '''搜索'''
     search_key = request.GET.get('_s')
     if search_key:
@@ -248,6 +248,7 @@ def article_scan_lending(request, article_id, lending_id):  # 项目预览
 # -----------------------endor_list_scan签批单-------------------------#
 @login_required
 @authority
+@article_right
 def endor_list_scan(request, article_id):  # 签批单
     current_url_name = resolve(request.path).url_name  # 获取当前URL_NAME
     authority_list = request.session.get('authority_list')  # 获取当前用户的所有权限

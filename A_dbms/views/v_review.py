@@ -9,7 +9,7 @@ from django.db.models import Q
 from django.db.models import Avg, Min, Sum, Max, Count
 from django.urls import resolve
 from _WHDB.views import MenuHelper
-from _WHDB.views import authority
+from _WHDB.views import (authority, custom_list_screen,custom_right)
 
 
 # -----------------------保后列表---------------------#
@@ -24,8 +24,7 @@ def review(request, *args, **kwargs):  # 保后列表
 
     REVIEW_STATE_LIST = models.Customes.REVIEW_STATE_LIST
     custom_list = models.Customes.objects.filter(**kwargs)
-    if '项目经理' in job_list:
-        custom_list = custom_list.filter(managementor=request.user)
+    custom_list = custom_list_screen(custom_list, request)
     '''
     custom_flow = models.FloatField(verbose_name='_流贷余额', default=0)
     custom_accept = models.FloatField(verbose_name='_承兑余额', default=0)
@@ -75,6 +74,7 @@ def review(request, *args, **kwargs):  # 保后列表
 # -----------------------------保后详情------------------------------#
 @login_required
 @authority
+@custom_right
 def review_scan(request, custom_id):  #
     current_url_name = resolve(request.path).url_name  # 获取当前URL_NAME
     authority_list = request.session.get('authority_list')  # 获取当前用户的所有权限
@@ -82,11 +82,6 @@ def review_scan(request, custom_id):  #
     job_list = request.session.get('job_list')  # 获取当前用户的所有角色
     PAGE_TITLE = '保后详情'
     custom_obj = models.Customes.objects.get(id=custom_id)
-
-    if '项目经理' in job_list:
-        user_list = models.Employees.objects.filter(manage_employee=custom_obj).distinct()
-        if not request.user in user_list:
-            return HttpResponse('你无权访问该客户')
 
     date_th_later = datetime.date.today() + datetime.timedelta(days=30)  # 30天后的日期
     form_review_plan = forms.FormRewiewPlanAdd(initial={'review_plan_date': str(date_th_later)})
@@ -112,8 +107,7 @@ def review_overdue(request, *args, **kwargs):
 
     review_overdue_list = models.Customes.objects.filter(
         review_state=1, review_plan_date__lt=datetime.date.today()).order_by('review_plan_date')  # 逾期保后
-    if '项目经理' in job_list:
-        review_overdue_list = review_overdue_list.filter(managementor=request.user)
+    review_overdue_list = custom_list_screen(review_overdue_list, request)
     '''搜索'''
     search_key = request.GET.get('_s')
     if search_key:

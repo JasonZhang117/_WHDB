@@ -394,7 +394,6 @@ def supply_ajax(request):  #
     response = {'status': True, 'message': None, 'forme': None, }
     post_data_str = request.POST.get('postDataStr')
     post_data = json.loads(post_data_str)
-    print('post_data:',post_data)
     article_obj = models.Articles.objects.get(id=post_data['article_id'])
     '''ARTICLE_STATE_LIST = [(1, '待反馈'), (2, '已反馈'), (3, '待上会'), (4, '已上会'), (5, '已签批'),
                           (51, '已放款'), (52, '已放完'), (55, '已解保'), (61, '待变更'), (99, '已注销')]'''
@@ -746,7 +745,9 @@ def article_sign_ajax(request):
                                         lately_date=article_obj.review_date)
                                     models.Warrants.objects.filter(
                                         lending_warrant__sure__lending__summary=article_obj).update(
-                                        meeting_date=article_obj.review_date)
+                                        meeting_date=article_obj.review_date,
+                                        warrant_buildor=article_obj.director,
+                                    )
                                 response['message'] = '成功签批项目：%s！' % article_obj.article_num
                             except Exception as e:
                                 response['status'] = False
