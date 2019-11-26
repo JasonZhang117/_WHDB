@@ -34,6 +34,19 @@ body {
     text-indent: 35pt;
 }
 
+/*主标题*/
+.tit{
+    font-size: 24pt;
+
+}
+
+/*附标题*/
+.sub-head{
+    font-size: 20pt;
+}
+
+
+
 .arg-bn {
     /*行间距*/
     line-height: 35pt;

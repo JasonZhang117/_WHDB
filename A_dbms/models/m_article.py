@@ -35,7 +35,7 @@ class Articles(models.Model):  # 项目、纪要
     credit_term = models.IntegerField(verbose_name='授信期限（月）', default=12)
     REPAY_METHOD_LIST = [
         (11, '按月付息、到期一次还本'), (21, '等额本息'), (31, '按月付息、分期还本'), ]
-    repay_method = models.IntegerField(verbose_name='还款方式', choices=REPAY_METHOD_LIST, null=True, blank=True)
+    article_repay_method = models.IntegerField(verbose_name='还款方式', choices=REPAY_METHOD_LIST, null=True, blank=True)
     product = models.ForeignKey(to='Product', verbose_name="产品种类",
                                 on_delete=models.PROTECT,
                                 related_name='article_product', default=1)

@@ -120,7 +120,7 @@ def borrower_del_ajax(request):  # 取消项目上会ajax
     response = {'status': True, 'message': None, 'forme': None, }
     post_data_str = request.POST.get('postDataStr')
     post_data = json.loads(post_data_str)
-    print('post_data:',post_data)
+    print('post_data:', post_data)
     article_id = post_data['article_id']
     borrower_id = post_data['borrower_id']
     article_obj = models.Articles.objects.get(id=article_id)
@@ -222,12 +222,14 @@ def article_opinion_ajax(request):
     article_obj = article_list[0]
     '''ARTICLE_STATE_LIST = [(1, '待反馈'), (2, '已反馈'), (3, '待上会'), (4, '已上会'), (5, '已签批'),
                           (51, '已放款'), (52, '已放完'), (55, '已解保'), (61, '待变更'), (99, '已注销')]'''
-    if article_obj.article_state in [1,]:
+    print('article_opinion_ajax',post_data)
+    if article_obj.article_state in [1, 2, ]:
         form = forms.FormOpinion(post_data)
         if form.is_valid():
             cleaned_data = form.cleaned_data
             try:
-                article_list.update(opinion=cleaned_data['opinion'], )
+                article_list.update(article_repay_method=cleaned_data['article_repay_method'],
+                                    opinion=cleaned_data['opinion'], )
                 response['message'] = '成功提交项目意见：%s！' % article_obj.article_num
             except Exception as e:
                 response['status'] = False
@@ -241,6 +243,7 @@ def article_opinion_ajax(request):
         response['message'] = '项目状态为：%s，无法提交项目意见！！！' % article_obj.article_state
     result = json.dumps(response, ensure_ascii=False)
     return HttpResponse(result)
+
 
 # -----------------------------反馈项目ajax------------------------------#
 @login_required

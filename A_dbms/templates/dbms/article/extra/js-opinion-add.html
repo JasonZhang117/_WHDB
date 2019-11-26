@@ -14,15 +14,16 @@
     function bindAddOpinionModalOk() {
         $('#addOpinionModalOk').click(function () {
             var postData = {};
-            $('#addFeedbackModal').find('input,select').each(function () {
+            $('#addOpinionModal').find('input,select').each(function () {
                 var v = $(this).val();
                 var n = $(this).attr('name');
                 postData[n] = v;
             });
             var opinion_text = $('#id_opinion').val()
             postData['opinion'] = opinion_text;
-
+            console.log(postData);
             var postDataStr = JSON.stringify(postData);
+            console.log(postDataStr);
             $.ajax({
                 url: '/dbms/article/opinion/',
                 type: 'POST',
@@ -30,7 +31,7 @@
                 dataType: 'JSON',
                 success: function (arg) {
                     if (arg.status) {
-                        $('#addFeedbackModal').modal('hide');
+                        $('#addOpinionModal').modal('hide');
                         alert(arg.message);
                         window.location.reload();
                     } else {

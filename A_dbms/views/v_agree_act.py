@@ -15,7 +15,7 @@ from .v_agree import convert, convert_num, credit_term_c
 # ---------------------------合同签批ajax----------------------------#
 @login_required
 @authority
-def agree_sign_ajax(request):  # 添加合同
+def agree_sign_ajax(request):  #
     response = {'status': True, 'message': None, 'forme': None, 'skip': None, }
     post_data_str = request.POST.get('postDataStr')
     post_data = json.loads(post_data_str)
@@ -23,9 +23,10 @@ def agree_sign_ajax(request):  # 添加合同
     agree_id = post_data['agree_id']
     agree_list = models.Agrees.objects.filter(id=agree_id)
     agree_obj = agree_list.first()
+    print('agree_sign_ajax')
     '''AGREE_STATE_LIST = [(11, '待签批'), (21, '已签批'), (25, '已签订'), (31, '未落实'),
                         (41, '已落实'), (51, '待变更'), (61, '已解保'), (99, '已注销')]'''
-    if agree_obj.agree_state == 11:
+    if agree_obj.agree_state == [11, 21]:
         form_agree_sign = forms.FormAgreeSign(post_data, request.FILES)
         if form_agree_sign.is_valid():
             agree_sign_cleaned = form_agree_sign.cleaned_data
@@ -185,10 +186,10 @@ def agree_add_ajax(request):  # 添加合同
                         amount_limit=amount_limit, agree_rate=agree_add_cleaned['agree_rate'],
                         agree_amount=agree_amount, guarantee_typ=guarantee_typ,
                         agree_copies=agree_copies, other=agree_add_cleaned['other'],
-                        agree_start_date = jk_add_cleaned['agree_start_date'],
-                        agree_due_date = jk_add_cleaned['agree_due_date'], acc_name = jk_add_cleaned['acc_name'],
-                        acc_num = jk_add_cleaned['acc_num'], acc_bank = jk_add_cleaned['acc_bank'],
-                        repay_method = jk_add_cleaned['repay_method'], repay_ex = jk_add_cleaned['repay_ex'],
+                        agree_start_date=jk_add_cleaned['agree_start_date'],
+                        agree_due_date=jk_add_cleaned['agree_due_date'], acc_name=jk_add_cleaned['acc_name'],
+                        acc_num=jk_add_cleaned['acc_num'], acc_bank=jk_add_cleaned['acc_bank'],
+                        repay_method=jk_add_cleaned['repay_method'], repay_ex=jk_add_cleaned['repay_ex'],
                         agree_buildor=request.user)
                     '''AGREE_TYP_LIST = [
                         (1, 'D-单笔'), (2, 'D-最高额'), (4, 'D-委贷'),
@@ -365,7 +366,7 @@ def agree_edit_ajax(request):  #
                         acc_num=jk_add_cleaned['acc_num'], acc_bank=jk_add_cleaned['acc_bank'],
                         repay_method=jk_add_cleaned['repay_method'], repay_ex=jk_add_cleaned['repay_ex'],
                         agree_buildor=request.user)
-                    if agree_obj.agree_typ == 22: #(22, 'D-公司保函')
+                    if agree_obj.agree_typ == 22:  # (22, 'D-公司保函')
                         form_letter_add = forms.LetterGuaranteeAddForm(post_data)
                         if form_letter_add.is_valid():
                             letter_add_cleaned = form_letter_add.cleaned_data
@@ -377,7 +378,7 @@ def agree_edit_ajax(request):  #
                             elif letter_typ == 11:
                                 guarantee_num_f = '-TB'
                             elif letter_typ == 21:
-                                   guarantee_num_f = '-YF'
+                                guarantee_num_f = '-YF'
                             guarantee_num = agree_obj.agree_num + guarantee_num_f + '1'
 
                             letter_clean = form_letter_add.cleaned_data
@@ -388,7 +389,7 @@ def agree_edit_ajax(request):  #
                                 'basic_contract_num': letter_add_cleaned['basic_contract_num'],
                                 'starting_date': letter_add_cleaned['starting_date'],
                                 'due_date': letter_add_cleaned['due_date'],
-                                'guarantee_number' : guarantee_num,
+                                'guarantee_number': guarantee_num,
                                 'creator': request.user}
                             letter, created = models.LetterGuarantee.objects.update_or_create(
                                 agree=agree_obj, defaults=default)

@@ -26,7 +26,7 @@ def provide_agree_sign_ajax(request):
                         (41, '已落实'), (51, '待变更'), (61, '已解保'), (99, '已注销')]'''
     if from_agree_sign.is_valid():
         counter_sign_cleaned = from_agree_sign.cleaned_data
-        if agree_obj.agree_state in [21, 51, ]:
+        if agree_obj.agree_state in [21, 31, 51, ]:
             try:
                 agree_list.update(agree_state=25,
                                   sign_date=counter_sign_cleaned['sign_date'], )
@@ -34,6 +34,9 @@ def provide_agree_sign_ajax(request):
             except Exception as e:
                 response['status'] = False
                 response['message'] = '合同签订成功：%s' % str(e)
+        else:
+            response['status'] = False
+            response['message'] = '合同签订失败：%s' % agree_obj.agree_state
     else:
         response['status'] = False
         response['message'] = '表单信息有误！！！'
@@ -91,7 +94,7 @@ def sign_all_ajax(request):
     agree_obj = agree_list.first()
     '''AGREE_STATE_LIST = [(11, '待签批'), (21, '已签批'), (25, '已签订'), (31, '未落实'),
                         (41, '已落实'), (51, '待变更'), (61, '已解保'), (99, '已注销')]'''
-    if agree_obj.agree_state in [21, 25, 31, 51, ]:
+    if agree_obj.agree_state in [21, 31, 51, ]:
         counter_list = agree_obj.counter_agree.all()
         '''COUNTER_STATE_LIST = [(11, '未签订'), (21, '已签订'), (31, '作废')]'''
         try:
@@ -103,7 +106,7 @@ def sign_all_ajax(request):
                     counter_l.update(
                         counter_state=21,
                         counter_sign_date=datetime.date.today(), )
-                response['message'] = '合同签订成功！'
+            response['message'] = '合同签订成功！'
         except Exception as e:
             response['status'] = False
             response['message'] = '合同签订失败：%s' % str(e)

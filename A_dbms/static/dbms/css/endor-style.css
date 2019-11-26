@@ -29,6 +29,18 @@ body {
     page-break-after: always;
 }
 
+/*主标题*/
+.tit{
+    font-size: 24pt;
+
+}
+
+/*附标题*/
+.sub-head{
+    font-size: 20pt;
+}
+
+
 .indal {
     /*缩进*/
     text-indent: 20pt;
