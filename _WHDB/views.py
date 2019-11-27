@@ -294,7 +294,7 @@ def provide_right(func):  # 合同权限控制
     def inner(request, *args, **kwargs):
         provide_obj = models.Provides.objects.get(id=kwargs['provide_id'])  # 项目
         job_list = request.session.get('job_list')  # 获取当前用户的所有角色
-        article_manager_department = provide_obj.notify.lending.summary.director.department  # 项目经理所属部门
+        article_manager_department = provide_obj.notify.agree.lending.summary.director.department  # 项目经理所属部门
         user_department = models.Departments.objects.get(employee_department=request.user)
         if '业务部负责人' in job_list:  # 如果为业务部门负责人
             if not article_manager_department == user_department:  # 项目经理不属于部门负责人所属部门

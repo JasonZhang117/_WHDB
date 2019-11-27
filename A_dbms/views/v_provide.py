@@ -468,6 +468,9 @@ def provide_scan(request, provide_id):  # 查看放款
     job_list = request.session.get('job_list')  # 获取当前用户的所有角色
     PAGE_TITLE = '放款详情'
 
+    provide_list = models.Provides.objects.filter(id=provide_id)
+    provide_obj = provide_list.first()
+
     today_str = str(datetime.date.today())
     form_repayment_add = forms.FormRepaymentAdd(initial={'repayment_date': today_str})
     form_compensatory_add = forms.FormCompensatoryAdd(initial={'compensatory_date': today_str})
