@@ -309,6 +309,7 @@ def counter_preview(request, agree_id, counter_id):
     D_COUNTER_TYP_LIST = models.Counters.COUNTER_TYP_D  # 抵押类（反）担保合同类型
     Z_COUNTER_TYP_LIST = models.Counters.COUNTER_TYP_Z  # 质押类（反）担保合同类型
     AGREE_TYP_H = models.Agrees.AGREE_TYP_H
+    AGREE_TYP_X = models.Agrees.AGREE_TYP_X
 
     credit_term = agree_obj.agree_term  # 授信期限（月）
     credit_term_cn = credit_term_c(credit_term)
@@ -370,7 +371,7 @@ def counter_preview(request, agree_id, counter_id):
             elif other_typ in [21, ]:
                 counter_property_type = '车辆合格证'
     counter_home_b_b = ''
-    if agree_typ == 21 or agree_typ == 22:  # (21, 'D-分离式保函'), (22, 'D-公司保函'),
+    if agree_obj.agree_typ == 21 or agree_obj.agree_typ == 22:  # (21, 'D-分离式保函'), (22, 'D-公司保函'),
         counter_home_b_b = '被担保人'
     else:
         counter_home_b_b = '借款人'
@@ -394,7 +395,6 @@ def counter_preview(request, agree_id, counter_id):
         single_quota_rate = agree_obj.agree_rate
         agree_rate_cn_q = agree_obj.agree_rate
         agree_rate_w = '叁点叁叁叁叁'
-    print(counter_obj.counter_other)
     return render(request, 'dbms/agree/preview-counter.html', locals())
 
 

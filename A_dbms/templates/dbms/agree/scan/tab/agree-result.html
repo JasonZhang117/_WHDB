@@ -6,6 +6,7 @@
             <th>决议/声明人</th>
             <th>决议类型</th>
             <th>签字人</th>
+            <th>婚姻状况</th>
             <th>操作</th>
         </tr>
         </thead>
@@ -24,6 +25,11 @@
                         {% endfor %}
                     {% else %}
                         {{ result.custom.name }}
+                    {% endif %}
+                </td>
+                <td>
+                    {% if result.custom.genre == 2 %}
+                        {{ result.custom.person_custome.get_marital_status_display }}
                     {% endif %}
                 </td>
                 <td>

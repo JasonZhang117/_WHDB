@@ -1,0 +1,23 @@
+<div style="padding-bottom: 15pt">
+    {% for custom in counter_obj.assure_counter.custome.all %}
+        {% if custom.genre == 1 %}
+            <!--保证人信息-->
+            <div style="padding-bottom: 15pt">
+                <p>保证人：<u><strong>{{ custom.name }}</strong></u></p>
+                <p>法定代表人（负责人）：<u><strong>{{ custom.company_custome.representative }}</strong></u></p>
+                <p>住所：<u><strong>{{ custom.company_custome.registered_addr }}</strong></u></p>
+            </div>
+        {% elif custom.genre == 2 %}
+            <div style="padding-bottom: 15pt">
+                <p>保证人：<u><strong>{{ custom.name }}</strong></u></p>
+                <p>证件种类：<u><strong>身份证</strong></u>，证件号码：<u><strong>{{ custom.person_custome.license_num }}</strong></u></p>
+            </div>
+            {% if custom.person_custome.spouses %}
+                <div style="padding-bottom: 15pt">
+                <p>保证人：<u><strong>{{ custom.person_custome.spouses.name }}</strong></u></p>
+                <p>证件种类：<u><strong>身份证</strong></u>，证件号码：<u><strong>{{ custom.person_custome.spouses.person_custome.license_num }}</strong></u></p>
+            </div>
+            {% endif %}
+        {% endif %}
+    {% endfor %}
+</div>

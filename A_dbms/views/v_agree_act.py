@@ -23,10 +23,9 @@ def agree_sign_ajax(request):  #
     agree_id = post_data['agree_id']
     agree_list = models.Agrees.objects.filter(id=agree_id)
     agree_obj = agree_list.first()
-    print('agree_sign_ajax')
     '''AGREE_STATE_LIST = [(11, '待签批'), (21, '已签批'), (25, '已签订'), (31, '未落实'),
                         (41, '已落实'), (51, '待变更'), (61, '已解保'), (99, '已注销')]'''
-    if agree_obj.agree_state == [11, 21]:
+    if agree_obj.agree_state in [11, 21]:
         form_agree_sign = forms.FormAgreeSign(post_data, request.FILES)
         if form_agree_sign.is_valid():
             agree_sign_cleaned = form_agree_sign.cleaned_data

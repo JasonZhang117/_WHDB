@@ -29,11 +29,11 @@
                 </tr>
                 <tr>
                     <td class="bb tc" width="12.5%">金额</td>
-                    <td class="bb tc" width="12.5%">{{ amount_str_w }}万元</td>
+                    <td class="bb tc" width="15%">{{ amount_str_w }}万元</td>
                     <td class="bb tc" width="12.5%">期限</td>
                     <td class="bb tc" colspan="2">{{ credit_term_str }}个月</td>
                     <td class="bb tc" colspan="2">月利率（‰）</td>
-                    <td class="bb tc" width="12.5%">{{ flow_rate }}</td>
+                    <td class="bb tc">{{ flow_rate }}</td>
                 </tr>
                 <tr>
                     <td class="bb tc" width="12.5%">担保方式</td>
@@ -47,14 +47,24 @@
                     <td class="bbb" colspan="3">分管领导意见：</td>
                 </tr>
                 <tr>
-                    <td class="brl indal" colspan="3">{{ article_obj.opinion }}</td>
+                    <td class="brl" colspan="3">
+                        <p class="indal">{{ article_obj.opinion }}</p>
+                        <p class="indal">综上，建议为
+                            {{ article_obj.custom.name}}
+                            {% if article_obj.borrower.all %}
+                                {% for borrower in article_obj.borrower.all %}
+                                    、{{ borrower.name }}
+                                {% endfor %}
+                            {% endif %}
+                            提供{{ amount_str_w }}万元贷款。</p>
+                    </td>
                     <td class="brl" colspan="2"></td>
                     <td class="brl" colspan="3"></td>
                 </tr>
                 <tr>
-                    <td class="brt" colspan="3"><div align="right" style="padding-right: 45pt"><span>负责人：</span></div></td>
+                    <td class="brt" colspan="3"><div align="right" style="padding-right: 45pt"><span>客户经理：</span></div></td>
                     <td class="brt" colspan="2"><div align="right" style="padding-right: 45pt"><span>负责人：</span></div></td>
-                    <td class="brt" colspan="3"><div align="right" style="padding-right: 45pt"><span>负责人：</span></div></td>
+                    <td class="brt" colspan="3"><div align="right" style="padding-right: 45pt"><span>分管领导：</span></div></td>
                 </tr>
                 <tr>
                     <td class="bb" colspan="3">专职评审意见：<br><br><br><br><br><br>

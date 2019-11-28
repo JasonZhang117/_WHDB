@@ -20,87 +20,87 @@
         <input style="display: none" name="counter_id" id="id_counter_id" value={{ counter_obj.id }}>
     </div>
     <div id="view-save">
-        {% if agree_typ == 1 %}
+        {% if agree_obj.agree_typ == 1 %}
             {#            (1, '单笔')#}
-            {% if counter_typ == 1 %}
+            {% if counter_obj.counter_typ == 1 %}
                 {% include 'dbms/agree/agree_board/counter/c-s-x.html' %}
-            {% elif counter_typ == 2 %}
+            {% elif counter_obj.counter_typ == 2 %}
                 {% include 'dbms/agree/agree_board/counter/c-s-g.html' %}
-            {% elif counter_typ in D_COUNTER_TYP_LIST %}
+            {% elif counter_obj.counter_typ in D_COUNTER_TYP_LIST %}
                 {% include 'dbms/agree/agree_board/counter/c-s-d.html' %}
-            {% elif counter_typ in Z_COUNTER_TYP_LIST %}
+            {% elif counter_obj.counter_typ in Z_COUNTER_TYP_LIST %}
                 {% include 'dbms/agree/agree_board/counter/c-s-z.html' %}
             {% else %}
                 <p>！！！！！！！还未添加合同模板，请联系系统管理员！！！！！！！</p>
             {% endif %}
-        {% elif agree_typ == 2 %}
+        {% elif agree_obj.agree_typ == 2 %}
             {#            (2, '最高额')#}
-            {% if counter_typ == 1 %}
+            {% if counter_obj.counter_typ == 1 %}
                 {% include 'dbms/agree/agree_board/counter/c-m-x.html' %}
-            {% elif counter_typ == 2 %}
+            {% elif counter_obj.counter_typ == 2 %}
                 {% include 'dbms/agree/agree_board/counter/c-m-g.html' %}
-            {% elif counter_typ in D_COUNTER_TYP_LIST %}
+            {% elif counter_obj.counter_typ in D_COUNTER_TYP_LIST %}
                 {% include 'dbms/agree/agree_board/counter/c-m-d.html' %}
-            {% elif counter_typ in Z_COUNTER_TYP_LIST %}
+            {% elif counter_obj.counter_typ in Z_COUNTER_TYP_LIST %}
                 {% include 'dbms/agree/agree_board/counter/c-m-z.html' %}
             {% else %}
                 <p>！！！！！！！还未添加合同模板，请联系系统管理员！！！！！！！</p>
             {% endif %}
-        {% elif agree_typ == 4 %}
+        {% elif agree_obj.agree_typ == 4 %}
             <p>！！！！！！！(4, 'D-委贷'),！！！！！！！</p>
-        {% elif agree_typ == 21 %}
+        {% elif agree_obj.agree_typ == 21 %}
             {#            (21, 'D-分离式保函'),#}
-            {% if counter_typ == 1 %}
+            {% if counter_obj.counter_typ == 1 %}
                 {% include 'dbms/agree/agree_board/counter/c-m-x.html' %}
-            {% elif counter_typ == 2 %}
+            {% elif counter_obj.counter_typ == 2 %}
                 {% include 'dbms/agree/agree_board/counter/c-m-g.html' %}
-            {% elif counter_typ in D_COUNTER_TYP_LIST %}
+            {% elif counter_obj.counter_typ in D_COUNTER_TYP_LIST %}
                 {% include 'dbms/agree/agree_board/counter/c-m-d.html' %}
-            {% elif counter_typ in Z_COUNTER_TYP_LIST %}
+            {% elif counter_obj.counter_typ in Z_COUNTER_TYP_LIST %}
                 {% include 'dbms/agree/agree_board/counter/c-m-z.html' %}
             {% else %}
                 <p>！！！！！！！还未添加合同模板，请联系系统管理员！！！！！！！</p>
             {% endif %}
-        {% elif agree_typ == 22 %}
+        {% elif agree_obj.agree_typ == 22 %}
             {#            (22, '公司保函')#}
-            {% if counter_typ == 1 %}
+            {% if counter_obj.counter_typ == 1 %}
                 {% include 'dbms/agree/agree_board/counter/c-s-x-l.html' %}
-            {% elif counter_typ == 2 %}
+            {% elif counter_obj.counter_typ == 2 %}
                 {% include 'dbms/agree/agree_board/counter/c-s-g-l.html' %}
-            {% elif counter_typ in D_COUNTER_TYP_LIST %}
+            {% elif counter_obj.counter_typ in D_COUNTER_TYP_LIST %}
                 <p>！！！！！！！(22, '公司保函'),counter_typ in D_COUNTER_TYP_LIST！！！！！！！</p>
             {% elif counter_typ in Z_COUNTER_TYP_LIST %}
                 {% include 'dbms/agree/agree_board/counter/c-s-z.html' %}
             {% else %}
                 <p>！！！！！！！还未添加合同模板，请联系系统管理员！！！！！！！</p>
             {% endif %}
-        {% elif agree_typ == 41 %}
+        {% elif agree_obj.agree_typ == 41 %}
             {#(41, '单笔(公证)')#}
-            {% if counter_typ == 1 %}
+            {% if counter_obj.counter_typ == 1 %}
                 {% include 'dbms/agree/agree_board/counter/c-s-x-n.html' %}
-            {% elif counter_typ == 2 %}
+            {% elif counter_obj.counter_typ == 2 %}
                 {% include 'dbms/agree/agree_board/counter/c-s-x-n-g.html' %}
-            {% elif counter_typ in D_COUNTER_TYP_LIST %}
+            {% elif counter_obj.counter_typ in D_COUNTER_TYP_LIST %}
                 {% include 'dbms/agree/agree_board/counter/c-s-d-n.html' %}
-            {% elif counter_typ in Z_COUNTER_TYP_LIST %}
+            {% elif counter_obj.counter_typ in Z_COUNTER_TYP_LIST %}
                 {% include 'dbms/agree/agree_board/counter/c-s-z-n.html' %}
             {% else %}
                 <p>！！！！！！！还未添加合同模板，请联系系统管理员！！！！！！！</p>
             {% endif %}
-        {% elif agree_typ == 42 %}
+        {% elif agree_obj.agree_typ == 42 %}
             <p>！！！！！！！(42, 'D-最高额(公证)'),！！！！！！！</p>
-        {% elif agree_typ == 51 %}
+        {% elif agree_obj.agree_typ == 51 %}
             {#(51, 'X-小贷单笔')#}
-            {% if counter_typ == 1 and counter_typ == 2 %}
+            {% if counter_obj.counter_typ == 1 or counter_typ == 2 %}
                 {% include 'dbms/agree/agree_board/loan_co/l-c-s-x.html' %}
-            {% elif counter_typ in D_COUNTER_TYP_LIST %}
+            {% elif counter_obj.counter_typ in D_COUNTER_TYP_LIST %}
                 {% include 'dbms/agree/agree_board/loan_co/l-c-s-d.html' %}
-            {% elif counter_typ in Z_COUNTER_TYP_LIST %}
+            {% elif counter_obj.counter_typ in Z_COUNTER_TYP_LIST %}
                 {% include 'dbms/agree/agree_board/loan_co/l-c-s-z.html' %}
             {% else %}
                 <p>！！！！！！！还未添加合同模板，请联系系统管理员！！！！！！！</p>
             {% endif %}
-        {% elif agree_typ == 52 %}
+        {% elif agree_obj.agree_typ == 52 %}
             <p>！！！！！！！(52, 'X-小贷最高额'),！！！！！！！</p>
         {% else %}
             <p>！！！！！！！还未添加合同模板，请联系系统管理员！！！！！！！</p>

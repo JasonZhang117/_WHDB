@@ -9,13 +9,9 @@
             <th>期限(月)</th>
             <th>合同金额</th>
             <th>放款限额</th>
-            {% if PAGE_TITLE == '风控落实' %}
-                {#                <th>加权通知金额</th>#}
-                <th>放款金额</th>
-                <th>还款金额</th>
-                <th>在保余额</th>
-            {% endif %}
-            {#            <th>纪要编号</th>#}
+            <th>放款金额</th>
+            <th>还款金额</th>
+            <th>在保余额</th>
             <th>创建日期</th>
             <th>创建人</th>
             <th>合同状态</th>
@@ -35,13 +31,9 @@
                 <td>{{ agree.agree_term }}</td>
                 <td align="right">{{ agree.agree_amount }}</td>
                 <td align="right">{{ agree.amount_limit }}</td>
-                {% if PAGE_TITLE == '风控落实' %}
-                    {#                    <td align="right">{{ agree.agree_notify_sum }}</td>#}
-                    <td align="right">{{ agree.agree_provide_sum }}</td>
-                    <td align="right">{{ agree.agree_repayment_sum }}</td>
-                    <td align="right">{{ agree.agree_balance }}</td>
-                {% endif %}
-                {#                <td>{{ agree.lending }}</td>#}
+                <td align="right">{{ agree.agree_provide_sum }}</td>
+                <td align="right">{{ agree.agree_repayment_sum }}</td>
+                <td align="right">{{ agree.agree_balance }}</td>
                 <td>{{ agree.agree_date }}</td>
                 <td>{{ agree.agree_buildor.name }}</td>
                 <td>{{ agree.get_agree_state_display }}</td>

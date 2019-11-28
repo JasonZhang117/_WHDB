@@ -302,7 +302,7 @@ def endor_list_scan(request, article_id):  # 签批单
                     ttt += '所有的位于%s的%s提供' %(warrant.house_warrant.house_locate,'住宅')
                     if sure_warrant_c < sure_warrant_count:
                         ttt += '、'
-                ttt += '提供%s%s' % (sure_typ_dic[sure.sure_typ], '担保')
+                ttt += '提供%s%s' % (sure_typ_dic[sure.sure_typ], '担保。')
             if sure_lending_c < sure_lending_count:
                 ttt += '；'
     PROCESS_LIST_XD = ['房抵贷', '担保贷', '过桥贷', ]
