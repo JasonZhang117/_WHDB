@@ -4,7 +4,7 @@
 <table cellspacing="0" cellpadding="0">
     {% for warrant in counter_obj.warrant_counter.warrant.all %}
         {% if warrant.warrant_typ == 1 or warrant.warrant_typ == 2 %}
-            {% if forloop.counter == 1 %}
+            {% if forloop.counter == 1 %}<!--第一次循环-->
                 <tr>
                     <td colspan="2" align="center">抵 押 人</td>
                     <td colspan="5">
@@ -22,9 +22,9 @@
                     <td align="center">评估价值（元）</td>
                     <td align="center">备注</td>
                 </tr>
-                {% if warrant.warrant_typ == 2 %}
-                    {% for house_bag in warrant.housebag_warrant.all %}
-                        {% if forloop.counter == 1 %}
+                {% if warrant.warrant_typ == 2 %}<!--第一次循环->房产包-->
+                    {% for house_bag in warrant.housebag_warrant.all %}<!--房产包循环-->
+                        {% if forloop.counter == 1 %}<!--房产包首次循环-->
                             <tr>
                                 <td rowspan="{{ counter_warrant_list_count }}">{{ counter_property_type }}</td>
                                 <td>{{ house_bag.get_housebag_app_display }}</td>
@@ -35,20 +35,20 @@
                                         {{ ownership.ownership_num }}{% if not forloop.last %}、{% endif %}
                                     {% endfor %}
                                 </td>
-                                <td></td>
+                                <td align="right">{{ warrant.evaluate_value }}</td>
                                 <td></td>
                             </tr>
-                        {% else %}
+                        {% else %}<!--房产包非首次循环-->
                             <tr>
                                 <td>{{ house_bag.get_housebag_app_display }}</td>
                                 <td align="right">{{ house_bag.housebag_area }}</td>
                                 <td>{{ house_bag.housebag_locate }}</td>
-                                <td></td>
+                                <td align="right">{{ warrant.evaluate_value }}</td>
                                 <td></td>
                             </tr>
                         {% endif %}
                     {% endfor %}
-                {% else %}
+                {% else %} <!--第一次循环->非房产包-->
                     <tr>
                         <td rowspan="{{ counter_warrant_list_count }}">{{ counter_property_type }}</td>
                         <td>{{ warrant.house_warrant.get_house_app_display }}</td>
@@ -59,7 +59,7 @@
                                 {{ ownership.ownership_num }}{% if not forloop.last %}、{% endif %}
                             {% endfor %}
                         </td>
-                        <td></td>
+                        <td align="right">{{ warrant.evaluate_value }}</td>
                         <td></td>
                     </tr>
                 {% endif %}
@@ -76,7 +76,7 @@
                                         {{ ownership.ownership_num }}{% if not forloop.last %}、{% endif %}
                                     {% endfor %}
                                 </td>
-                                <td></td>
+                                <td align="right">{{ warrant.evaluate_value }}</td>
                                 <td></td>
                             </tr>
                         {% else %}
@@ -84,7 +84,7 @@
                                 <td>{{ house_bag.get_housebag_app_display }}</td>
                                 <td align="right">{{ house_bag.housebag_area }}</td>
                                 <td>{{ house_bag.housebag_locate }}</td>
-                                <td></td>
+                                <td align="right">{{ warrant.evaluate_value }}</td>
                                 <td></td>
                             </tr>
                         {% endif %}
@@ -99,7 +99,7 @@
                                 {{ ownership.ownership_num }}{% if not forloop.last %}、{% endif %}
                             {% endfor %}
                         </td>
-                        <td></td>
+                        <td align="right">{{ warrant.evaluate_value }}</td>
                         <td></td>
                     </tr>
                 {% endif %}
