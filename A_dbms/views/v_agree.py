@@ -346,8 +346,8 @@ def counter_preview(request, agree_id, counter_id):
         elif counter_warrant_typ in [31, ]:  # (31, '票据'),
             counter_draft_obj = counter_warrant_obj.draft_warrant
             counter_draft_bag_list = counter_draft_obj.extend_draft.all()
-            denomination_str = str(counter_draft_obj.denomination / 10000).rstrip('0').rstrip('.')
-            denomination_cn = convert(counter_draft_obj.denomination)
+            denomination_str = str(round(counter_draft_obj.denomination, 2) / 10000).rstrip('0').rstrip('.')
+            denomination_cn = convert(round(counter_draft_obj.denomination, 2))
         elif counter_warrant_typ in [41, ]:  # (41, '车辆'),
             counter_vehicle_obj = counter_warrant_obj.vehicle_warrant
         elif counter_warrant_typ in [51, ]:  # (51, '动产'),

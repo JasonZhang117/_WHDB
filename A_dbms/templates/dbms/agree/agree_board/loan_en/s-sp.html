@@ -1,42 +1,17 @@
-<table>
-    <tr style="height: 5pt">
-        <td style="border: 1pt; width: 100pt" align="right" valign="top">
-            借款人（公章）：
-        </td>
-        <td style="border: 1pt; width: 45%" valign="top"><strong>
-            <u>{{ agree_obj.lending.summary.custom.name }}{% for borrower in agree_obj.lending.summary.borrower.all %}{% if forloop.first %}、{% endif %}{{ borrower.name }}{% if not forloop.last%}、{% endif %}{% endfor %}</u></strong>
-        </td>
-        <td style="border: 1pt; width:100pt" align="right" valign="top">
-            贷款人（公章）：
-        </td>
-        <td style="border: 1pt" valign="top">
-            成都武侯武兴小额贷款有限责任公司
-        </td>
-    </tr>
-
-    </tr>
-    <tr style="height: 65pt">
-        <td style="border: 0pt" colspan="2">
-            {% if agree_obj.lending.summary.custom.genre == 2 %}
-                <p>本人（经营者）或授权代表</p>
-                <p>（签字）</p>
-            {% else %}
-                <p>法定代表人或负责人或授权代表</p>
-                <p>（签字或盖章）</p>
-                <p>{{ agree_obj.lending.summary.custom.company_custome.representative }}</p>
-            {% endif %}
-        </td>
-        <td style="border: 0pt" colspan="2">
-            <p>法定代表人或负责人或授权代表</p>
-            <p>（签字或盖章）</p>
-        </td>
-    </tr>
-    <tr style="height: 32pt">
-        <td style="border: 0pt" colspan="2">
-            <p>签署日：{% include 'dbms/agree/agree_board/date-period.html' %}</p>
-        </td>
-        <td style="border: 0pt" colspan="2">
-            <p>签署日：{% include 'dbms/agree/agree_board/date-period.html' %}</p>
-        </td>
-    </tr>
-</table>
+<p>本页为签字页（无正文）。</p>
+<div class="sign-page">
+    <div class="sign-page-y">
+        <p>借款人(公章或合同专用章）：<strong><u>{{ agree_obj.lending.summary.custom.name }}</u></strong></p>
+        <p>
+            法定代表人或负责人或授权代表：<strong><u>{{ agree_obj.lending.summary.custom.company_custome.representative }}</u></strong>
+        </p>
+        <p>（签字或盖章）</p>
+        {% include 'dbms/agree/agree_board/sign-date.html' %}
+    </div>
+    <div class="sign-page-j">
+        <p>贷款人（公章或合同专用章）：{{ UN }}</p>
+        <p>法定代表人或负责人或授权代表：黄一平</p>
+        <p>（签字或盖章）</p>
+        {% include 'dbms/agree/agree_board/sign-date.html' %}
+    </div>
+</div>

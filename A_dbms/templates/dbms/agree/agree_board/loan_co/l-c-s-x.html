@@ -3,7 +3,7 @@
     <div class="split">
         <div>{% include 'dbms/agree/agree_board/loan_co/cover.html' %}</div>
     </div>
-    <!--正文-->
+    <!--合同主体-->
     <div class="split">
         <!--合同当事人-->
         <div>
@@ -16,7 +16,7 @@
                 <p>住所：<u>成都市武侯区武科西五路360号西部智谷B区2栋3单元10楼</u></p>
             </div>
         </div>
-        <!--合同主体-->
+        <!--合同正文-->
         <div>
             <p>为保障债权人与主合同债务人<strong><u>{{ agree_obj.lending.summary.custom.name }}</u></strong>于{% include 'dbms/agree/agree_board/date-period.html' %}所签订的编号为:<strong><u>{{ agree_obj.agree_num }}</u></strong>号的《{{ agree_obj.get_agree_name_display }}》（以下称主合同）项下的债权，保证人愿意为主合同项下的债权向债权人（也称主合同债权人）提供连带责任保证担保，保证人、债权人依照我国有关法律、法规，经协商一致，订立本合同。</p>
             <p><strong>第一条 担保的主债权种类、金额和期限</strong></p>
@@ -140,11 +140,25 @@
     <div class="split">
         <p>本页为签字页（无正文）。</p>
         <div class="sign-page">
-            <div class="sign-page-j">{% include 'dbms/agree/agree_board/sign-j.html' %}</div>
-            <div class="sign-page-y">{% include 'dbms/agree/agree_board/counter/_c/counter-sign-y.html' %}</div>
-            <div class="sign-page-b">
-                <p>丙方（公章或合同专用章）：<strong><u>{{ agree_obj.lending.summary.custom.name }}</u></strong></p>
-                <p>法定代表人（或授权代理人）：<strong><u>{{ agree_obj.lending.summary.custom.company_custome.representative }}</u></strong></p>
+            {% for custom in counter_obj.assure_counter.custome.all %}
+                {% if custom.genre == 1 %}
+                    <div class="sign-page-y">
+                        <p>保证人（公章或合同专用章）：<strong><u>{{ custom.name }}</u></strong></p>
+                        <p>法定代表人（或授权代理人）：<strong><u>{{ custom.company_custome.representative }}</u></strong></p>
+                        <p>（签字或盖章）</p>
+                        {% include 'dbms/agree/agree_board/sign-date.html' %}
+                    </div>
+                {% elif custom.genre == 2 %}
+                    <div class="sign-page-y">
+                        <p>保证人（或受托人）：<strong><u>{{ custom.name }}{% if custom.person_custome.spouses %}、{{ custom.person_custome.spouses.name }}{% endif %}</u></strong></p>
+                        <p>（签字）</p>
+                        {% include 'dbms/agree/agree_board/sign-date.html' %}
+                    </div>
+                {% endif %}
+            {% endfor %}
+            <div class="sign-page-j">
+                <p>债权人（公章或合同专用章）：成都武侯武兴小额贷款有限责任公司</p>
+                <p>法定代表人（或授权代理人）：黄一平</p>
                 <p>（签字或盖章）</p>
                 {% include 'dbms/agree/agree_board/sign-date.html' %}
             </div>
