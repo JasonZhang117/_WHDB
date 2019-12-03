@@ -1,15 +1,16 @@
 from django.shortcuts import render, redirect, HttpResponse
 from django.views import View
-from .. import models
-from .. import forms
+from .. import models, forms
+import datetime, time, json
+from django.contrib.auth.decorators import login_required
+from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
+from django.db.models import Q, F, Avg, Min, Sum, Max, Count
+from django.db import transaction
 from django.urls import resolve
-from _WHDB.views import MenuHelper
-from _WHDB.views import authority
+from _WHDB.views import (MenuHelper, authority, credit_term_c, convert, convert_num, un_dex, amount_s, amount_y,
+                         agree_list_screen, agree_right)
 
-# 部门、岗位、员工信息管理
-# -----------------------部门管理-------------------------#
-# -----------------------部门管理-------------------------#
-# -----------------------部门管理-------------------------#
+
 # -----------------------部门列表-------------------------#
 class Departments(View):  # 部门列表CBV
     def dispatch(self, request, *args, **kwargs):
@@ -92,158 +93,97 @@ def department_del(request, department_id):  # 部门删除
     return redirect('dbms:department')
 
 
-# -----------------------员工管理-------------------------#
-# -----------------------员工管理-------------------------#
-# -----------------------员工管理-------------------------#
-# -----------------------员工列表-------------------------#
-def employee(request):  # 员工列表
-    print('-------------------employee----------------------------')
-    employee_list = models.Employees.objects.filter(
-        department__name='风控部', job__name='风控专员')
-    # 一对多关系
-    # 员工对应的部门（正向查询）
-    department_obj = models.Employees.objects.filter(name='张建')[0].department
-    print(department_obj)  # 通过对象
-    department_obj = models.Departments.objects.filter(
-        employee_department__name='张建')  # *****
-    print(department_obj)  # 通过__
-    # 风控部的员工(反向查询）
-    department_obj = models.Departments.objects.filter(name='风控部')[0]
-    employee_l = department_obj.employee_department.all()  # 反向查询
-    print(employee_l)  # 通过对象
-    employee_l = models.Employees.objects.filter(department__name='风控部')  # *****
-    print(employee_l)  # 通过__
-    employee_l = models.Departments.objects.filter(name='风控部').values(
-        'employee_department__name')  # 反向查询
-    print(employee_l)  # 通过__
+# -----------------------用户列表-------------------------#
+@login_required
+@authority
+def employee(request, *args, **kwargs):  # 委托合同列表
+    current_url_name = resolve(request.path).url_name  # 获取当前URL_NAME
+    authority_list = request.session.get('authority_list')  # 获取当前用户的所有权限
+    job_list = request.session.get('job_list')  # 获取当前用户的所有角色
+    menu_result = MenuHelper(request).menu_data_list()
+    PAGE_TITLE = '用户列表'
+    EMPLOYEE_STATUS_LIST = models.Employees.EMPLOYEE_STATUS_LIST
+    '''筛选'''
+    employee_list = models.Employees.objects.filter(**kwargs).select_related('department', ).order_by('num')
+    '''搜索'''
+    search_key = request.GET.get('_s')
+    if search_key:
+        search_fields = ['email', 'num', 'name', 'department__name', ]
+        q = Q()
+        q.connector = 'OR'
+        for field in search_fields:
+            q.children.append(("%s__contains" % field, search_key))
+        employee_list = employee_list.filter(q)
 
-    # 多对多关系
-    # 员工对应的岗位（正向查找）
-    employee_obj = models.Employees.objects.filter(name='孙祥')[0]
-    print(employee_obj)
-    job_l = employee_obj.job.all()
-    print(job_l)
-    job_l = models.Jobs.objects.filter(employee_job__name='孙祥')  # *****
-    print(job_l)
-
-    # 岗位对应的员工（反向查询）
-    job_obj = models.Jobs.objects.filter(name='项目经理').first()
-    print(job_obj)
-    employee_l = job_obj.employee_job.all()
-    print(employee_l)
-    employee_l = models.Employees.objects.filter(job__name='项目经理')  # *****
-    print(employee_l)
-
-    # 通过对象绑定添加及删除
-    employee_obj = models.Employees.objects.filter(name='孙祥')[0]
-    job_l = models.Jobs.objects.all()
-    # employee_job.add(**job_l)
-
-    # 聚合查询aggregate
-    from django.db.models import Avg, Min, Sum, Max, Count
-    # 统计name字段的个数（风控部员工数）
-    ret = models.Employees.objects.filter(job__name='风控专员').aggregate(Count('name'))
-    print(ret)
-    ret = models.Employees.objects.filter(job__name='风控专员').count()
-    print(ret)
-    # 分组查询annotate
-    ret = models.Employees.objects.values('job__name')
-    print(ret)
-    ret = models.Employees.objects.values('job__name').annotate(Count('name'))
-    print(ret)
-
-    # F查询与Q查询
-    # 查询部门为风控部且岗位为部门负责人
-    ret = models.Employees.objects.filter(department__name='风控部',
-                                          job__name='部门负责人')
-    print(ret)
-    from django.db.models import Q, F
-    models.Employees.objects.all().update(age=F('age') + 1)  # 所有员工年龄加1
-    ret = models.Employees.objects.filter(Q(department__name='风控部') |
-                                          ~Q(job__name='部门负责人'))  # 或查询
-    print(ret)
-    ret = models.Employees.objects.filter(~Q(job__name='部门负责人'))  # 或查询
-    print(ret)
-    ret = models.Employees.objects.filter(job__name__contains='风')  # 或查询
-    print(ret)
-    # queryset 可迭代，可切片，有缓存（特性）
-    if ret.exists():  # exists()方法确定queryset是否有值
-        print(ret)
-    ret = ret.iterator()  # 将查询结果转换为迭代器对象
-    print(ret)
-    for i in ret:
-        print(i.id_code)
-    add_link = 'dbms:employee_add'
-    ajax_link = 'dbms:employee_add_ajax'
-
-    # 跨表操作提交查询效率（ForeignKey，OneToOneField）
-    Departments_name = models.Employees.objects.all(). \
-        select_related('department_id')
-    for row in Departments_name:
-        print(row.name, row.department.name)
-    print('Departments_name:', Departments_name)
-    # 连表查询性能低
-    Departments_name = models.Employees.objects.all(). \
-        prefetch_related('department_id')
-    # 进行两次查询
+    '''分页'''
+    paginator = Paginator(employee_list, 19)
+    page = request.GET.get('page')
+    try:
+        p_list = paginator.page(page)
+    except PageNotAnInteger:
+        p_list = paginator.page(1)
+    except EmptyPage:
+        p_list = paginator.page(paginator.num_pages)
 
     return render(request, 'dbms/employee/employee.html', locals())
 
 
-# -----------------------员工添加-------------------------#
-def employee_add(request):  # 员工添加
-    print('-------------------employee_add----------------------------')
-    choices = [(1, '部门负责人'), (2, '项目经理'), (3, '风控专员')]
-    print('choices:', choices)
-    print(type(choices))
-    Departments = models.Departments.objects.values_list('id', 'name')
-    print('Departments:', Departments)
-    print(type(Departments))
-    Departments = tuple(models.Departments.objects.values_list('id', 'name'))
-    print('Departments:', Departments)
-    print(type(Departments))
-    Departments = list(models.Departments.objects.values('id', 'name'))
-    print('Departments:', Departments)
-    print(type(Departments))
-    Jobs = list(models.Jobs.objects.values_list('id', 'name').order_by('name'))
-    print('Jobs:', Jobs)
-    print(type(Jobs))
-    if request.method == "GET":
-        form = forms.EmployeeForm()
-        return render(request, 'dbms/employee/employee-add.html', locals())
+# -----------------------------查看用户------------------------------#
+@login_required
+@authority
+def employee_scan(request, employee_id):  # 查看用户
+    current_url_name = resolve(request.path).url_name  # 获取当前URL_NAME
+    authority_list = request.session.get('authority_list')  # 获取当前用户的所有权限
+    menu_result = MenuHelper(request).menu_data_list()
+    PAGE_TITLE = '用户详情'
+
+    employee_list = models.Employees.objects.filter(id=employee_id)
+    employee_obj = employee_list.first()
+
+    return render(request, 'dbms/employee/employee-scan.html', locals())
+
+
+# -----------------------------查看用户------------------------------#
+@login_required
+@authority
+def employee_scan(request, employee_id):  # 查看用户
+    current_url_name = resolve(request.path).url_name  # 获取当前URL_NAME
+    authority_list = request.session.get('authority_list')  # 获取当前用户的所有权限
+    menu_result = MenuHelper(request).menu_data_list()
+    PAGE_TITLE = '用户详情'
+
+    employee_list = models.Employees.objects.filter(id=employee_id)
+    employee_obj = employee_list.first()
+
+    return render(request, 'dbms/employee/employee-scan.html', locals())
+
+
+# ---------------------------重置密码ajax----------------------------#
+@login_required
+@authority
+def employee_reset_ajax(request):  #
+    response = {'status': True, 'message': None, 'forme': None, 'skip': None, }
+    post_data_str = request.POST.get('postDataStr')
+    post_data = json.loads(post_data_str)
+    employee_list = models.Employees.objects.filter(id=post_data['employee_id'])
+    employee_obj = employee_list.first()
+    '''AGREE_STATE_LIST = [(11, '待签批'), (21, '已签批'), (31, '未落实'),
+                        (41, '已落实'), (51, '待变更'), (61, '已解保'), (99, '已注销')]'''
+    if employee_obj.employee_status in [1, 11]:
+        try:
+            with transaction.atomic():
+                employee_list.update(
+                    password='pbkdf2_sha256$120000$e8RCBOfbeyAx$4DRKCgNyJvD5FSn8jNM4QAV/5qn55RX2HMsLzZWx42k=', )
+            response['skip'] = "/dbms/employee/scan/%s" % employee_obj.id
+            response['message'] = '重置密码为：“%s”，请及时修改！' % 'WH666666'
+        except Exception as e:
+            response['status'] = False
+            response['message'] = '重置密码失败：%s' % str(e)
     else:
-        # form验证
-        print('request.POST:', request.POST)
-        print(type(request.POST['age']))
-        form = forms.EmployeeForm(request.POST, request.FILES)  # 验证form提交的数据
-        if form.is_valid():
-            cleaned_form_data = form.cleaned_data
-            print('cleaned_form_data:', cleaned_form_data)
-            department_id = int(cleaned_form_data['department'])
-            department_obj = models.Departments.objects.get(pk=department_id)
-            print('department_obj', department_obj)
-            print(type(cleaned_form_data['department']))
-            print(type(cleaned_form_data['job']))
-            for i in list(cleaned_form_data['job']):
-                print(type(i))
-            status = cleaned_form_data['status']
-            print('status:', type(status))
-            # job_obj = models.Jobs.objects.get(pk=int(cleaned_form_data['job']))
-            # print('job_obj', job_obj)
-            employee_obj = models.Employees.objects.create(
-                user_id=cleaned_form_data['user_id'],
-                name=cleaned_form_data['name'],
-                id_code=cleaned_form_data['id_code'],
-                # department=department_obj,
-                department_id=department_id,
-                age=cleaned_form_data['age'],
-                e_mail=cleaned_form_data['e_mail'],
-                password=cleaned_form_data['password'],
-                status=cleaned_form_data['status'])
-            employee_obj.job.add(*cleaned_form_data['job'])  # 绑定多对多关系
-            return redirect('dbms:employee')
-        else:
-            return render(request, 'dbms/employee/employee-add.html', locals())
+        response['status'] = False
+        response['message'] = '用户状态为：%s，重置密码失败！！！' % employee_obj.employee_status
+    result = json.dumps(response, ensure_ascii=False)
+    return HttpResponse(result)
 
 
 # -----------------------员工编辑-------------------------#

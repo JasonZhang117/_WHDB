@@ -1,0 +1,26 @@
+<div>
+    <label>
+        {% if kwargs.employee_status == None %}
+            <a class="active btn btn-primary btn-sm" href="{% url 'dbms:employee_all' %}">全部</a>
+        {% else %}
+            <a class="btn btn btn-primary btn-sm" href="{% url 'dbms:employee_all' %}">全部</a>
+        {% endif %}
+        {# 方式一：#}
+        {% for employee_status in EMPLOYEE_STATUS_LIST %}
+            {% if employee_status.0 == kwargs.employee_status %}
+                <a class="active btn btn-primary btn-sm"
+                   href="{% url 'dbms:employee' employee_status=employee_status.0 %}">{{ employee_status.1 }} </a>
+            {% else %}
+                <a class="btn btn-primary btn-sm"
+                   href="{% url 'dbms:employee' employee_status=employee_status.0 %}">{{ employee_status.1 }}</a>
+            {% endif %}
+        {% endfor %}
+    </label>
+    <label>
+        <form class="navbar-form" style="display: inline">
+            <input type="search" name="_s" class="form-control" placeholder="姓名，代码，邮箱"
+                   value="{{ search_key|default_if_none:'' }}">
+            <button type="submit" class="btn btn-primary btn-sm">搜索</button>
+        </form>
+    </label>
+</div>

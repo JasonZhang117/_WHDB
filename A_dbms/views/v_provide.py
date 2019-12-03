@@ -297,7 +297,7 @@ def notify_show(request, notify_id):  # 查看放款通知
     notify_money_cn = convert(notify_obj.notify_money)
     agree_term_cn = convert_num(notify_obj.agree.agree_term)
     agree_rate_str = notify_obj.agree.agree_rate
-    date_today =datetime.date.today()
+    date_today = datetime.date.today()
     date_today_str = str(date_today)
 
     return render(request, 'dbms/provide/provide-notify-show.html', locals())
@@ -470,7 +470,7 @@ def provide_scan(request, provide_id):  # 查看放款
     PAGE_TITLE = '放款详情'
 
     provide_list = models.Provides.objects.filter(id=provide_id)
-    provide_obj = provide_list.fir
+    provide_obj = provide_list.first()
 
     today_str = str(datetime.date.today())
     form_repayment_add = forms.FormRepaymentAdd(initial={'repayment_date': today_str})

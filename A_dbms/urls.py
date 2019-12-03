@@ -238,6 +238,9 @@ urlpatterns = [
     path('branch/', views.branches, name='branch_all'),
     path('branch/<int:branch_state>/', views.branches, name='branch'),
 
+    # ------------------------------人员管理--------------------------------------#
+
+
     # ------------------------------报表--------------------------------------#
     path('report/', views.report, name='report'),  #
     path('report/provide/list/<int:p_typ>/<int:t_typ>/', views.report_provide_list, name='report_provide_list'),
@@ -252,11 +255,12 @@ urlpatterns = [
     path('report/dun/class/<int:t_typ>/', views.report_dun, name='report_dun'),
 
     # 员工
-    path('employee/', views.employee, name='employee'),
-    path('employee/add/', views.employee_add, name='employee_add'),
-    path('employee/edit/<int:employee_id>/', views.employee_edit, name='employee_edit'),
-    path('employee/del/<int:employee_id>/', views.employee_del, name='employee_del'),
-    path('employee/del/ajax', views.employee_del_ajax, name='employee_del_ajax'),
+    path('employee/', views.employee, name='employee_all'),
+    path('employee/<int:employee_status>/', views.employee, name='employee'),  # /dbms/cstom/(0-9)
+    path('employee/scan/<int:employee_id>/', views.employee_scan, name='employee_scan'),
+
+    path('employee/reset/', views.employee_reset_ajax, name='employee_reset_ajax'),
+
     # 部门
     path('department/', views.department, name='department'),
     path('department/add/', views.department_add, name='department_add'),

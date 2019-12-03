@@ -9,8 +9,7 @@ from django.db.models import Q, F
 import datetime
 from django.db.models import Avg, Min, Sum, Max, Count
 from django.urls import resolve, reverse
-from _WHDB.views import MenuHelper
-from _WHDB.views import (authority, credit_term_c, convert, convert_num, un_dex, amount_s, amount_y,
+from _WHDB.views import (MenuHelper, authority, credit_term_c, convert, convert_num, un_dex, amount_s, amount_y,
                          agree_list_screen, agree_right)
 
 

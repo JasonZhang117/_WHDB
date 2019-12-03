@@ -1,63 +1,12 @@
-{% extends 'dbms/board/tabulation.html' %}
+{% extends 'dbms/index_dbms.html' %}
 
-{% block title %}员工管理{% endblock %}
+{% block title %}{{ PAGE_TITLE }}{% endblock %}
 
-{% block table %}
-    <caption><h3>员工管理</h3></caption>
-    <thead>
-        <tr>
-            <th>序号</th>
-            <th>用户名</th>
-            <th>员工姓名</th>
-            <th>身份证号</th>
-            <th>所属部门</th>
-            <th>岗位</th>
-            <th>年龄</th>
-            <th>电子邮箱</th>
-            <th>密码</th>
-            <th>编辑</th>
-        </tr>
-    </thead>
-    <tbody>
-    {% for employee in employee_list %}
-        <tr nid="{{ employee.id }}">
-            <td>{{employee.id}}</td>
-            <td>{{employee.user_id}}</td>
-            <td>{{employee.name}}</td>
-            <td>{{employee.id_code}}</td>
-            <td>{{employee.department}}</td>
-            <td>
-                {% for job in employee.job.all %}
-                    {{ job.name }}|
-                {% endfor %}
-            </td>
-            <td>{{ employee.age}}</td>
-            <td>{{ employee.e_mail}}</td>
-            <td>{{ employee.password }}</td>
-            <td><a href="{% url 'dbms:employee_edit' employee.id %}">编辑</a>|
-                <a onclick="removeemployee(this)" href="#">ajax删除</a>|
-                <a class="glyphicon glyphicon-remove-circle" href="{% url 'dbms:employee_del' employee.id %}"></a>
-            </td>
-        </tr>
-    {% endfor %}
-    </tbody>
-    <script>
-        function removeemployee(ths) {
-            var nid = $(ths).parent().parent().attr('nid')
-            {#alert(nid)#}
-            $.ajax({
-                url: 'del/ajax',
-                type: 'GET',
-                data: {nid: nid},
-                success:function (arg) {
-                    if(arg == '成功'){
-                        {#window.location.reload();#}
-                        $(ths).parent().parent().remove();
-                    }else {
-                        alert(arg)
-                    }
-                }
-            })
-        }
-    </script>
+{% block right-content-container %}
+    {% include 'dbms/employee/employee/employee-filter.html' %}
+    {% include 'dbms/employee/employee/employee-table.html' %}
+{% endblock %}
+
+{% block extra-js %}
+
 {% endblock %}
