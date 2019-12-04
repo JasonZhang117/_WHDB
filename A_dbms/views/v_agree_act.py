@@ -1018,7 +1018,7 @@ def result_state_ajax(request):  #
                         counter_warrant__counter__in=counter_agree_list, warrant_typ=5,
                         ownership_warrant__owner=counter_custom)
                     if counter_ground_list:
-                        result += '<p>%s同意%s以企业名下国有土地使及地上建筑物用权向%s提供%s抵押%s担保，' \
+                        result += '<p>%s同意%s以企业名下国有土地使权及地上建筑物用向%s提供%s抵押%s担保，' \
                                   '签订%s抵押%s担保合同，并办理%s抵押登记。国有土地使用权' \
                                   '的详细信息如下：</p>' % (crder_str, qqq, UN, hhh, DF, hhh, DF, hhh)
                         result += '<table>' \
@@ -1305,23 +1305,18 @@ def result_state_ajax(request):  #
                                 agree=agree_obj, custom=counter_custom, result_typ=41, defaults=default)
                     else:
                         ''''''
+
                         counter_house_list = models.Warrants.objects.filter(
                             counter_warrant__counter__in=counter_agree_list, warrant_typ__in=[1, 2],
                             ownership_warrant__owner=counter_custom)
                         single_house_list = counter_house_list.exclude(ownership_warrant__owner=spouse)
+                        owership_name = ''
+                        owership_num = ''
+                        owership_w = ''
                         if single_house_list:
-                            result += '<table>' \
-                                      '<tr>' \
-                                      '<td align="center">所有权人</td> ' \
-                                      '<td align="center">处所</td> ' \
-                                      '<td align="center">面积(平方米)</td> ' \
-                                      '<td align="center">产权证编号</td> ' \
-                                      '</tr>'
                             for warrant_house in single_house_list:
                                 owership_list = warrant_house.ownership_warrant.all()
                                 owership_list_count = owership_list.count()
-                                owership_name = ''
-                                owership_num = ''
                                 owership_list_order = 0
                                 for owership in owership_list:
                                     owership_name += '%s' % owership.owner.name
@@ -1330,14 +1325,12 @@ def result_state_ajax(request):  #
                                     if owership_list_order < owership_list_count:
                                         owership_name += '、'
                                         owership_num += '、'
-                                    else:
-                                        owership_o = ''
-                                        if owership_list_count < 2:
-                                            owership_o += '单独所有'
-                                        else:
-                                            owership_o += '所有'
+                                if owership_list_count < 2:
+                                    owership_w += '单独所有'
+                                else:
+                                    owership_w += '所有'
                         ''''''
-
+                        print(owership_w)
                         result += '<div class="tt" align="center"><strong>声明书</strong></div>'
                         result += '<p>声明人：%s，公民身份号码：%s</p>' % (
                             spouse.name, spouse.person_custome.license_num)
@@ -1347,7 +1340,7 @@ def result_state_ajax(request):  #
                                   '屋作抵押，我无异议。若到期债务人不能清偿债务须处分下列房屋时，我' \
                                   '无条件放弃对该物业的任何权益主张。</p>' % (
                                       spouse.name, counter_custom.name,
-                                      owership_name, owership_o, counter_custom.name)
+                                      owership_name, owership_w, counter_custom.name)
 
                         # (1, '房产'), (2, '房产包')
                         counter_house_list = models.Warrants.objects.filter(
