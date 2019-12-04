@@ -603,7 +603,7 @@ def counter_add_ajax(request):
                         '''创建反担保合同'''
                         counter_obj = models.Counters.objects.create(
                             counter_num=counter_num, counter_name=counter_name, agree=agree_obj,
-                            counter_typ=counter_typ,counter_other=counter_clean['counter_other'],
+                            counter_typ=counter_typ, counter_other=counter_clean['counter_other'],
                             counter_copies=counter_copies, counter_buildor=request.user)
                         '''创建抵质押反担保合同'''
                         counter_warrant_obj = models.CountersWarrants.objects.create(
@@ -1304,16 +1304,51 @@ def result_state_ajax(request):  #
                             result_obj, created = models.ResultState.objects.update_or_create(
                                 agree=agree_obj, custom=counter_custom, result_typ=41, defaults=default)
                     else:
+                        ''''''
+                        counter_house_list = models.Warrants.objects.filter(
+                            counter_warrant__counter__in=counter_agree_list, warrant_typ__in=[1, 2],
+                            ownership_warrant__owner=counter_custom)
+                        single_house_list = counter_house_list.exclude(ownership_warrant__owner=spouse)
+                        if single_house_list:
+                            result += '<table>' \
+                                      '<tr>' \
+                                      '<td align="center">所有权人</td> ' \
+                                      '<td align="center">处所</td> ' \
+                                      '<td align="center">面积(平方米)</td> ' \
+                                      '<td align="center">产权证编号</td> ' \
+                                      '</tr>'
+                            for warrant_house in single_house_list:
+                                owership_list = warrant_house.ownership_warrant.all()
+                                owership_list_count = owership_list.count()
+                                owership_name = ''
+                                owership_num = ''
+                                owership_list_order = 0
+                                for owership in owership_list:
+                                    owership_name += '%s' % owership.owner.name
+                                    owership_num += '%s' % owership.ownership_num
+                                    owership_list_order += 1
+                                    if owership_list_order < owership_list_count:
+                                        owership_name += '、'
+                                        owership_num += '、'
+                                    else:
+                                        owership_o = ''
+                                        if owership_list_count < 2:
+                                            owership_o += '单独所有'
+                                        else:
+                                            owership_o += '所有'
+                        ''''''
+
                         result += '<div class="tt" align="center"><strong>声明书</strong></div>'
                         result += '<p>声明人：%s，公民身份号码：%s</p>' % (
                             spouse.name, spouse.person_custome.license_num)
                         result += '<p>我声明人<strong><u>%s</u></strong>与<strong><u>%s</u></strong>是夫妻关系，' \
-                                  '下表所列房屋系<strong><u>%s</u></strong>单独所有，无其他共有人，' \
+                                  '下表所列房屋系<strong><u>%s</u></strong>%s，无其他共有人，' \
                                   '现<strong><u>%s</u></strong>以下列房' \
                                   '屋作抵押，我无异议。若到期债务人不能清偿债务须处分下列房屋时，我' \
                                   '无条件放弃对该物业的任何权益主张。</p>' % (
                                       spouse.name, counter_custom.name,
-                                      counter_custom.name, counter_custom.name)
+                                      owership_name, owership_o, counter_custom.name)
+
                         # (1, '房产'), (2, '房产包')
                         counter_house_list = models.Warrants.objects.filter(
                             counter_warrant__counter__in=counter_agree_list, warrant_typ__in=[1, 2],
