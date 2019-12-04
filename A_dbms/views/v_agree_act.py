@@ -1018,7 +1018,7 @@ def result_state_ajax(request):  #
                         counter_warrant__counter__in=counter_agree_list, warrant_typ=5,
                         ownership_warrant__owner=counter_custom)
                     if counter_ground_list:
-                        result += '<p>%s同意%s以企业名下国有土地使用权向%s提供%s抵押%s担保，' \
+                        result += '<p>%s同意%s以企业名下国有土地使及地上建筑物用权向%s提供%s抵押%s担保，' \
                                   '签订%s抵押%s担保合同，并办理%s抵押登记。国有土地使用权' \
                                   '的详细信息如下：</p>' % (crder_str, qqq, UN, hhh, DF, hhh, DF, hhh)
                         result += '<table>' \
