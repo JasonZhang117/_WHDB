@@ -290,12 +290,11 @@ def counter_preview(request, agree_id, counter_id):
         (21, 'D-分离式保函'), (22, 'D-公司保函'), (23, 'D-银行保函'),
         (41, 'D-单笔(公证)'), (42, 'D-最高额(公证)'),
         (51, 'X-小贷单笔'), (52, 'X-小贷最高额'), ]'''
-    agree_typ = agree_obj.agree_typ
     AGREE_TYP_D = models.Agrees.AGREE_TYP_D  # 担保公司合同类型
     AGREE_TYP_X = models.Agrees.AGREE_TYP_X  # 小贷公司合同类型
-    UN, ADD, CNB = un_dex(agree_typ)  # 不同合同种类下主体适用
+    UN, ADD, CNB = un_dex(agree_obj.agree_typ)  # 不同合同种类下主体适用
     notarization_typ = False
-    if agree_typ in [41, 42, ]:
+    if agree_obj.agree_typ in [41, 42, ]:
         notarization_typ = True
     '''COUNTER_TYP_LIST = [
         (1, '企业担保'), (2, '个人保证'),
@@ -303,16 +302,28 @@ def counter_preview(request, agree_id, counter_id):
         (31, '应收质押'), (32, '股权质押'), (33, '票据质押'), (34, '动产质押'),
         (41, '其他权利质押'),
         (51, '股权预售'), (52, '房产预售'), (53, '土地预售'), (59, '其他预售')]'''
-    counter_typ = counter_obj.counter_typ
     X_COUNTER_TYP_LIST = models.Counters.COUNTER_TYP_X  # 保证类（反）担保合同类型
     D_COUNTER_TYP_LIST = models.Counters.COUNTER_TYP_D  # 抵押类（反）担保合同类型
     Z_COUNTER_TYP_LIST = models.Counters.COUNTER_TYP_Z  # 质押类（反）担保合同类型
-    AGREE_TYP_H = models.Agrees.AGREE_TYP_H
-    AGREE_TYP_X = models.Agrees.AGREE_TYP_X
+    AGREE_TYP_H = models.Agrees.AGREE_TYP_H  # 最高额合同类型
+    AGREE_TYP_X = models.Agrees.AGREE_TYP_X  # 小贷公司合同类型
+    AGREE_TYP_D = models.Agrees.AGREE_TYP_D  # 担保公司合同类型
 
-    credit_term = agree_obj.agree_term  # 授信期限（月）
-    credit_term_cn = credit_term_c(credit_term)
-    if counter_typ in [1, 2]:  # 个人反担保
+    credit_term_cn = credit_term_c(agree_obj.agree_term)  # 授信期限（月）
+    counter_copy_cn = convert_num(counter_obj.counter_copies)  # 合同份数（大写）
+
+    if counter_obj.counter_typ not in X_COUNTER_TYP_LIST:
+        co_owner_list = []  # 共有人
+        ownership_owner_list = []  # 产权人
+        ownership_list = counter_obj.warrant_counter.warrant.all().first().ownership_warrant.all()
+        for ownership in ownership_list:
+            ownership_owner_list.append(ownership.owner)
+        for ownership in ownership_list:
+            if ownership.owner.genre == 2:
+                if ownership.owner.person_custome.spouses and ownership.owner.person_custome.spouses not in ownership_owner_list:
+                    co_owner_list.append(ownership.owner.person_custome.spouses)
+
+    if counter_obj.counter_typ in [1, 2]:  # 个人反担保
         assure_counter_obj = counter_obj.assure_counter
         custom_obj = assure_counter_obj.custome
     else:
@@ -415,20 +426,19 @@ def agree_sign_preview(request, agree_id):
     agree_typ = agree_obj.agree_typ
     '''AGREE_TYP_LIST = [(1, '单笔'), (2, '最高额'), (3, '保函'), (7, '小贷'),
                       (41, '单笔(公证)'), (42, '最高额(公证)'), (47, '小贷(公证)')]'''
-    AGREE_TYP_GZ = [41, 42, 47]
-    credit_term = agree_obj.agree_term  # 授信期限（月）
-    credit_term_cn = credit_term_c(credit_term)
+    AGREE_TYP_G = models.Agrees.AGREE_TYP_G
+    AGREE_TYP_X = models.Agrees.AGREE_TYP_X  # 小贷公司合同类型
+    AGREE_TYP_D = models.Agrees.AGREE_TYP_D  # 担保公司合同类型
+    credit_term_cn = credit_term_c(agree_obj.agree_term)
 
-    agree_amount = agree_obj.agree_amount
-    agree_amount_str = str(agree_amount / 10000).rstrip('0').rstrip('.')  # 续贷（万元）
-    article_amount = agree_obj.lending.summary.amount
-    article_amount_str = str(article_amount / 10000).rstrip('0').rstrip('.')  # 续贷（万元）
+    agree_amount_str = str(agree_obj.agree_amount / 10000).rstrip('0').rstrip('.')  # 续贷（万元）
+    article_amount_str = str(agree_obj.lending.summary.amount / 10000).rstrip('0').rstrip('.')  # 续贷（万元）
     '''AGREE_STATE_LIST = [(11, '待签批'), (21, '已签批'), (31, '未落实'),
                         (41, '已落实'), (51, '待变更'), (61, '已解保'), (99, '已注销')]'''
     agree_article = agree_obj.lending.summary
     article_agree_list = models.Agrees.objects.filter(lending__summary=agree_article).exclude(agree_state=99)
     article_agree_amount = article_agree_list.aggregate(Sum('agree_amount'))['agree_amount__sum']
-    article_agree_amount_ar = round(article_agree_amount - agree_amount, 2)
+    article_agree_amount_ar = round(article_agree_amount - agree_obj.agree_amount, 2)
     article_agree_amount_ar_str = str(article_agree_amount_ar / 10000).rstrip('0').rstrip('.')  # 续贷（万元）
     '''RESULT_TYP_LIST = [(11, '股东会决议'), (21, '董事会决议'), (31, '弃权声明'), (41, '单身声明')]'''
     counter_list = agree_obj.counter_agree.all()

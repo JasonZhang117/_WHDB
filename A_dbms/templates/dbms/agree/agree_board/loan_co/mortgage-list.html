@@ -4,7 +4,7 @@
 <table cellspacing="0" cellpadding="0">
     {% for warrant in counter_obj.warrant_counter.warrant.all %}
         {% if warrant.warrant_typ == 1 or warrant.warrant_typ == 2 %}
-            {% if forloop.counter == 1 %}<!--第一次循环-->
+            {% if forloop.first %}<!--第一次循环-->
                 <tr>
                     <td colspan="2" align="center">抵 押 人</td>
                     <td colspan="5">
@@ -115,17 +115,17 @@
 <!--签单签字信息-->
 <table>
     <tr style="height: 36pt">
-        {% if counter_typ in D_COUNTER_TYP_LIST %}
-            <td style="border: 0pt; width: 115pt" align="right" valign="top">乙方（抵押人）：</td>
-        {% elif counter_typ in Z_COUNTER_TYP_LIST %}
-            <td style="border: 0pt; width: 115pt" align="right" valign="top">乙方（出质人）：</td>
+        {% if counter_obj.counter_typ in D_COUNTER_TYP_LIST %}
+            <td style="border: 0pt; width: 115pt" align="center" valign="">抵押人（企业或者其他组织公章或自然人签字）：</td>
+        {% elif counter_obj.counter_typ in Z_COUNTER_TYP_LIST %}
+            <td style="border: 0pt; width: 115pt" align="center" valign="top">质押人（企业或者其他组织公章或自然人签字）：</td>
         {% endif %}
         <td style="border: 0pt; width: 25%" valign="top">
             <!--WARRANT_TYP_LIST = [
                 (1, '房产'), (2, '房产包'), (5, '土地'), (6, '在建工程'), (11, '应收账款'),
                 (21, '股权'), (31, '票据'), (41, '车辆'), (51, '动产'), (55, '其他'), (99, '他权')]-->
             {% for warrant in counter_obj.warrant_counter.warrant.all %}
-                {% if forloop.first %}
+                {% if forloop.first %}<!--第一次循环-->
                     {#(1, '房产'), (2, '房产包'), (5, '土地'), (6, '在建工程')#}
                     {% if warrant.ownership_warrant.all %}
                         <strong><u>{% for ownership in warrant.ownership_warrant.all %}
@@ -155,69 +155,11 @@
             {% endfor %}
         </td>
 
-        {% if counter_typ in D_COUNTER_TYP_LIST %}
-            <td style="border: 0pt; width:135pt" align="right" valign="top">甲方（抵押权人）：</td>
+        {% if counter_obj.counter_typ in D_COUNTER_TYP_LIST %}
+            <td style="border: 0pt; width:135pt" align="center" valign="top">抵押权人（公章）：</td>
         {% elif counter_typ in Z_COUNTER_TYP_LIST %}
-            <td style="border: 0pt; width:115pt" align="right" valign="top">甲方（质权人）：</td>
+            <td style="border: 0pt; width:115pt" align="center" valign="top">质权人（公章）：</td>
         {% endif %}
         <td style="border: 0pt" valign="top">成都武侯中小企业融资担保有限责任公司</td>
-
-    </tr>
-    <tr style="height: 32pt">
-        <td style="border: 0pt" align="right">法定代表人：</td>
-        <td style="border: 0pt">
-            <!--WARRANT_TYP_LIST = [
-                (1, '房产'), (2, '房产包'), (5, '土地'), (6, '在建工程'), (11, '应收账款'),
-                (21, '股权'), (31, '票据'), (41, '车辆'), (51, '动产'), (55, '其他'), (99, '他权')]-->
-            {% for warrant in counter_obj.warrant_counter.warrant.all %}
-                {% if forloop.first %}
-                    {#(1, '房产'), (2, '房产包'), (5, '土地'), (6, '在建工程')#}
-                    {% if warrant.ownership_warrant.all %}
-                        <strong><u>{% for ownership in warrant.ownership_warrant.all %}
-                            {% if ownership.owner.company_custome %}
-                                {{ ownership.owner.company_custome.representative }}
-                            {% endif %}
-                        {% endfor %}</u></strong>
-                        {#(11, '应收账款')#}
-                    {% elif warrant.warrant_typ == 11 %}
-                        {% if warrant.receive_warrant.receive_owner.company_custome %}
-                            <strong><u>{{ warrant.receive_warrant.receive_owner.company_custome.representative }}</u></strong>
-                        {% endif %}
-                        {#(21, '股权')#}
-                    {% elif warrant.warrant_typ == 21 %}
-                        {% if warrant.stock_warrant.stock_owner.company_custome %}
-                            <strong><u>{{ warrant.stock_warrant.stock_owner.company_custome.representative }}</u></strong>
-                        {% endif %}
-                        {#(31, '票据')#}
-                    {% elif warrant.warrant_typ == 31 %}
-                        {% if warrant.draft_warrant.draft_owner.company_custome %}
-                            <strong><u>{{ warrant.draft_warrant.draft_owner.company_custome.representative }}</u></strong>
-                        {% endif %}
-                        {#(41, '车辆')#}
-                    {% elif warrant.warrant_typ == 41 %}
-                        {% if warrant.vehicle_warrant.vehicle_owner.company_custome %}
-                            <strong><u>{{ warrant.vehicle_warrant.vehicle_owner.company_custome.representative }}</u></strong>
-                        {% endif %}
-                        {#(51, '动产')#}
-                    {% elif warrant.warrant_typ == 51 %}
-                        {% if warrant.chattel_warrant.chattel_owner.company_custome %}
-                            <strong><u>{{ warrant.chattel_warrant.chattel_owner.company_custome.representative }}</u></strong>
-                        {% endif %}
-                    {% elif warrant.warrant_typ == 55 %}
-                        {% if warrant.other_warrant.other_owner.company_custome %}
-                            <strong><u>{{ warrant.other_warrant.other_owner.company_custome.representative }}</u></strong>
-                        {% endif %}
-                    {% else %}
-                        <strong><u>？？？？？？？？？？？？</u></strong>
-                    {% endif %}
-                {% endif %}
-            {% endfor %}
-        </td>
-        <td style="border: 0pt" align="right">法定代表人：</td>
-        <td style="border: 0pt">何长见</td>
-    </tr>
-    <tr style="height: 32pt">
-        <td style="border: 0pt" colspan="2">（授权代理人）签字：</td>
-        <td style="border: 0pt" colspan="2">（授权代理人）签字：</td>
     </tr>
 </table>

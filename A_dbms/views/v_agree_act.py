@@ -878,7 +878,7 @@ def result_state_ajax(request):  #
                             (41, 'D-单笔(公证)'), (42, 'D-最高额(公证)'),
                             (51, 'X-小贷单笔'), (52, 'X-小贷最高额'), ]'''
                         if agr_typ in AGREE_TYP_D:
-                            if agr_typ in [1, 41]:  # (1, 'D-单笔'), (51, 'X-小贷单笔'),
+                            if agr_typ in [1, 41]:  # (1, 'D-单笔'), (41, 'D-单笔(公证)'),
                                 result += '<p>  1、同意向%s申请人民币%s%s期贷款，用以补充流动资金。</p>' % (
                                     agree_obj.branch.name, agree_amount_cn, agree_term_str)
                                 result += '<p>  2、同意委托%s为该贷款向贷款方提供担保。</p>' % UN
@@ -900,12 +900,12 @@ def result_state_ajax(request):  #
                                 order = 1
                         elif agr_typ in AGREE_TYP_X:
                             if agr_typ in [51, ]:  # 单笔
-                                result += '<p>  %s同意向%s申请人民币%s%s期的贷款。</p>' % (
-                                    oo, UN, agree_amount_cn, agree_term_str)
+                                result += '<p>  1、同意向%s申请人民币%s%s期的贷款。</p>' % (
+                                    UN, agree_amount_cn, agree_term_str)
                                 order = 1
                             elif agr_typ in [52, ]:  # 最高额
-                                result += '<p>  %s同意向%s申请人民币%s%s期的最高额授信。</p>' % (
-                                    oo, UN, agree_amount_cn, agree_term_str)
+                                result += '<p>  1、同意向%s申请人民币%s%s期的最高额授信。</p>' % (
+                                    UN, agree_amount_cn, agree_term_str)
                                 order = 1
                     else:
                         order = 0

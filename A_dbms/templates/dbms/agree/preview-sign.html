@@ -6,79 +6,9 @@
     <link rel="stylesheet" media="print" href="{% static 'dbms/css/agree-sign-style.css' %}">
 {% endblock %}
 {% block body %}
-    <div class="sign-tab">
-        <div class="split">
-            <div style="font-size: 18pt">
-                <p align="center"><strong>成都武侯中小企业融资担保有限责任公司</strong></p>
-                <p align="center"><strong>合 同 内 部 审 签 表</strong></p>
-            </div>
-            <table>
-                {% include 'dbms/agree/agree_board/sign-approval-order.html' %}
-                <tr>
-                    <td colspan="6">合同专员意见：<br><br><br>
-                        <span style="padding-left: 400pt">签名：</span><br><br>
-                        <span style="padding-left: 400pt">时间：</span>
-                    </td>
-                </tr>
-                <tr>
-                    <td colspan="6">风控专员意见：<br><br><br>
-                        <span style="padding-left: 400pt">签名：</span><br><br>
-                        <span style="padding-left: 400pt">时间：</span>
-                    </td>
-                </tr>
-                <tr>
-                    <td colspan="6">项目经理意见：<br><br><br>
-                        <span style="padding-left: 400pt">签名：</span><br><br>
-                        <span style="padding-left: 400pt">时间：</span>
-                    </td>
-                </tr>
-            </table>
-        </div>
-
-        <div class="split">
-            <div style="font-size: 18pt">
-                <p align="center"><strong>成都武侯中小企业融资担保有限责任公司</strong></p>
-                <p align="center"><strong>合 同 外 部 审 签 表</strong></p>
-            </div>
-            <table>
-                {% include 'dbms/agree/agree_board/sign-approval-order.html' %}
-                <tr>
-                    <td colspan="6">项目经理确认：<br><br><br>
-                        <span style="padding-left: 400pt">签名：</span><br><br>
-                        <span style="padding-left: 400pt">时间：</span>
-                    </td>
-                </tr>
-                <tr>
-                    <td colspan="6">业务部意见：<br><br><br>
-                        <span style="padding-left: 400pt">签名：</span><br><br>
-                        <span style="padding-left: 400pt">时间：</span>
-                    </td>
-                </tr>
-                <tr>
-                    <td colspan="6">财务部意见：<br><br><br>
-                        <span style="padding-left: 400pt">签名：</span><br><br>
-                        <span style="padding-left: 400pt">时间：</span>
-                    </td>
-                </tr>
-                <tr>
-                    <td colspan="6">风控部意见：<br><br><br>
-                        <span style="padding-left: 400pt">签名：</span><br><br>
-                        <span style="padding-left: 400pt">时间：</span>
-                    </td>
-                </tr>
-                <tr>
-                    <td colspan="6">分管风控副总经理意见：<br><br><br>
-                        <span style="padding-left: 400pt">签名：</span><br><br>
-                        <span style="padding-left: 400pt">时间：</span>
-                    </td>
-                </tr>
-                <tr>
-                    <td colspan="6">董事长意见：<br><br><br>
-                        <span style="padding-left: 400pt">签名：</span><br><br>
-                        <span style="padding-left: 400pt">时间：</span>
-                    </td>
-                </tr>
-            </table>
-        </div>
-    </div>
+    {% if agree_obj.agree_typ in AGREE_TYP_D %}
+        {% include 'dbms/agree/sign/sign-db.html' %}
+    {% elif agree_obj.agree_typ in AGREE_TYP_X %}
+        {% include 'dbms/agree/sign/sign-xd.html' %}
+    {% endif %}
 {% endblock %}

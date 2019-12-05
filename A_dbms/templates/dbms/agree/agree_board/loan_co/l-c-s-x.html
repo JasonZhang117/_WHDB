@@ -129,7 +129,7 @@
             <p>10.2本合同所约定的保证人应承担的债权人所花费律师费（律师代理费）是指债权人依据四川省现行律师服务收费规定如/即《四川省律师法律服务收费行业指导标准》(川发改价格〔2018〕93号)所计算并承担/支付/花费的费用；如果确实由于案情需要，债权人采用了其他付费标准或计费方式，保证人应据实承担。</p>
             <p>10.3保证人有逃避债权人监督、拖欠保证债务、恶意逃废债务或者协助债务人逃废债务等行为时，债权人有权将该种行为向有关单位通报，并在新闻媒体上公告。</p>
             <p>10.4<strong>本合同经企业或者其他组织保证人法定代表人或负责人或授权代表签字（或盖章）并加盖公章(自然人保证人本人或授权代表签字)、债权人法定代表人或负责人或授权代表签字（或盖章）并加盖公章后生效。</strong></p>
-            <p>10.5本合同正本一式<strong><u>{{ counter_obj.counter_copies }}</u></strong>份，具有同等效力。</p>
+            <p>10.5本合同正本一式<strong><u>{{ counter_copy_cn }}</u></strong>份，具有同等效力。</p>
             <p><strong>第十一条 其他约定事项</strong></p>
             <div>{% include 'dbms/agree/agree_board/counter-other-space.html' %}</div>
             <p><strong>保证人声明：债权人已提请保证人注意对本合同各条款作全面、准确的理解，并应保证人的要求作了相应的条款说明，签约各方对本合同含义理解认识一致，不存在任何歧义。保证人对本合同的签署意味着对声明内容的确认，否则应不予签署。</strong>
@@ -144,7 +144,7 @@
                 {% if custom.genre == 1 %}
                     <div class="sign-page-y">
                         <p>保证人（公章或合同专用章）：<strong><u>{{ custom.name }}</u></strong></p>
-                        <p>法定代表人（或授权代理人）：<strong><u>{{ custom.company_custome.representative }}</u></strong></p>
+                        <p>法定代表人（或负责人或授权代理人）：<strong><u>{{ custom.company_custome.representative }}</u></strong></p>
                         <p>（签字或盖章）</p>
                         {% include 'dbms/agree/agree_board/sign-date.html' %}
                     </div>
@@ -158,7 +158,7 @@
             {% endfor %}
             <div class="sign-page-j">
                 <p>债权人（公章或合同专用章）：成都武侯武兴小额贷款有限责任公司</p>
-                <p>法定代表人（或授权代理人）：黄一平</p>
+                <p>法定代表人（或负责人或授权代理人）：黄一平</p>
                 <p>（签字或盖章）</p>
                 {% include 'dbms/agree/agree_board/sign-date.html' %}
             </div>

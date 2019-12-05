@@ -1,0 +1,85 @@
+<tr>
+    <td align="center">借款人名称</td>
+    <td colspan="5" align="center">{{ agree_obj.lending.summary.custom.name }}</td>
+</tr>
+<tr>
+    <td align="center">合同金额</td>
+    <td align="center">{{ agree_amount_str }}万元</td>
+    <td align="center" colspan="3">期限</td>
+    <td align="center" style="width: 10%">{{ credit_term_cn }}</td>
+</tr>
+<tr>
+    <td align="center">月利率</td>
+    <td align="center">{{ agree_obj.agree_rate }}‰</td>
+    <td align="center" colspan="2">还款方式</td>
+    <td align="center" colspan="2">{{ agree_obj.get_repay_method_display }}</td>
+</tr>
+<tr>
+    <td align="center" rowspan="{{ counter_count }}">合同</td>
+    <td align="center">{{ agree_obj.get_agree_name_display }}</td>
+    <td align="center" colspan="3">{{ agree_obj.agree_num }}</td>
+    <td align="center">{{ agree_obj.agree_copies }}份</td>
+</tr>
+{% for counter in counter_list %}
+    {% if counter.counter_typ == 2 and agree_typ in AGREE_TYP_GZ %}
+        <tr>
+            <td align="center">{{ counter.get_counter_name_display }}
+                {% for custom in counter.assure_counter.custome.all %}
+                    ({{ custom }}
+                    {% if custom.person_custome.spouses %}
+                        、{{ custom.person_custome.spouses.name }}夫妇
+                    {% endif %}
+                    )
+                {% endfor %}
+            </td>
+            <td align="center" colspan="3">{{ counter.counter_num }}</td>
+            <td align="center">{{ counter.counter_copies }}份</td>
+        </tr>
+    {% elif counter.counter_typ == 2 %}
+        <tr>
+            <td align="center">{{ counter.get_counter_name_display }}
+                {% for custom in counter.assure_counter.custome.all %}
+                    ({{ custom }}
+                    {% if custom.person_custome.spouses %}
+                        、{{ custom.person_custome.spouses.name }}夫妇
+                    {% endif %}
+                    )
+                {% endfor %}
+            </td>
+            <td align="center" colspan="3"></td>
+            <td align="center">{{ counter.counter_copies }}份</td>
+        </tr>
+    {% elif counter.counter_typ == 59 %}
+        <tr>
+            <td align="center">{{ counter.get_counter_name_display }}
+                ({{ counter.warrant_counter.warrant.all.0.other_warrant.other_owner.short_name }})
+            </td>
+            <td align="center" colspan="3"></td>
+            <td align="center">{{ counter.counter_copies }}份</td>
+        </tr>
+    {% else %}
+        <tr>
+            <td align="center">{{ counter.get_counter_name_display }}</td>
+            <td align="center" colspan="3">{{ counter.counter_num }}</td>
+            <td align="center">{{ counter.counter_copies }}份</td>
+        </tr>
+    {% endif %}
+{% endfor %}
+{% if result_list %}
+    {% for result in result_list %}
+        {% if forloop.first %}
+            <tr>
+                <td align="center" rowspan="{{ result_count }}">声明</td>
+                <td align="center">{{ result.get_result_typ_display }}({{ result.custom.name }})</td>
+                <td align="center" colspan="3"></td>
+                <td align="center">{{ result.counter_copies }}2份</td>
+            </tr>
+        {% else %}
+            <tr>
+                <td align="center">{{ result.get_result_typ_display }}({{ result.custom.name }})</td>
+                <td align="center" colspan="3">{{ result.counter_num }}</td>
+                <td align="center">{{ result.counter_copies }}2份</td>
+            </tr>
+        {% endif %}
+    {% endfor %}
+{% endif %}

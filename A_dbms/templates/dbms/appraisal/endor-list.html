@@ -49,14 +49,7 @@
                 <tr>
                     <td class="brl" colspan="3">
                         <p class="indal">{{ article_obj.opinion }}</p>
-                        <p class="indal">综上，建议为
-                            {{ article_obj.custom.name}}
-                            {% if article_obj.borrower.all %}
-                                {% for borrower in article_obj.borrower.all %}
-                                    、{{ borrower.name }}
-                                {% endfor %}
-                            {% endif %}
-                            提供{{ amount_str_w }}万元贷款。</p>
+                        <p class="indal">综上，建议为{{ article_obj.custom.name}}{% if article_obj.borrower.all %}{% for borrower in article_obj.borrower.all %}、{{ borrower.name }}{% endfor %}{% endif %}提供{{ amount_str_w }}万元贷款。</p>
                     </td>
                     <td class="brl" colspan="2"></td>
                     <td class="brl" colspan="3"></td>

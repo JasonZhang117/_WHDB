@@ -49,6 +49,7 @@ class Agrees(models.Model):  # 委托合同
     AGREE_TYP_X = [51, 52]  # 小贷公司合同类型
     AGREE_TYP_S = [1, 4, 22, 23, 41, 51]  # 单笔合同类型
     AGREE_TYP_H = [2, 21, 42, 52]  # 最高额合同类型
+    AGREE_TYP_G = [41, 42, 51, 52]  # 公证合同类型
     GUARANTEE_TYP_LIST = (('①', '①'), ('②', '②'), ('③', '③'), ('④', '④'),
                           ('⑤', '⑤'), ('⑥', '⑥'), ('⑦', '⑦'), ('⑧', '⑧'),)
     guarantee_typ = models.CharField(verbose_name='反担保种类数', max_length=6, choices=GUARANTEE_TYP_LIST)
