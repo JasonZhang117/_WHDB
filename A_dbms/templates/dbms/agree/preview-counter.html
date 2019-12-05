@@ -91,7 +91,7 @@
             <p>！！！！！！！(42, 'D-最高额(公证)'),！！！！！！！</p>
         {% elif agree_obj.agree_typ == 51 %}
             {#(51, 'X-小贷单笔')#}
-            {% if counter_obj.counter_typ == 1 or counter_typ == 2 %}
+            {% if counter_obj.counter_typ == 1 or counter_obj.counter_typ == 2 %}
                 {% include 'dbms/agree/agree_board/loan_co/l-c-s-x.html' %}
             {% elif counter_obj.counter_typ in D_COUNTER_TYP_LIST %}
                 {% include 'dbms/agree/agree_board/loan_co/l-c-s-d.html' %}
