@@ -127,7 +127,7 @@ p {
 
 /*合同签字页*/
 .sign-page {
-    padding-top: 30pt;
+    padding-top: 15pt;
 }
 
 .sign-page-j {
@@ -143,12 +143,12 @@ p {
 }
 
 .sign-page div {
-    margin-top: 15pt;
-    margin-bottom: 15pt;
+    margin-top: 10pt;
+    margin-bottom: 10pt;
 }
 
 .sign-page p {
-    padding-bottom: 15pt;
+    padding-bottom: 10pt;
     text-indent: 0pt;
 }
 

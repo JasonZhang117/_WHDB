@@ -18,14 +18,14 @@ body {
     /*字间距*/
     letter-spacing: 0pt;
     /*行间距*/
-    line-height: 21pt;
+    line-height: 18pt;
     /*背景图片*/
     background-image: url("../images/bjj.png");
     background-repeat: repeat-y;
 }
 
 p {
-    margin-top: 8pt;
+    margin-top: 7pt;
     margin-bottom: 0pt;
     /*缩进*/
     text-indent: 26pt;
@@ -65,23 +65,23 @@ p {
 /*合同封面-甲方*/
 .page-home-j {
     font-size: 13.75pt;
-    padding-top: 15mm;
-    padding-bottom: 15mm;
+    padding-top: 10mm;
+    padding-bottom: 10mm;
     text-indent: 0pt;
 }
 
 /*合同封面-乙方*/
 .page-home-y {
     font-size: 13.75pt;
-    padding-top: 15mm;
-    padding-bottom: 15mm;
+    padding-top: 10mm;
+    padding-bottom: 10mm;
     text-indent: 0pt;
 }
 
 /*合同封面-丙方*/
 .page-home-b {
     font-size: 13.75pt;
-    padding-top: 15mm;
+    padding-top: 10mm;
     padding-bottom: 0mm;
     text-indent: 0pt;
 }
@@ -104,12 +104,12 @@ p {
 }
 
 .sign-page div {
-    margin-top: 15pt;
-    margin-bottom: 15pt;
+    margin-top: 10pt;
+    margin-bottom: 10pt;
 }
 
 .sign-page p {
-    padding-bottom: 15pt;
+    padding-bottom: 10pt;
     text-indent: 0pt;
 }
 

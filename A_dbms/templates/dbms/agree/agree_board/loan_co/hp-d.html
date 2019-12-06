@@ -9,9 +9,8 @@
                         <p>法定代表人（负责人）：<u><strong>{{ ownership.owner.company_custome.representative }}</strong></u></p>
                         <p>住所：<u><strong>{{ ownership.owner.company_custome.registered_addr }}</strong></u></p>
                     {% elif ownership.owner.genre == 2 %}
-                        <p>
-                            证件种类：<u><strong>身份证</strong></u>，证件号码：<u><strong>{{ agree_obj.lending.summary.custom.person_custome.license_num }}</strong></u>
-                        </p>
+                        <p>证件种类：<u><strong>身份证</strong></u>，证件号码：<u><strong>{{ ownership.owner.person_custome.license_num }}</strong></u></p>
+                        <p>住所：<u><strong>{{ ownership.owner.person_custome.license_addr }}</strong></u></p>
                     {% endif %}
                 {% endfor %}
                 {#(11, '应收账款')#}

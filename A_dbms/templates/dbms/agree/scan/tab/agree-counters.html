@@ -26,26 +26,29 @@
                 <td>{{ counter.counter_num }}</td>
                 <td>{{ counter.get_counter_typ_display }}</td>
                 <td align="right">{{ counter.counter_copies }}</td>
-                {% if counter.counter_typ in COUNTER_TYP_CUSTOM %}
+                {% if counter.assure_counter.custome.all %}
                     <td>
                         {% for custome in counter.assure_counter.custome.all %}
-                            <a target="_blank"
-                               href="{% url 'dbms:custom_scan' custom_id=custome.id %}">
+                            {% if forloop.first %}
+                                <a target="_blank" href="{% url 'dbms:custom_scan' custom_id=custome.id %}">
+                                    {{ custome.name }}</a>
+                            {% else %}
+                                、<a target="_blank" href="{% url 'dbms:custom_scan' custom_id=custome.id %}">
                                 {{ custome.name }}</a>
+                            {% endif %}
                             {% if custome.person_custome.spouses %}
-                                、 <a target="_blank"
-                                     href="{% url 'dbms:custom_scan' custom_id=custome.person_custome.spouses.id %}">
+                                、<a target="_blank"href="{% url 'dbms:custom_scan' custom_id=custome.person_custome.spouses.id %}">
                                 {{ custome.person_custome.spouses.name }}</a>
                             {% endif %}
                         {% endfor %}
                     </td>
-                {% else %}
+                {% elif counter.warrant_counter.warrant.all %}
                     <td>
                         {% for warrant in counter.warrant_counter.warrant.all %}
                             <!-- WARRANT_TYP_LIST = [
         (1, '房产'), (2, '房产包'), (5, '土地'), (6, '在建工程'), (11, '应收账款'),
         (21, '股权'), (31, '票据'), (41, '车辆'), (51, '动产'), (55, '其他'), (99, '他权')]-->
-                            {% if warrant.warrant_typ in WARRANT_TYP_OWN_LIST %}
+                            {% if warrant.ownership_warrant.all %}
                                 {% if forloop.first %}
                                     {% for ownership in warrant.ownership_warrant.all %}
                                         <a target="_blank"
@@ -78,25 +81,31 @@
                             {% endif %}
                         {% endfor %}
                     </td>
+                {% else %}
+                    <td>？？？？？</td>
                 {% endif %}
                 {#                <td>{{ counter.get_counter_state_display }}</td>#}
                 {% if PAGE_TITLE == '合同详情' %}
-                    {% if counter.counter_typ in COUNTER_TYP_CUSTOM %}
+                    {% if counter.assure_counter.custome.all %}
                         <td>
                             {% for custome in counter.assure_counter.custome.all %}
-                                {{ custome.contact_addr }}
+                                {% if forloop.first %}
+                                    {{ custome.contact_addr }}
+                                {% else %}
+                                    、{{ custome.contact_addr }}
+                                {% endif %}
                                 {% if custome.person_custome.spouses %}
                                     、{{ custome.person_custome.spouses.contact_addr }}
                                 {% endif %}
                             {% endfor %}
                         </td>
-                    {% else %}
+                    {% elif counter.warrant_counter.warrant.all %}
                         <td>
                             {% for warrant in counter.warrant_counter.warrant.all %}
                                 <!-- WARRANT_TYP_LIST = [
             (1, '房产'), (2, '房产包'), (5, '土地'), (6, '在建工程'), (11, '应收账款'),
             (21, '股权'), (31, '票据'), (41, '车辆'), (51, '动产'), (55, '其他'), (99, '他权')]-->
-                                {% if warrant.warrant_typ in WARRANT_TYP_OWN_LIST %}
+                                {% if warrant.ownership_warrant.all %}
                                     {% if forloop.first %}
                                         {% for ownership in warrant.ownership_warrant.all %}
                                             {{ ownership.owner.contact_addr }}{% if not forloop.last %}、{% endif %}
@@ -113,27 +122,33 @@
                                 {% elif warrant.warrant_typ == 55 %}
                                     {{ warrant.other_warrant.other_owner.contact_addr }}
                                 {% else %}
-
+                                    ？？？？？
                                 {% endif %}
                             {% endfor %}
                         </td>
+                    {% else %}
+                        ？？？？
                     {% endif %}
-                    {% if counter.counter_typ in COUNTER_TYP_CUSTOM %}
+                    {% if counter.assure_counter.custome.all %}
                         <td>
                             {% for custome in counter.assure_counter.custome.all %}
-                                {{ custome.linkman }}
+                                {% if forloop.first %}
+                                    {{ custome.linkman }}
+                                {% else %}
+                                    、{{ custome.linkman }}
+                                {% endif %}
                                 {% if custome.person_custome.spouses %}
                                     、{{ custome.person_custome.spouses.linkman }}
                                 {% endif %}
                             {% endfor %}
                         </td>
-                    {% else %}
+                    {% elif counter.warrant_counter.warrant.all %}
                         <td>
                             {% for warrant in counter.warrant_counter.warrant.all %}
                                 <!-- WARRANT_TYP_LIST = [
             (1, '房产'), (2, '房产包'), (5, '土地'), (6, '在建工程'), (11, '应收账款'),
             (21, '股权'), (31, '票据'), (41, '车辆'), (51, '动产'), (55, '其他'), (99, '他权')]-->
-                                {% if warrant.warrant_typ in WARRANT_TYP_OWN_LIST %}
+                                {% if warrant.ownership_warrant.all %}
                                     {% if forloop.first %}
                                         {% for ownership in warrant.ownership_warrant.all %}
                                             {{ ownership.owner.linkman }}{% if not forloop.last %}、{% endif %}
@@ -150,27 +165,33 @@
                                 {% elif warrant.warrant_typ == 55 %}
                                     {{ warrant.other_warrant.other_owner.linkman }}
                                 {% else %}
-
+                                    ？？？？？
                                 {% endif %}
                             {% endfor %}
                         </td>
+                    {% else %}
+                        ？？？？？
                     {% endif %}
-                    {% if counter.counter_typ in COUNTER_TYP_CUSTOM %}
+                    {% if counter.assure_counter.custome.all %}
                         <td>
                             {% for custome in counter.assure_counter.custome.all %}
-                                {{ custome.contact_num }}
+                                {% if forloop.first %}
+                                    {{ custome.contact_num }}
+                                {% else %}
+                                    、{{ custome.contact_num }}
+                                {% endif %}
                                 {% if custome.person_custome.spouses %}
                                     、{{ custome.person_custome.spouses.contact_num }}
                                 {% endif %}
                             {% endfor %}
                         </td>
-                    {% else %}
+                    {% elif counter.warrant_counter.warrant.all %}
                         <td>
                             {% for warrant in counter.warrant_counter.warrant.all %}
                                 <!-- WARRANT_TYP_LIST = [
             (1, '房产'), (2, '房产包'), (5, '土地'), (6, '在建工程'), (11, '应收账款'),
             (21, '股权'), (31, '票据'), (41, '车辆'), (51, '动产'), (55, '其他'), (99, '他权')]-->
-                                {% if warrant.warrant_typ in WARRANT_TYP_OWN_LIST %}
+                                {% if warrant.ownership_warrant.all %}
                                     {% if forloop.first %}
                                         {% for ownership in warrant.ownership_warrant.all %}
                                             {{ ownership.owner.contact_num }}{% if not forloop.last %}、{% endif %}
@@ -187,10 +208,12 @@
                                 {% elif warrant.warrant_typ == 55 %}
                                     {{ warrant.other_warrant.other_owner.contact_num }}
                                 {% else %}
-
+                                    ？？？？？
                                 {% endif %}
                             {% endfor %}
                         </td>
+                    {% else %}
+                        ？？？？？
                     {% endif %}
                     <td><a class="btn btn-primary btn-xs" target="_blank"
                            href="{% url 'dbms:agree_counter_preview' agree_id=agree_obj.id counter_id=counter.id %}">

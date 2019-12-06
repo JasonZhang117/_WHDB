@@ -1,12 +1,41 @@
 <p>(此页无正文)</p>
 <div class="sign-page">
     <div class="sign-page-j">
-        {% include 'dbms/agree/agree_board/sign-j.html' %}
-    </div>
-    <div class="sign-page-y">
-        <p>乙方（公章或合同专用章）：<strong><u>{{ agree_obj.lending.summary.custom.name }}</u></strong></p>
-        <p>法定代表人（或授权代理人）：<strong><u>{{ agree_obj.lending.summary.custom.company_custome.representative }}</u></strong></p>
+        <p>甲方（公章或合同专用章）：{{ UN }}</p>
+        <p>法定代表人（或授权代理人）：何长见</p>
         <p>（签字或盖章）</p>
         {% include 'dbms/agree/agree_board/sign-date.html' %}
+    </div>
+    <div class="sign-page-y">
+        {% if agree_obj.lending.summary.custom.genre == 1 %}
+            <p>乙方（公章或合同专用章）：
+                <strong><u>{{ agree_obj.lending.summary.custom.name }}</u></strong>
+            </p>
+            <p>法定代表人（或授权代理人）：
+                <strong><u>{{ agree_obj.lending.summary.custom.company_custome.representative }}</u></strong>
+            </p>
+            <p>（签字或盖章）</p>
+            {% include 'dbms/agree/agree_board/sign-date.html' %}
+        {% elif agree_obj.lending.summary.custom.genre == 2 %}
+            <p>乙方：<strong><u>{{ agree_obj.lending.summary.custom.name }}</u></strong></p>
+            <p>（本人或授权代理人签字）</p>
+            {% include 'dbms/agree/agree_board/sign-date.html' %}
+        {% endif %}
+        {% if agree_obj.lending.summary.borrower.all %}
+            {% for borrower in agree_obj.lending.summary.borrower.all %}
+                {% if borrower.genre == 1 %}
+                    <p>乙方（公章或合同专用章）：<strong><u>{{ borrower.name }}</u></strong></p>
+                    <p>法定代表人（或授权代理人）：
+                        <strong><u>{{ borrower.company_custome.representative }}</u></strong>
+                    </p>
+                    <p>（签字或盖章）</p>
+                    {% include 'dbms/agree/agree_board/sign-date.html' %}
+                {% elif borrower.genre == 2 %}
+                    <p>乙方：<strong><u>{{ borrower.name }}</u></strong></p>
+                    <p>（本人或授权代理人签字）</p>
+                    {% include 'dbms/agree/agree_board/sign-date.html' %}
+                {% endif %}
+            {% endfor %}
+        {% endif %}
     </div>
 </div>

@@ -2,8 +2,9 @@
 {#合同标题#}
 <div class="agree-title" style="text-align: center"><strong>{{ counter_obj.get_counter_name_display }}</strong></div>
 <div class="page-home">
+    {# 甲方信息#}
     <div class="page-home-j">
-        <p><strong>{% if  counter_typ in X_COUNTER_TYP_LIST %}担保人{% elif counter_typ in D_COUNTER_TYP_LIST %}抵押权人{% elif counter_typ in Z_COUNTER_TYP_LIST %}质权人{% endif %}（甲方）：成都武侯中小企业融资担保有限责任公司</strong></p>
+        <p><strong>{{j_typ}}（甲方）：成都武侯中小企业融资担保有限责任公司</strong></p>
         <p>住所（地址）：成都市武侯区武青南路33号(武侯新城管委会内)</p>
         <p>法定代表人：何长见</p>
     </div>
@@ -11,15 +12,53 @@
     <div class="page-home-y">
         {% include 'dbms/agree/agree_board/counter/_c/counter-home-y.html' %}
     </div>
+    {# 丙方信息#}
     <div class="page-home-b">
-        <p class="str-p page-home-p">
-            <strong>{{ counter_home_b_b }}（丙方）：{{ agree_obj.lending.summary.custom.name }}{% if agree_obj.lending.summary.borrower.all %}、{% for borrower in agree_obj.lending.summary.borrower.all %}{{ borrower.name }}{% if not forloop.last %}、{% endif %}{% endfor %}{% endif %}</strong></p>
+        <p class="page-home-p">
+           {{ counter_home_b_b }}（丙方）：<strong>{{ agree_obj.lending.summary.custom.name }}</strong>
+        </p>
         {% if agree_obj.lending.summary.custom.genre == 1 %}
-            <p class="page-home-p">住所（地址）：{{ agree_obj.lending.summary.custom.company_custome.registered_addr }}</p>
-            <p class="page-home-p">法定代表人：{{ agree_obj.lending.summary.custom.company_custome.representative }}</p>
+            <p class="page-home-p">
+                住所（地址）：<strong>{{ agree_obj.lending.summary.custom.company_custome.registered_addr }}</strong>
+            </p>
+            <p class="page-home-p">
+                法定代表人（负责人）：<strong>{{ agree_obj.lending.summary.custom.company_custome.representative }}</strong>
+            </p>
+        {% endif %}
+        {% if agree_obj.lending.summary.custom.genre == 2 %}
+            <p class="page-home-p">
+                住所（地址）：<strong>{{ agree_obj.lending.summary.custom.person_custome.license_addr }}</strong>
+            </p>
+            <p class="page-home-p">
+                身份证号码：<strong>{{ agree_obj.lending.summary.custom.person_custome.license_num }}</strong>
+            </p>
+        {% endif %}
+        {% if agree_obj.lending.summary.borrower.all %}
+            {% for borrower in agree_obj.lending.summary.borrower.all %}
+                <p class="page-home-p">
+                    {{ counter_home_b_b }}（丙方）：<strong>{{ borrower.name }}</strong>
+                </p>
+                {% if borrower.genre == 1 %}
+                    <p class="page-home-p">
+                        住所（地址）：<strong>{{ borrower.company_custome.registered_addr }}</strong>
+                    </p>
+                    <p class="page-home-p">
+                        法定代表人（负责人）：<strong>{{ borrower.company_custome.representative }}</strong>
+                    </p>
+                {% elif borrower.genre == 2 %}
+                    <p class="page-home-p">
+                        住所（地址）：<strong>{{ borrower.person_custome.license_addr }}</strong>
+                    </p>
+                    <p class="page-home-p">
+                        身份证号码：<strong>{{ borrower.person_custome.license_num }}</strong>
+                    </p>
+                {% endif %}
+            {% endfor %}
         {% endif %}
     </div>
-    {% if agree_typ == 22 %}
-        <p style="text-indent: 26pt;padding-top: 35pt"><strong>声明：乙丙双方已阅读本合同所有条款。应乙丙双方要求，甲方已经就本合同做了相应的条款说明。乙丙双方对本合同条款的含义及相应的法律后果已全部通晓并充分理解。</strong></p>
+    {% if agree_obj.agree_typ == 22 %}
+        <p style="text-indent: 26pt;padding-top: 35pt"><strong>
+            声明：乙丙双方已阅读本合同所有条款。应乙丙双方要求，甲方已经就本合同做了相应的条款说明。乙丙双方对本合同条款的含义及相应的法律后果已全部通晓并充分理解。
+        </strong></p>
     {% endif %}
 </div>

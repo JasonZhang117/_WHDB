@@ -35,7 +35,7 @@
                                         {{ ownership.ownership_num }}{% if not forloop.last %}、{% endif %}
                                     {% endfor %}
                                 </td>
-                                <td align="right">{{ warrant.evaluate_value }}</td>
+                                <td align="right">{{ warrant.evaluate_value|default_if_none:'' }}</td>
                                 <td></td>
                             </tr>
                         {% else %}<!--房产包非首次循环-->
@@ -43,7 +43,7 @@
                                 <td>{{ house_bag.get_housebag_app_display }}</td>
                                 <td align="right">{{ house_bag.housebag_area }}</td>
                                 <td>{{ house_bag.housebag_locate }}</td>
-                                <td align="right">{{ warrant.evaluate_value }}</td>
+                                <td align="right">{{ warrant.evaluate_value|default_if_none:'' }}</td>
                                 <td></td>
                             </tr>
                         {% endif %}
@@ -59,7 +59,7 @@
                                 {{ ownership.ownership_num }}{% if not forloop.last %}、{% endif %}
                             {% endfor %}
                         </td>
-                        <td align="right">{{ warrant.evaluate_value }}</td>
+                        <td align="right">{{ warrant.evaluate_value|default_if_none:'' }}</td>
                         <td></td>
                     </tr>
                 {% endif %}
@@ -76,7 +76,7 @@
                                         {{ ownership.ownership_num }}{% if not forloop.last %}、{% endif %}
                                     {% endfor %}
                                 </td>
-                                <td align="right">{{ warrant.evaluate_value }}</td>
+                                <td align="right">{{ warrant.evaluate_value|default_if_none:'' }}</td>
                                 <td></td>
                             </tr>
                         {% else %}
@@ -84,7 +84,7 @@
                                 <td>{{ house_bag.get_housebag_app_display }}</td>
                                 <td align="right">{{ house_bag.housebag_area }}</td>
                                 <td>{{ house_bag.housebag_locate }}</td>
-                                <td align="right">{{ warrant.evaluate_value }}</td>
+                                <td align="right">{{ warrant.evaluate_value|default_if_none:'' }}</td>
                                 <td></td>
                             </tr>
                         {% endif %}
@@ -99,7 +99,7 @@
                                 {{ ownership.ownership_num }}{% if not forloop.last %}、{% endif %}
                             {% endfor %}
                         </td>
-                        <td align="right">{{ warrant.evaluate_value }}</td>
+                        <td align="right">{{ warrant.evaluate_value|default_if_none:'' }}</td>
                         <td></td>
                     </tr>
                 {% endif %}
@@ -116,9 +116,9 @@
 <table>
     <tr style="height: 36pt">
         {% if counter_obj.counter_typ in D_COUNTER_TYP_LIST %}
-            <td style="border: 0pt; width: 115pt" align="center" valign="">抵押人（企业或者其他组织公章或自然人签字）：</td>
+            <td style="border: 0pt; width: 115pt" align="center" valign="">抵押人（企业或者其他组织公章、自然人签字）：</td>
         {% elif counter_obj.counter_typ in Z_COUNTER_TYP_LIST %}
-            <td style="border: 0pt; width: 115pt" align="center" valign="top">质押人（企业或者其他组织公章或自然人签字）：</td>
+            <td style="border: 0pt; width: 115pt" align="center" valign="top">质押人（企业或者其他组织公章、自然人签字）：</td>
         {% endif %}
         <td style="border: 0pt; width: 25%" valign="top">
             <!--WARRANT_TYP_LIST = [

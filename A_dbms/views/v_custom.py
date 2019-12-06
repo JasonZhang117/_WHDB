@@ -62,6 +62,7 @@ def custom_scan(request, custom_id):  # 项目预览
 
     custom_obj = models.Customes.objects.get(id=custom_id)
 
+    print('custom_obj.person_custome:',custom_obj.person_custome.spouses)
     form_date = {
         'name': custom_obj.name,
         'short_name': custom_obj.short_name,

@@ -26,27 +26,41 @@
             {#        (21, 'D-分离式保函'), (22, 'D-公司保函'), (23, 'D-银行保函'),#}
             {#        (41, 'D-单笔(公证)'), (42, 'D-最高额(公证)'),#}
             {#        (51, 'X-小贷单笔'), (52, 'X-小贷最高额'), ]#}
-            {% if agree_typ == 1 %} <!--(1, 'D-单笔')-->
-                {% include 'dbms/agree/agree_board/entrust-single.html' %}
-            {% elif agree_typ == 2 %} <!--(1, 'D-单笔')-->
-                {% include 'dbms/agree/agree_board/entrust-maximum.html' %}
-            {% elif agree_typ == 4 %} <!--(4, 'D-委贷'))-->
-                <p>！！！！！！！！！！ (4, 'D-委贷')！！！！！！！！！！</p>
-            {% elif agree_typ == 21 %} <!--(21, 'D-分离式保函')-->
-                {% include 'dbms/agree/agree_board/separate-guarantee.html' %}
-            {% elif agree_typ == 22 %} <!--(22, 'D-公司保函')-->
-                {% include 'dbms/agree/agree_board/entrust-single-l.html' %}
-            {% elif agree_typ == 23 %} <!--(23, 'D-银行保函')-->
-                <p>！！！！！！！！！！ (23, 'D-银行保函')！！！！！！！！！！？</p>
-            {% elif agree_typ == 41 %} <!--(41, 'D-单笔(公证)')-->
-                {% include 'dbms/agree/agree_board/entrust-single-n.html' %}
-            {% elif agree_typ == 42 %}<!--(42, 'D-最高额(公证)-->
-                <p>！！！！！！！！！！ (42, 'D-最高额(公证)')！！！！！！！！！！</p>
-            {% elif agree_typ == 51 %}<!--(51, 'X-小贷单笔')-->
+            {% if agree_obj.agree_typ == 1 %} <!--(1, 'D-单笔')-->
                 {% if agree_obj.lending.summary.custom.genre == 1 %} <!--(1, '企业')-->
-                    {% include 'dbms/agree/agree_board/loan_en/loan-single-c.html' %}
+                    {% include 'dbms/agree/agree_board/entrust-single-1.html' %}
                 {% elif agree_obj.lending.summary.custom.genre == 2 %} <!--(2, '个人')-->
-                    {% include 'dbms/agree/agree_board/loan_en/loan-single-p.html' %}
+                    {% include 'dbms/agree/agree_board/entrust-single-2.html' %}
+                {% endif %}
+            {% elif agree_obj.agree_typ == 2 %} <!--(2, 'D-最高额')-->
+                {% if agree_obj.lending.summary.custom.genre == 1 %} <!--(1, '企业')-->
+                    {% include 'dbms/agree/agree_board/entrust-maximum-1.html' %}
+                {% elif agree_obj.lending.summary.custom.genre == 2 %} <!--(2, '个人')-->
+                    {% include 'dbms/agree/agree_board/entrust-maximum-2.html' %}
+                {% endif %}
+            {% elif agree_obj.agree_typ == 4 %} <!--(4, 'D-委贷'))-->
+                <p>！！！！！！！！！！ (4, 'D-委贷')！！！！！！！！！！</p>
+            {% elif agree_obj.agree_typ == 21 %} <!--(21, 'D-分离式保函')-->
+                {% include 'dbms/agree/agree_board/separate-guarantee.html' %}
+            {% elif agree_obj.agree_typ == 22 %} <!--(22, 'D-公司保函')-->
+                {% include 'dbms/agree/agree_board/entrust-single-l.html' %}
+            {% elif agree_obj.agree_typ == 23 %} <!--(23, 'D-银行保函')-->
+                <p>！！！！！！！！！！ (23, 'D-银行保函')！！！！！！！！！！？</p>
+            {% elif agree_obj.agree_typ == 41 %} <!--(41, 'D-单笔(公证)')-->
+                {% if agree_obj.lending.summary.custom.genre == 1 %} <!--(1, '企业')-->
+                    {% include 'dbms/agree/agree_board/entrust-single-n-1.html' %}
+                {% elif agree_obj.lending.summary.custom.genre == 2 %} <!--(2, '个人')-->
+                    {% include 'dbms/agree/agree_board/entrust-single-n-2.html' %}
+                {% endif %}
+                <!--(42, 'D-最高额(公证)-->
+            {% elif agree_obj.agree_typ == 42 %}
+                <p>！！！！！！！！！！ (42, 'D-最高额(公证)')！！！！！！！！！！</p>
+                <!--(51, 'X-小贷单笔')-->
+            {% elif agree_obj.agree_typ == 51 %}
+                {% if agree_obj.lending.summary.custom.genre == 1 %} <!--(1, '企业')-->
+                    {% include 'dbms/agree/agree_board/loan_en/loan-single-1.html' %}
+                {% elif agree_obj.lending.summary.custom.genre == 2 %} <!--(2, '个人')-->
+                    {% include 'dbms/agree/agree_board/loan_en/loan-single-2.html' %}
                 {% endif %}
             {% else %}
                 <p>！！！！！！！！！！无该类型合同模板，请联系管理员！！！！！！！！！！</p>

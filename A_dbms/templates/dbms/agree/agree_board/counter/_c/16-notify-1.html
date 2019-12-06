@@ -1,37 +1,35 @@
 <p>甲乙丙三方就本合同中涉及各类通知、协议等文件及就合同发生纠纷时相关文件和法律文书送达时的送达地址及法律后果作如下约定：</p>
 <p>（一） 甲乙丙三方确认的有效送达地址如下：</p>
-<p>如至甲方：</p>
+<p>如至甲方：成都武侯中小企业融资担保有限责任公司</p>
 <p>地址：武科西五路360号西部智谷B区2栋4单元4楼（武侯政务服务中心背后）</p>
 <p>电话：028-85566171</p>
 <p>传真：028-85566171</p>
 <p>邮政编码：610041</p>
 <p>收件人：成都武侯中小企业融资担保有限责任公司</p>
-<p>如至乙方：</p>
 <!--COUNTER_TYP_LIST = (
     (1, '企业担保'), (2, '个人保证'),
     (11, '房产抵押'), (12, '土地抵押'), (13, '动产抵押'), (15, '车辆抵押'),
     (31, '应收质押'), (32, '股权质押'), (33, '票据质押'),
     (51, '股权预售'), (52, '房产预售'), (53, '土地预售'))-->
-{% if counter_typ == 1 %}
+{% if counter_obj.assure_counter.custome.all %}
     {% for custom in counter_obj.assure_counter.custome.all %}
-        <div>
+        {% if custom.genre == 1 %}
+                <p>如至乙方：<strong><u>{{ custom.name }}</u></strong></p>
+                <p>地址：<strong><u>{{ custom.contact_addr }}</u></strong></p>
+                <p>电话：<strong><u>{{ custom.contact_num }}</u></strong></p>
+                <p>收件人：<strong><u>{{ custom.linkman }}</u></strong></p>
+        {% elif custom.genre == 2 %}
+            <p>如至乙方：<strong><u>{{ custom.name }}</u></strong></p>
             <p>地址：<strong><u>{{ custom.contact_addr }}</u></strong></p>
             <p>电话：<strong><u>{{ custom.contact_num }}</u></strong></p>
             <p>收件人：<strong><u>{{ custom.linkman }}</u></strong></p>
-        </div>
-    {% endfor %}
-{% elif counter_typ == 2 %}
-    {% for custom in counter_obj.assure_counter.custome.all %}
-    <div>
-        <p>地址：<strong><u>{{ custom.contact_addr }}</u></strong></p>
-        <p>电话：<strong><u>{{ custom.contact_num }}</u></strong></p>
-        <p>收件人：<strong><u>{{ custom.linkman }}</u></strong></p>
-        {% if custom.person_custome.spouses %}
-            <p>地址：<strong><u>{{ custom.person_custome.spouses.contact_addr }}</u></strong></p>
-            <p>电话：<strong><u>{{ custom.person_custome.spouses.contact_num }}</u></strong></p>
-            <p>收件人：<strong><u>{{ custom.person_custome.spouses.linkman }}</u></strong></p>
+            {% if custom.person_custome.spouses %}
+                <p>如至乙方：<strong><u>{{ custom.name }}</u></strong></p>
+                <p>地址：<strong><u>{{ custom.person_custome.spouses.contact_addr }}</u></strong></p>
+                <p>电话：<strong><u>{{ custom.person_custome.spouses.contact_num }}</u></strong></p>
+                <p>收件人：<strong><u>{{ custom.person_custome.spouses.linkman }}</u></strong></p>
+            {% endif %}
         {% endif %}
-    </div>
     {% endfor %}
     {#MORTGAGE_COUNTER_TYP_LIST = [11, 12, 13, 14, 15, ]#}
 {% else %}
@@ -44,41 +42,49 @@
                 {#(1, '房产'), (2, '房产包'), (5, '土地'), (6, '在建工程')#}
                 {% if warrant.ownership_warrant.all %}
                     {% for ownership in warrant.ownership_warrant.all %}
+                        <p>如至乙方：<strong><u>{{ ownership.owner.name }}</u></strong></p>
                         <p>地址：<strong><u>{{ ownership.owner.contact_addr }}</u></strong></p>
                         <p>电话：<strong><u>{{ ownership.owner.contact_num }}</u></strong></p>
                         <p>收件人：<strong><u>{{ ownership.owner.linkman }}</u></strong></p>
                     {% endfor %}
                     {#(11, '应收账款')#}
                 {% elif warrant.warrant_typ == 11 %}
+                    <p>如至乙方：<strong><u>{{ warrant.receive_warrant.receive_owner.name }}</u></strong></p>
                     <p>地址：<strong><u>{{ warrant.receive_warrant.receive_owner.contact_addr }}</u></strong></p>
                     <p>电话：<strong><u>{{ warrant.receive_warrant.receive_owner.contact_num }}</u></strong></p>
                     <p>收件人：<strong><u>{{ warrant.receive_warrant.receive_owner.linkman }}</u></strong></p>
                     {#(21, '股权')#}
                 {% elif warrant.warrant_typ == 21 %}
+                    <p>如至乙方：<strong><u>{{ warrant.stock_warrant.stock_owner.name }}</u></strong></p>
                     <p>地址：<strong><u>{{ warrant.stock_warrant.stock_owner.contact_addr }}</u></strong></p>
                     <p>电话：<strong><u>{{ warrant.stock_warrant.stock_owner.contact_num }}</u></strong></p>
                     <p>收件人：<strong><u>{{ warrant.stock_warrant.stock_owner.linkman }}</u></strong></p>
                     {#(31, '票据')#}
                 {% elif warrant.warrant_typ == 31 %}
+                    <p>如至乙方：<strong><u>{{ warrant.draft_warrant.draft_owner.name }}</u></strong></p>
                     <p>地址：<strong><u>{{ warrant.draft_warrant.draft_owner.contact_addr }}</u></strong></p>
                     <p>电话：<strong><u>{{ warrant.draft_warrant.draft_owner.contact_num }}</u></strong></p>
                     <p>收件人：<strong><u>{{ warrant.draft_warrant.draft_owner.linkman }}</u></strong></p>
                     {#(41, '车辆')#}
                 {% elif warrant.warrant_typ == 41 %}
+                    <p>如至乙方：<strong><u>{{ warrant.vehicle_warrant.vehicle_owner.name }}</u></strong></p>
                     <p>地址：<strong><u>{{ warrant.vehicle_warrant.vehicle_owner.contact_addr }}</u></strong></p>
                     <p>电话：<strong><u>{{ warrant.vehicle_warrant.vehicle_owner.contact_num }}</u></strong></p>
                     <p>收件人：<strong><u>{{ warrant.vehicle_warrant.vehicle_owner.linkman }}</u></strong></p>
                     {#(51, '动产')#}
                 {% elif warrant.warrant_typ == 51 %}
+                    <p>如至乙方：<strong><u>{{ warrant.chattel_warrant.chattel_owner.name }}</u></strong></p>
                     <p>地址：<strong><u>{{ warrant.chattel_warrant.chattel_owner.contact_addr }}</u></strong></p>
                     <p>电话：<strong><u>{{ warrant.chattel_warrant.chattel_owner.contact_num }}</u></strong></p>
                     <p>收件人：<strong><u>{{ warrant.chattel_warrant.chattel_owner.linkman }}</u></strong></p>
                     {#(55, '其他')#}
                 {% elif warrant.warrant_typ == 55 %}
+                    <p>如至乙方：<strong><u>{{ warrant.other_warrant.other_owner.name }}</u></strong></p>
                     <p>地址：<strong><u>{{ warrant.other_warrant.other_owner.contact_addr }}</u></strong></p>
                     <p>电话：<strong><u>{{ warrant.other_warrant.other_owner.contact_num }}</u></strong></p>
                     <p>收件人：<strong><u>{{ warrant.other_warrant.other_owner.linkman }}</u></strong></p>
                 {% else %}
+                    <p><strong>？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？</strong></p>
                     <p><strong>？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？</strong></p>
                     <p><strong>？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？</strong></p>
                     <p><strong>？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？</strong></p>
@@ -87,13 +93,14 @@
         </div>
     {% endfor %}
 {% endif %}
-<p>如至丙方</p>
 <div>
+    <p>如至丙方：<strong><u>{{ agree_obj.lending.summary.custom.name }}</u></strong></p>
     <p>地址：<strong><u>{{ agree_obj.lending.summary.custom.contact_addr }}</u></strong></p>
     <p>电话：<strong><u>{{ agree_obj.lending.summary.custom.contact_num }}</u></strong></p>
     <p>收件人：<strong><u>{{ agree_obj.lending.summary.custom.linkman }}</u></strong></p>
     {% if agree_obj.lending.summary.borrower.all %}
         {% for borrower in agree_obj.lending.summary.borrower.all %}
+            <p>如至丙方：<strong><u>{{ borrower.name }}</u></strong></p>
             <p>地址：<strong><u>{{ borrower.contact_addr }}</u></strong></p>
             <p>电话：<strong><u>{{ borrower.contact_num }}</u></strong></p>
             <p>收件人：<strong><u>{{ borrower.linkman }}</u></strong></p>

@@ -3,9 +3,29 @@
     <div class="sign-page-j">{% include 'dbms/agree/agree_board/sign-j.html' %}</div>
     <div class="sign-page-y">{% include 'dbms/agree/agree_board/counter/_c/counter-sign-y.html' %}</div>
     <div class="sign-page-b">
-        <p>丙方（公章或合同专用章）：<strong><u>{{ agree_obj.lending.summary.custom.name }}</u></strong></p>
-        <p>法定代表人（或授权代理人）：<strong><u>{{ agree_obj.lending.summary.custom.company_custome.representative }}</u></strong></p>
-        <p>（签字或盖章）</p>
-        {% include 'dbms/agree/agree_board/sign-date.html' %}
+        {% if agree_obj.lending.summary.custom.genre == 1 %}
+            <p>丙方（公章或合同专用章）：<strong><u>{{ agree_obj.lending.summary.custom.name }}</u></strong></p>
+            <p>法定代表人（或授权代理人）：<strong><u>{{ agree_obj.lending.summary.custom.company_custome.representative }}</u></strong></p>
+            <p>（签字或盖章）</p>
+            {% include 'dbms/agree/agree_board/sign-date.html' %}
+        {% elif agree_obj.lending.summary.custom.genre == 2 %}
+            <p>丙方：<strong><u>{{ agree_obj.lending.summary.custom.name }}</u></strong></p>
+            <p>（本人或授权代表签字）</p>
+            {% include 'dbms/agree/agree_board/sign-date.html' %}
+        {% endif %}
+        {% if agree_obj.lending.summary.borrower.all %}
+            {% for borrower in agree_obj.lending.summary.borrower.all %}
+                {% if borrower.genre == 1 %}
+                    <p>丙方（公章或合同专用章）：<strong><u>{{ borrower.name }}</u></strong></p>
+                    <p>法定代表人（或授权代理人）：<strong><u>{{ borrower.company_custome.representative }}</u></strong></p>
+                    <p>（签字或盖章）</p>
+                    {% include 'dbms/agree/agree_board/sign-date.html' %}
+                {% elif borrower.genre == 2 %}
+                    <p>丙方：<strong><u>{{ borrower.name }}</u></strong></p>
+                    <p>（本人或授权代表签字）</p>
+                    {% include 'dbms/agree/agree_board/sign-date.html' %}
+                {% endif %}
+            {% endfor %}
+        {% endif %}
     </div>
 </div>

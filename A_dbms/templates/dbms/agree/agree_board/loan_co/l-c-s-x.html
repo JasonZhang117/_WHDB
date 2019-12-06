@@ -140,22 +140,24 @@
     <div class="split">
         <p>本页为签字页（无正文）。</p>
         <div class="sign-page">
-            {% for custom in counter_obj.assure_counter.custome.all %}
-                {% if custom.genre == 1 %}
-                    <div class="sign-page-y">
-                        <p>保证人（公章或合同专用章）：<strong><u>{{ custom.name }}</u></strong></p>
-                        <p>法定代表人（或负责人或授权代理人）：<strong><u>{{ custom.company_custome.representative }}</u></strong></p>
-                        <p>（签字或盖章）</p>
-                        {% include 'dbms/agree/agree_board/sign-date.html' %}
-                    </div>
-                {% elif custom.genre == 2 %}
-                    <div class="sign-page-y">
-                        <p>保证人（或受托人）：<strong><u>{{ custom.name }}{% if custom.person_custome.spouses %}、{{ custom.person_custome.spouses.name }}{% endif %}</u></strong></p>
-                        <p>（签字）</p>
-                        {% include 'dbms/agree/agree_board/sign-date.html' %}
-                    </div>
-                {% endif %}
-            {% endfor %}
+            {% if counter_obj.assure_counter.custome.all %}
+                {% for custom in counter_obj.assure_counter.custome.all %}
+                    {% if custom.genre == 1 %}
+                        <div class="sign-page-y">
+                            <p>保证人（公章或合同专用章）：<strong><u>{{ custom.name }}</u></strong></p>
+                            <p>法定代表人（或负责人或授权代理人）：<strong><u>{{ custom.company_custome.representative }}</u></strong></p>
+                            <p>（签字或盖章）</p>
+                            {% include 'dbms/agree/agree_board/sign-date.html' %}
+                        </div>
+                    {% elif custom.genre == 2 %}
+                        <div class="sign-page-y">
+                            <p>保证人：<strong><u>{{ custom.name }}{% if custom.person_custome.spouses %}、{{ custom.person_custome.spouses.name }}{% endif %}</u></strong></p>
+                            <p>（本人或授权代表签字）</p>
+                            {% include 'dbms/agree/agree_board/sign-date.html' %}
+                        </div>
+                    {% endif %}
+                {% endfor %}
+            {% endif %}
             <div class="sign-page-j">
                 <p>债权人（公章或合同专用章）：成都武侯武兴小额贷款有限责任公司</p>
                 <p>法定代表人（或负责人或授权代理人）：黄一平</p>

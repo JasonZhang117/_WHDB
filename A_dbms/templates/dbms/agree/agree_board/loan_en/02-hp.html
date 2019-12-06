@@ -1,12 +1,12 @@
 <div class="agree-tit"><strong>{{ agree_obj.get_agree_name_display }}</strong></div>
 <div style="padding-bottom: 15pt">
     <p>借 款 人：<u><strong>{{ agree_obj.lending.summary.custom.name }}</strong></u></p>
-    {% if agree_obj.lending.summary.custom.genre == 2 %}
-        <p>证件种类：<u><strong>身份证</strong></u>，证件号码：<u><strong>{{ agree_obj.lending.summary.custom.person_custome.license_num }}</strong></u></p>
-    {% endif %}
     {% if agree_obj.lending.summary.custom.genre == 1 %}
         <p>法定代表人（负责人）：<u><strong>{{ agree_obj.lending.summary.custom.company_custome.representative }}</strong></u></p>
         <p>住所：<u><strong>{{ agree_obj.lending.summary.custom.company_custome.registered_addr }}</strong></u></p>
+    {% elif agree_obj.lending.summary.custom.genre == 2 %}
+        <p>证件种类：<u><strong>身份证</strong></u>，证件号码：<u><strong>{{ agree_obj.lending.summary.custom.person_custome.license_num }}</strong></u></p>
+        <p>住所：<u><strong>{{ agree_obj.lending.summary.custom.person_custome.license_addr }}</strong></u></p>
     {% endif %}
 </div>
 <div>
@@ -14,12 +14,12 @@
         {% for borrower in agree_obj.lending.summary.borrower.all %}
             <div style="padding-bottom: 15pt">
                 <p>借 款 人：<u><strong>{{ borrower.name }}</strong></u></p>
-                {% if borrower.genre == 2 %}
-                    <p>证件种类：<u><strong>身份证</strong></u>，证件号码：<u><strong>{{ borrower.person_custome.license_num }}</strong></u></p>
-                {% endif %}
                 {% if borrower.genre == 1 %}
                     <p>法定代表人（负责人）：<u><strong>{{ borrower.company_custome.representative }}</strong></u></p>
                     <p>住所：<u><strong>{{ borrower.company_custome.registered_addr }}</strong></u></p>
+                {% elif borrower.genre == 2 %}
+                    <p>证件种类：<u><strong>身份证</strong></u>，证件号码：<u><strong>{{ borrower.person_custome.license_num }}</strong></u></p>
+                    <p>住所：<u><strong>{{ borrower.person_custome.license_addr }}</strong></u></p>
                 {% endif %}
             </div>
         {% endfor %}

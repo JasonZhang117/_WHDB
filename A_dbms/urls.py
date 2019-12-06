@@ -227,6 +227,7 @@ urlpatterns = [
     path('custom/trustee/del/', views.trustee_del_ajax, name='custom_trustee_del_ajax'),
 
     path('custom/spouse/add/', views.spouse_add_ajax, name='custom_spouse_add_ajax'),
+    path('custom/spouse/del/', views.spouse_del_ajax, name='custom_spouse_del_ajax'),
 
     # ------------------------------合作机构--------------------------------------#
     path('cooperative/', views.cooperative, name='cooperative_all'),  # 菜单-合作机构

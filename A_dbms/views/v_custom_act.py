@@ -239,8 +239,10 @@ def spouse_add_ajax(request):
             try:
                 with transaction.atomic():
                     '''MARITAL_STATUS = ((1, '未婚'), (11, '已婚'), (21, '离婚'), (31, '离婚'), (41, '丧偶'),)'''
-                    models.CustomesP.objects.filter(custome=custom_obj).update(spouses=spouse_add_obj, marital_status=11)
-                    models.CustomesP.objects.filter(custome=spouse_add_obj).update(spouses=custom_obj, marital_status=11)
+                    models.CustomesP.objects.filter(custome=custom_obj).update(spouses=spouse_add_obj,
+                                                                               marital_status=11)
+                    models.CustomesP.objects.filter(custome=spouse_add_obj).update(spouses=custom_obj,
+                                                                                   marital_status=11)
                 response['message'] = '成功添加配偶！'
             except Exception as e:
                 response['status'] = False
@@ -252,6 +254,33 @@ def spouse_add_ajax(request):
     else:
         response['status'] = False
         response['message'] = '客户类型为：%s，无法添加配偶！！！' % custom_state
+    result = json.dumps(response, ensure_ascii=False)
+    return HttpResponse(result)
+
+
+# -----------------------删除配偶ajax-------------------------#
+@login_required
+@authority
+def spouse_del_ajax(request):  #
+    response = {'status': True, 'message': None, 'forme': None, }
+    post_data_str = request.POST.get('postDataStr')
+    post_data = json.loads(post_data_str)
+    custom_obj = models.Customes.objects.get(id=post_data['custom_id'])
+    custom_list = models.CustomesP.objects.filter(custome_id=post_data['custom_id'])
+    spouse_list = models.CustomesP.objects.filter(custome_id=post_data['spouses_id'])
+    '''GENRE_LIST = ((1, '企业'), (2, '个人'))'''
+    if custom_obj.genre == 2:
+        try:
+            with transaction.atomic():
+                custom_list.update(spouses='', marital_status=99)
+                spouse_list.update(spouses='', marital_status=99)
+            response['message'] = '配偶删除成功！'
+        except Exception as e:
+            response['status'] = False
+            response['message'] = '配偶删除失败:%s！' % str(e)
+    else:
+        response['status'] = False
+        response['message'] = '客户类别为%s，无法删除相关配偶！' % custom_obj.genre
     result = json.dumps(response, ensure_ascii=False)
     return HttpResponse(result)
 

@@ -1,13 +1,21 @@
-{% if counter_typ == 1 %}
+{#保证类合同#}
+{% if counter_obj.assure_counter.custome.all %}
     {% for custom in counter_obj.assure_counter.custome.all %}
-        <p>乙方（公章或合同专用章）：<strong><u>{{ custom.name }}</u></strong></p>
-        <p>法定代表人（或授权代理人）：<strong><u>{{ custom.company_custome.representative }}</u></strong></p>
-        <p>（签字或盖章）</p>
+        {% if custom.genre == 1 %}
+            <p>乙方（公章或合同专用章）：<strong><u>{{ custom.name }}</u></strong></p>
+            <p>法定代表人（或授权代理人）：<strong><u>{{ custom.company_custome.representative }}</u></strong></p>
+            <p>（签字或盖章）</p>
+        {% elif custom.genre == 2 %}
+            <p>乙方：<strong><u>{{ custom.name }}</u></strong></p>
+            <p>（本人或授权代表签字）</p>
+            {% if custom.person_custome.spouses %}
+                <p>乙方：<strong><u>{{ custom.person_custome.spouses.name }}</u></strong></p>
+                <p>（本人或授权代表签字）</p>
+            {% endif %}
+        {% endif %}
+        {% include 'dbms/agree/agree_board/sign-date.html' %}
     {% endfor %}
-{% elif counter_typ == 2 %}
-    {% for custom in counter_obj.assure_counter.custome.all %}
-        <p>乙方（或受托人）：<strong><u>{{ custom.name }}{% if custom.person_custome.spouses %}、{{ custom.person_custome.spouses.name }}{% endif %}</u></strong></p>
-    {% endfor %}
+    {#抵质押类合同#}
 {% else %}
     <!--WARRANT_TYP_LIST = [
                    (1, '房产'), (2, '房产包'), (5, '土地'), (6, '在建工程'), (11, '应收账款'),
@@ -16,59 +24,48 @@
         {% if forloop.first %}
             {#(1, '房产'), (2, '房产包'), (5, '土地'), (6, '在建工程')#}
             {% if warrant.ownership_warrant.all %}
-                {% if warrant.ownership_warrant.all.0.owner.genre == 1 %}
-                    {% for ownership in warrant.ownership_warrant.all %}
-                        <p>抵押人（乙方）：<strong><u>{{ ownership.owner.name }}</u></strong></p>
-                        <p>法定代表人：<strong><u>{{ ownership.owner.company_custome.representative }}</u></strong></p>
+                {% for ownership in warrant.ownership_warrant.all %}
+                    {% if ownership.owner.genre == 1 %}
+                        <p>乙方（公章或合同专用章）：<strong><u>{{ ownership.owner.name }}</u></strong></p>
+                        <p>法定代表人（或授权代理人）：<strong><u>{{ ownership.owner.company_custome.representative }}</u></strong></p>
                         <p>（签字或盖章）</p>
-                    {% endfor %}
-                {% else %}
-                    <p>抵押人（乙方）：<strong><u>
-                        {% for ownership in warrant.ownership_warrant.all %}
-                            {{ ownership.owner.name }}{% if not forloop.last %}、{% endif %}
-                        {% endfor %}
-                    </u></strong></p>
-                    <p>（签字）</p>
-                {% endif %}
+                        {% include 'dbms/agree/agree_board/sign-date.html' %}
+                    {% elif ownership.owner.genre == 2 %}
+                        <p>乙方：<strong><u>{{ ownership.owner.name }}</u></strong></p>
+                        <p>（本人或授权代表签字）</p>
+                        {% include 'dbms/agree/agree_board/sign-date.html' %}
+                    {% endif %}
+                {% endfor %}
                 {#(11, '应收账款')#}
             {% elif warrant.warrant_typ == 11 %}
-                <p>抵押人（乙方）：<strong><u>{{ warrant.receive_warrant.receive_owner.name }}</u></strong></p>
-                <p>
-                    法定代表人：<strong><u>{{ warrant.receive_warrant.receive_owner.company_custome.representative }}</u></strong>
-                </p>
+                <p>乙方（公章或合同专用章）：<strong><u>{{ warrant.receive_warrant.receive_owner.name }}</u></strong></p>
+                <p>法定代表人（或授权代理人）：<strong><u>{{ warrant.receive_warrant.receive_owner.company_custome.representative }}</u></strong></p>
                 <p>（签字或盖章）</p>
                 {#(21, '股权')#}
             {% elif warrant.warrant_typ == 21 %}
-                <p>抵押人（乙方）：<strong><u>{{ warrant.stock_warrant.stock_owner.name }}</u></strong></p>
-                <p>
-                    法定代表人：<strong><u>{{ warrant.stock_warrant.stock_owner.company_custome.representative }}</u></strong>
-                </p>
+                <p>乙方（公章或合同专用章）：<strong><u>{{ warrant.stock_warrant.stock_owner.name }}</u></strong></p>
+                <p>法定代表人（或授权代理人）：<strong><u>{{ warrant.stock_warrant.stock_owner.company_custome.representative }}</u></strong></p>
                 <p>（签字或盖章）</p>
                 {#(31, '票据')#}
             {% elif warrant.warrant_typ == 31 %}
-                <p>抵押人（乙方）：<strong><u>{{ warrant.draft_warrant.draft_owner.name }}</u></strong></p>
-                <p>
-                    法定代表人：<strong><u>{{ warrant.draft_warrant.draft_owner.company_custome.representative }}</u></strong>
-                </p>
+                <p>乙方（公章或合同专用章）：<strong><u>{{ warrant.draft_warrant.draft_owner.name }}</u></strong></p>
+                <p>法定代表人（或授权代理人）：<strong><u>{{ warrant.draft_warrant.draft_owner.company_custome.representative }}</u></strong></p>
                 <p>（签字或盖章）</p>
                 {#(41, '车辆')#}
             {% elif warrant.warrant_typ == 41 %}
-                <p>抵押人（乙方）：<strong><u>{{ warrant.vehicle_warrant.vehicle_owner.name }}</u></strong></p>
-                <p>法定代表人：<strong><u>{{ warrant.vehicle_warrant.vehicle_owner.company_custome.representative }}
-                </u></strong></p>
+                <p>乙方（公章或合同专用章）：<strong><u>{{ warrant.vehicle_warrant.vehicle_owner.name }}</u></strong></p>
+                <p>法定代表人（或授权代理人）：<strong><u>{{ warrant.vehicle_warrant.vehicle_owner.company_custome.representative }}</u></strong></p>
                 <p>（签字或盖章）</p>
                 {#(51, '动产')#}
             {% elif warrant.warrant_typ == 51 %}
-                <p>抵押人（乙方）：<strong><u>{{ warrant.chattel_warrant.chattel_owner.name }}</u></strong></p>
-                <p>法定代表人：<strong><u>{{ warrant.chattel_warrant.chattel_owner.company_custome.representative }}
+                <p>乙方（公章或合同专用章）：<strong><u>{{ warrant.chattel_warrant.chattel_owner.name }}</u></strong></p>
+                <p>法定代表人（或授权代理人）：<strong><u>{{ warrant.chattel_warrant.chattel_owner.company_custome.representative }}
                 </u></strong></p>
                 <p>（签字或盖章）</p>
                 {#(55, '其他')#}
             {% elif warrant.warrant_typ == 55 %}
-                <p>抵押人（乙方）：<strong><u>{{ warrant.other_warrant.other_owner.name }}</u></strong></p>
-                <p>
-                    法定代表人：<strong><u>{{ warrant.other_warrant.other_owner.company_custome.representative }}</u></strong>
-                </p>
+                <p>乙方（公章或合同专用章）：<strong><u>{{ warrant.other_warrant.other_owner.name }}</u></strong></p>
+                <p>法定代表人（或授权代理人）：<strong><u>{{ warrant.other_warrant.other_owner.company_custome.representative }}</u></strong></p>
                 <p>（签字或盖章）</p>
             {% else %}
                 <p><strong>？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？</strong></p>
@@ -78,4 +75,3 @@
         {% endif %}
     {% endfor %}
 {% endif %}
-{% include 'dbms/agree/agree_board/sign-date.html' %}

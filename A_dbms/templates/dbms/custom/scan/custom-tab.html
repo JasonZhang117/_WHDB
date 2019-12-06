@@ -15,9 +15,11 @@
                 <a href="#trustee" style="background-color: #f5f5f5"
                    aria-controls="profile" role="tab" data-toggle="tab">董事/理事信息</a></li>
         {% elif custom_obj.genre == 2 %}
-            <li role="presentation">
-                <a href="#spouse" style="background-color: #f5f5f5"
-                   aria-controls="profile" role="tab" data-toggle="tab">配偶信息</a></li>
+            {% if custom_obj.person_custome.spouses %}
+                <li role="presentation">
+                    <a href="#spouse" style="background-color: #f5f5f5"
+                       aria-controls="profile" role="tab" data-toggle="tab">配偶信息</a></li>
+            {% endif %}
         {% endif %}
         <li role="presentation">
             <a href="#project_status" style="background-color: #f5f5f5"
@@ -41,8 +43,10 @@
             <div role="tabpanel" class="tab-pane" id="trustee"> <!--股东信息-->
                 {% include 'dbms/custom/scan/tab/trustee.html' %}</div>
         {% elif custom_obj.genre == 2 %}
-            <div role="tabpanel" class="tab-pane" id="spouse"> <!--配偶-->
-                {% include 'dbms/custom/scan/tab/spouse.html' %}</div>
+            {% if custom_obj.person_custome.spouses %}
+                <div role="tabpanel" class="tab-pane" id="spouse"> <!--配偶-->
+                    {% include 'dbms/custom/scan/tab/spouse.html' %}</div>
+            {% endif %}
         {% endif %}
         <div role="tabpanel" class="tab-pane" id="project_status"> <!--项目情况-->
             {% include 'dbms/custom/scan/tab/project_status.html' %}</div>

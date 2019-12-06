@@ -164,26 +164,11 @@ def agree_scan_counter(request, agree_id, counter_id):  # 查看合同
     menu_result = MenuHelper(request).menu_data_list()
     APPLICATION = 'agree_scan_counter'
     PAGE_TITLE = '担保合同'
-    COUNTER_TYP_CUSTOM = [1, 2]
-    '''WARRANT_TYP_LIST = [
-        (1, '房产'), (2, '房产包'), (5, '土地'), (6, '在建工程'), (11, '应收账款'),
-        (21, '股权'), (31, '票据'), (41, '车辆'), (51, '动产'), (55, '其他'), (99, '他权')]'''
-    WARRANT_TYP_OWN_LIST = [1, 2, 5, 6]
-
-    '''COUNTER_TYP_LIST = (
-        (1, '企业担保'), (2, '个人保证'),
-        (11, '房产抵押'), (12, '土地抵押'), (13, '动产抵押'), (14, '在建工程抵押'), (15, '车辆抵押'),
-        (31, '应收质押'), (32, '股权质押'), (33, '票据质押'), (34, '动产质押'),
-        (41, '其他权利质押'),
-        (51, '股权预售'), (52, '房产预售'), (53, '土地预售'))'''
 
     agree_obj = models.Agrees.objects.get(id=agree_id)
     agree_lending_obj = agree_obj.lending
 
     warrant_agree_list = models.Warrants.objects.filter(counter_warrant__counter__agree=agree_obj)
-    '''WARRANT_TYP_LIST = [
-        (1, '房产'), (5, '土地'), (11, '应收'), (21, '股权'),
-        (31, '票据'), (41, '车辆'), (51, '动产'), (99, '他权')]'''
     custom_c_lending_list = models.Customes.objects.filter(
         lending_custom__sure__lending=agree_lending_obj, genre=1).exclude(
         counter_custome__counter__agree=agree_obj).values_list('id', 'name').order_by('name')
@@ -221,39 +206,32 @@ def agree_preview(request, agree_id):
     current_url_name = resolve(request.path).url_name  # 获取当前URL_NAME
     authority_list = request.session.get('authority_list')  # 获取当前用户的所有权限
     menu_result = MenuHelper(request).menu_data_list()
-    agree_obj = models.Agrees.objects.get(id=agree_id)
-    agree_typ = agree_obj.agree_typ
-    agree_amount = agree_obj.agree_amount
-    agree_amount_cn = convert(agree_amount)  # 转换为金额大写
-    agree_amount_str = amount_s(agree_amount)  # 元转换为万元并去掉小数点后面的零
-    agree_amount_y = amount_y(agree_amount)  # 元转换为万元并去掉小数点后面的零
-    agree_term_cn = convert_num(agree_obj.agree_term)  # 合同期限转大写
-    bank_name = agree_obj.branch.cooperator.name  # 合作银行
 
-    if '民生银行' in bank_name:
-        file_name = '《开立保函/备用信用证申请书》或《开立保函/备用信用证协议》'
-    elif '建设银行' == bank_name:
-        file_name = '《开立保函/备用信用证申请书》或《开立保函/备用信用证协议》'
-    '''AGREE_TYP_LIST = [
-        (1, 'D-单笔'), (2, 'D-最高额'), (4, 'D-委贷'),
-        (21, 'D-分离式保函'), (22, 'D-公司保函'), (23, 'D-银行保函'),
-        (41, 'D-单笔(公证)'), (42, 'D-最高额(公证)'),
-        (51, 'X-小贷单笔'), (52, 'X-小贷最高额'), ]'''
+    agree_obj = models.Agrees.objects.get(id=agree_id)
+
     AGREE_TYP_D = models.Agrees.AGREE_TYP_D  # 担保公司合同类型
     AGREE_TYP_X = models.Agrees.AGREE_TYP_X  # 小贷公司合同类型
-    UN, ADD, CNB = un_dex(agree_typ)  # 不同合同种类下主体适用
-    if agree_typ in [22, ]:  # (22, 'D-公司保函'),
+
+    agree_amount_cn = convert(agree_obj.agree_amount)  # 转换为金额大写
+    agree_amount_str = amount_s(agree_obj.agree_amount)  # 元转换为万元并去掉小数点后面的零
+    agree_amount_y = amount_y(agree_obj.agree_amount)  # 元转换为万元并去掉小数点后面的零
+    agree_term_cn = convert_num(agree_obj.agree_term)  # 合同期限转大写
+    agree_copy_cn = convert_num(agree_obj.agree_copies)
+
+    UN, ADD, CNB = un_dex(agree_obj.agree_typ)  # 不同合同种类下主体适用
+
+    if agree_obj.agree_typ in [22, ]:  # (22, 'D-公司保函'),
         page_home_y_y = '申请人（乙方）'
         page_home_y_j = '担保人（甲方）'
-    elif agree_typ in [21, ]:  # (21, 'D-分离式保函'),
+    elif agree_obj.agree_typ in [21, ]:  # (21, 'D-分离式保函'),
         page_home_y_y = '乙方'
         page_home_y_j = '甲方'
     else:
         page_home_y_y = '被担保人（乙方）'
         page_home_y_j = '担保人（甲方）'
-    agree_copy_cn = convert_num(agree_obj.agree_copies)
+
     notarization_typ = False  # 是否公证
-    if agree_typ in [1, 2, 3, 4, 21, 22, 23]:
+    if agree_obj.agree_typ in [1, 2, 3, 4, 21, 22, 23]:
         agree_copy_jy_cn = convert_num(agree_obj.agree_copies - 2)
     else:
         notarization_typ = True
@@ -263,7 +241,7 @@ def agree_preview(request, agree_id):
     try:
         rate_b = True
         single_quota_rate = float(agree_obj.agree_rate)
-        charge = round(agree_amount * single_quota_rate / 100, 2)
+        charge = round(agree_obj.agree_amount * single_quota_rate / 100, 2)
         agree_rate_cn_q = convert_num(float(agree_obj.agree_rate))  # 合同利率转换为千分之，大写
         agree_rate_w = convert_num(round(((20 - float(agree_obj.agree_rate)) / 30 * 10), 4))
         charge_cn = convert(charge)
@@ -272,6 +250,7 @@ def agree_preview(request, agree_id):
         single_quota_rate = agree_obj.agree_rate
         agree_rate_cn_q = agree_obj.agree_rate
         agree_rate_w = '叁点叁叁叁叁'
+
     return render(request, 'dbms/agree/preview-agree.html', locals())
 
 
@@ -285,36 +264,32 @@ def counter_preview(request, agree_id, counter_id):
     menu_result = MenuHelper(request).menu_data_list()
     agree_obj = models.Agrees.objects.get(id=agree_id)  # 委托合同
     counter_obj = models.Counters.objects.get(id=counter_id)  # 反担保合同
-    '''AGREE_TYP_LIST = [
-        (1, 'D-单笔'), (2, 'D-最高额'), (4, 'D-委贷'),
-        (21, 'D-分离式保函'), (22, 'D-公司保函'), (23, 'D-银行保函'),
-        (41, 'D-单笔(公证)'), (42, 'D-最高额(公证)'),
-        (51, 'X-小贷单笔'), (52, 'X-小贷最高额'), ]'''
+
+    AGREE_TYP_H = models.Agrees.AGREE_TYP_H  # 最高额合同类型
+    AGREE_TYP_X = models.Agrees.AGREE_TYP_X  # 小贷公司合同类型
+    AGREE_TYP_D = models.Agrees.AGREE_TYP_D  # 担保公司合同类型
     AGREE_TYP_D = models.Agrees.AGREE_TYP_D  # 担保公司合同类型
     AGREE_TYP_X = models.Agrees.AGREE_TYP_X  # 小贷公司合同类型
+    X_COUNTER_TYP_LIST = models.Counters.COUNTER_TYP_X  # 保证类（反）担保合同类型
+    D_COUNTER_TYP_LIST = models.Counters.COUNTER_TYP_D  # 抵押类（反）担保合同类型
+    Z_COUNTER_TYP_LIST = models.Counters.COUNTER_TYP_Z  # 质押类（反）担保合同类型
+    credit_term_cn = credit_term_c(agree_obj.agree_term)  # 授信期限（月）
+    counter_copy_cn = convert_num(counter_obj.counter_copies)  # 合同份数（大写）
+    agree_amount = agree_obj.agree_amount
+    agree_amount_cn = convert(agree_obj.agree_amount)  # 转换为货币大写
+    agree_amount_str = amount_s(agree_obj.agree_amount)  # 元转换为万元并去掉小数点后面的零
+    agree_amount_y = amount_y(agree_obj.agree_amount)  # 元去掉小数点后面的零
+    agree_term = agree_obj.agree_term
+    agree_term_str = convert_num(agree_obj.agree_term)  # 转换为数字大写
+
     UN, ADD, CNB = un_dex(agree_obj.agree_typ)  # 不同合同种类下主体适用
     notarization_typ = False
     if agree_obj.agree_typ in [41, 42, ]:
         notarization_typ = True
-    '''COUNTER_TYP_LIST = [
-        (1, '企业担保'), (2, '个人保证'),
-        (11, '房产抵押'), (12, '土地抵押'), (13, '动产抵押'), (14, '在建工程抵押'), (15, '车辆抵押'),
-        (31, '应收质押'), (32, '股权质押'), (33, '票据质押'), (34, '动产质押'),
-        (41, '其他权利质押'),
-        (51, '股权预售'), (52, '房产预售'), (53, '土地预售'), (59, '其他预售')]'''
-    X_COUNTER_TYP_LIST = models.Counters.COUNTER_TYP_X  # 保证类（反）担保合同类型
-    D_COUNTER_TYP_LIST = models.Counters.COUNTER_TYP_D  # 抵押类（反）担保合同类型
-    Z_COUNTER_TYP_LIST = models.Counters.COUNTER_TYP_Z  # 质押类（反）担保合同类型
-    AGREE_TYP_H = models.Agrees.AGREE_TYP_H  # 最高额合同类型
-    AGREE_TYP_X = models.Agrees.AGREE_TYP_X  # 小贷公司合同类型
-    AGREE_TYP_D = models.Agrees.AGREE_TYP_D  # 担保公司合同类型
 
-    credit_term_cn = credit_term_c(agree_obj.agree_term)  # 授信期限（月）
-    counter_copy_cn = convert_num(counter_obj.counter_copies)  # 合同份数（大写）
-
+    co_owner_list = []  # 共有人列表
+    ownership_owner_list = []  # 产权人列表
     if counter_obj.counter_typ not in X_COUNTER_TYP_LIST:
-        co_owner_list = []  # 共有人
-        ownership_owner_list = []  # 产权人
         ownership_list = counter_obj.warrant_counter.warrant.all().first().ownership_warrant.all()
         for ownership in ownership_list:
             ownership_owner_list.append(ownership.owner)
@@ -322,6 +297,14 @@ def counter_preview(request, agree_id, counter_id):
             if ownership.owner.genre == 2:
                 if ownership.owner.person_custome.spouses and ownership.owner.person_custome.spouses not in ownership_owner_list:
                     co_owner_list.append(ownership.owner.person_custome.spouses)
+
+    j_typ = ''
+    if counter_obj.counter_typ in D_COUNTER_TYP_LIST:  # 抵押类（反）担保合同类型
+        j_typ = '抵押权人'
+    elif counter_obj.counter_typ in D_COUNTER_TYP_LIST:  # 抵押类（反）担保合同类型
+        j_typ = '抵押权人'
+    elif counter_obj.counter_typ in Z_COUNTER_TYP_LIST:  # 抵押类（反）担保合同类型
+        j_typ = '质权人'
 
     if counter_obj.counter_typ in [1, 2]:  # 个人反担保
         assure_counter_obj = counter_obj.assure_counter
@@ -376,27 +359,21 @@ def counter_preview(request, agree_id, counter_id):
             other_typ = counter_other_obj.other_typ  # 其他种类
             cost_str = str(counter_other_obj.cost / 10000).rstrip('0').rstrip('.')
             cost_cn = convert(counter_other_obj.cost)
-            if other_typ in [11, ]:
+            if counter_other_obj.other_typ in [11, ]:
                 counter_property_type = '购房合同'
-            elif other_typ in [21, ]:
+            elif counter_other_obj.other_typ in [21, ]:
                 counter_property_type = '车辆合格证'
     counter_home_b_b = ''
     if agree_obj.agree_typ == 21 or agree_obj.agree_typ == 22:  # (21, 'D-分离式保函'), (22, 'D-公司保函'),
         counter_home_b_b = '被担保人'
     else:
         counter_home_b_b = '借款人'
-    agree_amount = agree_obj.agree_amount
-    agree_amount_cn = convert(agree_amount)  # 转换为货币大写
-    agree_amount_str = amount_s(agree_amount)  # 元转换为万元并去掉小数点后面的零
-    agree_amount_y = amount_y(agree_amount)  # 元去掉小数点后面的零
-    agree_term = agree_obj.agree_term
-    agree_term_str = convert_num(agree_term)  # 转换为数字大写
 
     agree_rate_cn_q = ''
     try:
         rate_b = True
         single_quota_rate = float(agree_obj.agree_rate)
-        charge = round(agree_amount * single_quota_rate / 100, 2)
+        charge = round(agree_obj.agree_amount * single_quota_rate / 100, 2)
         agree_rate_cn_q = convert_num(float(agree_obj.agree_rate))  # 合同利率转换为千分之，大写
         agree_rate_w = convert_num(round(((20 - float(agree_obj.agree_rate)) / 30 * 10), 4))
         charge_cn = convert(charge)

@@ -1,8 +1,8 @@
 <table>
     <tr style="height: 36pt">
-        {% if counter_typ in D_COUNTER_TYP_LIST %}
+        {% if counter_obj.counter_typ in D_COUNTER_TYP_LIST %}
             <td style="border: 0pt; width: 115pt" align="right" valign="top">乙方（抵押人）：</td>
-        {% elif counter_typ in Z_COUNTER_TYP_LIST %}
+        {% elif counter_obj.counter_typ in Z_COUNTER_TYP_LIST %}
             <td style="border: 0pt; width: 115pt" align="right" valign="top">乙方（出质人）：</td>
         {% endif %}
         <td style="border: 0pt; width: 25%" valign="top">
@@ -40,9 +40,9 @@
             {% endfor %}
         </td>
 
-        {% if counter_typ in D_COUNTER_TYP_LIST %}
+        {% if counter_obj.counter_typ in D_COUNTER_TYP_LIST %}
             <td style="border: 0pt; width:135pt" align="right" valign="top">甲方（抵押权人）：</td>
-        {% elif counter_typ in Z_COUNTER_TYP_LIST %}
+        {% elif counter_obj.counter_typ in Z_COUNTER_TYP_LIST %}
             <td style="border: 0pt; width:115pt" align="right" valign="top">甲方（质权人）：</td>
         {% endif %}
         <td style="border: 0pt" valign="top">成都武侯中小企业融资担保有限责任公司</td>
@@ -102,7 +102,7 @@
         <td style="border: 0pt">何长见</td>
     </tr>
     <tr style="height: 32pt">
-        <td style="border: 0pt" colspan="2">（授权代理人）签字：</td>
-        <td style="border: 0pt" colspan="2">（授权代理人）签字：</td>
+        <td style="border: 0pt" colspan="2">（或授权代理人）签字：</td>
+        <td style="border: 0pt" colspan="2">（或授权代理人）签字：</td>
     </tr>
 </table>

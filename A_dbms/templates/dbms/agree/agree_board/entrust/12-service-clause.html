@@ -1,16 +1,17 @@
 <p>甲乙双方就本合同中涉及各类通知、协议等文件及就合同发生纠纷时相关文件和法律文书送达时的送达地址及法律后果作如下约定：</p>
 <p>（一）甲乙双方确认的有效送达地址如下：</p>
-<p>如至甲方：</p>
+<p>如至甲方：{{ UN }}</p>
 <p>地址：{{ ADD }}</p>
 <p>电话：{{ CNB }}</p>
 <p>邮政编码：610041</p>
 <p>收件人：{{ UN }}</p>
-<p>如至乙方：</p>
+<p>如至乙方：<strong><u>{{ agree_obj.lending.summary.custom.name }}</u></strong></p>
 <p>地址：<strong><u>{{ agree_obj.lending.summary.custom.contact_addr }}</u></strong></p>
 <p>电话：<strong><u>{{ agree_obj.lending.summary.custom.contact_num }}</u></strong></p>
 <p>收件人：<strong><u>{{ agree_obj.lending.summary.custom.linkman }}</u></strong></p>
 {% if agree_obj.lending.summary.borrower.all %}
     {% for borrower in agree_obj.lending.summary.borrower.all %}
+        <p>如至乙方：<strong><u>{{ borrower.name }}</u></strong></p>
         <p>地址：<strong><u>{{ borrower.contact_addr }}</u></strong></p>
         <p>电话：<strong><u>{{ borrower.contact_num }}</u></strong></p>
         <p>收件人：<strong><u>{{ borrower.linkman }}</u></strong></p>
