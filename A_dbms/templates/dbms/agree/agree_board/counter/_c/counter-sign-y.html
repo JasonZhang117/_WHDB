@@ -8,12 +8,13 @@
         {% elif custom.genre == 2 %}
             <p>乙方：<strong><u>{{ custom.name }}</u></strong></p>
             <p>（本人或授权代理人签字）</p>
+            {% include 'dbms/agree/agree_board/sign-date.html' %}
             {% if custom.person_custome.spouses %}
                 <p>乙方：<strong><u>{{ custom.person_custome.spouses.name }}</u></strong></p>
                 <p>（本人或授权代理人签字）</p>
+                {% include 'dbms/agree/agree_board/sign-date.html' %}
             {% endif %}
         {% endif %}
-        {% include 'dbms/agree/agree_board/sign-date.html' %}
     {% endfor %}
     {#抵质押类合同#}
 {% else %}

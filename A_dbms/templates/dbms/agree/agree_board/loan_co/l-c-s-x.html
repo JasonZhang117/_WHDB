@@ -151,9 +151,14 @@
                         </div>
                     {% elif custom.genre == 2 %}
                         <div class="sign-page-y">
-                            <p>保证人：<strong><u>{{ custom.name }}{% if custom.person_custome.spouses %}、{{ custom.person_custome.spouses.name }}{% endif %}</u></strong></p>
+                            <p>保证人：<strong><u>{{ custom.name }}</u></strong></p>
                             <p>（本人或授权代理人签字）</p>
                             {% include 'dbms/agree/agree_board/sign-date.html' %}
+                            {% if custom.person_custome.spouses %}
+                                <p>保证人：<strong><u>{{ custom.person_custome.spouses.name }}</u></strong></p>
+                                <p>（本人或授权代理人签字）</p>
+                                {% include 'dbms/agree/agree_board/sign-date.html' %}
+                            {% endif %}
                         </div>
                     {% endif %}
                 {% endfor %}
