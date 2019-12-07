@@ -7,10 +7,10 @@
             <p>（签字或盖章）</p>
         {% elif custom.genre == 2 %}
             <p>乙方：<strong><u>{{ custom.name }}</u></strong></p>
-            <p>（本人或授权代表签字）</p>
+            <p>（本人或授权代理人签字）</p>
             {% if custom.person_custome.spouses %}
                 <p>乙方：<strong><u>{{ custom.person_custome.spouses.name }}</u></strong></p>
-                <p>（本人或授权代表签字）</p>
+                <p>（本人或授权代理人签字）</p>
             {% endif %}
         {% endif %}
         {% include 'dbms/agree/agree_board/sign-date.html' %}
@@ -32,7 +32,7 @@
                         {% include 'dbms/agree/agree_board/sign-date.html' %}
                     {% elif ownership.owner.genre == 2 %}
                         <p>乙方：<strong><u>{{ ownership.owner.name }}</u></strong></p>
-                        <p>（本人或授权代表签字）</p>
+                        <p>（本人或授权代理人签字）</p>
                         {% include 'dbms/agree/agree_board/sign-date.html' %}
                     {% endif %}
                 {% endfor %}

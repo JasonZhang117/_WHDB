@@ -152,7 +152,7 @@
                     {% elif custom.genre == 2 %}
                         <div class="sign-page-y">
                             <p>保证人：<strong><u>{{ custom.name }}{% if custom.person_custome.spouses %}、{{ custom.person_custome.spouses.name }}{% endif %}</u></strong></p>
-                            <p>（本人或授权代表签字）</p>
+                            <p>（本人或授权代理人签字）</p>
                             {% include 'dbms/agree/agree_board/sign-date.html' %}
                         </div>
                     {% endif %}

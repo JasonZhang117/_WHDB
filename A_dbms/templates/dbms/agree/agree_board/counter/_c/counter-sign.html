@@ -10,7 +10,7 @@
             {% include 'dbms/agree/agree_board/sign-date.html' %}
         {% elif agree_obj.lending.summary.custom.genre == 2 %}
             <p>丙方：<strong><u>{{ agree_obj.lending.summary.custom.name }}</u></strong></p>
-            <p>（本人或授权代表签字）</p>
+            <p>（本人或授权代理人签字）</p>
             {% include 'dbms/agree/agree_board/sign-date.html' %}
         {% endif %}
         {% if agree_obj.lending.summary.borrower.all %}
@@ -22,7 +22,7 @@
                     {% include 'dbms/agree/agree_board/sign-date.html' %}
                 {% elif borrower.genre == 2 %}
                     <p>丙方：<strong><u>{{ borrower.name }}</u></strong></p>
-                    <p>（本人或授权代表签字）</p>
+                    <p>（本人或授权代理人签字）</p>
                     {% include 'dbms/agree/agree_board/sign-date.html' %}
                 {% endif %}
             {% endfor %}
