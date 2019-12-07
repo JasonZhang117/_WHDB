@@ -1,3 +1,4 @@
+{% load static %}
 <p>鉴于借款人向贷款人申请贷款，为明确双方权利义务，借款人与贷款人经协商一致，特订立本合同。</p>
 <p><strong>第一条 贷款金额、贷款期限与贷款用途</strong></p>
 <p>1.1贷款金额：本合同项下的贷款金额为人民币（大写）<u><strong>{{ agree_amount_cn }}</strong></u>（RMB<u>{{ agree_amount_y }}</u>元）。</p>
@@ -31,7 +32,7 @@
 <p>本合同采取以下第<u><strong>（{% if agree_obj.repay_method == 11 %}1{% elif agree_obj.repay_method == 21 %}2{% elif agree_obj.repay_method == 31 %}3{% endif %}）</strong></u>项方式还款：</p>
 <p>（1）按月付息、到期一次还本法：借款人每月付息，贷款到期日一次性偿还贷款本金。当月利息=贷款本金×日利率×占用天数。</p>
 <p>（2）等额本息法：即贷款期限内每期以相等的额度偿还贷款本息，每期还款额计算公式为：</p>
-<img src="debx.png">
+<p><img src="{% static "/dbms/images/debx.png" %}"></p>
 <p>每期还款额为人民币（大写金额）：<u><strong>{% if agree_obj.repay_method == 21 %}{{ agree_obj.repay_ex }}{% else %}/{% endif %}</strong></u>。</p>
 <p>（3）按月付息、分期还本法：<u><strong>{% if agree_obj.repay_method == 31 %}{{ agree_obj.repay_ex }}{% else %}/{% endif %}</strong></u>。</p>
 <p>选择按月付息、到期一次还本法和按月付息、分期还本法的，本合同项下的贷款按每月的二十日为结息日，结息日为付息日，如遇法定节假日，则顺延至下一工作日。</p>
