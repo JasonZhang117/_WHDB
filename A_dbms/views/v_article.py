@@ -292,14 +292,14 @@ def endor_list_scan(request, article_id):  # 签批单
                 for warrant in sure_warrant_list:
                     sure_warrant_c += 1
                     owner_ship_list = warrant.ownership_warrant.all() # 权证项下权证列表
-                    owner_ship_count = sure_warrant_list.count()  # 权证项下权证数量
+                    owner_ship_count = owner_ship_list.count()  # 权证项下权证数量
                     owner_ship_c = 0
                     for owner_ship in owner_ship_list:
                         owner_ship_c += 1
                         ttt += owner_ship.owner.name
                         if owner_ship_c < owner_ship_count:
                             ttt += '、'
-                    ttt += '所有的位于%s的%s提供' %(warrant.house_warrant.house_locate,'住宅')
+                    ttt += '所有的位于%s的%s' %(warrant.house_warrant.house_locate,'住宅')
                     if sure_warrant_c < sure_warrant_count:
                         ttt += '、'
                 ttt += '提供%s%s' % (sure_typ_dic[sure.sure_typ], '担保。')
