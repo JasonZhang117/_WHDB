@@ -23,7 +23,9 @@ def review(request, *args, **kwargs):  # 保后列表
     PAGE_TITLE = '保后管理'
 
     REVIEW_STATE_LIST = models.Customes.REVIEW_STATE_LIST
-    custom_list = models.Customes.objects.filter(**kwargs)
+    custom_list = models.Customes.objects.exclude()
+
+    custom_list = models.Customes.objects.filter(**kwargs).order_by('lately_date')
     custom_list = custom_list_screen(custom_list, request)
     '''
     custom_flow = models.FloatField(verbose_name='_流贷余额', default=0)
@@ -31,7 +33,8 @@ def review(request, *args, **kwargs):  # 保后列表
     custom_back = models.FloatField(verbose_name='_保函余额', default=0)
     '''
     '''CUSTOM_STATE_LIST = [(11, '担保客户'), (21, '反担保客户'), (99, '注销')]'''
-    custom_list = custom_list.filter(Q(custom_state=11) | Q(credit_amount__gt=0)).order_by('lately_date')
+    custom_list = custom_list.exclude(custom_state=99)
+    custom_list = custom_list.filter(credit_amount__gt=0)
 
     '''搜索条件'''
     search_key = request.GET.get('_s')

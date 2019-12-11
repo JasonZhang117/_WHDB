@@ -1059,7 +1059,7 @@ def summary_scan(request, article_id):  # 评审项目预览
                     '贷款审查委员会组织与运行制度》规定，该项目符合公司评审程序，参会人员%s人，' \
                     '其中' % (expert_amount)
         else:
-            head += '<td class="tbp" colspan="4">&nbsp&nbsp根据公司成武担[2019]27号文件《成都武侯中小企业融资担' \
+            head += '<td class="tbp" colspan="4">&nbsp&nbsp根据公司成武担[2014]5号文件《成都武侯中小企业融资担' \
                     '保有限责任公司担保审查委员会组织与管理办法》规定，该项目符合公司%s评审程序，参会人员%s人，' \
                     '其中' % (REVIEW_MODEL_DEC[review_model], expert_amount)
 
