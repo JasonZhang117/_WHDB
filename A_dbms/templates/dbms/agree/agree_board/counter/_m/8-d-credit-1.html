@@ -1,13 +1,13 @@
-{% if counter_typ in D_COUNTER_TYP_LIST %}
+{% if counter_obj.counter_typ in D_COUNTER_TYP_LIST %}
     <p>1、发生甲方依据主债权合同和保证合同约定代为丙方清偿债务的情形。</p>
     <p>2、抵押物被查封、扣押。</p>
     <p>3、丙方、乙方出现足以影响债务清偿的危机事件或被宣告破产、被撤销等。</p>
     <p>4、法律规定债权确定的其他情形。</p>
-{% elif counter_typ in Z_COUNTER_TYP_LIST %}
+{% elif counter_obj.counter_typ in Z_COUNTER_TYP_LIST %}
     <p><strong>？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？</strong></p>
     <p><strong>？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？</strong></p>
     <p><strong>？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？</strong></p>
-{% elif counter_typ in X_COUNTER_TYP_LIST %}
+{% elif counter_obj.counter_typ in X_COUNTER_TYP_LIST %}
     <p>出现以下情形之一的，甲方的债权确定：</p>
     <p>1、发生甲方依据丙方与债权银行签订的借款合同及其他债权文件（以下简称“主债权合同”）和保证合同约定代为丙方清偿债务的情形；</p>
     <p>2、抵押物被查封、扣押；</p>
