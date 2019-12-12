@@ -221,6 +221,7 @@ urlpatterns = [
     path('custom/add/', views.custom_add_ajax, name='custom_add_ajax'),
     path('custom/del/', views.custom_del_ajax, name='custom_del_ajax'),
     path('custom/edit/', views.custom_edit_ajax, name='custom_edit_ajax'),
+    path('custom/change/', views.custom_change_ajax, name='custom_change_ajax'),
     path('custom/shareholder/add/', views.shareholder_add_ajax, name='custom_shareholder_add_ajax'),
     path('custom/shareholder/del/', views.shareholder_del_ajax, name='custom_shareholder_del_ajax'),
     path('custom/trustee/add/', views.trustee_add_ajax, name='custom_trustee_add_ajax'),
@@ -253,7 +254,10 @@ urlpatterns = [
     path('report/accrual/class/<int:c_typ>/<int:t_typ>/', views.report_accrual_class, name='report_accrual_class'),
     path('report/article/class/<int:c_typ>/<int:t_typ>/', views.report_article, name='report_article'),
     path('report/custom/class/<int:c_typ>/<int:t_typ>/', views.report_custom, name='report_custom'),
+    path('report/custom/top/<int:c_typ>/<int:t_typ>/', views.top_custom, name='report_top_custom'),
     path('report/dun/class/<int:t_typ>/', views.report_dun, name='report_dun'),
+
+
 
     # 员工
     path('employee/', views.employee, name='employee_all'),

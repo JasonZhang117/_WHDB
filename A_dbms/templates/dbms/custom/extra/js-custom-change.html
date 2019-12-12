@@ -1,0 +1,52 @@
+<script>
+    $(function () {
+        bindChangeCustom();
+        bindChangeCustomModalOk();
+    });
+
+    function bindChangeCustom() {
+        $('#changeCustom').click(function () {
+            {#console.log("bindAddCounterB")#}
+            $('#changeCustomModal').modal('show');
+        })
+    }
+
+    function bindChangeCustomModalOk() {
+        $('#changeCustomModalOk').click(function () {
+            var postData = {};
+            $('#changeCustomModal').find('input,select').each(function () {
+                var v = $(this).val();
+                var n = $(this).attr('name');
+                postData[n] = v;
+            });
+            var postDataStr = JSON.stringify(postData);
+
+            $.ajax({
+                url: '/dbms/custom/change/',
+                type: 'POST',
+                data: {'postDataStr': postDataStr},
+                dataType: 'JSON',
+                success: function (arg) {
+                    console.log(arg);
+                    if (arg.status) {
+                        $('#changeCustomModal').modal('hide');
+                        alert(arg.message);
+                        window.location.reload();
+                    } else {
+                        alert(arg.message);
+                        $('#e_custom_typ').text(arg.forme.custom_typ);
+                        $('#e_credit_amount').text(arg.forme.credit_amount);
+                        $('#e_custom_state').text(arg.forme.custom_state);
+                        $('#e_managementor').text(arg.forme.managementor);
+                    }
+                }
+            })
+        })
+    }
+</script>
+
+
+
+
+
+

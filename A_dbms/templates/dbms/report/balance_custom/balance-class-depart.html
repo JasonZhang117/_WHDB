@@ -11,7 +11,7 @@
             <th>承兑余额</th>
             <th>保函余额</th>
             <th>委贷余额</th>
-            <th>小贷余额</th>
+{#            <th>小贷余额</th>#}
             <th>在保总额</th>
         </tr>
         </thead>
@@ -26,7 +26,7 @@
                 <td align="right">{{ item.custom_accept|floatformat:2 }}</td>
                 <td align="right">{{ item.custom_back|floatformat:2 }}</td>
                 <td align="right">{{ item.entrusted_loan|floatformat:2 }}</td>
-                <td align="right">{{ item.petty_loan|floatformat:2 }}</td>
+{#                <td align="right">{{ item.petty_loan|floatformat:2 }}</td>#}
                 <td align="right">{{ item.amount|floatformat:2 }}</td>
             </tr>
         {% endfor %}

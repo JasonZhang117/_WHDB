@@ -604,8 +604,8 @@ def report_custom(request, *args, **kwargs):  #
     authority_list = request.session.get('authority_list')  # 获取当前用户的所有权限
     menu_result = MenuHelper(request).menu_data_list()
     PAGE_TITLE = '客户分类'
-    CLASS_LIST = [(21, '区域'), (31, '行业'), (35, '部门'), (41, '管户经理'), (45, '风控经理'), ]
-    TERM_LIST = [(11, '在保'), (21, '所有')]
+    CLASS_LIST = [(21, '区域'), (31, '行业'), (35, '部门'), (41, '管户经理'), (45, '风控专员'), ]
+    TERM_LIST = [(11, '在保'), (21, '授信'), ]
     '''CUSTOM_STATE_LIST = [(11, '担保客户'), (21, '反担保客户'), (99, '注销')]'''
     industry_list = models.Industries.objects.all()
     lndustry_dic = {}
@@ -613,10 +613,13 @@ def report_custom(request, *args, **kwargs):  #
         lndustry_dic[industry.code] = industry.name
 
     t_typ = kwargs['t_typ']
-    if t_typ == 11:
-        custom_groups = models.Customes.objects.filter(amount__gt=0, )
+    if t_typ == 11:  # 在保
+        custom_groups = models.Customes.objects.exclude(
+            custom_state=99).filter(amount__gt=0)
     else:
-        custom_groups = models.Customes.objects.filter(credit_amount__gt=0, )
+        custom_groups = models.Customes.objects.exclude(
+            custom_state=99).filter(Q(credit_amount__gt=0) or Q(amount__gt=0))
+
     c_credit = custom_groups.aggregate(Sum('credit_amount'))['credit_amount__sum']  # 授信总额
     c_flow = custom_groups.aggregate(Sum('custom_flow'))['custom_flow__sum']  # 流贷余额
     c_accept = custom_groups.aggregate(Sum('custom_accept'))['custom_accept__sum']  # 承兑余额
@@ -625,6 +628,14 @@ def report_custom(request, *args, **kwargs):  #
     c_petty = custom_groups.aggregate(Sum('petty_loan'))['petty_loan__sum']  # 小贷余额
     c_amount = custom_groups.aggregate(Sum('amount'))['amount__sum']  # 在保总额
     article_count = custom_groups.aggregate(Count('credit_amount'))['credit_amount__count']  # 客户数
+    if article_count > 0:
+        s_credit = round(c_credit / article_count, 2)
+        s_flow = round(c_flow / article_count, 2)
+        s_accept = round(c_accept / article_count, 2)
+        s_back = round(c_back / article_count, 2)
+        s_entrusted = round(c_entrusted / article_count, 2)
+        s_petty = round(c_petty / article_count, 2)
+        s_amount = round(c_amount / article_count, 2)
 
     article_balance_district = custom_groups.values(
         'district__name').annotate(
@@ -670,6 +681,80 @@ def report_custom(request, *args, **kwargs):  #
                'custom_back', 'entrusted_loan', 'petty_loan', 'amount').order_by('-credit_amount')  # 管户经理
 
     return render(request, 'dbms/report/balance-class-custom.html', locals())
+
+
+# -----------------------客户分类排名---------------------#
+# @login_required
+# @authority
+def top_custom(request, *args, **kwargs):  #
+    current_url_name = resolve(request.path).url_name  # 获取当前URL_NAME
+    authority_list = request.session.get('authority_list')  # 获取当前用户的所有权限
+    menu_result = MenuHelper(request).menu_data_list()
+    PAGE_TITLE = '客户分类'
+    CLASS_LIST = [(11, '在保'), (21, '授信')]
+    TERM_LIST = [(11, '前十大'), (21, '前二十大'), (99, '自定义金额')]
+
+    industry_list = models.Industries.objects.all()
+    lndustry_dic = {}
+    for industry in industry_list:
+        lndustry_dic[industry.code] = industry.name
+
+    custom_groups = models.Customes.objects.exclude(custom_state=99)
+    custom_groups_t = models.Customes.objects.exclude(custom_state=99)
+    c_typ = kwargs['c_typ']
+    t_typ = kwargs['t_typ']
+    if c_typ == 11:  # 按在保
+        custom_groups_t = custom_groups.filter(amount__gt=0)
+        if t_typ == 11:  # (11, '前十大')
+            custom_groups = custom_groups_t.order_by('-amount')[:10]  # 在保前十名在保余额
+        elif t_typ == 21:  # (21, '前二十大')
+            custom_groups = custom_groups_t.order_by('-amount')[:20]  # 在保前二十名在保余额
+        else:  # (99, '自定义金额')
+            custom_groups = custom_groups_t.order_by('-amount')[:10]  # 在保前十名在保余额
+    elif c_typ == 21:  # 按授信
+        custom_groups_t = custom_groups.filter(Q(credit_amount__gt=0) or Q(amount__gt=0))
+        if t_typ == 11:  # (11, '前十大')
+            custom_groups = custom_groups_t.order_by('-credit_amount')[:10]  # 在保前十名在保余额
+        elif t_typ == 21:  # (21, '前二十大')
+            custom_groups = custom_groups_t.order_by('-credit_amount')[:20]  # 在保前二十名在保余额
+        else:  # (99, '自定义金额')
+            custom_groups = custom_groups_t.order_by('-credit_amount')[:10]  # 在保前十名在保余额
+    c_credit = custom_groups.aggregate(Sum('credit_amount'))['credit_amount__sum']  # 授信总额
+    c_flow = custom_groups.aggregate(Sum('custom_flow'))['custom_flow__sum']  # 流贷余额
+    c_accept = custom_groups.aggregate(Sum('custom_accept'))['custom_accept__sum']  # 承兑余额
+    c_back = custom_groups.aggregate(Sum('custom_back'))['custom_back__sum']  # 保函余额
+    c_entrusted = custom_groups.aggregate(Sum('entrusted_loan'))['entrusted_loan__sum']  # 委贷余额
+    c_petty = custom_groups.aggregate(Sum('petty_loan'))['petty_loan__sum']  # 小贷余额
+    c_amount = custom_groups.aggregate(Sum('amount'))['amount__sum']  # 在保总额
+    c_custom_count = custom_groups.aggregate(Count('credit_amount'))['credit_amount__count']  # 客户数
+
+    t_credit = custom_groups_t.aggregate(Sum('credit_amount'))['credit_amount__sum']  # 授信总额
+    t_flow = custom_groups_t.aggregate(Sum('custom_flow'))['custom_flow__sum']  # 流贷余额
+    t_accept = custom_groups_t.aggregate(Sum('custom_accept'))['custom_accept__sum']  # 承兑余额
+    t_back = custom_groups_t.aggregate(Sum('custom_back'))['custom_back__sum']  # 保函余额
+    t_entrusted = custom_groups_t.aggregate(Sum('entrusted_loan'))['entrusted_loan__sum']  # 委贷余额
+    t_petty = custom_groups_t.aggregate(Sum('petty_loan'))['petty_loan__sum']  # 小贷余额
+    t_amount = custom_groups_t.aggregate(Sum('amount'))['amount__sum']  # 在保总额
+    t_custom_count = custom_groups_t.aggregate(Count('credit_amount'))['credit_amount__count']  # 客户总数
+
+    if t_credit > 0:
+        r_credit = round(c_credit / t_credit * 100, 2)
+    if t_flow > 0:
+        r_flow = round(c_flow / t_flow * 100, 2)
+    if t_accept > 0:
+        r_accept = round(c_accept / t_accept * 100, 2)
+    if t_back > 0:
+        r_back = round(c_back / t_back * 100, 2)
+    if t_entrusted > 0:
+        r_entrusted = round(c_entrusted / t_entrusted * 100, 2)
+    if t_petty > 0:
+        r_petty = round(c_petty / t_petty * 100, 2)
+    if t_amount > 0:
+        r_amount = round(c_amount / t_amount * 100, 2)
+    if t_custom_count > 0:
+        r_custom_count = round(c_custom_count / t_custom_count * 100, 2)
+
+    return render(request, 'dbms/report/top-class-custom.html', locals())
 
 
 # -----------------------追偿分类统计---------------------#

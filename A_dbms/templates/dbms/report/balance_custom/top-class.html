@@ -4,8 +4,7 @@
         <thead>
         <tr style="text-align: center">
             <th>序号</th>
-            <th>区域</th>
-            <th>项目数</th>
+            <th>客户</th>
             <th>授信总额</th>
             <th>流贷余额</th>
             <th>承兑余额</th>
@@ -16,21 +15,20 @@
         </tr>
         </thead>
         <tbody>
-        {% for item in article_balance_district %}
+        {% for custom in custom_groups %}
             <tr>
                 <td>{{ forloop.counter }}</td>
-                <td>{{ item.district__name }}</td>
-                <td align="right">{{ item.con }}</td>
-                <td align="right">{{ item.credit_amount|floatformat:2 }}</td>
-                <td align="right">{{ item.custom_flow|floatformat:2 }}</td>
-                <td align="right">{{ item.custom_accept|floatformat:2 }}</td>
-                <td align="right">{{ item.custom_back|floatformat:2 }}</td>
-                <td align="right">{{ item.entrusted_loan|floatformat:2 }}</td>
+                <td>{{ custom.name }}</td>
+                <td align="right">{{ custom.credit_amount|floatformat:2 }}</td>
+                <td align="right">{{ custom.custom_flow|floatformat:2 }}</td>
+                <td align="right">{{ custom.custom_accept|floatformat:2 }}</td>
+                <td align="right">{{ custom.custom_back|floatformat:2 }}</td>
+                <td align="right">{{ custom.entrusted_loan|floatformat:2 }}</td>
 {#                <td align="right">{{ item.petty_loan|floatformat:2 }}</td>#}
-                <td align="right">{{ item.amount|floatformat:2 }}</td>
+                <td align="right">{{ custom.amount|floatformat:2 }}</td>
             </tr>
         {% endfor %}
-        {% include 'dbms/report/balance_custom/article-class.html' %}
+        {% include 'dbms/report/balance_custom/top-custom.html' %}
         </tbody>
     </table>
 </div>

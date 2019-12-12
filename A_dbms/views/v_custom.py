@@ -8,7 +8,7 @@ from django.db.models import Q, F
 from django.contrib.auth.decorators import login_required
 from django.urls import resolve
 from _WHDB.views import MenuHelper
-from _WHDB.views import (authority, custom_list_screen,custom_right)
+from _WHDB.views import (authority, custom_list_screen, custom_right)
 
 
 # -----------------------客户管理-------------------------#
@@ -62,7 +62,7 @@ def custom_scan(request, custom_id):  # 项目预览
 
     custom_obj = models.Customes.objects.get(id=custom_id)
 
-    form_date = {
+    custom_edit_data = {
         'name': custom_obj.name,
         'short_name': custom_obj.short_name,
         'contact_addr': custom_obj.contact_addr,
@@ -71,7 +71,14 @@ def custom_scan(request, custom_id):  # 项目预览
         'idustry': custom_obj.idustry,
         'district': custom_obj.district,
     }
-    form_custom_edit = forms.CustomEditForm(initial=form_date)
+    form_custom_edit = forms.CustomEditForm(initial=custom_edit_data)
+    custom_change_data = {
+        'custom_typ': custom_obj.custom_typ,
+        'credit_amount': custom_obj.credit_amount,
+        'custom_state': custom_obj.custom_state,
+        'managementor': custom_obj.managementor,
+    }
+    form_custom_change = forms.CustomChangeForm(initial=custom_change_data)
     if custom_obj.genre == 1:
         form_date = {
             'decisionor': custom_obj.company_custome.decisionor,
@@ -94,5 +101,4 @@ def custom_scan(request, custom_id):  # 项目预览
                           (51, '已放款'), (52, '已放完'), (55, '已解保'), (61, '待变更'), (99, '已注销'))'''
     article_custom_list = custom_obj.article_custom.all().filter(
         article_state__in=[1, 2, 3, 4, 5, 51, 52, 61]).order_by('-build_date')
-
     return render(request, 'dbms/custom/custom-scan.html', locals())

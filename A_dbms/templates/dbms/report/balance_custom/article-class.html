@@ -6,6 +6,18 @@
     <td align="right">{{ c_accept|floatformat:2 }}</td>
     <td align="right">{{ c_back|floatformat:2 }}</td>
     <td align="right">{{ c_entrusted|floatformat:2 }}</td>
-    <td align="right">{{ c_petty|floatformat:2 }}</td>
+{#    <td align="right">{{ c_petty|floatformat:2 }}</td>#}
     <td align="right">{{ c_amount|floatformat:2 }}</td>
+</tr>
+
+<tr>
+    <td colspan="2">单户金额</td>
+    <td align="right"></td>
+    <td align="right">{{ s_credit|floatformat:2 }}</td>
+    <td align="right">{{ s_flow|floatformat:2 }}</td>
+    <td align="right">{{ s_accept|floatformat:2 }}</td>
+    <td align="right">{{ s_back|floatformat:2 }}</td>
+    <td align="right">{{ s_entrusted|floatformat:2 }}</td>
+{#    <td align="right">{{ c_petty|floatformat:2 }}</td>#}
+    <td align="right">{{ s_amount|floatformat:2 }}</td>
 </tr>

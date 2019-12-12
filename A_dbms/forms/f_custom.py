@@ -34,13 +34,26 @@ class CustomEditForm(dform.ModelForm):
 
     class Meta:
         model = models.Customes
-        fields = ['contact_addr', 'linkman', 'contact_num','idustry', 'district', ]
+        fields = ['contact_addr', 'linkman', 'contact_num', 'idustry', 'district', ]
         widgets = {
             'contact_addr': dform.TextInput(attrs={'class': 'form-control', 'placeholder': '联系地址'}),
             'linkman': dform.TextInput(attrs={'class': 'form-control', 'placeholder': '联系人'}),
             'contact_num': dform.TextInput(attrs={'class': 'form-control', 'placeholder': '联系电话'}),
             'idustry': dform.Select(attrs={'class': 'form-control'}),
             'district': dform.Select(attrs={'class': 'form-control'}),
+        }
+
+
+# -----------------------客户状态编辑-------------------------#
+class CustomChangeForm(dform.ModelForm):
+    class Meta:
+        model = models.Customes
+        fields = ['custom_typ', 'credit_amount', 'custom_state', 'managementor', ]
+        widgets = {
+            'custom_typ': dform.Select(attrs={'class': 'form-control'}),
+            'credit_amount': dform.NumberInput(attrs={'class': 'form-control', 'placeholder': '授信总额'}),
+            'custom_state': dform.Select(attrs={'class': 'form-control'}),
+            'managementor': dform.Select(attrs={'class': 'form-control'}),
         }
 
 

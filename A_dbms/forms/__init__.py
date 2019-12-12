@@ -19,7 +19,7 @@ from .f_provide import (FormCounterSignAdd, FormAscertainAdd, FormNotifyAdd, For
                         FormImplementAdd, FormPigeonholeNumAdd, FormRepaymentAdd,FormAgreeSignAdd)
 
 from .f_custom import (CustomAddForm, CustomCAddForm, CustomPAddForm, CustomEditForm, FormShareholderAdd,
-                       FormCustomSpouseAdd, FormTrusteeAdd)
+                       FormCustomSpouseAdd, FormTrusteeAdd,CustomChangeForm)
 from .f_interior import DepartmentForm, EmployeeForm
 from .f_review import FormRewiewPlanAdd, FormRewiewAdd, FormInvestigateAdd
 from .f_dun import (FormDunAdd, FormCompensatoryAdd, FormClueAdd, FormSealupAdd, FormInquiryEvaluateAdd,

@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}{{ PAGE_TITLE }}{% endblock %}
+{% block extra-css %}
+    <link rel="stylesheet" media="screen" href="{% static 'dbms/css/report-style.css' %}">
+    <link rel="stylesheet" media="print" href="{% static 'dbms/css/report-style.css' %}">
+    <link rel="stylesheet" media="print" href="{% static 'dbms/css/report-style-noprint.css' %}">
+{% endblock %}
+{% block  body %}
+
+    <div style="width: 310mm; margin-left: auto; margin-right: auto;">
+        {% if PAGE_TITLE == '客户分类' %}
+            {% include 'dbms/report/balance_custom/top-class-filter.html' %}
+        {% endif %}
+        {% include 'dbms/report/balance_custom/top-class.html' %}
+    </div>
+{% endblock %}
+
+
+

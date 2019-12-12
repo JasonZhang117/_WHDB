@@ -64,14 +64,14 @@ from .v_dun_act import (
 # ----------------------v_custom客户管理视图--------------------#
 from .v_custom import (custom, custom_scan)
 from .v_custom_act import (custom_add_ajax, custom_del_ajax, custom_edit_ajax, shareholder_add_ajax,
-                           shareholder_del_ajax, spouse_del_ajax,
+                           shareholder_del_ajax, spouse_del_ajax, custom_change_ajax,
                            spouse_add_ajax, trustee_add_ajax, trustee_del_ajax)
 from .v_external import cooperative, cooperative_scan, soondue_cooperator, overdue_cooperator, branches
 from .v_external_act import agreement_add_ajax
 # ----------------------v_report报表管理视图--------------------#
 from .v_report import (report, report_provide_list, report_balance_class, report_article_class,
                        report_accrual_class, report_provide_accrual, report_article, report_custom,
-                       report_dun)
+                       report_dun, top_custom)
 
 # 部门、员工
 from .v_interior import department, department_add, department_edit

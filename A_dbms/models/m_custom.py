@@ -36,15 +36,15 @@ class Customes(models.Model):  # 客户
     CUSTOM_DUN_LIST = ((1, '正常'), (11, '被告'), (99, '注销'))
     custom_dun_state = models.IntegerField(verbose_name='_风险分类', choices=CUSTOM_DUN_LIST, default=1)
 
-    credit_amount = models.FloatField(verbose_name='_授信总额', default=0)
+    credit_amount = models.FloatField(verbose_name='授信总额', default=0)
     custom_flow = models.FloatField(verbose_name='_流贷余额', default=0)
     custom_accept = models.FloatField(verbose_name='_承兑余额', default=0)
     custom_back = models.FloatField(verbose_name='_保函余额', default=0)
     entrusted_loan = models.FloatField(verbose_name='_委贷余额', default=0)
-    petty_loan = models.FloatField(verbose_name='_小贷余额', default=0)
+    petty_loan = models.FloatField(verbose_name='_过桥贷余额', default=0)
     amount = models.FloatField(verbose_name='_在保总额', default=0)
 
-    CUSTOM_STATE_LIST = [(11, '担保客户'), (21, '反担保客户'),(31, '小贷客户'),  (99, '注销客户')]
+    CUSTOM_STATE_LIST = [(11, '正常客户'), (21, '反担保客户'),(31, '小贷客户'),  (99, '注销客户')]
     custom_state = models.IntegerField(verbose_name='客户状态', choices=CUSTOM_STATE_LIST, default=11)
     managementor = models.ForeignKey(to='Employees', verbose_name="管护经理",
                                      on_delete=models.PROTECT, default=1,
