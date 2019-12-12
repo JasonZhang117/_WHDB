@@ -26,9 +26,9 @@
                 {% include 'dbms/agree/agree_board/counter/c-s-x.html' %}
             {% elif counter_obj.counter_typ == 2 %}<!-- (2, '个人保证')-->
                 {% include 'dbms/agree/agree_board/counter/c-s-g.html' %}
-            {% elif counter_obj.counter_typ in D_COUNTER_TYP_LIST %}<!-- COUNTER_TYP_D = [11, 12, 13, 14, 15, ]  # 抵押类（反）担保合同类型-->
+            {% elif counter_obj.counter_typ in D_COUNTER_TYP_LIST %}
                 {% include 'dbms/agree/agree_board/counter/c-s-d.html' %}
-            {% elif counter_obj.counter_typ in Z_COUNTER_TYP_LIST %}<!-- COUNTER_TYP_Z = [31, 32, 33, 34, 41, ]  # 质押类（反）担保合同类型-->
+            {% elif counter_obj.counter_typ in Z_COUNTER_TYP_LIST %}
                 {% include 'dbms/agree/agree_board/counter/c-s-z.html' %}
             {% else %}
                 <p>！！！！！！！还未添加合同模板，请联系系统管理员！！！！！！！</p>
