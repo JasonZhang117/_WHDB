@@ -43,14 +43,26 @@
                 {% endfor %}
                 {#(11, '应收账款')#}
             {% elif warrant.warrant_typ == 11 %}
-                <p><strong>出质人（乙方）：{{ warrant.receive_warrant.receive_owner.name }}</strong></p>
-                <p>住所（地址）：{{ warrant.receive_warrant.receive_owner.company_custome.registered_addr }}</p>
-                <p>法定代表人：{{ warrant.receive_warrant.receive_owner.company_custome.representative }}</p>
+                {% if warrant.stock_warrant.stock_owner.genre == 1 %}
+                    <p><strong>出质人（乙方）：{{ warrant.receive_warrant.receive_owner.name }}</strong></p>
+                    <p>住所（地址）：{{ warrant.receive_warrant.receive_owner.company_custome.registered_addr }}</p>
+                    <p>法定代表人：{{ warrant.receive_warrant.receive_owner.company_custome.representative }}</p>
+                {% elif warrant.stock_warrant.stock_owner.genre == 2 %}
+                    <p><strong>出质人（乙方）：{{ warrant.receive_warrant.receive_owner.name }}</strong></p>
+                    <p>住所（地址）：{{ warrant.receive_warrant.receive_owner.person_custome.license_addr }}</p>
+                    <p>身份证号码：{{ warrant.receive_warrant.receive_owner.person_custome.license_num }}</p>
+                {% endif %}
                 {#(21, '股权')#}
             {% elif warrant.warrant_typ == 21 %}
-                <p><strong>出质人（乙方）：{{ warrant.stock_warrant.stock_owner.name }}</strong></p>
-                <p>住所（地址）：{{ warrant.stock_warrant.stock_owner.company_custome.registered_addr }}</p>
-                <p>法定代表人：{{ warrant.stock_warrant.stock_owner.company_custome.representative }}</p>
+                {% if warrant.stock_warrant.stock_owner.genre == 1 %}
+                    <p><strong>出质人（乙方）：{{ warrant.stock_warrant.stock_owner.name }}</strong></p>
+                    <p>住所（地址）：{{ warrant.stock_warrant.stock_owner.company_custome.registered_addr }}</p>
+                    <p>法定代表人：{{ warrant.stock_warrant.stock_owner.company_custome.representative }}</p>
+                {% elif warrant.stock_warrant.stock_owner.genre == 2 %}
+                    <p><strong>出质人（乙方）：{{ warrant.stock_warrant.stock_owner.name }}</strong></p>
+                    <p>住所（地址）：{{ warrant.stock_warrant.stock_owner.person_custome.license_addr }}</p>
+                    <p>身份证号码：{{ warrant.stock_warrant.stock_owner.person_custome.license_num }}</p>
+                {% endif %}
                 {#(31, '票据')#}
             {% elif warrant.warrant_typ == 31 %}
                 <p><strong>出质人（乙方）：{{ warrant.draft_warrant.draft_owner.name }}</strong></p>
