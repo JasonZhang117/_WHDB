@@ -43,11 +43,11 @@
                 {% endfor %}
                 {#(11, '应收账款')#}
             {% elif warrant.warrant_typ == 11 %}
-                {% if warrant.stock_warrant.stock_owner.genre == 1 %}
+                {% if warrant.warrant.receive_warrant.receive_owner.genre == 1 %}
                     <p><strong>出质人（乙方）：{{ warrant.receive_warrant.receive_owner.name }}</strong></p>
                     <p>住所（地址）：{{ warrant.receive_warrant.receive_owner.company_custome.registered_addr }}</p>
                     <p>法定代表人：{{ warrant.receive_warrant.receive_owner.company_custome.representative }}</p>
-                {% elif warrant.stock_warrant.stock_owner.genre == 2 %}
+                {% elif warrant.warrant.receive_warrant.receive_owner.genre == 2 %}
                     <p><strong>出质人（乙方）：{{ warrant.receive_warrant.receive_owner.name }}</strong></p>
                     <p>住所（地址）：{{ warrant.receive_warrant.receive_owner.person_custome.license_addr }}</p>
                     <p>身份证号码：{{ warrant.receive_warrant.receive_owner.person_custome.license_num }}</p>
@@ -70,9 +70,15 @@
                 <p>法定代表人：{{ warrant.draft_warrant.draft_owner.company_custome.representative }}</p>
                 {#(41, '车辆')#}
             {% elif warrant.warrant_typ == 41 %}
-                <p><strong>抵押人（乙方）：{{ warrant.vehicle_warrant.vehicle_owner.name }}</strong></p>
-                <p>住所（地址）：{{ warrant.vehicle_warrant.vehicle_owner.company_custome.registered_addr }}</p>
-                <p>法定代表人：{{ warrant.vehicle_warrant.vehicle_owner.company_custome.representative }}</p>
+                {% if warrant.vehicle_warrant.vehicle_owner.genre == 1 %}
+                    <p><strong>抵押人（乙方）：{{ warrant.vehicle_warrant.vehicle_owner.name }}</strong></p>
+                    <p>住所（地址）：{{ warrant.vehicle_warrant.vehicle_owner.company_custome.registered_addr }}</p>
+                    <p>法定代表人：{{ warrant.vehicle_warrant.vehicle_owner.company_custome.representative }}</p>
+                {% elif warrant.vehicle_warrant.vehicle_owner.genre == 2 %}
+                    <p><strong>出质人（乙方）：{{ warrant.vehicle_warrant.vehicle_owner.name }}</strong></p>
+                    <p>住所（地址）：{{ warrant.vehicle_warrant.vehicle_owner.person_custome.license_addr }}</p>
+                    <p>身份证号码：{{ warrant.vehicle_warrant.vehicle_owner.person_custome.license_num }}</p>
+                {% endif %}
                 {#(51, '动产')#}
             {% elif warrant.warrant_typ == 51 %}
                 <p><strong>抵押人（乙方）：{{ warrant.chattel_warrant.chattel_owner.name }}</strong></p>

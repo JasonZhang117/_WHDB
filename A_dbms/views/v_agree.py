@@ -299,8 +299,8 @@ def counter_preview(request, agree_id, counter_id):
                     co_owner_list.append(ownership.owner.person_custome.spouses)
 
     j_typ = ''
-    if counter_obj.counter_typ in D_COUNTER_TYP_LIST:  # 抵押类（反）担保合同类型
-        j_typ = '抵押权人'
+    if counter_obj.counter_typ in X_COUNTER_TYP_LIST:  # 保证类（反）担保合同类型
+        j_typ = '担保人'
     elif counter_obj.counter_typ in D_COUNTER_TYP_LIST:  # 抵押类（反）担保合同类型
         j_typ = '抵押权人'
     elif counter_obj.counter_typ in Z_COUNTER_TYP_LIST:  # 抵押类（反）担保合同类型
