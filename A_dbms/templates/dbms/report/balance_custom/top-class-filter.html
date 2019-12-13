@@ -2,15 +2,27 @@
     <div>
         <label>
             {# 方式一：#}
-            {% for c_typ in CLASS_LIST %}
-                {% if c_typ.0 == kwargs.c_typ %}
-                    <a class="btn btn-primary btn-sm active"
-                       href="{% url 'dbms:report_top_custom' c_typ=c_typ.0 t_typ=kwargs.t_typ %}">{{ c_typ.1 }}</a>
-                {% else %}
-                    <a class="btn btn-primary btn-sm"
-                       href="{% url 'dbms:report_top_custom' c_typ=c_typ.0 t_typ=kwargs.t_typ %}">{{ c_typ.1 }} </a>
-                {% endif %}
-            {% endfor %}
+            {% if t_typ == 99 %}
+                {% for c_typ in CLASS_LIST %}
+                    {% if c_typ.0 == kwargs.c_typ %}
+                        <a class="btn btn-primary btn-sm active"
+                           href="{% url 'dbms:report_top_custom' c_typ=c_typ.0 t_typ=kwargs.t_typ %}?ascreen={{ screen_value }}">{{ c_typ.1 }}</a>
+                    {% else %}
+                        <a class="btn btn-primary btn-sm"
+                           href="{% url 'dbms:report_top_custom' c_typ=c_typ.0 t_typ=kwargs.t_typ %}?ascreen={{ screen_value }}">{{ c_typ.1 }} </a>
+                    {% endif %}
+                {% endfor %}
+            {% else %}
+                {% for c_typ in CLASS_LIST %}
+                    {% if c_typ.0 == kwargs.c_typ %}
+                        <a class="btn btn-primary btn-sm active"
+                           href="{% url 'dbms:report_top_custom' c_typ=c_typ.0 t_typ=kwargs.t_typ %}">{{ c_typ.1 }}</a>
+                    {% else %}
+                        <a class="btn btn-primary btn-sm"
+                           href="{% url 'dbms:report_top_custom' c_typ=c_typ.0 t_typ=kwargs.t_typ %}">{{ c_typ.1 }} </a>
+                    {% endif %}
+                {% endfor %}
+            {% endif %}
         </label>
     </div>
 
@@ -27,5 +39,14 @@
                 {% endif %}
             {% endfor %}
         </label>
+
+        <label>
+            <form class="navbar-form" style="display: inline">
+                <input type="number" name="ascreen" class="form-control" placeholder="自定义金额筛选"
+                       value="{{screen_value|default_if_none:''}}">
+                <button type="submit" class="btn btn-primary btn-sm">搜索</button>
+            </form>
+        </label>
     </div>
+
 </div>

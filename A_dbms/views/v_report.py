@@ -690,9 +690,11 @@ def top_custom(request, *args, **kwargs):  #
     current_url_name = resolve(request.path).url_name  # 获取当前URL_NAME
     authority_list = request.session.get('authority_list')  # 获取当前用户的所有权限
     menu_result = MenuHelper(request).menu_data_list()
-    PAGE_TITLE = '客户分类'
+    PAGE_TITLE = '客户统计'
     CLASS_LIST = [(11, '在保'), (21, '授信')]
     TERM_LIST = [(11, '前十大'), (21, '前二十大'), (99, '自定义金额')]
+    CLASS_DIC = dict(CLASS_LIST)
+    TERM_DIC = dict(TERM_LIST)
 
     industry_list = models.Industries.objects.all()
     lndustry_dic = {}
@@ -703,22 +705,38 @@ def top_custom(request, *args, **kwargs):  #
     custom_groups_t = models.Customes.objects.exclude(custom_state=99)
     c_typ = kwargs['c_typ']
     t_typ = kwargs['t_typ']
+    c_typ_c = CLASS_DIC[c_typ]
+    t_typ_t = TERM_DIC[t_typ]
+    screen_value = request.GET.get('ascreen')
+
     if c_typ == 11:  # 按在保
         custom_groups_t = custom_groups.filter(amount__gt=0)
         if t_typ == 11:  # (11, '前十大')
             custom_groups = custom_groups_t.order_by('-amount')[:10]  # 在保前十名在保余额
+            screen_value = custom_groups[9].amount
         elif t_typ == 21:  # (21, '前二十大')
             custom_groups = custom_groups_t.order_by('-amount')[:20]  # 在保前二十名在保余额
+            screen_value = custom_groups[19].amount
         else:  # (99, '自定义金额')
-            custom_groups = custom_groups_t.order_by('-amount')[:10]  # 在保前十名在保余额
+            if screen_value:
+                custom_groups = custom_groups_t.filter(amount__gte=screen_value).order_by('-amount')  #按金额筛选
+            else:
+                screen_value = custom_groups_t.order_by('-amount')[:10][9].amount
+                custom_groups = custom_groups_t.filter(amount__gte=screen_value).order_by('-amount')  # 按金额筛选
     elif c_typ == 21:  # 按授信
         custom_groups_t = custom_groups.filter(Q(credit_amount__gt=0) or Q(amount__gt=0))
         if t_typ == 11:  # (11, '前十大')
             custom_groups = custom_groups_t.order_by('-credit_amount')[:10]  # 在保前十名在保余额
+            screen_value = custom_groups[9].credit_amount
         elif t_typ == 21:  # (21, '前二十大')
             custom_groups = custom_groups_t.order_by('-credit_amount')[:20]  # 在保前二十名在保余额
+            screen_value = custom_groups[19].credit_amount
         else:  # (99, '自定义金额')
-            custom_groups = custom_groups_t.order_by('-credit_amount')[:10]  # 在保前十名在保余额
+            if screen_value:
+                custom_groups = custom_groups_t.filter(credit_amount__gte=screen_value).order_by('-credit_amount')  #按金额筛选
+            else:
+                screen_value = custom_groups_t.order_by('-amount')[:10][9].amount
+                custom_groups = custom_groups_t.filter(credit_amount__gte=screen_value).order_by('-credit_amount')  #按金额筛选
     c_credit = custom_groups.aggregate(Sum('credit_amount'))['credit_amount__sum']  # 授信总额
     c_flow = custom_groups.aggregate(Sum('custom_flow'))['custom_flow__sum']  # 流贷余额
     c_accept = custom_groups.aggregate(Sum('custom_accept'))['custom_accept__sum']  # 承兑余额
