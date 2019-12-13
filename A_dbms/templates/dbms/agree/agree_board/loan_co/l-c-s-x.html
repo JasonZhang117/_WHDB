@@ -18,7 +18,7 @@
         </div>
         <!--合同正文-->
         <div>
-            <p>为保障债权人与主合同债务人<strong><u>{{ agree_obj.lending.summary.custom.name }}</u></strong>于{% include 'dbms/agree/agree_board/date-period.html' %}所签订的编号为:<strong><u>{{ agree_obj.agree_num }}</u></strong>号的《{{ agree_obj.get_agree_name_display }}》（以下称主合同）项下的债权，保证人愿意为主合同项下的债权向债权人（也称主合同债权人）提供连带责任保证担保，保证人、债权人依照我国有关法律、法规，经协商一致，订立本合同。</p>
+            <p>为保障债权人与主合同债务人<strong><u>{{ agree_obj.lending.summary.custom.name }}{% if agree_obj.lending.summary.borrower.all %}{% for borrower in agree_obj.lending.summary.borrower.all %}、{{ borrower.name }}{% endfor %}{% endif %}</u></strong>于{% include 'dbms/agree/agree_board/date-period.html' %}所签订的编号为:<strong><u>{{ agree_obj.agree_num }}</u></strong>号的《{{ agree_obj.get_agree_name_display }}》（以下称主合同）项下的债权，保证人愿意为主合同项下的债权向债权人（也称主合同债权人）提供连带责任保证担保，保证人、债权人依照我国有关法律、法规，经协商一致，订立本合同。</p>
             <p><strong>第一条 担保的主债权种类、金额和期限</strong></p>
             <p>保证人担保的主债权为主合同项下贷款本金（大写）人民币<u><strong>{{ agree_amount_cn }}</strong></u>（RMB<u>{{ agree_amount_y }}元</u>）；贷款利率为<strong>月利率<u>{{ agree_obj.agree_rate }}</u>‰（千分之<u>{{ agree_rate_cn_q }}</u>）</strong>；贷款期限为<strong><u>{{ agree_obj.agree_start_date }}</u></strong>始至<strong><u>{{ agree_obj.agree_due_date }}</u></strong>止（若主合同约定的《借款凭证》记载的贷款起始日期、到期日期与本起始日期、到期日期不一致的，以《借款凭证》的记载为准），共<u><strong>{{ agree_term_str }}</strong></u>个月零<u><strong>/</strong></u>天。
             </p>
@@ -94,36 +94,7 @@
             <p>（1）提交<u>&nbsp\&nbsp}</u>仲裁委员会仲裁；</p>
             <p>（2）向债权人所在地有管辖权的法院提起诉讼。</p>
             <p><strong>第九条 通讯及送达</strong></p>
-            <p>9.1本合同规定一方向相对方发出的通知或书面函件可通过当面递交、专递信函、传真或电子邮件、手机短信等电子通讯方式送达。</p>
-            <p>9.2本合同各方确认的有效送达地址如下：</p>
-            <!--保证人送达信息-->
-            <div>
-                {% for custom in counter_obj.assure_counter.custome.all %}
-                    <p>如至保证人：<u><strong>{{ custom.name }}</strong></u></p>
-                    <p>地址：<u><strong>{{ custom.contact_addr }}</strong></u></p>
-                    <p>电话：<u><strong>{{ custom.contact_num }}</strong></u></p>
-                    <p>收件人：<u><strong>{{ custom.linkman }}</strong></u></p>
-                    {% if custom.person_custome.spouses %}
-                        <div>
-                            <p>如至保证人：<u><strong>{{ custom.person_custome.spouses.name }}</strong></u></p>
-                            <p>地址：<u><strong>{{ custom.person_custome.spouses.contact_addr }}</strong></u></p>
-                            <p>电话：<u><strong>{{ custom.person_custome.spouses.contact_num }}</strong></u></p>
-                            <p>收件人：<u><strong>{{ custom.person_custome.spouses.linkman }}</strong></u></p>
-                        </div>
-                    {% endif %}
-                {% endfor %}
-            </div>
-            <p>如至债权人：成都武侯武兴小额贷款有限责任公司</p>
-            <p>地址：成都市武侯区武科西五路360号西部智谷B区2栋4单元4楼附楼</p>
-            <p>电话：028-85014022</p>
-            <p>收件人：成都武侯武兴小额贷款有限责任公司</p>
-            <p>9.3债权人对保证人发出的函件在以下时间通知被视为已经送达：</p>
-            <p>（1）如果以当面递交方式送达，送达指定地址并签署回执或其他送达证明；</p>
-            <p>（2）如果是以专递信函方式送达，为递交日后的第三个工作日；</p>
-            <p>（3）如果是以传真的方式送达，为发送传真方的传真机发送的报告确认书（表明已向相关传真号码发送完整的、未中断的传真）上标记之日视为已送达收件人；</p>
-            <p>（4）如果是以电子邮件、手机短信等数据电文形式的，该等通知自发送之日视为已送达收件人。</p>
-            <p>9.4本合同有效期间，任何一方的住所或通讯地址、联系人、联系方式等发生变更的，应当在变更后立即通知或可能发生前7个工作日内书面通知相对方；企业或者其他组织保证人名称(自然人保证人姓名)、住所等发生变化而未书面通知债权人，债权人按本合同所载名称（姓名）、通讯地址、住所向保证人发送所有文书，视同已向保证人送达。</p>
-            <p>9.5债权人通过新闻媒体进行公告催收，公告期间超过15天即视为对主合同债务人、保证人完成送达。</p>
+            <div>{% include 'dbms/agree/agree_board/loan_co/notify-x.html' %}</div>
             <p><strong>第十条 其他条款</strong></p>
             <p>10.1保证人有违反本合同的任何行为或其它行为、情形的出现导致其代偿能力不足或债权人有理由相信其代偿能力不足的，债权人有权提前终止主合同，并自该行为、情形、理由出现之时有权要求主合同债务人、保证人共同或单独清偿全部债务。</p>
             <p>10.2本合同所约定的保证人应承担的债权人所花费律师费（律师代理费）是指债权人依据四川省现行律师服务收费规定如/即《四川省律师法律服务收费行业指导标准》(川发改价格〔2018〕93号)所计算并承担/支付/花费的费用；如果确实由于案情需要，债权人采用了其他付费标准或计费方式，保证人应据实承担。</p>

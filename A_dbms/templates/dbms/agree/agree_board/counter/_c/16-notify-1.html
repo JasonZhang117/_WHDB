@@ -9,32 +9,32 @@
     (11, '房产抵押'), (12, '土地抵押'), (13, '动产抵押'), (15, '车辆抵押'),
     (31, '应收质押'), (32, '股权质押'), (33, '票据质押'),
     (51, '股权预售'), (52, '房产预售'), (53, '土地预售'))-->
-{% if counter_obj.assure_counter.custome.all %} <!--(1, '企业担保'), (2, '个人保证')-->
-    {% for custom in counter_obj.assure_counter.custome.all %}
-        {% if custom.genre == 1 %}
+<div>
+    {% if counter_obj.assure_counter.custome.all %} <!--(1, '企业担保'), (2, '个人保证')-->
+        {% for custom in counter_obj.assure_counter.custome.all %}
+            {% if custom.genre == 1 %}
                 <p>如至乙方：<strong><u>{{ custom.name }}</u></strong></p>
                 <p>地址：<strong><u>{{ custom.contact_addr }}</u></strong></p>
                 <p>电话：<strong><u>{{ custom.contact_num }}</u></strong></p>
                 <p>收件人：<strong><u>{{ custom.linkman }}</u></strong></p>
-        {% elif custom.genre == 2 %}
-            <p>如至乙方：<strong><u>{{ custom.name }}</u></strong></p>
-            <p>地址：<strong><u>{{ custom.contact_addr }}</u></strong></p>
-            <p>电话：<strong><u>{{ custom.contact_num }}</u></strong></p>
-            <p>收件人：<strong><u>{{ custom.linkman }}</u></strong></p>
-            {% if custom.person_custome.spouses %}
+            {% elif custom.genre == 2 %}
                 <p>如至乙方：<strong><u>{{ custom.name }}</u></strong></p>
-                <p>地址：<strong><u>{{ custom.person_custome.spouses.contact_addr }}</u></strong></p>
-                <p>电话：<strong><u>{{ custom.person_custome.spouses.contact_num }}</u></strong></p>
-                <p>收件人：<strong><u>{{ custom.person_custome.spouses.linkman }}</u></strong></p>
+                <p>地址：<strong><u>{{ custom.contact_addr }}</u></strong></p>
+                <p>电话：<strong><u>{{ custom.contact_num }}</u></strong></p>
+                <p>收件人：<strong><u>{{ custom.linkman }}</u></strong></p>
+                {% if custom.person_custome.spouses %}
+                    <p>如至乙方：<strong><u>{{ custom.name }}</u></strong></p>
+                    <p>地址：<strong><u>{{ custom.person_custome.spouses.contact_addr }}</u></strong></p>
+                    <p>电话：<strong><u>{{ custom.person_custome.spouses.contact_num }}</u></strong></p>
+                    <p>收件人：<strong><u>{{ custom.person_custome.spouses.linkman }}</u></strong></p>
+                {% endif %}
             {% endif %}
-        {% endif %}
-    {% endfor %}
-{% elif counter_obj.warrant_counter.warrant.all %} <!--抵质押担保-->
-    <!--WARRANT_TYP_LIST = [
-        (1, '房产'), (2, '房产包'), (5, '土地'), (6, '在建工程'), (11, '应收账款'),
-        (21, '股权'), (31, '票据'), (41, '车辆'), (51, '动产'), (55, '其他'), (99, '他权')]-->
-    {% for warrant in counter_obj.warrant_counter.warrant.all %}
-        <div>
+        {% endfor %}
+    {% elif counter_obj.warrant_counter.warrant.all %} <!--抵质押担保-->
+        <!--WARRANT_TYP_LIST = [
+            (1, '房产'), (2, '房产包'), (5, '土地'), (6, '在建工程'), (11, '应收账款'),
+            (21, '股权'), (31, '票据'), (41, '车辆'), (51, '动产'), (55, '其他'), (99, '他权')]-->
+        {% for warrant in counter_obj.warrant_counter.warrant.all %}
             {% if forloop.first %}
                 {% if warrant.ownership_warrant.all %}<!--(1, '房产'), (2, '房产包'), (5, '土地'), (6, '在建工程')-->
                     {% for ownership in warrant.ownership_warrant.all %}
@@ -86,14 +86,14 @@
                     <p><strong>？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？</strong></p>
                 {% endif %}
             {% endif %}
-        </div>
-    {% endfor %}
-{% else %}
-    <p><strong>？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？</strong></p>
-    <p><strong>？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？</strong></p>
-    <p><strong>？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？</strong></p>
-    <p><strong>？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？</strong></p>
-{% endif %}
+        {% endfor %}
+    {% else %}
+        <p><strong>？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？</strong></p>
+        <p><strong>？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？</strong></p>
+        <p><strong>？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？</strong></p>
+        <p><strong>？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？</strong></p>
+    {% endif %}
+</div>
 <div>
     <p>如至丙方：<strong><u>{{ agree_obj.lending.summary.custom.name }}</u></strong></p>
     <p>地址：<strong><u>{{ agree_obj.lending.summary.custom.contact_addr }}</u></strong></p>
