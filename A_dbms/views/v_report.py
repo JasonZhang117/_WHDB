@@ -692,7 +692,7 @@ def top_custom(request, *args, **kwargs):  #
     menu_result = MenuHelper(request).menu_data_list()
     PAGE_TITLE = '客户统计'
     CLASS_LIST = [(11, '在保'), (21, '授信')]
-    TERM_LIST = [(11, '前十大'), (21, '前二十大'), (99, '自定义金额')]
+    TERM_LIST = [(7, '前五大'), (11, '前十大'), (21, '前二十大'), (99, '自定义金额')]
     CLASS_DIC = dict(CLASS_LIST)
     TERM_DIC = dict(TERM_LIST)
 
@@ -711,7 +711,10 @@ def top_custom(request, *args, **kwargs):  #
 
     if c_typ == 11:  # 按在保
         custom_groups_t = custom_groups.filter(amount__gt=0)
-        if t_typ == 11:  # (11, '前十大')
+        if t_typ == 7:  #(7, '前五大')
+            custom_groups = custom_groups_t.order_by('-amount')[:5]  # 在保前五名在保余额
+            screen_value = custom_groups[4].amount
+        elif t_typ == 11:  # (11, '前十大')
             custom_groups = custom_groups_t.order_by('-amount')[:10]  # 在保前十名在保余额
             screen_value = custom_groups[9].amount
         elif t_typ == 21:  # (21, '前二十大')
@@ -721,11 +724,14 @@ def top_custom(request, *args, **kwargs):  #
             if screen_value:
                 custom_groups = custom_groups_t.filter(amount__gte=screen_value).order_by('-amount')  #按金额筛选
             else:
-                screen_value = custom_groups_t.order_by('-amount')[:10][9].amount
+                screen_value = custom_groups_t.order_by('-amount')[:5][4].amount
                 custom_groups = custom_groups_t.filter(amount__gte=screen_value).order_by('-amount')  # 按金额筛选
     elif c_typ == 21:  # 按授信
         custom_groups_t = custom_groups.filter(Q(credit_amount__gt=0) or Q(amount__gt=0))
-        if t_typ == 11:  # (11, '前十大')
+        if t_typ == 7:  # (7, '前五大')
+            custom_groups = custom_groups_t.order_by('-credit_amount')[:5]  # 在保前十名在保余额
+            screen_value = custom_groups[4].credit_amount
+        elif t_typ == 11:  # (11, '前十大')
             custom_groups = custom_groups_t.order_by('-credit_amount')[:10]  # 在保前十名在保余额
             screen_value = custom_groups[9].credit_amount
         elif t_typ == 21:  # (21, '前二十大')
@@ -735,7 +741,7 @@ def top_custom(request, *args, **kwargs):  #
             if screen_value:
                 custom_groups = custom_groups_t.filter(credit_amount__gte=screen_value).order_by('-credit_amount')  #按金额筛选
             else:
-                screen_value = custom_groups_t.order_by('-amount')[:10][9].amount
+                screen_value = custom_groups_t.order_by('-amount')[:5][4].amount
                 custom_groups = custom_groups_t.filter(credit_amount__gte=screen_value).order_by('-credit_amount')  #按金额筛选
     c_credit = custom_groups.aggregate(Sum('credit_amount'))['credit_amount__sum']  # 授信总额
     c_flow = custom_groups.aggregate(Sum('custom_flow'))['custom_flow__sum']  # 流贷余额
