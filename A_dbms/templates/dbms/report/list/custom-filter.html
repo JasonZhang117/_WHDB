@@ -1,17 +1,10 @@
 <div>
+    <label>{{ c_typ_this }}:{{ ss_value }}--></label>
     <label>
-        <form class="navbar-form" style="display: inline">
-            <input type="search" name="_s" class="form-control" placeholder="客户名称，管户经理"
-                   value="{{ search_key|default_if_none:'' }}">
-            <button type="submit" class="btn btn-primary btn-sm">搜索</button>
-        </form>
-    </label>
-
-    <label>
-        授信总额：{{ custom_credit_tot|floatformat:2 }}；
+        授信总额：{{ custom_credit_tot|floatformat:2 }}（户均：{{ custom_credit_average|floatformat:2 }}）；
     </label>
     <label>
-        在保余额：{{ custom_acount_tot|floatformat:2 }}
+        在保余额：{{ custom_acount_tot|floatformat:2 }}（户均：{{ custom_acount_average|floatformat:2 }}）
     </label>
 
 </div>

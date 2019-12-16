@@ -26,8 +26,6 @@ def report(request, *args, **kwargs):  #
 
 
 # -----------------------在保列表---------------------#
-@login_required
-@authority
 def report_provide_list(request, *args, **kwargs):  #
     current_url_name = resolve(request.path).url_name  # 获取当前URL_NAME
     authority_list = request.session.get('authority_list')  # 获取当前用户的所有权限
@@ -103,8 +101,6 @@ def report_provide_list(request, *args, **kwargs):  #
 
 
 # -----------------------在保分类（按放款）---------------------#
-@login_required
-@authority
 def report_balance_class(request, *args, **kwargs):  #
     current_url_name = resolve(request.path).url_name  # 获取当前URL_NAME
     authority_list = request.session.get('authority_list')  # 获取当前用户的所有权限
@@ -205,8 +201,6 @@ def report_balance_class(request, *args, **kwargs):  #
 
 
 # -----------------------在保分类(按项目)---------------------#
-@login_required
-@authority
 def report_article_class(request, *args, **kwargs):  #
     current_url_name = resolve(request.path).url_name  # 获取当前URL_NAME
     authority_list = request.session.get('authority_list')  # 获取当前用户的所有权限
@@ -293,8 +287,6 @@ def report_article_class(request, *args, **kwargs):  #
 
 
 # -----------------------放款列表---------------------#
-@login_required
-@authority
 def report_provide_accrual(request, *args, **kwargs):  #
     current_url_name = resolve(request.path).url_name  # 获取当前URL_NAME
     authority_list = request.session.get('authority_list')  # 获取当前用户的所有权限
@@ -362,8 +354,6 @@ def report_provide_accrual(request, *args, **kwargs):  #
 
 
 # -----------------------放款分类统计---------------------#
-@login_required
-@authority
 def report_accrual_class(request, *args, **kwargs):  #
     current_url_name = resolve(request.path).url_name  # 获取当前URL_NAME
     authority_list = request.session.get('authority_list')  # 获取当前用户的所有权限
@@ -471,8 +461,6 @@ def report_accrual_class(request, *args, **kwargs):  #
 
 
 # -----------------------项目分类统计---------------------#
-@login_required
-@authority
 def report_article(request, *args, **kwargs):  #
     current_url_name = resolve(request.path).url_name  # 获取当前URL_NAME
     authority_list = request.session.get('authority_list')  # 获取当前用户的所有权限
@@ -518,8 +506,7 @@ def report_article(request, *args, **kwargs):  #
             tl_r = datetime.date(dt_today.year, 12, 31).isoformat()  # 本年最后一天
         '''ARTICLE_STATE_LIST = [(1, '待反馈'), (2, '已反馈'), (3, '待上会'), (4, '已上会'), (5, '已签批'),
                           (51, '已放款'), (52, '已放完'), (55, '已解保'), (61, '待变更'), (99, '已注销')]'''
-    article_groups = models.Articles.objects.filter(build_date__year=dt_today.year,
-                                                    article_state__in=[1, 2, 3, 4, 5, 51, 52, 55, 61])
+
     '''ARTICLE_STATE_LIST = [(1, '待反馈'), (2, '已反馈'), (3, '待上会'), (4, '已上会'), (5, '已签批'),
                           (51, '已放款'), (52, '已放完'), (55, '已解保'), (61, '待变更'), (99, '已注销')]'''
     if tf_r and tl_r:
@@ -596,9 +583,79 @@ def report_article(request, *args, **kwargs):  #
     return render(request, 'dbms/report/balance-class-article.html', locals())
 
 
+# -----------------------项目分类统计明细---------------------#
+def report_article_list(request, *args, **kwargs):  #
+    current_url_name = resolve(request.path).url_name  # 获取当前URL_NAME
+    authority_list = request.session.get('authority_list')  # 获取当前用户的所有权限
+    menu_result = MenuHelper(request).menu_data_list()
+    PAGE_TITLE = '项目分类'
+    CLASS_LIST = [(2, '阶段'), (21, '区域'), (31, '行业'), (35, '部门'),
+                  (41, '项目经理'), (51, '项目助理'), (61, '风控专员'), (81, '法律顾问'), ]
+    TERM_LIST = [(1, '本年'), (2, '本季'), (3, '本月'), (4, '本周'), (11, '上年'), (99, '自定义'), ]
+
+    article_state_list = models.Articles.ARTICLE_STATE_LIST  # 项目阶段
+    article_state_dic = {}
+    for article_state in article_state_list:
+        article_state_dic[article_state[0]] = article_state[1]
+    c_typ_dic = dict(CLASS_LIST)
+    t_typ_dic = dict(TERM_LIST)
+
+    ss_value = request.GET.get('_cs')
+    tf_r = request.GET.get('tf')
+    tl_r = request.GET.get('tl')
+    c_typ = kwargs['c_typ']
+    t_typ = kwargs['t_typ']
+
+    c_typ_dic_this = c_typ_dic[c_typ]
+    t_typ_dic_this = t_typ_dic[t_typ]
+
+    dt_today = datetime.date.today()
+    if t_typ == 1:
+        tf_r = datetime.date(dt_today.year, 1, 1).isoformat()  # 本年第一天
+        tl_r = datetime.date(dt_today.year, 12, 31).isoformat()  # 本年最后一天
+    elif t_typ == 2:
+        tf_r = datetime.date(dt_today.year, dt_today.month - (dt_today.month - 1) % 3, 1).isoformat()  # 本季第一天
+        tl_r = quarter_end_day = (datetime.date(dt_today.year, dt_today.month - (dt_today.month - 1) % 3 + 2, 1) +
+                                  relativedelta(months=1, days=-1)).isoformat()  # 本季最后一天
+    elif t_typ == 3:
+        tf_r = (dt_today - datetime.timedelta(days=dt_today.day - 1)).isoformat()  # 本月第一天
+        tl_r = (dt_today + datetime.timedelta(days=-dt_today.day + 1) +
+                relativedelta(months=1, days=-1)).isoformat()  # 本月最后一天
+    elif t_typ == 4:
+        tf_r = (dt_today - datetime.timedelta(days=dt_today.weekday())).isoformat()  # 本周第一天
+        tl_r = (dt_today + datetime.timedelta(days=6 - dt_today.weekday())).isoformat()  # 本周最后一天
+    elif t_typ == 11:
+        tf_r = datetime.date(dt_today.year - 1, 1, 1).isoformat()  # 上年第一天
+        tl_r = datetime.date(dt_today.year - 1, 12, 31).isoformat()  # 上年最后一天
+    elif t_typ == 99:
+        if tf_r and tl_r:
+            tf_r = tf_r
+            tl_r = tl_r
+        else:
+            tf_r = datetime.date(dt_today.year, 1, 1).isoformat()  # 本年第一天
+            tl_r = datetime.date(dt_today.year, 12, 31).isoformat()  # 本年最后一天
+        '''ARTICLE_STATE_LIST = [(1, '待反馈'), (2, '已反馈'), (3, '待上会'), (4, '已上会'), (5, '已签批'),
+                          (51, '已放款'), (52, '已放完'), (55, '已解保'), (61, '待变更'), (99, '已注销')]'''
+    article_groups = models.Articles.objects.filter(build_date__year=dt_today.year,
+                                                    article_state__in=[1, 2, 3, 4, 5, 51, 52, 55, 61])
+    '''ARTICLE_STATE_LIST = [(1, '待反馈'), (2, '已反馈'), (3, '待上会'), (4, '已上会'), (5, '已签批'),
+                          (51, '已放款'), (52, '已放完'), (55, '已解保'), (61, '待变更'), (99, '已注销')]'''
+    if tf_r and tl_r:
+        article_groups = article_groups.filter(build_date__gte=tf_r, build_date__lte=tl_r)
+
+    article_credit_tot = article_groups.aggregate(Sum('credit_amount'))['credit_amount__sum']  # 授信总额
+    article_acount_tot = article_groups.aggregate(Sum('amount'))['amount__sum']  # 在保总额
+    article_acount = article_groups.count()
+    article_credit_average = 0
+    article_acount_average = 0
+    if article_acount > 0:
+        article_credit_average = round(article_credit_tot / article_acount, 2)
+        article_acount_average = round(article_acount_tot / article_acount, 2)
+
+    return render(request, 'dbms/report/list/class-article-list.html', locals())
+
+
 # -----------------------客户分类统计---------------------#
-@login_required
-@authority
 def report_custom(request, *args, **kwargs):  #
     current_url_name = resolve(request.path).url_name  # 获取当前URL_NAME
     authority_list = request.session.get('authority_list')  # 获取当前用户的所有权限
@@ -684,8 +741,6 @@ def report_custom(request, *args, **kwargs):  #
 
 
 # -----------------------客户分类统计明细---------------------#
-# @login_required
-# @authority
 def report_custom_list(request, *args, **kwargs):  #
     current_url_name = resolve(request.path).url_name  # 获取当前URL_NAME
     authority_list = request.session.get('authority_list')  # 获取当前用户的所有权限
@@ -698,9 +753,12 @@ def report_custom_list(request, *args, **kwargs):  #
     lndustry_dic = {}
     for industry in industry_list:
         lndustry_dic[industry.code] = industry.name
+    c_typ_dic = dict(CLASS_LIST)
+
     ss_value = request.GET.get('_cs')
     c_typ = kwargs['c_typ']
     t_typ = kwargs['t_typ']
+    c_typ_this = c_typ_dic[c_typ]
     if t_typ == 11:  # 在保
         custom_groups = models.Customes.objects.exclude(
             custom_state=99).filter(amount__gt=0)
@@ -721,12 +779,15 @@ def report_custom_list(request, *args, **kwargs):  #
     custom_credit_tot = custom_groups.aggregate(Sum('credit_amount'))['credit_amount__sum']  # 授信总额
     custom_acount_tot = custom_groups.aggregate(Sum('amount'))['amount__sum']  # 在保总额
     custom_acount = custom_groups.count()
+    custom_credit_average = 0
+    custom_acount_average = 0
+    if custom_acount > 0:
+        custom_credit_average = round(custom_credit_tot / custom_acount, 2)
+        custom_acount_average = round(custom_acount_tot / custom_acount, 2)
     return render(request, 'dbms/report/list/class-custom-list.html', locals())
 
 
 # -----------------------客户分类排名---------------------#
-# @login_required
-# @authority
 def top_custom(request, *args, **kwargs):  #
     current_url_name = resolve(request.path).url_name  # 获取当前URL_NAME
     authority_list = request.session.get('authority_list')  # 获取当前用户的所有权限
@@ -825,8 +886,6 @@ def top_custom(request, *args, **kwargs):  #
 
 
 # -----------------------追偿分类统计---------------------#
-@login_required
-@authority
 def report_dun(request, *args, **kwargs):  #
     current_url_name = resolve(request.path).url_name  # 获取当前URL_NAME
     authority_list = request.session.get('authority_list')  # 获取当前用户的所有权限

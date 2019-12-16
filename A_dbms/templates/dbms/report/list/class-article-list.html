@@ -1,0 +1,13 @@
+{% extends 'dbms/index_dbms.html' %}
+
+{% block title %}{{ PAGE_TITLE }}{% endblock %}
+
+
+{% block right-content-container %}
+    {% include 'dbms/report/list/article-filter.html' %}
+    {% include 'dbms/report/list/article-table.html' %}
+{% endblock %}
+
+{% block extra-js %}
+
+{% endblock %}
