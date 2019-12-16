@@ -251,7 +251,9 @@ urlpatterns = [
 
     path('report/accrual/list/<int:p_typ>/<int:t_typ>/', views.report_provide_accrual, name='report_provide_accrual'),
     path('report/accrual/class/<int:c_typ>/<int:t_typ>/', views.report_accrual_class, name='report_accrual_class'),
+
     path('report/article/class/<int:c_typ>/<int:t_typ>/', views.report_article, name='report_article'),
+    path('report/article/list/<int:c_typ>/<int:t_typ>/', views.report_article_list, name='report_article_list'),
 
     path('report/custom/class/<int:c_typ>/<int:t_typ>/', views.report_custom, name='report_custom'),
     path('report/custom/list/<int:c_typ>/<int:t_typ>/', views.report_custom_list, name='report_custom_list'),

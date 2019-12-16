@@ -510,8 +510,7 @@ def report_article(request, *args, **kwargs):  #
     '''ARTICLE_STATE_LIST = [(1, '待反馈'), (2, '已反馈'), (3, '待上会'), (4, '已上会'), (5, '已签批'),
                           (51, '已放款'), (52, '已放完'), (55, '已解保'), (61, '待变更'), (99, '已注销')]'''
     if tf_r and tl_r:
-        article_groups = models.Articles.objects.filter(article_state__in=[1, 2, 3, 4, 5, 51, 52, 55, 61, 99],
-                                                        build_date__gte=tf_r, build_date__lte=tl_r)
+        article_groups = models.Articles.objects.filter(build_date__gte=tf_r, build_date__lte=tl_r)
 
     article_renewal = article_groups.aggregate(Sum('renewal'))['renewal__sum']  # 续贷金额
     article_augment = article_groups.aggregate(Sum('augment'))['augment__sum']  # 新增金额
@@ -634,14 +633,11 @@ def report_article_list(request, *args, **kwargs):  #
         else:
             tf_r = datetime.date(dt_today.year, 1, 1).isoformat()  # 本年第一天
             tl_r = datetime.date(dt_today.year, 12, 31).isoformat()  # 本年最后一天
-        '''ARTICLE_STATE_LIST = [(1, '待反馈'), (2, '已反馈'), (3, '待上会'), (4, '已上会'), (5, '已签批'),
-                          (51, '已放款'), (52, '已放完'), (55, '已解保'), (61, '待变更'), (99, '已注销')]'''
-    article_groups = models.Articles.objects.filter(build_date__year=dt_today.year,
-                                                    article_state__in=[1, 2, 3, 4, 5, 51, 52, 55, 61])
+
     '''ARTICLE_STATE_LIST = [(1, '待反馈'), (2, '已反馈'), (3, '待上会'), (4, '已上会'), (5, '已签批'),
                           (51, '已放款'), (52, '已放完'), (55, '已解保'), (61, '待变更'), (99, '已注销')]'''
     if tf_r and tl_r:
-        article_groups = article_groups.filter(build_date__gte=tf_r, build_date__lte=tl_r)
+        article_groups = models.Articles.objects.filter(build_date__gte=tf_r, build_date__lte=tl_r)
 
     article_credit_tot = article_groups.aggregate(Sum('credit_amount'))['credit_amount__sum']  # 授信总额
     article_acount_tot = article_groups.aggregate(Sum('amount'))['amount__sum']  # 在保总额
