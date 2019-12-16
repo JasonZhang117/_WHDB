@@ -11,7 +11,7 @@
             <th>承兑余额</th>
             <th>保函余额</th>
             <th>委贷余额</th>
-{#            <th>小贷余额</th>#}
+            {#            <th>小贷余额</th>#}
             <th>在保总额</th>
         </tr>
         </thead>
@@ -19,14 +19,19 @@
         {% for item in article_balance_idustry %}
             <tr>
                 <td>{{ forloop.counter }}</td>
-                <td>{{ item.idustry__cod_nam }}</td>
+                <td>
+                    <a target="_blank"
+                       href="{% url 'dbms:report_custom_list' c_typ=kwargs.c_typ t_typ=kwargs.t_typ %}?_cs={{ item.idustry__cod_nam }}">
+                        {{ item.idustry__cod_nam }}
+                    </a>
+                </td>
                 <td align="right">{{ item.con }}</td>
                 <td align="right">{{ item.credit_amount|floatformat:2 }}</td>
                 <td align="right">{{ item.custom_flow|floatformat:2 }}</td>
                 <td align="right">{{ item.custom_accept|floatformat:2 }}</td>
                 <td align="right">{{ item.custom_back|floatformat:2 }}</td>
                 <td align="right">{{ item.entrusted_loan|floatformat:2 }}</td>
-{#                <td align="right">{{ item.petty_loan|floatformat:2 }}</td>#}
+                {#                <td align="right">{{ item.petty_loan|floatformat:2 }}</td>#}
                 <td align="right">{{ item.amount|floatformat:2 }}</td>
             </tr>
         {% endfor %}

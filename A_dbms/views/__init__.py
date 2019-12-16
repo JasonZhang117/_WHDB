@@ -71,7 +71,7 @@ from .v_external_act import agreement_add_ajax
 # ----------------------v_report报表管理视图--------------------#
 from .v_report import (report, report_provide_list, report_balance_class, report_article_class,
                        report_accrual_class, report_provide_accrual, report_article, report_custom,
-                       report_dun, top_custom)
+                       report_dun, top_custom,report_custom_list)
 
 # 部门、员工
 from .v_interior import department, department_add, department_edit

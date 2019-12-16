@@ -1,0 +1,44 @@
+<div class="table-responsive">
+    <table class="table table-bordered table-hover table-condensed active">
+        <thead>
+        <tr style="text-align: center">
+            <th>客户名称({{ custom_acount }})</th>
+            <th>行业</th>
+            <th>区域</th>
+            <th>管户经理</th>
+            <th>风控专员</th>
+            <th>授信总额</th>
+            <th>在保余额</th>
+            <th>流贷余额</th>
+            <th>承兑余额</th>
+            <th>保函余额</th>
+            <th>委贷余额</th>
+            <th>类型</th>
+            <th>风险分类</th>
+            <th>计划时间</th>
+            <th>保后状态</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for custom in custom_groups %}
+            <tr>
+                <td><a href="{% url 'dbms:custom_scan' custom_id=custom.id %}">{{ custom.short_name }}</a></td>
+                <td>{{ custom.idustry.name }}</td>
+                <td>{{ custom.district.name }}</td>
+                <td align="right">{{ custom.managementor }}</td>
+                <td align="right">{{ custom.controler }}</td>
+                <td align="right">{{ custom.credit_amount }}</td>
+                <td align="right">{{ custom.amount }}</td>
+                <td align="right">{{ custom.custom_flow }}</td>
+                <td align="right">{{ custom.custom_accept }}</td>
+                <td align="right">{{ custom.custom_back }}</td>
+                <td align="right">{{ custom.entrusted_loan }}</td>
+                <td>{{ custom.get_custom_typ_display }}</td>
+                <td>{{ custom.get_classification_display }}</td>
+                <td>{{ custom.review_plan_date|default_if_none:"" }}</td>
+                <td>{{ custom.get_review_state_display }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>

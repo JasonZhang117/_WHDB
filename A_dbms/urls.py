@@ -242,7 +242,6 @@ urlpatterns = [
 
     # ------------------------------人员管理--------------------------------------#
 
-
     # ------------------------------报表--------------------------------------#
     path('report/', views.report, name='report'),  #
     path('report/provide/list/<int:p_typ>/<int:t_typ>/', views.report_provide_list, name='report_provide_list'),
@@ -254,10 +253,10 @@ urlpatterns = [
     path('report/accrual/class/<int:c_typ>/<int:t_typ>/', views.report_accrual_class, name='report_accrual_class'),
     path('report/article/class/<int:c_typ>/<int:t_typ>/', views.report_article, name='report_article'),
     path('report/custom/class/<int:c_typ>/<int:t_typ>/', views.report_custom, name='report_custom'),
+    path('report/custom/list/<int:c_typ>/<int:t_typ>/', views.report_custom_list, name='report_custom_list'),
+
     path('report/custom/top/<int:c_typ>/<int:t_typ>/', views.top_custom, name='report_top_custom'),
     path('report/dun/class/<int:t_typ>/', views.report_dun, name='report_dun'),
-
-
 
     # 员工
     path('employee/', views.employee, name='employee_all'),

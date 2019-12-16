@@ -683,6 +683,47 @@ def report_custom(request, *args, **kwargs):  #
     return render(request, 'dbms/report/balance-class-custom.html', locals())
 
 
+# -----------------------客户分类统计明细---------------------#
+# @login_required
+# @authority
+def report_custom_list(request, *args, **kwargs):  #
+    current_url_name = resolve(request.path).url_name  # 获取当前URL_NAME
+    authority_list = request.session.get('authority_list')  # 获取当前用户的所有权限
+    menu_result = MenuHelper(request).menu_data_list()
+    PAGE_TITLE = '客户分类'
+    CLASS_LIST = [(21, '区域'), (31, '行业'), (35, '部门'), (41, '管户经理'), (45, '风控专员'), ]
+    TERM_LIST = [(11, '在保'), (21, '授信'), ]
+    '''CUSTOM_STATE_LIST = [(11, '担保客户'), (21, '反担保客户'), (99, '注销')]'''
+    industry_list = models.Industries.objects.all()
+    lndustry_dic = {}
+    for industry in industry_list:
+        lndustry_dic[industry.code] = industry.name
+    ss_value = request.GET.get('_cs')
+    c_typ = kwargs['c_typ']
+    t_typ = kwargs['t_typ']
+    if t_typ == 11:  # 在保
+        custom_groups = models.Customes.objects.exclude(
+            custom_state=99).filter(amount__gt=0)
+    else:
+        custom_groups = models.Customes.objects.exclude(
+            custom_state=99).filter(Q(credit_amount__gt=0) or Q(amount__gt=0))
+
+    if c_typ == 21:
+        custom_groups = custom_groups.filter(district__name=ss_value)
+    elif c_typ == 31:
+        custom_groups = custom_groups.filter(idustry__cod_nam=ss_value)
+    elif c_typ == 35:
+        custom_groups = custom_groups.filter(managementor__department__name=ss_value)
+    elif c_typ == 41:
+        custom_groups = custom_groups.filter(managementor__name=ss_value)
+    else:
+        custom_groups = custom_groups.filter(controler__name=ss_value)
+    custom_credit_tot = custom_groups.aggregate(Sum('credit_amount'))['credit_amount__sum']  # 授信总额
+    custom_acount_tot = custom_groups.aggregate(Sum('amount'))['amount__sum']  # 在保总额
+    custom_acount = custom_groups.count()
+    return render(request, 'dbms/report/list/class-custom-list.html', locals())
+
+
 # -----------------------客户分类排名---------------------#
 # @login_required
 # @authority
@@ -711,7 +752,7 @@ def top_custom(request, *args, **kwargs):  #
 
     if c_typ == 11:  # 按在保
         custom_groups_t = custom_groups.filter(amount__gt=0)
-        if t_typ == 7:  #(7, '前五大')
+        if t_typ == 7:  # (7, '前五大')
             custom_groups = custom_groups_t.order_by('-amount')[:5]  # 在保前五名在保余额
             screen_value = custom_groups[4].amount
         elif t_typ == 11:  # (11, '前十大')
@@ -722,7 +763,7 @@ def top_custom(request, *args, **kwargs):  #
             screen_value = custom_groups[19].amount
         else:  # (99, '自定义金额')
             if screen_value:
-                custom_groups = custom_groups_t.filter(amount__gte=screen_value).order_by('-amount')  #按金额筛选
+                custom_groups = custom_groups_t.filter(amount__gte=screen_value).order_by('-amount')  # 按金额筛选
             else:
                 screen_value = custom_groups_t.order_by('-amount')[:5][4].amount
                 custom_groups = custom_groups_t.filter(amount__gte=screen_value).order_by('-amount')  # 按金额筛选
@@ -739,10 +780,12 @@ def top_custom(request, *args, **kwargs):  #
             screen_value = custom_groups[19].credit_amount
         else:  # (99, '自定义金额')
             if screen_value:
-                custom_groups = custom_groups_t.filter(credit_amount__gte=screen_value).order_by('-credit_amount')  #按金额筛选
+                custom_groups = custom_groups_t.filter(credit_amount__gte=screen_value).order_by(
+                    '-credit_amount')  # 按金额筛选
             else:
                 screen_value = custom_groups_t.order_by('-amount')[:5][4].amount
-                custom_groups = custom_groups_t.filter(credit_amount__gte=screen_value).order_by('-credit_amount')  #按金额筛选
+                custom_groups = custom_groups_t.filter(credit_amount__gte=screen_value).order_by(
+                    '-credit_amount')  # 按金额筛选
     c_credit = custom_groups.aggregate(Sum('credit_amount'))['credit_amount__sum']  # 授信总额
     c_flow = custom_groups.aggregate(Sum('custom_flow'))['custom_flow__sum']  # 流贷余额
     c_accept = custom_groups.aggregate(Sum('custom_accept'))['custom_accept__sum']  # 承兑余额
