@@ -155,6 +155,7 @@ urlpatterns = [
     path('provide/track/update/', views.track_update_ajax, name='provide_track_update_ajax'),
 
     path('provide/agree/change/', views.change_agree_state_ajax, name='provide_change_agree_state_ajax'),
+    path('provide/state/change/', views.provide_state_change_ajax, name='provide_state_change_ajax'),
 
     # -----------------------归档管理-------------------------#
     path('pigeonhole/', views.pigeonhole, name='pigeonhole_all'),  # 菜单-放款管理-放款

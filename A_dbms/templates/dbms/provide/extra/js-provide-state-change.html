@@ -1,39 +1,40 @@
 <script>
     $(function () {
-        bindChangeAgreeState();
-        bindChangeAgreeStateModalOk();
+        bindProvideChangeB();
+        bindProvideChangeStateModalOk();
     });
 
-    function bindChangeAgreeState() {
-        $('#changeAgreeState').click(function () {
-            $('#changeAgreeStateModal').modal('show');
+    function bindProvideChangeB() {
+        $('#provideChangeB').click(function () {
+            $('#provideChangeStateModal').modal('show');
         })
     }
 
-    function bindChangeAgreeStateModalOk() {
-        $('#changeAgreeStateModalOk').click(function () {
+    function bindProvideChangeStateModalOk() {
+        $('#provideChangeStateModalOk').click(function () {
             var postData = {};
-            $('#changeAgreeStateModal').find('input,select').each(function () {
+            $('#provideChangeStateModal').find('input,select').each(function () {
                 var v = $(this).val();
                 var n = $(this).attr('name');
                 postData[n] = v;
             });
             var postDataStr = JSON.stringify(postData);
+
             $.ajax({
-                url: '/dbms/provide/agree/change/',
+                url: '/dbms/provide/state/change/',
                 type: 'POST',
                 traditional: true,
                 data: {'postDataStr': postDataStr},
                 dataType: 'JSON',
                 success: function (arg) {
                     if (arg.status) {
-                        $('#changeAgreeStateModal').modal('hide');
+                        $('#provideChangeStateModal').modal('hide');
                         alert(arg.message);
                         {#window.location.href = arg.skip;#}
                         window.location.reload();
                     } else {
                         alert(arg.message);
-                        $('#e_agree_state').text(arg.forme.agree_state);
+                        $('#e_provide_status').text(arg.forme.provide_status);
                     }
                 }
             })

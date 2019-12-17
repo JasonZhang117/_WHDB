@@ -1,0 +1,26 @@
+<div class="modal fade" id="provideChangeStateModal" tabindex="-1"
+     role="dialog" aria-labelledby="provideChangeStateModal">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title" id="provideChangeStateModalLabel">修改放款状态
+                    <input style="display: none" name="provide_id" id="id_provide_id" value={{ provide_obj.id }}>
+                </h4>
+            </div>
+            <div class="modal-body">
+                <form class="form-horizontal">
+                    {% include 'dbms/provide/modl/mod_form/provide-change-state.html' %}
+                </form>
+            </div>
+
+            <label id="formErrors"></label>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                <button type="button" class="btn btn-primary" id="provideChangeStateModalOk">确定</button>
+            </div>
+        </div>
+    </div>
+</div>

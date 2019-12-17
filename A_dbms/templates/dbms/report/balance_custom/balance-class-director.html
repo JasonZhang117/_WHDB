@@ -1,6 +1,6 @@
 <div class="table-responsive">
     <table class="table table-bordered table-hover table-condensed active">
-        <caption>{{ PAGE_TITLE }}统计表（按管户经理）</caption>
+        <caption>{{ t_typ_t }}{{ PAGE_TITLE }}统计表（按管户经理）</caption>
         <thead>
         <tr style="text-align: center">
             <th>序号</th>
@@ -17,22 +17,22 @@
         </thead>
         <tbody>
         {% for item in article_balance_director %}
-            <tr>
-                <td>{{ forloop.counter }}</td>
-                <td>
+            <tr style="padding: 0;">
+                <td style="padding: 0;">{{ forloop.counter }}</td>
+                <td style="padding: 0;">
                     <a target="_blank"
                        href="{% url 'dbms:report_custom_list' c_typ=kwargs.c_typ t_typ=kwargs.t_typ %}?_cs={{ item.managementor__name }}">
                         {{ item.managementor__name }}
                     </a>
                 </td>
-                <td align="right">{{ item.con }}</td>
-                <td align="right">{{ item.credit_amount|floatformat:2 }}</td>
-                <td align="right">{{ item.custom_flow|floatformat:2 }}</td>
-                <td align="right">{{ item.custom_accept|floatformat:2 }}</td>
-                <td align="right">{{ item.custom_back|floatformat:2 }}</td>
-                <td align="right">{{ item.entrusted_loan|floatformat:2 }}</td>
+                <td style="padding: 0;" align="right">{{ item.con }}</td>
+                <td style="padding: 0;" align="right">{{ item.credit_amount|floatformat:2 }}</td>
+                <td style="padding: 0;" align="right">{{ item.custom_flow|floatformat:2 }}</td>
+                <td style="padding: 0;" align="right">{{ item.custom_accept|floatformat:2 }}</td>
+                <td style="padding: 0;" align="right">{{ item.custom_back|floatformat:2 }}</td>
+                <td style="padding: 0;" align="right">{{ item.entrusted_loan|floatformat:2 }}</td>
                 {#                <td align="right">{{ item.petty_loan|floatformat:2 }}</td>#}
-                <td align="right">{{ item.amount|floatformat:2 }}</td>
+                <td style="padding: 0;" align="right">{{ item.amount|floatformat:2 }}</td>
             </tr>
         {% endfor %}
         {% include 'dbms/report/balance_custom/article-class.html' %}

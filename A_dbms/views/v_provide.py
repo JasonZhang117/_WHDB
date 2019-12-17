@@ -481,6 +481,8 @@ def provide_scan(request, provide_id):  # 查看放款
     date_th_later = datetime.date.today() + datetime.timedelta(days=30)  # 30天后的日期
     form_track_plan = forms.FormTrackPlan(initial={'plan_date': str(date_th_later)})
     form_track_add = forms.FormTrackAdd()
+    provide_state_change_data = {'provide_status': provide_obj.provide_status}
+    form_change_provide_state = forms.FormProvideStateChange(initial=provide_state_change_data)
 
     return render(request, 'dbms/provide/provide-scan.html', locals())
 

@@ -14,7 +14,6 @@ from _WHDB.views import authority
 
 
 def tt(t_typ, tf_r, tl_r):
-    print(t_typ,tf_r,tl_r)
     dt_today = datetime.date.today()
     if t_typ == 0:
         article_groups = models.Articles.objects.filter(article_balance__gt=0)
@@ -672,9 +671,11 @@ def report_custom(request, *args, **kwargs):  #
     if t_typ == 11:  # 在保
         custom_groups = models.Customes.objects.exclude(
             custom_state=99).filter(amount__gt=0)
+        t_typ_t = '在保'
     else:
         custom_groups = models.Customes.objects.exclude(
             custom_state=99).filter(Q(credit_amount__gt=0) or Q(amount__gt=0))
+        t_typ_t = '授信'
 
     c_credit = custom_groups.aggregate(Sum('credit_amount'))['credit_amount__sum']  # 授信总额
     c_flow = custom_groups.aggregate(Sum('custom_flow'))['custom_flow__sum']  # 流贷余额
@@ -753,11 +754,13 @@ def report_custom_list(request, *args, **kwargs):  #
     for industry in industry_list:
         lndustry_dic[industry.code] = industry.name
     c_typ_dic = dict(CLASS_LIST)
-
+    t_typ_dic = dict(TERM_LIST)
     ss_value = request.GET.get('_cs')
     c_typ = kwargs['c_typ']
     t_typ = kwargs['t_typ']
     c_typ_this = c_typ_dic[c_typ]
+    t_typ_this = t_typ_dic[t_typ]
+
     if t_typ == 11:  # 在保
         custom_groups = models.Customes.objects.exclude(
             custom_state=99).filter(amount__gt=0)
@@ -780,9 +783,11 @@ def report_custom_list(request, *args, **kwargs):  #
     custom_acount = custom_groups.count()
     custom_credit_average = 0
     custom_acount_average = 0
+    custom_credit_tot_w = custom_credit_tot / 10000
+    custom_acount_tot_w = custom_acount_tot / 10000
     if custom_acount > 0:
-        custom_credit_average = round(custom_credit_tot / custom_acount, 2)
-        custom_acount_average = round(custom_acount_tot / custom_acount, 2)
+        custom_credit_average = round(custom_credit_tot_w / custom_acount, 2)
+        custom_acount_average = round(custom_acount_tot_w / custom_acount, 2)
     return render(request, 'dbms/report/list/class-custom-list.html', locals())
 
 

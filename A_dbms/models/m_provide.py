@@ -70,7 +70,7 @@ class Provides(models.Model):  # 放款
     file_num = models.CharField(verbose_name='档案编号', max_length=64, unique=True, null=True, blank=True)
 
     PROVIDE_STATUS_LIST = [(1, '在保'), (11, '解保'), (21, '代偿')]
-    provide_status = models.IntegerField(verbose_name='_放款状态', choices=PROVIDE_STATUS_LIST, default=1)
+    provide_status = models.IntegerField(verbose_name='放款状态', choices=PROVIDE_STATUS_LIST, default=1)
     provide_repayment_sum = models.FloatField(verbose_name='_还款总额', default=0)
     provide_balance = models.FloatField(verbose_name='_在保余额', default=0)
     providor = models.ForeignKey(to='Employees', verbose_name="_创建者",

@@ -80,6 +80,14 @@ class FormProvideAdd(dform.ModelForm):
             'due_date': dform.DateInput(attrs={'class': 'form-control', 'type': 'date'})}
 
 
+# -----------------------放款状态修改-------------------------#
+class FormProvideStateChange(dform.ModelForm):
+    class Meta:
+        model = models.Provides
+        fields = ['provide_status',]
+        widgets = {
+            'provide_status': dform.Select(attrs={'class': 'form-control'}),}
+
 # -----------------------还款添加-------------------------#
 class FormRepaymentAdd(dform.ModelForm):
     class Meta:

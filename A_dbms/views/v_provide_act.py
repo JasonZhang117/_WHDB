@@ -470,6 +470,34 @@ def provide_add_ajax(request):
     return HttpResponse(result)
 
 
+# ---------------------------修改放款状态ajax----------------------------#
+@login_required
+@authority
+def provide_state_change_ajax(request):  #
+    response = {'status': True, 'message': None, 'forme': None, 'skip': None, }
+    post_data_str = request.POST.get('postDataStr')
+    post_data = json.loads(post_data_str)
+    provide_list = models.Provides.objects.filter(id=post_data['provide_id'])
+    provide_obj = provide_list.first()
+
+    form_change_provide_state = forms.FormProvideStateChange(post_data)
+    if form_change_provide_state.is_valid():
+        provide_state_cleaned = form_change_provide_state.cleaned_data
+        try:
+            with transaction.atomic():
+                provide_list.update(provide_status=provide_state_cleaned['provide_status'], )
+            response['message'] = '放款状态修改成功！！'
+        except Exception as e:
+            response['status'] = False
+            response['message'] = '放款状态修改失败：%s' % str(e)
+    else:
+        response['status'] = False
+        response['message'] = '表单信息有误！！！'
+        response['forme'] = form_change_provide_state.errors
+
+    result = json.dumps(response, ensure_ascii=False)
+    return HttpResponse(result)
+
 # -----------------------删除放款ajax-------------------------#
 @login_required
 @authority
@@ -855,7 +883,7 @@ def change_agree_state_ajax(request):  #
         try:
             with transaction.atomic():
                 agree_list.update(agree_state=change_agree_cleaned['agree_state'], )
-            response['message'] = '合同项下余额未结清，无法解保或者注销！！'
+            response['message'] = '合同状态修改成功！！'
         except Exception as e:
             response['status'] = False
             response['message'] = '合同状态修改失败：%s' % str(e)
