@@ -852,18 +852,13 @@ def change_agree_state_ajax(request):  #
 
     if form_change_agree_state.is_valid():
         change_agree_cleaned = form_change_agree_state.cleaned_data
-        agree_state_d = change_agree_cleaned['agree_state']
-        if agree_obj.agree_balance > 0 and agree_state_d in [61, 99]:
-            try:
-                with transaction.atomic():
-                    agree_list.update(agree_state=agree_state_d, )
-                response['message'] = '合同项下余额未结清，无法解保或者注销！！'
-            except Exception as e:
-                response['status'] = False
-                response['message'] = '合同状态修改失败：%s' % str(e)
-        else:
+        try:
+            with transaction.atomic():
+                agree_list.update(agree_state=change_agree_cleaned['agree_state'], )
+            response['message'] = '合同项下余额未结清，无法解保或者注销！！'
+        except Exception as e:
             response['status'] = False
-            response['message'] = '合同状态为：%s，合同状态修改失败！！！' % agree_obj.agree_state
+            response['message'] = '合同状态修改失败：%s' % str(e)
     else:
         response['status'] = False
         response['message'] = '表单信息有误！！！'
