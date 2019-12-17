@@ -14,7 +14,7 @@ from .m_warrant import (
     Warrants, Ownership, Houses, HouseBag, Grounds, Construction, Stockes, Receivable, ReceiveExtend, Draft,
     DraftExtend, Chattel, Others, Vehicle, Hypothecs, Evaluate, Storages)
 # -----------------------m_provide放款模型-------------------#
-from .m_provide import (Notify, Provides, Repayments, Pigeonholes, Charges, Track)
+from .m_provide import (Notify, Provides, Repayments, Pigeonholes, Charges, Track,)
 # -----------------------m_dun追偿-------------------#
 from .m_dun import (Compensatories, Dun, Agent, Staff, Retrieve, Charge, Stage, Judgment, Standing,
                     Seal, Sealup, Inquiry)

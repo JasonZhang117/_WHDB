@@ -20,4 +20,13 @@ th {
     text-align: center;
     vertical-align: middle;
     vert-align: middle;
+    padding: 0;
+}
+
+tr{
+    padding: 0;
+}
+
+td{
+    padding: 0;
 }

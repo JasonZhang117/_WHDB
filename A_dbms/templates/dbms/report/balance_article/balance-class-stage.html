@@ -21,29 +21,60 @@
                 <td>{{ forloop.counter }}</td>
                 {#            ARTICLE_STATE_LIST = [(1, '待反馈'), (2, '已反馈'), (3, '待上会'), (4, '已上会'), (5, '已签批'),#}
                 {#                          (51, '已放款'), (52, '已放完'), (55, '已解保'), (61, '待变更'), (99, '已注销')]#}
-                {% if item.article_state == 1 %}
-                    <td>{{ article_state_dic.1 }}</td>
-                {% elif item.article_state == 2 %}
-                    <td>{{ article_state_dic.2 }}</td>
-                {% elif item.article_state == 3 %}
-                    <td>{{ article_state_dic.3 }}</td>
-                {% elif item.article_state == 4 %}
-                    <td>{{ article_state_dic.4 }}</td>
-                {% elif item.article_state == 5 %}
-                    <td>{{ article_state_dic.5 }}</td>
-                {% elif item.article_state == 6 %}
-                    <td>{{ article_state_dic.6 }}</td>
-                {% elif item.article_state == 51 %}
-                    <td>{{ article_state_dic.51 }}</td>
-                {% elif item.article_state == 52 %}
-                    <td>{{ article_state_dic.52 }}</td>
-                {% elif item.article_state == 55 %}
-                    <td>{{ article_state_dic.55 }}</td>
-                {% elif item.article_state == 61 %}
-                    <td>{{ article_state_dic.61 }}</td>
-                {% elif item.article_state == 99 %}
-                    <td>{{ article_state_dic.99 }}</td>
-                {% endif %}
+                <td>
+                    {% if item.article_state == 1 %}
+                        <a target="_blank"
+                           href="{% url 'dbms:report_article_list' c_typ=kwargs.c_typ t_typ=kwargs.t_typ %}?_cs={{ article_state_dic.1 }}&tf={{ tf_r }}&tl={{ tl_r }}">
+                            {{ article_state_dic.1 }}
+                        </a>
+                    {% elif item.article_state == 2 %}
+                        <a target="_blank"
+                           href="{% url 'dbms:report_article_list' c_typ=kwargs.c_typ t_typ=kwargs.t_typ %}?_cs={{ article_state_dic.2 }}&tf={{ tf_r }}&tl={{ tl_r }}">
+                            {{ article_state_dic.2 }}
+                        </a>
+                    {% elif item.article_state == 3 %}
+                        <a target="_blank"
+                           href="{% url 'dbms:report_article_list' c_typ=kwargs.c_typ t_typ=kwargs.t_typ %}?_cs={{ article_state_dic.3 }}&tf={{ tf_r }}&tl={{ tl_r }}">
+                            {{ article_state_dic.3 }}
+                        </a>
+                    {% elif item.article_state == 4 %}
+                        <a target="_blank"
+                           href="{% url 'dbms:report_article_list' c_typ=kwargs.c_typ t_typ=kwargs.t_typ %}?_cs={{ article_state_dic.4 }}&tf={{ tf_r }}&tl={{ tl_r }}">
+                            {{ article_state_dic.4 }}
+                        </a>
+                    {% elif item.article_state == 5 %}
+                        <a target="_blank"
+                           href="{% url 'dbms:report_article_list' c_typ=kwargs.c_typ t_typ=kwargs.t_typ %}?_cs={{ article_state_dic.5 }}&tf={{ tf_r }}&tl={{ tl_r }}">
+                            {{ article_state_dic.5 }}
+                        </a>
+                    {% elif item.article_state == 51 %}
+                        <a target="_blank"
+                           href="{% url 'dbms:report_article_list' c_typ=kwargs.c_typ t_typ=kwargs.t_typ %}?_cs={{ article_state_dic.51 }}&tf={{ tf_r }}&tl={{ tl_r }}">
+                            {{ article_state_dic.51 }}
+                        </a>
+                    {% elif item.article_state == 52 %}
+                        <a target="_blank"
+                           href="{% url 'dbms:report_article_list' c_typ=kwargs.c_typ t_typ=kwargs.t_typ %}?_cs={{ article_state_dic.52 }}&tf={{ tf_r }}&tl={{ tl_r }}">
+                            {{ article_state_dic.52 }}
+                        </a>
+                    {% elif item.article_state == 55 %}
+                        <a target="_blank"
+                           href="{% url 'dbms:report_article_list' c_typ=kwargs.c_typ t_typ=kwargs.t_typ %}?_cs={{ article_state_dic.55 }}&tf={{ tf_r }}&tl={{ tl_r }}">
+                            {{ article_state_dic.55 }}
+                        </a>
+                    {% elif item.article_state == 61 %}
+                        <a target="_blank"
+                           href="{% url 'dbms:report_article_list' c_typ=kwargs.c_typ t_typ=kwargs.t_typ %}?_cs={{ article_state_dic.61 }}&tf={{ tf_r }}&tl={{ tl_r }}">
+                            {{ article_state_dic.61 }}
+                        </a>
+                    {% elif item.article_state == 99 %}
+                        <a target="_blank"
+                           href="{% url 'dbms:report_article_list' c_typ=kwargs.c_typ t_typ=kwargs.t_typ %}?_cs={{ article_state_dic.99 }}&tf={{ tf_r }}&tl={{ tl_r }}">
+                            {{ article_state_dic.99 }}
+                        </a>
+
+                    {% endif %}
+                </td>
                 <td align="right">{{ item.con }}</td>
                 <td align="right">{{ item.sum_renewal|floatformat:2 }}</td>
                 <td align="right">{{ item.sum_augment|floatformat:2 }}</td>

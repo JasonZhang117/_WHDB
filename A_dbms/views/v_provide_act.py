@@ -837,6 +837,42 @@ def repayment_add_ajax(request):
     return HttpResponse(result)
 
 
+# ---------------------------修改合同ajax----------------------------#
+@login_required
+@authority
+def change_agree_state_ajax(request):  #
+    response = {'status': True, 'message': None, 'forme': None, 'skip': None, }
+    post_data_str = request.POST.get('postDataStr')
+    post_data = json.loads(post_data_str)
+    agree_list = models.Agrees.objects.filter(id=post_data['agree_id'])
+    agree_obj = agree_list.first()
+    '''AGREE_STATE_LIST = [(11, '待签批'), (21, '已签批'), (25, '已签订'), (31, '未落实'),
+                        (41, '已落实'), (51, '待变更'), (61, '已解保'), (99, '已注销')]'''
+    form_change_agree_state = forms.FormAgreeChangeState(post_data)
+
+    if form_change_agree_state.is_valid():
+        change_agree_cleaned = form_change_agree_state.cleaned_data
+        agree_state_d = change_agree_cleaned['agree_state']
+        if agree_obj.agree_balance > 0 and agree_state_d in [61, 99]:
+            try:
+                with transaction.atomic():
+                    agree_list.update(agree_state=agree_state_d, )
+                response['message'] = '合同项下余额未结清，无法解保或者注销！！'
+            except Exception as e:
+                response['status'] = False
+                response['message'] = '合同状态修改失败：%s' % str(e)
+        else:
+            response['status'] = False
+            response['message'] = '合同状态为：%s，合同状态修改失败！！！' % agree_obj.agree_state
+    else:
+        response['status'] = False
+        response['message'] = '表单信息有误！！！'
+        response['forme'] = form_change_agree_state.errors
+
+    result = json.dumps(response, ensure_ascii=False)
+    return HttpResponse(result)
+
+
 # -----------------------删除还款信息ajax-------------------------#
 @login_required
 @authority

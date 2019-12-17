@@ -17,9 +17,19 @@ class FormAscertainAdd(dform.ModelForm):
 class FormAgreeSignAdd(dform.ModelForm):
     class Meta:
         model = models.Agrees
-        fields = ['sign_date',]
+        fields = ['sign_date', ]
         widgets = {
-            'sign_date': dform.DateInput(attrs={'class': 'form-control', 'type': 'date'}),}
+            'sign_date': dform.DateInput(attrs={'class': 'form-control', 'type': 'date'}), }
+
+
+# -----------------------合同状态修改-------------------------#
+class FormAgreeChangeState(dform.ModelForm):
+    class Meta:
+        model = models.Agrees
+        fields = ['agree_state', ]
+        widgets = {
+            'agree_state': dform.Select(attrs={'class': 'form-control'}), }
+
 
 # -----------------------反担保合同签订-------------------------#
 class FormCounterSignAdd(dform.ModelForm):

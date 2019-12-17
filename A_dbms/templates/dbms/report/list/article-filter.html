@@ -1,10 +1,16 @@
 <div>
-    <label>{{ c_typ_this }}:{{ ss_value }}--></label>
+    <label>{{ t_typ_dic_this }}-{{ c_typ_dic_this }}:{{ ss_value }}--></label>
     <label>
-        授信总额：{{ article_credit_tot|floatformat:2 }}（户均：{{ article_credit_average|floatformat:2 }}）；
+        项目金额：{{ article_amount_tot|floatformat:2 }}；
     </label>
     <label>
-        在保余额：{{ article_acount_tot|floatformat:2 }}（户均：{{ article_acount_average|floatformat:2 }}）
+        放款金额：{{ article_provide_tot|floatformat:2 }}；
+    </label>
+    <label>
+        还款金额：{{ article_repayment_tot|floatformat:2 }}；
+    </label>
+    <label>
+        在保余额：{{ article_balance_tot|floatformat:2 }}
     </label>
 
 </div>

@@ -1,0 +1,48 @@
+<script>
+    $(function () {
+        bindChangeAgreeState();
+        bindChangeAgreeStateModalOk();
+    });
+
+    function bindChangeAgreeState() {
+        $('#changeAgreeState').click(function () {
+            $('#changeAgreeStateModal').modal('show');
+        })
+    }
+
+    function bindChangeAgreeStateModalOk() {
+        $('#changeAgreeStateModalOk').click(function () {
+            var postData = {};
+            $('#changeAgreeStateModal').find('input,select').each(function () {
+                var v = $(this).val();
+                var n = $(this).attr('name');
+                postData[n] = v;
+            });
+            var postDataStr = JSON.stringify(postData);
+            $.ajax({
+                url: '/dbms/provide/agree/change/',
+                type: 'POST',
+                traditional: true,
+                data: {'postDataStr': postDataStr},
+                dataType: 'JSON',
+                success: function (arg) {
+                    if (arg.status) {
+                        $('#addNotifyModal').modal('hide');
+                        alert(arg.message);
+                        {#window.location.href = arg.skip;#}
+                        window.location.reload();
+                    } else {
+                        alert(arg.message);
+                        $('#e_e_agree_state').text(arg.forme.e_agree_state);
+                    }
+                }
+            })
+        })
+    }
+</script>
+
+
+
+
+
+

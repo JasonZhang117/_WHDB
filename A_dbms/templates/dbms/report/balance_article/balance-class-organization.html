@@ -17,17 +17,22 @@
         <tbody>
         {% for item in article_balance_organization %}
             {% if item.expert__organization == '泰和泰律师事务所' or item.expert__organization == '明之鉴律师事务所' %}
-            <tr>
-                <td>{{ item.expert__organization }}</td>
-                <td align="right">{{ item.con }}</td>
-                <td align="right">{{ item.sum_renewal|floatformat:2 }}</td>
-                <td align="right">{{ item.sum_augment|floatformat:2 }}</td>
-                <td align="right">{{ item.sum_amount|floatformat:2 }}</td>
-                <td align="right">{{ item.sum_notify|floatformat:2 }}</td>
-                <td align="right">{{ item.sum_provide|floatformat:2 }}</td>
-                <td align="right">{{ item.sum_repayment|floatformat:2 }}</td>
-                <td align="right">{{ item.sum_balance|floatformat:2 }}</td>
-            </tr>
+                <tr>
+                    <td>
+                        <a target="_blank"
+                           href="{% url 'dbms:report_article_list' c_typ=kwargs.c_typ t_typ=kwargs.t_typ %}?_cs={{ item.expert__organization }}&tf={{ tf_r }}&tl={{ tl_r }}">
+                            {{ item.expert__organization }}
+                        </a>
+                    </td>
+                    <td align="right">{{ item.con }}</td>
+                    <td align="right">{{ item.sum_renewal|floatformat:2 }}</td>
+                    <td align="right">{{ item.sum_augment|floatformat:2 }}</td>
+                    <td align="right">{{ item.sum_amount|floatformat:2 }}</td>
+                    <td align="right">{{ item.sum_notify|floatformat:2 }}</td>
+                    <td align="right">{{ item.sum_provide|floatformat:2 }}</td>
+                    <td align="right">{{ item.sum_repayment|floatformat:2 }}</td>
+                    <td align="right">{{ item.sum_balance|floatformat:2 }}</td>
+                </tr>
             {% endif %}
         {% endfor %}
         </tbody>

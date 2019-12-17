@@ -6,7 +6,7 @@
             <caption>{{ t_typ_t }}{{ c_typ_c }}客户及占比</caption>
         {% endif %}
         <thead>
-        <tr style="text-align: center">
+        <tr style="text-align: center;padding: 0">
             <th>序号</th>
             <th>客户</th>
             <th>授信总额</th>
@@ -20,16 +20,16 @@
         </thead>
         <tbody>
         {% for custom in custom_groups %}
-            <tr>
-                <td>{{ forloop.counter }}</td>
-                <td>{{ custom.name }}</td>
-                <td align="right">{{ custom.credit_amount|floatformat:2 }}</td>
-                <td align="right">{{ custom.custom_flow|floatformat:2 }}</td>
-                <td align="right">{{ custom.custom_accept|floatformat:2 }}</td>
-                <td align="right">{{ custom.custom_back|floatformat:2 }}</td>
-                <td align="right">{{ custom.entrusted_loan|floatformat:2 }}</td>
+            <tr style="padding: 0">
+                <td style="padding: 0">{{ forloop.counter }}</td>
+                <td style="padding: 0">{{ custom.name }}</td>
+                <td style="padding: 0" align="right">{{ custom.credit_amount|floatformat:2 }}</td>
+                <td style="padding: 0" align="right">{{ custom.custom_flow|floatformat:2 }}</td>
+                <td style="padding: 0" align="right">{{ custom.custom_accept|floatformat:2 }}</td>
+                <td style="padding: 0" align="right">{{ custom.custom_back|floatformat:2 }}</td>
+                <td style="padding: 0" align="right">{{ custom.entrusted_loan|floatformat:2 }}</td>
 {#                <td align="right">{{ item.petty_loan|floatformat:2 }}</td>#}
-                <td align="right">{{ custom.amount|floatformat:2 }}</td>
+                <td style="padding: 0" align="right">{{ custom.amount|floatformat:2 }}</td>
             </tr>
         {% endfor %}
         {% include 'dbms/report/balance_custom/top-custom.html' %}

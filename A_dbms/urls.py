@@ -154,6 +154,8 @@ urlpatterns = [
     path('provide/track/del/', views.track_del_ajax, name='provide_track_del_ajax'),
     path('provide/track/update/', views.track_update_ajax, name='provide_track_update_ajax'),
 
+    path('provide/agree/change/', views.change_agree_state_ajax, name='provide_change_agree_state_ajax'),
+
     # -----------------------归档管理-------------------------#
     path('pigeonhole/', views.pigeonhole, name='pigeonhole_all'),  # 菜单-放款管理-放款
     path('pigeonhole/<int:implement>/', views.pigeonhole, name='pigeonhole'),  # /dbms/grant/(0-9)
@@ -247,7 +249,7 @@ urlpatterns = [
     path('report/provide/list/<int:p_typ>/<int:t_typ>/', views.report_provide_list, name='report_provide_list'),
     path('report/provide/balance/class/<int:c_typ>/<int:t_typ>/', views.report_balance_class,
          name='report_balance_class'),
-    path('report/article/balance/class/<int:c_typ>/', views.report_article_class, name='report_article_class'),
+    path('report/article/balance/class/<int:c_typ>/<int:t_typ>/', views.report_article_class, name='report_article_class'),
 
     path('report/accrual/list/<int:p_typ>/<int:t_typ>/', views.report_provide_accrual, name='report_provide_accrual'),
     path('report/accrual/class/<int:c_typ>/<int:t_typ>/', views.report_accrual_class, name='report_accrual_class'),

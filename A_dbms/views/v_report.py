@@ -13,6 +13,45 @@ from _WHDB.views import MenuHelper
 from _WHDB.views import authority
 
 
+def tt(t_typ, tf_r, tl_r):
+    print(t_typ,tf_r,tl_r)
+    dt_today = datetime.date.today()
+    if t_typ == 0:
+        article_groups = models.Articles.objects.filter(article_balance__gt=0)
+    elif t_typ == 1:
+        tf_r = datetime.date(dt_today.year, 1, 1).isoformat()  # 本年第一天
+        tl_r = datetime.date(dt_today.year, 12, 31).isoformat()  # 本年最后一天
+        article_groups = models.Articles.objects.filter(build_date__gte=tf_r, build_date__lte=tl_r)
+    elif t_typ == 2:
+        tf_r = datetime.date(dt_today.year, dt_today.month - (dt_today.month - 1) % 3, 1).isoformat()  # 本季第一天
+        tl_r = quarter_end_day = (datetime.date(dt_today.year, dt_today.month - (dt_today.month - 1) % 3 + 2, 1) +
+                                  relativedelta(months=1, days=-1)).isoformat()  # 本季最后一天
+        article_groups = models.Articles.objects.filter(build_date__gte=tf_r, build_date__lte=tl_r)
+    elif t_typ == 3:
+        tf_r = (dt_today - datetime.timedelta(days=dt_today.day - 1)).isoformat()  # 本月第一天
+        tl_r = (dt_today + datetime.timedelta(days=-dt_today.day + 1) +
+                relativedelta(months=1, days=-1)).isoformat()  # 本月最后一天
+        article_groups = models.Articles.objects.filter(build_date__gte=tf_r, build_date__lte=tl_r)
+    elif t_typ == 4:
+        tf_r = (dt_today - datetime.timedelta(days=dt_today.weekday())).isoformat()  # 本周第一天
+        tl_r = (dt_today + datetime.timedelta(days=6 - dt_today.weekday())).isoformat()  # 本周最后一天
+        article_groups = models.Articles.objects.filter(build_date__gte=tf_r, build_date__lte=tl_r)
+    elif t_typ == 11:
+        tf_r = datetime.date(dt_today.year - 1, 1, 1).isoformat()  # 上年第一天
+        tl_r = datetime.date(dt_today.year - 1, 12, 31).isoformat()  # 上年最后一天
+        article_groups = models.Articles.objects.filter(build_date__gte=tf_r, build_date__lte=tl_r)
+    elif t_typ == 99:
+        if tf_r and tl_r:
+            tf_r = tf_r
+            tl_r = tl_r
+        else:
+            tf_r = datetime.date(dt_today.year, 1, 1).isoformat()  # 本年第一天
+            tl_r = datetime.date(dt_today.year, 12, 31).isoformat()  # 本年最后一天
+        article_groups = models.Articles.objects.filter(build_date__gte=tf_r, build_date__lte=tl_r)
+
+    return (article_groups, tf_r, tl_r)
+
+
 # ----------------------报表---------------------#
 @login_required
 @authority
@@ -214,7 +253,10 @@ def report_article_class(request, *args, **kwargs):  #
     for article_state in article_state_list:
         article_state_dic[article_state[0]] = article_state[1]
 
-    article_groups = models.Articles.objects.filter(article_balance__gt=0)
+    tf_r = '2019-1-1'
+    tl_r = '2019-12-31'
+    t_typ = 0
+    article_groups, tf_r, tl_r = tt(t_typ, tf_r, tl_r)
 
     article_renewal = article_groups.aggregate(Sum('renewal'))['renewal__sum']  # 续贷金额
     article_augment = article_groups.aggregate(Sum('augment'))['augment__sum']  # 新增金额
@@ -479,38 +521,10 @@ def report_article(request, *args, **kwargs):  #
     tl_r = request.GET.get('tl')
     t_typ = kwargs['t_typ']
 
-    dt_today = datetime.date.today()
-    if t_typ == 1:
-        tf_r = datetime.date(dt_today.year, 1, 1).isoformat()  # 本年第一天
-        tl_r = datetime.date(dt_today.year, 12, 31).isoformat()  # 本年最后一天
-    elif t_typ == 2:
-        tf_r = datetime.date(dt_today.year, dt_today.month - (dt_today.month - 1) % 3, 1).isoformat()  # 本季第一天
-        tl_r = quarter_end_day = (datetime.date(dt_today.year, dt_today.month - (dt_today.month - 1) % 3 + 2, 1) +
-                                  relativedelta(months=1, days=-1)).isoformat()  # 本季最后一天
-    elif t_typ == 3:
-        tf_r = (dt_today - datetime.timedelta(days=dt_today.day - 1)).isoformat()  # 本月第一天
-        tl_r = (dt_today + datetime.timedelta(days=-dt_today.day + 1) +
-                relativedelta(months=1, days=-1)).isoformat()  # 本月最后一天
-    elif t_typ == 4:
-        tf_r = (dt_today - datetime.timedelta(days=dt_today.weekday())).isoformat()  # 本周第一天
-        tl_r = (dt_today + datetime.timedelta(days=6 - dt_today.weekday())).isoformat()  # 本周最后一天
-    elif t_typ == 11:
-        tf_r = datetime.date(dt_today.year - 1, 1, 1).isoformat()  # 上年第一天
-        tl_r = datetime.date(dt_today.year - 1, 12, 31).isoformat()  # 上年最后一天
-    elif t_typ == 99:
-        if tf_r and tl_r:
-            tf_r = tf_r
-            tl_r = tl_r
-        else:
-            tf_r = datetime.date(dt_today.year, 1, 1).isoformat()  # 本年第一天
-            tl_r = datetime.date(dt_today.year, 12, 31).isoformat()  # 本年最后一天
-        '''ARTICLE_STATE_LIST = [(1, '待反馈'), (2, '已反馈'), (3, '待上会'), (4, '已上会'), (5, '已签批'),
-                          (51, '已放款'), (52, '已放完'), (55, '已解保'), (61, '待变更'), (99, '已注销')]'''
+    article_groups, tf_r, tl_r = tt(t_typ, tf_r, tl_r)
 
     '''ARTICLE_STATE_LIST = [(1, '待反馈'), (2, '已反馈'), (3, '待上会'), (4, '已上会'), (5, '已签批'),
                           (51, '已放款'), (52, '已放完'), (55, '已解保'), (61, '待变更'), (99, '已注销')]'''
-    if tf_r and tl_r:
-        article_groups = models.Articles.objects.filter(build_date__gte=tf_r, build_date__lte=tl_r)
 
     article_renewal = article_groups.aggregate(Sum('renewal'))['renewal__sum']  # 续贷金额
     article_augment = article_groups.aggregate(Sum('augment'))['augment__sum']  # 新增金额
@@ -596,57 +610,46 @@ def report_article_list(request, *args, **kwargs):  #
     article_state_dic = {}
     for article_state in article_state_list:
         article_state_dic[article_state[0]] = article_state[1]
+    article_state_wen = {}
+    for article_state in article_state_list:
+        article_state_wen[article_state[1]] = article_state[0]
     c_typ_dic = dict(CLASS_LIST)
     t_typ_dic = dict(TERM_LIST)
+
+    t_typ_dic[0] = '在保'
 
     ss_value = request.GET.get('_cs')
     tf_r = request.GET.get('tf')
     tl_r = request.GET.get('tl')
     c_typ = kwargs['c_typ']
     t_typ = kwargs['t_typ']
-
     c_typ_dic_this = c_typ_dic[c_typ]
     t_typ_dic_this = t_typ_dic[t_typ]
-
-    dt_today = datetime.date.today()
-    if t_typ == 1:
-        tf_r = datetime.date(dt_today.year, 1, 1).isoformat()  # 本年第一天
-        tl_r = datetime.date(dt_today.year, 12, 31).isoformat()  # 本年最后一天
-    elif t_typ == 2:
-        tf_r = datetime.date(dt_today.year, dt_today.month - (dt_today.month - 1) % 3, 1).isoformat()  # 本季第一天
-        tl_r = quarter_end_day = (datetime.date(dt_today.year, dt_today.month - (dt_today.month - 1) % 3 + 2, 1) +
-                                  relativedelta(months=1, days=-1)).isoformat()  # 本季最后一天
-    elif t_typ == 3:
-        tf_r = (dt_today - datetime.timedelta(days=dt_today.day - 1)).isoformat()  # 本月第一天
-        tl_r = (dt_today + datetime.timedelta(days=-dt_today.day + 1) +
-                relativedelta(months=1, days=-1)).isoformat()  # 本月最后一天
-    elif t_typ == 4:
-        tf_r = (dt_today - datetime.timedelta(days=dt_today.weekday())).isoformat()  # 本周第一天
-        tl_r = (dt_today + datetime.timedelta(days=6 - dt_today.weekday())).isoformat()  # 本周最后一天
-    elif t_typ == 11:
-        tf_r = datetime.date(dt_today.year - 1, 1, 1).isoformat()  # 上年第一天
-        tl_r = datetime.date(dt_today.year - 1, 12, 31).isoformat()  # 上年最后一天
-    elif t_typ == 99:
-        if tf_r and tl_r:
-            tf_r = tf_r
-            tl_r = tl_r
-        else:
-            tf_r = datetime.date(dt_today.year, 1, 1).isoformat()  # 本年第一天
-            tl_r = datetime.date(dt_today.year, 12, 31).isoformat()  # 本年最后一天
-
+    article_groups, tf_r, tl_r = tt(t_typ, tf_r, tl_r)
     '''ARTICLE_STATE_LIST = [(1, '待反馈'), (2, '已反馈'), (3, '待上会'), (4, '已上会'), (5, '已签批'),
                           (51, '已放款'), (52, '已放完'), (55, '已解保'), (61, '待变更'), (99, '已注销')]'''
-    if tf_r and tl_r:
-        article_groups = models.Articles.objects.filter(build_date__gte=tf_r, build_date__lte=tl_r)
 
-    article_credit_tot = article_groups.aggregate(Sum('credit_amount'))['credit_amount__sum']  # 授信总额
-    article_acount_tot = article_groups.aggregate(Sum('amount'))['amount__sum']  # 在保总额
+    if c_typ == 2:
+        article_groups = article_groups.filter(article_state=article_state_wen[ss_value])
+    elif c_typ == 21:
+        article_groups = article_groups.filter(custom__district__name=ss_value)
+    elif c_typ == 31:
+        article_groups = article_groups.filter(custom__idustry__name=ss_value)
+    elif c_typ == 35:
+        article_groups = article_groups.filter(director__department__name=ss_value)
+    elif c_typ == 41:
+        article_groups = article_groups.filter(director__name=ss_value)
+    elif c_typ == 51:
+        article_groups = article_groups.filter(assistant__name=ss_value)
+    elif c_typ == 61:
+        article_groups = article_groups.filter(control__name=ss_value)
+    elif c_typ == 81:
+        article_groups = article_groups.filter(expert__organization=ss_value)
+    article_amount_tot = article_groups.aggregate(Sum('amount'))['amount__sum']  #
+    article_provide_tot = article_groups.aggregate(Sum('article_provide_sum'))['article_provide_sum__sum']  #
+    article_repayment_tot = article_groups.aggregate(Sum('article_repayment_sum'))['article_repayment_sum__sum']  #
+    article_balance_tot = article_groups.aggregate(Sum('article_balance'))['article_balance__sum']  #
     article_acount = article_groups.count()
-    article_credit_average = 0
-    article_acount_average = 0
-    if article_acount > 0:
-        article_credit_average = round(article_credit_tot / article_acount, 2)
-        article_acount_average = round(article_acount_tot / article_acount, 2)
 
     return render(request, 'dbms/report/list/class-article-list.html', locals())
 

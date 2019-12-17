@@ -2,8 +2,7 @@
     <div>
         <label>
             {# 方式一：#}
-            {% if t_typ == 99 %}
-                {% for c_typ in CLASS_LIST %}
+            {% for c_typ in CLASS_LIST %}
                     {% if c_typ.0 == kwargs.c_typ %}
                         <a class="btn btn-primary btn-sm active"
                            href="{% url 'dbms:report_article' c_typ=c_typ.0 t_typ=kwargs.t_typ %}?tf={{ tf_r }}&tl={{ tl_r }}">{{ c_typ.1 }}</a>
@@ -12,17 +11,6 @@
                            href="{% url 'dbms:report_article' c_typ=c_typ.0 t_typ=kwargs.t_typ %}?tf={{ tf_r }}&tl={{ tl_r }}">{{ c_typ.1 }} </a>
                     {% endif %}
                 {% endfor %}
-            {% else %}
-                {% for c_typ in CLASS_LIST %}
-                    {% if c_typ.0 == kwargs.c_typ %}
-                        <a class="btn btn-primary btn-sm active"
-                           href="{% url 'dbms:report_article' c_typ=c_typ.0 t_typ=kwargs.t_typ %}">{{ c_typ.1 }}</a>
-                    {% else %}
-                        <a class="btn btn-primary btn-sm"
-                           href="{% url 'dbms:report_article' c_typ=c_typ.0 t_typ=kwargs.t_typ %}">{{ c_typ.1 }} </a>
-                    {% endif %}
-                {% endfor %}
-            {% endif %}
         </label>
     </div>
 

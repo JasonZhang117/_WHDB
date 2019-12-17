@@ -42,7 +42,7 @@ from .v_provide import (
 from .v_provide_act import (
     counter_sign_ajax, ascertain_add_ajax, notify_add_ajax, notify_edit_ajax, notify_del_ajax, provide_add_ajax,
     provide_del_ajax, repayment_add_ajax, repayment_del_ajax, track_plan_ajax, track_del_ajax, track_update_ajax,
-    sign_all_ajax, provide_agree_sign_ajax)
+    sign_all_ajax, provide_agree_sign_ajax, change_agree_state_ajax)
 
 from .v_pigeonhole import pigeonhole, pigeonhole_scan, pigeonhole_overdue
 from .v_pigeonhole_act import pigeonhole_add_ajax
@@ -71,7 +71,7 @@ from .v_external_act import agreement_add_ajax
 # ----------------------v_report报表管理视图--------------------#
 from .v_report import (report, report_provide_list, report_balance_class, report_article_class,
                        report_accrual_class, report_provide_accrual, report_article, report_custom,
-                       report_dun, top_custom,report_custom_list,report_article_list)
+                       report_dun, top_custom, report_custom_list, report_article_list)
 
 # 部门、员工
 from .v_interior import department, department_add, department_edit

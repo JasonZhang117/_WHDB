@@ -210,6 +210,9 @@ def provide_agree_scan(request, agree_id):  # 查看放款
 
     from_agree_sign = forms.FormAgreeSignAdd(initial={'sign_date': today_str})  # 反担保合同签订
     from_counter_sign = forms.FormCounterSignAdd(initial={'counter_sign_date': today_str})  # 反担保合同签订
+    change_agree_state_data = {'agree_state': agree_obj.agree_state}
+    form_change_agree_state = forms.FormAgreeChangeState(initial=change_agree_state_data)
+
     return render(request, 'dbms/provide/provide-agree-scan.html', locals())
 
 
