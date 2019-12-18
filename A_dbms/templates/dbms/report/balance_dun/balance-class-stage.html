@@ -1,6 +1,6 @@
 <div class="table-responsive">
     <table class="table table-bordered table-hover table-condensed active">
-        <caption>{{ PAGE_TITLE }}统计表</caption>
+        <caption>{{ PAGE_TITLE }}统计表（{{ t_typ_this }}：{{ tf_r }}至{{ tl_r }}）</caption>
         <thead>
         <tr style="text-align: center">
             <th>项目</th>
@@ -20,12 +20,22 @@
             <td style="padding: 0" align="right">{{ compensatory_amount|floatformat:2 }}</td>
         </tr>
         <tr style="padding: 0">
-            <td style="padding: 0">追偿费用</td>
+            <td style="padding: 0">
+                <a target="_blank"
+                       href="{% url 'dbms:report_dun_fy_list' t_typ=kwargs.t_typ %}?tf={{ tf_r }}&tl={{ tl_r }}">
+                    追偿费用
+                </a>
+            </td>
             <td style="padding: 0" align="right">{{ charge_count }}</td>
             <td style="padding: 0" align="right">{{ charge_amount|floatformat:2 }}</td>
         </tr>
         <tr style="padding: 0">
-            <td style="padding: 0">追偿回款</td>
+            <td style="padding: 0">
+                <a target="_blank"
+                       href="{% url 'dbms:report_dun_hk_list' t_typ=kwargs.t_typ %}?tf={{ tf_r }}&tl={{ tl_r }}">
+                    追偿回款
+                </a>
+            </td>
             <td style="padding: 0" align="right">{{ retrieve_count }}</td>
             <td style="padding: 0" align="right">{{ retrieve_amount|floatformat:2 }}</td>
         </tr>

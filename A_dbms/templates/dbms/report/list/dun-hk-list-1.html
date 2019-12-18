@@ -1,0 +1,34 @@
+<div class="table-responsive">
+    <table class="table table-bordered table-hover table-condensed active">
+        <caption>{{ PAGE_TITLE }}（{{ t_typ_this }}：{{ tf_r }}至{{ tl_r }}）</caption>
+        <thead>
+        <tr style="text-align: center">
+            <th>追偿项目</th>
+            <th>回收类型</th>
+            <th>金额</th>
+            <th>回收日期</th>
+            <th>备注</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for charge in dun_hk_groups %}
+            <tr style="padding: 0">
+                <td style="padding: 0">{{ charge.dun.title }}</td>
+                <td style="padding: 0">{{ charge.get_retrieve_type_display }}</td>
+                <td style="padding: 0" align="right">{{ charge.retrieve_amount|floatformat:2 }}</td>
+                <td style="padding: 0" align="right">{{ charge.retrieve_date }}</td>
+                <td style="padding: 0" align="right">{{ retrieve_remark }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+        <tfoot>
+        <tr style="padding: 0">
+            <td style="padding: 0" align="center">合计</td>
+            <td style="padding: 0" align="right">{{ dun_hk_count }}</td>
+            <td style="padding: 0" align="right">{{ dun_hk_amount_tot|floatformat:2 }}</td>
+            <td style="padding: 0"></td>
+            <td style="padding: 0"></td>
+        </tr>
+        </tfoot>
+    </table>
+</div>

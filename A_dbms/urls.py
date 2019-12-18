@@ -265,6 +265,8 @@ urlpatterns = [
     path('report/dun/class/<int:t_typ>/', views.report_dun, name='report_dun'),
 
     path('report/dun/dc/list/<int:t_typ>/', views.report_dun_dc_list, name='report_dun_dc_list'),
+    path('report/dun/fy/list/<int:t_typ>/', views.report_dun_fy_list, name='report_dun_fy_list'),
+    path('report/dun/hk/list/<int:t_typ>/', views.report_dun_hk_list, name='report_dun_hk_list'),
 
     # 员工
     path('employee/', views.employee, name='employee_all'),

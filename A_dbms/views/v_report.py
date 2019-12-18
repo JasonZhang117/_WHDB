@@ -51,6 +51,39 @@ def tt_article(t_typ, tf_r, tl_r):
     return (article_groups, tf_r, tl_r)
 
 
+def tt(t_typ, tf_r, tl_r):
+    dt_today = datetime.date.today()
+    if t_typ == 0:
+        pl = models.Compensatories.objects.all().order_by('compensatory_date')
+        tf_r = pl.first().compensatory_date.isoformat()  #
+        tl_r = pl.last().compensatory_date.isoformat()  #
+    elif t_typ == 1:
+        tf_r = datetime.date(dt_today.year, 1, 1).isoformat()  # 本年第一天
+        tl_r = datetime.date(dt_today.year, 12, 31).isoformat()  # 本年最后一天
+    elif t_typ == 2:
+        tf_r = datetime.date(dt_today.year, dt_today.month - (dt_today.month - 1) % 3, 1).isoformat()  # 本季第一天
+        tl_r = quarter_end_day = (datetime.date(dt_today.year, dt_today.month - (dt_today.month - 1) % 3 + 2, 1) +
+                                  relativedelta(months=1, days=-1)).isoformat()  # 本季最后一天
+    elif t_typ == 3:
+        tf_r = (dt_today - datetime.timedelta(days=dt_today.day - 1)).isoformat()  # 本月第一天
+        tl_r = (dt_today + datetime.timedelta(days=-dt_today.day + 1) +
+                relativedelta(months=1, days=-1)).isoformat()  # 本月最后一天
+    elif t_typ == 4:
+        tf_r = (dt_today - datetime.timedelta(days=dt_today.weekday())).isoformat()  # 本周第一天
+        tl_r = (dt_today + datetime.timedelta(days=6 - dt_today.weekday())).isoformat()  # 本周最后一天
+    elif t_typ == 11:
+        tf_r = datetime.date(dt_today.year - 1, 1, 1).isoformat()  # 上年第一天
+        tl_r = datetime.date(dt_today.year - 1, 12, 31).isoformat()  # 上年最后一天
+    elif t_typ == 99:
+        if tf_r and tl_r:
+            tf_r = tf_r
+            tl_r = tl_r
+        else:
+            tf_r = datetime.date(dt_today.year, 1, 1).isoformat()  # 本年第一天
+            tl_r = datetime.date(dt_today.year, 12, 31).isoformat()  # 本年最后一天
+    return (tf_r, tl_r)
+
+
 # ----------------------报表---------------------#
 @login_required
 @authority
@@ -600,7 +633,7 @@ def report_article_list(request, *args, **kwargs):  #
     current_url_name = resolve(request.path).url_name  # 获取当前URL_NAME
     authority_list = request.session.get('authority_list')  # 获取当前用户的所有权限
     menu_result = MenuHelper(request).menu_data_list()
-    PAGE_TITLE = '项目分类'
+    PAGE_TITLE = '项目分类明细'
     CLASS_LIST = [(2, '阶段'), (21, '区域'), (31, '行业'), (35, '部门'),
                   (41, '项目经理'), (51, '项目助理'), (61, '风控专员'), (81, '法律顾问'), ]
     TERM_LIST = [(1, '本年'), (2, '本季'), (3, '本月'), (4, '本周'), (11, '上年'), (99, '自定义'), ]
@@ -753,7 +786,7 @@ def report_custom_list(request, *args, **kwargs):  #
     current_url_name = resolve(request.path).url_name  # 获取当前URL_NAME
     authority_list = request.session.get('authority_list')  # 获取当前用户的所有权限
     menu_result = MenuHelper(request).menu_data_list()
-    PAGE_TITLE = '客户分类'
+    PAGE_TITLE = '客户分类明细'
     CLASS_LIST = [(21, '区域'), (31, '行业'), (35, '部门'), (41, '管户经理'), (45, '风控专员'), ]
     TERM_LIST = [(11, '在保'), (21, '授信'), ]
     '''CUSTOM_STATE_LIST = [(11, '担保客户'), (21, '反担保客户'), (99, '注销')]'''
@@ -905,40 +938,14 @@ def report_dun(request, *args, **kwargs):  #
     PAGE_TITLE = '追偿统计'
     TERM_LIST = [(0, '全部'), (1, '本年'), (2, '本季'), (3, '本月'), (4, '本周'), (11, '上年'), (99, '自定义'), ]
 
+    t_typ_dic = dict(TERM_LIST)
     tf_r = request.GET.get('tf')
     tl_r = request.GET.get('tl')
     t_typ = kwargs['t_typ']
+    t_typ_this = t_typ_dic[t_typ]
+    tf_r, tl_r = tt(t_typ, tf_r, tl_r)
 
-    dt_today = datetime.date.today()
-    if t_typ == 0:
-        pl = models.Compensatories.objects.all().order_by('compensatory_date')
-        tf_r = pl.first().compensatory_date.isoformat()  #
-        tl_r = pl.last().compensatory_date.isoformat()  #
-    elif t_typ == 1:
-        tf_r = datetime.date(dt_today.year, 1, 1).isoformat()  # 本年第一天
-        tl_r = datetime.date(dt_today.year, 12, 31).isoformat()  # 本年最后一天
-    elif t_typ == 2:
-        tf_r = datetime.date(dt_today.year, dt_today.month - (dt_today.month - 1) % 3, 1).isoformat()  # 本季第一天
-        tl_r = quarter_end_day = (datetime.date(dt_today.year, dt_today.month - (dt_today.month - 1) % 3 + 2, 1) +
-                                  relativedelta(months=1, days=-1)).isoformat()  # 本季最后一天
-    elif t_typ == 3:
-        tf_r = (dt_today - datetime.timedelta(days=dt_today.day - 1)).isoformat()  # 本月第一天
-        tl_r = (dt_today + datetime.timedelta(days=-dt_today.day + 1) +
-                relativedelta(months=1, days=-1)).isoformat()  # 本月最后一天
-    elif t_typ == 4:
-        tf_r = (dt_today - datetime.timedelta(days=dt_today.weekday())).isoformat()  # 本周第一天
-        tl_r = (dt_today + datetime.timedelta(days=6 - dt_today.weekday())).isoformat()  # 本周最后一天
-    elif t_typ == 11:
-        tf_r = datetime.date(dt_today.year - 1, 1, 1).isoformat()  # 上年第一天
-        tl_r = datetime.date(dt_today.year - 1, 12, 31).isoformat()  # 上年最后一天
-    elif t_typ == 99:
-        if tf_r and tl_r:
-            tf_r = tf_r
-            tl_r = tl_r
-        else:
-            tf_r = datetime.date(dt_today.year, 1, 1).isoformat()  # 本年第一天
-            tl_r = datetime.date(dt_today.year, 12, 31).isoformat()  # 本年最后一天
-        '''ARTICLE_STATE_LIST = [(1, '待反馈'), (2, '已反馈'), (3, '待上会'), (4, '已上会'), (5, '已签批'),
+    '''ARTICLE_STATE_LIST = [(1, '待反馈'), (2, '已反馈'), (3, '待上会'), (4, '已上会'), (5, '已签批'),
                           (51, '已放款'), (52, '已放完'), (55, '已解保'), (61, '待变更'), (99, '已注销')]'''
 
     compensatory_groups = models.Compensatories.objects.all()  # 代偿项目
@@ -946,10 +953,10 @@ def report_dun(request, *args, **kwargs):  #
     retrieve_groups = models.Retrieve.objects.all()  # 案款回收
 
     if tf_r and tl_r:
-        compensatory_groups = models.Compensatories.objects.filter(compensatory_date__gte=tf_r,
-                                                                   compensatory_date__lte=tl_r)  # 代偿项目
-        charge_groups = models.Charge.objects.filter(charge_date__gte=tf_r, charge_date__lte=tl_r)  # 追偿费用
-        retrieve_groups = models.Retrieve.objects.filter(retrieve_date__gte=tf_r, retrieve_date__lte=tl_r)  # 案款回收
+        compensatory_groups = compensatory_groups.filter(compensatory_date__gte=tf_r,
+                                                         compensatory_date__lte=tl_r)  # 代偿项目
+        charge_groups = charge_groups.filter(charge_date__gte=tf_r, charge_date__lte=tl_r)  # 追偿费用
+        retrieve_groups = retrieve_groups.filter(retrieve_date__gte=tf_r, retrieve_date__lte=tl_r)  # 案款回收
 
     compensatory_amount = compensatory_groups.aggregate(Sum('compensatory_amount'))['compensatory_amount__sum']  # 代偿合计
     charge_amount = charge_groups.aggregate(Sum('charge_amount'))['charge_amount__sum']  # 追偿费用合计
@@ -979,20 +986,19 @@ def report_dun_dc_list(request, *args, **kwargs):  #
     current_url_name = resolve(request.path).url_name  # 获取当前URL_NAME
     authority_list = request.session.get('authority_list')  # 获取当前用户的所有权限
     menu_result = MenuHelper(request).menu_data_list()
-    PAGE_TITLE = '客户分类'
-    CLASS_LIST = [(21, '区域'), (31, '行业'), (35, '部门'), (41, '管户经理'), (45, '风控专员'), ]
+    PAGE_TITLE = '代偿分类明细'
     TERM_LIST = [(0, '全部'), (1, '本年'), (2, '本季'), (3, '本月'), (4, '本周'), (11, '上年'), (99, '自定义'), ]
     '''CUSTOM_STATE_LIST = [(11, '担保客户'), (21, '反担保客户'), (99, '注销')]'''
     dun_dc_groups = models.Compensatories.objects.all().order_by('-compensatory_date').select_related('provide')
 
-    c_typ_dic = dict(CLASS_LIST)
     t_typ_dic = dict(TERM_LIST)
 
     tf_r = request.GET.get('tf')
     tl_r = request.GET.get('tl')
-
     t_typ = kwargs['t_typ']
     t_typ_this = t_typ_dic[t_typ]
+    tf_r, tl_r = tt(t_typ, tf_r, tl_r)
+
     dun_dc_groups = models.Compensatories.objects.filter(
         compensatory_date__gte=tf_r, compensatory_date__lte=tl_r).order_by(
         '-compensatory_date').select_related('provide')
@@ -1003,3 +1009,51 @@ def report_dun_dc_list(request, *args, **kwargs):  #
     dun_dc_count = dun_dc_groups.count()
 
     return render(request, 'dbms/report/list/dun-dc-list.html', locals())
+
+
+# -----------------------追偿费用分类统计明细---------------------#
+def report_dun_fy_list(request, *args, **kwargs):  #
+    current_url_name = resolve(request.path).url_name  # 获取当前URL_NAME
+    authority_list = request.session.get('authority_list')  # 获取当前用户的所有权限
+    menu_result = MenuHelper(request).menu_data_list()
+    PAGE_TITLE = '追偿费用分类明细'
+    TERM_LIST = [(0, '全部'), (1, '本年'), (2, '本季'), (3, '本月'), (4, '本周'), (11, '上年'), (99, '自定义'), ]
+    '''CUSTOM_STATE_LIST = [(11, '担保客户'), (21, '反担保客户'), (99, '注销')]'''
+
+    t_typ_dic = dict(TERM_LIST)
+    tf_r = request.GET.get('tf')
+    tl_r = request.GET.get('tl')
+    t_typ = kwargs['t_typ']
+    t_typ_this = t_typ_dic[t_typ]
+    tf_r, tl_r = tt(t_typ, tf_r, tl_r)
+
+    dun_fy_groups = models.Charge.objects.filter(
+        charge_date__gte=tf_r, charge_date__lte=tl_r).order_by('dun').select_related('dun')
+    dun_charge_amount_tot = dun_fy_groups.aggregate(Sum('charge_amount'))['charge_amount__sum']  #
+    dun_charge_count = dun_fy_groups.count()
+
+    return render(request, 'dbms/report/list/dun-fy-list.html', locals())
+
+
+# -----------------------追偿回款分类统计明细---------------------#
+def report_dun_hk_list(request, *args, **kwargs):  #
+    current_url_name = resolve(request.path).url_name  # 获取当前URL_NAME
+    authority_list = request.session.get('authority_list')  # 获取当前用户的所有权限
+    menu_result = MenuHelper(request).menu_data_list()
+    PAGE_TITLE = '追偿回款分类明细'
+    TERM_LIST = [(0, '全部'), (1, '本年'), (2, '本季'), (3, '本月'), (4, '本周'), (11, '上年'), (99, '自定义'), ]
+    '''CUSTOM_STATE_LIST = [(11, '担保客户'), (21, '反担保客户'), (99, '注销')]'''
+
+    t_typ_dic = dict(TERM_LIST)
+    tf_r = request.GET.get('tf')
+    tl_r = request.GET.get('tl')
+    t_typ = kwargs['t_typ']
+    t_typ_this = t_typ_dic[t_typ]
+    tf_r, tl_r = tt(t_typ, tf_r, tl_r)
+
+    dun_hk_groups = models.Retrieve.objects.filter(
+        retrieve_date__gte=tf_r, retrieve_date__lte=tl_r).order_by('dun').select_related('dun')
+    dun_hk_amount_tot = dun_hk_groups.aggregate(Sum('retrieve_amount'))['retrieve_amount__sum']  #
+    dun_hk_count = dun_hk_groups.count()
+
+    return render(request, 'dbms/report/list/dun-hk-list.html', locals())
