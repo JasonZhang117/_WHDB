@@ -7,12 +7,23 @@
         <li role="presentation" class="active">
             <a href="#provide-repayment" style="background-color: #f5f5f5" aria-controls="home" role="tab"
                data-toggle="tab">还款 </a></li>
-        <li role="presentation">
-            <a href="#track" style="background-color: #f5f5f5" aria-controls="home" role="tab"
-               data-toggle="tab">跟踪事项 </a>
-        <li role="presentation">
-            <a href="#compensatory" style="background-color: #f5f5f5" aria-controls="home" role="tab" data-toggle="tab">代偿 </a>
-        </li>
+        {% if provide_obj.extension_provide.all %}
+            <li role="presentation">
+                <a href="#extension" style="background-color: #f5f5f5" aria-controls="home" role="tab"
+                   data-toggle="tab">展期 </a>
+            </li>
+        {% endif %}
+        {% if provide_obj.track_provide.all %}
+            <li role="presentation">
+                <a href="#track" style="background-color: #f5f5f5" aria-controls="home" role="tab"
+                   data-toggle="tab">跟踪事项 </a></li>
+        {% endif %}
+        {% if provide_obj.compensatory_provide.all %}
+            <li role="presentation">
+                <a href="#compensatory" style="background-color: #f5f5f5" aria-controls="home" role="tab"
+                   data-toggle="tab">代偿 </a></li>
+        {% endif %}
+
     </ul>
 
     <!-- Tab panes -->
@@ -21,6 +32,8 @@
             {% include 'dbms/provide/scan/tab/provide-article.html' %} </div>
         <div role="presentation" class="tab-pane active" id="provide-repayment"> <!--还款-->
             {% include 'dbms/provide/scan/tab/provide-repayment.html' %} </div>
+        <div role="presentation" class="tab-pane" id="extension"> <!--展期-->
+            {% include 'dbms/provide/scan/tab/provide-extension.html' %} </div>
         <div role="presentation" class="tab-pane" id="track"> <!--跟踪事项-->
             {% include 'dbms/provide/scan/tab/provide-track.html' %} </div>
         <div role="presentation" class="tab-pane" id="compensatory"> <!--代偿-->

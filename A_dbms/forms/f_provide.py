@@ -60,10 +60,11 @@ class FormNotifyAdd(dform.ModelForm):
 class FormNotifyEdit(dform.ModelForm):
     class Meta:
         model = models.Notify
-        fields = ['contracts_lease', 'contract_guaranty', 'remark']
+        fields = ['contracts_lease', 'contract_guaranty', 'time_limit', 'remark']
         widgets = {
             'contracts_lease': dform.TextInput(attrs={'class': 'form-control', 'placeholder': '借款合同编号'}),
             'contract_guaranty': dform.TextInput(attrs={'class': 'form-control', 'placeholder': '保证合同编号'}),
+            'time_limit': dform.NumberInput(attrs={'class': 'form-control', 'placeholder': '期限'}),
             'remark': dform.TextInput(attrs={'class': 'form-control', 'placeholder': '备注'})}
 
 
@@ -80,13 +81,25 @@ class FormProvideAdd(dform.ModelForm):
             'due_date': dform.DateInput(attrs={'class': 'form-control', 'type': 'date'})}
 
 
+# -----------------------展期-------------------------#
+class FormExtensionAdd(dform.ModelForm):
+    class Meta:
+        model = models.Extension
+        fields = ['extension_amount', 'extension_date', 'extension_due_date']
+        widgets = {
+            'extension_amount': dform.NumberInput(attrs={'class': 'form-control', 'placeholder': '展期金额'}),
+            'extension_date': dform.DateInput(attrs={'class': 'form-control', 'type': 'date'}),
+            'extension_due_date': dform.DateInput(attrs={'class': 'form-control', 'type': 'date'})}
+
+
 # -----------------------放款状态修改-------------------------#
 class FormProvideStateChange(dform.ModelForm):
     class Meta:
         model = models.Provides
-        fields = ['provide_status',]
+        fields = ['provide_status', ]
         widgets = {
-            'provide_status': dform.Select(attrs={'class': 'form-control'}),}
+            'provide_status': dform.Select(attrs={'class': 'form-control'}), }
+
 
 # -----------------------还款添加-------------------------#
 class FormRepaymentAdd(dform.ModelForm):

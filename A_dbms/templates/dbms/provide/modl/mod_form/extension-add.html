@@ -1,0 +1,19 @@
+<div id="form_extension">
+
+    <div class="form-group"><!--展期金额-->
+        <label for="id_extension_amount" class="col-sm-3 control-label">{{ form_extension.extension_amount.label }}：</label>
+        <div class="col-sm-9">{{ form_extension.extension_amount }}</div>
+        <label id="e_extension_amount" class="pull-right">{{ form_extension.extension_amount.errors }}</label>
+    </div>
+    <div class="form-group"><!--展期日-->
+        <label for="id_extension_date" class="col-sm-3 control-label">{{ form_extension.extension_date.label }}：</label>
+        <div class="col-sm-9">{{ form_extension.extension_date }}</div>
+        <label id="e_extension_date" class="pull-right">{{ form_extension.extension_date.errors }}</label>
+    </div>
+    <div class="form-group"><!--展期到期日-->
+        <label for="id_extension_due_date" class="col-sm-3 control-label">{{ form_extension.extension_due_date.label }}：</label>
+        <div class="col-sm-9">{{ form_extension.extension_due_date }}</div>
+        <label id="e_extension_due_date" class="pull-right">{{ form_extension.extension_due_date.errors }}</label>
+    </div>
+
+</div>

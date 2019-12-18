@@ -17,7 +17,7 @@ from .f_agree import (AgreeAddForm, AddCounterForm, FormAgreeSign, AgreeEditForm
 from .f_provide import (FormCounterSignAdd, FormAscertainAdd, FormNotifyAdd, FormNotifyEdit,
                         FormProvideAdd, FormPigeonholeAdd, FormTrackPlan, FormTrackAdd,
                         FormImplementAdd, FormPigeonholeNumAdd, FormRepaymentAdd, FormAgreeSignAdd,
-                        FormAgreeChangeState, FormProvideStateChange)
+                        FormAgreeChangeState, FormProvideStateChange, FormExtensionAdd)
 
 from .f_custom import (CustomAddForm, CustomCAddForm, CustomPAddForm, CustomEditForm, FormShareholderAdd,
                        FormCustomSpouseAdd, FormTrusteeAdd, CustomChangeForm)

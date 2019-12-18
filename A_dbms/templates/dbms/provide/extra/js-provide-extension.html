@@ -1,44 +1,42 @@
 <script>
     $(function () {
-        bindEditNotifyB();
-        bindEditNotifyModalOk();
+        bindExtensionB();
+        bindExtensionModalOk();
     });
 
-    function bindEditNotifyB() {
-        $('#editNotifyB').click(function () {
-            $('#editNotifyModal').modal('show');
+    function bindExtensionB() {
+        $('#extensionB').click(function () {
+            $('#extensionModal').modal('show');
         })
     }
 
-    function bindEditNotifyModalOk() {
-        $('#editNotifyModalOk').click(function () {
+    function bindExtensionModalOk() {
+        $('#extensionModalOk').click(function () {
             var postData = {};
-            $('#editNotifyModal').find('input,select').each(function () {
+            $('#extensionModal').find('input,select').each(function () {
                 var v = $(this).val();
                 var n = $(this).attr('name');
                 postData[n] = v;
             });
             var postDataStr = JSON.stringify(postData);
-            console.log(postDataStr);
+
             $.ajax({
-                url: '/dbms/provide/notify/edit/',
+                url: '/dbms/provide/extension/add/',
                 type: 'POST',
                 traditional: true,
                 data: {'postDataStr': postDataStr},
                 dataType: 'JSON',
                 success: function (arg) {
-                    console.log(arg);
                     if (arg.status) {
-                        $('#editNotifyModal').modal('hide');
+                        $('#extensionModal').modal('hide');
                         alert(arg.message);
                         {#window.location.href = arg.skip;#}
                         window.location.reload();
                     } else {
                         alert(arg.message);
-                        $('#e_contracts_lease').text(arg.forme.contracts_lease);
-                        $('#e_contract_guaranty').text(arg.forme.contract_guaranty);
-                        $('#e_time_limit').text(arg.forme.time_limit);
-                        $('#e_remark').text(arg.forme.remark);
+                        $('#e_extension_amount').text(arg.forme.extension_amount);
+                        $('#e_extension_date').text(arg.forme.extension_date);
+                        $('#e_extension_due_date').text(arg.forme.extension_due_date);
                     }
                 }
             })

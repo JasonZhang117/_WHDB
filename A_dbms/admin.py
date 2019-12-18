@@ -222,6 +222,18 @@ class ProvidesAdmin(admin.ModelAdmin):
 
 
 admin.site.register(models.Provides, ProvidesAdmin)  # 放款
+
+
+class ExtensionAdmin(admin.ModelAdmin):
+    list_display = ('provide', 'extension_amount', 'extension_date', 'extension_due_date',
+                    'extensionor', 'extensiondate',)
+    # list_per_page = 20  # 每页显示条目数
+    # search_fields = ['notify']  # 搜索字段
+    # ordering = ['-provide_date']  # 排序字段
+
+
+admin.site.register(models.Extension, ExtensionAdmin)  # 展期
+
 admin.site.register(models.Track)  # 跟踪
 
 

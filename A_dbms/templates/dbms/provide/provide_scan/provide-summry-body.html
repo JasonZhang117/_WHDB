@@ -17,15 +17,13 @@
     放款日期：{{ provide_obj.provide_date }}</label>
 <label class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
     到期日：{{ provide_obj.due_date }}</label>
-{% if PAGE_TITLE != '归档管理' %}
-    <label class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
-        还款金额：{{ provide_obj.provide_repayment_sum }}</label>
-{% endif %}
+<label class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
+    还款金额：{{ provide_obj.provide_repayment_sum }}</label>
+<label class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
+    在保余额：{{ provide_obj.provide_balance }}</label>
 <label class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
     归档情况：{{ provide_obj.get_implement_display }}</label>
 <label class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
     状态：{{ provide_obj.get_provide_status_display }}</label>
-{% if PAGE_TITLE == '归档管理' %}
-    <label class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
-        档案编号：{{ provide_obj.file_num }}</label>
-{% endif %}
+<label class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
+    档案编号：{{ provide_obj.file_num }}</label>

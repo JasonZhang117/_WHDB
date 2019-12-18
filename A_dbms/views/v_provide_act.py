@@ -262,6 +262,7 @@ def notify_edit_ajax(request):
             with transaction.atomic():
                 notify_list.update(contracts_lease=notify_data['contracts_lease'],
                                    contract_guaranty=notify_data['contract_guaranty'],
+                                   time_limit=notify_data['time_limit'],
                                    remark=notify_data['remark'], notifyor=request.user)
             response['message'] = '成功修改放款通知！'
         except Exception as e:
@@ -497,6 +498,43 @@ def provide_state_change_ajax(request):  #
 
     result = json.dumps(response, ensure_ascii=False)
     return HttpResponse(result)
+
+
+# ---------------------------展期ajax----------------------------#
+@login_required
+@authority
+def provide_extension_ajax(request):  #
+    response = {'status': True, 'message': None, 'forme': None, 'skip': None, }
+    post_data_str = request.POST.get('postDataStr')
+    post_data = json.loads(post_data_str)
+    provide_list = models.Provides.objects.filter(id=post_data['provide_id'])
+    provide_obj = provide_list.first()
+
+    form_extension = forms.FormExtensionAdd(post_data)
+    if form_extension.is_valid():
+        extension_cleaned = form_extension.cleaned_data
+        try:
+            with transaction.atomic():
+                default = {'provide': provide_obj,
+                           'extension_amount': str(extension_cleaned['extension_amount']),
+                           'extension_date': str(extension_cleaned['extension_date']),
+                           'extension_due_date': str(extension_cleaned['extension_due_date']),
+                           'extensionor': request.user}
+                extension_obj, created = models.Extension.objects.update_or_create(
+                    provide=provide_obj, extension_date=str(extension_cleaned['extension_date']), defaults=default)
+                provide_list.update(due_date=str(extension_cleaned['extension_due_date']), provide_status=15)
+            response['message'] = '展期成功！！'
+        except Exception as e:
+            response['status'] = False
+            response['message'] = '展期失败：%s' % str(e)
+    else:
+        response['status'] = False
+        response['message'] = '表单信息有误！！！'
+        response['forme'] = form_extension.errors
+
+    result = json.dumps(response, ensure_ascii=False)
+    return HttpResponse(result)
+
 
 # -----------------------删除放款ajax-------------------------#
 @login_required

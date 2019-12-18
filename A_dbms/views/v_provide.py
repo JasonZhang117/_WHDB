@@ -413,6 +413,7 @@ def notify_scan(request, notify_id):  # 查看放款通知
     form_provide_add = forms.FormProvideAdd(initial=form_provide_data)
     form_data = {'contracts_lease': notify_obj.contracts_lease,
                  'contract_guaranty': notify_obj.contract_guaranty,
+                 'time_limit': notify_obj.time_limit,
                  'remark': notify_obj.remark}
     form_notify_edit = forms.FormNotifyEdit(initial=form_data)  # 添加放款通知
     return render(request, 'dbms/provide/provide-notify-scan.html', locals())
@@ -483,7 +484,12 @@ def provide_scan(request, provide_id):  # 查看放款
     form_track_add = forms.FormTrackAdd()
     provide_state_change_data = {'provide_status': provide_obj.provide_status}
     form_change_provide_state = forms.FormProvideStateChange(initial=provide_state_change_data)
+    date_year_later = datetime.date.today() + datetime.timedelta(days=365)  # 30天后的日期
 
+    form_extension_data = {'extension_amount': provide_obj.provide_balance,
+                           'extension_date': today_str,
+                           'extension_due_date': str(date_year_later), }
+    form_extension = forms.FormExtensionAdd(initial=form_extension_data)
     return render(request, 'dbms/provide/provide-scan.html', locals())
 
 

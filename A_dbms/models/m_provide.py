@@ -69,7 +69,7 @@ class Provides(models.Model):  # 放款
     implement = models.IntegerField(verbose_name='_归档状态', choices=IMPLEMENT_LIST, default=1)
     file_num = models.CharField(verbose_name='档案编号', max_length=64, unique=True, null=True, blank=True)
 
-    PROVIDE_STATUS_LIST = [(1, '在保'), (11, '解保'), (21, '代偿')]
+    PROVIDE_STATUS_LIST = [(1, '在保'), (11, '解保'), (15, '展期'), (21, '代偿')]
     provide_status = models.IntegerField(verbose_name='放款状态', choices=PROVIDE_STATUS_LIST, default=1)
     provide_repayment_sum = models.FloatField(verbose_name='_还款总额', default=0)
     provide_balance = models.FloatField(verbose_name='_在保余额', default=0)
@@ -85,6 +85,28 @@ class Provides(models.Model):  # 放款
 
     def __str__(self):
         return '%s_%s' % (self.notify, self.provide_money)
+
+
+# ------------------------展期模型--------------------------#
+class Extension(models.Model):  # 放款
+    provide = models.ForeignKey(to='Provides', verbose_name="_放款",
+                                on_delete=models.PROTECT,
+                                related_name='extension_provide')
+    extension_amount = models.FloatField(verbose_name='展期金额', default=0)
+    extension_date = models.DateField(verbose_name='展期日')
+    extension_due_date = models.DateField(verbose_name='展期到期日')
+    extensionor = models.ForeignKey(to='Employees', verbose_name="_创建者",
+                                    on_delete=models.PROTECT,
+                                    related_name='extensionor_employee')
+    extensiondate = models.DateField(verbose_name='_创建日期', default=datetime.date.today)
+
+    # Cancellation = models.BooleanField('注销', default=False)
+    class Meta:
+        verbose_name_plural = '放款-展期'  # 指定显示名称
+        db_table = 'dbms_extension'  # 指定数据表的名称
+
+    def __str__(self):
+        return '%s_%s' % (self.provide, self.extension_amount)
 
 
 # ------------------------还款模型--------------------------#

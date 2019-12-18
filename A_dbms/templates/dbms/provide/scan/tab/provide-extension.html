@@ -1,0 +1,24 @@
+<div class="table-responsive">
+    <table class="table table-bordered table-hover table-condensed active">
+        <thead>
+        <tr style="text-align: center">
+            <th>序号</th>
+            <th>展期日期</th>
+            <th>展期金额</th>
+            <th>展期到期日</th>
+            <th>操作人</th>
+        </tr>
+        </thead>
+        <tbody id="extension-tb">
+        {% for extension in provide_obj.extension_provide.all %}
+            <tr extension-nid="{{ extension.id }}">
+                <td>{{ forloop.counter }}</td>
+                <td align="right">{{ extension.extension_date }}</td>
+                <td align="right">{{ extension.extension_amount }}</td>
+                <td align="right">{{ extension.extension_due_date }}</td>
+                <td>{{ extension.extensionor.name }}</td>
+            <tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
