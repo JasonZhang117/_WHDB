@@ -264,6 +264,8 @@ urlpatterns = [
     path('report/custom/top/<int:c_typ>/<int:t_typ>/', views.top_custom, name='report_top_custom'),
     path('report/dun/class/<int:t_typ>/', views.report_dun, name='report_dun'),
 
+    path('report/dun/dc/list/<int:t_typ>/', views.report_dun_dc_list, name='report_dun_dc_list'),
+
     # 员工
     path('employee/', views.employee, name='employee_all'),
     path('employee/<int:employee_status>/', views.employee, name='employee'),  # /dbms/cstom/(0-9)

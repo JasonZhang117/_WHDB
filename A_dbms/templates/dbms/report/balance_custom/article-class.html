@@ -1,23 +1,11 @@
 <tr style="padding: 0;">
-    <td style="padding: 0;" colspan="2">合计</td>
+    <td style="padding: 0;" align="center" colspan="2">合计（户均）（万元）</td>
     <td style="padding: 0;" align="right">{{ article_count }}</td>
-    <td style="padding: 0;" align="right">{{ c_credit|floatformat:2 }}</td>
-    <td style="padding: 0;" align="right">{{ c_flow|floatformat:2 }}</td>
-    <td style="padding: 0;" align="right">{{ c_accept|floatformat:2 }}</td>
-    <td style="padding: 0;" align="right">{{ c_back|floatformat:2 }}</td>
-    <td style="padding: 0;" align="right">{{ c_entrusted|floatformat:2 }}</td>
+    <td style="padding: 0;" align="right">{{ c_credit_w|floatformat:2 }}({{ s_credit|floatformat:2 }})</td>
+    <td style="padding: 0;" align="right">{{ c_flow_w|floatformat:2 }}({{ s_flow|floatformat:2 }})</td>
+    <td style="padding: 0;" align="right">{{ c_accept_w|floatformat:2 }}({{ s_accept|floatformat:2 }})</td>
+    <td style="padding: 0;" align="right">{{ c_back_w|floatformat:2 }}({{ s_back|floatformat:2 }})</td>
+    <td style="padding: 0;" align="right">{{ c_entrusted_w|floatformat:2 }}({{ s_entrusted|floatformat:2 }})</td>
 {#    <td align="right">{{ c_petty|floatformat:2 }}</td>#}
-    <td style="padding: 0;" align="right">{{ c_amount|floatformat:2 }}</td>
-</tr>
-
-<tr style="padding: 0;">
-    <td style="padding: 0;" colspan="2">单户金额</td>
-    <td style="padding: 0;" align="right"></td>
-    <td style="padding: 0;" align="right">{{ s_credit|floatformat:2 }}</td>
-    <td style="padding: 0;" align="right">{{ s_flow|floatformat:2 }}</td>
-    <td style="padding: 0;" align="right">{{ s_accept|floatformat:2 }}</td>
-    <td style="padding: 0;" align="right">{{ s_back|floatformat:2 }}</td>
-    <td style="padding: 0;" align="right">{{ s_entrusted|floatformat:2 }}</td>
-{#    <td align="right">{{ c_petty|floatformat:2 }}</td>#}
-    <td style="padding: 0;" align="right">{{ s_amount|floatformat:2 }}</td>
+    <td style="padding: 0;" align="right">{{ c_amount_w|floatformat:2 }}({{ s_amount|floatformat:2 }})</td>
 </tr>

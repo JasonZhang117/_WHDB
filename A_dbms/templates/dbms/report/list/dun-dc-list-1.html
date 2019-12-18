@@ -1,0 +1,46 @@
+<div class="table-responsive">
+    <table class="table table-bordered table-hover table-condensed active">
+        <caption>代偿明细表（{{ t_typ_this }}：{{ tf_r }}至{{ tl_r }}）</caption>
+        <thead>
+        <tr style="text-align: center">
+            <th>委托合同</th>
+            <th>客户名称</th>
+            <th>银行名称</th>
+            <th>代偿日期</th>
+            <th>代偿本金</th>
+            <th>代偿利息</th>
+            <th>代偿罚息</th>
+            <th>代偿总额</th>
+            <th>状态</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for compensatory in dun_dc_groups %}
+            <tr style="padding: 0">
+                <td style="padding: 0">{{ compensatory.provide.notify.agree.agree_num }}</td>
+                <td style="padding: 0">{{ compensatory.provide.notify.agree.lending.summary.custom.short_name }}</td>
+                <td style="padding: 0">{{ compensatory.provide.notify.agree.branch.short_name }}</td>
+                <td style="padding: 0">{{ compensatory.compensatory_date }}</td>
+                <td style="padding: 0" align="right">{{ compensatory.compensatory_capital|floatformat:2 }}</td>
+                <td style="padding: 0" align="right">{{ compensatory.compensatory_interest|floatformat:2 }}</td>
+                <td style="padding: 0" align="right">{{ compensatory.default_interest|floatformat:2 }}</td>
+                <td style="padding: 0" align="right">{{ compensatory.compensatory_amount|floatformat:2 }}</td>
+                <td style="padding: 0">{{ compensatory.get_dun_state_display }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+        <tfoot>
+        <tr style="padding: 0">
+            <td style="padding: 0" align="center" colspan="2">合计</td>
+            <td style="padding: 0" align="right">{{ dun_dc_count|floatformat:0 }}</td>
+            <td style="padding: 0"></td>
+            <td style="padding: 0" align="right">{{ dun_dc_capital_tot|floatformat:2 }}</td>
+            <td style="padding: 0" align="right">{{ dun_dc_interest_tot|floatformat:2 }}</td>
+            <td style="padding: 0" align="right">{{ dun_dc_default_tot|floatformat:2 }}</td>
+            <td style="padding: 0" align="right">{{ dun_dc_amount_tot|floatformat:2 }}</td>
+            <td style="padding: 0"></td>
+        </tr>
+        </tfoot>
+    </table>
+    {% include 'dbms/board/page.html' %}
+</div>

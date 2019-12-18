@@ -13,7 +13,7 @@ from _WHDB.views import MenuHelper
 from _WHDB.views import authority
 
 
-def tt(t_typ, tf_r, tl_r):
+def tt_article(t_typ, tf_r, tl_r):
     dt_today = datetime.date.today()
     if t_typ == 0:
         article_groups = models.Articles.objects.filter(article_balance__gt=0)
@@ -255,7 +255,7 @@ def report_article_class(request, *args, **kwargs):  #
     tf_r = '2019-1-1'
     tl_r = '2019-12-31'
     t_typ = 0
-    article_groups, tf_r, tl_r = tt(t_typ, tf_r, tl_r)
+    article_groups, tf_r, tl_r = tt_article(t_typ, tf_r, tl_r)
 
     article_renewal = article_groups.aggregate(Sum('renewal'))['renewal__sum']  # 续贷金额
     article_augment = article_groups.aggregate(Sum('augment'))['augment__sum']  # 新增金额
@@ -520,7 +520,7 @@ def report_article(request, *args, **kwargs):  #
     tl_r = request.GET.get('tl')
     t_typ = kwargs['t_typ']
 
-    article_groups, tf_r, tl_r = tt(t_typ, tf_r, tl_r)
+    article_groups, tf_r, tl_r = tt_article(t_typ, tf_r, tl_r)
 
     '''ARTICLE_STATE_LIST = [(1, '待反馈'), (2, '已反馈'), (3, '待上会'), (4, '已上会'), (5, '已签批'),
                           (51, '已放款'), (52, '已放完'), (55, '已解保'), (61, '待变更'), (99, '已注销')]'''
@@ -624,7 +624,7 @@ def report_article_list(request, *args, **kwargs):  #
     t_typ = kwargs['t_typ']
     c_typ_dic_this = c_typ_dic[c_typ]
     t_typ_dic_this = t_typ_dic[t_typ]
-    article_groups, tf_r, tl_r = tt(t_typ, tf_r, tl_r)
+    article_groups, tf_r, tl_r = tt_article(t_typ, tf_r, tl_r)
     '''ARTICLE_STATE_LIST = [(1, '待反馈'), (2, '已反馈'), (3, '待上会'), (4, '已上会'), (5, '已签批'),
                           (51, '已放款'), (52, '已放完'), (55, '已解保'), (61, '待变更'), (99, '已注销')]'''
 
@@ -667,15 +667,16 @@ def report_custom(request, *args, **kwargs):  #
     for industry in industry_list:
         lndustry_dic[industry.code] = industry.name
 
+    t_typ_dic = dict(TERM_LIST)
     t_typ = kwargs['t_typ']
+    t_typ_t = t_typ_dic[t_typ]
+
     if t_typ == 11:  # 在保
         custom_groups = models.Customes.objects.exclude(
             custom_state=99).filter(amount__gt=0)
-        t_typ_t = '在保'
     else:
         custom_groups = models.Customes.objects.exclude(
             custom_state=99).filter(Q(credit_amount__gt=0) or Q(amount__gt=0))
-        t_typ_t = '授信'
 
     c_credit = custom_groups.aggregate(Sum('credit_amount'))['credit_amount__sum']  # 授信总额
     c_flow = custom_groups.aggregate(Sum('custom_flow'))['custom_flow__sum']  # 流贷余额
@@ -685,14 +686,21 @@ def report_custom(request, *args, **kwargs):  #
     c_petty = custom_groups.aggregate(Sum('petty_loan'))['petty_loan__sum']  # 小贷余额
     c_amount = custom_groups.aggregate(Sum('amount'))['amount__sum']  # 在保总额
     article_count = custom_groups.aggregate(Count('credit_amount'))['credit_amount__count']  # 客户数
+    c_credit_w = round(c_credit / 10000, 2)
+    c_flow_w = round(c_credit / 10000, 2)
+    c_accept_w = round(c_credit / 10000, 2)
+    c_back_w = round(c_back / 10000, 2)
+    c_entrusted_w = round(c_credit / 10000, 2)
+    c_petty_w = round(c_credit / 10000, 2)
+    c_amount_w = round(c_credit / 10000, 2)
     if article_count > 0:
-        s_credit = round(c_credit / article_count, 2)
-        s_flow = round(c_flow / article_count, 2)
-        s_accept = round(c_accept / article_count, 2)
-        s_back = round(c_back / article_count, 2)
+        s_credit = round(c_credit_w / article_count, 2)
+        s_flow = round(c_flow_w / article_count, 2)
+        s_accept = round(c_accept_w / article_count, 2)
+        s_back = round(c_back_w / article_count, 2)
         s_entrusted = round(c_entrusted / article_count, 2)
-        s_petty = round(c_petty / article_count, 2)
-        s_amount = round(c_amount / article_count, 2)
+        s_petty = round(c_petty_w / article_count, 2)
+        s_amount = round(c_amount_w / article_count, 2)
 
     article_balance_district = custom_groups.values(
         'district__name').annotate(
@@ -964,3 +972,34 @@ def report_dun(request, *args, **kwargs):  #
     #            'con', 'sum', ).order_by('-retrieve_amount')  # 案款回收
 
     return render(request, 'dbms/report/balance-class-dun.html', locals())
+
+
+# -----------------------追偿分类统计明细---------------------#
+def report_dun_dc_list(request, *args, **kwargs):  #
+    current_url_name = resolve(request.path).url_name  # 获取当前URL_NAME
+    authority_list = request.session.get('authority_list')  # 获取当前用户的所有权限
+    menu_result = MenuHelper(request).menu_data_list()
+    PAGE_TITLE = '客户分类'
+    CLASS_LIST = [(21, '区域'), (31, '行业'), (35, '部门'), (41, '管户经理'), (45, '风控专员'), ]
+    TERM_LIST = [(0, '全部'), (1, '本年'), (2, '本季'), (3, '本月'), (4, '本周'), (11, '上年'), (99, '自定义'), ]
+    '''CUSTOM_STATE_LIST = [(11, '担保客户'), (21, '反担保客户'), (99, '注销')]'''
+    dun_dc_groups = models.Compensatories.objects.all().order_by('-compensatory_date').select_related('provide')
+
+    c_typ_dic = dict(CLASS_LIST)
+    t_typ_dic = dict(TERM_LIST)
+
+    tf_r = request.GET.get('tf')
+    tl_r = request.GET.get('tl')
+
+    t_typ = kwargs['t_typ']
+    t_typ_this = t_typ_dic[t_typ]
+    dun_dc_groups = models.Compensatories.objects.filter(
+        compensatory_date__gte=tf_r, compensatory_date__lte=tl_r).order_by(
+        '-compensatory_date').select_related('provide')
+    dun_dc_capital_tot = dun_dc_groups.aggregate(Sum('compensatory_capital'))['compensatory_capital__sum']  #
+    dun_dc_interest_tot = dun_dc_groups.aggregate(Sum('compensatory_interest'))['compensatory_interest__sum']  #
+    dun_dc_default_tot = dun_dc_groups.aggregate(Sum('default_interest'))['default_interest__sum']  #
+    dun_dc_amount_tot = dun_dc_groups.aggregate(Sum('compensatory_amount'))['compensatory_amount__sum']  #
+    dun_dc_count = dun_dc_groups.count()
+
+    return render(request, 'dbms/report/list/dun-dc-list.html', locals())

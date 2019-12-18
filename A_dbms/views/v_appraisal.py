@@ -524,22 +524,25 @@ def summary_scan(request, article_id):  # 评审项目预览
                 lk = lending_list.first().remark
             else:
                 lk = ''
-            summary += '提供%s%s。期限%s,' % (TEXT_O, lk, credit_term_cn)
+            # summary += '提供%s%s。期限%s,' % (TEXT_O, lk, credit_term_cn)
+            summary += '提供%s%s' % (TEXT_O, lk)
         else:
-            summary += '提供%s。期限%s,' % (TEXT_O, credit_term_cn)
+            # summary += '提供%s。期限%s,' % (TEXT_O, credit_term_cn)
+            summary += '提供%s。' % (TEXT_O)
 
-        single_dic_c = 0
-        for single in single_dic_list:
-            if single_dic_count > 1:
-                single_dic_c += 1
-                summary += '%s%s' % (single['credit'], single['flow_rate'])
-                if single_dic_c < single_dic_count:
-                    summary += '、'
-            else:
-                summary += '%s' % (single['flow_rate'])
+        # single_dic_c = 0
+        # for single in single_dic_list:
+        #     if single_dic_count > 1:
+        #         single_dic_c += 1
+        #         summary += '%s%s' % (single['credit'], single['flow_rate'])
+        #         if single_dic_c < single_dic_count:
+        #             summary += '、'
+        #     else:
+        #         summary += '%s' % (single['flow_rate'])
+
         if lending_count > 1:
             # rowspan_count += lending_count
-            summary += '。贷款分%s次发放，' % convert_str(lending_count)
+            summary += '贷款分%s次发放，' % convert_str(lending_count)
             lending_c = 0
             for lending in lending_list:
                 lending_c += 1
@@ -547,7 +550,7 @@ def summary_scan(request, article_id):  # 评审项目预览
                                            str(lending.order_amount / 10000).rstrip('0').rstrip('.'))
                 if lending_c < lending_count:
                     summary += '、'
-        summary += '</td></tr>'
+        summary += '。</td></tr>'
 
         if ss:
             rowspan_count += 1
