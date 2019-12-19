@@ -1312,19 +1312,18 @@ def result_state_ajax(request):  #
                         owership_name = ''
                         owership_w = ''
                         if single_house_list:
-                            for warrant_house in single_house_list:
-                                owership_list = warrant_house.ownership_warrant.all()
-                                owership_list_count = owership_list.count()
-                                owership_list_order = 0
-                                for owership in owership_list:
-                                    owership_name += '%s' % owership.owner.name
-                                    owership_list_order += 1
-                                    if owership_list_order < owership_list_count:
-                                        owership_name += '、'
-                                if owership_list_count < 2:
-                                    owership_w += '单独所有'
-                                else:
-                                    owership_w += '所有'
+                            owership_list = single_house_list.first().ownership_warrant.all()
+                            owership_list_count = owership_list.count()
+                            owership_list_order = 0
+                            for owership in owership_list:
+                                owership_name += '%s' % owership.owner.name
+                                owership_list_order += 1
+                                if owership_list_order < owership_list_count:
+                                    owership_name += '、'
+                            if owership_list_count < 2:
+                                owership_w += '单独所有'
+                            else:
+                                owership_w += '所有'
                         ''''''
                         result += '<div class="tt" align="center"><strong>声明书</strong></div>'
                         result += '<p>声明人：%s，公民身份号码：%s</p>' % (

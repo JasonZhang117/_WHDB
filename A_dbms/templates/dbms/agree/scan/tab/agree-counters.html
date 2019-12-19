@@ -68,6 +68,10 @@
                                 <a target="_blank"
                                    href="{% url 'dbms:custom_scan' custom_id=warrant.draft_warrant.draft_owner.id %}">
                                     {{ warrant.draft_warrant.draft_owner }}</a>
+                            {% elif warrant.warrant_typ == 41 %}
+                                <a target="_blank"
+                                   href="{% url 'dbms:custom_scan' custom_id=warrant.vehicle_warrant.vehicle_owner.id %}">
+                                    {{ warrant.vehicle_warrant.vehicle_owner }}</a>
                             {% elif warrant.warrant_typ == 51 %}
                                 <a target="_blank"
                                    href="{% url 'dbms:custom_scan' custom_id=warrant.chattel_warrant.chattel_owner.id %}">
@@ -77,7 +81,7 @@
                                    href="{% url 'dbms:custom_scan' custom_id=warrant.other_warrant.other_owner.id %}">
                                     {{ warrant.other_warrant.other_owner }}</a>
                             {% else %}
-
+                                ？？？？？
                             {% endif %}
                         {% endfor %}
                     </td>
@@ -117,6 +121,8 @@
                                     {{ warrant.stock_warrant.stock_owner.contact_addr }}
                                 {% elif warrant.warrant_typ == 31 %}
                                     {{ warrant.draft_warrant.draft_owner.contact_addr }}
+                                {% elif warrant.warrant_typ == 41 %}
+                                    {{ warrant.vehicle_warrant.vehicle_owner.contact_addr }}
                                 {% elif warrant.warrant_typ == 51 %}
                                     {{ warrant.chattel_warrant.chattel_owner.contact_addr }}
                                 {% elif warrant.warrant_typ == 55 %}
@@ -160,6 +166,8 @@
                                     {{ warrant.stock_warrant.stock_owner.linkman }}
                                 {% elif warrant.warrant_typ == 31 %}
                                     {{ warrant.draft_warrant.draft_owner.linkman }}
+                                {% elif warrant.warrant_typ == 41 %}
+                                    {{ warrant.vehicle_warrant.vehicle_owner.linkman }}
                                 {% elif warrant.warrant_typ == 51 %}
                                     {{ warrant.chattel_warrant.chattel_owner.linkman }}
                                 {% elif warrant.warrant_typ == 55 %}
@@ -203,6 +211,8 @@
                                     {{ warrant.stock_warrant.stock_owner.contact_num }}
                                 {% elif warrant.warrant_typ == 31 %}
                                     {{ warrant.draft_warrant.draft_owner.contact_num }}
+                                {% elif warrant.warrant_typ == 41 %}
+                                    {{ warrant.vehicle_warrant.vehicle_owner.contact_num }}
                                 {% elif warrant.warrant_typ == 51 %}
                                     {{ warrant.chattel_warrant.chattel_owner.contact_num }}
                                 {% elif warrant.warrant_typ == 55 %}
