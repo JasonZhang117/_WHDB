@@ -1,0 +1,25 @@
+<div class="modal fade" id="editAgreeModal" tabindex="-1"
+     role="dialog" aria-labelledby="editAgreeModal">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title" id="editAgreeModalLabel">修改委托保证合同：{{ agree_obj.agree_num }}</h4>
+                <input style="display: none" name="agree_id" value="{{ agree_obj.id }}">
+                <input style="display: none" name="agree_typ_n" id="id_agree_typ_n" value={{ agree_obj.agree_typ }}>
+            </div>
+            <div class="modal-body">
+                <form class="form-horizontal">
+                    {% include 'dbms/agree/modl/mod_form/promise-add.html' %}
+                </form>
+            </div>
+            <label id="formErrors"></label>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                <button type="button" class="btn btn-primary" id="editAgreeModalOk">确定</button>
+            </div>
+        </div>
+    </div>
+</div>

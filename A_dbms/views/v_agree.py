@@ -420,7 +420,10 @@ def agree_sign_preview(request, agree_id):
     '''RESULT_TYP_LIST = [(11, '股东会决议'), (21, '董事会决议'), (31, '弃权声明'), (41, '单身声明')]'''
     counter_list = agree_obj.counter_agree.all()
     counter_count = counter_list.count() + 1
-    result_list = agree_obj.result_agree.filter(result_typ__in=[31, 41])
+    '''RESULT_TYP_LIST = [(11, '股东会决议'), (13, '合伙人会议决议'), (15, '举办者会议决议'), (21, '董事会决议'),
+                        (23, '管委会决议'),
+                        (31, '声明书'), (41, '个人婚姻状况及财产申明')]'''
+    result_list = agree_obj.result_agree.all()
     result_count = result_list.count()
 
     return render(request, 'dbms/agree/preview-sign.html', locals())

@@ -23,7 +23,7 @@
                 <p>电话：<strong><u>{{ custom.contact_num }}</u></strong></p>
                 <p>收件人：<strong><u>{{ custom.linkman }}</u></strong></p>
                 {% if custom.person_custome.spouses %}
-                    <p>如至乙方：<strong><u>{{ custom.name }}</u></strong></p>
+                    <p>如至乙方：<strong><u>{{ custom.person_custome.spouses.name }}</u></strong></p>
                     <p>地址：<strong><u>{{ custom.person_custome.spouses.contact_addr }}</u></strong></p>
                     <p>电话：<strong><u>{{ custom.person_custome.spouses.contact_num }}</u></strong></p>
                     <p>收件人：<strong><u>{{ custom.person_custome.spouses.linkman }}</u></strong></p>

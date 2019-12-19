@@ -49,6 +49,17 @@ class AgreeEditForm(dform.ModelForm):
         }
 
 
+# -----------------------声明承诺添加-------------------------#
+class PromiseAddForm(dform.ModelForm):
+    class Meta:
+        model = models.ResultState
+        fields = ['result_typ', 'result_detail']
+        widgets = {
+            'result_typ': dform.Select(attrs={'class': 'form-control'}),
+            'result_detail': dform.Textarea(attrs={'class': 'form-control', 'rows': '3', 'placeholder': '决议声明内容'}),
+        }
+
+
 # -----------------------合同签批-------------------------#
 class FormAgreeSign(dform.ModelForm):
     class Meta:
@@ -64,6 +75,7 @@ initial = str(datetime.date.today()),
 class AddCounterForm(dform.ModelForm):  # 反担保合同添加
     class Meta:
         model = models.Counters
-        fields = ['counter_typ','counter_other']
+        fields = ['counter_typ', 'counter_other']
         widgets = {'counter_typ': dform.Select(attrs={'class': 'form-control'}),
-                   'counter_other': dform.Textarea(attrs={'class': 'form-control', 'rows': '1', 'placeholder': '其他合同约定事项'}),}
+                   'counter_other': dform.Textarea(
+                       attrs={'class': 'form-control', 'rows': '1', 'placeholder': '其他合同约定事项'}), }

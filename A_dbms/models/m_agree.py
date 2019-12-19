@@ -237,7 +237,9 @@ class ResultState(models.Model):  #
                                related_name='result_custom')
     RESULT_TYP_LIST = [(11, '股东会决议'), (13, '合伙人会议决议'), (15, '举办者会议决议'), (21, '董事会决议'),
                        (23, '管委会决议'),
-                       (31, '声明书'), (41, '个人婚姻状况及财产申明')]
+                       (31, '财产声明书'), (41, '个人婚姻状况及财产申明'),
+                       (51, '承诺函'),
+                       ]
     result_typ = models.IntegerField(verbose_name='决议类型', choices=RESULT_TYP_LIST)
     result_detail = models.TextField(verbose_name='决议声明内容', blank=True, null=True)
     resultor = models.ForeignKey(to='Employees', verbose_name="创建者",
@@ -249,7 +251,7 @@ class ResultState(models.Model):  #
         verbose_name_plural = '合同-决议及声明'  # 指定显示名称
         db_table = 'dbms_resultstate'  # 指定数据表的名称
         unique_together = ['agree', 'custom', 'result_typ']
-        ordering = ['-agree', ]
+        ordering = ['result_typ', ]
 
     def __str__(self):
         return "%s_%s_%s" % (self.agree, self.custom, self.result_typ)
