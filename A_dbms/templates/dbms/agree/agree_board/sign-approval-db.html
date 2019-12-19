@@ -17,7 +17,7 @@
     <td align="center">{{ agree_obj.agree_copies }}份</td>
 </tr>
 {% for counter in counter_list %}
-    {% if counter.counter_typ == 2 and agree_typ in AGREE_TYP_GZ %}
+    {% if counter.counter_typ == 2 and agree_obj.agree_typ in AGREE_TYP_GZ %}
         <tr>
             <td align="center">{{ counter.get_counter_name_display }}
                 {% for custom in counter.assure_counter.custome.all %}
