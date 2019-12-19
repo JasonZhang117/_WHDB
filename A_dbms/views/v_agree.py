@@ -449,7 +449,7 @@ def agree_sign_preview(request, agree_id):
     agree_typ = agree_obj.agree_typ
     '''AGREE_TYP_LIST = [(1, '单笔'), (2, '最高额'), (3, '保函'), (7, '小贷'),
                       (41, '单笔(公证)'), (42, '最高额(公证)'), (47, '小贷(公证)')]'''
-    AGREE_TYP_G = models.Agrees.AGREE_TYP_G
+    AGREE_TYP_GZ = models.Agrees.AGREE_TYP_G
     AGREE_TYP_X = models.Agrees.AGREE_TYP_X  # 小贷公司合同类型
     AGREE_TYP_D = models.Agrees.AGREE_TYP_D  # 担保公司合同类型
     credit_term_cn = credit_term_c(agree_obj.agree_term)
