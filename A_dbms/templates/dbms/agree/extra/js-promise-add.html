@@ -1,0 +1,51 @@
+<script>
+    $(function () {
+        bindAddPromiseB();
+        bindEditAgreeModalOk();
+    });
+
+    function bindAddPromiseB() {
+        $('#addPromiseB').click(function () {
+            $('#promiseAddModal').modal('show');
+        })
+    }
+
+    function bindPromiseAddModalOk() {
+        $('#promiseAddModalOk').click(function () {
+            var postData = {};
+            $('#promiseAddModal').find('input,select').each(function () {
+                var v = $(this).val();
+                var n = $(this).attr('name');
+                postData[n] = v;
+            });
+            var result_detail_g = $('#id_result_detail').val();
+            postData['result_detail'] = result_detail_g;
+            var postDataStr = JSON.stringify(postData);
+            $.ajax({
+                url: '/dbms/agree/edit/',
+                type: 'POST',
+                traditional: true,
+                data: {'postDataStr': postDataStr},
+                dataType: 'JSON',
+                success: function (arg) {
+                    if (arg.status) {
+                        $('#promiseAddModal').modal('hide');
+                        alert(arg.message);
+                        {#window.location.href = arg.skip;#}
+                        window.location.reload();
+                    } else {
+                        alert(arg.message);
+                        $('#e_result_typ').text(arg.forme.result_typ);
+                        $('#e_result_detail').text(arg.forme.result_detail);
+                    }
+                }
+            })
+        })
+    }
+</script>
+
+
+
+
+
+

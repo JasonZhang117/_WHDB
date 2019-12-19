@@ -229,7 +229,7 @@ class CountersWarrants(models.Model):  # 房产抵押反担保合同
 
 # -------------------决议及声明模型--------------------#
 class ResultState(models.Model):  #
-    agree = models.ForeignKey(to='Agrees', verbose_name="主合同", default=1,
+    agree = models.ForeignKey(to='Agrees', verbose_name="主合同",
                               on_delete=models.PROTECT,
                               related_name='result_agree')
     custom = models.ForeignKey(to='Customes', verbose_name="客户",

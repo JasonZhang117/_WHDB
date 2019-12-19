@@ -150,7 +150,7 @@ def agree_scan(request, agree_id):  # 查看合同
                     'acc_bank': agree_obj.acc_bank, 'repay_method': agree_obj.repay_method,
                     'repay_ex': agree_obj.repay_ex, }
     form_agree_jk_add = forms.AgreeJkAddForm(initial=from_jk_data)  # 创建小贷借款合同扩展
-
+    form_promise_add = forms.PromiseAddForm()
     return render(request, 'dbms/agree/agree-scan.html', locals())
 
 
@@ -344,6 +344,7 @@ def counter_preview(request, agree_id, counter_id):
             denomination_cn = convert(round(counter_draft_obj.denomination, 2))
         elif counter_warrant_typ in [41, ]:  # (41, '车辆'),
             counter_vehicle_obj = counter_warrant_obj.vehicle_warrant
+            counter_property_type = '车辆'
         elif counter_warrant_typ in [51, ]:  # (51, '动产'),
             '''CHATTEL_TYP_LIST = [(1, '存货'), (11, '机器设备'), (99, '其他')]'''
             chattel_typ = counter_warrant_obj.chattel_warrant.chattel_typ  # 动产种类
