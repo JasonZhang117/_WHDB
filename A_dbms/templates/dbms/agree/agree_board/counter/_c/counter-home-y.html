@@ -75,7 +75,7 @@
                     <p>住所（地址）：{{ warrant.vehicle_warrant.vehicle_owner.company_custome.registered_addr }}</p>
                     <p>法定代表人：{{ warrant.vehicle_warrant.vehicle_owner.company_custome.representative }}</p>
                 {% elif warrant.vehicle_warrant.vehicle_owner.genre == 2 %}
-                    <p><strong>出质人（乙方）：{{ warrant.vehicle_warrant.vehicle_owner.name }}</strong></p>
+                    <p><strong>抵押人（乙方）：{{ warrant.vehicle_warrant.vehicle_owner.name }}</strong></p>
                     <p>住所（地址）：{{ warrant.vehicle_warrant.vehicle_owner.person_custome.license_addr }}</p>
                     <p>身份证号码：{{ warrant.vehicle_warrant.vehicle_owner.person_custome.license_num }}</p>
                 {% endif %}
