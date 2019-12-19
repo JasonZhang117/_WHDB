@@ -326,7 +326,7 @@ class Vehicle(models.Model):  # 车辆
                                       related_name='vehicle_custome')
     frame_num = models.CharField(verbose_name="车架号", max_length=64, unique=True)
     plate_num = models.CharField(verbose_name="车牌号", max_length=64, unique=True)
-    vehicle_brand = models.CharField(verbose_name="品牌型号", max_length=64)
+    vehicle_brand = models.CharField(verbose_name="车辆类型", max_length=64)
     vehicle_remark = models.CharField(verbose_name="备注", max_length=64, null=True, blank=True)
     vehicle_buildor = models.ForeignKey(to='Employees', verbose_name="创建者",
                                         on_delete=models.PROTECT,

@@ -18,6 +18,9 @@
                 {% if 'article_edit_ajax' in authority_list %}
                     <a class="btn btn-primary btn-sm " id="editArticle">修改</a><!--#path('article/del/'-->
                 {% endif %}
+                {% if 'article_state_change_ajax' in authority_list %}
+                    <a class="btn btn-primary btn-sm " id="changeStateB">修改状态</a><!--#path('article/del/'-->
+                {% endif %}
                 {% if 'article_del_ajax' in authority_list %}
                     <a class="btn btn-warning btn-sm " id="delArticle">删除</a><!--#path('article/del/'-->
                 {% endif %}

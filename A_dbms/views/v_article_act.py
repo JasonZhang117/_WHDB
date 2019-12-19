@@ -188,6 +188,40 @@ def article_edit_ajax(request):  # 修改项目ajax
     return HttpResponse(result)
 
 
+# -----------------------------修改项目状态ajax------------------------------#
+@login_required
+@authority
+def article_state_change_ajax(request):  # 修改项目状态ajax
+    response = {'status': True, 'message': None, 'forme': None, }
+    post_data_str = request.POST.get('postDataStr')
+    post_data = json.loads(post_data_str)
+    article_list = models.Articles.objects.filter(id=post_data['article_id'])
+    article_obj = article_list.first()
+    '''ARTICLE_STATE_LIST = [(1, '待反馈'), (2, '已反馈'), (3, '待上会'), (4, '已上会'), (5, '已签批'),
+                          (51, '已放款'), (52, '已放完'), (55, '已解保'), (61, '待变更'), (99, '已注销')]'''
+    if article_obj.article_state in [1, 2, 3, 4, 5, 61, 52, 55, 61, 99]:
+        form_change_article_state = forms.ArticleStateChangeForm(post_data)
+        if form_change_article_state.is_valid():
+            cleaned_data = form_change_article_state.cleaned_data
+            try:
+                article_list.update(article_state=cleaned_data['article_state'])
+                response['message'] = '成功修改项目状态：%s！' % article_obj.article_num
+            except Exception as e:
+                response['status'] = False
+                response['message'] = '项目状态修改失败:%s！' % str(e)
+        else:
+            response['status'] = False
+            response['message'] = '表单信息有误！！！'
+            response['forme'] = form_change_article_state.errors
+    else:
+        response['status'] = False
+        response['message'] = '项目状态为：%s，无法修改！！！' % article_obj.article_state
+
+    result = json.dumps(response, ensure_ascii=False)
+
+    return HttpResponse(result)
+
+
 # -----------------------------删除项目ajax------------------------------#
 @login_required
 @authority

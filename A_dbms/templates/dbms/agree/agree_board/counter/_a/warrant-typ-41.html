@@ -11,18 +11,18 @@
         <td rowspan="{{ counter_obj.warrant_counter.warrant.count }}">
             车辆
         </td>
-        <td>{{ warrant.vehicle_warrant.frame_num }}</td>
+        <td>{{ warrant.vehicle_warrant.vehicle_brand }}</td>
         <td>{{ warrant.vehicle_warrant.frame_num }}</td>
         <td>{{ warrant.vehicle_warrant.plate_num }}</td>
         <td></td>
-        <td></td>
+        <td>{{ warrant.vehicle_warrant.vehicle_remark }}</td>
     </tr>
 {% else %}
     <tr>
-        <td>{{ warrant.vehicle_warrant.frame_num }}</td>
+        <td>{{ warrant.vehicle_warrant.vehicle_brand }}</td>
         <td>{{ warrant.vehicle_warrant.frame_num }}</td>
         <td>{{ warrant.vehicle_warrant.plate_num }}</td>
         <td></td>
-        <td></td>
+        <td>{{ warrant.vehicle_warrant.vehicle_remark }}</td>
     </tr>
 {% endif %}

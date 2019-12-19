@@ -5,7 +5,7 @@ from .v_article import (
     article, article_scan, article_scan_agree, article_scan_lending, endor_list_scan)
 from .v_article_act import (
     article_add_ajax, article_feedback_ajax, article_edit_ajax, article_del_ajax, article_sub_ajax,
-    borrower_add_ajax, borrower_del_ajax, article_opinion_ajax)
+    borrower_add_ajax, borrower_del_ajax, article_opinion_ajax, article_state_change_ajax)
 # ----------------------v_meeting评审会视图--------------------#
 from .v_meeting import (
     meeting, meeting_scan, meeting_notice, meeting_scan_article, experts)

@@ -88,6 +88,14 @@ class ArticleChangeForm(dform.ModelForm):  # 项目变更
                    'change_detail': dform.Textarea(attrs={'class': 'form-control', 'rows': '3', 'placeholder': '变更情况'})}
 
 
+# -----------------------项目状态变更-------------------------#
+class ArticleStateChangeForm(dform.ModelForm):  # 项目变更
+    class Meta:
+        model = models.Articles
+        fields = ['article_state', ]
+        widgets = {'article_state': dform.Select(attrs={'class': 'form-control'}), }
+
+
 # -----------------------委托合同添加-------------------------#
 class ArticleAgreeAddForm(dform.ModelForm):
     branch = fields.ChoiceField(

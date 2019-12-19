@@ -124,9 +124,10 @@ def article_scan(request, article_id):  # 项目预览
     form_borrower_add = forms.FormBorrowerAdd()  # 添加共借人form
     form_article_change = forms.ArticleChangeForm(initial={'change_date': str(datetime.date.today())})  # 变更项目form
     form_inv_add = forms.FormInvestigateAdd(initial={'inv_date': str(datetime.date.today())})  # 添加补充调查form
-    form_opinion = forms.FormOpinion(initial={'article_repay_method':article_obj.article_repay_method,
+    form_opinion = forms.FormOpinion(initial={'article_repay_method': article_obj.article_repay_method,
                                               'opinion': article_obj.opinion})  # 添加放款次序form
 
+    form_change_article_state = forms.ArticleStateChangeForm(initial={'article_state': article_obj.article_state})
     return render(request, 'dbms/article/article-scan.html', locals())
 
 
@@ -266,7 +267,7 @@ def endor_list_scan(request, article_id):  # 签批单
     lending_list = article_obj.lending_summary.all()  # 放款次序列表
     sure_lending_list = lending_list[0].sure_lending.all()
     sure_typ_dic = dict(models.LendingSures.SURE_TYP_LIST)  # 反担保类型
-    process_typ = article_obj.process.typ#流程类型
+    process_typ = article_obj.process.typ  # 流程类型
 
     ttt = '由'
     for lending in article_obj.lending_summary.all():
@@ -275,7 +276,7 @@ def endor_list_scan(request, article_id):  # 签批单
         sure_lending_c = 0
         for sure in lending.sure_lending.all():
             sure_lending_c += 1
-            if sure.sure_typ in [1, 2]: #(1, '企业保证'), (2, '个人保证'),
+            if sure.sure_typ in [1, 2]:  # (1, '企业保证'), (2, '个人保证'),
                 sure_custom_list = sure.custom_sure.custome.all()  # 担保措施下客户列表
                 sure_custom_count = sure_custom_list.count()  # 担保措施下客户数量
                 sure_custom_c = 0
@@ -285,13 +286,13 @@ def endor_list_scan(request, article_id):  # 签批单
                     if sure_custom_c < sure_custom_count:
                         ttt += '、'
                 ttt += '提供%s%s' % (sure_typ_dic[sure.sure_typ], '担保')
-            elif sure.sure_typ in [11,21]: #(11, '房产抵押'), (21, '房产顺位'),
+            elif sure.sure_typ in [11, 21]:  # (11, '房产抵押'), (21, '房产顺位'),
                 sure_warrant_list = sure.warrant_sure.warrant.all()  # 担保措施下权证列表
                 sure_warrant_count = sure_warrant_list.count()  # 担保措施下权证数量
                 sure_warrant_c = 0
                 for warrant in sure_warrant_list:
                     sure_warrant_c += 1
-                    owner_ship_list = warrant.ownership_warrant.all() # 权证项下权证列表
+                    owner_ship_list = warrant.ownership_warrant.all()  # 权证项下权证列表
                     owner_ship_count = owner_ship_list.count()  # 权证项下权证数量
                     owner_ship_c = 0
                     for owner_ship in owner_ship_list:
@@ -299,13 +300,12 @@ def endor_list_scan(request, article_id):  # 签批单
                         ttt += owner_ship.owner.name
                         if owner_ship_c < owner_ship_count:
                             ttt += '、'
-                    ttt += '所有的位于%s的%s' %(warrant.house_warrant.house_locate,'住宅')
+                    ttt += '所有的位于%s的%s' % (warrant.house_warrant.house_locate, '住宅')
                     if sure_warrant_c < sure_warrant_count:
                         ttt += '、'
                 ttt += '提供%s%s' % (sure_typ_dic[sure.sure_typ], '担保。')
             if sure_lending_c < sure_lending_count:
                 ttt += '；'
     PROCESS_LIST_XD = ['房抵贷', '担保贷', '过桥贷', ]
-
 
     return render(request, 'dbms/appraisal/endor-list.html', locals())
