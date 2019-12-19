@@ -70,12 +70,8 @@ def agree_scan(request, agree_id):  # 查看合同
     PAGE_TITLE = '合同详情'
     COUNTER_TYP_CUSTOM = [1, 2]
     WARRANT_TYP_OWN_LIST = [1, 2, 5, 6]
-    ''' COUNTER_TYP_LIST = [
-        (1, '企业担保'), (2, '个人保证'),
-        (11, '房产抵押'), (12, '土地抵押'), (13, '动产抵押'), (14, '在建工程抵押'), (15, '车辆抵押'),
-        (31, '应收质押'), (32, '股权质押'), (33, '票据质押'), (34, '动产质押'),
-        (41, '其他权利质押'),
-        (51, '股权预售'), (52, '房产预售'), (53, '土地预售'), (59, '其他预售')]'''
+    AGREE_TYP_GZ = models.Agrees.AGREE_TYP_G
+
     agree_obj = models.Agrees.objects.get(id=agree_id)
     agree_lending_obj = agree_obj.lending
 
@@ -151,6 +147,55 @@ def agree_scan(request, agree_id):  # 查看合同
                     'repay_ex': agree_obj.repay_ex, }
     form_agree_jk_add = forms.AgreeJkAddForm(initial=from_jk_data)  # 创建小贷借款合同扩展
     form_promise_add = forms.PromiseAddForm()
+    '''WARRANT_TYP_LIST = [
+        (1, '房产'), (2, '房产包'), (5, '土地'), (6, '在建工程'), (11, '应收账款'),
+        (21, '股权'), (31, '票据'), (41, '车辆'), (51, '动产'), (55, '其他'), (99, '他权')]'''
+    custom_list = [agree_obj.lending.summary.custom, ]
+    custom_c_lending_c = models.Customes.objects.filter(lending_custom__sure__lending=agree_lending_obj)
+    warrants_hg6_lending_l = models.Warrants.objects.filter(
+        lending_warrant__sure__lending=agree_lending_obj, warrant_typ__in=[1, 2, 5, 6])
+    warrants_r_lending_l = models.Warrants.objects.filter(
+        lending_warrant__sure__lending=agree_lending_obj, warrant_typ=11)
+    warrants_s_lending_l = models.Warrants.objects.filter(
+        lending_warrant__sure__lending=agree_lending_obj, warrant_typ=21)
+    warrants_d_lending_l = models.Warrants.objects.filter(
+        lending_warrant__sure__lending=agree_lending_obj, warrant_typ=31)
+    warrants_v_lending_l = models.Warrants.objects.filter(
+        lending_warrant__sure__lending=agree_lending_obj, warrant_typ=41)
+    warrants_c_lending_l = models.Warrants.objects.filter(
+        lending_warrant__sure__lending=agree_lending_obj, warrant_typ=51)
+    warrants_o_lending_l = models.Warrants.objects.filter(
+        lending_warrant__sure__lending=agree_lending_obj, warrant_typ=55)
+    if custom_c_lending_c:
+        for custom in custom_c_lending_c:
+            custom_list.append(custom)
+    if warrants_hg6_lending_l:
+        for warrant in warrants_hg6_lending_l:
+            for owership in warrant.ownership_warrant.all():
+                custom_list.append(owership.owner)
+    if warrants_r_lending_l:
+        for r in warrants_r_lending_l:
+            custom_list.append(r.receive_warrant.receive_owner)
+    if warrants_s_lending_l:
+        for s in warrants_s_lending_l:
+            custom_list.append(s.stock_warrant.stock_owner)
+    if warrants_d_lending_l:
+        for d in warrants_d_lending_l:
+            custom_list.append(d.draft_warrant.draft_owner)
+    if warrants_v_lending_l:
+        for v in warrants_v_lending_l:
+            custom_list.append(v.vehicle_warrant.vehicle_owner)
+    if warrants_c_lending_l:
+        for c in warrants_c_lending_l:
+            custom_list.append(c.chattel_warrant.chattel_custome)
+    if warrants_o_lending_l:
+        for o in warrants_o_lending_l:
+            custom_list.append(o.other_warrant.other_owner)
+    custom_list_w = []
+    for custom in custom_list:
+        if custom not in custom_list_w:
+            custom_list_w.append(custom)
+
     return render(request, 'dbms/agree/agree-scan.html', locals())
 
 

@@ -1,7 +1,7 @@
 <script>
     $(function () {
         bindAddPromiseB();
-        bindEditAgreeModalOk();
+        bindPromiseAddModalOk();
     });
 
     function bindAddPromiseB() {
@@ -21,8 +21,9 @@
             var result_detail_g = $('#id_result_detail').val();
             postData['result_detail'] = result_detail_g;
             var postDataStr = JSON.stringify(postData);
+            console.log(postDataStr);
             $.ajax({
-                url: '/dbms/agree/edit/',
+                url: '/dbms/agree/promise/add/',
                 type: 'POST',
                 traditional: true,
                 data: {'postDataStr': postDataStr},
@@ -35,6 +36,7 @@
                         window.location.reload();
                     } else {
                         alert(arg.message);
+                        $('#e_custom').text(arg.forme.custom);
                         $('#e_result_typ').text(arg.forme.result_typ);
                         $('#e_result_detail').text(arg.forme.result_detail);
                     }

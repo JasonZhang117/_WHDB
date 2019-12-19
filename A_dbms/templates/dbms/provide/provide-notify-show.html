@@ -13,8 +13,10 @@
             {% include 'dbms/provide/notify_show/dbd.html' %}
         {% elif notify_obj.agree.lending.summary.product.name == '过桥贷' %}
             {% include 'dbms/provide/notify_show/gqd.html' %}
+        {% elif notify_obj.agree.lending.summary.product.name == '流贷' %}
+            {% include 'dbms/provide/notify_show/ld.html' %}
         {% else %}
-
+            ？？？？？
         {% endif %}
     </div>
 {% endblock %}

@@ -15,7 +15,7 @@
     <td align="center" colspan="2">{{ agree_obj.get_repay_method_display }}</td>
 </tr>
 <tr>
-    <td align="center" rowspan="{{ counter_count }}">合同</td>
+    <td align="center" rowspan="{{ counter_count }}">合同/协议</td>
     <td align="center">{{ agree_obj.get_agree_name_display }}</td>
     <td align="center" colspan="3">{{ agree_obj.agree_num }}</td>
     <td align="center">{{ agree_obj.agree_copies }}份</td>
@@ -27,7 +27,7 @@
                 {% for custom in counter.assure_counter.custome.all %}
                     ({{ custom }}
                     {% if custom.person_custome.spouses %}
-                        、{{ custom.person_custome.spouses.name }}夫妇
+                        、{{ custom.person_custome.spouses.name }}
                     {% endif %}
                     )
                 {% endfor %}
@@ -69,7 +69,7 @@
     {% for result in result_list %}
         {% if forloop.first %}
             <tr>
-                <td align="center" rowspan="{{ result_count }}">声明</td>
+                <td align="center" rowspan="{{ result_count }}">声明/承诺</td>
                 <td align="center">{{ result.get_result_typ_display }}({{ result.custom.name }})</td>
                 <td align="center" colspan="3"></td>
                 <td align="center">{{ result.counter_copies }}2份</td>

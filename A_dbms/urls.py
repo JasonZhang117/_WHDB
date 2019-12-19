@@ -79,6 +79,7 @@ urlpatterns = [
     path('agree/counter/save/', views.counter_save_ajax, name='agree_counter_save_ajax'),
     path('agree/result/add/', views.result_state_ajax, name='agree_result_state_ajax'),
     path('agree/result/del/', views.result_del_ajax, name='agree_result_del_ajax'),
+    path('agree/promise/add/', views.promise_add_ajax, name='agree_promise_add_ajax'),
 
     # -----------------------warrant权证管理-------------------------#
     path('warrant/', views.warrant, name='warrant_all'),  # 菜单-权证管理-所有权证

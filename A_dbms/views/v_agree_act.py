@@ -1415,6 +1415,41 @@ def result_state_ajax(request):  #
     return HttpResponse(result)
 
 
+# -------------------------手动添加声明ajax-------------------------#
+@login_required
+@authority
+def promise_add_ajax(request):
+    response = {'status': True, 'message': None, 'forme': None, }
+    post_data_str = request.POST.get('postDataStr')
+    post_data = json.loads(post_data_str)
+    agree_obj = models.Agrees.objects.get(id=post_data['agree_id'])
+
+    form_promise_add = forms.PromiseAddForm(post_data)
+
+    if form_promise_add.is_valid():
+        counter_clean = form_promise_add.cleaned_data
+        custom = counter_clean['custom']
+        result_typ = counter_clean['result_typ']
+        try:
+            with transaction.atomic():
+                default = {'agree': agree_obj, 'custom': custom,
+                           'result_typ': result_typ,
+                           'result_detail': counter_clean['result_typ'],
+                           'resultor': request.user}
+                result_obj, created = models.ResultState.objects.update_or_create(
+                    agree=agree_obj, custom=custom, result_typ=result_typ, defaults=default)
+            response['message'] = '成功创建声明/承诺！'
+        except Exception as e:
+            response['status'] = False
+            response['message'] = '声明/承诺创建失败：%s' % str(e)
+    else:
+        response['status'] = False
+        response['message'] = '表单信息有误！！！'
+        response['forme'] = form_promise_add.errors
+    result = json.dumps(response, ensure_ascii=False)
+    return HttpResponse(result)
+
+
 # -------------------------删除决议ajax-------------------------#
 @login_required
 @authority

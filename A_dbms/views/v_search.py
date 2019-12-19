@@ -19,9 +19,11 @@ def search_custom_ajax(request):
     response = {'status': True, 'message': None, 'forme': None, ' skip': None, 'custom_list': None, }
     post_data_str = request.POST.get('postDataStr')
     post_data = json.loads(post_data_str)
+    print(post_data)
 
     '''搜索'''
     search_key = post_data['search_custom']
+    print(search_key)
     if search_key:
         search_fields = ['name', 'short_name']
         q = Q()

@@ -24,7 +24,7 @@ from .v_appraisal_act import (
 from .v_agree import (agree, agree_scan, agree_preview, counter_preview, agree_sign_preview, result_preview)
 from .v_agree_act import (agree_add_ajax, counter_add_ajax, agree_sign_ajax, counter_del_ajax, agree_edit_ajax,
                           result_state_ajax, result_del_ajax, agree_save_ajax, counter_save_ajax,
-                          agree_del_ajax)
+                          agree_del_ajax, promise_add_ajax)
 # ----------------------v_warrant权证管理视图--------------------#
 from .v_warrant import (
     warrant, warrant_scan, warrant_agree, warrant_agree_scan, warrant_agree_warrant, house, ground,

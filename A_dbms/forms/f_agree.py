@@ -53,8 +53,9 @@ class AgreeEditForm(dform.ModelForm):
 class PromiseAddForm(dform.ModelForm):
     class Meta:
         model = models.ResultState
-        fields = ['result_typ', 'result_detail']
+        fields = ['custom', 'result_typ', 'result_detail']
         widgets = {
+            'custom': dform.Select(attrs={'class': 'form-control'}),
             'result_typ': dform.Select(attrs={'class': 'form-control'}),
             'result_detail': dform.Textarea(attrs={'class': 'form-control', 'rows': '3', 'placeholder': '决议声明内容'}),
         }
