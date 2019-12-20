@@ -11,7 +11,7 @@ class Customes(models.Model):  # 客户
     CUSTOM_TYP = ((1, '--'), (11, '新增'), (21, '存量'), (31, '存量新增'))
     custom_typ = models.IntegerField(verbose_name='新增标志', choices=CUSTOM_TYP, default=1)
     contact_addr = models.CharField(verbose_name='联系地址', max_length=64)
-    linkman = models.CharField(verbose_name='联系人', max_length=16)
+    linkman = models.CharField(verbose_name='联系人', max_length=64)
     contact_num = models.CharField(verbose_name='联系电话', max_length=32)
     idustry = models.ForeignKey(to='Industries', verbose_name="所属行业",
                                 on_delete=models.PROTECT,
