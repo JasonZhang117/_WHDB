@@ -443,7 +443,7 @@ def summary_scan(request, article_id):  # 评审项目预览
     single_list = article_obj.single_quota_summary.all()
     single_count = single_list.count()
     product_name = article_obj.product.name
-    PROCESS_LIST_XD = ['房抵贷', '担保贷', '过桥贷', ]
+    PROCESS_LIST_XD = ['房抵贷', '担保贷', '过桥贷', '流贷', ]
     UN = '？？？？？？？？？？？'
     if product_name in PROCESS_LIST_XD:  # 小贷
         UN = UNX
@@ -546,8 +546,7 @@ def summary_scan(request, article_id):  # 评审项目预览
             lending_c = 0
             for lending in lending_list:
                 lending_c += 1
-                summary += '第%s次发放%s万元' % (convert_str(lending_c),
-                                           str(lending.order_amount / 10000).rstrip('0').rstrip('.'))
+                summary += '第%s次发放%s万元' % (convert_str(lending_c), amount_s(lending.order_amount))
                 if lending_c < lending_count:
                     summary += '、'
         summary += '。</td></tr>'
@@ -571,7 +570,7 @@ def summary_scan(request, article_id):  # 评审项目预览
                 lend_oz = convert_str(lend_or)
                 summary += '<tr class="ot tbp"><td class="oi" colspan="4">&nbsp&nbsp（%s）第%s次发放%s万元%s，' \
                            '并落实以下%s担保措施</td></tr>' % (
-                               lend_oz, lend_oz, str(order_amount / 10000).rstrip('0').rstrip('.'), lk, DF)
+                               lend_oz, lend_oz, amount_s(order_amount), lk, DF)
             custom_c_list = models.Customes.objects.filter(lending_custom__sure__lending=lending, genre=1)  # 企业
             if custom_c_list:
                 rowspan_count += 1
