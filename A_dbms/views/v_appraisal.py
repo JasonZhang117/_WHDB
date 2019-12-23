@@ -465,9 +465,9 @@ def summary_scan(request, article_id):  # 评审项目预览
     credit_term = article_obj.credit_term  # 授信期限（月）
     credit_term_cn = credit_term_c(credit_term)  # 授信期限转换
 
-    renewal_str = amount_s(article_obj.renewal)  # 新增金额
-    augment_str = amount_s(article_obj.augment)  # 续贷金额
-    amount_str = amount_s(article_obj.amount)  # 金额合计
+    renewal_str = amount_s(round(article_obj.renewal, 6))  # 新增金额
+    augment_str = amount_s(round(article_obj.augment, 6))  # 续贷金额
+    amount_str = amount_s(round(article_obj.amount, 6))  # 金额合计
 
     CREDIT_MODEL_LIST = models.SingleQuota.CREDIT_MODEL_LIST
     CREDIT_MODEL_DIC = {}
