@@ -321,8 +321,8 @@ def counter_preview(request, agree_id, counter_id):
     credit_term_cn = credit_term_c(agree_obj.agree_term)  # 授信期限（月）
     counter_copy_cn = convert_num(counter_obj.counter_copies)  # 合同份数（大写）
     agree_amount = agree_obj.agree_amount
-    agree_amount_cn = convert(round(agree_obj.agree_amount, 6))  # 转换为货币大写
-    agree_amount_str = amount_s(round(agree_obj.agree_amount, 6))  # 元转换为万元并去掉小数点后面的零
+    agree_amount_cn = convert(agree_obj.agree_amount)  # 转换为货币大写
+    agree_amount_str = amount_s(agree_obj.agree_amount)  # 元转换为万元并去掉小数点后面的零
     agree_amount_y = amount_y(agree_obj.agree_amount)  # 元去掉小数点后面的零
     agree_term = agree_obj.agree_term
     agree_term_str = convert_num(agree_obj.agree_term)  # 转换为数字大写

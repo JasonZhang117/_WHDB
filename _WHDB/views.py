@@ -561,7 +561,7 @@ def un_dex(agree_typ):
 
 
 def amount_s(amount):
-    amount_str = str(amount / 10000).rstrip('0').rstrip('.')  # 总额（万元）
+    amount_str = str(round(amount / 10000, 6)).rstrip('0').rstrip('.')  # 总额（万元）
     return amount_str
 
 
