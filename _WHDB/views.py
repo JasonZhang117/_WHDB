@@ -566,5 +566,5 @@ def amount_s(amount):
 
 
 def amount_y(amount):
-    amount_str = str(amount).rstrip('0').rstrip('.')  # 总额（元）
+    amount_str = str(round(amount, 2)).rstrip('0').rstrip('.')  # 总额（元）
     return amount_str

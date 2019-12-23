@@ -453,16 +453,17 @@ def agree_sign_preview(request, agree_id):
     AGREE_TYP_X = models.Agrees.AGREE_TYP_X  # 小贷公司合同类型
     AGREE_TYP_D = models.Agrees.AGREE_TYP_D  # 担保公司合同类型
     credit_term_cn = credit_term_c(agree_obj.agree_term)
+    amount_s(agree_obj.agree_amount)  # 元转换为万元并去掉小数点后面的零
+    agree_amount_str = amount_s(agree_obj.agree_amount)
+    article_amount_str = amount_s(round(agree_obj.lending.summary.amount, 2))
 
-    agree_amount_str = str(agree_obj.agree_amount / 10000).rstrip('0').rstrip('.')  # 续贷（万元）
-    article_amount_str = str(agree_obj.lending.summary.amount / 10000).rstrip('0').rstrip('.')  # 续贷（万元）
     '''AGREE_STATE_LIST = [(11, '待签批'), (21, '已签批'), (31, '未落实'),
                         (41, '已落实'), (51, '待变更'), (61, '已解保'), (99, '已注销')]'''
     agree_article = agree_obj.lending.summary
     article_agree_list = models.Agrees.objects.filter(lending__summary=agree_article).exclude(agree_state=99)
     article_agree_amount = article_agree_list.aggregate(Sum('agree_amount'))['agree_amount__sum']
     article_agree_amount_ar = round(article_agree_amount - agree_obj.agree_amount, 2)
-    article_agree_amount_ar_str = str(article_agree_amount_ar / 10000).rstrip('0').rstrip('.')  # 续贷（万元）
+    article_agree_amount_ar_str = amount_s(article_agree_amount_ar)
     '''RESULT_TYP_LIST = [(11, '股东会决议'), (21, '董事会决议'), (31, '弃权声明'), (41, '单身声明')]'''
     counter_list = agree_obj.counter_agree.all()
     counter_count = counter_list.count() + 1
