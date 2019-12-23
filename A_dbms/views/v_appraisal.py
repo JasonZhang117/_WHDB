@@ -11,7 +11,7 @@ from django.db import transaction
 from django.urls import resolve, reverse
 from .v_agree import convert_num
 from _WHDB.views import (MenuHelper, authority, article_right, article_list_screen,
-                         amount_s, credit_term_c, UND, UNX,convert_str)
+                         amount_s, credit_term_c, UND, UNX, convert_str)
 
 
 # -----------------------appraisal评审情况-------------------------#
@@ -476,7 +476,7 @@ def summary_scan(request, article_id):  # 评审项目预览
     single_val_list = article_obj.single_quota_summary.values_list('credit_model', 'credit_amount', 'flow_rate')
     single_dic_list = list(
         map(lambda x: {'credit_model': x[0],
-                       'credit_amount': str(x[1] / 10000).rstrip('0').rstrip('.'),
+                       'credit_amount': str(round(x[1] / 10000, 6)).rstrip('0').rstrip('.'),
                        'flow_rate': x[2]}, single_val_list))
     for single_dic in single_dic_list:
         single_dic['credit_model_cn'] = CREDIT_MODEL_DIC[single_dic['credit_model']]
