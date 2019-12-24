@@ -1057,7 +1057,7 @@ def summary_scan(request, article_id):  # 评审项目预览
         # -----------------评审意见
         head += '<tr class="ot"><td class="bb" rowspan="%s">评审意见</td>' % rowspan_count
         if product_name in PROCESS_LIST_XD:  # 小贷
-            head += '<td class="tbp" colspan="4">&nbsp&nbsp根据公司成武贷发[2019]3号《成都武兴小额贷款有限责任公司' \
+            head += '<td class="tbp" colspan="4">&nbsp&nbsp根据公司成武贷发[2019]3号《成都武侯武兴小额贷款有限责任公司' \
                     '贷款审查委员会组织与运行制度》规定，该项目符合公司评审程序，参会人员%s人，' \
                     '其中' % (expert_amount)
         else:
