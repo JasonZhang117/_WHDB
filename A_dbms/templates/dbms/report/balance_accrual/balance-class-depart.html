@@ -6,22 +6,29 @@
             <th>序号</th>
             <th>部门</th>
             <th>放款笔数</th>
-            {% if PAGE_TITLE == '在保分类(按放款)' %}
-                <th>担保余额</th>
-            {% elif  PAGE_TITLE == '放款分类' %}
-                <th>发放额</th>
-            {% endif %}
+            <th>续贷金额</th>
+            <th>新增金额</th>
+            <th>发放总额</th>
+            <th>还款金额</th>
+            <th>在保余额</th>
         </tr>
         </thead>
         <tbody>
         {% for depart in provide_groups_depart %}
-            <tr>
-                <td>{{ forloop.counter }}</td>
-                <td>{{ depart.notify__agree__lending__summary__director__department__name }}</td>
-                <td align="right">{{ depart.con }}</td>
-                <td align="right">{{ depart.sum_old|floatformat:2  }}</td>
-                <td align="right">{{ depart.sum_new|floatformat:2  }}</td>
-                <td align="right">{{ depart.sum|floatformat:2 }}</td>
+            <tr style="padding: 0">
+                <td style="padding: 0">{{ forloop.counter }}</td>
+                <td style="padding: 0">
+                    <a target="_blank"
+                       href="{% url 'dbms:report_provide_class_list' c_typ=kwargs.c_typ t_typ=kwargs.t_typ %}?_cs={{ depart.notify__agree__lending__summary__director__department__name }}&tf={{ tf_r }}&tl={{ tl_r }}">
+                        {{ depart.notify__agree__lending__summary__director__department__name }}
+                    </a>
+                </td>
+                <td style="padding: 0" align="right">{{ depart.con }}</td>
+                <td style="padding: 0" align="right">{{ depart.sum_old|floatformat:2 }}</td>
+                <td style="padding: 0" align="right">{{ depart.sum_new|floatformat:2 }}</td>
+                <td style="padding: 0" align="right">{{ depart.sum|floatformat:2 }}</td>
+                <td style="padding: 0" align="right">{{ depart.repayment|floatformat:2 }}</td>
+                <td style="padding: 0" align="right">{{ depart.balance|floatformat:2 }}</td>
             </tr>
         {% endfor %}
         {% include 'dbms/report/balance_accrual/balance-class.html' %}

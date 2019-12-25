@@ -73,7 +73,8 @@ from .v_external_act import agreement_add_ajax
 from .v_report import (report, report_provide_list, report_balance_class, report_article_class,
                        report_accrual_class, report_provide_accrual, report_article, report_custom,
                        report_dun, top_custom, report_custom_list, report_article_list,
-                       report_dun_dc_list, report_dun_fy_list, report_dun_hk_list)
+                       report_dun_dc_list, report_dun_fy_list, report_dun_hk_list,
+                       report_provide_class_list, report_provid_w_list)
 
 # 部门、员工
 from .v_interior import department, department_add, department_edit

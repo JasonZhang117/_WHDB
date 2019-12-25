@@ -21,28 +21,37 @@
         </thead>
         <tbody>
         {% for provide in provide_list %}
-            <tr>
-                <td>{{ forloop.counter }}</td>
-                <td>{{ provide.notify.agree.lending.summary.custom.name }}</td>
-                <td>{{ provide.get_provide_typ_display }}</td>
-                <td align="right">{{ provide.provide_money }}</td>
-                <td align="right">{{ provide.notify.time_limit }}</td>
-                <td>{{ provide.notify.agree.branch.short_name }}</td>
-                <td>{{ provide.notify.agree.lending.summary.custom.idustry }}</td>
-                <td>{{ provide.notify.agree.lending.summary.custom.district }}</td>
-                <td>{{ provide.notify.agree.lending.summary.director.name }}</td>
-                <td>{{ provide.notify.agree.lending.summary.assistant.name }}</td>
-                <td>{{ provide.provide_date }}</td>
-                <td>{{ provide.due_date }}</td>
-                <td align="right">{{ provide.provide_repayment_sum }}</td>
-                <td align="right">{{ provide.provide_balance }}</td>
+            <tr style="padding: 0">
+                <td style="padding: 0">{{ forloop.counter }}</td>
+                <td style="padding: 0">{{ provide.notify.agree.lending.summary.custom.name }}</td>
+                <td style="padding: 0">{{ provide.get_provide_typ_display }}</td>
+                <td style="padding: 0" align="right">{{ provide.provide_money }}</td>
+                <td style="padding: 0" align="right">{{ provide.notify.time_limit }}</td>
+                <td style="padding: 0">{{ provide.notify.agree.branch.short_name }}</td>
+                <td style="padding: 0">{{ provide.notify.agree.lending.summary.custom.idustry }}</td>
+                <td style="padding: 0">{{ provide.notify.agree.lending.summary.custom.district }}</td>
+                <td style="padding: 0">{{ provide.notify.agree.lending.summary.director.name }}</td>
+                <td style="padding: 0">{{ provide.notify.agree.lending.summary.assistant.name }}</td>
+                <td style="padding: 0">{{ provide.provide_date }}</td>
+                <td style="padding: 0">{{ provide.due_date }}</td>
+                <td style="padding: 0" align="right">{{ provide.provide_repayment_sum }}</td>
+                <td style="padding: 0" align="right">{{ provide.provide_balance }}</td>
             </tr>
         {% endfor %}
         <tr>
-            <td colspan="3">合计</td>
-            <td align="right">{{ provide_provide|floatformat:'2' }}</td>
-            <td colspan="9"></td>
-            <td align="right">{{ provide_balance|floatformat:'2' }}</td>
+            <td style="padding: 0" colspan="2" align="center">合计</td>
+            <td style="padding: 0" align="right">{{ provide_provide|floatformat:'2' }}</td>
+            <td style="padding: 0" align="right">{{ provide_count }}</td>
+            <td style="padding: 0"></td>
+            <td style="padding: 0"></td>
+            <td style="padding: 0"></td>
+            <td style="padding: 0"></td>
+            <td style="padding: 0"></td>
+            <td style="padding: 0"></td>
+            <td style="padding: 0"></td>
+            <td style="padding: 0"></td>
+            <td style="padding: 0" align="right">{{ repayment_sum|floatformat:'2' }}</td>
+            <td style="padding: 0" align="right">{{ provide_balance|floatformat:'2' }}</td>
         </tr>
         </tbody>
     </table>

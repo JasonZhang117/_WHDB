@@ -1,3 +1,7 @@
+django==2.1
+pymysql
+python-dateutil
+
 菜单：
 我的主页
 项目管理

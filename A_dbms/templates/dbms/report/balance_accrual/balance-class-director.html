@@ -9,17 +9,26 @@
             <th>续贷金额</th>
             <th>新增金额</th>
             <th>发放总额</th>
+            <th>还款金额</th>
+            <th>在保余额</th>
         </tr>
         </thead>
         <tbody>
         {% for director in provide_groups_director %}
-            <tr>
-                <td>{{ forloop.counter }}</td>
-                <td>{{ director.notify__agree__lending__summary__director__name }}</td>
-                <td align="right">{{ director.con }}</td>
-                <td align="right">{{ director.sum_old|floatformat:2  }}</td>
-                <td align="right">{{ director.sum_new|floatformat:2  }}</td>
-                <td align="right">{{ director.sum|floatformat:2 }}</td>
+            <tr style="padding: 0">
+                <td style="padding: 0">{{ forloop.counter }}</td>
+                <td style="padding: 0">
+                    <a target="_blank"
+                       href="{% url 'dbms:report_provide_class_list' c_typ=kwargs.c_typ t_typ=kwargs.t_typ %}?_cs={{ director.notify__agree__lending__summary__director__name }}&tf={{ tf_r }}&tl={{ tl_r }}">
+                        {{ director.notify__agree__lending__summary__director__name }}
+                    </a>
+                </td>
+                <td style="padding: 0" align="right">{{ director.con }}</td>
+                <td style="padding: 0" align="right">{{ director.sum_old|floatformat:2 }}</td>
+                <td style="padding: 0" align="right">{{ director.sum_new|floatformat:2 }}</td>
+                <td style="padding: 0" align="right">{{ director.sum|floatformat:2 }}</td>
+                <td style="padding: 0" align="right">{{ director.repayment|floatformat:2 }}</td>
+                <td style="padding: 0" align="right">{{ director.balance|floatformat:2 }}</td>
             </tr>
         {% endfor %}
         {% include 'dbms/report/balance_accrual/balance-class.html' %}

@@ -152,11 +152,8 @@ def report_provide_list(request, *args, **kwargs):  #
     provide_list = models.Provides.objects.filter(
         provide_balance__gt=0, provide_date__gte=tf_r, provide_date__lte=tl_r).select_related(
         'notify').order_by('-provide_date')
-    if tf_r and tl_r:
-        if p_typ:
-            provide_list = provide_list.filter(provide_typ=p_typ).select_related('notify').order_by('-provide_date')
-        else:
-            provide_list = provide_list.select_related('notify').order_by('-provide_date')
+    if p_typ:
+        provide_list = provide_list.filter(provide_typ=p_typ).select_related('notify').order_by('-provide_date')
 
     '''搜索'''
     search_key = request.GET.get('_s')
@@ -170,8 +167,10 @@ def report_provide_list(request, *args, **kwargs):  #
         for field in search_fields:
             q.children.append(("%s__contains" % field, search_key))
         provide_list = provide_list.filter(q)
-    provide_balance = provide_list.aggregate(Sum('provide_balance'))['provide_balance__sum']  # 放款金额
-    provide_provide = provide_list.aggregate(Sum('provide_money'))['provide_money__sum']  # 放款金额
+    provide_provide = provide_list.aggregate(Sum('provide_money'))['provide_money__sum']  #
+    repayment_sum = provide_list.aggregate(Sum('provide_repayment_sum'))['provide_repayment_sum__sum']  #
+    provide_balance = provide_list.aggregate(Sum('provide_balance'))['provide_balance__sum']  #
+    provide_count = provide_list.count()  #
 
     return render(request, 'dbms/report/provide_list.html', locals())
 
@@ -196,56 +195,149 @@ def report_balance_class(request, *args, **kwargs):  #
     t_typ = kwargs['t_typ']
 
     tf_r, tl_r = tt_provide(t_typ, tf_r, tl_r)
-    provide_groups = models.Provides.objects.filter(provide_status=1)
-    if tf_r and tl_r:
-        provide_groups = provide_groups.filter(provide_status=1, provide_date__gte=tf_r,
-                                               provide_date__lte=tl_r)
+    provide_groups = models.Provides.objects.filter(provide_balance__gt=0, provide_date__gte=tf_r,
+                                                    provide_date__lte=tl_r)
 
-    provide_balance = provide_groups.aggregate(Sum('provide_balance'))['provide_balance__sum']  # 放款金额
+    provide_old = provide_groups.aggregate(Sum('old_amount'))['old_amount__sum']  # 续贷金额
+    provide_new = provide_groups.aggregate(Sum('new_amount'))['new_amount__sum']  # 新增金额
+    provide_balance = provide_groups.aggregate(Sum('provide_money'))['provide_money__sum']  # 放款金额
+    provide_repayment_tot = provide_groups.aggregate(Sum('provide_repayment_sum'))['provide_repayment_sum__sum']  #
+    provide_balance_tot = provide_groups.aggregate(Sum('provide_balance'))['provide_balance__sum']  #
     provide_count = provide_groups.aggregate(Count('provide_money'))['provide_money__count']  # 放款项目数
 
     provide_groups_breed = provide_groups.values(
         'provide_typ').annotate(
-        con=Count('provide_money'), sum=Sum('provide_balance')).values(
-        'provide_typ', 'con', 'sum').order_by('-sum')
+        con=Count('provide_money'), sum_old=Sum('old_amount'), sum_new=Sum('new_amount'),
+        sum=Sum('provide_money'), repayment=Sum('provide_repayment_sum'),
+        balance=Sum('provide_balance')).values(
+        'provide_typ', 'con', 'sum_old', 'sum_new', 'sum', 'repayment', 'balance').order_by('-sum')
     provide_groups_director = provide_groups.values(
         'notify__agree__lending__summary__director__name').annotate(
-        con=Count('provide_money'), sum=Sum('provide_balance')).values(
-        'notify__agree__lending__summary__director__name', 'con', 'sum').order_by('-sum')
+        con=Count('provide_money'), sum_old=Sum('old_amount'), sum_new=Sum('new_amount'),
+        sum=Sum('provide_money'), repayment=Sum('provide_repayment_sum'),
+        balance=Sum('provide_balance')).values(
+        'notify__agree__lending__summary__director__name', 'con', 'sum_old', 'sum_new', 'sum', 'repayment',
+        'balance').order_by('-sum')
     provide_groups_assistant = provide_groups.values(
         'notify__agree__lending__summary__assistant__name').annotate(
-        con=Count('provide_money'), sum=Sum('provide_balance')).values(
-        'notify__agree__lending__summary__assistant__name', 'con', 'sum').order_by('-sum')
+        con=Count('provide_money'), sum_old=Sum('old_amount'), sum_new=Sum('new_amount'),
+        sum=Sum('provide_money'), repayment=Sum('provide_repayment_sum'),
+        balance=Sum('provide_balance')).values(
+        'notify__agree__lending__summary__assistant__name', 'con', 'sum_old', 'sum_new', 'sum', 'repayment',
+        'balance').order_by('-sum')
     provide_groups_control = provide_groups.values(
         'notify__agree__lending__summary__control__name').annotate(
-        con=Count('provide_money'), sum=Sum('provide_balance')).values(
-        'notify__agree__lending__summary__control__name', 'con', 'sum').order_by('-sum')
+        con=Count('provide_money'), sum_old=Sum('old_amount'), sum_new=Sum('new_amount'),
+        sum=Sum('provide_money'), repayment=Sum('provide_repayment_sum'),
+        balance=Sum('provide_balance')).values(
+        'notify__agree__lending__summary__control__name', 'con', 'sum_old', 'sum_new', 'sum', 'repayment',
+        'balance').order_by('-sum')
     provide_groups_idustry = provide_groups.values(
         'notify__agree__lending__summary__custom__idustry__name').annotate(
-        con=Count('provide_money'), sum=Sum('provide_balance')).values(
-        'notify__agree__lending__summary__custom__idustry__name', 'con', 'sum').order_by('-sum')
+        con=Count('provide_money'), sum_old=Sum('old_amount'), sum_new=Sum('new_amount'),
+        sum=Sum('provide_money'), repayment=Sum('provide_repayment_sum'),
+        balance=Sum('provide_balance')).values(
+        'notify__agree__lending__summary__custom__idustry__name', 'con', 'sum_old', 'sum_new', 'sum', 'repayment',
+        'balance').order_by('-sum')
     provide_groups_district = provide_groups.values(
         'notify__agree__lending__summary__custom__district__name').annotate(
-        con=Count('provide_money'), sum=Sum('provide_balance')).values(
-        'notify__agree__lending__summary__custom__district__name', 'con', 'sum').order_by('-sum')
+        con=Count('provide_money'), sum_old=Sum('old_amount'), sum_new=Sum('new_amount'),
+        sum=Sum('provide_money'), repayment=Sum('provide_repayment_sum'),
+        balance=Sum('provide_balance')).values(
+        'notify__agree__lending__summary__custom__district__name', 'con', 'sum_old', 'sum_new', 'sum', 'repayment',
+        'balance').order_by('-sum')
     provide_groups_bank = provide_groups.values(
         'notify__agree__branch__cooperator__short_name').annotate(
-        con=Count('provide_money'), sum=Sum('provide_balance')).values(
-        'notify__agree__branch__cooperator__short_name', 'con', 'sum').order_by('-sum')
+        con=Count('provide_money'), sum_old=Sum('old_amount'), sum_new=Sum('new_amount'),
+        sum=Sum('provide_money'), repayment=Sum('provide_repayment_sum'),
+        balance=Sum('provide_balance')).values(
+        'notify__agree__branch__cooperator__short_name', 'con', 'sum_old', 'sum_new', 'sum', 'repayment',
+        'balance').order_by('-sum')
     provide_groups_branch = provide_groups.values(
         'notify__agree__branch__short_name').annotate(
-        con=Count('provide_money'), sum=Sum('provide_balance')).values(
-        'notify__agree__branch__short_name', 'con', 'sum').order_by('-sum')
+        con=Count('provide_money'), sum_old=Sum('old_amount'), sum_new=Sum('new_amount'),
+        sum=Sum('provide_money'), repayment=Sum('provide_repayment_sum'),
+        balance=Sum('provide_balance')).values(
+        'notify__agree__branch__short_name', 'con', 'sum_old', 'sum_new', 'sum', 'repayment', 'balance').order_by(
+        '-sum')
     provide_groups_depart = provide_groups.values(
         'notify__agree__lending__summary__director__department__name').annotate(
-        con=Count('provide_money'), sum=Sum('provide_balance')).values(
-        'notify__agree__lending__summary__director__department__name', 'con', 'sum').order_by('-sum')
+        con=Count('provide_money'), sum_old=Sum('old_amount'), sum_new=Sum('new_amount'),
+        sum=Sum('provide_money'), repayment=Sum('provide_repayment_sum'),
+        balance=Sum('provide_balance')).values(
+        'notify__agree__lending__summary__director__department__name', 'con', 'sum_old', 'sum_new', 'sum', 'repayment',
+        'balance').order_by(
+        '-sum')
     provide_groups_organization = provide_groups.values(
         'notify__agree__lending__summary__expert__organization').annotate(
-        con=Count('provide_money'), sum=Sum('provide_balance')).values(
-        'notify__agree__lending__summary__expert__organization', 'con', 'sum').order_by('-sum')
+        con=Count('provide_money'), sum_old=Sum('old_amount'), sum_new=Sum('new_amount'),
+        sum=Sum('provide_money'), repayment=Sum('provide_repayment_sum'),
+        balance=Sum('provide_balance')).values(
+        'notify__agree__lending__summary__expert__organization', 'con', 'sum_old', 'sum_new', 'sum', 'repayment',
+        'balance').order_by('-sum')
 
     return render(request, 'dbms/report/balance-class-provide.html', locals())
+
+
+# ----------------------在保分类统计（按放款）明细---------------------#
+def report_provid_w_list(request, *args, **kwargs):  #
+    current_url_name = resolve(request.path).url_name  # 获取当前URL_NAME
+    authority_list = request.session.get('authority_list')  # 获取当前用户的所有权限
+    menu_result = MenuHelper(request).menu_data_list()
+    PAGE_TITLE = '放款分类明细（在保）'
+    CLASS_LIST = [(1, '品种'), (11, '授信银行'), (21, '区域'), (31, '行业'), (35, '部门'),
+                  (41, '项目经理'), (51, '项目助理'), (61, '风控专员'), (71, '放款支行'), (81, '法律顾问'), ]
+    TERM_LIST = [(0, '全部'), (1, '本年'), (2, '本季'), (3, '本月'), (4, '本周'), (11, '上年'), (99, '自定义'), ]
+    provide_typ_list = models.Provides.PROVIDE_TYP_LIST
+    provide_typ_dic = dict(provide_typ_list)
+    provide_typ_wen = {}
+    for provide_typ in provide_typ_list:
+        provide_typ_wen[provide_typ[1]] = provide_typ[0]
+
+    c_typ_dic = dict(CLASS_LIST)
+    t_typ_dic = dict(TERM_LIST)
+    ss_value = request.GET.get('_cs')
+    tf_r = request.GET.get('tf')
+    tl_r = request.GET.get('tl')
+    c_typ = kwargs['c_typ']
+    t_typ = kwargs['t_typ']
+    c_typ_dic_this = c_typ_dic[c_typ]
+    t_typ_dic_this = t_typ_dic[t_typ]
+    tf_r, tl_r = tt_provide(t_typ, tf_r, tl_r)
+
+    provide_list = models.Provides.objects.filter(
+        provide_balance__gt=0, provide_date__gte=tf_r, provide_date__lte=tl_r).select_related(
+        'notify').order_by('-provide_date')
+    print(ss_value,c_typ,t_typ)
+    if c_typ == 1:
+        provide_list = provide_list.filter(provide_typ=provide_typ_wen[ss_value])
+    elif c_typ == 11:
+        provide_list = provide_list.filter(notify__agree__branch__cooperator__short_name=ss_value)
+    elif c_typ == 21:
+        provide_list = provide_list.filter(notify__agree__lending__summary__custom__district__name=ss_value)
+    elif c_typ == 31:
+        provide_list = provide_list.filter(notify__agree__lending__summary__custom__idustry__name=ss_value)
+    elif c_typ == 35:
+        provide_list = provide_list.filter(notify__agree__lending__summary__director__department__name=ss_value)
+    elif c_typ == 41:
+        provide_list = provide_list.filter(notify__agree__lending__summary__director__name=ss_value)
+    elif c_typ == 51:
+        provide_list = provide_list.filter(notify__agree__lending__summary__assistant__name=ss_value)
+    elif c_typ == 61:
+        provide_list = provide_list.filter(notify__agree__lending__summary__control__name=ss_value)
+    elif c_typ == 71:
+        provide_list = provide_list.filter(notify__agree__branch__short_name=ss_value)
+    elif c_typ == 81:
+        provide_list = provide_list.filter(notify__agree__lending__summary__expert__organization=ss_value)
+
+    old_amount_tot = provide_list.aggregate(Sum('old_amount'))['old_amount__sum']  #
+    new_amount_tot = provide_list.aggregate(Sum('new_amount'))['new_amount__sum']  #
+    provide_money_tot = provide_list.aggregate(Sum('provide_money'))['provide_money__sum']  #
+    provide_repayment_tot = provide_list.aggregate(Sum('provide_repayment_sum'))['provide_repayment_sum__sum']  #
+    provide_balance_tot = provide_list.aggregate(Sum('provide_balance'))['provide_balance__sum']  #
+    article_acount = provide_list.count()
+
+    return render(request, 'dbms/report/list/class-provide-list.html', locals())
 
 
 # -----------------------在保分类(按项目)---------------------#
@@ -352,8 +444,7 @@ def report_provide_accrual(request, *args, **kwargs):  #
     p_typ = kwargs['p_typ']
 
     tf_r, tl_r = tt_provide(t_typ, tf_r, tl_r)
-    provide_list = models.Provides.objects.filter(
-        provide_status=1, provide_date__gte=tf_r, provide_date__lte=tl_r).select_related(
+    provide_list = models.Provides.objects.filter(provide_date__gte=tf_r, provide_date__lte=tl_r).select_related(
         'notify').order_by('-provide_date')
 
     '''搜索'''
@@ -368,8 +459,10 @@ def report_provide_accrual(request, *args, **kwargs):  #
         for field in search_fields:
             q.children.append(("%s__contains" % field, search_key))
         provide_list = provide_list.filter(q)
-    provide_balance = provide_list.aggregate(Sum('provide_balance'))['provide_balance__sum']  # 放款金额
-    provide_provide = provide_list.aggregate(Sum('provide_money'))['provide_money__sum']  # 放款金额
+    provide_provide = provide_list.aggregate(Sum('provide_money'))['provide_money__sum']  #
+    repayment_sum = provide_list.aggregate(Sum('provide_repayment_sum'))['provide_repayment_sum__sum']  #
+    provide_balance = provide_list.aggregate(Sum('provide_balance'))['provide_balance__sum']  #
+    provide_count = provide_list.count()  #
 
     return render(request, 'dbms/report/provide_list.html', locals())
 
@@ -385,98 +478,98 @@ def report_accrual_class(request, *args, **kwargs):  #
     TERM_LIST = [(1, '本年'), (2, '本季'), (3, '本月'), (4, '本周'), (11, '上年'), (99, '自定义'), ]
 
     provide_typ_list = models.Provides.PROVIDE_TYP_LIST  # 筛选条件
-    provide_typ_dic = {}
-    for provide_typ in provide_typ_list:
-        provide_typ_dic[provide_typ[0]] = provide_typ[1]
+    provide_typ_dic = dict(provide_typ_list)
+
+    c_typ_dic = dict(CLASS_LIST)
+    t_typ_dic = dict(TERM_LIST)
 
     tf_r = request.GET.get('tf')
     tl_r = request.GET.get('tl')
+    c_typ = kwargs['c_typ']
     t_typ = kwargs['t_typ']
+    c_typ_dic_this = c_typ_dic[c_typ]
+    t_typ_dic_this = t_typ_dic[t_typ]
+    tf_r, tl_r = tt_provide(t_typ, tf_r, tl_r)
 
-    dt_today = datetime.date.today()
-    if t_typ == 1:
-        tf_r = datetime.date(dt_today.year, 1, 1).isoformat()  # 本年第一天
-        tl_r = datetime.date(dt_today.year, 12, 31).isoformat()  # 本年最后一天
-    elif t_typ == 2:
-        tf_r = datetime.date(dt_today.year, dt_today.month - (dt_today.month - 1) % 3, 1).isoformat()  # 本季第一天
-        tl_r = quarter_end_day = (datetime.date(dt_today.year, dt_today.month - (dt_today.month - 1) % 3 + 2, 1) +
-                                  relativedelta(months=1, days=-1)).isoformat()  # 本季最后一天
-    elif t_typ == 3:
-        tf_r = (dt_today - datetime.timedelta(days=dt_today.day - 1)).isoformat()  # 本月第一天
-        tl_r = (dt_today + datetime.timedelta(days=-dt_today.day + 1) +
-                relativedelta(months=1, days=-1)).isoformat()  # 本月最后一天
-    elif t_typ == 4:
-        tf_r = (dt_today - datetime.timedelta(days=dt_today.weekday())).isoformat()  # 本周第一天
-        tl_r = (dt_today + datetime.timedelta(days=6 - dt_today.weekday())).isoformat()  # 本周最后一天
-    elif t_typ == 11:
-        tf_r = datetime.date(dt_today.year - 1, 1, 1).isoformat()  # 上年第一天
-        tl_r = datetime.date(dt_today.year - 1, 12, 31).isoformat()  # 上年最后一天
-    elif t_typ == 99:
-        if tf_r and tl_r:
-            tf_r = tf_r
-            tl_r = tl_r
-        else:
-            tf_r = datetime.date(dt_today.year, 1, 1).isoformat()  # 本年第一天
-            tl_r = datetime.date(dt_today.year, 12, 31).isoformat()  # 本年最后一天
-    provide_groups = models.Provides.objects.filter(provide_date__year=dt_today.year)
-    if tf_r and tl_r:
-        provide_groups = models.Provides.objects.filter(provide_date__gte=tf_r, provide_date__lte=tl_r)
+    provide_groups = models.Provides.objects.filter(provide_date__gte=tf_r, provide_date__lte=tl_r)
+
     provide_old = provide_groups.aggregate(Sum('old_amount'))['old_amount__sum']  # 续贷金额
     provide_new = provide_groups.aggregate(Sum('new_amount'))['new_amount__sum']  # 新增金额
     provide_balance = provide_groups.aggregate(Sum('provide_money'))['provide_money__sum']  # 放款金额
+    provide_repayment_tot = provide_groups.aggregate(Sum('provide_repayment_sum'))['provide_repayment_sum__sum']  #
+    provide_balance_tot = provide_groups.aggregate(Sum('provide_balance'))['provide_balance__sum']  #
     provide_count = provide_groups.aggregate(Count('provide_money'))['provide_money__count']  # 放款项目数
 
     provide_groups_breed = provide_groups.values(
         'provide_typ').annotate(
         con=Count('provide_money'), sum_old=Sum('old_amount'), sum_new=Sum('new_amount'),
-        sum=Sum('provide_money')).values(
-        'provide_typ', 'con', 'sum_old', 'sum_new', 'sum').order_by('-sum')
+        sum=Sum('provide_money'), repayment=Sum('provide_repayment_sum'),
+        balance=Sum('provide_balance')).values(
+        'provide_typ', 'con', 'sum_old', 'sum_new', 'sum', 'repayment', 'balance').order_by('-sum')
     provide_groups_director = provide_groups.values(
         'notify__agree__lending__summary__director__name').annotate(
         con=Count('provide_money'), sum_old=Sum('old_amount'), sum_new=Sum('new_amount'),
-        sum=Sum('provide_money')).values(
-        'notify__agree__lending__summary__director__name', 'con', 'sum_old', 'sum_new', 'sum').order_by('-sum')
+        sum=Sum('provide_money'), repayment=Sum('provide_repayment_sum'),
+        balance=Sum('provide_balance')).values(
+        'notify__agree__lending__summary__director__name', 'con', 'sum_old', 'sum_new', 'sum', 'repayment',
+        'balance').order_by('-sum')
     provide_groups_assistant = provide_groups.values(
         'notify__agree__lending__summary__assistant__name').annotate(
         con=Count('provide_money'), sum_old=Sum('old_amount'), sum_new=Sum('new_amount'),
-        sum=Sum('provide_money')).values(
-        'notify__agree__lending__summary__assistant__name', 'con', 'sum_old', 'sum_new', 'sum').order_by('-sum')
+        sum=Sum('provide_money'), repayment=Sum('provide_repayment_sum'),
+        balance=Sum('provide_balance')).values(
+        'notify__agree__lending__summary__assistant__name', 'con', 'sum_old', 'sum_new', 'sum', 'repayment',
+        'balance').order_by('-sum')
     provide_groups_control = provide_groups.values(
         'notify__agree__lending__summary__control__name').annotate(
         con=Count('provide_money'), sum_old=Sum('old_amount'), sum_new=Sum('new_amount'),
-        sum=Sum('provide_money')).values(
-        'notify__agree__lending__summary__control__name', 'con', 'sum_old', 'sum_new', 'sum').order_by('-sum')
+        sum=Sum('provide_money'), repayment=Sum('provide_repayment_sum'),
+        balance=Sum('provide_balance')).values(
+        'notify__agree__lending__summary__control__name', 'con', 'sum_old', 'sum_new', 'sum', 'repayment',
+        'balance').order_by('-sum')
     provide_groups_idustry = provide_groups.values(
         'notify__agree__lending__summary__custom__idustry__name').annotate(
         con=Count('provide_money'), sum_old=Sum('old_amount'), sum_new=Sum('new_amount'),
-        sum=Sum('provide_money')).values(
-        'notify__agree__lending__summary__custom__idustry__name', 'con', 'sum_old', 'sum_new', 'sum').order_by('-sum')
+        sum=Sum('provide_money'), repayment=Sum('provide_repayment_sum'),
+        balance=Sum('provide_balance')).values(
+        'notify__agree__lending__summary__custom__idustry__name', 'con', 'sum_old', 'sum_new', 'sum', 'repayment',
+        'balance').order_by('-sum')
     provide_groups_district = provide_groups.values(
         'notify__agree__lending__summary__custom__district__name').annotate(
         con=Count('provide_money'), sum_old=Sum('old_amount'), sum_new=Sum('new_amount'),
-        sum=Sum('provide_money')).values(
-        'notify__agree__lending__summary__custom__district__name', 'con', 'sum_old', 'sum_new', 'sum').order_by('-sum')
+        sum=Sum('provide_money'), repayment=Sum('provide_repayment_sum'),
+        balance=Sum('provide_balance')).values(
+        'notify__agree__lending__summary__custom__district__name', 'con', 'sum_old', 'sum_new', 'sum', 'repayment',
+        'balance').order_by('-sum')
     provide_groups_bank = provide_groups.values(
         'notify__agree__branch__cooperator__short_name').annotate(
         con=Count('provide_money'), sum_old=Sum('old_amount'), sum_new=Sum('new_amount'),
-        sum=Sum('provide_money')).values(
-        'notify__agree__branch__cooperator__short_name', 'con', 'sum_old', 'sum_new', 'sum').order_by('-sum')
+        sum=Sum('provide_money'), repayment=Sum('provide_repayment_sum'),
+        balance=Sum('provide_balance')).values(
+        'notify__agree__branch__cooperator__short_name', 'con', 'sum_old', 'sum_new', 'sum', 'repayment',
+        'balance').order_by('-sum')
     provide_groups_branch = provide_groups.values(
         'notify__agree__branch__short_name').annotate(
         con=Count('provide_money'), sum_old=Sum('old_amount'), sum_new=Sum('new_amount'),
-        sum=Sum('provide_money')).values(
-        'notify__agree__branch__short_name', 'con', 'sum_old', 'sum_new', 'sum').order_by('-sum')
+        sum=Sum('provide_money'), repayment=Sum('provide_repayment_sum'),
+        balance=Sum('provide_balance')).values(
+        'notify__agree__branch__short_name', 'con', 'sum_old', 'sum_new', 'sum', 'repayment', 'balance').order_by(
+        '-sum')
     provide_groups_depart = provide_groups.values(
         'notify__agree__lending__summary__director__department__name').annotate(
         con=Count('provide_money'), sum_old=Sum('old_amount'), sum_new=Sum('new_amount'),
-        sum=Sum('provide_money')).values(
-        'notify__agree__lending__summary__director__department__name', 'con', 'sum_old', 'sum_new', 'sum').order_by(
+        sum=Sum('provide_money'), repayment=Sum('provide_repayment_sum'),
+        balance=Sum('provide_balance')).values(
+        'notify__agree__lending__summary__director__department__name', 'con', 'sum_old', 'sum_new', 'sum', 'repayment',
+        'balance').order_by(
         '-sum')
     provide_groups_organization = provide_groups.values(
         'notify__agree__lending__summary__expert__organization').annotate(
         con=Count('provide_money'), sum_old=Sum('old_amount'), sum_new=Sum('new_amount'),
-        sum=Sum('provide_money')).values(
-        'notify__agree__lending__summary__expert__organization', 'con', 'sum_old', 'sum_new', 'sum').order_by('-sum')
+        sum=Sum('provide_money'), repayment=Sum('provide_repayment_sum'),
+        balance=Sum('provide_balance')).values(
+        'notify__agree__lending__summary__expert__organization', 'con', 'sum_old', 'sum_new', 'sum', 'repayment',
+        'balance').order_by('-sum')
 
     return render(request, 'dbms/report/balance-class-accrual.html', locals())
 
@@ -490,10 +583,14 @@ def report_provide_class_list(request, *args, **kwargs):  #
     CLASS_LIST = [(1, '品种'), (11, '授信银行'), (21, '区域'), (31, '行业'), (35, '部门'),
                   (41, '项目经理'), (51, '项目助理'), (61, '风控专员'), (71, '放款支行'), (81, '法律顾问'), ]
     TERM_LIST = [(0, '全部'), (1, '本年'), (2, '本季'), (3, '本月'), (4, '本周'), (11, '上年'), (99, '自定义'), ]
+    provide_typ_list = models.Provides.PROVIDE_TYP_LIST
+    provide_typ_dic = dict(provide_typ_list)
+    provide_typ_wen = {}
+    for provide_typ in provide_typ_list:
+        provide_typ_wen[provide_typ[1]] = provide_typ[0]
 
     c_typ_dic = dict(CLASS_LIST)
     t_typ_dic = dict(TERM_LIST)
-
     ss_value = request.GET.get('_cs')
     tf_r = request.GET.get('tf')
     tl_r = request.GET.get('tl')
@@ -503,12 +600,16 @@ def report_provide_class_list(request, *args, **kwargs):  #
     t_typ_dic_this = t_typ_dic[t_typ]
     tf_r, tl_r = tt_provide(t_typ, tf_r, tl_r)
 
-    provide_list = models.Provides.objects.filter(
-        provide_date__gte=tf_r, provide_date__lte=tl_r).select_related(
-        'notify').order_by('-provide_date')
-
+    if t_typ == 0:
+        provide_list = models.Provides.objects.filter(
+            provide_balance__gt=0, provide_date__gte=tf_r, provide_date__lte=tl_r).select_related(
+            'notify').order_by('-provide_date')
+    else:
+        provide_list = models.Provides.objects.filter(
+            provide_date__gte=tf_r, provide_date__lte=tl_r).select_related(
+            'notify').order_by('-provide_date')
     if c_typ == 1:
-        provide_list = provide_list.filter(notify__agree__lending__summary__article_state=ss_value)
+        provide_list = provide_list.filter(provide_typ=provide_typ_wen[ss_value])
     elif c_typ == 11:
         provide_list = provide_list.filter(notify__agree__branch__cooperator__short_name=ss_value)
     elif c_typ == 21:
@@ -548,10 +649,7 @@ def report_article(request, *args, **kwargs):  #
                   (41, '项目经理'), (51, '项目助理'), (61, '风控专员'), (81, '法律顾问'), ]
     TERM_LIST = [(1, '本年'), (2, '本季'), (3, '本月'), (4, '本周'), (11, '上年'), (99, '自定义'), ]
 
-    article_state_list = models.Articles.ARTICLE_STATE_LIST  # 项目阶段
-    article_state_dic = {}
-    for article_state in article_state_list:
-        article_state_dic[article_state[0]] = article_state[1]
+    article_state_dic = dict(models.Articles.ARTICLE_STATE_LIST)  # 项目阶段
 
     tf_r = request.GET.get('tf')
     tl_r = request.GET.get('tl')
@@ -643,9 +741,7 @@ def report_article_list(request, *args, **kwargs):  #
     TERM_LIST = [(1, '本年'), (2, '本季'), (3, '本月'), (4, '本周'), (11, '上年'), (99, '自定义'), ]
 
     article_state_list = models.Articles.ARTICLE_STATE_LIST  # 项目阶段
-    article_state_dic = {}
-    for article_state in article_state_list:
-        article_state_dic[article_state[0]] = article_state[1]
+    article_state_dic = dict(article_state_list)
     article_state_wen = {}
     for article_state in article_state_list:
         article_state_wen[article_state[1]] = article_state[0]
@@ -664,7 +760,6 @@ def report_article_list(request, *args, **kwargs):  #
     article_groups, tf_r, tl_r = tt_article(t_typ, tf_r, tl_r)
     '''ARTICLE_STATE_LIST = [(1, '待反馈'), (2, '已反馈'), (3, '待上会'), (4, '已上会'), (5, '已签批'),
                           (51, '已放款'), (52, '已放完'), (55, '已解保'), (61, '待变更'), (99, '已注销')]'''
-
     if c_typ == 2:
         article_groups = article_groups.filter(article_state=article_state_wen[ss_value])
     elif c_typ == 21:

@@ -1,5 +1,9 @@
 <tr>
-    <td colspan="2">合计</td>
-    <td align="right">{{ provide_count }}</td>
-    <td align="right">{{ provide_balance|floatformat:2 }}</td>
+    <td style="padding: 0" colspan="2">合计</td>
+    <td style="padding: 0" align="right">{{ provide_count }}</td>
+    <td style="padding: 0" align="right">{{ provide_old|floatformat:2  }}</td>
+    <td style="padding: 0" align="right">{{ provide_new|floatformat:2  }}</td>
+    <td style="padding: 0" align="right">{{ provide_balance|floatformat:2 }}</td>
+    <td style="padding: 0" align="right">{{ provide_repayment_tot|floatformat:2 }}</td>
+    <td style="padding: 0" align="right">{{ provide_balance_tot|floatformat:2 }}</td>
 </tr>
