@@ -16,7 +16,9 @@ from _WHDB.views import authority
 def tt_article(t_typ, tf_r, tl_r):
     dt_today = datetime.date.today()
     if t_typ == 0:
-        article_groups = models.Articles.objects.filter(article_balance__gt=0)
+        article_groups = models.Articles.objects.filter(article_balance__gt=0).order_by('build_date')
+        tf_r = article_groups.first().build_date.isoformat()  # 在保第一笔日期
+        tl_r = article_groups.last().build_date.isoformat()  # 在保最后一笔日期
     elif t_typ == 1:
         tf_r = datetime.date(dt_today.year, 1, 1).isoformat()  # 本年第一天
         tl_r = datetime.date(dt_today.year, 12, 31).isoformat()  # 本年最后一天
@@ -51,12 +53,45 @@ def tt_article(t_typ, tf_r, tl_r):
     return (article_groups, tf_r, tl_r)
 
 
-def tt(t_typ, tf_r, tl_r):
+def tt_compensatory(t_typ, tf_r, tl_r):
     dt_today = datetime.date.today()
     if t_typ == 0:
         pl = models.Compensatories.objects.all().order_by('compensatory_date')
         tf_r = pl.first().compensatory_date.isoformat()  #
         tl_r = pl.last().compensatory_date.isoformat()  #
+    elif t_typ == 1:
+        tf_r = datetime.date(dt_today.year, 1, 1).isoformat()  # 本年第一天
+        tl_r = datetime.date(dt_today.year, 12, 31).isoformat()  # 本年最后一天
+    elif t_typ == 2:
+        tf_r = datetime.date(dt_today.year, dt_today.month - (dt_today.month - 1) % 3, 1).isoformat()  # 本季第一天
+        tl_r = quarter_end_day = (datetime.date(dt_today.year, dt_today.month - (dt_today.month - 1) % 3 + 2, 1) +
+                                  relativedelta(months=1, days=-1)).isoformat()  # 本季最后一天
+    elif t_typ == 3:
+        tf_r = (dt_today - datetime.timedelta(days=dt_today.day - 1)).isoformat()  # 本月第一天
+        tl_r = (dt_today + datetime.timedelta(days=-dt_today.day + 1) +
+                relativedelta(months=1, days=-1)).isoformat()  # 本月最后一天
+    elif t_typ == 4:
+        tf_r = (dt_today - datetime.timedelta(days=dt_today.weekday())).isoformat()  # 本周第一天
+        tl_r = (dt_today + datetime.timedelta(days=6 - dt_today.weekday())).isoformat()  # 本周最后一天
+    elif t_typ == 11:
+        tf_r = datetime.date(dt_today.year - 1, 1, 1).isoformat()  # 上年第一天
+        tl_r = datetime.date(dt_today.year - 1, 12, 31).isoformat()  # 上年最后一天
+    elif t_typ == 99:
+        if tf_r and tl_r:
+            tf_r = tf_r
+            tl_r = tl_r
+        else:
+            tf_r = datetime.date(dt_today.year, 1, 1).isoformat()  # 本年第一天
+            tl_r = datetime.date(dt_today.year, 12, 31).isoformat()  # 本年最后一天
+    return (tf_r, tl_r)
+
+
+def tt_provide(t_typ, tf_r, tl_r):
+    dt_today = datetime.date.today()
+    if t_typ == 0:
+        pl = models.Provides.objects.filter(provide_balance__gt=0).order_by('provide_date')
+        tf_r = pl.first().provide_date.isoformat()  # 在保第一笔日期
+        tl_r = pl.last().provide_date.isoformat()  # 在保最后一笔日期
     elif t_typ == 1:
         tf_r = datetime.date(dt_today.year, 1, 1).isoformat()  # 本年第一天
         tl_r = datetime.date(dt_today.year, 12, 31).isoformat()  # 本年最后一天
@@ -112,46 +147,16 @@ def report_provide_list(request, *args, **kwargs):  #
     tl_r = request.GET.get('tl')
     t_typ = kwargs['t_typ']
     p_typ = kwargs['p_typ']
+    tf_r, tl_r = tt_provide(t_typ, tf_r, tl_r)
 
-    dt_today = datetime.date.today()
-    if t_typ == 0:
-        pl = models.Provides.objects.filter(provide_status=1).order_by('provide_date')
-        tf_r = pl.first().provide_date.isoformat()  # 本年第一天
-        tl_r = pl.last().provide_date.isoformat()  # 本年最后一天
-    elif t_typ == 1:
-        tf_r = datetime.date(dt_today.year, 1, 1).isoformat()  # 本年第一天
-        tl_r = datetime.date(dt_today.year, 12, 31).isoformat()  # 本年最后一天
-    elif t_typ == 2:
-        tf_r = datetime.date(dt_today.year, dt_today.month - (dt_today.month - 1) % 3, 1).isoformat()  # 本季第一天
-        tl_r = quarter_end_day = (datetime.date(dt_today.year, dt_today.month - (dt_today.month - 1) % 3 + 2, 1)
-                                  + relativedelta(months=1, days=-1)).isoformat()  # 本季最后一天
-    elif t_typ == 3:
-        tf_r = (dt_today - datetime.timedelta(days=dt_today.day - 1)).isoformat()  # 本月第一天
-        tl_r = (dt_today + datetime.timedelta(days=-dt_today.day + 1) +
-                relativedelta(months=1, days=-1)).isoformat()  # 本月最后一天
-    elif t_typ == 4:
-        tf_r = (dt_today - datetime.timedelta(days=dt_today.weekday())).isoformat()  # 本周第一天
-        tl_r = (dt_today + datetime.timedelta(days=6 - dt_today.weekday())).isoformat()  # 本周最后一天
-    elif t_typ == 11:
-        tf_r = datetime.date(dt_today.year - 1, 1, 1).isoformat()  # 上年第一天
-        tl_r = datetime.date(dt_today.year - 1, 12, 31).isoformat()  # 上年最后一天
-    elif t_typ == 99:
-        if tf_r and tl_r:
-            tf_r = tf_r
-            tl_r = tl_r
-        else:
-            tf_r = datetime.date(dt_today.year, 1, 1).isoformat()  # 本年第一天
-            tl_r = datetime.date(dt_today.year, 12, 31).isoformat()  # 本年最后一天
-    provide_list = models.Provides.objects.filter(provide_status=1).select_related('notify').order_by('-provide_date')
+    provide_list = models.Provides.objects.filter(
+        provide_balance__gt=0, provide_date__gte=tf_r, provide_date__lte=tl_r).select_related(
+        'notify').order_by('-provide_date')
     if tf_r and tl_r:
         if p_typ:
-            provide_list = models.Provides.objects.filter(
-                provide_status=1, provide_date__gte=tf_r, provide_date__lte=tl_r). \
-                filter(provide_typ=p_typ).select_related('notify').order_by('-provide_date')
+            provide_list = provide_list.filter(provide_typ=p_typ).select_related('notify').order_by('-provide_date')
         else:
-            provide_list = models.Provides.objects.filter(
-                provide_status=1, provide_date__gte=tf_r, provide_date__lte=tl_r). \
-                select_related('notify').order_by('-provide_date')
+            provide_list = provide_list.select_related('notify').order_by('-provide_date')
 
     '''搜索'''
     search_key = request.GET.get('_s')
@@ -190,39 +195,11 @@ def report_balance_class(request, *args, **kwargs):  #
     tl_r = request.GET.get('tl')
     t_typ = kwargs['t_typ']
 
-    dt_today = datetime.date.today()
-    if t_typ == 0:
-        pl = models.Provides.objects.filter(provide_status=1).order_by('provide_date')
-        tf_r = pl.first().provide_date.isoformat()  #
-        tl_r = pl.last().provide_date.isoformat()  #
-    elif t_typ == 1:
-        tf_r = datetime.date(dt_today.year, 1, 1).isoformat()  # 本年第一天
-        tl_r = datetime.date(dt_today.year, 12, 31).isoformat()  # 本年最后一天
-    elif t_typ == 2:
-        tf_r = datetime.date(dt_today.year, dt_today.month - (dt_today.month - 1) % 3, 1).isoformat()  # 本季第一天
-        tl_r = quarter_end_day = (datetime.date(dt_today.year, dt_today.month - (dt_today.month - 1) % 3 + 2, 1) +
-                                  relativedelta(months=1, days=-1)).isoformat()  # 本季最后一天
-    elif t_typ == 3:
-        tf_r = (dt_today - datetime.timedelta(days=dt_today.day - 1)).isoformat()  # 本月第一天
-        tl_r = (dt_today + datetime.timedelta(days=-dt_today.day + 1) +
-                relativedelta(months=1, days=-1)).isoformat()  # 本月最后一天
-    elif t_typ == 4:
-        tf_r = (dt_today - datetime.timedelta(days=dt_today.weekday())).isoformat()  # 本周第一天
-        tl_r = (dt_today + datetime.timedelta(days=6 - dt_today.weekday())).isoformat()  # 本周最后一天
-    elif t_typ == 11:
-        tf_r = datetime.date(dt_today.year - 1, 1, 1).isoformat()  # 上年第一天
-        tl_r = datetime.date(dt_today.year - 1, 12, 31).isoformat()  # 上年最后一天
-    elif t_typ == 99:
-        if tf_r and tl_r:
-            tf_r = tf_r
-            tl_r = tl_r
-        else:
-            tf_r = datetime.date(dt_today.year, 1, 1).isoformat()  # 本年第一天
-            tl_r = datetime.date(dt_today.year, 12, 31).isoformat()  # 本年最后一天
+    tf_r, tl_r = tt_provide(t_typ, tf_r, tl_r)
     provide_groups = models.Provides.objects.filter(provide_status=1)
     if tf_r and tl_r:
-        provide_groups = models.Provides.objects.filter(provide_status=1, provide_date__gte=tf_r,
-                                                        provide_date__lte=tl_r)
+        provide_groups = provide_groups.filter(provide_status=1, provide_date__gte=tf_r,
+                                               provide_date__lte=tl_r)
 
     provide_balance = provide_groups.aggregate(Sum('provide_balance'))['provide_balance__sum']  # 放款金额
     provide_count = provide_groups.aggregate(Count('provide_money'))['provide_money__count']  # 放款项目数
@@ -285,8 +262,8 @@ def report_article_class(request, *args, **kwargs):  #
     for article_state in article_state_list:
         article_state_dic[article_state[0]] = article_state[1]
 
-    tf_r = '2019-1-1'
-    tl_r = '2019-12-31'
+    tf_r = request.GET.get('tf')
+    tl_r = request.GET.get('tl')
     t_typ = 0
     article_groups, tf_r, tl_r = tt_article(t_typ, tf_r, tl_r)
 
@@ -374,40 +351,10 @@ def report_provide_accrual(request, *args, **kwargs):  #
     t_typ = kwargs['t_typ']
     p_typ = kwargs['p_typ']
 
-    dt_today = datetime.date.today()
-    if t_typ == 1:
-        tf_r = datetime.date(dt_today.year, 1, 1).isoformat()  # 本年第一天
-        tl_r = datetime.date(dt_today.year, 12, 31).isoformat()  # 本年最后一天
-    elif t_typ == 2:
-        tf_r = datetime.date(dt_today.year, dt_today.month - (dt_today.month - 1) % 3, 1).isoformat()  # 本季第一天
-        tl_r = quarter_end_day = (datetime.date(dt_today.year, dt_today.month - (dt_today.month - 1) % 3 + 2, 1) +
-                                  relativedelta(months=1, days=-1)).isoformat()  # 本季最后一天
-    elif t_typ == 3:
-        tf_r = (dt_today - datetime.timedelta(days=dt_today.day - 1)).isoformat()  # 本月第一天
-        tl_r = (dt_today + datetime.timedelta(days=-dt_today.day + 1) +
-                relativedelta(months=1, days=-1)).isoformat()  # 本月最后一天
-    elif t_typ == 4:
-        tf_r = (dt_today - datetime.timedelta(days=dt_today.weekday())).isoformat()  # 本周第一天
-        tl_r = (dt_today + datetime.timedelta(days=6 - dt_today.weekday())).isoformat()  # 本周最后一天
-    elif t_typ == 11:
-        tf_r = datetime.date(dt_today.year - 1, 1, 1).isoformat()  # 上年第一天
-        tl_r = datetime.date(dt_today.year - 1, 12, 31).isoformat()  # 上年最后一天
-    elif t_typ == 99:
-        if tf_r and tl_r:
-            tf_r = tf_r
-            tl_r = tl_r
-        else:
-            tf_r = datetime.date(dt_today.year, 1, 1).isoformat()  # 本年第一天
-            tl_r = datetime.date(dt_today.year, 12, 31).isoformat()  # 本年最后一天
-    provide_list = models.Provides.objects.filter(provide_date__year=dt_today.year). \
-        select_related('notify').order_by('-provide_date')
-    if tf_r and tl_r:
-        if p_typ:
-            provide_list = models.Provides.objects.filter(provide_date__gte=tf_r, provide_date__lte=tl_r). \
-                filter(provide_typ=p_typ).select_related('notify').order_by('-provide_date')
-        else:
-            provide_list = models.Provides.objects.filter(provide_date__gte=tf_r, provide_date__lte=tl_r). \
-                select_related('notify').order_by('-provide_date')
+    tf_r, tl_r = tt_provide(t_typ, tf_r, tl_r)
+    provide_list = models.Provides.objects.filter(
+        provide_status=1, provide_date__gte=tf_r, provide_date__lte=tl_r).select_related(
+        'notify').order_by('-provide_date')
 
     '''搜索'''
     search_key = request.GET.get('_s')
@@ -532,6 +479,63 @@ def report_accrual_class(request, *args, **kwargs):  #
         'notify__agree__lending__summary__expert__organization', 'con', 'sum_old', 'sum_new', 'sum').order_by('-sum')
 
     return render(request, 'dbms/report/balance-class-accrual.html', locals())
+
+
+# -----------------------放款分类统计明细---------------------#
+def report_provide_class_list(request, *args, **kwargs):  #
+    current_url_name = resolve(request.path).url_name  # 获取当前URL_NAME
+    authority_list = request.session.get('authority_list')  # 获取当前用户的所有权限
+    menu_result = MenuHelper(request).menu_data_list()
+    PAGE_TITLE = '放款分类明细'
+    CLASS_LIST = [(1, '品种'), (11, '授信银行'), (21, '区域'), (31, '行业'), (35, '部门'),
+                  (41, '项目经理'), (51, '项目助理'), (61, '风控专员'), (71, '放款支行'), (81, '法律顾问'), ]
+    TERM_LIST = [(0, '全部'), (1, '本年'), (2, '本季'), (3, '本月'), (4, '本周'), (11, '上年'), (99, '自定义'), ]
+
+    c_typ_dic = dict(CLASS_LIST)
+    t_typ_dic = dict(TERM_LIST)
+
+    ss_value = request.GET.get('_cs')
+    tf_r = request.GET.get('tf')
+    tl_r = request.GET.get('tl')
+    c_typ = kwargs['c_typ']
+    t_typ = kwargs['t_typ']
+    c_typ_dic_this = c_typ_dic[c_typ]
+    t_typ_dic_this = t_typ_dic[t_typ]
+    tf_r, tl_r = tt_provide(t_typ, tf_r, tl_r)
+
+    provide_list = models.Provides.objects.filter(
+        provide_date__gte=tf_r, provide_date__lte=tl_r).select_related(
+        'notify').order_by('-provide_date')
+
+    if c_typ == 1:
+        provide_list = provide_list.filter(notify__agree__lending__summary__article_state=ss_value)
+    elif c_typ == 11:
+        provide_list = provide_list.filter(notify__agree__branch__cooperator__short_name=ss_value)
+    elif c_typ == 21:
+        provide_list = provide_list.filter(notify__agree__lending__summary__custom__district__name=ss_value)
+    elif c_typ == 31:
+        provide_list = provide_list.filter(notify__agree__lending__summary__custom__idustry__name=ss_value)
+    elif c_typ == 35:
+        provide_list = provide_list.filter(notify__agree__lending__summary__director__department__name=ss_value)
+    elif c_typ == 41:
+        provide_list = provide_list.filter(notify__agree__lending__summary__director__name=ss_value)
+    elif c_typ == 51:
+        provide_list = provide_list.filter(notify__agree__lending__summary__assistant__name=ss_value)
+    elif c_typ == 61:
+        provide_list = provide_list.filter(notify__agree__lending__summary__control__name=ss_value)
+    elif c_typ == 71:
+        provide_list = provide_list.filter(notify__agree__branch__short_name=ss_value)
+    elif c_typ == 81:
+        provide_list = provide_list.filter(notify__agree__lending__summary__expert__organization=ss_value)
+
+    old_amount_tot = provide_list.aggregate(Sum('old_amount'))['old_amount__sum']  #
+    new_amount_tot = provide_list.aggregate(Sum('new_amount'))['new_amount__sum']  #
+    provide_money_tot = provide_list.aggregate(Sum('provide_money'))['provide_money__sum']  #
+    provide_repayment_tot = provide_list.aggregate(Sum('provide_repayment_sum'))['provide_repayment_sum__sum']  #
+    provide_balance_tot = provide_list.aggregate(Sum('provide_balance'))['provide_balance__sum']  #
+    article_acount = provide_list.count()
+
+    return render(request, 'dbms/report/list/class-provide-list.html', locals())
 
 
 # -----------------------项目分类统计---------------------#
@@ -943,7 +947,7 @@ def report_dun(request, *args, **kwargs):  #
     tl_r = request.GET.get('tl')
     t_typ = kwargs['t_typ']
     t_typ_this = t_typ_dic[t_typ]
-    tf_r, tl_r = tt(t_typ, tf_r, tl_r)
+    tf_r, tl_r = tt_compensatory(t_typ, tf_r, tl_r)
 
     '''ARTICLE_STATE_LIST = [(1, '待反馈'), (2, '已反馈'), (3, '待上会'), (4, '已上会'), (5, '已签批'),
                           (51, '已放款'), (52, '已放完'), (55, '已解保'), (61, '待变更'), (99, '已注销')]'''
@@ -997,7 +1001,7 @@ def report_dun_dc_list(request, *args, **kwargs):  #
     tl_r = request.GET.get('tl')
     t_typ = kwargs['t_typ']
     t_typ_this = t_typ_dic[t_typ]
-    tf_r, tl_r = tt(t_typ, tf_r, tl_r)
+    tf_r, tl_r = tt_compensatory(t_typ, tf_r, tl_r)
 
     dun_dc_groups = models.Compensatories.objects.filter(
         compensatory_date__gte=tf_r, compensatory_date__lte=tl_r).order_by(
@@ -1025,7 +1029,7 @@ def report_dun_fy_list(request, *args, **kwargs):  #
     tl_r = request.GET.get('tl')
     t_typ = kwargs['t_typ']
     t_typ_this = t_typ_dic[t_typ]
-    tf_r, tl_r = tt(t_typ, tf_r, tl_r)
+    tf_r, tl_r = tt_compensatory(t_typ, tf_r, tl_r)
 
     dun_fy_groups = models.Charge.objects.filter(
         charge_date__gte=tf_r, charge_date__lte=tl_r).order_by('dun').select_related('dun')
@@ -1049,7 +1053,7 @@ def report_dun_hk_list(request, *args, **kwargs):  #
     tl_r = request.GET.get('tl')
     t_typ = kwargs['t_typ']
     t_typ_this = t_typ_dic[t_typ]
-    tf_r, tl_r = tt(t_typ, tf_r, tl_r)
+    tf_r, tl_r = tt_compensatory(t_typ, tf_r, tl_r)
 
     dun_hk_groups = models.Retrieve.objects.filter(
         retrieve_date__gte=tf_r, retrieve_date__lte=tl_r).order_by('dun').select_related('dun')

@@ -1,0 +1,55 @@
+{% if counter_obj.assure_counter.custome.all %}
+    {% for custom in counter_obj.assure_counter.custome.all %}
+        {% if custom.genre == 1 %}
+            {{ custom.name }}
+        {% elif custom.genre == 2 %}
+            {{ custom.name }}
+            {% if custom.person_custome.spouses %}
+                、{{ custom.person_custome.spouses.name }}
+            {% endif %}
+        {% endif %}
+        {% if not forloop.last %} 、{% endif %}
+    {% endfor %}
+    {#MORTGAGE_COUNTER_TYP_LIST = [11, 12, 13, 14, 15, ]#}
+{% else %}
+    <!--WARRANT_TYP_LIST = [
+        (1, '房产'), (2, '房产包'), (5, '土地'), (6, '在建工程'), (11, '应收账款'),
+        (21, '股权'), (31, '票据'), (41, '车辆'), (51, '动产'), (55, '其他'), (99, '他权')]-->
+    {% for warrant in counter_obj.warrant_counter.warrant.all %}
+        {% if forloop.first %}
+            {#(1, '房产'), (2, '房产包'), (5, '土地'), (6, '在建工程')#}
+            {% if warrant.ownership_warrant.all %}
+                {% for ownership in warrant.ownership_warrant.all %}
+                    {{ ownership.owner.name }}
+                    {% if not forloop.last %} 、{% endif %}
+                {% endfor %}
+                {#(11, '应收账款')#}
+            {% elif warrant.warrant_typ == 11 %}
+                {% if warrant.receive_warrant.receive_owner.genre == 1 %}
+                    {{ warrant.receive_warrant.receive_owner.name }}
+                {% elif warrant.receive_warrant.receive_owner.genre == 2 %}
+                    {{ warrant.receive_warrant.receive_owner.name }}
+                {% endif %}
+                {#(21, '股权')#}
+            {% elif warrant.warrant_typ == 21 %}
+               {{ warrant.stock_warrant.stock_owner.name }}
+                {#(31, '票据')#}
+            {% elif warrant.warrant_typ == 31 %}
+                {{ warrant.draft_warrant.draft_owner.name }}
+                {#(41, '车辆')#}
+            {% elif warrant.warrant_typ == 41 %}
+                {{ warrant.vehicle_warrant.vehicle_owner.name }}
+                {#(51, '动产')#}
+            {% elif warrant.warrant_typ == 51 %}
+                {{ warrant.chattel_warrant.chattel_owner.name }}
+                {#(55, '其他')#}
+            {% elif warrant.warrant_typ == 55 %}
+                {{ warrant.other_warrant.other_owner.name }}
+            {% else %}
+                <p><strong>？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？</strong></p>
+                <p><strong>？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？</strong></p>
+                <p><strong>？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？</strong></p>
+            {% endif %}
+        {% endif %}
+    {% endfor %}
+{% endif %}

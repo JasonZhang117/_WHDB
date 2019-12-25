@@ -1,0 +1,63 @@
+<div class="table-responsive">
+    <table class="table table-bordered table-hover table-condensed active">
+        {% if t_typ_dic_this == '在保' %}
+            <caption>在保放款分类明细表（按{{ c_typ_dic_this }}：{{ ss_value }}）</caption>
+        {% else %}
+            <caption>放款分类明细表（按{{ c_typ_dic_this }}：{{ ss_value }}）（{{ t_typ_dic_this }}：{{ tf_r }}至{{ tl_r }}）</caption>
+        {% endif %}
+        <thead>
+        <tr style="text-align: center">
+            <th>合同编号({{ article_acount }})</th>
+            <th>客户</th>
+            <th>银行</th>
+            <th>期限</th>
+            <th>续贷金额</th>
+            <th>新增金额</th>
+            <th>放款总额</th>
+            <th>还款金额</th>
+            <th>在保余额</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for article in article_groups %}
+            <tr style="padding: 0">
+                <td style="padding: 0">
+                    <a target="_blank" href="{% url 'dbms:article_scan' article_id=article.id %}">
+                        {{ article.article_num }}
+                    </a>
+                </td>
+                <td style="padding: 0">{{ article.custom.short_name }}</td>
+                <td style="padding: 0" align="right">{{ article.amount }}</td>
+                <td style="padding: 0" align="right">{{ article.credit_term }}</td>
+                <td style="padding: 0">{{ article.product }}</td>
+                <td style="padding: 0">{{ article.director.name }}</td>
+                <td style="padding: 0">{{ article.assistant.name }}</td>
+                <td style="padding: 0">{{ article.control.name }}</td>
+                <td style="padding: 0">{{ article.summary_num }}</td>
+                {#                <td>{{ article.article_date|default_if_none:"" }}</td>#}
+                {#                <td align="right">{{ article.article_notify_sum }}</td>#}
+                <td style="padding: 0" align="right">{{ article.article_provide_sum }}</td>
+                <td style="padding: 0" align="right">{{ article.article_repayment_sum }}</td>
+                <td style="padding: 0" align="right">{{ article.article_balance }}</td>
+                {#                <td>{{ article.get_classification_display }}</td>#}
+                {#方式一：推荐#}
+                <td style="padding: 0">{{ article.get_article_state_display }}</td>
+            </tr>
+        {% endfor %}
+        <tr style="padding: 0">
+            <td style="padding: 0" align="center" colspan="2">合计</td>
+            <td style="padding: 0">{{ article_amount_tot|floatformat:2 }}</td>
+            <td style="padding: 0"></td>
+            <td style="padding: 0"></td>
+            <td style="padding: 0"></td>
+            <td style="padding: 0"></td>
+            <td style="padding: 0"></td>
+            <td style="padding: 0"></td>
+            <td style="padding: 0">{{ article_provide_tot|floatformat:2 }}</td>
+            <td style="padding: 0">{{ article_repayment_tot|floatformat:2 }}</td>
+            <td style="padding: 0">{{ article_balance_tot|floatformat:2 }}</td>
+            <td style="padding: 0"></td>
+        </tr>
+        </tbody>
+    </table>
+</div>
