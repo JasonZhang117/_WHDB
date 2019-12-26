@@ -822,9 +822,9 @@ def report_custom(request, *args, **kwargs):  #
     c_flow_w = round(c_credit / 10000, 2)
     c_accept_w = round(c_credit / 10000, 2)
     c_back_w = round(c_back / 10000, 2)
-    c_entrusted_w = round(c_credit / 10000, 2)
-    c_petty_w = round(c_credit / 10000, 2)
-    c_amount_w = round(c_credit / 10000, 2)
+    c_entrusted_w = round(c_entrusted / 10000, 2)
+    c_petty_w = round(c_petty / 10000, 2)
+    c_amount_w = round(c_amount / 10000, 2)
     if article_count > 0:
         s_credit = round(c_credit_w / article_count, 2)
         s_flow = round(c_flow_w / article_count, 2)
