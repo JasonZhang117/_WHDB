@@ -29,22 +29,10 @@ body {
     page-break-after: always;
 }
 
-.indent{
-     /*缩进*/
+.indent {
+    /*缩进*/
     text-indent: 35pt;
 }
-
-/*主标题*/
-.tit{
-    font-size: 24pt;
-
-}
-
-/*附标题*/
-.sub-head{
-    font-size: 20pt;
-}
-
 
 
 .arg-bn {
@@ -56,6 +44,19 @@ body {
     text-align-last: left;
     -moz-text-align-last: left; /* 针对 Firefox 的代码 */
 }
+
+
+/*主标题*/
+.tit {
+    font-size: 24pt;
+
+}
+
+/*附标题*/
+.sub-head {
+    font-size: 20pt;
+}
+
 
 .tc {
     text-align: center;
