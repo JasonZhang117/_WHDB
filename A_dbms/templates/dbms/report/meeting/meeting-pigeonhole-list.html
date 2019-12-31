@@ -1,0 +1,67 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}{{ PAGE_TITLE }}{% endblock %}
+{% block extra-css %}
+    <link rel="stylesheet" media="screen" href="{% static 'dbms/css/report-style.css' %}">
+    <link rel="stylesheet" media="print" href="{% static 'dbms/css/report-style.css' %}">
+    <link rel="stylesheet" media="print" href="{% static 'dbms/css/report-style-noprint.css' %}">
+{% endblock %}
+{% block  body %}
+    <div style="width: 310mm; margin-left: auto; margin-right: auto;">
+        <div class="table-responsive">
+            <table class="table table-bordered table-hover table-condensed active">
+                <caption>{{ PAGE_TITLE }}（截止日：{{ td }}）</caption>
+                <thead>
+                <tr style="text-align: center">
+                    <th>合同编号({{ pigeonhole_list_count }})</th>
+                    <th>客户名称</th>
+                    <th>放款银行</th>
+                    <th>放款总额</th>
+                    <th>放款种类</th>
+                    <th>放款日期</th>
+                    <th>到期日</th>
+                    <th>在保余额</th>
+                    <th>归档状态</th>
+                    <th>在保状态</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for provide in pigeonhole_overdue_list %}
+                    <tr style="padding: 0;">
+                        <td style="padding: 0">
+                            <a target="_blank" href="{% url 'dbms:pigeonhole_scan' provide_id=provide.id %}">
+                                {{ provide.notify.agree.agree_num }}
+                            </a>
+                        </td>
+                        <td style="padding: 0">{{ provide.notify.agree.lending.summary.custom.short_name }}</td>
+                        <td style="padding: 0">{{ provide.notify.agree.branch.short_name }}</td>
+                        <td style="padding: 0" align="right">{{ provide.provide_money|floatformat:2 }}</td>
+                        <td style="padding: 0">{{ provide.get_provide_typ_display }}</td>
+                        <td style="padding: 0">{{ provide.provide_date }}</td>
+                        <td style="padding: 0">{{ provide.due_date }}</td>
+                        <td style="padding: 0" align="right">{{ provide.provide_balance|floatformat:2 }}</td>
+                        <td style="padding: 0">{{ provide.get_implement_display }}</td>
+                        <td style="padding: 0">{{ provide.get_provide_status_display }}</td>
+                    </tr>
+                {% endfor %}
+                <tr style="padding: 0">
+                    <td style="padding: 0" align="center">合计</td>
+                    <td style="padding: 0" align="right">{{ pigeonhole_list_count }}</td>
+                    <td style="padding: 0"></td>
+                    <td style="padding: 0" align="right">{{ provide_money_sum|floatformat:2 }}</td>
+                    <td style="padding: 0"></td>
+                    <td style="padding: 0"></td>
+                    <td style="padding: 0"></td>
+                    <td style="padding: 0" align="right">{{ provide_balance_sum|floatformat:2 }}</td>
+                    <td style="padding: 0"></td>
+                    <td style="padding: 0"></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+{% endblock %}
+
+
+

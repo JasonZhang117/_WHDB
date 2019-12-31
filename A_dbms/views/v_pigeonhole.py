@@ -10,7 +10,7 @@ from django.db import transaction
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.urls import resolve
 from _WHDB.views import MenuHelper
-from _WHDB.views import (authority,provide_list_screen,provide_right)
+from _WHDB.views import (authority, provide_list_screen, provide_right)
 
 
 # -----------------------归档列表---------------------#
@@ -26,7 +26,7 @@ def pigeonhole(request, *args, **kwargs):  # 归档
     IMPLEMENT_LIST = models.Provides.IMPLEMENT_LIST  # 筛选条件
     '''筛选'''
     provide_list = models.Provides.objects.filter(**kwargs).select_related('notify').order_by('-provide_date')
-    provide_list = provide_list_screen(provide_list,request)
+    provide_list = provide_list_screen(provide_list, request)
     '''搜索'''
     search_key = request.GET.get('_s')
     if search_key:
@@ -87,7 +87,7 @@ def pigeonhole_overdue(request, *args, **kwargs):
 
     date_15_leter = datetime.date.today() - datetime.timedelta(days=20)  # 15天前
     pigeonhole_overdue_list = models.Provides.objects.filter(
-        implement__in=[1, 11], provide_date__lt=date_15_leter).order_by('-provide_date')  # 逾期归档
+        implement__in=[1, 11, 21], provide_date__lt=date_15_leter).order_by('-provide_date')  # 逾期归档
     pigeonhole_overdue_list = provide_list_screen(pigeonhole_overdue_list, request)
     '''搜索'''
     search_key = request.GET.get('_s')

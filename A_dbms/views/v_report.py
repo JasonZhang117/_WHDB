@@ -1191,3 +1191,60 @@ def report_dun_hk_list(request, *args, **kwargs):  #
     dun_hk_count = dun_hk_groups.count()
 
     return render(request, 'dbms/report/list/dun-hk-list.html', locals())
+
+
+# -----------------------------项目反馈情况表------------------------------#
+def article_feedback_list(request, *args, **kwargs):  # 项目列表
+    current_url_name = resolve(request.path).url_name  # 获取当前URL_NAME
+    authority_list = request.session.get('authority_list')  # 获取当前用户的所有权限
+    menu_result = MenuHelper(request).menu_data_list()
+    job_list = request.session.get('job_list')  # 获取当前用户的所有角色
+    PAGE_TITLE = '项目反馈情况表'
+    '''ARTICLE_STATE_LIST = [(1, '待反馈'), (2, '已反馈'), (3, '待上会'), (4, '已上会'), (5, '已签批'),
+                          (51, '已放款'), (52, '已放完'), (55, '已解保'), (61, '待变更'), (99, '已注销')]'''
+    article_list = models.Articles.objects.filter(
+        article_state__in=[1, 2]).order_by('-augment', 'article_state', )
+    article_list_count = article_list.count()
+    td = datetime.date.today()
+    augment_tot = article_list.aggregate(Sum('augment'))['augment__sum']  #
+    renewal_tot = article_list.aggregate(Sum('renewal'))['renewal__sum']  #
+    amount_tot = article_list.aggregate(Sum('amount'))['amount__sum']  #
+    return render(request, 'dbms/report/meeting/meeting-article-feedback.html', locals())
+
+
+# -----------------------------逾期归档情况表------------------------------#
+def pig_overdue_list(request, *args, **kwargs):  # 项目列表
+    current_url_name = resolve(request.path).url_name  # 获取当前URL_NAME
+    authority_list = request.session.get('authority_list')  # 获取当前用户的所有权限
+    menu_result = MenuHelper(request).menu_data_list()
+    job_list = request.session.get('job_list')  # 获取当前用户的所有角色
+    PAGE_TITLE = '逾期归档情况表'
+    '''ARTICLE_STATE_LIST = [(1, '待反馈'), (2, '已反馈'), (3, '待上会'), (4, '已上会'), (5, '已签批'),
+                          (51, '已放款'), (52, '已放完'), (55, '已解保'), (61, '待变更'), (99, '已注销')]'''
+    date_20_leter = datetime.date.today() - datetime.timedelta(days=20)  # 15天前
+    pigeonhole_overdue_list = models.Provides.objects.filter(
+        implement__in=[1, 11, 21], provide_date__lt=date_20_leter).order_by('provide_date')  # 逾期归档
+    pigeonhole_list_count = pigeonhole_overdue_list.count()
+    td = datetime.date.today()
+    provide_money_sum = pigeonhole_overdue_list.aggregate(Sum('provide_money'))['provide_money__sum']  #
+    provide_balance_sum = pigeonhole_overdue_list.aggregate(Sum('provide_balance'))['provide_balance__sum']  #
+    return render(request, 'dbms/report/meeting/meeting-pigeonhole-list.html', locals())
+
+
+# -----------------------------保后情况表------------------------------#
+def review_plan_list(request, *args, **kwargs):  # 项目列表
+    current_url_name = resolve(request.path).url_name  # 获取当前URL_NAME
+    authority_list = request.session.get('authority_list')  # 获取当前用户的所有权限
+    menu_result = MenuHelper(request).menu_data_list()
+    job_list = request.session.get('job_list')  # 获取当前用户的所有角色
+    PAGE_TITLE = '保后情况表'
+    '''ARTICLE_STATE_LIST = [(1, '待反馈'), (2, '已反馈'), (3, '待上会'), (4, '已上会'), (5, '已签批'),
+                          (51, '已放款'), (52, '已放完'), (55, '已解保'), (61, '待变更'), (99, '已注销')]'''
+    review_plan_list = models.Customes.objects.filter(
+        review_state__in=[1, 2]).order_by('review_plan_date', 'lately_date', 'lately_date').select_related(
+        'idustry', 'managementor', 'controler')  #
+    review_plan_count = review_plan_list.count()
+    td = datetime.date.today()
+    credit_amount_sum = review_plan_list.aggregate(Sum('credit_amount'))['credit_amount__sum']  #
+    amount_sum = review_plan_list.aggregate(Sum('amount'))['amount__sum']  #
+    return render(request, 'dbms/report/meeting/meeting-review-list.html', locals())

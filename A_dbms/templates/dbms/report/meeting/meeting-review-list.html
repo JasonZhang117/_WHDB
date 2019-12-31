@@ -1,0 +1,77 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}{{ PAGE_TITLE }}{% endblock %}
+{% block extra-css %}
+    <link rel="stylesheet" media="screen" href="{% static 'dbms/css/report-style.css' %}">
+    <link rel="stylesheet" media="print" href="{% static 'dbms/css/report-style.css' %}">
+    <link rel="stylesheet" media="print" href="{% static 'dbms/css/report-style-noprint.css' %}">
+{% endblock %}
+{% block  body %}
+    <div style="width: 310mm; margin-left: auto; margin-right: auto;">
+        <div class="table-responsive">
+            <table class="table table-bordered table-hover table-condensed active">
+                <caption>{{ PAGE_TITLE }}（截止日：{{ td }}）</caption>
+                <thead>
+                <tr style="text-align: center">
+                    <th>序号({{ review_plan_count }})</th>
+                    <th>客户名称</th>
+                    <th>行业</th>
+                    <th>管户经理</th>
+                    <th>风控专员</th>
+                    <th>授信总额</th>
+                    <th>在保余额</th>
+                    <th>类型</th>
+                    <th>补调(次)</th>
+                    <th>保后(次)</th>
+                    <th>间隔(日)</th>
+                    <th>风险分类</th>
+                    <th>计划时间</th>
+                    <th>保后状态</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for custom in review_plan_list %}
+                    <tr style="padding: 0;">
+                        <td style="padding: 0">{{ forloop.counter }}</td>
+                        <td style="padding: 0">
+                            <a target="_blank" href="{% url 'dbms:review_scan' custom_id=custom.id %}">
+                                {{ custom.short_name }}
+                            </a>
+                        </td>
+                        <td style="padding: 0">{{ custom.idustry.name }}</td>
+                        <td style="padding: 0">{{ custom.managementor.name }}</td>
+                        <td style="padding: 0">{{ custom.controler.name }}</td>
+                        <td style="padding: 0" align="right">{{ custom.credit_amount|floatformat:2 }}</td>
+                        <td style="padding: 0" align="right">{{ custom.amount|floatformat:2 }}</td>
+                        <td style="padding: 0">{{ custom.get_custom_typ_display }}</td>
+                        <td style="padding: 0" align="right">{{ custom.review_amount }}</td>
+                        <td style="padding: 0" align="right">{{ custom.add_amount }}</td>
+                        <td style="padding: 0" align="right">{{ custom.day_space }}</td>
+                        <td style="padding: 0">{{ custom.get_classification_display }}</td>
+                        <td style="padding: 0">{{ custom.review_plan_date }}</td>
+                        <td style="padding: 0">{{ custom.get_review_state_display }}</td>
+                    </tr>
+                {% endfor %}
+                <tr style="padding: 0">
+                    <td style="padding: 0" align="center" colspan="2">合计</td>
+                    <td style="padding: 0" align="right">{{ review_plan_count }}</td>
+                    <td style="padding: 0"></td>
+                    <td style="padding: 0"></td>
+                    <td style="padding: 0" align="right">{{ credit_amount_sum|floatformat:2 }}</td>
+                    <td style="padding: 0" align="right">{{ amount_sum|floatformat:2 }}</td>
+                    <td style="padding: 0"></td>
+                    <td style="padding: 0"></td>
+                    <td style="padding: 0"></td>
+                    <td style="padding: 0"></td>
+                    <td style="padding: 0"></td>
+                    <td style="padding: 0"></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+{% endblock %}
+
+
+
