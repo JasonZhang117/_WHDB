@@ -252,16 +252,20 @@ urlpatterns = [
     # ------------------------------报表--------------------------------------#
     path('report/', views.report, name='report'),  #
     path('report/provide/list/<int:p_typ>/<int:t_typ>/', views.report_provide_list, name='report_provide_list'),
+    path('report/repay/list/<int:t_typ>/', views.report_repay_list, name='report_repay_list'),
+
     path('report/provide/balance/class/<int:c_typ>/<int:t_typ>/', views.report_balance_class,
          name='report_balance_class'),
-    path('report/article/balance/class/<int:c_typ>/<int:t_typ>/', views.report_article_class, name='report_article_class'),
+
+    path('report/article/balance/class/<int:c_typ>/<int:t_typ>/', views.report_article_class,
+         name='report_article_class'),
 
     path('report/accrual/list/<int:p_typ>/<int:t_typ>/', views.report_provide_accrual, name='report_provide_accrual'),
     path('report/accrual/class/<int:c_typ>/<int:t_typ>/', views.report_accrual_class, name='report_accrual_class'),
-    path('report/provide/class/list/<int:c_typ>/<int:t_typ>/', views.report_provide_class_list, name='report_provide_class_list'),
+    path('report/provide/class/list/<int:c_typ>/<int:t_typ>/', views.report_provide_class_list,
+         name='report_provide_class_list'),
     path('report/provide/class/w/<int:c_typ>/<int:t_typ>/', views.report_provid_w_list,
          name='report_provid_w_list'),
-
 
     path('report/article/class/<int:c_typ>/<int:t_typ>/', views.report_article, name='report_article'),
     path('report/article/list/<int:c_typ>/<int:t_typ>/', views.report_article_list, name='report_article_list'),

@@ -308,7 +308,7 @@ def report_provid_w_list(request, *args, **kwargs):  #
     provide_list = models.Provides.objects.filter(
         provide_balance__gt=0, provide_date__gte=tf_r, provide_date__lte=tl_r).select_related(
         'notify').order_by('-provide_date')
-    print(ss_value,c_typ,t_typ)
+    print(ss_value, c_typ, t_typ)
     if c_typ == 1:
         provide_list = provide_list.filter(provide_typ=provide_typ_wen[ss_value])
     elif c_typ == 11:
@@ -465,6 +465,41 @@ def report_provide_accrual(request, *args, **kwargs):  #
     provide_count = provide_list.count()  #
 
     return render(request, 'dbms/report/provide_list.html', locals())
+
+
+# -----------------------还款列表---------------------#
+def report_repay_list(request, *args, **kwargs):  #
+    current_url_name = resolve(request.path).url_name  # 获取当前URL_NAME
+    authority_list = request.session.get('authority_list')  # 获取当前用户的所有权限
+    menu_result = MenuHelper(request).menu_data_list()
+    PAGE_TITLE = '还款明细'
+    TERM_LIST = [(1, '本年'), (2, '本季'), (3, '本月'), (4, '本周'), (11, '上年'), (99, '自定义'), ]
+
+    tf_r = request.GET.get('tf')
+    tl_r = request.GET.get('tl')
+    t_typ = kwargs['t_typ']
+
+    tf_r, tl_r = tt_provide(t_typ, tf_r, tl_r)
+    repay_list = models.Repayments.objects.filter(repayment_date__gte=tf_r, repayment_date__lte=tl_r).select_related(
+        'provide').order_by('-repayment_date')
+
+    '''搜索'''
+    search_key = request.GET.get('_s')
+    if search_key:
+        search_fields = ['provide__notify__agree__lending__summary__custom__name',
+                         'provide__notify__agree__lending__summary__custom__short_name',
+                         'provide__notify__agree__branch__name',
+                         'provide__notify__agree__branch__short_name',
+                         'provide__notify__agree__agree_num']
+        q = Q()
+        q.connector = 'OR'
+        for field in search_fields:
+            q.children.append(("%s__contains" % field, search_key))
+        repay_list = repay_list.filter(q)
+    repay_sum = repay_list.aggregate(Sum('repayment_money'))['repayment_money__sum']  #
+    repay_count = repay_list.count()  #
+
+    return render(request, 'dbms/report/repay_list.html', locals())
 
 
 # -----------------------放款分类统计---------------------#

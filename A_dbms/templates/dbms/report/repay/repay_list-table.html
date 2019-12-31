@@ -1,0 +1,63 @@
+<div id="noprint">
+    <label>
+        <form class="navbar-form" style="display: inline">
+            <input type="search" name="_s" class="form-control" placeholder="客户,银行,合同"
+                   value="{{ search_key|default_if_none:'' }}">
+            <button type="submit" class="btn btn-primary btn-sm">搜索</button>
+        </form>
+    </label>
+    <label>
+        {% for t_typ in TERM_LIST %}
+            {% if t_typ.0 == kwargs.t_typ %}
+                <a class="btn btn-primary btn-sm active"
+                   href="{% url 'dbms:report_repay_list' t_typ=t_typ.0 %}">{{ t_typ.1 }}</a>
+            {% else %}
+                <a class="btn btn-primary btn-sm"
+                   href="{% url 'dbms:report_repay_list' t_typ=t_typ.0 %}">{{ t_typ.1 }} </a>
+            {% endif %}
+        {% endfor %}
+    </label>
+    <label>
+        <form class="navbar-form" style="display: inline">
+            <input type="date" name="tf" class="form-control" placeholder="起始日"
+                   value="{{ tf_r|default_if_none:'' }}">
+            <input type="date" name="tl" class="form-control" placeholder="结束日"
+                   value="{{ tl_r|default_if_none:'' }}">
+            <button type="submit" class="btn btn-primary btn-sm">搜索</button>
+        </form>
+    </label>
+</div>
+
+<div class="table-responsive">
+    <table class="table table-bordered table-hover table-condensed active">
+        <caption>{{ PAGE_TITLE }}统计表（{{ tf_r }}至{{ tl_r }}）</caption>
+        <thead>
+        <tr style="text-align: center">
+            <th>序号</th>
+            <th>合同编号</th>
+            <th>客户名称</th>
+            <th>银行名称</th>
+            <th>还款金额</th>
+            <th>还款日期</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for repay in repay_list %}
+            <tr style="padding: 0">
+                <td style="padding: 0">{{ forloop.counter }}</td>
+                <td style="padding: 0">{{ repay.provide.notify.agree.agree_num }}</td>
+                <td style="padding: 0">{{ repay.provide.notify.agree.lending.summary.custom.short_name }}</td>
+                <td style="padding: 0">{{ repay.provide.notify.agree.branch.short_name }}</td>
+                <td style="padding: 0" align="right">{{ repay.repayment_money|floatformat:'2' }}</td>
+                <td style="padding: 0">{{ repay.repayment_date }}</td>
+            </tr>
+        {% endfor %}
+        <tr>
+            <td style="padding: 0" colspan="3" align="center">合计</td>
+            <td style="padding: 0" align="right">{{ repay_count }}</td>
+            <td style="padding: 0" align="right">{{ repay_sum|floatformat:'2' }}</td>
+            <td style="padding: 0"></td>
+        </tr>
+        </tbody>
+    </table>
+</div>
