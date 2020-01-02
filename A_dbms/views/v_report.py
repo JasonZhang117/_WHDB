@@ -911,7 +911,7 @@ def report_custom(request, *args, **kwargs):  #
         petty_loan=Sum('petty_loan'), amount=Sum('amount')). \
         values('controler__name', 'con', 'credit_amount', 'custom_flow', 'custom_accept',
                'custom_back', 'entrusted_loan', 'petty_loan', 'amount').order_by('-credit_amount')  # 管户经理
-
+    td = datetime.date.today()
     return render(request, 'dbms/report/balance-class-custom.html', locals())
 
 
