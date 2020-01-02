@@ -963,6 +963,7 @@ def report_custom_list(request, *args, **kwargs):  #
     if custom_acount > 0:
         custom_credit_average = round(custom_credit_tot_w / custom_acount, 2)
         custom_acount_average = round(custom_acount_tot_w / custom_acount, 2)
+    td = datetime.date.today()
     return render(request, 'dbms/report/list/class-custom-list.html', locals())
 
 
