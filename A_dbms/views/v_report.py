@@ -1060,7 +1060,7 @@ def top_custom(request, *args, **kwargs):  #
         r_amount = round(c_amount / t_amount * 100, 2)
     if t_custom_count > 0:
         r_custom_count = round(c_custom_count / t_custom_count * 100, 2)
-
+    td = datetime.date.today()
     return render(request, 'dbms/report/top-class-custom.html', locals())
 
 
