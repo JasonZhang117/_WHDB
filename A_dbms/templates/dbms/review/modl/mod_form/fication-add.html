@@ -1,0 +1,21 @@
+<div id="form_fication">
+    <div class="form-group"><!--分类期间-->
+        <label for="id_fic_date"
+               class="col-sm-3 control-label">{{ form_fication.fic_date.label }}：</label>
+        <div class="col-sm-9">{{ form_fication.fic_date }}</div>
+        <label id="e_fic_date" class="pull-right">{{ form_fication.fic_date.errors }}</label>
+    </div>
+    <div class="form-group"><!--五级分类-->
+        <label for="id_fication"
+               class="col-sm-3 control-label">{{ form_fication.fication.label }}：</label>
+        <div class="col-sm-9">{{ form_fication.fication }}</div>
+        <label id="e_fication" class="pull-right">{{ form_fication.fication.errors }}</label>
+    </div>
+    <div class="form-group"><!--分类说明-->
+        <label for="id_explain"
+               class="col-sm-3 control-label">{{ form_fication.explain.label }}：</label>
+        <div class="col-sm-9">{{ form_fication.explain }}</div>
+        <label id="e_explain" class="pull-right">{{ form_fication.explain.errors }}</label>
+    </div>
+
+</div>

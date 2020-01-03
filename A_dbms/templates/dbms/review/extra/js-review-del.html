@@ -6,9 +6,7 @@
 
     function bindDelReviewB() {
         $('#review-tb').on('click', '.delReviewB', function () {
-            console.log("bindDelReviewB");
             delReviewId = $(this).parent().parent().attr('review-nid');
-            console.log(delReviewId);
             $('#delReviewId').val(delReviewId);
             $('#delReviewModal').modal('show');
         })

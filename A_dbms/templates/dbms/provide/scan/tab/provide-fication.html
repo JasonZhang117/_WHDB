@@ -1,0 +1,26 @@
+<div class="table-responsive">
+    <table class="table table-bordered table-hover table-condensed active">
+        <thead>
+        <tr style="text-align: center">
+            <th>序号</th>
+            <th>分类</th>
+            <th>分类日期</th>
+            <th>分类说明</th>
+            <th>操作人</th>
+            <th>操作日期</th>
+        </tr>
+        </thead>
+        <tbody id="fication-tb">
+        {% for fication in provide_obj.fication_provide.all %}
+            <tr fication-nid="{{ fication.id }}">
+                <td>{{ forloop.counter }}</td>
+                <td>{{ fication.get_fication_display }}</td>
+                <td>{{ fication.fic_date }}</td>
+                <td>{{ fication.explain }}</td>
+                <td>{{ fication.ficationor.name }}</td>
+                <td>{{ fication.ficationdate }}</td>
+            <tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>

@@ -71,12 +71,17 @@ def review_update_ajax(request):
     custom_list = models.Customes.objects.filter(id=post_data['custom_id'])
     custom_obj = custom_list.first()
     review_list_s = custom_obj.review_custom.filter(review_state=1)
+    provide_list = models.Provides.objects.filter(
+        notify__agree__lending__summary__custom=custom_obj,
+        provide_status__in=[1, 15])
     '''REVIEW_STATE_LIST = [(1, '待保后'), (11, '待报告'), (21, '已完成'), (81, '自主保后')]'''
-    if not post_data['review_id']:  # 自主保后
+    today_str = str(datetime.date.today())
+    if post_data['review_id'] == 'N':  # 自主保后
         form_review_add = forms.FormRewiewAdd(post_data)
         if form_review_add.is_valid():
             review_cleaned = form_review_add.cleaned_data
-            today_str = str(datetime.date.today())
+            classification = review_cleaned['classification']
+            review_date = review_cleaned['review_date']
             try:
                 with transaction.atomic():
                     review_obj = models.Review.objects.create(
@@ -84,11 +89,13 @@ def review_update_ajax(request):
                         review_sty=review_cleaned['review_sty'],
                         analysis=review_cleaned['analysis'],
                         suggestion=review_cleaned['suggestion'],
-                        classification=review_cleaned['classification'],
+                        classification=classification,
                         review_date=review_cleaned['review_date'],
                         reviewor=request.user)
-                    custom_list.update(review_state=81, review_date=review_cleaned['review_date'],
-                                       lately_date=review_cleaned['review_date'], )  # 更新客户信息
+                    custom_list.update(review_state=81, review_date=review_date,
+                                       classification=classification,
+                                       lately_date=review_date, )  # 更新客户信息
+                    provide_list.update(fication=classification, fic_date=review_date, providor=request.user)
                 response['message'] = '自主保后提交成功！'
             except Exception as e:
                 response['status'] = False
@@ -106,17 +113,20 @@ def review_update_ajax(request):
         form_review_add = forms.FormRewiewAdd(post_data)
         if form_review_add.is_valid():
             review_cleaned = form_review_add.cleaned_data
-            today_str = str(datetime.date.today())
+            classification = review_cleaned['classification']
+            review_date = review_cleaned['review_date']
             try:
                 with transaction.atomic():
                     review_list.update(review_sty=review_cleaned['review_sty'],
                                        analysis=review_cleaned['analysis'],
                                        suggestion=review_cleaned['suggestion'],
-                                       classification=review_cleaned['classification'],
-                                       review_date=review_cleaned['review_date'],
+                                       classification=classification,
+                                       review_date=review_date,
                                        review_state=21)  # 更新保后信息
-                    custom_list.update(review_state=21, review_date=review_cleaned['review_date'],
-                                       lately_date=review_cleaned['review_date'])  # 更新客户信息
+                    custom_list.update(review_state=21, review_date=review_date,
+                                       classification=classification,
+                                       lately_date=review_date)  # 更新客户信息
+                    provide_list.update(fication=classification, fic_date=review_date, providor=request.user)
                 response['message'] = '保后成功！'
             except Exception as e:
                 response['status'] = False
@@ -125,6 +135,92 @@ def review_update_ajax(request):
             response['status'] = False
             response['message'] = '表单信息有误！！！'
             response['forme'] = form_review_add.errors
+    result = json.dumps(response, ensure_ascii=False)
+    return HttpResponse(result)
+
+
+# -----------------------分类ajax-------------------------#
+@login_required
+@authority
+def fication_add_ajax(request):
+    response = {'status': True, 'message': None, 'forme': None, 'skip': None, }
+    post_data_str = request.POST.get('postDataStr')
+    post_data = json.loads(post_data_str)
+    provide_list = models.Provides.objects.filter(id=post_data['provide_id'])
+    provide_obj = provide_list.first()
+    form_fication = forms.FormFicationAdd(post_data)
+    if form_fication.is_valid():
+        fication_cleaned = form_fication.cleaned_data
+        fic_date = fication_cleaned['fic_date']
+        fication = fication_cleaned['fication']
+        try:
+            with transaction.atomic():
+                provide_list.update(fic_date=fic_date, fication=fication, )
+                fication_default = {
+                    'provide': provide_obj,
+                    'fic_date': fic_date,
+                    'fication': fication,
+                    'explain': fication_cleaned['explain'],
+                    'ficationor': request.user}
+                fication_obj, created = models.Fication.objects.update_or_create(
+                    provide=provide_obj, fic_date=fic_date,
+                    defaults=fication_default)
+            response['message'] = '分类成功！！'
+        except Exception as e:
+            response['status'] = False
+            response['message'] = '分类失败：%s' % str(e)
+    else:
+        response['status'] = False
+        response['message'] = '表单信息有误！！！'
+        response['forme'] = form_fication.errors
+
+    result = json.dumps(response, ensure_ascii=False)
+    return HttpResponse(result)
+
+
+# -----------------------分类ajax-------------------------#
+@login_required
+@authority
+def fication_all_ajax(request, *args, **kwargs):
+    response = {'status': True, 'message': None, 'forme': None, 'skip': None, }
+    post_data_str = request.POST.get('postDataStr')
+    post_data = json.loads(post_data_str)
+    ini_fication = int(post_data['ini_fication'])
+
+    if ini_fication > 0:
+        provide_list = models.Provides.objects.filter(provide_balance__gt=0, fication=ini_fication)
+    else:
+        response['status'] = False
+        response['message'] = '不能对所有类型项目进行批量分类，请选择具体分类类型'
+        result = json.dumps(response, ensure_ascii=False)
+        return HttpResponse(result)
+
+    form_fication_all = forms.FormFicationAll(post_data)
+    if form_fication_all.is_valid():
+        fication_all_cleaned = form_fication_all.cleaned_data
+        fic_date = fication_all_cleaned['fic_date']
+        fication = fication_all_cleaned['fication']
+        try:
+            with transaction.atomic():
+                for provide in provide_list:
+                    provide_list.update(fic_date=fic_date, fication=fication, )
+                    fication_default = {
+                        'provide': provide,
+                        'fic_date': fic_date,
+                        'fication': fication,
+                        'ficationor': request.user}
+                    fication_obj, created = models.Fication.objects.update_or_create(
+                        provide=provide, fic_date=fic_date,
+                        defaults=fication_default)
+            response['message'] = '批量分类分类成功！！'
+        except Exception as e:
+            response['status'] = False
+            response['message'] = '批量分类成功失败：%s' % str(e)
+    else:
+        response['status'] = False
+        response['message'] = '表单信息有误！！！'
+        response['forme'] = form_fication_all.errors
+
     result = json.dumps(response, ensure_ascii=False)
     return HttpResponse(result)
 

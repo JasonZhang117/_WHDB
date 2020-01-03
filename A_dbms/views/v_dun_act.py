@@ -329,7 +329,6 @@ def defendant_add_ajax(request):  #
             custom_cleaned = from_custom_add.cleaned_data
             custom_add_list = custom_cleaned['custom']
             dun_custom_add_list = models.Customes.objects.filter(id__in=custom_add_list)
-            print('dun_custom_add_list:', dun_custom_add_list)
             try:
                 with transaction.atomic():
                     for custom_obj in dun_custom_add_list:
@@ -665,8 +664,6 @@ def inquiry_add_ajax(request):
                         response['status'] = False
                         response['message'] = '查询信息创建失败：%s！' % str(e)
                 else:
-                    print('form_turn_add:', form_turn_add.errors)
-
                     response['status'] = False
                     response['message'] = '表单信息有误！！！'
                     response['forme'] = form_turn_add.errors

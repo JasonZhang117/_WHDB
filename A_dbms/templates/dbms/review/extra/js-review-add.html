@@ -5,11 +5,8 @@
     });
 
     function bindReviewB() {
-        console.log("bindReviewB");
         $('#review-tb').on('click', '.reviewB', function () {
-            console.log("bindReviewB");
             reviewNid = $(this).parent().parent().attr('review-nid');
-            console.log(reviewNid);
             $('#reviewNid').val(reviewNid);
             $('#addReviewModal').modal('show');
         })
@@ -29,14 +26,12 @@
             postData['suggestion'] = suggestion;
 
             var postDataStr = JSON.stringify(postData);
-            console.log(postDataStr);
             $.ajax({
                 url: '/dbms/review/update/',
                 type: 'POST',
                 data: {'postDataStr': postDataStr},
                 success: function (arg) {
                     var dict = JSON.parse(arg);
-                    console.log(dict);
                     if (dict.status) {
                         $('#addCommentModal').modal('hide');
                         alert(dict.message);

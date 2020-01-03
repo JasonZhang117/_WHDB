@@ -9,7 +9,8 @@ from django.db.models import Q
 from django.db.models import Avg, Min, Sum, Max, Count
 from django.urls import resolve
 from _WHDB.views import MenuHelper
-from _WHDB.views import (authority, custom_list_screen,custom_right)
+from _WHDB.views import (authority, custom_list_screen, custom_right, provide_list_screen,
+                         FICATION_LIST)
 
 
 # -----------------------保后列表---------------------#
@@ -152,3 +153,57 @@ def review_overdue(request, *args, **kwargs):
         p_list = paginator.page(paginator.num_pages)
 
     return render(request, 'dbms/review/review.html', locals())
+
+
+# -----------------------分类列表---------------------#
+@login_required
+@authority
+def classification(request, *args, **kwargs):  # 委托合同列表
+    current_url_name = resolve(request.path).url_name  # 获取当前URL_NAME
+    authority_list = request.session.get('authority_list')  # 获取当前用户的所有权限
+    menu_result = MenuHelper(request).menu_data_list()
+    job_list = request.session.get('job_list')  # 获取当前用户的所有角色
+    PAGE_TITLE = '分类列表'
+    if kwargs:
+        fication = kwargs['fication']
+    else:
+        fication = 0
+
+    '''PROVIDE_STATUS_LIST = [(1, '在保'), (11, '解保'), (21, '代偿')]'''
+    FICATION_LIST = models.Provides.FICATION_LIST  # 筛选条件
+    '''筛选'''
+    provide_list = models.Provides.objects.filter(provide_balance__gt=0)
+    provide_list = provide_list.filter(**kwargs).select_related('notify').order_by('-provide_date')
+    provide_list = provide_list_screen(provide_list, request)
+    '''搜索'''
+    search_key = request.GET.get('_s')
+    if search_key:
+        search_fields = ['notify__agree__lending__summary__custom__name',
+                         'notify__agree__lending__summary__custom__short_name',
+                         'notify__agree__branch__name', 'notify__agree__branch__short_name',
+                         'notify__agree__agree_num']
+        q = Q()
+        q.connector = 'OR'
+        for field in search_fields:
+            q.children.append(("%s__contains" % field, search_key))
+        provide_list = provide_list.filter(q)
+
+    balance = provide_list.aggregate(Sum('provide_balance'))['provide_balance__sum']  # 在保余额
+
+    provide_acount = provide_list.count()
+    '''分页'''
+    paginator = Paginator(provide_list, 19)
+    page = request.GET.get('page')
+    try:
+        p_list = paginator.page(page)
+    except PageNotAnInteger:
+        p_list = paginator.page(1)
+    except EmptyPage:
+        p_list = paginator.page(paginator.num_pages)
+    today_str = str(datetime.date.today())
+    form_fication = forms.FormFicationAdd(initial={'fic_date': today_str})
+
+    form_fication_all_data = {'fic_date': today_str, 'fication': fication, }
+    form_fication_all = forms.FormFicationAll(initial=form_fication_all_data)
+
+    return render(request, 'dbms/review/classification.html', locals())

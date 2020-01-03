@@ -173,9 +173,14 @@ urlpatterns = [
     path('review/<int:review_state>/', views.review, name='review'),  # 菜单-保后管理
     path('review/scan/<int:custom_id>/', views.review_scan, name='review_scan'),  #
     path('review/overdue/', views.review_overdue, name='review_overdue_all'),  # 菜单-保后管理
+    path('review/classification/', views.classification, name='review_fication_all'),  # 菜单-保后管理
+    path('review/classification/<int:fication>/', views.classification, name='review_fication'),  # 菜单-保后管理
 
     path('review/plan/', views.review_plan_ajax, name='review_plan_ajax'),  #
     path('review/update/', views.review_update_ajax, name='review_update_ajax'),  #
+    path('review/del/', views.review_del_ajax, name='review_del_ajax'),  #
+    path('review/fication/', views.fication_add_ajax, name='review_fication_add_ajax'),  #
+    path('review/fication/all/', views.fication_all_ajax, name='review_fication_all_ajax'),  #
     path('review/del/', views.review_del_ajax, name='review_del_ajax'),  #
     path('investigate/add/', views.investigate_add_ajax, name='investigate_add_ajax'),  #
     path('investigate/del/', views.investigate_del_ajax, name='investigate_del_ajax'),  #
@@ -279,7 +284,9 @@ urlpatterns = [
     path('report/meeting/article/feedback/', views.article_feedback_list, name='report_article_feedback_list'),
     path('report/meeting/pig/overdue/', views.pig_overdue_list, name='report_pig_overdue_list'),
     path('report/meeting/review/plan/', views.review_plan_list, name='report_review_plan_list'),
-    
+
+    path('report/month/fication/', views.fication_list, name='report_fication_list'),
+
     # 员工
     path('employee/', views.employee, name='employee_all'),
     path('employee/<int:employee_status>/', views.employee, name='employee'),  # /dbms/cstom/(0-9)

@@ -1,0 +1,40 @@
+<div class="table-responsive">
+    <table class="table table-bordered table-hover table-condensed active">
+        <thead>
+        <tr style="text-align: center">
+            <th>合同编号({{ provide_acount }})</th>
+            <th>客户名称</th>
+            <th>放款银行</th>
+            <th>放款总额</th>
+            <th>放款种类</th>
+            <th>放款日期</th>
+            <th>到期日</th>
+            <th>还款金额</th>
+            <th>余额</th>
+            <th>五级分类</th>
+            <th>分类日期</th>
+            <th>操作</th>
+        </tr>
+        </thead>
+        <tbody id="cla-tb">
+        {% for provide in p_list %}
+            <tr provide-nid="{{ provide.id }}">
+                <td><a href="{% url 'dbms:provide_scan' provide_id=provide.id %}">
+                    {{ provide.notify.agree.agree_num }} </a></td>
+                <td>{{ provide.notify.agree.lending.summary.custom.short_name }}</td>
+                <td>{{ provide.notify.agree.branch.short_name }}</td>
+                <td align="right">{{ provide.provide_money }}</td>
+                <td>{{ provide.get_provide_typ_display }}</td>
+                <td>{{ provide.provide_date }}</td>
+                <td>{{ provide.due_date }}</td>
+                <td align="right">{{ provide.provide_repayment_sum }}</td>
+                <td align="right">{{ provide.provide_balance }}</td>
+                <td>{{ provide.get_fication_display }}</td>
+                <td>{{ provide.fic_date }}</td>
+                <td><a class="btn btn-primary btn-xs claFicationB">分类</a></td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    {% include 'dbms/board/page.html' %}
+</div>

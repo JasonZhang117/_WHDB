@@ -12,6 +12,29 @@ class FormRewiewPlanAdd(dform.ModelForm):
             'review_plan_date': dform.DateInput(attrs={'class': 'form-control', 'type': 'date'})}
 
 
+# -----------------------分类-------------------------#
+class FormFicationAdd(dform.ModelForm):
+    class Meta:
+        model = models.Fication
+        fields = ['fic_date', 'fication', 'explain', ]
+        widgets = {
+            'fic_date': dform.DateInput(attrs={'class': 'form-control', 'type': 'date'}),
+            'fication': dform.Select(attrs={'class': 'form-control'}),
+            'explain': dform.Textarea(attrs={'class': 'form-control', 'rows': '3', 'placeholder': '分类说明'}),
+        }
+
+
+# -----------------------一件分类-------------------------#
+class FormFicationAll(dform.ModelForm):
+    class Meta:
+        model = models.Fication
+        fields = ['fic_date', 'fication', ]
+        widgets = {
+            'fic_date': dform.DateInput(attrs={'class': 'form-control', 'type': 'date'}),
+            'fication': dform.Select(attrs={'class': 'form-control'}),
+        }
+
+
 # -----------------------保后添加-------------------------#
 class FormRewiewAdd(dform.ModelForm):
     class Meta:

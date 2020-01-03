@@ -1,0 +1,38 @@
+<div>
+    <label>
+        {% if kwargs.fication == None %}
+            <a class="btn btn-primary btn-sm active" href="{% url 'dbms:review_fication_all' %}">全部</a>
+        {% else %}
+            <a class="btn btn-primary btn-sm" href="{% url 'dbms:review_fication_all' %}">全部</a>
+        {% endif %}
+        {# 方式一：#}
+        {% for FICATION in FICATION_LIST %}
+            {% if FICATION.0 == kwargs.fication %}
+                <a class="btn btn-primary btn-sm active"
+                   href="{% url 'dbms:review_fication' fication=FICATION.0 %}">{{ FICATION.1 }}</a>
+            {% else %}
+                <a class="btn btn-primary btn-sm"
+                   href="{% url 'dbms:review_fication' fication=FICATION.0 %}">{{ FICATION.1 }} </a>
+            {% endif %}
+        {% endfor %}
+    </label>
+
+    <label>
+        <form class="navbar-form" style="display: inline">
+            <input type="search" name="_s" class="form-control" placeholder="客户,银行,合同"
+                   value="{{ search_key|default_if_none:'' }}">
+            <button type="submit" class="btn btn-primary btn-sm">搜索</button>
+        </form>
+    </label>
+    <label>
+        在保余额：{{ balance|floatformat:'2' }}
+    </label>
+
+    <label class="pull-right">
+        <a class="btn btn-success btn-sm " target="_blank" href="{% url 'dbms:report_fication_list' %}">
+            汇总表</a></label>
+
+    <label class="pull-right">
+        <a class="btn btn-primary btn-sm " id="FicationAllB">批量分类</a>
+    </label>
+</div>

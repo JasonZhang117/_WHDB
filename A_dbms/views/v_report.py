@@ -180,15 +180,14 @@ def report_balance_class(request, *args, **kwargs):  #
     current_url_name = resolve(request.path).url_name  # 获取当前URL_NAME
     authority_list = request.session.get('authority_list')  # 获取当前用户的所有权限
     menu_result = MenuHelper(request).menu_data_list()
-    PAGE_TITLE = '在保分类(按放款)'
-    CLASS_LIST = [(1, '品种'), (11, '授信银行'), (21, '区域'), (31, '行业'), (35, '部门'),
+    PAGE_TITLE = '在保放款分类统计表'
+    CLASS_LIST = [(1, '品种'), (11, '授信银行'), (21, '区域'), (31, '行业'), (33, '分类'), (35, '部门'),
                   (41, '项目经理'), (51, '项目助理'), (61, '风控专员'), (71, '放款支行'), (81, '法律顾问'), ]
     TERM_LIST = [(0, '全部'), (1, '本年'), (2, '本季'), (3, '本月'), (4, '本周'), (11, '上年'), (99, '自定义'), ]
-    provide_typ_list = models.Provides.PROVIDE_TYP_LIST  # 筛选条件
 
-    provide_typ_dic = {}
-    for provide_typ in provide_typ_list:
-        provide_typ_dic[provide_typ[0]] = provide_typ[1]
+    provide_typ_dic = dict(models.Provides.PROVIDE_TYP_LIST)
+
+    fication_dic = dict(models.Provides.FICATION_LIST)
 
     tf_r = request.GET.get('tf')
     tl_r = request.GET.get('tl')
@@ -239,6 +238,12 @@ def report_balance_class(request, *args, **kwargs):  #
         balance=Sum('provide_balance')).values(
         'notify__agree__lending__summary__custom__idustry__name', 'con', 'sum_old', 'sum_new', 'sum', 'repayment',
         'balance').order_by('-sum')
+    provide_groups_fication = provide_groups.values(
+        'fication').annotate(
+        con=Count('provide_money'), sum_old=Sum('old_amount'), sum_new=Sum('new_amount'),
+        sum=Sum('provide_money'), repayment=Sum('provide_repayment_sum'),
+        balance=Sum('provide_balance')).values(
+        'fication', 'con', 'sum_old', 'sum_new', 'sum', 'repayment', 'balance').order_by('fication')
     provide_groups_district = provide_groups.values(
         'notify__agree__lending__summary__custom__district__name').annotate(
         con=Count('provide_money'), sum_old=Sum('old_amount'), sum_new=Sum('new_amount'),
@@ -285,15 +290,18 @@ def report_provid_w_list(request, *args, **kwargs):  #
     authority_list = request.session.get('authority_list')  # 获取当前用户的所有权限
     menu_result = MenuHelper(request).menu_data_list()
     PAGE_TITLE = '放款分类明细（在保）'
-    CLASS_LIST = [(1, '品种'), (11, '授信银行'), (21, '区域'), (31, '行业'), (35, '部门'),
+    CLASS_LIST = [(1, '品种'), (11, '授信银行'), (21, '区域'), (31, '行业'), (33, '分类'), (35, '部门'),
                   (41, '项目经理'), (51, '项目助理'), (61, '风控专员'), (71, '放款支行'), (81, '法律顾问'), ]
     TERM_LIST = [(0, '全部'), (1, '本年'), (2, '本季'), (3, '本月'), (4, '本周'), (11, '上年'), (99, '自定义'), ]
     provide_typ_list = models.Provides.PROVIDE_TYP_LIST
-    provide_typ_dic = dict(provide_typ_list)
     provide_typ_wen = {}
     for provide_typ in provide_typ_list:
         provide_typ_wen[provide_typ[1]] = provide_typ[0]
-
+    fication_list = models.Provides.FICATION_LIST
+    fication_dic = dict(fication_list)
+    fication_wen = {}
+    for fication in fication_list:
+        fication_wen[fication[1]] = fication[0]
     c_typ_dic = dict(CLASS_LIST)
     t_typ_dic = dict(TERM_LIST)
     ss_value = request.GET.get('_cs')
@@ -301,6 +309,7 @@ def report_provid_w_list(request, *args, **kwargs):  #
     tl_r = request.GET.get('tl')
     c_typ = kwargs['c_typ']
     t_typ = kwargs['t_typ']
+
     c_typ_dic_this = c_typ_dic[c_typ]
     t_typ_dic_this = t_typ_dic[t_typ]
     tf_r, tl_r = tt_provide(t_typ, tf_r, tl_r)
@@ -308,7 +317,7 @@ def report_provid_w_list(request, *args, **kwargs):  #
     provide_list = models.Provides.objects.filter(
         provide_balance__gt=0, provide_date__gte=tf_r, provide_date__lte=tl_r).select_related(
         'notify').order_by('-provide_date')
-    print(ss_value, c_typ, t_typ)
+
     if c_typ == 1:
         provide_list = provide_list.filter(provide_typ=provide_typ_wen[ss_value])
     elif c_typ == 11:
@@ -317,6 +326,8 @@ def report_provid_w_list(request, *args, **kwargs):  #
         provide_list = provide_list.filter(notify__agree__lending__summary__custom__district__name=ss_value)
     elif c_typ == 31:
         provide_list = provide_list.filter(notify__agree__lending__summary__custom__idustry__name=ss_value)
+    elif c_typ == 33:
+        provide_list = provide_list.filter(fication=fication_wen[ss_value])
     elif c_typ == 35:
         provide_list = provide_list.filter(notify__agree__lending__summary__director__department__name=ss_value)
     elif c_typ == 41:
@@ -507,13 +518,13 @@ def report_accrual_class(request, *args, **kwargs):  #
     current_url_name = resolve(request.path).url_name  # 获取当前URL_NAME
     authority_list = request.session.get('authority_list')  # 获取当前用户的所有权限
     menu_result = MenuHelper(request).menu_data_list()
-    PAGE_TITLE = '放款分类'
-    CLASS_LIST = [(1, '品种'), (11, '授信银行'), (21, '区域'), (31, '行业'), (35, '部门'),
+    PAGE_TITLE = '放款分类统计表'
+    CLASS_LIST = [(1, '品种'), (11, '授信银行'), (21, '区域'), (31, '行业'), (33, '分类'), (35, '部门'),
                   (41, '项目经理'), (51, '项目助理'), (61, '风控专员'), (71, '放款支行'), (81, '法律顾问'), ]
     TERM_LIST = [(1, '本年'), (2, '本季'), (3, '本月'), (4, '本周'), (11, '上年'), (99, '自定义'), ]
 
-    provide_typ_list = models.Provides.PROVIDE_TYP_LIST  # 筛选条件
-    provide_typ_dic = dict(provide_typ_list)
+    provide_typ_dic = dict( models.Provides.PROVIDE_TYP_LIST)
+    fication_dic = dict(models.Provides.FICATION_LIST)
 
     c_typ_dic = dict(CLASS_LIST)
     t_typ_dic = dict(TERM_LIST)
@@ -569,6 +580,12 @@ def report_accrual_class(request, *args, **kwargs):  #
         balance=Sum('provide_balance')).values(
         'notify__agree__lending__summary__custom__idustry__name', 'con', 'sum_old', 'sum_new', 'sum', 'repayment',
         'balance').order_by('-sum')
+    provide_groups_fication = provide_groups.values(
+        'fication').annotate(
+        con=Count('provide_money'), sum_old=Sum('old_amount'), sum_new=Sum('new_amount'),
+        sum=Sum('provide_money'), repayment=Sum('provide_repayment_sum'),
+        balance=Sum('provide_balance')).values(
+        'fication', 'con', 'sum_old', 'sum_new', 'sum', 'repayment', 'balance').order_by('fication')
     provide_groups_district = provide_groups.values(
         'notify__agree__lending__summary__custom__district__name').annotate(
         con=Count('provide_money'), sum_old=Sum('old_amount'), sum_new=Sum('new_amount'),
@@ -615,7 +632,7 @@ def report_provide_class_list(request, *args, **kwargs):  #
     authority_list = request.session.get('authority_list')  # 获取当前用户的所有权限
     menu_result = MenuHelper(request).menu_data_list()
     PAGE_TITLE = '放款分类明细'
-    CLASS_LIST = [(1, '品种'), (11, '授信银行'), (21, '区域'), (31, '行业'), (35, '部门'),
+    CLASS_LIST = [(1, '品种'), (11, '授信银行'), (21, '区域'), (31, '行业'), (33, '分类'),(35, '部门'),
                   (41, '项目经理'), (51, '项目助理'), (61, '风控专员'), (71, '放款支行'), (81, '法律顾问'), ]
     TERM_LIST = [(0, '全部'), (1, '本年'), (2, '本季'), (3, '本月'), (4, '本周'), (11, '上年'), (99, '自定义'), ]
     provide_typ_list = models.Provides.PROVIDE_TYP_LIST
@@ -623,6 +640,12 @@ def report_provide_class_list(request, *args, **kwargs):  #
     provide_typ_wen = {}
     for provide_typ in provide_typ_list:
         provide_typ_wen[provide_typ[1]] = provide_typ[0]
+
+    fication_list = models.Provides.FICATION_LIST
+    fication_dic = dict(fication_list)
+    fication_wen = {}
+    for fication in fication_list:
+        fication_wen[fication[1]] = fication[0]
 
     c_typ_dic = dict(CLASS_LIST)
     t_typ_dic = dict(TERM_LIST)
@@ -651,6 +674,8 @@ def report_provide_class_list(request, *args, **kwargs):  #
         provide_list = provide_list.filter(notify__agree__lending__summary__custom__district__name=ss_value)
     elif c_typ == 31:
         provide_list = provide_list.filter(notify__agree__lending__summary__custom__idustry__name=ss_value)
+    elif c_typ == 33:
+        provide_list = provide_list.filter(fication=fication_wen[ss_value])
     elif c_typ == 35:
         provide_list = provide_list.filter(notify__agree__lending__summary__director__department__name=ss_value)
     elif c_typ == 41:
@@ -680,7 +705,7 @@ def report_article(request, *args, **kwargs):  #
     authority_list = request.session.get('authority_list')  # 获取当前用户的所有权限
     menu_result = MenuHelper(request).menu_data_list()
     PAGE_TITLE = '项目分类'
-    CLASS_LIST = [(2, '阶段'), (21, '区域'), (31, '行业'), (35, '部门'),
+    CLASS_LIST = [(2, '阶段'), (21, '区域'), (31, '行业'), (33, '分类'), (35, '部门'),
                   (41, '项目经理'), (51, '项目助理'), (61, '风控专员'), (81, '法律顾问'), ]
     TERM_LIST = [(1, '本年'), (2, '本季'), (3, '本月'), (4, '本周'), (11, '上年'), (99, '自定义'), ]
 
@@ -1249,3 +1274,23 @@ def review_plan_list(request, *args, **kwargs):  # 项目列表
     credit_amount_sum = review_plan_list.aggregate(Sum('credit_amount'))['credit_amount__sum']  #
     amount_sum = review_plan_list.aggregate(Sum('amount'))['amount__sum']  #
     return render(request, 'dbms/report/meeting/meeting-review-list.html', locals())
+
+
+# -----------------------------贷款风险分类汇总表------------------------------#
+def fication_list(request, *args, **kwargs):  # 项目列表
+    current_url_name = resolve(request.path).url_name  # 获取当前URL_NAME
+    authority_list = request.session.get('authority_list')  # 获取当前用户的所有权限
+    menu_result = MenuHelper(request).menu_data_list()
+    job_list = request.session.get('job_list')  # 获取当前用户的所有角色
+    PAGE_TITLE = '贷款风险分类汇总表'
+    '''ARTICLE_STATE_LIST = [(1, '待反馈'), (2, '已反馈'), (3, '待上会'), (4, '已上会'), (5, '已签批'),
+                          (51, '已放款'), (52, '已放完'), (55, '已解保'), (61, '待变更'), (99, '已注销')]'''
+
+    provide_list = models.Provides.objects.filter(provide_balance__gt=0).order_by('fic_date')
+    provide_list_count = provide_list.count()
+    provide_first_date = provide_list.first().fic_date
+    provide_list = provide_list.order_by('-fication', 'due_date')
+    td = datetime.date.today()
+    provide_money_sum = provide_list.aggregate(Sum('provide_money'))['provide_money__sum']  #
+    provide_balance_sum = provide_list.aggregate(Sum('provide_balance'))['provide_balance__sum']  #
+    return render(request, 'dbms/report/meeting/fication-list.html', locals())

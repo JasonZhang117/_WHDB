@@ -48,9 +48,9 @@ from .v_provide_act import (
 from .v_pigeonhole import pigeonhole, pigeonhole_scan, pigeonhole_overdue
 from .v_pigeonhole_act import pigeonhole_add_ajax
 # ----------------------v_review保后管理视图--------------------#
-from .v_review import review, review_scan, review_overdue
+from .v_review import review, review_scan, review_overdue, classification
 from .v_review_act import (review_plan_ajax, review_update_ajax, review_del_ajax, investigate_add_ajax,
-                           investigate_del_ajax)
+                           investigate_del_ajax, fication_add_ajax, fication_all_ajax)
 # ----------------------v_dun追偿视图--------------------#
 from .v_dun import (
     compensatory, compensatory_scan, dun, dun_scan, seal, overdue_seal, soondue_seal,
@@ -76,7 +76,7 @@ from .v_report import (report, report_provide_list, report_balance_class, report
                        report_dun_dc_list, report_dun_fy_list, report_dun_hk_list,
                        report_provide_class_list, report_provid_w_list, report_repay_list,
 
-                       article_feedback_list, pig_overdue_list, review_plan_list)
+                       article_feedback_list, pig_overdue_list, review_plan_list,fication_list)
 
 # 部门、员工
 from .v_interior import department, department_add, department_edit

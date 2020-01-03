@@ -7,6 +7,12 @@
         <li role="presentation" class="active">
             <a href="#provide-repayment" style="background-color: #f5f5f5" aria-controls="home" role="tab"
                data-toggle="tab">还款 </a></li>
+        {% if provide_obj.fication_provide.all %}
+            <li role="presentation">
+                <a href="#fication" style="background-color: #f5f5f5" aria-controls="home" role="tab"
+                   data-toggle="tab">分类 </a>
+            </li>
+        {% endif %}
         {% if provide_obj.extension_provide.all %}
             <li role="presentation">
                 <a href="#extension" style="background-color: #f5f5f5" aria-controls="home" role="tab"
@@ -32,6 +38,8 @@
             {% include 'dbms/provide/scan/tab/provide-article.html' %} </div>
         <div role="presentation" class="tab-pane active" id="provide-repayment"> <!--还款-->
             {% include 'dbms/provide/scan/tab/provide-repayment.html' %} </div>
+        <div role="presentation" class="tab-pane" id="fication"> <!--分类-->
+            {% include 'dbms/provide/scan/tab/provide-fication.html' %} </div>
         <div role="presentation" class="tab-pane" id="extension"> <!--展期-->
             {% include 'dbms/provide/scan/tab/provide-extension.html' %} </div>
         <div role="presentation" class="tab-pane" id="track"> <!--跟踪事项-->

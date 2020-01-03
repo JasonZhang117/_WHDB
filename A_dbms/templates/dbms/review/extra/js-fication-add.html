@@ -1,0 +1,56 @@
+<script>
+    $(function () {
+        bindClaFicationB();
+        bindClaFicationModalOk();
+    });
+
+    function bindClaFicationB() {
+        $('#cla-tb').on('click', '.claFicationB', function () {
+            var claFicationNid = $(this).parent().parent().attr('provide-nid');
+            $('#claFicationModalId').val(claFicationNid);
+            $('#claFicationModal').modal('show');
+        })
+    }
+
+    function bindClaFicationModalOk() {
+        $('#claFicationModalOk').click(function () {
+            var postData = {};
+            $('#claFicationModal').find('input,select').each(function () {
+                var v = $(this).val();
+                var n = $(this).attr('name');
+                postData[n] = v;
+            });
+            var explain = $('#id_explain').val();
+            postData['explain'] = explain;
+
+            var postDataStr = JSON.stringify(postData);
+
+            $.ajax({
+                url: '/dbms/review/fication/',
+                type: 'POST',
+                dataType: 'JSON',
+                data: {'postDataStr': postDataStr},
+                success: function (arg) {
+                    if (arg.status) {
+                        $('#claFicationModal').modal('hide');
+                        alert(arg.message);
+                        window.location.reload();
+                    } else {
+                        $('#claFicationModal').modal('hide');
+                        alert(arg.message);
+                        $('#e_fic_date').text(arg.forme.fic_date);
+                        $('#e_fication').text(arg.forme.ication);
+                        $('#e_explain').text(arg.forme.explain);
+                        {#window.location.reload();#}
+                    }
+                }
+            })
+        })
+    }
+</script>
+
+
+
+
+
+

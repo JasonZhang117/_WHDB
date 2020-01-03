@@ -11,6 +11,7 @@ from django.db import transaction
 UND = '成都武侯中小企业融资担保有限责任公司'
 UNX = '成都武侯武兴小额贷款有限责任公司'
 
+FICATION_LIST = [(1, '正常'), (11, '关注'), (21, '次级'), (31, '可疑'), (41, '损失')]
 
 class MenuHelper(object):
     def __init__(self, request):

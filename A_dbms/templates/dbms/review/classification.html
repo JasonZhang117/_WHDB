@@ -1,0 +1,18 @@
+{% extends 'dbms/index_dbms.html' %}
+
+{% block title %}{{ PAGE_TITLE }}{% endblock %}
+
+{% block right-content-container %}
+    {% include 'dbms/review/classification/provide-filter.html' %}
+    {% include 'dbms/review/classification/provide-table.html' %}
+
+    {% include 'dbms/review/modl/fication-add-mod.html' %}
+    {% include 'dbms/review/modl/fication-all-mod.html' %}
+{% endblock %}
+
+{% block extra-js %}
+
+    {% include 'dbms/review/extra/js-fication-add.html' %}
+    {% include 'dbms/review/extra/js-fication-all.html' %}
+
+{% endblock %}

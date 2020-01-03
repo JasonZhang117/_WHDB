@@ -1,26 +1,33 @@
-<div id="form_review_auto_add">
+<div id="form_review_add">
     <div class="form-group"><!--保后方式-->
         <label for="id_review_stye"
-               class="col-sm-3 control-label">{{ form_review_auto_add.review_sty.label }}：</label>
-        <div class="col-sm-9">{{ form_review_auto_add.review_sty }}</div>
-        <label id="e_review_sty" class="pull-right">{{ form_review_auto_add.review_sty.errors }}</label>
+               class="col-sm-3 control-label">{{ form_review_add.review_sty.label }}：</label>
+        <div class="col-sm-9">{{ form_review_add.review_sty }}</div>
+        <label id="e_review_sty" class="pull-right">{{ form_review_add.review_sty.errors }}</label>
     </div>
     <div class="form-group"><!--风险分析-->
         <label for="id_analysis"
-               class="col-sm-3 control-label">{{ form_review_auto_add.analysis.label }}：</label>
-        <div class="col-sm-9">{{ form_review_auto_add.analysis }}</div>
-        <label id="e_analysis" class="pull-right">{{ form_review_auto_add.analysis.errors }}</label>
+               class="col-sm-3 control-label">{{ form_review_add.analysis.label }}：</label>
+        <div class="col-sm-9">{{ form_review_add.analysis }}</div>
+        <label id="e_analysis" class="pull-right">{{ form_review_add.analysis.errors }}</label>
     </div>
     <div class="form-group"><!--风控建议-->
         <label for="id_suggestion"
-               class="col-sm-3 control-label">{{ form_review_auto_add.suggestion.label }}：</label>
-        <div class="col-sm-9">{{ form_review_auto_add.suggestion }}</div>
-        <label id="e_suggestion" class="pull-right">{{ form_review_auto_add.suggestion.errors }}</label>
+               class="col-sm-3 control-label">{{ form_review_add.suggestion.label }}：</label>
+        <div class="col-sm-9">{{ form_review_add.suggestion }}</div>
+        <label id="e_suggestion" class="pull-right">{{ form_review_add.suggestion.errors }}</label>
     </div>
     <div class="form-group"><!--五级分类-->
         <label for="id_classification"
-               class="col-sm-3 control-label">{{ form_review_auto_add.classification.label }}：</label>
-        <div class="col-sm-9">{{ form_review_auto_add.classification }}</div>
-        <label id="e_classification" class="pull-right">{{ form_review_auto_add.classification.errors }}</label>
+               class="col-sm-3 control-label">{{ form_review_add.classification.label }}：</label>
+        <div class="col-sm-9">{{ form_review_add.classification }}</div>
+        <label id="e_classification" class="pull-right">{{ form_review_add.classification.errors }}</label>
     </div>
+    <div class="form-group"><!--保后日期-->
+        <label for="id_review_date"
+               class="col-sm-3 control-label">{{ form_review_add.review_date.label }}：</label>
+        <div class="col-sm-9">{{ form_review_add.review_date }}</div>
+        <label id="e_review_date" class="pull-right">{{ form_review_add.review_date.errors }}</label>
+    </div>
+
 </div>

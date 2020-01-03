@@ -1,6 +1,13 @@
 <tr>
     <td align="center">借款人名称</td>
-    <td colspan="5" align="center">{{ agree_obj.lending.summary.custom.name }}</td>
+    <td colspan="5" align="center">
+        {{ agree_obj.lending.summary.custom.name }}
+        {% if agree_obj.lending.summary.borrower.all %}
+            {% for borrower in agree_obj.lending.summary.borrower.all %}
+               、{{ borrower.name }}
+            {% endfor %}
+        {% endif %}
+    </td>
 </tr>
 <tr>
     <td align="center">合同金额</td>

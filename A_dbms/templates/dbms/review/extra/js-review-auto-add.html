@@ -6,15 +6,14 @@
 
     function bindAutoReviewB() {
         $('#autoReviewB').click(function () {
-            {#console.log("bindAddCounterB")#}
-            $('#addReviewModal').modal('show');
+            $('#addReviewOwnModal').modal('show');
         })
     }
 
-    function bindAddReviewModalOk() {
-        $('#addReviewModalOk').click(function () {
+    function bindAddReviewOwnModalOk() {
+        $('#addReviewOwnModalOk').click(function () {
             var postData = {};
-            $('#addReviewModal').find('input,select').each(function () {
+            $('#addReviewOwnModal').find('input,select').each(function () {
                 var v = $(this).val();
                 var n = $(this).attr('name');
                 postData[n] = v;
@@ -25,7 +24,6 @@
             postData['suggestion'] = suggestion;
 
             var postDataStr = JSON.stringify(postData);
-            console.log(postDataStr);
             $.ajax({
                 url: '/dbms/review/update/',
                 type: 'POST',
@@ -34,7 +32,7 @@
                     var dict = JSON.parse(arg);
                     console.log(dict);
                     if (dict.status) {
-                        $('#addCommentModal').modal('hide');
+                        $('#addReviewOwnModal').modal('hide');
                         alert(dict.message);
                         window.location.reload();
                     } else {

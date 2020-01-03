@@ -350,6 +350,8 @@ admin.site.register(models.Trustee)  # 董事
 
 # -----------------------保后-------------------------#
 admin.site.register(models.Review)  # 保后
+admin.site.register(models.Fication)  # 分类
+
 admin.site.register(models.Investigate)  # 补调
 
 

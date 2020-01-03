@@ -1,0 +1,72 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}{{ PAGE_TITLE }}{% endblock %}
+{% block extra-css %}
+    <link rel="stylesheet" media="screen" href="{% static 'dbms/css/report-style.css' %}">
+    <link rel="stylesheet" media="print" href="{% static 'dbms/css/report-style.css' %}">
+    <link rel="stylesheet" media="print" href="{% static 'dbms/css/report-style-noprint.css' %}">
+{% endblock %}
+{% block  body %}
+    <div style="width: 310mm; margin-left: auto; margin-right: auto;">
+        <div style="font-size: large" align="center"><strong>{{ PAGE_TITLE }}</strong></div>
+        <div>
+            <table>
+                <tr>
+                    <td align="left">分类期：{{provide_first_date.year}}年{{provide_first_date.month}}月</td>
+                    <td align="right">制表日期：{{ td }}</td>
+                </tr>
+            </table>
+        </div>
+        <div class="table-responsive">
+            <table class="table table-bordered table-hover table-condensed active">
+                <thead>
+                <tr style="text-align: center">
+                    <th>序号</th>
+                    <th>客户名称</th>
+                    <th>合同编号</th>
+                    <th>贷款金额</th>
+                    <th>贷款余额</th>
+                    <th>放款日</th>
+                    <th>到期日</th>
+                    <th>分类结果</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for provide in provide_list %}
+
+                    <tr style="padding: 0;">
+                        <td style="padding: 0">{{ forloop.counter }}</td>
+                        <td style="padding: 0">
+                            {{ provide.notify.agree.lending.summary.custom.name }}
+                            {% if provide.notify.agree.lending.summary.borrower.all %}
+                                {% for borrower in provide.notify.agree.lending.summary.borrower.all %}
+                                    、{{ borrower.name }}
+                                {% endfor %}
+                            {% endif %}
+                        </td>
+                        <td style="padding: 0"><a href="{% url 'dbms:provide_scan' provide_id=provide.id %}">
+                            {{ provide.notify.agree.agree_num }} </a></td>
+                        <td style="padding: 0" align="right">{{ provide.provide_money|floatformat:2 }}</td>
+                        <td style="padding: 0" align="right">{{ provide.provide_balance|floatformat:2 }}</td>
+                        <td style="padding: 0" align="right">{{ provide.provide_date }}</td>
+                        <td style="padding: 0" align="right">{{ provide.due_date }}</td>
+                        <td style="padding: 0" align="center">{{ provide.get_fication_display }}</td>
+                    </tr>
+                {% endfor %}
+                <tr style="padding: 0">
+                    <td style="padding: 0" align="center" colspan="3">合计</td>
+                    <td style="padding: 0" align="right">{{ provide_money_sum|floatformat:2 }}</td>
+                    <td style="padding: 0" align="right">{{ provide_balance_sum|floatformat:2 }}</td>
+                    <td style="padding: 0"></td>
+                    <td style="padding: 0"></td>
+                    <td style="padding: 0"></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+{% endblock %}
+
+
+
