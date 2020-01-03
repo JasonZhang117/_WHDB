@@ -170,7 +170,7 @@ def classification(request, *args, **kwargs):  # 委托合同列表
         fication = 0
 
     '''PROVIDE_STATUS_LIST = [(1, '在保'), (11, '解保'), (21, '代偿')]'''
-    FICATION_LIST = models.Provides.FICATION_LIST  # 筛选条件
+    FICATION_LIST = [(11, '正常'), (21, '关注'), (31, '次级'), (41, '可疑'), (51, '损失')]  # 筛选条件
     '''筛选'''
     provide_list = models.Provides.objects.filter(provide_balance__gt=0)
     provide_list = provide_list.filter(**kwargs).select_related('notify').order_by('-provide_date')

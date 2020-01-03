@@ -9,13 +9,13 @@
 {% block  body %}
 
     <div style="width: 310mm; margin-left: auto; margin-right: auto;">
-        {% if PAGE_TITLE == '客户分类' %}
-            {% include 'dbms/report/balance_custom/balance-class-filter-a.html' %}
-        {% endif %}
+        {% include 'dbms/report/balance_custom/balance-class-filter-a.html' %}
         {% if  kwargs.c_typ == 21 %}
             {% include 'dbms/report/balance_custom/balance-class-district.html' %}
         {% elif  kwargs.c_typ == 31 %}
             {% include 'dbms/report/balance_custom/balance-class-idustry.html' %}
+        {% elif  kwargs.c_typ == 33 %}
+            {% include 'dbms/report/balance_custom/balance-class-fication.html' %}
         {% elif  kwargs.c_typ == 35 %}
             {% include 'dbms/report/balance_custom/balance-class-depart.html' %}
         {% elif  kwargs.c_typ == 41 %}

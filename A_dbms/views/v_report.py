@@ -9,8 +9,7 @@ from django.contrib.auth.decorators import login_required
 from django.db.models import Q
 from django.db.models import Avg, Min, Sum, Max, Count
 from django.urls import resolve
-from _WHDB.views import MenuHelper
-from _WHDB.views import authority
+from _WHDB.views import (MenuHelper, authority, FICATION_LIST)
 
 
 def tt_article(t_typ, tf_r, tl_r):
@@ -187,7 +186,7 @@ def report_balance_class(request, *args, **kwargs):  #
 
     provide_typ_dic = dict(models.Provides.PROVIDE_TYP_LIST)
 
-    fication_dic = dict(models.Provides.FICATION_LIST)
+    fication_dic = dict(FICATION_LIST)
 
     tf_r = request.GET.get('tf')
     tl_r = request.GET.get('tl')
@@ -297,7 +296,7 @@ def report_provid_w_list(request, *args, **kwargs):  #
     provide_typ_wen = {}
     for provide_typ in provide_typ_list:
         provide_typ_wen[provide_typ[1]] = provide_typ[0]
-    fication_list = models.Provides.FICATION_LIST
+    fication_list = FICATION_LIST
     fication_dic = dict(fication_list)
     fication_wen = {}
     for fication in fication_list:
@@ -523,8 +522,8 @@ def report_accrual_class(request, *args, **kwargs):  #
                   (41, '项目经理'), (51, '项目助理'), (61, '风控专员'), (71, '放款支行'), (81, '法律顾问'), ]
     TERM_LIST = [(1, '本年'), (2, '本季'), (3, '本月'), (4, '本周'), (11, '上年'), (99, '自定义'), ]
 
-    provide_typ_dic = dict( models.Provides.PROVIDE_TYP_LIST)
-    fication_dic = dict(models.Provides.FICATION_LIST)
+    provide_typ_dic = dict(models.Provides.PROVIDE_TYP_LIST)
+    fication_dic = dict(FICATION_LIST)
 
     c_typ_dic = dict(CLASS_LIST)
     t_typ_dic = dict(TERM_LIST)
@@ -632,7 +631,7 @@ def report_provide_class_list(request, *args, **kwargs):  #
     authority_list = request.session.get('authority_list')  # 获取当前用户的所有权限
     menu_result = MenuHelper(request).menu_data_list()
     PAGE_TITLE = '放款分类明细'
-    CLASS_LIST = [(1, '品种'), (11, '授信银行'), (21, '区域'), (31, '行业'), (33, '分类'),(35, '部门'),
+    CLASS_LIST = [(1, '品种'), (11, '授信银行'), (21, '区域'), (31, '行业'), (33, '分类'), (35, '部门'),
                   (41, '项目经理'), (51, '项目助理'), (61, '风控专员'), (71, '放款支行'), (81, '法律顾问'), ]
     TERM_LIST = [(0, '全部'), (1, '本年'), (2, '本季'), (3, '本月'), (4, '本周'), (11, '上年'), (99, '自定义'), ]
     provide_typ_list = models.Provides.PROVIDE_TYP_LIST
@@ -641,7 +640,7 @@ def report_provide_class_list(request, *args, **kwargs):  #
     for provide_typ in provide_typ_list:
         provide_typ_wen[provide_typ[1]] = provide_typ[0]
 
-    fication_list = models.Provides.FICATION_LIST
+    fication_list = FICATION_LIST
     fication_dic = dict(fication_list)
     fication_wen = {}
     for fication in fication_list:
@@ -850,14 +849,16 @@ def report_custom(request, *args, **kwargs):  #
     current_url_name = resolve(request.path).url_name  # 获取当前URL_NAME
     authority_list = request.session.get('authority_list')  # 获取当前用户的所有权限
     menu_result = MenuHelper(request).menu_data_list()
-    PAGE_TITLE = '客户分类'
-    CLASS_LIST = [(21, '区域'), (31, '行业'), (35, '部门'), (41, '管户经理'), (45, '风控专员'), ]
+    PAGE_TITLE = '客户分类统计表'
+    CLASS_LIST = [(21, '区域'), (31, '行业'), (33, '分类'), (35, '部门'), (41, '管户经理'), (45, '风控专员'), ]
     TERM_LIST = [(11, '在保'), (21, '授信'), ]
     '''CUSTOM_STATE_LIST = [(11, '担保客户'), (21, '反担保客户'), (99, '注销')]'''
     industry_list = models.Industries.objects.all()
     lndustry_dic = {}
     for industry in industry_list:
         lndustry_dic[industry.code] = industry.name
+
+    fication_dic = dict(FICATION_LIST)
 
     t_typ_dic = dict(TERM_LIST)
     t_typ = kwargs['t_typ']
@@ -911,6 +912,16 @@ def report_custom(request, *args, **kwargs):  #
         petty_loan=Sum('petty_loan'), amount=Sum('amount')). \
         values('idustry__cod_nam', 'con', 'credit_amount', 'custom_flow', 'custom_accept',
                'custom_back', 'entrusted_loan', 'petty_loan', 'amount').order_by('-credit_amount')  # 行业
+
+    article_balance_fication = custom_groups.values(
+        'classification').annotate(
+        con=Count('id'), credit_amount=Sum('credit_amount'), custom_flow=Sum('custom_flow'),
+        custom_accept=Sum('custom_accept'),
+        custom_back=Sum('custom_back'), entrusted_loan=Sum('entrusted_loan'),
+        petty_loan=Sum('petty_loan'), amount=Sum('amount')). \
+        values('classification', 'con', 'credit_amount', 'custom_flow', 'custom_accept',
+               'custom_back', 'entrusted_loan', 'petty_loan', 'amount').order_by('-credit_amount')  # 行业
+
     article_balance_depart = custom_groups.values(
         'managementor__department__name').annotate(
         con=Count('id'), credit_amount=Sum('credit_amount'), custom_flow=Sum('custom_flow'),
@@ -946,13 +957,19 @@ def report_custom_list(request, *args, **kwargs):  #
     authority_list = request.session.get('authority_list')  # 获取当前用户的所有权限
     menu_result = MenuHelper(request).menu_data_list()
     PAGE_TITLE = '客户分类明细'
-    CLASS_LIST = [(21, '区域'), (31, '行业'), (35, '部门'), (41, '管户经理'), (45, '风控专员'), ]
+    CLASS_LIST = [(21, '区域'), (31, '行业'), (33, '分类'), (35, '部门'), (41, '管户经理'), (45, '风控专员'), ]
     TERM_LIST = [(11, '在保'), (21, '授信'), ]
     '''CUSTOM_STATE_LIST = [(11, '担保客户'), (21, '反担保客户'), (99, '注销')]'''
     industry_list = models.Industries.objects.all()
     lndustry_dic = {}
     for industry in industry_list:
         lndustry_dic[industry.code] = industry.name
+    fication_list = FICATION_LIST
+    fication_dic = dict(fication_list)
+    fication_wen = {}
+    for fication in fication_list:
+        fication_wen[fication[1]] = fication[0]
+
     c_typ_dic = dict(CLASS_LIST)
     t_typ_dic = dict(TERM_LIST)
     ss_value = request.GET.get('_cs')
@@ -972,6 +989,8 @@ def report_custom_list(request, *args, **kwargs):  #
         custom_groups = custom_groups.filter(district__name=ss_value)
     elif c_typ == 31:
         custom_groups = custom_groups.filter(idustry__cod_nam=ss_value)
+    elif c_typ == 33:
+        custom_groups = custom_groups.filter(classification=fication_wen[ss_value])
     elif c_typ == 35:
         custom_groups = custom_groups.filter(managementor__department__name=ss_value)
     elif c_typ == 41:

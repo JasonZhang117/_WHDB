@@ -1,5 +1,6 @@
 from django.db import models
 import datetime
+from _WHDB.views import (FICATION_LIST)
 
 
 # ------------------------收费模型--------------------------#
@@ -74,7 +75,6 @@ class Provides(models.Model):  # 放款
     provide_repayment_sum = models.FloatField(verbose_name='_还款总额', default=0)
     provide_balance = models.FloatField(verbose_name='_在保余额', default=0)
 
-    FICATION_LIST = [(11, '正常'), (21, '关注'), (31, '次级'), (41, '可疑'), (51, '损失')]
     fication = models.IntegerField(verbose_name='风险分类', choices=FICATION_LIST, default=11)
     fic_date = models.DateField(verbose_name='分类日期', default=datetime.date.today)
     providor = models.ForeignKey(to='Employees', verbose_name="_创建者",

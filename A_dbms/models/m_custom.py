@@ -1,5 +1,6 @@
 from django.db import models
 import datetime
+from _WHDB.views import (FICATION_LIST)
 
 
 # -----------------------客户模型-------------------------#
@@ -15,10 +16,10 @@ class Customes(models.Model):  # 客户
     contact_num = models.CharField(verbose_name='联系电话', max_length=32)
     idustry = models.ForeignKey(to='Industries', verbose_name="所属行业",
                                 on_delete=models.PROTECT,
-                                related_name='c_idustry',)
+                                related_name='c_idustry', )
     district = models.ForeignKey(to='Districtes', verbose_name="所属区域",
                                  on_delete=models.PROTECT,
-                                 related_name='c_district',)
+                                 related_name='c_district', )
     review_plan_date = models.DateField(verbose_name='保后计划', blank=True, null=True)
     REVIEW_STATE_LIST = [(1, '待保后'), (11, '待报告'), (21, '已完成'), (81, '自主保后')]
     review_state = models.IntegerField(verbose_name='_保后状态', choices=REVIEW_STATE_LIST, default=21)
@@ -26,15 +27,14 @@ class Customes(models.Model):  # 客户
     review_amount = models.IntegerField(verbose_name='保后次数', default=0)
     add_amount = models.IntegerField(verbose_name='补调次数', default=0)
 
-    CLASSIFICATION_LIST = [(1, '正常'), (11, '关注'), (21, '次级'), (31, '可疑'), (41, '损失')]
-    classification = models.IntegerField(verbose_name='_风险分类', choices=CLASSIFICATION_LIST, default=1)
+    classification = models.IntegerField(verbose_name='五级分类', choices=FICATION_LIST, default=11)
     provide_date = models.DateField(verbose_name='最近放款', null=True, blank=True)
     # 含上会，放款，补调，保后
     lately_date = models.DateField(verbose_name='最近更新', null=True, blank=True)
     day_space = models.IntegerField(verbose_name='间隔（日）', default=0)
 
     CUSTOM_DUN_LIST = ((1, '正常'), (11, '被告'), (99, '注销'))
-    custom_dun_state = models.IntegerField(verbose_name='_风险分类', choices=CUSTOM_DUN_LIST, default=1)
+    custom_dun_state = models.IntegerField(verbose_name='_风险分类', choices=CUSTOM_DUN_LIST, default=11)
 
     credit_amount = models.FloatField(verbose_name='授信总额', default=0)
     custom_flow = models.FloatField(verbose_name='_流贷余额', default=0)
@@ -44,7 +44,7 @@ class Customes(models.Model):  # 客户
     petty_loan = models.FloatField(verbose_name='_过桥贷余额', default=0)
     amount = models.FloatField(verbose_name='_在保总额', default=0)
 
-    CUSTOM_STATE_LIST = [(11, '正常客户'), (21, '反担保客户'),(31, '小贷客户'),  (99, '注销客户')]
+    CUSTOM_STATE_LIST = [(11, '正常客户'), (21, '反担保客户'), (31, '小贷客户'), (99, '注销客户')]
     custom_state = models.IntegerField(verbose_name='客户状态', choices=CUSTOM_STATE_LIST, default=11)
     managementor = models.ForeignKey(to='Employees', verbose_name="管护经理",
                                      on_delete=models.PROTECT, default=1,

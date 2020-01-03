@@ -95,7 +95,7 @@ def review_update_ajax(request):
                     custom_list.update(review_state=81, review_date=review_date,
                                        classification=classification,
                                        lately_date=review_date, )  # 更新客户信息
-                    provide_list.update(fication=classification, fic_date=review_date, providor=request.user)
+                    # provide_list.update(fication=classification, fic_date=review_date, providor=request.user)
                 response['message'] = '自主保后提交成功！'
             except Exception as e:
                 response['status'] = False
@@ -126,7 +126,7 @@ def review_update_ajax(request):
                     custom_list.update(review_state=21, review_date=review_date,
                                        classification=classification,
                                        lately_date=review_date)  # 更新客户信息
-                    provide_list.update(fication=classification, fic_date=review_date, providor=request.user)
+                    # provide_list.update(fication=classification, fic_date=review_date, providor=request.user)
                 response['message'] = '保后成功！'
             except Exception as e:
                 response['status'] = False

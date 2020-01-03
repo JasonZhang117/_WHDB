@@ -16,8 +16,7 @@ class Review(models.Model):
     review_sty = models.IntegerField(verbose_name='保后方式', choices=REVIEW_STY_LIST, blank=True, null=True)
     analysis = models.TextField(verbose_name='风险分析', blank=True, null=True)
     suggestion = models.TextField(verbose_name='风控建议', blank=True, null=True)
-    CLASSIFICATION_LIST = [(1, '正常'), (11, '关注'), (21, '次级'), (31, '可疑'), (41, '损失')]
-    classification = models.IntegerField(verbose_name='风险分类', choices=CLASSIFICATION_LIST, blank=True, null=True)
+    classification = models.IntegerField(verbose_name='风险分类', choices=FICATION_LIST, blank=True, null=True)
     review_date = models.DateField(verbose_name='保后日期', blank=True, null=True)
     reviewor = models.ForeignKey(to='Employees', verbose_name="保后人员",
                                  on_delete=models.PROTECT,
@@ -38,7 +37,6 @@ class Fication(models.Model):
                                 related_name='fication_provide')
 
     fic_date = models.DateField(verbose_name='分类期间', default=datetime.date.today)
-    FICATION_LIST = [(11, '正常'), (21, '关注'), (31, '次级'), (41, '可疑'), (51, '损失')]
     fication = models.IntegerField(verbose_name='五级分类', choices=FICATION_LIST, default=11)
     explain = models.TextField(verbose_name='分类说明', blank=True, null=True)
 
@@ -64,8 +62,7 @@ class Investigate(models.Model):
     inv_typ = models.IntegerField(verbose_name='补调类型', choices=INV_TYP_LIST)
     i_analysis = models.TextField(verbose_name='风险分析', blank=True, null=True)
     i_suggestion = models.TextField(verbose_name='风控建议', blank=True, null=True)
-    CLASSIFICATION_LIST = [(1, '正常'), (11, '关注'), (21, '次级'), (31, '可疑'), (41, '损失')]
-    i_classification = models.IntegerField(verbose_name='风险分类', choices=CLASSIFICATION_LIST, blank=True, null=True)
+    i_classification = models.IntegerField(verbose_name='风险分类', choices=FICATION_LIST, blank=True, null=True)
     inv_date = models.DateField(verbose_name='补调日期', default=datetime.date.today)
     invor = models.ForeignKey(to='Employees', verbose_name="补调人员",
                               on_delete=models.PROTECT,

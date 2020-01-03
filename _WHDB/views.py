@@ -11,7 +11,8 @@ from django.db import transaction
 UND = '成都武侯中小企业融资担保有限责任公司'
 UNX = '成都武侯武兴小额贷款有限责任公司'
 
-FICATION_LIST = [(1, '正常'), (11, '关注'), (21, '次级'), (31, '可疑'), (41, '损失')]
+FICATION_LIST = [(11, '正常'), (21, '关注'), (31, '次级'), (41, '可疑'), (51, '损失')]
+
 
 class MenuHelper(object):
     def __init__(self, request):
@@ -425,6 +426,8 @@ def home(request):
     #                       (51, '已放款'), (52, '已放完'), (55, '已解保'), (61, '待变更'), (99, '已注销')]'''
     #     if lending.summary.article_state in [5, 51, 52, 55] and lending.lending_state == 4:
     #         models.LendingOrder.objects.filter(id=lending.id).update(lending_state=5)
+
+
     return render(request, 'test.html', locals())
 
 
