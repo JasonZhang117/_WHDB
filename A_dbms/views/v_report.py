@@ -920,7 +920,7 @@ def report_custom(request, *args, **kwargs):  #
         custom_back=Sum('custom_back'), entrusted_loan=Sum('entrusted_loan'),
         petty_loan=Sum('petty_loan'), amount=Sum('amount')). \
         values('classification', 'con', 'credit_amount', 'custom_flow', 'custom_accept',
-               'custom_back', 'entrusted_loan', 'petty_loan', 'amount').order_by('-credit_amount')  # 行业
+               'custom_back', 'entrusted_loan', 'petty_loan', 'amount').order_by('classification')  # 行业
 
     article_balance_depart = custom_groups.values(
         'managementor__department__name').annotate(
