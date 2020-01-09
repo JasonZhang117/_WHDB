@@ -3,18 +3,21 @@
         <label>项目情况</label>
         <label class="navbar-right">
             {% if PAGE_TITLE == '项目详情' %}
-{#                <a class="btn btn-danger btn-sm " id="subArticle">提交</a>#}
-                <a class="btn btn-primary btn-sm " id="subOpinion">项目意见</a>
-                {% if 'article_endor_list_scan' in authority_list and process_typ == 1%}
+                {#                <a class="btn btn-danger btn-sm " id="subArticle">提交</a>#}
+
+                {% if 'article_opinion_ajax' in authority_list %}
+                    <a class="btn btn-primary btn-sm " id="subOpinion">项目意见</a>
+                {% endif %}
+                {% if 'article_endor_list_scan' in authority_list and process_typ == 1 %}
                     <a class="btn btn-success btn-sm " id="endorList" target="_blank"
-                   href="{% url 'dbms:article_endor_list_scan' article_id=article_obj.id %}">签批表</a>
+                       href="{% url 'dbms:article_endor_list_scan' article_id=article_obj.id %}">签批表</a>
                 {% endif %}
                 {% if 'article_feedback_ajax' in authority_list %}
                     <a class="btn btn-primary btn-sm " id="feedbackArticle">反馈</a><!--#path('article/del/'-->
                 {% endif %}
-
-                <a class="btn btn-primary btn-sm " id="addCoBorrowerB">添加共借</a><!--#path('article/del/'-->
-
+                {% if 'article_borrower_add_ajax' in authority_list %}
+                    <a class="btn btn-primary btn-sm " id="addCoBorrowerB">添加共借</a><!--#path('article/del/'-->
+                {% endif %}
                 {% if 'article_edit_ajax' in authority_list %}
                     <a class="btn btn-primary btn-sm " id="editArticle">修改</a><!--#path('article/del/'-->
                 {% endif %}
