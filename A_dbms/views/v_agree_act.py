@@ -481,14 +481,9 @@ def counter_num_f(counter_prefix, agree_typ, counter_typ, agree_obj):
         (31, '应收质押'), (32, '股权质押'), (33, '票据质押'), (34, '动产质押'),
         (41, '其他权利质押'),
         (51, '股权预售'), (52, '房产预售'), (53, '土地预售'), (59, '其他预售')]'''
-    if counter_typ in [1, ]:  # (1, '企业担保')
+    if counter_typ in [1, 2]:  # (1, '企业担保')
         counter_typ_n = 'X'
         counter_copies = 3
-        counter_max = models.Counters.objects.filter(
-            agree=agree_obj, counter_typ=counter_typ).count() + 1
-    elif counter_typ in [2, ] and agree_typ in [41, 42, 51, 52]:  # 公正类个人反担保合同/担保合同
-        counter_typ_n = 'X'
-        counter_copies = 2
         counter_max = models.Counters.objects.filter(
             agree=agree_obj, counter_typ__in=[1, 2]).count() + 1
     elif counter_typ in [2, ]:  # 个人反担保函类型
