@@ -371,7 +371,7 @@ def counter_preview(request, agree_id, counter_id):
         if counter_warrant_typ in [1, 2]:  # (1, '房产'), (2, '房产包'),
             counter_property_type = '房产'
         elif counter_warrant_typ in [5, ]:  # (5, '土地'),
-            counter_property_type = '土地使用权'
+            counter_property_type = '国有土地使用权'
         elif counter_warrant_typ in [6, ]:  # (6, '在建工程'),
             counter_property_type = '在建工程'
         elif counter_warrant_typ in [11, ]:  # (11, '应收账款'),
