@@ -56,7 +56,7 @@ class Agrees(models.Model):  # 委托合同
     agree_copies = models.IntegerField(verbose_name='合同份数')
     agree_amount = models.FloatField(verbose_name='合同金额')
     amount_limit = models.FloatField(verbose_name='放款限额')
-    agree_rate = models.CharField(verbose_name='收费（利率）', max_length=128)
+    agree_rate = models.TextField(verbose_name='收费（利率）')
     agree_sign_date = models.DateField(verbose_name='签批日期', null=True, blank=True)
     charge = models.FloatField(verbose_name='应收保费（元）', default=0)
     other = models.TextField(verbose_name='其他约定', null=True, blank=True)

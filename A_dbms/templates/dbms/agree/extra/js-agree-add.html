@@ -56,8 +56,11 @@
                 var n = $(this).attr('name');
                 postData[n] = v;
             });
+
+            var agree_rate_g = $('#id_agree_rate').val();
             var other_g = $('#id_other').val();
             var repay_ex_g = $('#id_repay_ex').val();
+            postData['agree_rate'] = agree_rate_g;
             postData['other'] = other_g;
             postData['repay_ex'] = repay_ex_g;
 
@@ -69,7 +72,6 @@
                 data: {'postDataStr': postDataStr},
                 dataType: 'JSON',
                 success: function (arg) {
-                    console.log(arg);
                     if (arg.status) {
                         $('#addAgreeModal').modal('hide');
                         alert(arg.message);
@@ -77,6 +79,7 @@
                         window.location.reload();
                     } else {
                         alert(arg.message);
+                        $('#e_agree_rate').text(arg.forme.agree_rate);
                         $('#e_agree_amount').text(arg.forme.agree_amount);
                         $('#e_amount_limit').text(arg.forme.amount_limit);
                         $('#e_letter_typ').text(arg.forme.letter_typ);
