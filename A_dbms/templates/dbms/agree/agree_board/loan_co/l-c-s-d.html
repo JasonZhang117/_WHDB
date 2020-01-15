@@ -27,17 +27,18 @@
             <p>1.4抵押人保证对抵押物依法享有所有权或处分权，并保证抵押物不存在任何权属争议、被查封、被扣押、已出租等情况。</p>
             <p>1.5（如有共有人）共有人均同意以抵押物为主合同项下债权提供抵押担保，并接受本合同约束。</p>
             <p>共有人：<strong><u>
-                {% if co_owner_list %}
-                    {% for co_owner in co_owner_list %}
-                        {% if forloop.first %}
-                            {{ co_owner.name }}
-                        {% else %}
-                           、{{ co_owner.name }}
-                        {% endif %}
-                    {% endfor %}
-                {% else %}
-                    /
-                {% endif %}
+{#                {% if co_owner_list %}#}
+{#                    {% for co_owner in co_owner_list %}#}
+{#                        {% if forloop.first %}#}
+{#                            {{ co_owner.name }}#}
+{#                        {% else %}#}
+{#                           、{{ co_owner.name }}#}
+{#                        {% endif %}#}
+{#                    {% endfor %}#}
+{#                {% else %}#}
+{#                    /#}
+{#                {% endif %}#}
+            /
             </u></strong>
                 （签字）</p>
             <p><strong>第二条 担保的主债权及担保范围</strong></p>
