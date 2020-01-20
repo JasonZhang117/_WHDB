@@ -34,7 +34,7 @@ def agree(request, *args, **kwargs):  # 委托合同列表
     '''搜索'''
     search_key = request.GET.get('_s')
     if search_key:
-        search_fields = ['agree_num', 'lending__summary__custom__name',
+        search_fields = ['agree_num', 'lending__summary__custom__name', 'lending__summary__custom__short_name',
                          'branch__name', 'branch__short_name', 'lending__summary__summary_num']
         q = Q()
         q.connector = 'OR'

@@ -29,7 +29,9 @@ def compensatory(request, *args, **kwargs):  # 代偿列表
     if search_key:
         search_fields = ['provide__notify__agree__agree_num',  # 合同编号
                          'provide__notify__agree__branch__name',  # 放款银行
+                         'provide__notify__agree__branch__short_name',  # 放款银行
                          'provide__notify__agree__lending__summary__summary_num',  # 纪要编号
+                         'provide__notify__agree__lending__summary__custom__short_name',  # 纪要编号
                          'provide__notify__agree__lending__summary__custom__name']  # 客户名称
         q = Q()
         q.connector = 'OR'
