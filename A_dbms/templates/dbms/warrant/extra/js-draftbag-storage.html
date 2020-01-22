@@ -1,0 +1,54 @@
+<script>
+    $(function () {
+        bindDraftStoragesB();
+        bindDraftStoragesModalOk();
+    });
+
+    function bindDraftStoragesB() {
+        $('#draftbag-tb').on('click', '.draftStoragesB', function () {
+            draftStorageIdN = $(this).parent().parent().attr('draftbag-nid');
+            $('#draftStoragesModalId').val(draftStorageIdN);
+            draftStoragesModalLabel = $(this).parent().parent().attr('draftbag-num');
+            $('#draftStoragesModalH').text(draftStoragesModalLabel);
+            $('#draftStoragesModal').modal('show');
+        })
+    }
+
+    function bindDraftStoragesModalOk() {
+        $('#draftStoragesModalOk').click(function () {
+            var postData = {};
+            $('#draftStoragesModal').find('input,select').each(function () {
+                var v = $(this).val();
+                var n = $(this).attr('name');
+                postData[n] = v;
+            });
+            var postDataStr = JSON.stringify(postData);
+            $.ajax({
+                url: '/dbms/dun/sealup/add/',
+                type: 'POST',
+                data: {'postDataStr': postDataStr},
+                dataType: 'JSON',
+                success: function (arg) {
+                    console.log(arg);
+                    if (arg.status) {
+                        $('#addCommentModal').modal('hide');
+                        alert(arg.message);
+                        window.location.reload();
+                    } else {
+                        alert(arg.message);
+                        $('#e_sealup_type').text(arg.forme.sealup_type);
+                        $('#e_sealup_date').text(arg.forme.sealup_date);
+                        $('#e_due_date').text(arg.forme.due_date);
+                        $('#e_sealup_remark').text(arg.forme.sealup_remark);
+                    }
+                }
+            })
+        })
+    }
+</script>
+
+
+
+
+
+

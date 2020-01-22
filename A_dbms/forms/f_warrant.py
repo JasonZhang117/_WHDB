@@ -192,6 +192,15 @@ class FormDraftExtend(dform.ModelForm):  # 票据31
                    }
 
 
+# ------------------------票据状态修改--------------------------#
+class FormDraftStorage(dform.ModelForm):  # 票据状态修改
+    class Meta:
+        model = models.DraftExtend
+        fields = ['draft_state', ]
+        widgets = {'draft_state': dform.Select(attrs={'class': 'form-control'}),
+                   }
+
+
 # ------------------------车辆FormVehicle41--------------------------#
 class FormVehicle(dform.ModelForm):  # 车辆FormVehicle41
     vehicle_owner = fields.IntegerField(

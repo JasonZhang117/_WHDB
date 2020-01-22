@@ -10,7 +10,7 @@ from .f_appraisal import (
     LendinStockForm, LendinChattelForm, LendinOtherForm, LendinDraftForm)
 from .f_warrant import (
     WarrantAddForm, WarrantEditForm, HouseBagAddEidtForm, OwerShipAddForm, HouseAddEidtForm, GroundAddEidtForm,
-    ConstructionAddForm,
+    ConstructionAddForm,FormDraftStorage,
     HypothecsAddEidtForm, StoragesAddEidtForm, FormReceivable, FormReceivableEdit, FormReceivExtend,
     FormStockes, FormStockesEdit, FormDraft, FormDraftEdit, FormDraftExtend,
     FormVehicle, FormVehicleEdit, FormChattel, FormChattelEdit, FormOthers, FormOthersEdit, EvaluateAddEidtForm)
