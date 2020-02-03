@@ -195,7 +195,12 @@ admin.site.register(models.Stockes)  # 股权
 admin.site.register(models.Receivable)  # 应收账款
 admin.site.register(models.ReceiveExtend)  # 应收账款
 admin.site.register(models.Draft)  # 票据
-admin.site.register(models.DraftExtend)  # 票据列表
+class DraftExtendAdmin(admin.ModelAdmin):
+    list_display = ('draft_typ', 'draft_num', 'due_date', 'draft_state', )
+    # list_per_page = 20  # 每页显示条目数
+    # search_fields = ['notify']  # 搜索字段
+    ordering = ['-due_date']  # 排序字段
+admin.site.register(models.DraftExtend,DraftExtendAdmin)  # 票据列表
 admin.site.register(models.Chattel)  # 动产
 admin.site.register(models.Others)  # 动产
 admin.site.register(models.Evaluate)  # 出入库

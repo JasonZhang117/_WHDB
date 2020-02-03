@@ -6,11 +6,14 @@
 
     function bindDraftStoragesB() {
         $('#draftbag-tb').on('click', '.draftStoragesB', function () {
+            dbSnN = $(this).parent().parent().attr('db-s');
+            $('#dbSn').val(dbSnN);
             draftStorageIdN = $(this).parent().parent().attr('draftbag-nid');
             $('#draftStoragesModalId').val(draftStorageIdN);
             draftStoragesModalLabel = $(this).parent().parent().attr('draftbag-num');
             $('#draftStoragesModalH').text(draftStoragesModalLabel);
             $('#draftStoragesModal').modal('show');
+            console.log(dbSnN,draftStorageIdN,draftStoragesModalLabel)
         })
     }
 
@@ -24,7 +27,7 @@
             });
             var postDataStr = JSON.stringify(postData);
             $.ajax({
-                url: '/dbms/dun/sealup/add/',
+                url: '/dbms/warrant/draft/storage/',
                 type: 'POST',
                 data: {'postDataStr': postDataStr},
                 dataType: 'JSON',

@@ -113,6 +113,9 @@ urlpatterns = [
     path('warrant/storages/add/', views.storages_add_ajax, name='warrant_storages_add_ajax'),
     path('warrant/storages/del/', views.storage_del_ajax, name='warrant_storage_del_ajax'),
     path('warrant/evaluate/add/', views.evaluate_add_ajax, name='warrant_evaluate_add_ajax'),
+    path('warrant/draft/storage/', views.draft_state_change_ajax, name='warrant_draft_state_change_ajax'),
+
+
 
     # -----------------------house房产管理-------------------------#
     path('house/', views.house, name='warrant_house_all'),  # 菜单-权证管理-房产列表

@@ -33,7 +33,7 @@ from .v_warrant_act import (
     warrant_add_ajax, warrant_del_ajax, warrant_edit_ajax, owership_add_ajax, owership_del_ajax,
     guaranty_add_ajax, guaranty_del_ajax, storages_add_ajax, storage_del_ajax,
     housebag_add_ajax, housebag_del_ajax, receivextend_add_ajax, receivextend_del_ajax, draftextend_add_ajax,
-    draftbag_del_ajax, evaluate_add_ajax)
+    draftbag_del_ajax, evaluate_add_ajax, draft_state_change_ajax)
 
 # ----------------------v_provide放款管理视图--------------------#
 from .v_provide import (
@@ -76,7 +76,7 @@ from .v_report import (report, report_provide_list, report_balance_class, report
                        report_dun_dc_list, report_dun_fy_list, report_dun_hk_list,
                        report_provide_class_list, report_provid_w_list, report_repay_list,
 
-                       article_feedback_list, pig_overdue_list, review_plan_list,fication_list)
+                       article_feedback_list, pig_overdue_list, review_plan_list, fication_list)
 
 # 部门、员工
 from .v_interior import department, department_add, department_edit

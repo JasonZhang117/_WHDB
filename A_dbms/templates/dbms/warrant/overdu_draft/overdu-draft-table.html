@@ -14,7 +14,9 @@
         <tbody id="draftbag-tb">
         {% for draft in p_list %}
             <tr draft-nid="{{ draft.id }}">
-                <td>{{ forloop.counter }}</td>
+                <td>
+                    <a href="{% url 'dbms:warrant_scan' warrant_id=draft.draft.warrant.id %}">{{ forloop.counter }}</a>
+                </td>
                 <td>{{ draft.draft_num }}</td>
                 <td>{{ draft.get_draft_typ_display }}</td>
                 <td>{{ draft.draft_acceptor }}</td>

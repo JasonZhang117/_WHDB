@@ -1,36 +1,18 @@
 <div id="form_draft_storage">
-
     <div class="form-group"><!--出入库类型-->
         <label for="id_draft_state"
                class="col-sm-3 control-label">{{ form_draft_storage.draft_state.label }}：</label>
         <div class="col-sm-9">
             <select name="draft_state" class="form-control" id="id_draft_state">
-                {% for db_sv in db_sv_dic %}
-                    <option value="31">解保出库</option>
+                {% for db_sv in db_sv_list %}
+                    {% if db_sv.0 == dbSn %}
+                        <option value="{{ db_sv.0 }}" selected="">{{ db_sv.1 }}</option>
+                    {% else %}
+                        <option value="{{ db_sv.0 }}">{{ db_sv.1 }}</option>
+                    {% endif %}
                 {% endfor %}
             </select>
-
         </div>
         <label id="e_draft_state" class="pull-right">{{ form_draft_storage.draft_state.errors }}</label>
-    </div>
-
-    <div class="form-group"><!--出入库日期-->
-        <label for="id_storage_date"
-               class="col-sm-3 control-label">{{ form_draft_storage.storage_date.label }}：</label>
-        <div class="col-sm-9">{{ form_draft_storage.storage_date }}</div>
-        <label id="e_storage_date" class="pull-right">{{ form_draft_storage.storage_date.errors }}</label>
-    </div>
-
-    <div class="form-group"><!--移交/接收者-->
-        <label for="id_transfer" class="col-sm-3 control-label">{{ form_draft_storage.transfer.label }}：</label>
-        <div class="col-sm-9">{{ form_draft_storage.transfer }}</div>
-        <label id="e_transfer" class="pull-right">{{ form_draft_storage.transfer.errors }}</label>
-    </div>
-
-    <div class="form-group"><!--出入库说明-->
-        <label for="id_storage_explain"
-               class="col-sm-3 control-label">{{ form_draft_storage.storage_explain.label }}：</label>
-        <div class="col-sm-9">{{ form_draft_storage.storage_explain }}</div>
-        <label id="e_storage_explain" class="pull-right">{{ form_draft_storage.storage_explain.errors }}</label>
     </div>
 </div>

@@ -769,6 +769,40 @@ def draftbag_del_ajax(request):  #
     return HttpResponse(result)
 
 
+# -----------------------------修改票据状态ajax------------------------------#
+@login_required
+@authority
+def draft_state_change_ajax(request):  # 修改票据状态ajax
+    response = {'status': True, 'message': None, 'forme': None, }
+    post_data_str = request.POST.get('postDataStr')
+    post_data = json.loads(post_data_str)
+    draft_list = models.DraftExtend.objects.filter(id=post_data['draftbag_id'])
+    draft_obj = draft_list.first()
+    '''DRAFT_STATE_LIST = [
+        (1, '未入库'), (2, '已入库'), (21, '置换出库'), (31, '解保出库'), (41, '托收出库'), (99, '已注销')]'''
+    if draft_obj.draft_state in [1, 2, 21, 31, 41, ]:
+        form_draft_storage = forms.FormDraftStorage(post_data)
+        if form_draft_storage.is_valid():
+            cleaned_data = form_draft_storage.cleaned_data
+            try:
+                draft_list.update(draft_state=cleaned_data['draft_state'])
+                response['message'] = '成功修改票据状态：%s！' % draft_obj.draft_num
+            except Exception as e:
+                response['status'] = False
+                response['message'] = '票据状态修改失败:%s！' % str(e)
+        else:
+            response['status'] = False
+            response['message'] = '表单信息有误！！！'
+            response['forme'] = form_draft_storage.errors
+    else:
+        response['status'] = False
+        response['message'] = '票据状态为：%s，无法修改！！！' % draft_obj.draft_state
+
+    result = json.dumps(response, ensure_ascii=False)
+
+    return HttpResponse(result)
+
+
 # -----------------------抵押物添加ajax-------------------------#
 @login_required
 @authority
