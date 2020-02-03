@@ -377,6 +377,7 @@ def soondue_draft(request, *args, **kwargs):  #
     PAGE_TITLE = '票据列表'
 
     date_th_later = datetime.date.today() - datetime.timedelta(days=-30)  # 30天前的日期
+
     soondue_draft_list = models.DraftExtend.objects.filter(draft_state__in=[1, 2], due_date__gte=datetime.date.today(),
                                                            due_date__lt=date_th_later)  # 30天内到期
     '''搜索'''
@@ -412,7 +413,8 @@ def overdue_draft(request, *args, **kwargs):  #
     authority_list = request.session.get('authority_list')  # 获取当前用户的所有权限
     menu_result = MenuHelper(request).menu_data_list()
     PAGE_TITLE = '票据列表'
-
+    '''DRAFT_STATE_LIST = [
+        (1, '未入库'), (2, '已入库'), (21, '置换出库'), (31, '解保出库'), (41, '托收出库'), (99, '已注销')]'''
     overdue_draft_list = models.DraftExtend.objects.filter(
         draft_state__in=[1, 2], due_date__lt=datetime.date.today())  # 逾期票据
     '''搜索'''
