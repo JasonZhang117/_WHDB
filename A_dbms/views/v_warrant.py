@@ -15,7 +15,7 @@ from _WHDB.views import (authority, warrant_list_screen, warrant_right, agree_ri
 # -----------------------权证列表-------------------------#
 @login_required
 @authority
-def warrant(request, *args, **kwargs):  # 房产列表
+def warrant(request, *args, **kwargs):  # 权证列表
     current_url_name = resolve(request.path).url_name  # 获取当前URL_NAME
     authority_list = request.session.get('authority_list')  # 获取当前用户的所有权限
     menu_result = MenuHelper(request).menu_data_list()
@@ -367,6 +367,42 @@ def ground(request, *args, **kwargs):  # 房产列表
     return render(request, 'dbms/warrant/ground.html', locals())
 
 
+@login_required
+@authority
+def draft_list(request, *args, **kwargs):  #
+    current_url_name = resolve(request.path).url_name  # 获取当前URL_NAME
+    authority_list = request.session.get('authority_list')  # 获取当前用户的所有权限
+    menu_result = MenuHelper(request).menu_data_list()
+    PAGE_TITLE = '票据列表'
+
+    draft_state_list = models.DraftExtend.DRAFT_STATE_LIST
+    '''DRAFT_STATE_LIST = [
+        (1, '未入库'), (2, '已入库'), (21, '置换出库'), (31, '解保出库'), (41, '托收出库'), (99, '已注销')]'''
+    draft_list = models.DraftExtend.objects.filter(**kwargs).order_by('draft_state','due_date')  # 逾期票据
+    '''搜索'''
+    search_key = request.GET.get('_s')
+    if search_key:
+        search_fields = ['draft_num', 'draft_acceptor',
+                         'draft__draft_owner__name', 'draft__draft_owner__short_name']
+        q = Q()
+        q.connector = 'OR'
+        for field in search_fields:
+            q.children.append(("%s__contains" % field, search_key))
+        draft_list = draft_list.filter(q)
+
+    provide_acount = draft_list.count()
+    '''分页'''
+    paginator = Paginator(draft_list, 19)
+    page = request.GET.get('page')
+    try:
+        p_list = paginator.page(page)
+    except PageNotAnInteger:
+        p_list = paginator.page(1)
+    except EmptyPage:
+        p_list = paginator.page(paginator.num_pages)
+
+    return render(request, 'dbms/warrant/draft-list.html', locals())
+
 # -----------------------即将到期票据列表-------------------------#
 @login_required
 @authority
@@ -374,7 +410,7 @@ def soondue_draft(request, *args, **kwargs):  #
     current_url_name = resolve(request.path).url_name  # 获取当前URL_NAME
     authority_list = request.session.get('authority_list')  # 获取当前用户的所有权限
     menu_result = MenuHelper(request).menu_data_list()
-    PAGE_TITLE = '票据列表'
+    PAGE_TITLE = '即将到期票据列表'
 
     date_th_later = datetime.date.today() - datetime.timedelta(days=-30)  # 30天前的日期
 
@@ -405,14 +441,14 @@ def soondue_draft(request, *args, **kwargs):  #
     return render(request, 'dbms/warrant/overdu-draft.html', locals())
 
 
-# -----------------------过期票据列表-------------------------#
+# -----------------------到期票据列表-------------------------#
 @login_required
 @authority
 def overdue_draft(request, *args, **kwargs):  #
     current_url_name = resolve(request.path).url_name  # 获取当前URL_NAME
     authority_list = request.session.get('authority_list')  # 获取当前用户的所有权限
     menu_result = MenuHelper(request).menu_data_list()
-    PAGE_TITLE = '票据列表'
+    PAGE_TITLE = '到期票据列表'
     '''DRAFT_STATE_LIST = [
         (1, '未入库'), (2, '已入库'), (21, '置换出库'), (31, '解保出库'), (41, '托收出库'), (99, '已注销')]'''
     overdue_draft_list = models.DraftExtend.objects.filter(

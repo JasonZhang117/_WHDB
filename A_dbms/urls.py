@@ -84,6 +84,10 @@ urlpatterns = [
     # -----------------------warrant权证管理-------------------------#
     path('warrant/', views.warrant, name='warrant_all'),  # 菜单-权证管理-所有权证
     path('warrant/<int:warrant_typ>/', views.warrant, name='warrant'),  # /dbms/warrant/(0-9)
+
+    path('warrant/draft/', views.draft_list, name='warrant_draft_all'),  # 菜单-权证管理-所有权证
+    path('warrant/draft/<int:draft_state>/', views.draft_list, name='warrant_draft'),  # /dbms/warrant/(0-9)
+
     path('warrant/scan/<int:warrant_id>/', views.warrant_scan, name='warrant_scan'),
     path('warrant/agree/', views.warrant_agree, name='warrant_agree_all'),
     path('warrant/agree/<int:agree_state>', views.warrant_agree, name='warrant_agree'),
@@ -114,8 +118,6 @@ urlpatterns = [
     path('warrant/storages/del/', views.storage_del_ajax, name='warrant_storage_del_ajax'),
     path('warrant/evaluate/add/', views.evaluate_add_ajax, name='warrant_evaluate_add_ajax'),
     path('warrant/draft/storage/', views.draft_state_change_ajax, name='warrant_draft_state_change_ajax'),
-
-
 
     # -----------------------house房产管理-------------------------#
     path('house/', views.house, name='warrant_house_all'),  # 菜单-权证管理-房产列表

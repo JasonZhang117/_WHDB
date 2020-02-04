@@ -28,7 +28,7 @@ from .v_agree_act import (agree_add_ajax, counter_add_ajax, agree_sign_ajax, cou
 # ----------------------v_warrant权证管理视图--------------------#
 from .v_warrant import (
     warrant, warrant_scan, warrant_agree, warrant_agree_scan, warrant_agree_warrant, house, ground,
-    soondue_draft, overdue_draft, overdue_evaluate, overdue_storage)
+    soondue_draft, overdue_draft, overdue_evaluate, overdue_storage,draft_list)
 from .v_warrant_act import (
     warrant_add_ajax, warrant_del_ajax, warrant_edit_ajax, owership_add_ajax, owership_del_ajax,
     guaranty_add_ajax, guaranty_del_ajax, storages_add_ajax, storage_del_ajax,

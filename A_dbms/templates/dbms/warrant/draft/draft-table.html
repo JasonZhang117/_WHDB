@@ -1,0 +1,32 @@
+<div class="table-responsive">
+    <table class="table table-bordered table-hover table-condensed active">
+        <thead>
+        <tr style="text-align: center">
+            <th>序号</th>
+            <th>票据编号</th>
+            <th>票据种类</th>
+            <th>承兑人</th>
+            <th>票面金额</th>
+            <th>出票日期</th>
+            <th>到期日</th>
+            <th>状态</th>
+        </tr>
+        </thead>
+        <tbody id="draftbag-tb">
+        {% for draft in p_list %}
+            <tr draft-nid="{{ draft.id }}">
+                <td>
+                    <a href="{% url 'dbms:warrant_scan' warrant_id=draft.draft.warrant.id %}">{{ forloop.counter }}</a>
+                </td>
+                <td>{{ draft.draft_num }}</td>
+                <td>{{ draft.get_draft_typ_display }}</td>
+                <td>{{ draft.draft_acceptor }}</td>
+                <td>{{ draft.draft_amount }}</td>
+                <td>{{ draft.issue_date }}</td>
+                <td>{{ draft.due_date }}</td>
+                <td>{{ draft.get_draft_state_display }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
