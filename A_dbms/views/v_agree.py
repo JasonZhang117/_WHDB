@@ -187,7 +187,7 @@ def agree_scan(request, agree_id):  # 查看合同
             custom_list.append(v.vehicle_warrant.vehicle_owner)
     if warrants_c_lending_l:
         for c in warrants_c_lending_l:
-            custom_list.append(c.chattel_warrant.chattel_custome)
+            custom_list.append(c.chattel_warrant.chattel_owner)
     if warrants_o_lending_l:
         for o in warrants_o_lending_l:
             custom_list.append(o.other_warrant.other_owner)
