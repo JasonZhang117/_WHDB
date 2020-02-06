@@ -281,14 +281,36 @@ class FormOthers(dform.ModelForm):  #
         self.fields['other_owner'].widget.choices = models.Customes.objects.values_list('id', 'name').order_by('name')
 
 
+# ------------------------其他FormOthers55--------------------------#
+class FormOthers41(dform.ModelForm):  #
+
+    class Meta:
+        model = models.Patent
+        fields = ['patent_name', 'reg_num', 'patent_ty']
+        widgets = {'patent_name': dform.TextInput(attrs={'class': 'form-control', 'placeholder': '商标名称'}),
+                   'reg_num': dform.TextInput(attrs={'class': 'form-control', 'placeholder': '申请/注册号'}),
+                   'patent_ty': dform.NumberInput(attrs={'class': 'form-control', 'placeholder': '国际分类'}), }
+
+
+# ------------------------其他FormOthers55--------------------------#
+class FormOthers41Edit(dform.ModelForm):  #
+    reg_num = fields.CharField(
+        label='申请/注册号', label_suffix="：", widget=widgets.TextInput(
+            attrs={'class': 'form-control', 'placeholder': '申请/注册号'}))
+    class Meta:
+        model = models.Patent
+        fields = ['patent_name', 'patent_ty']
+        widgets = {'patent_name': dform.TextInput(attrs={'class': 'form-control', 'placeholder': '商标名称'}),
+                   'patent_ty': dform.NumberInput(attrs={'class': 'form-control', 'placeholder': '国际分类'}), }
+
+
 # ------------------------其他FormOthersEdit55--------------------------#
 class FormOthersEdit(dform.ModelForm):  #
 
     class Meta:
         model = models.Others
-        fields = ['other_typ', 'other_detail', 'cost']
-        widgets = {'other_typ': dform.Select(attrs={'class': 'form-control'}),
-                   'cost': dform.NumberInput(attrs={'class': 'form-control', 'placeholder': '价值'}),
+        fields = ['other_detail', 'cost']
+        widgets = {'cost': dform.NumberInput(attrs={'class': 'form-control', 'placeholder': '价值'}),
                    'other_detail': dform.Textarea(
                        attrs={'class': 'form-control', 'rows': '3', 'placeholder': '详细情况'})}
 

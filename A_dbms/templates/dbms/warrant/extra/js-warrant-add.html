@@ -1,77 +1,90 @@
 <script>
     $(function () {
-
         bindAddWarrant();
         bind_id_warrant_typ();
-        bind_id_warrant_typ_n();
+        bind_id_other_typ();
         bindAddWarrantModalOk();
 
     });
 
-    function bindAddWarrant() {
-        $('#addWarrant').click(function () {
-            console.log("bindAddWarrant");
-            $('#addWarrantModal').modal('show');
-        })
+    function bind_id_other_show() {
+        $('#form_other_add_eidt').show(function () {
+            $('.other-extend').hide();
+            var selected_other_typ = $('#id_other_typ').val();
+            switch (selected_other_typ) {
+                case ('41'):{#车辆#}
+                    $('#form_other_add_eidt_41').show();
+                    break;
+                default:
+                    $('.other-extend').hide()
+            }
+        });
     }
 
-    function bind_id_warrant_typ_n() {
-        console.log("bind_id_warrant_typ_n");
-        var selected_warrant_typ_n = $('#id_warrant_typ_n').val();
-        $('.warrant-extend').hide();
-        $('#id_search_custom').hide();
-        console.log(selected_warrant_typ_n);
-        {#WARRANT_TYP_LIST = [#}
-        {#(1, '房产'), (2, '房产包'), (5, '土地'), (11, '应收'), (21, '股权'),#}
-        {#(31, '票据'), (41, '车辆'), (51, '动产'), (99, '他权')]#}
-        switch (selected_warrant_typ_n) {
-            case ('0'):
-                $('#form_house_add_edit').show();
-                break;
-            case ('1'):{#房产#}
-                $('#form_house_add_edit').show();
-                break;
-            case ('2'):{#房产包#}
+
+    function bindAddWarrant() {
+        $('#addWarrant').click(function () {
+            $('#addWarrantModal').modal('show');
+            $('#addWarrantModal').show(function () {
                 $('.warrant-extend').hide();
-                break;
-            case ('5'):{#土地#}
-                $('#form_ground_add_edit').show();
-                break;
-            case ('6'):{#在建工程#}
-                $('#form_construct_add_edit').show();
-                break;
-            case ('11'):{#应收#}
-                $('#form_receivable_add').show();
-                break;
-            case ('21'):{#股权#}
-                $('#form_stockes_add_edit').show();
-                break;
-            case ('31'):{#票据#}
-                $('#form_draft_add_eidt').show();
-                break;
-            case ('41'):{#车辆#}
-                $('#form_vehicle_add_eidt').show();
-                break;
-            case ('51'):{#动产#}
-                $('#form_chattel_add_eidt').show();
-                break;
-            case ('55'):{#其他#}
-                $('#form_other_add_eidt').show();
-                break;
-            case ('99'):{#他权#}
-                $('#form_hypothecs_add_eidt').show();
-                break;
-            default:
-                $('.warrant-extend').hide()
-        }
+                $('#id_search_custom').hide();
+                $('.other-extend').hide();
+                var selected_warrant_typ = $('#id_warrant_typ').val();
+                switch (selected_warrant_typ) {
+                    case ('1'):{#房产#}
+                        $('#form_house_add_edit').show();
+                        break;
+                    case ('2'):{#房产包#}
+                        $('.warrant-extend').hide();
+                        break;
+                    case ('5'):{#土地#}
+                        $('#form_ground_add_edit').show();
+                        break;
+                    case ('6'):{#在建工程#}
+                        $('#form_construct_add_edit').show();
+                        break;
+                    case ('11'):{#应收#}
+                        $('#form_receivable_add').show();
+                        $('#id_search_custom').show();
+                        break;
+                    case ('21'):{#股权#}
+                        $('#form_stockes_add_edit').show();
+                        $('#id_search_custom').show();
+                        break;
+                    case ('31'):{#票据#}
+                        $('#form_draft_add_eidt').show();
+                        $('#id_search_custom').show();
+                        break;
+                    case ('41'):{#车辆#}
+                        $('#form_vehicle_add_eidt').show();
+                        $('#id_search_custom').show();
+                        break;
+                    case ('51'):{#动产#}
+                        $('#form_chattel_add_eidt').show();
+                        $('#id_search_custom').show();
+                        break;
+                    case ('55'):{#其他#}
+                        $('#form_other_add_eidt').show();
+                        $('#id_search_custom').show();
+                        bind_id_other_show();
+                        break;
+                    case ('99'):{#他权#}
+                        $('#form_hypothecs_add_eidt').show();
+                        break;
+                    default:
+                        $('.warrant-extend').hide()
+                }
+            })
+
+        })
     }
 
 
     function bind_id_warrant_typ() {
         $('#id_warrant_typ').change(function () {
-            console.log("bind_id_warrant_typ");
             $('.warrant-extend').hide();
             $('#id_search_custom').hide();
+            $('.other-extend').hide();
             var selected_warrant_typ = $('#id_warrant_typ').val();
             switch (selected_warrant_typ) {
                 case ('0'):
@@ -81,7 +94,7 @@
                     $('#form_house_add_edit').show();
                     break;
                 case ('2'):{#房产包#}
-                    $('.warrant-extend').hide()
+                    $('.warrant-extend').hide();
                     break;
                 case ('5'):{#土地#}
                     $('#form_ground_add_edit').show();
@@ -112,6 +125,7 @@
                 case ('55'):{#其他#}
                     $('#form_other_add_eidt').show();
                     $('#id_search_custom').show();
+                    bind_id_other_show();
                     break;
                 case ('99'):{#他权#}
                     $('#form_hypothecs_add_eidt').show();
@@ -122,6 +136,20 @@
         })
     }
 
+    function bind_id_other_typ() {
+        $('#id_other_typ').change(function () {
+            $('.other-extend').hide();
+            var selected_other_typ = $('#id_other_typ').val();
+            switch (selected_other_typ) {
+                case ('41'):{#车辆#}
+                    $('#form_other_add_eidt_41').show();
+                    bind_id_other_show();
+                    break;
+                default:
+                    $('.other-extend').hide()
+            }
+        })
+    }
 
     function bindAddWarrantModalOk() {
         $('#addWarrantModalOk').click(function () {
@@ -140,9 +168,6 @@
             var ttt = $('#id_other_detail').val();
             postData['other_detail'] = ttt;
             var postDataStr = JSON.stringify(postData);
-
-            console.log(postDataStr);
-
             $.ajax({
                 url: '/dbms/warrant/add/',
                 type: 'POST',
@@ -150,7 +175,6 @@
                 data: {'postDataStr': postDataStr},
                 dataType: 'JSON',
                 success: function (arg) {
-                    console.log(arg);
                     if (arg.status) {
                         $('#addWarrantModal').modal('hide');
                         alert(arg.message);
@@ -198,6 +222,10 @@
                         $('#e_other_typ').text(arg.forme.other_typ);
                         $('#e_cost').text(arg.forme.cost);
                         $('#e_other_detail').text(arg.forme.other_detail);
+
+                        $('#e_patent_name').text(arg.forme.patent_name);
+                        $('#e_reg_num').text(arg.forme.reg_num);
+                        $('#e_patent_ty').text(arg.forme.patent_ty);
 
                         $('#e_agree').text(arg.forme.agree);
                     }

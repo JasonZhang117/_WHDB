@@ -9,6 +9,7 @@
                 <h4 class="modal-title" id="editWarrantModalLabel">修改产权
                     <input style="display: none" name="warrant_id" id="id_warrant_id" value={{ warrant_obj.id }}>
                     <input style="display: none" name="warrant_typ_n" id="id_warrant_typ_n" value={{ warrant_typ_n }}>
+                    <input style="display: none" name="other_typ_n" id="id_other_typ_n" value={{ other_typ_n }}>
                 </h4>
             </div>
             <div class="modal-body">
@@ -35,6 +36,9 @@
                         {% include 'dbms/warrant/modl/mod_form/chattel-edit.html' %}
                     {% elif warrant_typ_n == 55 %}
                         {% include 'dbms/warrant/modl/mod_form/other-edit.html' %}
+                        {% if other_typ_n == 41 %}
+                            {% include 'dbms/warrant/modl/mod_form/other-add-edit-41.html' %}
+                        {% endif %}
                     {% elif warrant_typ_n == 99 %}
                         {% include 'dbms/warrant/modl/mod_form/hypothec-add-edit.html' %}
                     {% endif %}

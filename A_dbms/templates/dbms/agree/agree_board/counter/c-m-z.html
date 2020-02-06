@@ -48,6 +48,17 @@
             {% include 'dbms/agree/agree_board/counter/d/d-appendix-1.html' %}
         {% elif counter_warrant_typ == 31 %}
             {% include 'dbms/agree/agree_board/counter/z/z-appendix-draft.html' %}
+        {% elif counter_warrant_typ == 55 %}
+            {% if other_typ == 21 %}
+                {% include 'dbms/agree/agree_board/counter/z/z-appendix-other-21.html' %}
+            {% elif other_typ == 41 %}
+                {% include 'dbms/agree/agree_board/counter/z/z-appendix-other-41.html' %}
+            {% else %}
+                <p>？？？？？？？？？？？？？？？？？？？？？？？？？？</p>
+                <p>？？？？？？？？？？？？？？？？？？？？？？？？？？</p>
+                <p>？？？？？？？？？？？？？？？？？？？？？？？？？？</p>
+                <p>？？？？？？？？？？？？？？？？？？？？？？？？？？</p>
+            {% endif %}
         {% else %}
             <p>？？？？？？？？？？？？？？？？？？？？？？？？？？</p>
             <p>？？？？？？？？？？？？？？？？？？？？？？？？？？</p>

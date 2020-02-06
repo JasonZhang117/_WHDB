@@ -178,7 +178,7 @@ def fication_add_ajax(request):
     return HttpResponse(result)
 
 
-# -----------------------分类ajax-------------------------#
+# -----------------------批量分类ajax-------------------------#
 @login_required
 @authority
 def fication_all_ajax(request, *args, **kwargs):

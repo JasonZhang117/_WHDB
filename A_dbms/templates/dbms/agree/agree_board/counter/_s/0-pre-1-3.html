@@ -19,7 +19,9 @@
     <p>经丙方要求，乙方同意以其合法持有的票面总额不低于<strong><u>{{ denomination_str }}万元</u></strong>（人民币大写金额：<strong><u>{{ denomination_cn }}</u></strong>）的{{  counter_draft_obj.get_typ_display }}以背书“质押”方式出质给被背书人甲方为保证合同项下甲方给丙方担保的全部款项向甲方提供质押反担保, 乙方向甲方提供的质押反担保的被担保主债权金额为<strong><u>{{ agree_amount_cn }}</u></strong>，担保期限为：______年___月___日至______年___月___日。甲、乙、丙三方根据有关法律、法规规定，经协商一致，特订立如下条款：</p>
 {% elif counter_warrant_typ == 55 %}
     {% if other_typ == 21 %}
-        <p>经丙方要求，乙方乙方同意以其名下总价值为<strong><u>{{ cost_str }}万元</u></strong>（人民币大写金额：<strong><u>{{ cost_cn }}</u></strong>）的{{ counter_other_obj.get_other_typ_display }}为保证合同项下甲方给丙方担保的全部款项向甲方提供质押反担保, 乙方向甲方提供的质押反担保的被担保主债权金额为<strong><u>{{ agree_amount_cn }}</u></strong>，担保期限为：______年___月___日至______年___月___日。甲、乙、丙三方根据有关法律、法规规定，经协商一致，特订立如下条款：</p>
+        <p>经丙方要求，乙方同意以其名下总价值为<strong><u>{{ cost_str }}万元</u></strong>（人民币大写金额：<strong><u>{{ cost_cn }}</u></strong>）的{{ counter_other_obj.get_other_typ_display }}为保证合同项下甲方给丙方担保的全部款项向甲方提供质押反担保, 乙方向甲方提供的质押反担保的被担保主债权金额为<strong><u>{{ agree_amount_cn }}</u></strong>，担保期限为：______年___月___日至______年___月___日。甲、乙、丙三方根据有关法律、法规规定，经协商一致，特订立如下条款：</p>
+    {% elif other_typ == 41 %}
+        <p>经丙方要求，乙方同意以其名下的<strong><u>{{ counter_other_obj.get_other_typ_display }}所有权</u></strong>为保证合同项下甲方给丙方担保的全部款项向甲方提供质押反担保, 乙方向甲方提供的质押反担保的被担保主债权金额为<strong><u>{{ agree_amount_cn }}</u></strong>，担保期限为：______年___月___日至______年___月___日。甲、乙、丙三方根据有关法律、法规规定，经协商一致，特订立如下条款：</p>
     {% else %}
         <p><strong>？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？</strong></p>
         <p><strong>？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？</strong></p>

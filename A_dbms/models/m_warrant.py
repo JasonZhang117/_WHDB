@@ -82,7 +82,7 @@ class Houses(models.Model):  # 房产
                                    limit_choices_to={'warrant_typ': 1},
                                    related_name='house_warrant')
     house_locate = models.CharField(verbose_name='房产坐落', max_length=128, unique=True)
-    HOUSE_APP_LIST = [(1, '住宅'), (5, '住宅、住宅地下室'), (11, '商业'), (12, '商业服务'),(13, '商业用房'),
+    HOUSE_APP_LIST = [(1, '住宅'), (5, '住宅、住宅地下室'), (11, '商业'), (12, '商业服务'), (13, '商业用房'),
                       (21, '办公'),
                       (31, '公寓'), (41, '生产性工业用房'),
                       (42, '非生产性工业用房'), (43, '厂房'), (44, '工业性科研用房'), (45, '工业'),
@@ -395,6 +395,30 @@ class Others(models.Model):  #
 
     def __str__(self):
         return '%s_%s' % (self.warrant.warrant_num, self.other_typ)
+
+
+# ------------------------其他55-商标--------------------------#
+class Patent(models.Model):  #
+    '''OTHER_TYP_LIST = [(11, '购房合同'), (21, '车辆合格证'), (31, '专利'), (41, '商标'), (71, '账户'),
+                      (99, '其他')]'''
+    other = models.OneToOneField(to='Others', verbose_name="权证",
+                                 on_delete=models.CASCADE,
+                                 limit_choices_to={'other_typ': 41},
+                                 related_name='patent_other')
+    patent_name = models.CharField(verbose_name="商标名称", max_length=64)
+    reg_num = models.CharField(verbose_name="申请/注册号", max_length=64, unique=True)
+    patent_ty = models.IntegerField(verbose_name="国际分类")
+    patentor = models.ForeignKey(to='Employees', verbose_name="创建者", default=1,
+                                 on_delete=models.PROTECT,
+                                 related_name='patentor_employee')
+    patentor_date = models.DateField(verbose_name='创建日期', default=datetime.date.today)
+
+    class Meta:
+        verbose_name_plural = '权证-其他-商标'  # 指定显示名称
+        db_table = 'dbms_patent'  # 指定数据表的名称
+
+    def __str__(self):
+        return '%s_%s' % (self.other, self.reg_num)
 
 
 # ------------------------他权模型99--------------------------#

@@ -1,0 +1,30 @@
+{% if forloop.counter == 1 %}
+    <tr>
+        <td align="center" width="5%">序号</td>
+        <td align="center" width="20%">专利名称</td>
+        <td align="center">申请/注册人</td>
+        <td align="center">申请/注册号</td>
+        <td align="center">国际分类</td>
+        <td align="center">被担保债权数额</td>
+        <td align="center">评估价值</td>
+    </tr>
+    <tr>
+        <td>{{ forloop.counter }}</td>
+        <td>{{ warrant.other_warrant.patent_other.patent_name }}</td>
+        <td>{{ warrant.other_warrant.other_owner.name }}</td>
+        <td>{{ warrant.other_warrant.patent_other.reg_num }}</td>
+        <td>{{ warrant.other_warrant.patent_other.patent_ty }}</td>
+        <td></td>
+        <td></td>
+    </tr>
+{% else %}
+    <tr>
+        <td>{{ forloop.counter }}</td>
+        <td>{{ warrant.other_warrant.patent_other.patent_name }}</td>
+        <td>{{ warrant.other_warrant.other_owner.name }}</td>
+        <td>{{ warrant.other_warrant.patent_other.reg_num }}</td>
+        <td>{{ warrant.other_warrant.patent_other.patent_ty }}</td>
+        <td></td>
+        <td></td>
+    </tr>
+{% endif %}

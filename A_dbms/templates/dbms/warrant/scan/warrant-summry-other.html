@@ -11,4 +11,15 @@
     <label class="col-lg-3 col-md-4 col-sm-12 col-xs-12">
         详情：{{ warrant_obj.other_warrant.other_detail }}
     </label>
+    {% if warrant_obj.other_warrant.other_typ == 41 %}
+        <label class="col-lg-3 col-md-4 col-sm-12 col-xs-12">
+            商标名称：{{ warrant_obj.other_warrant.patent_other.patent_name }}
+        </label>
+        <label class="col-lg-3 col-md-4 col-sm-12 col-xs-12">
+            申请/注册号：{{ warrant_obj.other_warrant.patent_other.reg_num }}
+        </label>
+        <label class="col-lg-3 col-md-4 col-sm-12 col-xs-12">
+            国际分类：{{ warrant_obj.other_warrant.patent_other.patent_ty }}
+        </label>
+    {% endif %}
 </div>

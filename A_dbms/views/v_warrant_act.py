@@ -236,25 +236,54 @@ def warrant_add_ajax(request):
             form_other_add_eidt = forms.FormOthers(post_data)  # 55其他添加
             if form_other_add_eidt.is_valid():
                 other_clean = form_other_add_eidt.cleaned_data
-                try:
-                    '''WARRANT_STATE_LIST = (
-        (1, '未入库'), (2, '已入库'), (6, '无需入库'), (11, '续抵出库'), (21, '已借出'), (31, '解保出库'),
-        (99, '已注销'))'''
-                    with transaction.atomic():
-                        warrant_obj = models.Warrants.objects.create(
-                            warrant_num=warrant_add_clean['warrant_num'], warrant_state=6, evaluate_state=99,
-                            warrant_typ=warrant_typ, warrant_buildor=request.user)
-                        other_obj = models.Others.objects.create(
-                            warrant=warrant_obj, otheror=request.user,
-                            other_owner_id=other_clean['other_owner'],
-                            other_typ=other_clean['other_typ'],
-                            cost=other_clean['cost'],
-                            other_detail=other_clean['other_detail'])
-                    response['message'] = '资产创建成功！！！'
-                    response['skip'] = "/dbms/warrant/scan/%s/" % warrant_obj.id
-                except Exception as e:
-                    response['status'] = False
-                    response['message'] = '资产创建失败：%s' % str(e)
+                other_typ = other_clean['other_typ']
+                if other_typ == 41:
+                    form_other_add_eidt_41 = forms.FormOthers41(post_data)
+                    if form_other_add_eidt_41.is_valid():
+                        other_41_clean = form_other_add_eidt_41.cleaned_data
+                        try:
+                            with transaction.atomic():
+                                warrant_obj = models.Warrants.objects.create(
+                                    warrant_num=warrant_add_clean['warrant_num'], evaluate_state=99,
+                                    warrant_typ=warrant_typ, warrant_buildor=request.user)
+                                other_obj = models.Others.objects.create(
+                                    warrant=warrant_obj, otheror=request.user,
+                                    other_owner_id=other_clean['other_owner'],
+                                    other_typ=other_typ, cost=other_clean['cost'],
+                                    other_detail=other_clean['other_detail'])
+                                if other_typ == 41:
+                                    patent_obj = models.Patent.objects.create(
+                                        other=other_obj, patentor=request.user,
+                                        patent_name=other_41_clean['patent_name'],
+                                        reg_num=other_41_clean['reg_num'], patent_ty=other_41_clean['patent_ty'])
+                            response['message'] = '资产创建成功！！！'
+                            response['skip'] = "/dbms/warrant/scan/%s/" % warrant_obj.id
+                        except Exception as e:
+                            response['status'] = False
+                            response['message'] = '资产创建失败：%s' % str(e)
+                    else:
+                        response['status'] = False
+                        response['message'] = '表单信息有误！！！'
+                        response['forme'] = form_other_add_eidt_41.errors
+                else:
+                    try:
+                        '''WARRANT_STATE_LIST = (
+            (1, '未入库'), (2, '已入库'), (6, '无需入库'), (11, '续抵出库'), (21, '已借出'), (31, '解保出库'),
+            (99, '已注销'))'''
+                        with transaction.atomic():
+                            warrant_obj = models.Warrants.objects.create(
+                                warrant_num=warrant_add_clean['warrant_num'], evaluate_state=99,
+                                warrant_typ=warrant_typ, warrant_buildor=request.user)
+                            other_obj = models.Others.objects.create(
+                                warrant=warrant_obj, otheror=request.user,
+                                other_owner_id=other_clean['other_owner'],
+                                other_typ=other_typ, cost=other_clean['cost'],
+                                other_detail=other_clean['other_detail'])
+                        response['message'] = '资产创建成功！！！'
+                        response['skip'] = "/dbms/warrant/scan/%s/" % warrant_obj.id
+                    except Exception as e:
+                        response['status'] = False
+                        response['message'] = '资产创建失败：%s' % str(e)
             else:
                 response['status'] = False
                 response['message'] = '表单信息有误！！！'
@@ -504,18 +533,41 @@ def warrant_edit_ajax(request):
             form_other_eidt = forms.FormOthersEdit(post_data)  # 55其他添加
             if form_other_eidt.is_valid():
                 other_edit_clean = form_other_eidt.cleaned_data
-                try:
-                    with transaction.atomic():
-                        warrant_list.update(
-                            warrant_num=warrant_edit_clean['warrant_num'])
-                        models.Others.objects.filter(warrant=warrant_obj).update(
-                            other_typ=other_edit_clean['other_typ'],
-                            cost=other_edit_clean['cost'],
-                            other_detail=other_edit_clean['other_detail'])
-                        response['message'] = '其他权证信息修改该成功！！！'
-                except Exception as e:
-                    response['status'] = False
-                    response['message'] = '其他权证信息修改失败：%s' % str(e)
+                other_typ = warrant_obj.other_warrant.other_typ
+                if other_typ == 41:
+                    form_other_add_eidt_41 = forms.FormOthers41Edit(post_data)
+                    if form_other_add_eidt_41.is_valid():
+                        other_41_clean = form_other_add_eidt_41.cleaned_data
+                        try:
+                            with transaction.atomic():
+                                warrant_list.update(
+                                    warrant_num=warrant_edit_clean['warrant_num'])
+                                models.Others.objects.filter(warrant=warrant_obj).update(
+                                    cost=other_edit_clean['cost'],
+                                    other_detail=other_edit_clean['other_detail'])
+                                models.Patent.objects.filter(other__warrant=warrant_obj).update(
+                                    patent_name=other_41_clean['patent_name'],
+                                    reg_num=other_41_clean['reg_num'], patent_ty=other_41_clean['patent_ty'])
+                                response['message'] = '其他权证信息修改该成功！！！'
+                        except Exception as e:
+                            response['status'] = False
+                            response['message'] = '其他权证信息修改失败：%s' % str(e)
+                    else:
+                        response['status'] = False
+                        response['message'] = '表单信息有误！！！'
+                        response['forme'] = form_other_add_eidt_41.errors
+                else:
+                    try:
+                        with transaction.atomic():
+                            warrant_list.update(
+                                warrant_num=warrant_edit_clean['warrant_num'])
+                            models.Others.objects.filter(warrant=warrant_obj).update(
+                                cost=other_edit_clean['cost'],
+                                other_detail=other_edit_clean['other_detail'])
+                            response['message'] = '其他权证信息修改该成功！！！'
+                    except Exception as e:
+                        response['status'] = False
+                        response['message'] = '其他权证信息修改失败：%s' % str(e)
             else:
                 response['status'] = False
                 response['message'] = '表单信息有误！！！'

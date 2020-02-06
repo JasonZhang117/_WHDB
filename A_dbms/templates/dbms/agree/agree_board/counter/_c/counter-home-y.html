@@ -86,9 +86,15 @@
                 <p>法定代表人：{{ warrant.chattel_warrant.chattel_owner.company_custome.representative }}</p>
                 {#(55, '其他')#}
             {% elif warrant.warrant_typ == 55 %}
-                <p><strong>出质人（乙方）：{{ warrant.other_warrant.other_owner.name }}</strong></p>
-                <p>住所（地址）：{{ warrant.other_warrant.other_owner.company_custome.registered_addr }}</p>
-                <p>法定代表人：{{ warrant.other_warrant.other_owner.company_custome.representative }}</p>
+                {% if warrant.other_warrant.other_owner.genre == 1 %}
+                    <p><strong>抵押人（乙方）：{{ warrant.other_warrant.other_owner.name }}</strong></p>
+                    <p>住所（地址）：{{ warrant.other_warrant.other_owner.company_custome.registered_addr }}</p>
+                    <p>法定代表人：{{ warrant.other_warrant.other_owner.company_custome.representative }}</p>
+                {% elif warrant.other_warrant.other_owner.genre == 2 %}
+                    <p><strong>抵押人（乙方）：{{ warrant.other_warrant.other_owner.name }}</strong></p>
+                    <p>住所（地址）：{{ warrant.other_warrant.other_owner.person_custome.license_addr }}</p>
+                    <p>身份证号码：{{ warrant.other_warrant.other_owner.person_custome.license_num }}</p>
+                {% endif %}
             {% else %}
                 <p><strong>？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？</strong></p>
                 <p><strong>？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？</strong></p>

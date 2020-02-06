@@ -39,6 +39,7 @@ def warrant(request, *args, **kwargs):  # 权证列表
     form_vehicle_add_eidt = forms.FormVehicle()  # 41车辆添加
     form_chattel_add_eidt = forms.FormChattel()  # 51动产添加
     form_other_add_eidt = forms.FormOthers()  # 55其他添加
+    form_other_add_eidt_41 = forms.FormOthers41()  # 55其他添加
     form_hypothecs_add_eidt = forms.HypothecsAddEidtForm()  # 99他权添加
 
     warrant_typ_list = models.Warrants.WARRANT_TYP_LIST  # 筛选条件
@@ -78,6 +79,7 @@ def warrant_scan(request, warrant_id):  # house_scan房产预览
     menu_result = MenuHelper(request).menu_data_list()
     PAGE_TITAL = '权证预览'
     warrant_obj = models.Warrants.objects.get(id=warrant_id)
+    other_typ_n = 0
     warrant_typ_n = warrant_obj.warrant_typ
     HOUSE_GROUND_TYP_LIST = [1, 5, 6]
     if warrant_typ_n == 99:
@@ -144,10 +146,17 @@ def warrant_scan(request, warrant_id):  # house_scan房产预览
         form_chattel_eidt = forms.FormChattelEdit(form_date)  # 51动产添加
     elif warrant_typ == 55:  # 55其他添加
         form_date = {
-            'other_typ': warrant_obj.other_warrant.other_typ,
             'cost': warrant_obj.other_warrant.cost,
             'other_detail': warrant_obj.other_warrant.other_detail}
         form_other_eidt = forms.FormOthersEdit(form_date)  # 55其他添加
+        other_typ_n = warrant_obj.other_warrant.other_typ
+        if other_typ_n == 41:
+            other_form_data = {
+                'patent_name': warrant_obj.other_warrant.patent_other.patent_name,
+                'reg_num': warrant_obj.other_warrant.patent_other.reg_num,
+                'patent_ty': warrant_obj.other_warrant.patent_other.patent_ty
+            }
+            form_other_add_eidt_41 = forms.FormOthers41Edit(other_form_data)  # 55其他添加
     elif warrant_typ == 99:  # 他权form
         form_date = {
             'agree': warrant_obj.ypothec_warrant.agree}
@@ -378,7 +387,7 @@ def draft_list(request, *args, **kwargs):  #
     draft_state_list = models.DraftExtend.DRAFT_STATE_LIST
     '''DRAFT_STATE_LIST = [
         (1, '未入库'), (2, '已入库'), (21, '置换出库'), (31, '解保出库'), (41, '托收出库'), (99, '已注销')]'''
-    draft_list = models.DraftExtend.objects.filter(**kwargs).order_by('draft_state','due_date')  # 逾期票据
+    draft_list = models.DraftExtend.objects.filter(**kwargs).order_by('draft_state', 'due_date')  # 逾期票据
     '''搜索'''
     search_key = request.GET.get('_s')
     if search_key:
@@ -402,6 +411,7 @@ def draft_list(request, *args, **kwargs):  #
         p_list = paginator.page(paginator.num_pages)
 
     return render(request, 'dbms/warrant/draft-list.html', locals())
+
 
 # -----------------------即将到期票据列表-------------------------#
 @login_required

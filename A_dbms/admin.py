@@ -206,7 +206,18 @@ class DraftExtendAdmin(admin.ModelAdmin):
 
 admin.site.register(models.DraftExtend, DraftExtendAdmin)  # 票据列表
 admin.site.register(models.Chattel)  # 动产
-admin.site.register(models.Others)  # 动产
+admin.site.register(models.Others)  # 其他
+
+
+class PatentAdmin(admin.ModelAdmin):
+    list_display = ('patent_name', 'reg_num', 'patent_ty',)
+    # list_per_page = 20  # 每页显示条目数
+    search_fields = ['patent_name', 'reg_num']  # 搜索字段
+    # ordering = ['-due_date']  # 排序字段
+
+
+admin.site.register(models.Patent, PatentAdmin)  # 商标
+
 admin.site.register(models.Evaluate)  # 出入库
 
 

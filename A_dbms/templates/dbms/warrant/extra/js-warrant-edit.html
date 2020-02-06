@@ -5,9 +5,21 @@
         bindEditWarrantModalOk();
     });
 
+    function bind_id_other_show() {
+        $('.other-extend').hide();
+        var selected_other_typ_n = $('#id_other_typ_n').val();
+        switch (selected_other_typ_n) {
+            case ('41'):{#商标#}
+                $('#form_other_add_eidt_41').show();
+                break;
+            default:
+                $('.other-extend').hide()
+        }
+    }
+
+
     function bindEditWarrant() {
         $('#editWarrant').click(function () {
-            console.log("bindEditWarrant");
             $('#editWarrantModal').modal('show');
         })
     }
@@ -45,6 +57,7 @@
                 break;
             case ('55'):{#其他#}
                 $('#form_other_eidt').show();
+                bind_id_other_show();
                 break;
             case ('99'):
                 $('#form_hypothecs_add_eidt').show();
@@ -80,7 +93,6 @@
                 data: {'postDataStr': postDataStr},
                 dataType: 'JSON',
                 success: function (arg) {
-                    console.log(arg);
                     if (arg.status) {
                         $('#editWarrantModal').modal('hide');
                         alert(arg.message);
@@ -121,6 +133,10 @@
                         $('#e_other_typ').text(arg.forme.other_typ);
                         $('#e_cost').text(arg.forme.cost);
                         $('#e_other_detail').text(arg.forme.other_detail);
+
+                        $('#e_patent_name').text(arg.forme.patent_name);
+                        $('#e_reg_num').text(arg.forme.reg_num);
+                        $('#e_patent_ty').text(arg.forme.patent_ty);
 
                         $('#e_agree').text(arg.forme.agree);
                     }

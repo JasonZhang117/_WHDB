@@ -12,7 +12,7 @@ from .m_agree import (
 # -------------------v_warrant担保物模型---------------------#
 from .m_warrant import (
     Warrants, Ownership, Houses, HouseBag, Grounds, Construction, Stockes, Receivable, ReceiveExtend, Draft,
-    DraftExtend, Chattel, Others, Vehicle, Hypothecs, Evaluate, Storages)
+    DraftExtend, Chattel, Others, Vehicle, Hypothecs, Evaluate, Storages,Patent)
 # -----------------------m_provide放款模型-------------------#
 from .m_provide import (Notify, Provides, Repayments, Pigeonholes, Charges, Track, Extension)
 # -----------------------m_dun追偿-------------------#
