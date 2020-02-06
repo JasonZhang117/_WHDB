@@ -407,7 +407,7 @@ class Patent(models.Model):  #
                                  related_name='patent_other')
     patent_name = models.CharField(verbose_name="商标名称", max_length=64)
     reg_num = models.CharField(verbose_name="申请/注册号", max_length=64, unique=True)
-    patent_ty = models.IntegerField(verbose_name="国际分类")
+    patent_ty = models.IntegerField(verbose_name="分类")
     patentor = models.ForeignKey(to='Employees', verbose_name="创建者", default=1,
                                  on_delete=models.PROTECT,
                                  related_name='patentor_employee')
