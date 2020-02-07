@@ -31,12 +31,11 @@
                         <p>乙方（公章或合同专用章）：<strong><u>{{ ownership.owner.name }}</u></strong></p>
                         <p>法定代表人（或授权代理人）：<strong><u>{{ ownership.owner.company_custome.representative }}</u></strong></p>
                         <p>（签字或盖章）</p>
-                        {% include 'dbms/agree/agree_board/sign-date.html' %}
                     {% elif ownership.owner.genre == 2 %}
                         <p>乙方：<strong><u>{{ ownership.owner.name }}</u></strong></p>
                         <p>（本人或授权代理人签字）</p>
-                        {% include 'dbms/agree/agree_board/sign-date.html' %}
                     {% endif %}
+                    {% include 'dbms/agree/agree_board/sign-date.html' %}
                 {% endfor %}
                 {#(11, '应收账款')#}
             {% elif warrant.warrant_typ == 11 %}
@@ -44,24 +43,22 @@
                     <p>乙方（公章或合同专用章）：<strong><u>{{ warrant.receive_warrant.receive_owner.name }}</u></strong></p>
                     <p>法定代表人（或授权代理人）：<strong><u>{{ warrant.receive_warrant.receive_owner.company_custome.representative }}</u></strong></p>
                     <p>（签字或盖章）</p>
-                    {% include 'dbms/agree/agree_board/sign-date.html' %}
                 {% elif warrant.receive_warrant.receive_owner.genre == 2 %}
                     <p>乙方：<strong><u>{{ warrant.receive_warrant.receive_owner.name }}</u></strong></p>
                     <p>（本人或授权代理人签字）</p>
-                    {% include 'dbms/agree/agree_board/sign-date.html' %}
                 {% endif %}
+                {% include 'dbms/agree/agree_board/sign-date.html' %}
                 {#(21, '股权')#}
             {% elif warrant.warrant_typ == 21 %}
                 {% if warrant.stock_warrant.stock_owner.genre == 1 %}
                     <p>乙方（公章或合同专用章）：<strong><u>{{ warrant.stock_warrant.stock_owner.name }}</u></strong></p>
                     <p>法定代表人（或授权代理人）：<strong><u>{{ warrant.stock_warrant.stock_owner.company_custome.representative }}</u></strong></p>
                     <p>（签字或盖章）</p>
-                    {% include 'dbms/agree/agree_board/sign-date.html' %}
                 {% elif warrant.stock_warrant.stock_owner.genre == 2 %}
                     <p>乙方：<strong><u>{{ warrant.stock_warrant.stock_owner.name }}</u></strong></p>
                     <p>（本人或授权代理人签字）</p>
-                    {% include 'dbms/agree/agree_board/sign-date.html' %}
                 {% endif %}
+                {% include 'dbms/agree/agree_board/sign-date.html' %}
                 {#(31, '票据')#}
             {% elif warrant.warrant_typ == 31 %}
                 <p>乙方（公章或合同专用章）：<strong><u>{{ warrant.draft_warrant.draft_owner.name }}</u></strong></p>
@@ -74,12 +71,11 @@
                     <p>乙方（公章或合同专用章）：<strong><u>{{ warrant.vehicle_warrant.vehicle_owner.name }}</u></strong></p>
                     <p>法定代表人（或授权代理人）：<strong><u>{{ warrant.vehicle_warrant.vehicle_owner.company_custome.representative }}</u></strong></p>
                     <p>（签字或盖章）</p>
-                    {% include 'dbms/agree/agree_board/sign-date.html' %}
                 {% elif warrant.vehicle_warrant.vehicle_owner.genre == 2 %}
                     <p>乙方（公章或合同专用章）：<strong><u>{{ warrant.vehicle_warrant.vehicle_owner.name }}</u></strong></p>
                     <p>（本人或授权代理人签字）</p>
-                    {% include 'dbms/agree/agree_board/sign-date.html' %}
                 {% endif %}
+                {% include 'dbms/agree/agree_board/sign-date.html' %}
                 {#(51, '动产')#}
             {% elif warrant.warrant_typ == 51 %}
                 <p>乙方（公章或合同专用章）：<strong><u>{{ warrant.chattel_warrant.chattel_owner.name }}</u></strong></p>
@@ -93,11 +89,9 @@
                     <p>乙方（公章或合同专用章）：<strong><u>{{ warrant.other_warrant.other_owner.name }}</u></strong></p>
                     <p>法定代表人（或授权代理人）：<strong><u>{{ warrant.other_warrant.other_owner.company_custome.representative }}</u></strong></p>
                     <p>（签字或盖章）</p>
-                    {% include 'dbms/agree/agree_board/sign-date.html' %}
                 {% elif warrant.other_warrant.other_owner.genre == 2 %}
                     <p>乙方：<strong><u>{{ warrant.other_warrant.other_owner.name }}</u></strong></p>
                     <p>（本人或授权代理人签字）</p>
-                    {% include 'dbms/agree/agree_board/sign-date.html' %}
                 {% endif %}
                 {% include 'dbms/agree/agree_board/sign-date.html' %}
             {% else %}
