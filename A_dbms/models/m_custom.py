@@ -172,6 +172,8 @@ class Districtes(models.Model):  # 区域（街道）
 class Industries(models.Model):  # 行业
     code = models.CharField(verbose_name='行业编码', max_length=16, unique=True)
     name = models.CharField(verbose_name='行业名称', max_length=32, unique=True)
+    IND_TYP_LIST = ((1, '未分产业'), (11, '第一产业'), (21, '第二产业'), (31, '第三产业'), )
+    ind_typ = models.IntegerField(verbose_name='产业分类', choices=IND_TYP_LIST, default=1)
     cod_nam = models.CharField(verbose_name='代码名称', max_length=48)
 
     # Cancellation = models.BooleanField('注销', default=False)

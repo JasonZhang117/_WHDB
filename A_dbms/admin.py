@@ -358,7 +358,7 @@ admin.site.register(models.Districtes, DistrictesAdmin)  # 区域
 
 
 class IndustriesAdmin(admin.ModelAdmin):
-    list_display = ['id', 'code', 'name', 'cod_nam']  # 显示字段
+    list_display = ['id', 'code', 'name', 'cod_nam', 'ind_typ']  # 显示字段
     # list_per_page = 20  # 每页显示条目数
     search_fields = ['code', 'name']  # 搜索字段
     ordering = ['code']  # 排序字段
