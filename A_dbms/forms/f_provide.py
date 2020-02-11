@@ -81,6 +81,16 @@ class FormProvideAdd(dform.ModelForm):
             'due_date': dform.DateInput(attrs={'class': 'form-control', 'type': 'date'})}
 
 
+# -----------------------放款说明添加-------------------------#
+class FormProvideEx(dform.ModelForm):
+    class Meta:
+        model = models.Provides
+        fields = ['obj_typ', 'credit_typ', ]
+        widgets = {
+            'obj_typ': dform.Select(attrs={'class': 'form-control'}),
+            'credit_typ': dform.Select(attrs={'class': 'form-control'}), }
+
+
 # -----------------------展期-------------------------#
 class FormExtensionAdd(dform.ModelForm):
     class Meta:

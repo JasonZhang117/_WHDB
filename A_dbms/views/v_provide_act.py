@@ -323,6 +323,7 @@ def provide_add_ajax(request):
         provide_money = round(old_amount + new_amount, 2)
         notify_provide_amount = models.Provides.objects.filter(notify=notify_obj).aggregate(Sum('provide_money'))
         notify_provide_sum = notify_provide_amount['provide_money__sum']
+        provide_typ = form_provide_cleaned['provide_typ']
         if notify_provide_sum:
             amount = round(notify_provide_sum + provide_money, 2)
         else:
@@ -334,12 +335,12 @@ def provide_add_ajax(request):
             try:
                 with transaction.atomic():
                     provide_obj = models.Provides.objects.create(
-                        notify=notify_obj, provide_typ=form_provide_cleaned['provide_typ'],
+                        notify=notify_obj, provide_typ=provide_typ,
                         old_amount=old_amount, new_amount=new_amount, provide_money=provide_money,
                         provide_date=form_provide_cleaned['provide_date'],
                         due_date=form_provide_cleaned['due_date'], provide_balance=provide_money,
+                        obj_typ=post_data['obj_typ'], credit_typ=post_data['credit_typ'],
                         providor=request.user)
-
                     '''notify_provide_sum，更新放款通知放款情况'''
                     notify_provide_balance = models.Provides.objects.filter(
                         notify=notify_obj).aggregate(Sum('provide_balance'))['provide_balance__sum']

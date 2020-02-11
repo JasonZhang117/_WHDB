@@ -78,8 +78,9 @@ class Provides(models.Model):  # 放款
 
     fication = models.IntegerField(verbose_name='风险分类', choices=FICATION_LIST, default=11)
     fic_date = models.DateField(verbose_name='分类日期', default=datetime.date.today)
+
     OBJ_TYP_LIST = [(1, '农户贷款'), (11, '关联企业或个体工商户贷款'), (15, '个人消费贷款'),
-                    (21, '农村企业贷款'), (23, '城市-小微企业'), (25, '城市-小微其他企业'), (99, '其他'), ]
+                    (21, '农村企业贷款'), (23, '城市-小微企业'), (25, '城市-其他企业'), (99, '其他'), ]
     obj_typ = models.IntegerField(verbose_name='贷款对象分类', choices=OBJ_TYP_LIST, default=99)
     CREDIT_TYP_LIST = [(1, '纯信用贷款'), (11, '抵押贷款'), (15, '质押贷款'), (21, '保证贷款'), (99, '其他')]
     credit_typ = models.IntegerField(verbose_name='信用形式分类', choices=CREDIT_TYP_LIST, default=99)

@@ -1,14 +1,64 @@
 <script>
     $(function () {
         bindAddProvideB();
+        bind_provide_typ_change();
         bindAddProvideModalOk();
-
     });
+
 
     function bindAddProvideB() {
         $('#addProvideB').click(function () {
-            console.log("bindAddProvideB");
             $('#addProvideModal').modal('show');
+            $('#addProvideModal').show(function () {
+                $('.provide-extend').hide();
+                var selected_provide_typ = $('#id_provide_typ').val();
+                switch (selected_provide_typ) {
+                    case ('41'):{#房产#}
+                        $('#form_provide_ex').show();
+                        break;
+                    case ('52'):{#房产包#}
+                        $('#form_provide_ex').show();
+                        break;
+                    case ('53'):{#土地#}
+                        $('#form_provide_ex').show();
+                        break;
+                    case ('55'):{#在建工程#}
+                        $('#form_provide_ex').show();
+                        break;
+                    case ('57'):{#应收#}
+                        $('#form_provide_ex').show();
+                        break;
+                    default:
+                        $('.provide-extend').hide()
+                }
+            })
+
+        })
+    }
+
+    function bind_provide_typ_change() {
+        $('#id_provide_typ').change(function () {
+            $('.provide-extend').hide();
+            var selected_provide_typ = $('#id_provide_typ').val();
+            switch (selected_provide_typ) {
+                case ('41'):{#房产#}
+                    $('#form_provide_ex').show();
+                    break;
+                case ('52'):{#房产包#}
+                    $('#form_provide_ex').show();
+                    break;
+                case ('53'):{#土地#}
+                    $('#form_provide_ex').show();
+                    break;
+                case ('55'):{#在建工程#}
+                    $('#form_provide_ex').show();
+                    break;
+                case ('57'):{#应收#}
+                    $('#form_provide_ex').show();
+                    break;
+                default:
+                    $('.provide-extend').hide()
+            }
         })
     }
 
@@ -21,7 +71,6 @@
                 postData[n] = v;
             });
             var postDataStr = JSON.stringify(postData);
-            console.log(postDataStr);
             $.ajax({
                 url: '/dbms/provide/add/',
                 type: 'POST',
@@ -29,7 +78,6 @@
                 data: {'postDataStr': postDataStr},
                 dataType: 'JSON',
                 success: function (arg) {
-                    console.log(arg);
                     if (arg.status) {
                         $('#addProvideModal').modal('hide');
                         alert(arg.message);

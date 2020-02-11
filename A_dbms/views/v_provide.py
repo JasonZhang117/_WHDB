@@ -279,6 +279,7 @@ def provide_agree_notify(request, agree_id, notify_id):  # 查看放款通知
     date_th_later = today_str + datetime.timedelta(days=365)
     form_provide_data = {'provide_date': str(today_str), 'due_date': str(date_th_later)}
     form_provide_add = forms.FormProvideAdd(initial=form_provide_data)
+    form_provide_ex = forms.FormProvideEx()
 
     return render(request, 'dbms/provide/provide-agree-notify.html', locals())
 
@@ -411,6 +412,7 @@ def notify_scan(request, notify_id):  # 查看放款通知
     date_th_later = today_str + datetime.timedelta(days=365)
     form_provide_data = {'provide_date': str(today_str), 'due_date': str(date_th_later)}
     form_provide_add = forms.FormProvideAdd(initial=form_provide_data)
+    form_provide_ex = forms.FormProvideEx()
     form_data = {'contracts_lease': notify_obj.contracts_lease,
                  'contract_guaranty': notify_obj.contract_guaranty,
                  'time_limit': notify_obj.time_limit,
