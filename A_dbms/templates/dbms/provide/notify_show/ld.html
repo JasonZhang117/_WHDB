@@ -3,7 +3,11 @@
     <p class="sub-head" style="padding-bottom: 25pt"><strong>放款通知审批单</strong></p>
 </div>
 <div>会计财务部：</div>
-<p class="indent arg-bn">根据我公司与<u>{{ notify_obj.agree.lending.summary.custom.name }}{% if notify_obj.agree.lending.summary.borrower.all %}{% for borrower in notify_obj.agree.lending.summary.borrower.all %}、{{ borrower.name }}{% endfor %}{% endif %}</u>于<u>{{ notify_obj.agree.sign_date }}</u>签订的编号为<u>{{ notify_obj.agree.agree_num }}</u>《<u>{{ notify_obj.agree.get_agree_name_display }}</u>》约定，已完成放款前的全部手续，同意发放贷款（大写）<u>{{ notify_money_cn }}</u>，期限<u>{{ agree_term_cn }}</u>个月<u>零</u>天，月利率<u>{{ agree_rate_str }}</u>‰。</p>
+<p class="indent arg-bn">根据我公司与<u>
+    {{ notify_obj.agree.lending.summary.custom.name }}{% if notify_obj.agree.lending.summary.borrower.all %}
+        {% for borrower in notify_obj.agree.lending.summary.borrower.all %}、{{ borrower.name }}
+        {% endfor %}{% endif %}</u>于<u>{{ notify_obj.agree.sign_date }}</u>签订的编号为<u>{{ notify_obj.agree.agree_num }}</u>《<u>{{ notify_obj.agree.get_agree_name_display }}</u>》约定，已完成放款前的全部手续，同意发放贷款（大写）<u>{{ notify_money_cn }}</u>，期限<u>{{ agree_term_cn }}</u>个月<u>零</u>天，月利率<u>{{ agree_rate_str }}</u>‰。
+</p>
 <table>
     <tr>
         <td class="bb tc" width="15%">借款人名称</td>
@@ -24,6 +28,9 @@
         <td class="bb tc" width="15%">户名</td>
         <td class="bb tc" width="35%">{{ notify_obj.agree.acc_name }}</td>
     </tr>
+    {% if provide_agree_list %}
+        {% include 'dbms/provide/notify_show/ex.html' %}
+    {% endif %}
     <tr>
         <td class="bbb" colspan="2">放款岗意见：</td>
         <td class="bbb" colspan="2">风控部负责人意见：</td>

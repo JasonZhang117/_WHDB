@@ -304,6 +304,13 @@ def notify_show(request, notify_id):  # 查看放款通知
     date_today = datetime.date.today()
     date_today_str = str(date_today)
 
+    agree_amount = notify_obj.agree.agree_amount
+    provide_agree_list = models.Provides.objects.filter(notify__agree=notify_obj.agree)
+    if provide_agree_list:
+        provide_agree_count = provide_agree_list.count()
+        provide_agree_aount = provide_agree_list.aggregate(Sum('provide_money'))['provide_money__sum']  #
+        remainder = round(agree_amount - provide_agree_aount, 2)
+
     return render(request, 'dbms/provide/provide-notify-show.html', locals())
 
 

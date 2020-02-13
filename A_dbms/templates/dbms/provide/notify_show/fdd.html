@@ -13,7 +13,7 @@
                 {% endfor %}
             {% endif %}
         </td>
-        <td class="bb tc" >放款金额</td>
+        <td class="bb tc">放款金额</td>
         <td class="bb tc" colspan="2">{{ notify_money_cn }}</td>
     </tr>
     <tr>
@@ -23,6 +23,10 @@
         <td class="bb tc" width="15%">收款账号</td>
         <td class="bb tc" width="35%">{{ notify_obj.agree.acc_num }}（{{ notify_obj.agree.acc_name }}）</td>
     </tr>
+
+    {% if provide_agree_list %}
+        {% include 'dbms/provide/notify_show/ex.html' %}
+    {% endif %}
 
     <tr>
         <td class="bb arg-bn" colspan="6" style="line-height: 25pt">

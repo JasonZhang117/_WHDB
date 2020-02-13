@@ -1,0 +1,39 @@
+<tr>
+    <td colspan="4">
+        <table width="100%">
+            {% for provide in provide_agree_list %}
+                {% if forloop.first %}
+                    <tr>
+                        <td class="bb" colspan="5" align="center">
+                            <strong>累计投放情况</strong>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="bb tc"><strong>合同金额</strong></td>
+                        <td class="bb tc"><strong>放款金额</strong></td>
+                        <td class="bb tc"><strong>放款日</strong></td>
+                        <td class="bb tc"><strong>到期日</strong></td>
+                    </tr>
+                    <tr>
+                        <td class="bb tc" rowspan="{{ provide_agree_count }}">{{ agree_amount }}</td>
+                        <td class="bb tc">{{ provide.provide_money }}</td>
+                        <td class="bb tc">{{ provide.provide_date }}</td>
+                        <td class="bb tc">{{ provide.due_date }}</td>
+                    </tr>
+                {% else %}
+                    <tr>
+                        <td class="bb tc">{{ provide.provide_money }}</td>
+                        <td class="bb tc">{{ provide.provide_date }}</td>
+                        <td class="bb tc">{{ provide.due_date }}</td>
+                    </tr>
+                {% endif %}
+            {% endfor %}
+            <tr>
+                <td class="bb tc"><strong>累计发放金额</strong></td>
+                <td class="bb tc"><strong>{{ provide_agree_aount }}</strong></td>
+                <td class="bb tc"><strong>剩余可用金额</strong></td>
+                <td class="bb tc"><strong>{{ remainder }}</strong></td>
+            </tr>
+        </table>
+    </td>
+</tr>
