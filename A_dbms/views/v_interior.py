@@ -104,7 +104,7 @@ def employee(request, *args, **kwargs):  # 委托合同列表
     PAGE_TITLE = '用户列表'
     EMPLOYEE_STATUS_LIST = models.Employees.EMPLOYEE_STATUS_LIST
     '''筛选'''
-    employee_list = models.Employees.objects.filter(**kwargs).select_related('department', ).order_by('num')
+    employee_list = models.Employees.objects.filter(**kwargs).select_related('department', ).order_by('employee_status','num')
     '''搜索'''
     search_key = request.GET.get('_s')
     if search_key:
