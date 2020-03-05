@@ -1307,7 +1307,7 @@ def fication_list(request, *args, **kwargs):  # 项目列表
 
     provide_list_all = models.Provides.objects.filter(provide_balance__gt=0).order_by('fic_date')
     provide_first_date = provide_list_all.first().fic_date
-    provide_list = models.Provides.objects.filter(provide_balance__gt=0,provide_date__lte=provide_first_date).order_by('fic_date')
+    provide_list = provide_list_all.filter(provide_date__lte=provide_first_date).order_by('fic_date')
     provide_list_count = provide_list.count()
     provide_list = provide_list.order_by('-fication', 'due_date')
     td = datetime.date.today()
