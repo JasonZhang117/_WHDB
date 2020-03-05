@@ -1305,9 +1305,10 @@ def fication_list(request, *args, **kwargs):  # 项目列表
     '''ARTICLE_STATE_LIST = [(1, '待反馈'), (2, '已反馈'), (3, '待上会'), (4, '已上会'), (5, '已签批'),
                           (51, '已放款'), (52, '已放完'), (55, '已解保'), (61, '待变更'), (99, '已注销')]'''
 
-    provide_list = models.Provides.objects.filter(provide_balance__gt=0).order_by('fic_date')
+    provide_list_all = models.Provides.objects.filter(provide_balance__gt=0).order_by('fic_date')
+    provide_first_date = provide_list_all.first().fic_date
+    provide_list = models.Provides.objects.filter(provide_balance__gt=0,fic_date__lte=provide_first_date).order_by('fic_date')
     provide_list_count = provide_list.count()
-    provide_first_date = provide_list.first().fic_date
     provide_list = provide_list.order_by('-fication', 'due_date')
     td = datetime.date.today()
     provide_money_sum = provide_list.aggregate(Sum('provide_money'))['provide_money__sum']  #
