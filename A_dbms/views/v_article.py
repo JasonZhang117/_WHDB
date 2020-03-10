@@ -260,7 +260,7 @@ def endor_list_scan(request, article_id):  # 签批单
     article_obj = article_list.first()
 
     amount_str_w = amount_s(article_obj.amount)  # 转化为万为单位，并且去掉小数点后面的零
-    credit_term_str = amount_y(article_obj.credit_term)  # 去掉小数点后面的零
+    credit_term_str = convert_num(article_obj.credit_term)  # 去掉小数点后面的零
     single_quota_list = article_obj.single_quota_summary.all()  # 单项额度列表
     flow_rate = single_quota_list[0].flow_rate  # 费率
     product_name = article_obj.product.name  # 产品名称
