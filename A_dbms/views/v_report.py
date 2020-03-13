@@ -1098,6 +1098,17 @@ def top_custom(request, *args, **kwargs):  #
     t_amount = custom_groups_t.aggregate(Sum('amount'))['amount__sum']  # 在保总额
     t_custom_count = custom_groups_t.aggregate(Count('credit_amount'))['credit_amount__count']  # 客户总数
     
+
+    r_credit = 0
+    r_g_value = 0
+    r_flow = 0
+    r_accept = 0
+    r_back = 0
+    r_entrusted = 0
+    r_petty = 0
+    r_amount = 0
+    r_custom_count = 0
+
     if t_credit > 0:
         r_credit = round(c_credit / t_credit * 100, 2)
     if t_g_value > 0:
@@ -1117,7 +1128,6 @@ def top_custom(request, *args, **kwargs):  #
     if t_custom_count > 0:
         r_custom_count = round(c_custom_count / t_custom_count * 100, 2)
     td = datetime.date.today()
-    print(c_g_value,t_g_value,r_g_value)
     return render(request, 'dbms/report/top-class-custom.html', locals())
 
 
