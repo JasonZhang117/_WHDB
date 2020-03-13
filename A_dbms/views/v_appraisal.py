@@ -78,6 +78,7 @@ def appraisal_scan(request, article_id):  # 评审项目预览
         form_date = {
             'summary_num': article_obj.summary_num, 'sign_type': article_obj.sign_type, 'renewal': article_obj.renewal,
             'augment': article_obj.augment, 'credit_amount': article_obj.custom.credit_amount,
+            'g_value': article_obj.custom.g_value,
             'rcd_opinion': article_obj.rcd_opinion,
             'convenor_opinion': article_obj.convenor_opinion, 'sign_detail': article_obj.sign_detail,
             'sign_date': str(article_obj.sign_date)}

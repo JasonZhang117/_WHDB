@@ -39,6 +39,9 @@ class ArticlesSignForm(dform.Form):  # 项目签批
     credit_amount = fields.FloatField(
         label='客户授信总额', label_suffix="：",
         widget=widgets.NumberInput(attrs={'class': 'form-control', 'placeholder': '客户授信总额（元）'}))
+    g_value = fields.FloatField(
+        label='反担保价值', label_suffix="：",
+        widget=widgets.NumberInput(attrs={'class': 'form-control', 'placeholder': '反担保价值（元）'}))
     rcd_opinion = fields.CharField(
         label='风控部意见', label_suffix="：",
         widget=widgets.Textarea(attrs={'class': 'form-control', 'rows': '1', 'placeholder': '风控部意见'}))

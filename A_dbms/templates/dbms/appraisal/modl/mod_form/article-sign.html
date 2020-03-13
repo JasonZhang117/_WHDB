@@ -24,6 +24,12 @@
         <label id="e_credit_amount" class="pull-right">{{ form_article_sign.credit_amount.errors }}</label>
     </div>
 
+    <div class="form-group"><!--反担保价值-->
+        <label for="id_g_value" class="col-sm-3 control-label">{{ form_article_sign.g_value.label }}：</label>
+        <div class="col-sm-9">{{ form_article_sign.g_value }}</div>
+        <label id="e_g_value" class="pull-right">{{ form_article_sign.g_value.errors }}</label>
+    </div>
+
     <div class="form-group"><!--风控部意见-->
         <label for="id_rcd_opinion" class="col-sm-3 control-label">{{ form_article_sign.rcd_opinion.label }}：</label>
         <div class="col-sm-9">{{ form_article_sign.rcd_opinion }}</div>

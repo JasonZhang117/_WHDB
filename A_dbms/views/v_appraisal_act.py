@@ -673,7 +673,9 @@ def article_sign_ajax(request):
                                 models.LendingOrder.objects.filter(summary=article_obj).update(lending_state=5)
                                 # 更新客户授信总额，存量/新增情况
                                 custom_list.update(
-                                    credit_amount=cleaned_data['credit_amount'], custom_typ=custom_typ_n,
+                                    credit_amount=cleaned_data['credit_amount'], 
+                                    g_value=cleaned_data['g_value'], 
+                                    custom_typ=custom_typ_n,
                                     lately_date=cleaned_data['sign_date'])
                                 models.Warrants.objects.filter(
                                     lending_warrant__sure__lending__summary=article_obj).update(
