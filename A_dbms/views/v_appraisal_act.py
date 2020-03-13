@@ -629,6 +629,7 @@ def article_sign_ajax(request):
     internal_audit = models.Process.objects.filter(typ=11)  # 内审批类型流程
     external_audit = models.Process.objects.filter(typ=21)  # 外审批类型流程
     process_article = article_obj.process  # 项目流程
+    print(post_data)
     if process_article in endorsement_list:  # 如果项目流程属于签批类型流程
         if article_obj.article_state in [1, 2, 3, 61]:
             if sign_type == 2:  # [(1, '同意'), (2, '不同意')]
@@ -743,7 +744,8 @@ def article_sign_ajax(request):
                                     models.LendingOrder.objects.filter(summary=article_obj).update(lending_state=5)
                                     # 更新客户授信总额，存量/新增情况
                                     custom_list.update(
-                                        credit_amount=cleaned_data['credit_amount'], custom_typ=custom_typ_n,
+                                        credit_amount=cleaned_data['credit_amount'], g_value=cleaned_data['g_value'], 
+                                        custom_typ=custom_typ_n,
                                         lately_date=article_obj.review_date)
                                     models.Warrants.objects.filter(
                                         lending_warrant__sure__lending__summary=article_obj).update(

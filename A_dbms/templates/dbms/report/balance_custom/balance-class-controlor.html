@@ -7,6 +7,7 @@
             <th>风控专员</th>
             <th>客户数</th>
             <th>授信总额</th>
+            <th>反担保价值</th>
             <th>流贷余额</th>
             <th>承兑余额</th>
             <th>保函余额</th>
@@ -15,7 +16,7 @@
             <th>在保总额</th>
         </tr>
         </thead>
-        <tbody>
+        <tbody>g_value
         {% for item in article_balance_control %}
             <tr style="padding: 0;">
                 <td style="padding: 0;">{{ forloop.counter }}</td>
@@ -27,6 +28,7 @@
                 </td>
                 <td style="padding: 0;" align="right">{{ item.con }}</td>
                 <td style="padding: 0;" align="right">{{ item.credit_amount|floatformat:2 }}</td>
+                <td style="padding: 0;" align="right">{{ item.g_value|floatformat:2 }}</td>
                 <td style="padding: 0;" align="right">{{ item.custom_flow|floatformat:2 }}</td>
                 <td style="padding: 0;" align="right">{{ item.custom_accept|floatformat:2 }}</td>
                 <td style="padding: 0;" align="right">{{ item.custom_back|floatformat:2 }}</td>

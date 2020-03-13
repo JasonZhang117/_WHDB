@@ -872,6 +872,7 @@ def report_custom(request, *args, **kwargs):  #
             custom_state=99).filter(Q(credit_amount__gt=0) or Q(amount__gt=0))
 
     c_credit = custom_groups.aggregate(Sum('credit_amount'))['credit_amount__sum']  # 授信总额
+    c_g_value = custom_groups.aggregate(Sum('g_value'))['g_value__sum']  # 反担保价值
     c_flow = custom_groups.aggregate(Sum('custom_flow'))['custom_flow__sum']  # 流贷余额
     c_accept = custom_groups.aggregate(Sum('custom_accept'))['custom_accept__sum']  # 承兑余额
     c_back = custom_groups.aggregate(Sum('custom_back'))['custom_back__sum']  # 保函余额
@@ -880,6 +881,7 @@ def report_custom(request, *args, **kwargs):  #
     c_amount = custom_groups.aggregate(Sum('amount'))['amount__sum']  # 在保总额
     article_count = custom_groups.aggregate(Count('credit_amount'))['credit_amount__count']  # 客户数
     c_credit_w = round(c_credit / 10000, 2)
+    c_g_value_w = round(c_g_value / 10000, 2)
     c_flow_w = round(c_credit / 10000, 2)
     c_accept_w = round(c_credit / 10000, 2)
     c_back_w = round(c_back / 10000, 2)
@@ -888,6 +890,7 @@ def report_custom(request, *args, **kwargs):  #
     c_amount_w = round(c_amount / 10000, 2)
     if article_count > 0:
         s_credit = round(c_credit_w / article_count, 2)
+        s_g_value = round(c_g_value_w / article_count, 2)
         s_flow = round(c_flow_w / article_count, 2)
         s_accept = round(c_accept_w / article_count, 2)
         s_back = round(c_back_w / article_count, 2)
@@ -898,54 +901,54 @@ def report_custom(request, *args, **kwargs):  #
     article_balance_district = custom_groups.values(
         'district__name').annotate(
         con=Count('id'), credit_amount=Sum('credit_amount'), custom_flow=Sum('custom_flow'),
-        custom_accept=Sum('custom_accept'),
+        custom_accept=Sum('custom_accept'),g_value=Sum('g_value'), 
         custom_back=Sum('custom_back'), entrusted_loan=Sum('entrusted_loan'),
         petty_loan=Sum('petty_loan'), amount=Sum('amount')). \
-        values('district__name', 'con', 'credit_amount', 'custom_flow', 'custom_accept',
+        values('district__name', 'con', 'credit_amount', 'custom_flow', 'custom_accept','g_value',
                'custom_back', 'entrusted_loan', 'petty_loan', 'amount').order_by('-credit_amount')  # 区域
 
     article_balance_idustry = custom_groups.values(
         'idustry__cod_nam').annotate(
         con=Count('id'), credit_amount=Sum('credit_amount'), custom_flow=Sum('custom_flow'),
-        custom_accept=Sum('custom_accept'),
+        custom_accept=Sum('custom_accept'),g_value=Sum('g_value'), 
         custom_back=Sum('custom_back'), entrusted_loan=Sum('entrusted_loan'),
         petty_loan=Sum('petty_loan'), amount=Sum('amount')). \
-        values('idustry__cod_nam', 'con', 'credit_amount', 'custom_flow', 'custom_accept',
+        values('idustry__cod_nam', 'con', 'credit_amount', 'custom_flow', 'custom_accept','g_value',
                'custom_back', 'entrusted_loan', 'petty_loan', 'amount').order_by('-credit_amount')  # 行业
 
     article_balance_fication = custom_groups.values(
         'classification').annotate(
         con=Count('id'), credit_amount=Sum('credit_amount'), custom_flow=Sum('custom_flow'),
-        custom_accept=Sum('custom_accept'),
+        custom_accept=Sum('custom_accept'),g_value=Sum('g_value'), 
         custom_back=Sum('custom_back'), entrusted_loan=Sum('entrusted_loan'),
         petty_loan=Sum('petty_loan'), amount=Sum('amount')). \
-        values('classification', 'con', 'credit_amount', 'custom_flow', 'custom_accept',
+        values('classification', 'con', 'credit_amount', 'custom_flow', 'custom_accept','g_value',
                'custom_back', 'entrusted_loan', 'petty_loan', 'amount').order_by('classification')  # 行业
 
     article_balance_depart = custom_groups.values(
         'managementor__department__name').annotate(
         con=Count('id'), credit_amount=Sum('credit_amount'), custom_flow=Sum('custom_flow'),
-        custom_accept=Sum('custom_accept'),
+        custom_accept=Sum('custom_accept'),g_value=Sum('g_value'), 
         custom_back=Sum('custom_back'), entrusted_loan=Sum('entrusted_loan'),
         petty_loan=Sum('petty_loan'), amount=Sum('amount')). \
-        values('managementor__department__name', 'con', 'credit_amount', 'custom_flow', 'custom_accept',
+        values('managementor__department__name', 'con', 'credit_amount', 'custom_flow', 'custom_accept','g_value',
                'custom_back', 'entrusted_loan', 'petty_loan', 'amount').order_by('-credit_amount')  # 部门
     article_balance_director = custom_groups.values(
         'managementor__name').annotate(
         con=Count('id'), credit_amount=Sum('credit_amount'), custom_flow=Sum('custom_flow'),
-        custom_accept=Sum('custom_accept'),
+        custom_accept=Sum('custom_accept'),g_value=Sum('g_value'), 
         custom_back=Sum('custom_back'), entrusted_loan=Sum('entrusted_loan'),
         petty_loan=Sum('petty_loan'), amount=Sum('amount')). \
-        values('managementor__name', 'con', 'credit_amount', 'custom_flow', 'custom_accept',
+        values('managementor__name', 'con', 'credit_amount', 'custom_flow', 'custom_accept','g_value',
                'custom_back', 'entrusted_loan', 'petty_loan', 'amount').order_by('-credit_amount')  # 管户经理
 
     article_balance_control = custom_groups.values(
         'controler__name').annotate(
         con=Count('id'), credit_amount=Sum('credit_amount'), custom_flow=Sum('custom_flow'),
-        custom_accept=Sum('custom_accept'),
+        custom_accept=Sum('custom_accept'),g_value=Sum('g_value'), 
         custom_back=Sum('custom_back'), entrusted_loan=Sum('entrusted_loan'),
         petty_loan=Sum('petty_loan'), amount=Sum('amount')). \
-        values('controler__name', 'con', 'credit_amount', 'custom_flow', 'custom_accept',
+        values('controler__name', 'con', 'credit_amount', 'custom_flow', 'custom_accept','g_value',
                'custom_back', 'entrusted_loan', 'petty_loan', 'amount').order_by('-credit_amount')  # 管户经理
     td = datetime.date.today()
     return render(request, 'dbms/report/balance-class-custom.html', locals())
@@ -998,14 +1001,18 @@ def report_custom_list(request, *args, **kwargs):  #
     else:
         custom_groups = custom_groups.filter(controler__name=ss_value)
     custom_credit_tot = custom_groups.aggregate(Sum('credit_amount'))['credit_amount__sum']  # 授信总额
+    custom_g_value_tot = custom_groups.aggregate(Sum('g_value'))['g_value__sum']  # 反担保价值
     custom_acount_tot = custom_groups.aggregate(Sum('amount'))['amount__sum']  # 在保总额
     custom_acount = custom_groups.count()
     custom_credit_average = 0
+    custom_g_value_average = 0
     custom_acount_average = 0
     custom_credit_tot_w = custom_credit_tot / 10000
+    custom_g_value_tot_w = custom_g_value_tot / 10000
     custom_acount_tot_w = custom_acount_tot / 10000
     if custom_acount > 0:
         custom_credit_average = round(custom_credit_tot_w / custom_acount, 2)
+        custom_g_value_average = round(custom_g_value_tot_w / custom_acount, 2)
         custom_acount_average = round(custom_acount_tot_w / custom_acount, 2)
     td = datetime.date.today()
     return render(request, 'dbms/report/list/class-custom-list.html', locals())
@@ -1072,6 +1079,7 @@ def top_custom(request, *args, **kwargs):  #
                 custom_groups = custom_groups_t.filter(credit_amount__gte=screen_value).order_by(
                     '-credit_amount')  # 按金额筛选
     c_credit = custom_groups.aggregate(Sum('credit_amount'))['credit_amount__sum']  # 授信总额
+    c_g_value = custom_groups.aggregate(Sum('g_value'))['g_value__sum']  # 反担保价值
     c_flow = custom_groups.aggregate(Sum('custom_flow'))['custom_flow__sum']  # 流贷余额
     c_accept = custom_groups.aggregate(Sum('custom_accept'))['custom_accept__sum']  # 承兑余额
     c_back = custom_groups.aggregate(Sum('custom_back'))['custom_back__sum']  # 保函余额
@@ -1081,6 +1089,7 @@ def top_custom(request, *args, **kwargs):  #
     c_custom_count = custom_groups.aggregate(Count('credit_amount'))['credit_amount__count']  # 客户数
 
     t_credit = custom_groups_t.aggregate(Sum('credit_amount'))['credit_amount__sum']  # 授信总额
+    t_g_value = custom_groups_t.aggregate(Sum('g_value'))['g_value__sum']  # 反担保价值
     t_flow = custom_groups_t.aggregate(Sum('custom_flow'))['custom_flow__sum']  # 流贷余额
     t_accept = custom_groups_t.aggregate(Sum('custom_accept'))['custom_accept__sum']  # 承兑余额
     t_back = custom_groups_t.aggregate(Sum('custom_back'))['custom_back__sum']  # 保函余额
@@ -1088,9 +1097,11 @@ def top_custom(request, *args, **kwargs):  #
     t_petty = custom_groups_t.aggregate(Sum('petty_loan'))['petty_loan__sum']  # 小贷余额
     t_amount = custom_groups_t.aggregate(Sum('amount'))['amount__sum']  # 在保总额
     t_custom_count = custom_groups_t.aggregate(Count('credit_amount'))['credit_amount__count']  # 客户总数
-
+    
     if t_credit > 0:
         r_credit = round(c_credit / t_credit * 100, 2)
+    if t_g_value > 0:
+        r_g_value = round(c_g_value / t_g_value * 100, 2)
     if t_flow > 0:
         r_flow = round(c_flow / t_flow * 100, 2)
     if t_accept > 0:
@@ -1106,6 +1117,7 @@ def top_custom(request, *args, **kwargs):  #
     if t_custom_count > 0:
         r_custom_count = round(c_custom_count / t_custom_count * 100, 2)
     td = datetime.date.today()
+    print(c_g_value,t_g_value,r_g_value)
     return render(request, 'dbms/report/top-class-custom.html', locals())
 
 

@@ -9,6 +9,7 @@
             <th>管户经理</th>
             <th>风控专员</th>
             <th>授信总额</th>
+            <th>反担保价值</th>
             <th>在保余额</th>
             <th>流贷余额</th>
             <th>承兑余额</th>
@@ -32,6 +33,7 @@
                 <td style="padding: 0" align="right">{{ custom.managementor }}</td>
                 <td style="padding: 0" align="right">{{ custom.controler }}</td>
                 <td style="padding: 0" align="right">{{ custom.credit_amount }}</td>
+                <td style="padding: 0" align="right">{{ custom.g_value }}</td>
                 <td style="padding: 0" align="right">{{ custom.amount }}</td>
                 <td style="padding: 0" align="right">{{ custom.custom_flow }}</td>
                 <td style="padding: 0" align="right">{{ custom.custom_accept }}</td>
@@ -49,6 +51,7 @@
         <tr style="padding: 0">
             <td style="padding: 0" align="center" colspan="4">合计(户均)(万)</td>
             <td style="padding: 0" align="right">{{ custom_credit_tot_w|floatformat:0 }}({{ custom_credit_average|floatformat:0 }})</td>
+            <td style="padding: 0" align="right">{{ custom_g_value_tot_w|floatformat:0 }}({{ custom_g_value_average|floatformat:0 }})</td>
             <td style="padding: 0" align="right">{{ custom_acount_tot_w|floatformat:0 }}({{ custom_acount_average|floatformat:0 }})</td>
             <td style="padding: 0"></td>
             <td style="padding: 0"></td>

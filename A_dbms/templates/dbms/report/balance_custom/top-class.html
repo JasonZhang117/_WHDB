@@ -10,6 +10,7 @@
             <th>序号</th>
             <th>客户</th>
             <th>授信总额</th>
+            <th>反担保价值</th>
             <th>流贷余额</th>
             <th>承兑余额</th>
             <th>保函余额</th>
@@ -24,6 +25,7 @@
                 <td style="padding: 0">{{ forloop.counter }}</td>
                 <td style="padding: 0">{{ custom.name }}</td>
                 <td style="padding: 0" align="right">{{ custom.credit_amount|floatformat:2 }}</td>
+                <td style="padding: 0" align="right">{{ custom.g_value|floatformat:2 }}</td>
                 <td style="padding: 0" align="right">{{ custom.custom_flow|floatformat:2 }}</td>
                 <td style="padding: 0" align="right">{{ custom.custom_accept|floatformat:2 }}</td>
                 <td style="padding: 0" align="right">{{ custom.custom_back|floatformat:2 }}</td>
