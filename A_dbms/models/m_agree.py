@@ -56,8 +56,8 @@ class Agrees(models.Model):  # 委托合同
     agree_copies = models.IntegerField(verbose_name='合同份数')
     agree_amount = models.FloatField(verbose_name='合同金额')
     amount_limit = models.FloatField(verbose_name='放款限额')
-    agree_rate = models.TextField(verbose_name='保费/利率')
-    investigation_fee = models.TextField(verbose_name='调查费(%)', default=0)
+    agree_rate = models.TextField(verbose_name='保费率/利率')
+    investigation_fee = models.FloatField(verbose_name='调查费率(%)', default=0)
     agree_sign_date = models.DateField(verbose_name='签批日期', null=True, blank=True)
     charge = models.FloatField(verbose_name='应收保费（元）', default=0)
     other = models.TextField(verbose_name='其他约定', null=True, blank=True)
@@ -74,6 +74,7 @@ class Agrees(models.Model):  # 委托合同
     agree_balance = models.FloatField(verbose_name='_在保余额', default=0)
     agree_sign = models.TextField(verbose_name='签批单', null=True, blank=True)
     agree_view = models.TextField(verbose_name='合同预览', null=True, blank=True)
+    supplementary = models.TextField(verbose_name='补充协议', null=True, blank=True)
 
     agree_buildor = models.ForeignKey(to='Employees', verbose_name="创建人",
                                       on_delete=models.PROTECT, related_name='agree_buildor_employee')

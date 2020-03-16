@@ -104,13 +104,14 @@ class ArticleAgreeAddForm(dform.ModelForm):
     class Meta:
         model = models.Agrees
         fields = ['agree_typ', 'guarantee_typ', 'agree_copies', 'agree_amount', 'amount_limit',
-                  'agree_rate', 'agree_term', 'other']
+                  'agree_rate', 'investigation_fee', 'agree_term', 'other']
         widgets = {
             'agree_typ': dform.Select(attrs={'class': 'form-control'}),
             'guarantee_typ': dform.Select(attrs={'class': 'form-control'}),
             'agree_copies': dform.NumberInput(attrs={'class': 'form-control', 'placeholder': '合同份数'}),
             'agree_term': dform.NumberInput(attrs={'class': 'form-control', 'placeholder': '期限'}),
-            'agree_rate': dform.Textarea(attrs={'class': 'form-control', 'rows': '2', 'placeholder': '如为单项合同输入纯数字'}),
+            'agree_rate': dform.Textarea(attrs={'class': 'form-control', 'rows': '2', 'placeholder': '如为单项合同输入纯数字,担保费率单位：百分之，小贷费率单位：千分之/每月'}),
+            'investigation_fee': dform.NumberInput(attrs={'class': 'form-control', 'placeholder': '调查费率(%)'}),
             'agree_amount': dform.NumberInput(attrs={'class': 'form-control', 'placeholder': '合同金额（元）'}),
             'amount_limit': dform.NumberInput(attrs={'class': 'form-control', 'placeholder': '放款限额（元）'}),
             'other': dform.Textarea(attrs={'class': 'form-control', 'rows': '1', 'placeholder': '其他合同约定事项'}),
