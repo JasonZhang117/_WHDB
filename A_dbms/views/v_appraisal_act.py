@@ -604,11 +604,16 @@ def single_del_ajax(request):  # 单项额度删除ajax
     else:
         msg = '项目状态为：%s，无法删除单项额度！！！' % article_obj.article_state
         response['status'] = False
-        response['message'] = msg
+        response['messagg_valuee'] = msg
     result = json.dumps(response, ensure_ascii=False)
     return HttpResponse(result)
 
-
+def radio(credit_amount:float,g_value:float):
+    if credit_amount > 0:
+        redioer = round(g_value/credit_amount*100,2)
+    else:
+        redioer = 0
+    return redioer
 # -----------------------签批ajax-------------------------#
 @login_required
 @authority
@@ -629,7 +634,6 @@ def article_sign_ajax(request):
     internal_audit = models.Process.objects.filter(typ=11)  # 内审批类型流程
     external_audit = models.Process.objects.filter(typ=21)  # 外审批类型流程
     process_article = article_obj.process  # 项目流程
-    print(post_data)
     if process_article in endorsement_list:  # 如果项目流程属于签批类型流程
         if article_obj.article_state in [1, 2, 3, 61]:
             if sign_type == 2:  # [(1, '同意'), (2, '不同意')]
@@ -650,6 +654,7 @@ def article_sign_ajax(request):
                     lending_amount = models.LendingOrder.objects.filter(
                         summary__id=article_id).aggregate(Sum('order_amount'))
                     lending_amount = lending_amount['order_amount__sum']  # 放款次序金额合计
+                    g_radio = radio(cleaned_data['credit_amount'],cleaned_data['g_value'])
                     if single_quota_amount == article_amount and lending_amount == article_amount:
                         custom_typ_n = 1
                         if renewal > 0 and augment > 0:
@@ -675,7 +680,7 @@ def article_sign_ajax(request):
                                 # 更新客户授信总额，存量/新增情况
                                 custom_list.update(
                                     credit_amount=cleaned_data['credit_amount'], 
-                                    g_value=cleaned_data['g_value'], 
+                                    g_value=cleaned_data['g_value'],  g_radio=g_radio,
                                     custom_typ=custom_typ_n,
                                     lately_date=cleaned_data['sign_date'])
                                 models.Warrants.objects.filter(
@@ -719,6 +724,7 @@ def article_sign_ajax(request):
                         lending_amount = models.LendingOrder.objects.filter(
                             summary__id=article_id).aggregate(Sum('order_amount'))
                         lending_amount = lending_amount['order_amount__sum']  # 放款次序金额合计
+                        g_radio = radio(cleaned_data['credit_amount'],cleaned_data['g_value'])
                         if single_quota_amount == article_amount and lending_amount == article_amount:
                             custom_typ_n = 1
                             if renewal > 0 and augment > 0:
@@ -744,8 +750,9 @@ def article_sign_ajax(request):
                                     models.LendingOrder.objects.filter(summary=article_obj).update(lending_state=5)
                                     # 更新客户授信总额，存量/新增情况
                                     custom_list.update(
-                                        credit_amount=cleaned_data['credit_amount'], g_value=cleaned_data['g_value'], 
-                                        custom_typ=custom_typ_n,
+                                        credit_amount=cleaned_data['credit_amount'], 
+                                        g_value=cleaned_data['g_value'], g_radio=g_radio,
+                                        custom_typ=custom_typ_n, 
                                         lately_date=article_obj.review_date)
                                     models.Warrants.objects.filter(
                                         lending_warrant__sure__lending__summary=article_obj).update(

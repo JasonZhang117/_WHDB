@@ -1080,6 +1080,7 @@ def top_custom(request, *args, **kwargs):  #
                     '-credit_amount')  # 按金额筛选
     c_credit = custom_groups.aggregate(Sum('credit_amount'))['credit_amount__sum']  # 授信总额
     c_g_value = custom_groups.aggregate(Sum('g_value'))['g_value__sum']  # 反担保价值
+    c_g_radio = custom_groups.aggregate(Sum('g_radio'))['g_radio__sum']  # 覆盖率
     c_flow = custom_groups.aggregate(Sum('custom_flow'))['custom_flow__sum']  # 流贷余额
     c_accept = custom_groups.aggregate(Sum('custom_accept'))['custom_accept__sum']  # 承兑余额
     c_back = custom_groups.aggregate(Sum('custom_back'))['custom_back__sum']  # 保函余额
@@ -1090,6 +1091,7 @@ def top_custom(request, *args, **kwargs):  #
 
     t_credit = custom_groups_t.aggregate(Sum('credit_amount'))['credit_amount__sum']  # 授信总额
     t_g_value = custom_groups_t.aggregate(Sum('g_value'))['g_value__sum']  # 反担保价值
+    t_g_radio = custom_groups_t.aggregate(Sum('g_radio'))['g_radio__sum']  # 覆盖率
     t_flow = custom_groups_t.aggregate(Sum('custom_flow'))['custom_flow__sum']  # 流贷余额
     t_accept = custom_groups_t.aggregate(Sum('custom_accept'))['custom_accept__sum']  # 承兑余额
     t_back = custom_groups_t.aggregate(Sum('custom_back'))['custom_back__sum']  # 保函余额
@@ -1101,6 +1103,7 @@ def top_custom(request, *args, **kwargs):  #
 
     r_credit = 0
     r_g_value = 0
+    r_g_radio = 0
     r_flow = 0
     r_accept = 0
     r_back = 0
@@ -1113,6 +1116,8 @@ def top_custom(request, *args, **kwargs):  #
         r_credit = round(c_credit / t_credit * 100, 2)
     if t_g_value > 0:
         r_g_value = round(c_g_value / t_g_value * 100, 2)
+    if t_g_radio > 0:
+        r_g_radio = round(c_g_radio / t_g_radio * 100, 2)
     if t_flow > 0:
         r_flow = round(c_flow / t_flow * 100, 2)
     if t_accept > 0:

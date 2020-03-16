@@ -41,7 +41,7 @@ class AgreeEditForm(dform.ModelForm):
             'agree_typ': dform.Select(attrs={'class': 'form-control'}),
             'agree_amount': dform.NumberInput(attrs={'class': 'form-control', 'placeholder': '合同金额（元）'}),
             'amount_limit': dform.NumberInput(attrs={'class': 'form-control', 'placeholder': '放款限额（元）'}),
-            'agree_rate': dform.TextInput(attrs={'class': 'form-control', 'placeholder': '如为单项合同输入纯数字'}),
+            'agree_rate': dform.TextInput(attrs={'class': 'form-control', 'placeholder': '如为单项合同输入纯数字,委托担保合同单位：百分之，小贷合同单位：千分之'}),
             'agree_term': dform.NumberInput(attrs={'class': 'form-control', 'placeholder': '期限'}),
             'guarantee_typ': dform.Select(attrs={'class': 'form-control'}),
             'agree_copies': dform.NumberInput(attrs={'class': 'form-control', 'placeholder': '合同份数'}),
