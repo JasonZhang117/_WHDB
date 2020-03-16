@@ -10,7 +10,7 @@ from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.db import transaction
 from django.urls import resolve, reverse
 from _WHDB.views import MenuHelper
-from _WHDB.views import authority
+from _WHDB.views import authority,radio
 
 
 # -----------------------------反担保措施添加ajax------------------------#
@@ -608,12 +608,7 @@ def single_del_ajax(request):  # 单项额度删除ajax
     result = json.dumps(response, ensure_ascii=False)
     return HttpResponse(result)
 
-def radio(credit_amount:float,g_value:float):
-    if credit_amount > 0:
-        redioer = round(g_value/credit_amount*100,2)
-    else:
-        redioer = 0
-    return redioer
+
 # -----------------------签批ajax-------------------------#
 @login_required
 @authority

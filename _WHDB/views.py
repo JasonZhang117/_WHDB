@@ -426,7 +426,11 @@ def home(request):
     #                       (51, '已放款'), (52, '已放完'), (55, '已解保'), (61, '待变更'), (99, '已注销')]'''
     #     if lending.summary.article_state in [5, 51, 52, 55] and lending.lending_state == 4:
     #         models.LendingOrder.objects.filter(id=lending.id).update(lending_state=5)
-
+    custom_list = models.Customes.objects.filter(credit_amount__gt=0)
+    for custom in custom_list:
+        rr = radio(custom.credit_amount,custom.g_value)
+        custom_ll = models.Customes.objects.filter(id=custom.id)
+        custom_ll.update()
 
     return render(request, 'test.html', locals())
 
@@ -572,3 +576,10 @@ def amount_s(amount):
 def amount_y(amount):
     amount_str = str(round(amount, 2)).rstrip('0').rstrip('.')  # 总额（元）
     return amount_str
+
+def radio(credit_amount:float,g_value:float):
+    if credit_amount > 0:
+        redioer = round(g_value/credit_amount*100,2)
+    else:
+        redioer = 0
+    return redioer
