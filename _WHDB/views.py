@@ -430,7 +430,7 @@ def home(request):
     for custom in custom_list:
         rr = radio(custom.credit_amount,custom.g_value)
         custom_ll = models.Customes.objects.filter(id=custom.id)
-        custom_ll.update()
+        custom_ll.update(g_radio=rr)
 
     return render(request, 'test.html', locals())
 
