@@ -359,6 +359,7 @@ def agree_edit_ajax(request):  #
                         agree_name=agree_name, branch_id=branch_id, agree_typ=agree_typ,
                         agree_term=agree_add_cleaned['agree_term'],
                         amount_limit=amount_limit, agree_rate=agree_add_cleaned['agree_rate'],
+                        investigation_fee=agree_add_cleaned['investigation_fee'],
                         agree_amount=agree_amount, guarantee_typ=guarantee_typ,
                         agree_copies=agree_copies, other=agree_add_cleaned['other'],
                         agree_start_date=jk_add_cleaned['agree_start_date'],
@@ -468,6 +469,26 @@ def agree_save_ajax(request):  #
     result = json.dumps(response, ensure_ascii=False)
     return HttpResponse(result)
 
+
+# ---------------------------补充协议保存ajax----------------------------#
+@login_required
+def supple_save_ajax(request):  #
+    response = {'status': True, 'message': None, 'forme': None, 'skip': None, }
+    post_data_str = request.POST.get('postDataStr')
+    post_data = json.loads(post_data_str)
+    agree_content = post_data['content']
+    agree_obj = models.Agrees.objects.filter(id=post_data['agree_id'])
+    '''ARTICLE_STATE_LIST = [(1, '待反馈'), (2, '已反馈'), (3, '待上会'), (4, '已上会'), (5, '已签批'),
+                          (51, '已放款'), (52, '已放完'), (55, '已解保'), (61, '待变更'), (99, '已注销')]'''
+    try:
+        agree_obj.update(supplementary=agree_content)
+        response['message'] = '合同保存成功，正式签订合同须经公司领导签批！合同签批后，合同内容将固定！'
+    except Exception as e:
+        response['status'] = False
+        response['message'] = '合同保存失败：%s' % str(e)
+
+    result = json.dumps(response, ensure_ascii=False)
+    return HttpResponse(result)
 
 def counter_num_f(counter_prefix, agree_typ, counter_typ, agree_obj):
     '''担保合同编号函数'''

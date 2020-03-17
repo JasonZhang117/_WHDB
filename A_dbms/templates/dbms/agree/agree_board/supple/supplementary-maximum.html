@@ -1,0 +1,16 @@
+<div class="tt" align="center"><strong>补充协议</strong></div>
+<br>
+<p>甲方：成都武侯中小企业融资担保有限责任公司</p>
+<p>乙方：<strong><u>{{ agree_obj.lending.summary.custom.name }}</u></strong></p>
+<br>
+<p>因{% include 'dbms/agree/agree_board/date-period.html' %}，乙方向贷款方<strong><u>{{ agree_obj.branch.name }}</u></strong>申请申请最高额融资<strong><u>人民币{{ agree_amount_cn }}</u></strong>，特委托甲方为该笔融资向贷款方提供担保。经甲乙双方协商，对费用标准达成以下补充协议：</p>
+<p>乙方除按《{{ agree_obj.get_agree_name_display }}》（编号：<strong><u>{{ agree_obj.agree_num }}</u></strong>）中约定的费用标准向甲方支付担保费外，应另按实际放款金额的<strong><u>{{ agree_obj.investigation_fee }}%</u></strong>向甲方支付融资调查费用，乙方应于签订本补充协议后，甲方每次向债权方出具《同意放款确认书》前，将按《同意放款确认书》确认的担保额度及上述{{ agree_obj.investigation_fee }}%调查费率计算的融资调查费用支付给甲方。</p>
+<br>
+<p>甲方（公章）：成都武侯中小企业融资担保有限责任公司</p>
+<p>法定代表人（或授权代理人）：何长见</p>
+<br>
+<p>乙方（公章）：<strong><u>{{ agree_obj.lending.summary.custom.name }}</u></strong></p>
+<p>法定代表人（或授权代理人）：<strong><u>{{ agree_obj.lending.summary.custom.company_custome.representative }}</u></strong></p>
+<br>
+<br>
+<div style="text-align: right">签订时间：{% include 'dbms/agree/agree_board/date-period.html' %}</div>

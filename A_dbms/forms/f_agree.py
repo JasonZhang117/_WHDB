@@ -34,14 +34,15 @@ class AgreeAddForm(dform.ModelForm):
 class AgreeEditForm(dform.ModelForm):
     class Meta:
         model = models.Agrees
-        fields = ['branch', 'agree_typ', 'agree_amount', 'amount_limit', 'agree_rate', 'agree_term',
-                  'guarantee_typ', 'agree_copies', 'other']
+        fields = ['branch', 'agree_typ', 'agree_amount', 'amount_limit', 'agree_rate', 'investigation_fee',
+                   'agree_term', 'guarantee_typ', 'agree_copies', 'other']
         widgets = {
             'branch': dform.Select(attrs={'class': 'form-control'}),
             'agree_typ': dform.Select(attrs={'class': 'form-control'}),
             'agree_amount': dform.NumberInput(attrs={'class': 'form-control', 'placeholder': '合同金额（元）'}),
             'amount_limit': dform.NumberInput(attrs={'class': 'form-control', 'placeholder': '放款限额（元）'}),
             'agree_rate': dform.TextInput(attrs={'class': 'form-control', 'placeholder': '如为单项合同输入纯数字,委托担保合同单位：百分之，小贷合同单位：千分之'}),
+            'investigation_fee': dform.TextInput(attrs={'class': 'form-control', 'placeholder': '调查费率(%)'}),
             'agree_term': dform.NumberInput(attrs={'class': 'form-control', 'placeholder': '期限'}),
             'guarantee_typ': dform.Select(attrs={'class': 'form-control'}),
             'agree_copies': dform.NumberInput(attrs={'class': 'form-control', 'placeholder': '合同份数'}),

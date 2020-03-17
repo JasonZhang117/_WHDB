@@ -1,16 +1,16 @@
 <script>
     $(function () {
-        bindCounterView();
+        bindSuppleView();
     });
 
-    function bindCounterView() {
+    function bindSuppleView() {
         var postData = {};
         postData["content"] = $("#view-save").html();
-        postData["counter_id"] = $("#id_counter_id").val();
-
+        postData["agree_id"] = $("#id_agree_id").val();
         var postDataStr = JSON.stringify(postData);
+        console.log(postDataStr);
         $.ajax({
-            url: '/dbms/agree/counter/save/',
+            url: '/dbms/agree/supple/save/',
             type: 'POST',
             dataType: 'JSON',
             data: {'postDataStr': postDataStr},
@@ -25,6 +25,7 @@
             }
         });
     }
+
 </script>
 
 

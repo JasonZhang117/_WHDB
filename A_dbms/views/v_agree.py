@@ -121,6 +121,7 @@ def agree_scan(request, agree_id):  # 查看合同
         'agree_amount': agree_obj.agree_amount,
         'amount_limit': agree_obj.amount_limit,
         'agree_rate': agree_obj.agree_rate,
+        'investigation_fee': agree_obj.investigation_fee,
         'agree_term': agree_obj.agree_term,
         'guarantee_typ': agree_obj.guarantee_typ,
         'agree_copies': agree_obj.agree_copies,
@@ -297,6 +298,30 @@ def agree_preview(request, agree_id):
         agree_rate_w = '叁点叁叁叁叁'
 
     return render(request, 'dbms/agree/preview-agree.html', locals())
+
+
+# -------------------------补充协议预览-------------------------#
+@login_required
+@authority
+@agree_right
+def supplementary_preview(request, agree_id):
+    current_url_name = resolve(request.path).url_name  # 获取当前URL_NAME
+    authority_list = request.session.get('authority_list')  # 获取当前用户的所有权限
+    menu_result = MenuHelper(request).menu_data_list()
+
+    agree_obj = models.Agrees.objects.get(id=agree_id)
+
+    agree_amount_cn = convert(agree_obj.agree_amount)  # 转换为金额大写
+    agree_copy_cn = convert_num(agree_obj.agree_copies)
+    investigation_fee_cn = '零'
+    if agree_obj.investigation_fee > 0:
+        investigation_fee_cn = convert(round(agree_obj.agree_amount*agree_obj.investigation_fee/100,2)) # 调查费大写
+
+    print(agree_obj.agree_state)
+
+
+    return render(request, 'dbms/agree/preview-supplementary.html', locals())
+
 
 
 # -------------------------反担保合同预览-------------------------#
