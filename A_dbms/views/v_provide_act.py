@@ -9,7 +9,7 @@ from django.db.models import Q, F
 from django.db.models import Avg, Min, Sum, Max, Count
 from django.urls import resolve
 from _WHDB.views import MenuHelper
-from _WHDB.views import authority
+from _WHDB.views import authority, radio
 
 
 # -----------------------------合同签订ajax------------------------------#
@@ -449,9 +449,11 @@ def provide_add_ajax(request):
                         cooperator_list.update(petty_loan=round(cooperator_petty_loan_balance, 2))
 
                     '''更新客户、放款银行、授信银行在保总额'''
-                    custom_list.update(amount=round(custom_obj.custom_flow + custom_obj.custom_accept +
+                    custom_amount = round(custom_obj.custom_flow + custom_obj.custom_accept +
                                                     custom_obj.custom_back + custom_obj.entrusted_loan +
-                                                    custom_obj.petty_loan + provide_money, 2))
+                                                    custom_obj.petty_loan + provide_money, 2)
+                    v_radio = radio(custom_amount,custom_obj.g_value)
+                    custom_list.update(amount=custom_amount,v_radio=v_radio)
                     branch_list.update(amount=round(branch_obj.branch_flow + branch_obj.branch_accept +
                                                     branch_obj.branch_back + branch_obj.entrusted_loan +
                                                     branch_obj.petty_loan + provide_money, 2))
@@ -708,6 +710,11 @@ def provide_del_ajax(request):  # 删除放款ajax
                 else:
                     cooperator_list.update(petty_loan=0)
             '''更新客户、放款银行、授信银行在保总额'''
+            custom_amount = round(custom_obj.custom_flow + custom_obj.custom_accept +
+                                            custom_obj.custom_back + custom_obj.entrusted_loan +
+                                            custom_obj.petty_loan - provide_m, 2)
+            v_radio = radio(custom_amount,custom_obj.g_value)
+            custom_list.update(amount=custom_amount,v_radio=v_radio)
             custom_list.update(amount=round(custom_obj.custom_flow + custom_obj.custom_accept +
                                             custom_obj.custom_back + custom_obj.entrusted_loan +
                                             custom_obj.petty_loan - provide_m, 2))
@@ -882,9 +889,11 @@ def repayment_add_ajax(request):
                             Sum('petty_loan'))['petty_loan__sum']  # 授信银行项下，小贷余额
                         cooperator_list.update(petty_loan=round(cooperator_petty_loan_balance, 2))
                     '''更新客户、放款银行、授信银行在保总额'''
-                    custom_list.update(amount=round(custom_obj.custom_flow + custom_obj.custom_accept +
+                    custom_amount = round(custom_obj.custom_flow + custom_obj.custom_accept +
                                                     custom_obj.custom_back + custom_obj.entrusted_loan +
-                                                    custom_obj.petty_loan - repayment_money, 2))
+                                                    custom_obj.petty_loan - repayment_money, 2)
+                    v_radio = radio(custom_amount,custom_obj.g_value)
+                    custom_list.update(amount=custom_amount,v_radio=v_radio)
                     branch_list.update(amount=round(branch_obj.branch_flow + branch_obj.branch_accept +
                                                     branch_obj.branch_back + branch_obj.entrusted_loan +
                                                     branch_obj.petty_loan - repayment_money, 2))
@@ -1084,9 +1093,11 @@ def repayment_del_ajax(request):  # 删除还款信息ajax
                     cooperator_list.update(petty_loan=round(cooperator_petty_loan_balance, 2))
 
                 '''更新客户、放款银行、授信银行在保总额'''
-                custom_list.update(amount=round(custom_obj.custom_flow + custom_obj.custom_accept +
+                custom_amount = round(custom_obj.custom_flow + custom_obj.custom_accept +
                                                 custom_obj.custom_back + custom_obj.entrusted_loan +
-                                                custom_obj.petty_loan + repayment_m, 2))
+                                                custom_obj.petty_loan + repayment_m, 2)
+                v_radio = radio(custom_amount,custom_obj.g_value)
+                custom_list.update(amount=custom_amount,v_radio=v_radio)
                 branch_list.update(amount=round(branch_obj.branch_flow + branch_obj.branch_accept +
                                                 branch_obj.branch_back + branch_obj.entrusted_loan +
                                                 branch_obj.petty_loan + repayment_m, 2))

@@ -10,7 +10,7 @@ import datetime
 from django.db.models import Avg, Min, Sum, Max, Count
 from django.urls import resolve, reverse
 from _WHDB.views import (MenuHelper, authority, credit_term_c, convert, convert_num, un_dex, amount_s, amount_y,
-                         agree_list_screen, agree_right)
+                         agree_list_screen, agree_right,convert_num_4)
 
 
 # -----------------------委托合同列表---------------------#
@@ -289,7 +289,8 @@ def agree_preview(request, agree_id):
         single_quota_rate = float(agree_obj.agree_rate)
         charge = round(agree_obj.agree_amount * single_quota_rate / 100, 2)
         agree_rate_cn_q = convert_num(float(agree_obj.agree_rate))  # 合同利率转换为千分之，大写
-        agree_rate_w = convert_num(round(((20 - float(agree_obj.agree_rate)) / 30 * 10), 4))
+        agree_rate_p = round(((20 - float(agree_obj.agree_rate)) / 30 * 10), 4)
+        agree_rate_w = convert_num_4(agree_rate_p)
         charge_cn = convert(charge)
     except ValueError:
         rate_b = False

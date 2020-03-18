@@ -45,7 +45,9 @@ class Customes(models.Model):  # 客户
     amount = models.FloatField(verbose_name='_在保总额', default=0)
 
     g_value = models.FloatField(verbose_name='反担保价值', default=0)
-    g_radio = models.FloatField(verbose_name='覆盖率(%)', default=0)
+    g_radio = models.FloatField(verbose_name='授信覆盖率(%)', default=0)
+
+    u_radio = models.FloatField(verbose_name='在保覆盖率(%)', default=0)
 
 
     CUSTOM_STATE_LIST = [(11, '正常客户'), (21, '反担保客户'), (31, '小贷客户'), (99, '注销客户')]

@@ -522,6 +522,39 @@ def convert_num(n):
     # print('len(result):',len(result),result,result[-1])
     return result
 
+# -----------------------------数字小写转大写（含小数点）------------------------------#
+def convert_num_4(n):
+    units = ['', '万', '亿']
+    nums = ['零', '壹', '贰', '叁', '肆', '伍', '陆', '柒', '捌', '玖']
+    decimal_label = ['角', '分']
+    small_int_label = ['', '拾', '佰', '仟']
+    int_part, decimal_part = str(int(n)), str(round(n - int(n), 4))[2:]  # 分离整数和小数部分
+    res = []
+    if decimal_part:
+        res.append(''.join([nums[int(x)] for x in list(decimal_part)]))
+
+    if int_part != '0':
+        if decimal_part and decimal_part != '0':
+            res.append('点')
+        while int_part:
+            small_int_part, int_part = int_part[-4:], int_part[:-4]
+            tmp = ''.join(
+                [nums[int(x)] + (y if x != '0' else '') for x, y in
+                 list(zip(small_int_part[::-1], small_int_label))[::-1]])
+            tmp = tmp.rstrip('零').replace('零零零', '零').replace('零零', '零')
+            unit = units.pop(0)
+            if tmp:
+                tmp += unit
+                res.append(tmp)
+    else:
+        if decimal_part != 0:
+            res.append('点')
+            res.append('零')
+    result = ''.join(res[::-1])
+    # print('len(result):',len(result),result,result[-1])
+    return result
+
+
 
 # -----------------------阿拉伯数字转换-------------------------#
 

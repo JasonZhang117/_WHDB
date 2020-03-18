@@ -11,13 +11,14 @@
             <th>客户</th>
             <th>授信总额</th>
             <th>反担保价值</th>
-            <th>覆盖率(%)</th>
+            <th>授信覆盖率</th>
             <th>流贷余额</th>
             <th>承兑余额</th>
             <th>保函余额</th>
             <th>委贷余额</th>
 {#            <th>小贷余额</th>#}
             <th>在保总额</th>
+            <th>在保覆盖率</th>
         </tr>
         </thead>
         <tbody>
@@ -34,6 +35,7 @@
                 <td style="padding: 0" align="right">{{ custom.entrusted_loan|floatformat:2 }}</td>
 {#                <td align="right">{{ item.petty_loan|floatformat:2 }}</td>#}
                 <td style="padding: 0" align="right">{{ custom.amount|floatformat:2 }}</td>
+                <td style="padding: 0" align="right">{{ custom.v_radio|floatformat:2 }}</td>
             </tr>
         {% endfor %}
         {% include 'dbms/report/balance_custom/top-custom.html' %}

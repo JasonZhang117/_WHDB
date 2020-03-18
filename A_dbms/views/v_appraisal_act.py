@@ -620,6 +620,7 @@ def article_sign_ajax(request):
     article_id = post_data['article_id']
     article_obj = models.Articles.objects.get(id=article_id)
     custom_list = models.Customes.objects.filter(id=article_obj.custom.id)
+    custom_obj = custom_list.first()
 
     '''ARTICLE_STATE_LIST = [(1, '待反馈'), (2, '已反馈'), (3, '待上会'), (4, '已上会'), (5, '已签批'),
                           (51, '已放款'), (52, '已放完'), (55, '已解保'), (61, '待变更'), (99, '已注销')]'''
@@ -650,6 +651,7 @@ def article_sign_ajax(request):
                         summary__id=article_id).aggregate(Sum('order_amount'))
                     lending_amount = lending_amount['order_amount__sum']  # 放款次序金额合计
                     g_radio = radio(cleaned_data['credit_amount'],cleaned_data['g_value'])
+                    v_radio = radio(custom_obj.amount,cleaned_data['g_value'])
                     if single_quota_amount == article_amount and lending_amount == article_amount:
                         custom_typ_n = 1
                         if renewal > 0 and augment > 0:
@@ -675,7 +677,7 @@ def article_sign_ajax(request):
                                 # 更新客户授信总额，存量/新增情况
                                 custom_list.update(
                                     credit_amount=cleaned_data['credit_amount'], 
-                                    g_value=cleaned_data['g_value'],  g_radio=g_radio,
+                                    g_value=cleaned_data['g_value'], g_radio=g_radio, v_radio=v_radio,
                                     custom_typ=custom_typ_n,
                                     lately_date=cleaned_data['sign_date'])
                                 models.Warrants.objects.filter(
@@ -720,6 +722,7 @@ def article_sign_ajax(request):
                             summary__id=article_id).aggregate(Sum('order_amount'))
                         lending_amount = lending_amount['order_amount__sum']  # 放款次序金额合计
                         g_radio = radio(cleaned_data['credit_amount'],cleaned_data['g_value'])
+                        v_radio = radio(custom_obj.amount,cleaned_data['g_value'])
                         if single_quota_amount == article_amount and lending_amount == article_amount:
                             custom_typ_n = 1
                             if renewal > 0 and augment > 0:
@@ -746,7 +749,7 @@ def article_sign_ajax(request):
                                     # 更新客户授信总额，存量/新增情况
                                     custom_list.update(
                                         credit_amount=cleaned_data['credit_amount'], 
-                                        g_value=cleaned_data['g_value'], g_radio=g_radio,
+                                        g_value=cleaned_data['g_value'], g_radio=g_radio, v_radio=v_radio,
                                         custom_typ=custom_typ_n, 
                                         lately_date=article_obj.review_date)
                                     models.Warrants.objects.filter(

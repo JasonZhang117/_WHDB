@@ -1104,6 +1104,13 @@ def top_custom(request, *args, **kwargs):  #
         c_g_radio = round(c_g_value / c_credit * 100, 2)
     if t_credit > 0:
         t_g_radio = round(t_g_value / t_credit * 100, 2)
+    c_v_radio = 0
+    t_v_radio = 0
+    if c_amount > 0:
+        c_v_radio = round(c_g_value / c_amount * 100, 2)
+    if t_amount > 0:
+        t_v_radio = round(t_g_value / t_amount * 100, 2)
+
 
     r_credit = 0
     r_g_value = 0
