@@ -3,13 +3,14 @@
         <thead>
         <tr style="text-align: center">
             <th>客户名称({{ provide_acount }})</th>
-            <th>行业</th>
+            {% comment %} <th>行业</th> {% endcomment %}
             <th>管户经理</th>
             <th>风控专员</th>
             <th>授信总额</th>
             <th>反担保价值</th>
-            <th>覆盖率</th>
+            <th>授信覆盖率</th>
             <th>在保余额</th>
+            <th>在保覆盖率</th>
 {#            <th>流贷余额</th>#}
 {#            <th>承兑余额</th>#}
 {#            <th>保函余额</th>#}
@@ -32,13 +33,14 @@
                 {% if PAGE_TITLE == '保后管理' or PAGE_TITLE == '逾期保后' %}
                     <td><a href="{% url 'dbms:review_scan' custom_id=custom.id %}">{{ custom.short_name }}</a></td>
                 {% endif %}
-                <td>{{ custom.idustry.name }}</td>
+                {% comment %} <td>{{ custom.idustry.name }}</td> {% endcomment %}
                 <td align="right">{{ custom.managementor }}</td>
                 <td align="right">{{ custom.controler }}</td>
                 <td align="right">{{ custom.credit_amount }}</td>
                 <td align="right">{{ custom.g_value }}</td>
                 <td align="right">{{ custom.g_radio }}</td>
                 <td align="right">{{ custom.amount }}</td>
+                <td align="right">{{ custom.v_radio }}</td>
 {#                <td align="right">{{ custom.custom_flow }}</td>#}
 {#                <td align="right">{{ custom.custom_accept }}</td>#}
 {#                <td align="right">{{ custom.custom_back }}</td>#}

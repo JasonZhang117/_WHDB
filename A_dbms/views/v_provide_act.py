@@ -913,7 +913,7 @@ def repayment_add_ajax(request):
     return HttpResponse(result)
 
 
-# ---------------------------修改合同ajax----------------------------#
+# ---------------------------修改合同状态ajax----------------------------#
 @login_required
 @authority
 def change_agree_state_ajax(request):  #

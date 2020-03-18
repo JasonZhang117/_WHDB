@@ -9,7 +9,7 @@ from django.db.models import Q, F
 from django.contrib.auth.decorators import login_required
 from django.urls import resolve
 from _WHDB.views import MenuHelper
-from _WHDB.views import authority
+from _WHDB.views import authority, radio
 
 
 # -----------------------客户添加-------------------------#
@@ -405,11 +405,13 @@ def custom_change_ajax(request):
     form_custom_change = forms.CustomChangeForm(post_data)
     if form_custom_change.is_valid():
         custom_chang_data = form_custom_change.cleaned_data
+        credit_amount = custom_chang_data['credit_amount']
+        g_radio = radio(credit_amount,custom_obj.g_value)
         try:
             with transaction.atomic():
                 custom_lsit.update(
                     custom_typ=custom_chang_data['custom_typ'],
-                    credit_amount=custom_chang_data['credit_amount'],
+                    credit_amount=credit_amount, g_radio=g_radio,
                     custom_state=custom_chang_data['custom_state'],
                     managementor=custom_chang_data['managementor'],
                 )
