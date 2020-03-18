@@ -662,7 +662,7 @@ def provide_del_ajax(request):  # 删除放款ajax
             cooperator_list = models.Cooperators.objects.filter(branch_cooperator=branch_obj)
             cooperator_obj = cooperator_list.first()
             cooperator_provide_balance = models.Provides.objects.filter(
-                notify__agree__branch__cooperator=branch_obj, provide_typ=provide_typ).aggregate(
+                notify__agree__branch__cooperator=cooperator_obj, provide_typ=provide_typ).aggregate(
                 Sum('provide_balance'))['provide_balance__sum']  # 放款银行及放款品种项下，在保余额
             if provide_typ == 1:
                 if cooperator_provide_balance:
@@ -693,6 +693,8 @@ def provide_del_ajax(request):  # 删除放款ajax
             custom_provide_balance_all = models.Provides.objects.filter(
                         notify__agree__lending__summary__custom=custom_obj).aggregate(
                         Sum('provide_balance'))['provide_balance__sum']  # 客户项下，在保余额
+            if not custom_provide_balance_all:
+                custom_provide_balance_all = 0
             v_radio = radio(custom_provide_balance_all,custom_obj.g_value)
             custom_list.update(amount=round(custom_provide_balance_all, 2),v_radio=v_radio)
 
@@ -707,7 +709,7 @@ def provide_del_ajax(request):  # 删除放款ajax
             cooperator_list.update(amount=round(cooperator_provide_balance_all, 2))
 
         response['message'] = '借款信息删除成功！'
-    except Exception as e:
+    except ValueError as e:
         response['status'] = False
         response['message'] = '还款信息删除失败：%s' % str(e)
     result = json.dumps(response, ensure_ascii=False)
@@ -861,6 +863,8 @@ def repayment_add_ajax(request):
                     custom_provide_balance_all = models.Provides.objects.filter(
                                 notify__agree__lending__summary__custom=custom_obj).aggregate(
                                 Sum('provide_balance'))['provide_balance__sum']  # 客户项下，在保余额
+                    if not custom_provide_balance_all:
+                        custom_provide_balance_all = 0            
                     v_radio = radio(custom_provide_balance_all,custom_obj.g_value)
                     custom_list.update(amount=round(custom_provide_balance_all, 2),v_radio=v_radio)
 
@@ -873,9 +877,6 @@ def repayment_add_ajax(request):
                                 notify__agree__branch__cooperator=cooperator_obj).aggregate(
                                 Sum('provide_balance'))['provide_balance__sum']  # 授信银行项下，在保余额
                     cooperator_list.update(amount=round(cooperator_provide_balance_all, 2))
-
-
-
             except Exception as e:
                 response['status'] = False
                 response['message'] = '还款失败：%s' % str(e)

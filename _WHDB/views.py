@@ -640,7 +640,7 @@ def amount_y(amount):
     return amount_str
 
 def radio(credit_amount:float,g_value:float):
-    if credit_amount > 0:
+    if credit_amount and credit_amount > 0:
         redioer = round(g_value/credit_amount*100,2)
     else:
         redioer = 0
