@@ -41,7 +41,7 @@ class Customes(models.Model):  # 客户
     custom_accept = models.FloatField(verbose_name='_承兑余额', default=0)
     custom_back = models.FloatField(verbose_name='_保函余额', default=0)
     entrusted_loan = models.FloatField(verbose_name='_委贷余额', default=0)
-    petty_loan = models.FloatField(verbose_name='_过桥贷余额', default=0)
+    petty_loan = models.FloatField(verbose_name='小贷', default=0)
     amount = models.FloatField(verbose_name='_在保总额', default=0)
 
     g_value = models.FloatField(verbose_name='反担保价值', default=0)

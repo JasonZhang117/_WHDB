@@ -426,12 +426,40 @@ def home(request):
     #                       (51, '已放款'), (52, '已放完'), (55, '已解保'), (61, '待变更'), (99, '已注销')]'''
     #     if lending.summary.article_state in [5, 51, 52, 55] and lending.lending_state == 4:
     #         models.LendingOrder.objects.filter(id=lending.id).update(lending_state=5)
-    custom_list = models.Customes.objects.filter(credit_amount__gt=0)
+    custom_list = models.Customes.objects.all()
     for custom in custom_list:
+        custom_provide_balance_all = models.Provides.objects.filter(
+                                notify__agree__lending__summary__custom=custom).aggregate(
+                                Sum('provide_balance'))['provide_balance__sum']  # 客户项下，在保余额
+        custom_ll = models.Customes.objects.filter(id=custom.id)
+        if custom_provide_balance_all:
+            custom_ll.update(amount=round(custom_provide_balance_all, 2))
+            custom_ll.update(g_radio=rr,v_radio=vv)
+        else:
+            custom_ll.update(amount=0)
         rr = radio(custom.credit_amount,custom.g_value)
         vv = radio(custom.amount,custom.g_value)
-        custom_ll = models.Customes.objects.filter(id=custom.id)
-        custom_ll.update(g_radio=rr,v_radio=vv)
+    branch_list = models.Branches.objects.all()
+    for branch_obj in branch_list:
+        branch_provide_balance_all = models.Provides.objects.filter(
+                                notify__agree__branch=branch_obj).aggregate(
+                                Sum('provide_balance'))['provide_balance__sum']  # 放款银行项下，在保余额
+        branch_ll =  models.Branches.objects.filter(id=branch_obj.id)     
+        if branch_provide_balance_all:
+            branch_ll.update(amount=round(branch_provide_balance_all, 2))
+        else:
+            branch_ll.update(amount=0)
+
+    cooperator_list = models.Cooperators.objects.all()
+    for cooperator_obj in cooperator_list:
+        cooperator_provide_balance_all = models.Provides.objects.filter(
+                                notify__agree__branch__cooperator=cooperator_obj).aggregate(
+                                Sum('provide_balance'))['provide_balance__sum']  # 授信银行项下，在保余额
+        cooperator_ll = models.Cooperators.objects.filter(id=cooperator_obj.id)
+        if cooperator_provide_balance_all:
+            cooperator_ll.update(amount=round(cooperator_provide_balance_all, 2))
+        else:
+            cooperator_ll.update(amount=0)
 
     return render(request, 'test.html', locals())
 
