@@ -434,11 +434,11 @@ def home(request):
         custom_ll = models.Customes.objects.filter(id=custom.id)
         if custom_provide_balance_all:
             custom_ll.update(amount=round(custom_provide_balance_all, 2))
-            custom_ll.update(g_radio=rr,v_radio=vv)
         else:
             custom_ll.update(amount=0)
         rr = radio(custom.credit_amount,custom.g_value)
         vv = radio(custom.amount,custom.g_value)
+        custom_ll.update(g_radio=rr,v_radio=vv)
     branch_list = models.Branches.objects.all()
     for branch_obj in branch_list:
         branch_provide_balance_all = models.Provides.objects.filter(
