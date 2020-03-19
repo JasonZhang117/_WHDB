@@ -1057,7 +1057,7 @@ def top_custom(request, *args, **kwargs):  #
             if screen_value:
                 custom_groups = custom_groups_t.filter(amount__gte=screen_value).order_by('-amount')  # 按金额筛选
             else:
-                screen_value = custom_groups_t.order_by('-amount')[:5][4].amount
+                screen_value = 0 #custom_groups_t.order_by('-amount')[:5][4].amount
                 custom_groups = custom_groups_t.filter(amount__gte=screen_value).order_by('-amount')  # 按金额筛选
     elif c_typ == 21:  # 按授信
         custom_groups_t = custom_groups.filter(Q(credit_amount__gt=0) or Q(amount__gt=0))
@@ -1075,7 +1075,7 @@ def top_custom(request, *args, **kwargs):  #
                 custom_groups = custom_groups_t.filter(credit_amount__gte=screen_value).order_by(
                     '-credit_amount')  # 按金额筛选
             else:
-                screen_value = custom_groups_t.order_by('-amount')[:5][4].amount
+                screen_value = 0 #custom_groups_t.order_by('-amount')[:5][4].amount
                 custom_groups = custom_groups_t.filter(credit_amount__gte=screen_value).order_by(
                     '-credit_amount')  # 按金额筛选
     c_credit = custom_groups.aggregate(Sum('credit_amount'))['credit_amount__sum']  # 授信总额

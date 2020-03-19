@@ -9,7 +9,7 @@ from django.db.models import Q, F
 from django.urls import resolve, reverse
 from _WHDB.views import MenuHelper
 from _WHDB.views import authority, UND, UNX
-from .v_agree import convert, convert_num, credit_term_c
+from .v_agree import convert, convert_num, credit_term_c, convert
 
 
 # ---------------------------合同签批ajax----------------------------#
@@ -176,20 +176,30 @@ def agree_add_ajax(request):  # 添加合同
                 agree_num_prefix, agree_num = agree_num_f(AGREE_TYP_X, '成武贷', 'J', guarantee_typ, agree_copies)
             agree_name = agree_name_f(agree_typ)
 
+            repay_method=jk_add_cleaned['repay_method']
+            agree_rate=float(agree_add_cleaned['agree_rate'])
+            agree_term=int(agree_add_cleaned['agree_term'])
+            repay_ex=jk_add_cleaned['repay_ex']
+            if repay_method == 21: #等额本息
+                agree_rate_q = agree_rate / 1000
+                fz = agree_amount * agree_rate_q * (1 + agree_rate_q) ** agree_term
+                fm = (1 + agree_rate_q) ** agree_term - 1
+                if fm:
+                    repay_ex = convert(round(fz/fm,2))
             try:
                 with transaction.atomic():
                     agree_obj = models.Agrees.objects.create(
                         agree_num=agree_num, agree_name=agree_name, num_prefix=agree_num_prefix,
                         lending=lending_obj, branch_id=branch_id, agree_typ=agree_typ,
-                        agree_term=agree_add_cleaned['agree_term'],
-                        amount_limit=amount_limit, agree_rate=agree_add_cleaned['agree_rate'],
+                        agree_term=agree_term,
+                        amount_limit=amount_limit, agree_rate=agree_rate,
                         investigation_fee=agree_add_cleaned['investigation_fee'],
                         agree_amount=agree_amount, guarantee_typ=guarantee_typ,
                         agree_copies=agree_copies, other=agree_add_cleaned['other'],
                         agree_start_date=jk_add_cleaned['agree_start_date'],
                         agree_due_date=jk_add_cleaned['agree_due_date'], acc_name=jk_add_cleaned['acc_name'],
                         acc_num=jk_add_cleaned['acc_num'], acc_bank=jk_add_cleaned['acc_bank'],
-                        repay_method=jk_add_cleaned['repay_method'], repay_ex=jk_add_cleaned['repay_ex'],
+                        repay_method=repay_method, repay_ex=repay_ex,
                         agree_buildor=request.user)
                     '''AGREE_TYP_LIST = [
                         (1, 'D-单笔'), (2, 'D-最高额'), (4, 'D-委贷'),
@@ -353,19 +363,30 @@ def agree_edit_ajax(request):  #
             '''合同限额检测'''
             agree_limit_test(agree_typ, order_amount, cooperator_up_scale, agree_amount, amount_limit, response)
             agree_name = agree_name_f(agree_typ)  # 生成合同名称
+
+            repay_method=jk_add_cleaned['repay_method']
+            agree_rate=float(agree_add_cleaned['agree_rate'])
+            agree_term=int(agree_add_cleaned['agree_term'])
+            repay_ex=jk_add_cleaned['repay_ex']
+            if repay_method == 21: #等额本息
+                agree_rate_q = agree_rate / 1000
+                fz = agree_amount * agree_rate_q * (1 + agree_rate_q) ** agree_term
+                fm = (1 + agree_rate_q) ** agree_term - 1
+                if fm:
+                    repay_ex = convert(round(fz/fm,2))
             try:
                 with transaction.atomic():
                     agree_list.update(
                         agree_name=agree_name, branch_id=branch_id, agree_typ=agree_typ,
-                        agree_term=agree_add_cleaned['agree_term'],
-                        amount_limit=amount_limit, agree_rate=agree_add_cleaned['agree_rate'],
+                        agree_term=agree_term,
+                        amount_limit=amount_limit, agree_rate=agree_rate,
                         investigation_fee=agree_add_cleaned['investigation_fee'],
                         agree_amount=agree_amount, guarantee_typ=guarantee_typ,
                         agree_copies=agree_copies, other=agree_add_cleaned['other'],
                         agree_start_date=jk_add_cleaned['agree_start_date'],
                         agree_due_date=jk_add_cleaned['agree_due_date'], acc_name=jk_add_cleaned['acc_name'],
                         acc_num=jk_add_cleaned['acc_num'], acc_bank=jk_add_cleaned['acc_bank'],
-                        repay_method=jk_add_cleaned['repay_method'], repay_ex=jk_add_cleaned['repay_ex'],
+                        repay_method=repay_method, repay_ex=repay_ex,
                         agree_buildor=request.user)
                     if agree_obj.agree_typ == 22:  # (22, 'D-公司保函')
                         form_letter_add = forms.LetterGuaranteeAddForm(post_data)
