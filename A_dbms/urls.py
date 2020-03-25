@@ -70,6 +70,7 @@ urlpatterns = [
     path('agree/preview/counter/<int:agree_id>/<int:counter_id>/', views.counter_preview, name='agree_counter_preview'),
     path('agree/preview/sign/<int:agree_id>/', views.agree_sign_preview, name='agree_sign_preview'),
     path('agree/preview/result/<int:agree_id>/<int:result_id>/', views.result_preview, name='agree_result_preview'),
+    path('agree/preview/mortgage/<int:agree_id>/<int:warrant_id>/', views.mortgage_app, name='agree_mortgage_preview'),
     path('agree/add/', views.agree_add_ajax, name='agree_add_ajax'),
     path('agree/edit/', views.agree_edit_ajax, name='agree_edit_ajax'),
     path('agree/del/', views.agree_del_ajax, name='agree_del_ajax'),
