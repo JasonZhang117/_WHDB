@@ -7,6 +7,7 @@
         <li role="presentation">
             <a href="#result" style="background-color: #f5f5f5"
                aria-controls="home" role="tab" data-toggle="tab"> 决议/声明 </a></li>
+        {% include 'dbms/provide/agree/scan/tab-tit-guarantee.html' %} {#反担保#}
     </ul>
     <!-- Tab panes -->
     <div class="tab-content">
@@ -14,5 +15,6 @@
             {% include 'dbms/agree/scan/tab/agree-counters.html' %} </div>
         <div role="result" class="tab-pane" id="result"> <!--决议/声明-->
             {% include 'dbms/agree/scan/tab/agree-result.html' %} </div>
+        {% include 'dbms/provide/agree/scan/tab-con-guarantee.html' %} {#反担保#}    
     </div>
 </div>

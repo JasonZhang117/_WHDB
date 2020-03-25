@@ -425,6 +425,13 @@ def sum_g(lending):
     return sum_gg
 
 
+def ooo(sure_or:int):
+    if sure_or == 0:
+        so = ''
+    else:
+        so = str(sure_or) + '、'
+    return so       
+
 # -----------------------summary_scan意见书-------------------------#
 @login_required
 @authority
@@ -564,7 +571,10 @@ def summary_scan(request, article_id):  # 评审项目预览
                 lk = ''
             sure_list = lending.sure_lending.all()
             sure_count = sure_list.count()
-            sure_or = 1
+            if sure_count <=1:
+                sure_or = 0
+            else:
+                sure_or = 1
             if lending_count > 1:
                 rowspan_count += 1
                 lend_or += 1
@@ -578,8 +588,8 @@ def summary_scan(request, article_id):  # 评审项目预览
                 sure_remark = models.LendingSures.objects.get(lending=lending, sure_typ=1).sure_remark
                 if not sure_remark:
                     sure_remark = ''
-                summary += '<tr class="ot tbp"><td class="oi" colspan="4">&nbsp&nbsp%s、企业保证%s：' % (
-                    sure_or, sure_remark)
+                summary += '<tr class="ot tbp"><td class="oi" colspan="4">&nbsp&nbsp%s企业保证%s：' % (
+                    ooo(sure_or), sure_remark)
                 custom_c_count = custom_c_list.count()
                 custom_c_c = 1
                 for custom_c in custom_c_list:
@@ -595,8 +605,8 @@ def summary_scan(request, article_id):  # 评审项目预览
                 sure_remark = models.LendingSures.objects.get(lending=lending, sure_typ=2).sure_remark
                 if not sure_remark:
                     sure_remark = ''
-                summary += '<tr class="ot tbp"><td class="oi" colspan="4">&nbsp&nbsp%s、个人保证%s：' % (
-                    sure_or, sure_remark)
+                summary += '<tr class="ot tbp"><td class="oi" colspan="4">&nbsp&nbsp%s个人保证%s：' % (
+                    ooo(sure_or), sure_remark)
                 custom_p_count = custom_p_list.count()
                 custom_p_c = 1
                 for custom_p in custom_p_list:
@@ -625,9 +635,9 @@ def summary_scan(request, article_id):  # 评审项目预览
                 sure_remark = models.LendingSures.objects.get(lending=lending, sure_typ=11).sure_remark
                 if not sure_remark:
                     sure_remark = ''
-                summary += '<tr class="ot tbp"><td class="oi" colspan="4">&nbsp&nbsp%s、房产抵押：' \
+                summary += '<tr class="ot tbp"><td class="oi" colspan="4">&nbsp&nbsp%s房产抵押：' \
                            '以下房产抵押给我公司，签订抵押%s担保合同并办理抵押登记%s</td></tr>' % (
-                               sure_or, DF, sure_remark)
+                               ooo(sure_or), DF, sure_remark)
                 summary += house_d(warrant_h_11_list)  # 房产列表
                 sure_or += 1
             warrant_g_12_list = models.Warrants.objects.filter(
@@ -638,9 +648,9 @@ def summary_scan(request, article_id):  # 评审项目预览
                 if not sure_remark:
                     sure_remark = ''
                 summary += '<tr class="ot tbp"><td class="oi" colspan="4">' \
-                           '&nbsp&nbsp%s、土地抵押：以下国有土地使用权抵押给我公司，签订抵押%s担保合同并办' \
+                           '&nbsp&nbsp%s土地抵押：以下国有土地使用权抵押给我公司，签订抵押%s担保合同并办' \
                            '理抵押登记%s</td></tr>' % (
-                               sure_or, DF, sure_remark)
+                               ooo(sure_or), DF, sure_remark)
                 summary += ground_d(warrant_g_12_list)
                 sure_or += 1
             warrant_c_14_list = models.Warrants.objects.filter(
@@ -651,9 +661,9 @@ def summary_scan(request, article_id):  # 评审项目预览
                 if not sure_remark:
                     sure_remark = ''
                 summary += '<tr class="ot tbp"><td class="oi" colspan="4">' \
-                           '&nbsp&nbsp%s、在建工程抵押：以下在建工程抵押给我公司，签订抵押%s担保合同并' \
+                           '&nbsp&nbsp%s在建工程抵押：以下在建工程抵押给我公司，签订抵押%s担保合同并' \
                            '办理抵押登记%s</td></tr>' % (
-                               sure_or, DF, sure_remark)
+                               ooo(sure_or), DF, sure_remark)
                 summary += create_d(warrant_c_14_list)
                 sure_or += 1
             warrant_c_13_list = models.Warrants.objects.filter(
@@ -663,8 +673,8 @@ def summary_scan(request, article_id):  # 评审项目预览
                 sure_remark = models.LendingSures.objects.get(lending=lending, sure_typ=13).sure_remark
                 if not sure_remark:
                     sure_remark = ''
-                summary += '<tr class="ot tbp"><td class="oi" colspan="4">&nbsp&nbsp%s、动产抵押%s：' % (
-                    sure_or, sure_remark)
+                summary += '<tr class="ot tbp"><td class="oi" colspan="4">&nbsp&nbsp%s动产抵押%s：' % (
+                    ooo(sure_or), sure_remark)
                 warrant_c_count = warrant_c_13_list.count()
                 warrant_c_c = 0
                 for warrant_c in warrant_c_13_list:
@@ -684,9 +694,9 @@ def summary_scan(request, article_id):  # 评审项目预览
                     sure_remark = ''
                 warrant_count = warrant_v_15_list.count()
                 summary += '<tr class="ot tbp"><td class="oi" colspan="4">' \
-                           '&nbsp&nbsp%s、车辆抵押抵押：以下车辆抵押给我公司，签订抵押%s担保合同并办' \
+                           '&nbsp&nbsp%s车辆抵押抵押：以下车辆抵押给我公司，签订抵押%s担保合同并办' \
                            '理抵押登记%s</td></tr>' % (
-                               sure_or, DF, sure_remark)
+                               ooo(sure_or), DF, sure_remark)
                 summary += '<tr class="it"><td colspan="4"><table class="tbi" cellspacing="0" cellpadding="0" >'
                 summary += '<tr class="it">' \
                            '<td class="bb" align="center">所有权人</td> ' \
@@ -716,10 +726,10 @@ def summary_scan(request, article_id):  # 评审项目预览
                 sure_remark = models.LendingSures.objects.get(lending=lending, sure_typ=21).sure_remark
                 if not sure_remark:
                     sure_remark = ''
-                summary += '<tr class="ot tbp"><td class="oi" colspan="4">&nbsp&nbsp%s、房产顺位抵押：' \
+                summary += '<tr class="ot tbp"><td class="oi" colspan="4">&nbsp&nbsp%s房产顺位抵押：' \
                            '以下房产抵押给我公司，签订抵押%s担保合同并办理顺位' \
                            '抵押登记%s</td></tr>' % (
-                               sure_or, DF, sure_remark)
+                               ooo(sure_or), DF, sure_remark)
                 summary += house_d(warrant_h_21_list)  # 房产列表
                 sure_or += 1
             warrant_g_22_list = models.Warrants.objects.filter(
@@ -730,9 +740,9 @@ def summary_scan(request, article_id):  # 评审项目预览
                 if not sure_remark:
                     sure_remark = ''
                 summary += '<tr class="ot tbp"><td class="oi" colspan="4">' \
-                           '&nbsp&nbsp%s、土地顺位抵押：以下国有土地使用权抵押给我公司，签' \
+                           '&nbsp&nbsp%s土地顺位抵押：以下国有土地使用权抵押给我公司，签' \
                            '订抵押%s担保合同并办理顺位抵押登记%s</td></tr>' % (
-                               sure_or, DF, sure_remark)
+                               ooo(sure_or), DF, sure_remark)
                 summary += ground_d(warrant_g_22_list)
                 sure_or += 1
             warrant_c_23_list = models.Warrants.objects.filter(
@@ -743,9 +753,9 @@ def summary_scan(request, article_id):  # 评审项目预览
                 if not sure_remark:
                     sure_remark = ''
                 summary += '<tr class="ot tbp"><td class="oi" colspan="4">' \
-                           '&nbsp&nbsp%s、在建工程顺位抵押：以下在建工程抵押给我公司，签' \
+                           '&nbsp&nbsp%s在建工程顺位抵押：以下在建工程抵押给我公司，签' \
                            '订抵押%s担保合同并办理顺位抵押登记%s</td></tr>' % (
-                               sure_or, DF, sure_remark)
+                               ooo(sure_or), DF, sure_remark)
                 summary += create_d(warrant_c_23_list)
                 sure_or += 1
             warrant_c_24_list = models.Warrants.objects.filter(
@@ -755,8 +765,8 @@ def summary_scan(request, article_id):  # 评审项目预览
                 sure_remark = models.LendingSures.objects.get(lending=lending, sure_typ=24).sure_remark
                 if not sure_remark:
                     sure_remark = ''
-                summary += '<tr class="ot tbp"><td class="oi" colspan="4">&nbsp&nbsp%s、动产顺位抵押%s：' % (
-                    sure_or, sure_remark)
+                summary += '<tr class="ot tbp"><td class="oi" colspan="4">&nbsp&nbsp%s动产顺位抵押%s：' % (
+                    ooo(sure_or), sure_remark)
                 warrant_c_count = warrant_c_24_list.count()
                 warrant_c_c = 0
                 for warrant_c in warrant_c_24_list:
@@ -774,8 +784,8 @@ def summary_scan(request, article_id):  # 评审项目预览
                 sure_remark = models.LendingSures.objects.get(lending=lending, sure_typ=31).sure_remark
                 if not sure_remark:
                     sure_remark = ''
-                summary += '<tr class="ot tbp"><td class="oi" colspan="4">&nbsp&nbsp%s、应收账款质押%s：' % (
-                    sure_or, sure_remark)
+                summary += '<tr class="ot tbp"><td class="oi" colspan="4">&nbsp&nbsp%s应收账款质押%s：' % (
+                    ooo(sure_or), sure_remark)
                 warrant_r_count = warrant_r_31_list.count()
                 warrant_r_c = 0
                 for warrant_r in warrant_r_31_list:
@@ -793,8 +803,8 @@ def summary_scan(request, article_id):  # 评审项目预览
                 sure_remark = models.LendingSures.objects.get(lending=lending, sure_typ=32).sure_remark
                 if not sure_remark:
                     sure_remark = ''
-                summary += '<tr class="ot tbp"><td class="oi" colspan="4">&nbsp&nbsp%s、股权质押%s：' % (
-                    sure_or, sure_remark)
+                summary += '<tr class="ot tbp"><td class="oi" colspan="4">&nbsp&nbsp%s股权质押%s：' % (
+                    ooo(sure_or), sure_remark)
                 warrant_s_count = warrant_s_32_list.count()
                 warrant_s_c = 0
                 for warrant_s in warrant_s_32_list:
@@ -827,8 +837,8 @@ def summary_scan(request, article_id):  # 评审项目预览
                 sure_remark = models.LendingSures.objects.get(lending=lending, sure_typ=33).sure_remark
                 if not sure_remark:
                     sure_remark = ''
-                summary += '<tr class="ot tbp"><td class="oi" colspan="4">&nbsp&nbsp%s、票据质押%s：' % (
-                    sure_or, sure_remark)
+                summary += '<tr class="ot tbp"><td class="oi" colspan="4">&nbsp&nbsp%s票据质押%s：' % (
+                    ooo(sure_or), sure_remark)
                 warrant_d_count = warrant_d_33_list.count()
                 warrant_d_c = 0
                 for warrant_d in warrant_d_33_list:
@@ -853,8 +863,8 @@ def summary_scan(request, article_id):  # 评审项目预览
                 sure_remark = models.LendingSures.objects.get(lending=lending, sure_typ=39).sure_remark
                 if not sure_remark:
                     sure_remark = ''
-                summary += '<tr class="ot tbp"><td class="oi" colspan="4">&nbsp&nbsp%s、其他权利质押%s：' % (
-                    sure_or, sure_remark)
+                summary += '<tr class="ot tbp"><td class="oi" colspan="4">&nbsp&nbsp%s其他权利质押%s：' % (
+                    ooo(sure_or), sure_remark)
                 warrant_o_39_count = warrant_o_39_list.count()
                 warrant_o_39_c = 0
                 for warrant_o_39 in warrant_o_39_list:
@@ -872,10 +882,10 @@ def summary_scan(request, article_id):  # 评审项目预览
                 sure_remark = models.LendingSures.objects.get(lending=lending, sure_typ=42).sure_remark
                 if not sure_remark:
                     sure_remark = ''
-                summary += '<tr class="ot tbp"><td class="oi" colspan="4">&nbsp&nbsp%s、房产监管%s：' \
+                summary += '<tr class="ot tbp"><td class="oi" colspan="4">&nbsp&nbsp%s房产监管%s：' \
                            '以下房产签订抵押%s担保合同，收取购房合同等资料并承诺配合我公司' \
                            '办理相抵押登记关手续</td></tr>' % (
-                               sure_or, DF, sure_remark)
+                               ooo(sure_or), DF, sure_remark)
                 summary += house_j(warrant_h_42_list)  # 房产列表
                 sure_or += 1
             warrant_g_43_list = models.Warrants.objects.filter(
@@ -894,8 +904,8 @@ def summary_scan(request, article_id):  # 评审项目预览
                 sure_remark = models.LendingSures.objects.get(lending=lending, sure_typ=44).sure_remark
                 if not sure_remark:
                     sure_remark = ''
-                summary += '<tr class="ot tbp"><td class="oi" colspan="4">&nbsp&nbsp%s、票据监管%s：' % (
-                    sure_or, sure_remark)
+                summary += '<tr class="ot tbp"><td class="oi" colspan="4">&nbsp&nbsp%s票据监管%s：' % (
+                    ooo(sure_or), sure_remark)
                 warrant_d_count = warrant_d_44_list.count()
                 warrant_d_c = 0
                 for warrant_d in warrant_d_44_list:
@@ -920,8 +930,8 @@ def summary_scan(request, article_id):  # 评审项目预览
                 sure_remark = models.LendingSures.objects.get(lending=lending, sure_typ=49).sure_remark
                 if not sure_remark:
                     sure_remark = ''
-                summary += '<tr class="ot tbp"><td class="oi" colspan="4">&nbsp&nbsp%s、其他监管%s：' % (
-                    sure_or, sure_remark)
+                summary += '<tr class="ot tbp"><td class="oi" colspan="4">&nbsp&nbsp%s其他监管%s：' % (
+                    ooo(sure_or), sure_remark)
                 warrant_o_49_count = warrant_o_49_list.count()
                 warrant_o_49_c = 0
                 for warrant_o_49 in warrant_o_49_list:
@@ -964,8 +974,8 @@ def summary_scan(request, article_id):  # 评审项目预览
                 sure_remark = models.LendingSures.objects.get(lending=lending, sure_typ=59).sure_remark
                 if not sure_remark:
                     sure_remark = ''
-                summary += '<tr class="ot tbp"><td class="oi" colspan="4">&nbsp&nbsp%s、其他%s：' % (
-                    sure_or, sure_remark)
+                summary += '<tr class="ot tbp"><td class="oi" colspan="4">&nbsp&nbsp%s其他%s：' % (
+                    ooo(sure_or), sure_remark)
                 warrant_o_59_count = warrant_o_59_list.count()
                 warrant_o_59_c = 0
                 for warrant_o_59 in warrant_o_59_list:

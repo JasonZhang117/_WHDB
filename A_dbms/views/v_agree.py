@@ -74,6 +74,7 @@ def agree_scan(request, agree_id):  # 查看合同
 
     agree_obj = models.Agrees.objects.get(id=agree_id)
     agree_lending_obj = agree_obj.lending
+    lending_obj = agree_lending_obj
 
     warrant_agree_list = models.Warrants.objects.filter(counter_warrant__counter__agree=agree_obj)
     '''WARRANT_TYP_LIST = [
@@ -167,6 +168,38 @@ def agree_scan(request, agree_id):  # 查看合同
         lending_warrant__sure__lending=agree_lending_obj, warrant_typ=51)
     warrants_o_lending_l = models.Warrants.objects.filter(
         lending_warrant__sure__lending=agree_lending_obj, warrant_typ=55)
+
+    SURE_LIST = [1, 2]  # 保证类
+    HOUSE_LIST = [11, 21, 42, 52]  # 房产类
+    GROUND_LIST = [12, 22, 43, 53]  # 土地类
+    COUNSTRUCT_LIST = [14, 23]  # 在建工程类
+    RECEIVABLE_LIST = [31, ]  # 应收账款类
+    STOCK_LIST = [32, 51]  # 股权类
+    DRAFT_LIST = [33, 44]  # 票据类
+    VEHICLE_LIST = [15, ]  # 车辆类
+    CHATTEL_LIST = [13, 24, 34, 47]  # 动产类
+    OTHER_LIST = [39, 49]  # 其他类
+    
+    custom_lending_list = models.Customes.objects.filter(lending_custom__sure__lending=agree_lending_obj)
+    warrant_lending_h_list = models.Warrants.objects.filter(lending_warrant__sure__lending=agree_lending_obj,
+                                                            warrant_typ__in=[1, 2])
+    warrant_lending_g_list = models.Warrants.objects.filter(lending_warrant__sure__lending=agree_lending_obj,
+                                                            warrant_typ=5)
+    warrant_lending_6_list = models.Warrants.objects.filter(lending_warrant__sure__lending=agree_lending_obj,
+                                                            warrant_typ=6)
+    warrant_lending_r_list = models.Warrants.objects.filter(lending_warrant__sure__lending=agree_lending_obj,
+                                                            warrant_typ=11)
+    warrant_lending_s_list = models.Warrants.objects.filter(lending_warrant__sure__lending=agree_lending_obj,
+                                                            warrant_typ=21)
+    warrant_lending_d_list = models.Warrants.objects.filter(lending_warrant__sure__lending=agree_lending_obj,
+                                                            warrant_typ=31)
+    warrant_lending_v_list = models.Warrants.objects.filter(lending_warrant__sure__lending=agree_lending_obj,
+                                                            warrant_typ=41)
+    warrant_lending_c_list = models.Warrants.objects.filter(lending_warrant__sure__lending=agree_lending_obj,
+                                                            warrant_typ=51)
+    warrant_lending_o_list = models.Warrants.objects.filter(lending_warrant__sure__lending=agree_lending_obj,
+                                                            warrant_typ=55)
+
     if custom_c_lending_c:
         for custom in custom_c_lending_c:
             custom_list.append(custom)
@@ -196,6 +229,7 @@ def agree_scan(request, agree_id):  # 查看合同
     for custom in custom_list:
         if custom not in custom_list_w:
             custom_list_w.append(custom)
+
 
     return render(request, 'dbms/agree/agree-scan.html', locals())
 
@@ -244,6 +278,32 @@ def agree_scan_counter(request, agree_id, counter_id):  # 查看合同
     return render(request, 'dbms/agree/agree-scan.html', locals())
 
 
+# -------------------------抵押申请预览-------------------------#
+@login_required
+@authority
+@agree_right
+def mortgage_app(request, agree_id, warrant_id): #抵押申请预览
+    current_url_name = resolve(request.path).url_name  # 获取当前URL_NAME
+    authority_list = request.session.get('authority_list')  # 获取当前用户的所有权限
+    menu_result = MenuHelper(request).menu_data_list()
+
+    agree_obj = models.Agrees.objects.get(id=agree_id)
+    warrant_obj = models.Warrants.objects.get(id=warrant_id)
+
+    AGREE_TYP_D = models.Agrees.AGREE_TYP_D  # 担保公司合同类型
+    AGREE_TYP_X = models.Agrees.AGREE_TYP_X  # 小贷公司合同类型
+
+    agree_amount_cn = convert(agree_obj.agree_amount)  # 转换为金额大写
+    agree_amount_str = amount_s(agree_obj.agree_amount)  # 元转换为万元并去掉小数点后面的零
+    agree_amount_y = amount_y(agree_obj.agree_amount)  # 元转换为万元并去掉小数点后面的零
+    agree_term_cn = convert_num(agree_obj.agree_term)  # 合同期限转大写
+    agree_copy_cn = convert_num(agree_obj.agree_copies)
+
+    UN, ADD, CNB = un_dex(agree_obj.agree_typ)  # 不同合同种类下主体适用
+
+
+    return render(request, 'dbms/agree/preview-mortgage_app.html', locals())
+
 # -------------------------合同预览-------------------------#
 @login_required
 @authority
@@ -265,38 +325,6 @@ def agree_preview(request, agree_id):
     agree_copy_cn = convert_num(agree_obj.agree_copies)
 
     UN, ADD, CNB = un_dex(agree_obj.agree_typ)  # 不同合同种类下主体适用
-
-    if agree_obj.agree_typ in [22, ]:  # (22, 'D-公司保函'),
-        page_home_y_y = '申请人（乙方）'
-        page_home_y_j = '担保人（甲方）'
-    elif agree_obj.agree_typ in [21, ]:  # (21, 'D-分离式保函'),
-        page_home_y_y = '乙方'
-        page_home_y_j = '甲方'
-    else:
-        page_home_y_y = '被担保人（乙方）'
-        page_home_y_j = '担保人（甲方）'
-
-    notarization_typ = False  # 是否公证
-    if agree_obj.agree_typ in [1, 2, 3, 4, 21, 22, 23]:
-        agree_copy_jy_cn = convert_num(agree_obj.agree_copies - 2)
-    else:
-        notarization_typ = True
-        agree_copy_jy_cn = convert_num(agree_obj.agree_copies - 3)
-    '''利率（费率）处理'''
-    agree_rate_cn_q = ''
-    try:
-        rate_b = True
-        single_quota_rate = float(agree_obj.agree_rate)
-        charge = round(agree_obj.agree_amount * single_quota_rate / 100, 2)
-        agree_rate_cn_q = convert_num(float(agree_obj.agree_rate))  # 合同利率转换为千分之，大写
-        agree_rate_p = round(((20 - float(agree_obj.agree_rate)) / 30 * 10), 4)
-        agree_rate_w = convert_num_4(agree_rate_p)
-        charge_cn = convert(charge)
-    except ValueError:
-        rate_b = False
-        single_quota_rate = agree_obj.agree_rate
-        agree_rate_cn_q = agree_obj.agree_rate
-        agree_rate_w = '叁点叁叁叁叁'
 
     return render(request, 'dbms/agree/preview-agree.html', locals())
 

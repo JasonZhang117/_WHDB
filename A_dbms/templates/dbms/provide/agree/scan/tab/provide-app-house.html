@@ -16,7 +16,7 @@
             <th>评估价值</th>
             <th>评估日期</th>
             <th>入库情况</th>
-            {% if PAGE_TITLE == '项目次序' or PAGE_TITLE == '权证管理' or PAGE_TITLE == '放款次序' %}
+            {% if PAGE_TITLE == '项目次序' or PAGE_TITLE == '权证管理' or PAGE_TITLE == '放款次序' or PAGE_TITLE == '合同详情'%}
                 <td>操作</td>
             {% endif %}
 
@@ -62,6 +62,12 @@
                         {% endif %}
                         {% if PAGE_TITLE == '权证管理' %}
                             <td><a class="btn btn-primary btn-xs addStoragesAgreeB">出入库</a></td>
+                        {% endif %}
+                        {% if PAGE_TITLE == '合同详情' %}
+                            <td>
+                                <a class="btn btn-success btn-xs MortgageAppB">抵押申请</a>
+                                <a class="btn btn-success btn-xs LetterKnowingB">知晓函</a>
+                            </td>
                         {% endif %}
                     </tr>
                 {% endfor %}
