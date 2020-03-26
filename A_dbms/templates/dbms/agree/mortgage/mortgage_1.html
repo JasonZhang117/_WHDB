@@ -45,13 +45,7 @@
             <tr>
                 <td class="cc">抵押人姓名（名称）</td>
                 <td class="cc" colspan="3">
-                    {% for ownership in warrant_obj.ownership_warrant.all %}
-                        {% if forloop.first %}
-                            {{ ownership.owner.name }}
-                        {% else %}
-                            、{{ ownership.owner.name }}
-                        {% endif %}
-                    {% endfor %}
+                    {% for ownership in warrant_obj.ownership_warrant.all %}{% if forloop.first %}{{ ownership.owner.name }}{% else %}、{{ ownership.owner.name }}{% endif %}{% endfor %}
                 </td>
             </tr> 
             <tr>
@@ -75,13 +69,7 @@
             <tr>
                 <td class="cc">不动产单元号（或权属证书号）</td>
                 <td class="cc">
-                    {% for ownership in warrant_obj.ownership_warrant.all %}
-                        {% if forloop.first %}
-                            {{ ownership.ownership_num }}
-                        {% else %}
-                            、{{ ownership.ownership_num }}
-                        {% endif %}
-                    {% endfor %}
+                    {% for ownership in warrant_obj.ownership_warrant.all %}{% if forloop.first %}{{ ownership.ownership_num }}{% else %}、{{ ownership.ownership_num }}{% endif %}{% endfor %}
                 </td>
                 <td class="cc">不动产类型</td>
                 <td class="cc"></td>
@@ -106,12 +94,7 @@
             <tr>
                 <td class="cc">债务人</td>
                 <td class="cc" colspan="3">
-                    {{ agree_obj.lending.summary.custom.name }}
-                    {% if agree_obj.lending.summary.borrower.all %}
-                        {% for borrower in agree_obj.lending.summary.borrower.all %}
-                            、{{ borrower.name }}
-                        {% endfor %}
-                    {% endif %}    
+                    {{ agree_obj.lending.summary.custom.name }}{% if agree_obj.lending.summary.borrower.all %}{% for borrower in agree_obj.lending.summary.borrower.all %}、{{ borrower.name }}{% endfor %}{% endif %}    
                 </td>
             </tr> 
             <tr>
