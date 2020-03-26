@@ -65,7 +65,7 @@
                         {% endif %}
                         {% if PAGE_TITLE == '合同详情' %}
                             <td>
-                                <a class="btn btn-success btn-xs MortgageAppB">抵押申请</a>
+                                <a class="btn btn-success btn-xs MortgageAppB" target="_blank" href="{% url 'dbms:agree_mortgage_preview' agree_id=agree_obj.id warrant_id=warrant.id %}">抵押申请</a>
                                 <a class="btn btn-success btn-xs LetterKnowingB">知晓函</a>
                             </td>
                         {% endif %}

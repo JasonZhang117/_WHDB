@@ -1,0 +1,109 @@
+<tr>
+    <td align="center">公司名称</td>
+    <td colspan="5" align="center">
+        {{ agree_obj.lending.summary.custom.name }}
+        {% if agree_obj.lending.summary.borrower.all %}
+            {% for borrower in agree_obj.lending.summary.borrower.all %}
+               、 {{ borrower.name }}
+            {% endfor %}
+        {% endif %}
+    </td>
+</tr>
+<tr>
+    <td align="center">贷款银行</td>
+    <td align="center">{{ agree_obj.branch }}</td>
+    <td>合同金额</td>
+    <td align="center">{{ agree_amount_str }}万元</td>
+    <td align="center">期限</td>
+    <td align="center">{{ credit_term_cn }}</td>
+</tr>
+<tr>
+    <td align="center" rowspan="{{ counter_count }}">合同/协议</td>
+    <td align="center">{{ agree_obj.get_agree_name_display }}</td>
+    <td align="center" colspan="3">{{ agree_obj.agree_num }}</td>
+    <td align="center">{{ agree_obj.agree_copies }}份</td>
+</tr>
+{% for counter in counter_list %}
+    {% if counter.counter_typ == 2 and agree_obj.agree_typ in AGREE_TYP_GZ %}
+        <tr>
+            <td align="center">{{ counter.get_counter_name_display }}
+                {% for custom in counter.assure_counter.custome.all %}
+                    ({{ custom }}
+                    {% if custom.person_custome.spouses %}
+                        、{{ custom.person_custome.spouses.name }}
+                    {% endif %}
+                    )
+                {% endfor %}
+            </td>
+            <td align="center" colspan="3">{{ counter.counter_num }}</td>
+            <td align="center">{{ counter.counter_copies }}份</td>
+        </tr>
+    {% elif counter.counter_typ == 2 %}
+        <tr>
+            <td align="center">{{ counter.get_counter_name_display }}
+                {% for custom in counter.assure_counter.custome.all %}
+                    ({{ custom }}
+                    {% if custom.person_custome.spouses %}
+                        、{{ custom.person_custome.spouses.name }}
+                    {% endif %}
+                    )
+                {% endfor %}
+            </td>
+            <td align="center" colspan="3"></td>
+            <td align="center">{{ counter.counter_copies }}份</td>
+        </tr>
+    {% elif counter.counter_typ == 59 %}
+        <tr>
+            <td align="center">{{ counter.get_counter_name_display }}
+                ({{ counter.warrant_counter.warrant.all.0.other_warrant.other_owner.short_name }})
+            </td>
+            <td align="center" colspan="3"></td>
+            <td align="center">{{ counter.counter_copies }}份</td>
+        </tr>
+    {% else %}
+        <tr>
+            <td align="center">{{ counter.get_counter_name_display }}</td>
+            <td align="center" colspan="3">{{ counter.counter_num }}</td>
+            <td align="center">{{ counter.counter_copies }}份</td>
+        </tr>
+    {% endif %}
+{% endfor %}
+{% if result_list %}
+    {% for result in result_list %}
+        {% if forloop.first %}
+            <tr>
+                <td align="center" rowspan="{{ result_count }}">声明/决议</td>
+                <td align="center">{{ result.get_result_typ_display }}({{ result.custom.short_name }})</td>
+                <td align="center" colspan="3"></td>
+                <td align="center">{{ result.counter_copies }}2份</td>
+            </tr>
+        {% else %}
+            <tr>
+                <td align="center">{{ result.get_result_typ_display }}({{ result.custom.short_name }})</td>
+                <td align="center" colspan="3"></td>
+                <td align="center">{{ result.counter_copies }}2份</td>
+            </tr>
+        {% endif %}
+    {% endfor %}
+{% endif %}
+<tr>
+    <td align="center" colspan="6">评审信息</td>
+</tr>
+<tr>
+    <td align="center">意见书编号：</td>
+    <td align="center">{{ agree_obj.lending.summary.summary_num }}</td>
+    <td align="center" colspan="2">授信金额：</td>
+    <td align="center" colspan="2">{{ article_amount_str }}万</td>
+</tr>
+<tr>
+    <td align="center">累计已签订额：</td>
+    <td align="center">{{ article_agree_amount_ar_str }}
+        {% if article_agree_amount_ar_str == '0' %}
+
+        {% else %}
+            万元
+        {% endif %}
+    </td>
+    <td align="center" colspan="2">本次金额：</td>
+    <td align="center" colspan="2">{{ agree_amount_str }}万</td>
+</tr>

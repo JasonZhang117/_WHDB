@@ -1,0 +1,50 @@
+body {
+    padding-top: 3pt;
+    /*字体*/
+    font-family: SimSun;
+}
+
+/*合同审签表样式*/
+.sign-tab {
+    /*宽度*/
+    width: 180mm;
+    /*左空白*/
+    margin-left: auto;
+    /*右空白*/
+    margin-right: auto;
+    /*字体大小*/
+    font-size: 11pt;
+    /*{#背景色*/
+    /*background-color: #dddddd;*/
+    /*字间距*/
+    letter-spacing: 0pt;
+    /*行间距*/
+    line-height: 15pt;
+    /*字体*/
+    /*font-family: "宋体";*/
+}
+
+/*换页打印*/
+.split {
+    page-break-after: always;
+}
+
+table {
+    width: 100%;
+    /*行间距*/
+    line-height: 16pt;
+}
+
+td {
+    border: 1.5px solid black;
+    height: 24pt;
+}
+
+th {
+    border: 1.5px soli black;
+    height: 24pt;
+}
+
+.cc {
+    text-align: center;
+}
