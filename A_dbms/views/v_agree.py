@@ -576,3 +576,31 @@ def mortgage_app(request, agree_id, warrant_id): #抵押申请预览
 
 
     return render(request, 'dbms/agree/preview-mortgage_app.html', locals())
+
+
+
+# -------------------------顺位抵押知晓函预览-------------------------#
+@login_required
+@authority
+@agree_right
+def letter_knowing(request, agree_id, warrant_id): #顺位抵押知晓函预览
+    current_url_name = resolve(request.path).url_name  # 获取当前URL_NAME
+    authority_list = request.session.get('authority_list')  # 获取当前用户的所有权限
+    menu_result = MenuHelper(request).menu_data_list()
+
+    agree_obj = models.Agrees.objects.get(id=agree_id)
+    warrant_obj = models.Warrants.objects.get(id=warrant_id)
+
+    AGREE_TYP_D = models.Agrees.AGREE_TYP_D  # 担保公司合同类型
+    AGREE_TYP_X = models.Agrees.AGREE_TYP_X  # 小贷公司合同类型
+
+    agree_amount_cn = convert(agree_obj.agree_amount)  # 转换为金额大写
+    agree_amount_str = amount_s(agree_obj.agree_amount)  # 元转换为万元并去掉小数点后面的零
+    agree_amount_y = amount_y(agree_obj.agree_amount)  # 元转换为万元并去掉小数点后面的零
+    agree_term_cn = convert_num(agree_obj.agree_term)  # 合同期限转大写
+    agree_copy_cn = convert_num(agree_obj.agree_copies)
+
+    UN, ADD, CNB = un_dex(agree_obj.agree_typ)  # 不同合同种类下主体适用
+
+
+    return render(request, 'dbms/agree/preview-letter-knowing.html', locals())

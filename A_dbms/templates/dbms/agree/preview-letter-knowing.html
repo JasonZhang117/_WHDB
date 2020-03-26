@@ -1,0 +1,22 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ agree_obj.agree_num }}</title>
+    <link rel="stylesheet" media="screen" href="{% static 'dbms/css/agree-letter-knowing.css' %}">
+    <link rel="stylesheet" media="print" href="{% static 'dbms/css/agree-letter-knowing.css' %}">
+    <script src="{% static 'js/jquery-3.3.1.min.js' %}"></script>
+</head>
+<body>
+<div class="contain-result">
+    <div class="tt" align="center"><strong>知晓函</strong></div>
+    <p>_________________________________：</p>
+    <p>产权人<u>{% for ownership in warrant_obj.ownership_warrant.all %}{% if forloop.first %}{{ ownership.owner.name }}{% else %}、{{ ownership.owner.name }}{% endif %}{% endfor %}</u>位于<u>{{ warrant_obj.house_warrant.house_locate }}</u>的房产，产权证号：<u>{% for ownership in warrant_obj.ownership_warrant.all %}{% if forloop.first %}{{ ownership.ownership_num }}{% else %}、{{ ownership.ownership_num }}{% endif %}{% endfor %}</u>，建筑面积：<u>{{ warrant_obj.house_warrant.house_area }}</u>平方米，已办理抵押登记，债务金额为：<u>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</u>，不动产登记证明为：<u>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</u>，抵押权人为：<u>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</u>。</p>
+    <p>现我公司已知晓并同意办理该房屋后顺位抵押登记。</p>
+    </br>
+    <div style="text-align: right">{{ UN}}</div>
+    <div style="text-align: right">&nbsp&nbsp&nbsp&nbsp年&nbsp&nbsp月&nbsp&nbsp日</div>
+</div>
+</body>
+</html>

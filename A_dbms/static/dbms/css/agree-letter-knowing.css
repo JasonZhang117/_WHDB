@@ -1,0 +1,91 @@
+body {
+    padding-top: 3pt;
+    /*字体*/
+    font-family: 宋体;
+}
+
+.contain-result {
+    /*页面宽度*/
+    width: 180mm;
+    /*左空白*/
+    margin-left: auto;
+    /*右空白*/
+    margin-right: auto;
+    /*字体大小*/
+    font-size: 14pt;
+    /*背景色 */
+    /*background-color: #dddddd;*/
+    /*字间距*/
+    letter-spacing: 0pt;
+    /*行间距*/
+    line-height: 40pt;
+    /*背景图片*/
+    /*background-image: url("../images/agree_dark_line.png");*/
+    /*background-repeat: repeat-y;*/
+    /*两端对齐文本*/
+
+}
+
+p {
+    margin-top: 12pt;
+    margin-bottom: 12pt;
+    /*缩进*/
+    text-indent: 28pt;
+    /*两端对齐文本*/
+    text-align: justify;
+    text-justify: distribute;
+    text-align-last: left;
+    -moz-text-align-last: left; /* 针对 Firefox 的代码 */
+}
+
+/*换页打印*/
+.split {
+    page-break-after: always;
+}
+
+/*标题*/
+.tt {
+    text-align: center;
+    font-size: 21pt;
+    font-weight: bold;
+    padding-top: 5mm;
+    padding-bottom: 5mm;
+}
+/*标题*/
+.ff {
+    text-align: center;
+    font-size: 21pt;
+    font-weight: bold;
+    /*padding-top: 15mm;*/
+    padding-bottom: 5mm;
+}
+/*签字样本标题*/
+.ts {
+    text-align: center;
+    font-size: 21pt;
+    font-weight: bold;
+    /*padding-top: 15mm;*/
+    /*padding-bottom: 5mm;*/
+}
+
+/*签字样本行高*/
+.trs {
+    height: 60pt;
+}
+
+/*声明人及日期*/
+.sm {
+    padding-left: 230pt;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    /*行间距*/
+    line-height: 15pt;
+}
+
+tr, td, th {
+    border: 1px solid black;
+    height: 24pt;
+}

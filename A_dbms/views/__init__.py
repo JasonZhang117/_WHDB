@@ -22,7 +22,7 @@ from .v_appraisal_act import (
     single_quota_ajax, lending_change_ajax, lending_del_ajax, lending_order_ajax, article_change_ajax)
 # ----------------------v_agree合同管理视图--------------------#
 from .v_agree import (agree, agree_scan, agree_preview, counter_preview, agree_sign_preview, result_preview,
-                        supplementary_preview, mortgage_app)
+                        supplementary_preview, mortgage_app, letter_knowing)
 from .v_agree_act import (agree_add_ajax, counter_add_ajax, agree_sign_ajax, counter_del_ajax, agree_edit_ajax,
                           result_state_ajax, result_del_ajax, agree_save_ajax, counter_save_ajax, supple_save_ajax,
                           agree_del_ajax, promise_add_ajax)
