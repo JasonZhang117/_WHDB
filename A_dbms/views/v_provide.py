@@ -11,7 +11,7 @@ from django.urls import resolve
 from _WHDB.views import (MenuHelper, authority, amount_s, amount_y, convert, convert_num,
                          agree_list_screen, agree_right, notify_list_screen, provide_list_screen,
                          notify_right, provide_right)
-
+from dateutil.relativedelta import relativedelta
 
 # -----------------------放款管理---------------------#
 @login_required
@@ -485,20 +485,49 @@ def provide_scan(request, provide_id):  # 查看放款
     provide_list = models.Provides.objects.filter(id=provide_id)
     provide_obj = provide_list.first()
 
-    today_str = str(datetime.date.today())
-    form_repayment_add = forms.FormRepaymentAdd(initial={'repayment_date': today_str})
-    form_compensatory_add = forms.FormCompensatoryAdd(initial={'compensatory_date': today_str})
-    date_th_later = datetime.date.today() + datetime.timedelta(days=30)  # 30天后的日期
-    form_track_plan = forms.FormTrackPlan(initial={'plan_date': str(date_th_later)})
-    form_track_add = forms.FormTrackAdd()
-    provide_state_change_data = {'provide_status': provide_obj.provide_status}
-    form_change_provide_state = forms.FormProvideStateChange(initial=provide_state_change_data)
-    date_year_later = datetime.date.today() + datetime.timedelta(days=365)  # 30天后的日期
+    provide_agree_obj = provide_obj.notify.agree
+    agree_amount = provide_agree_obj.agree_amount #合同金额
+    repay_method = provide_agree_obj.repay_method #还款方式
+    agree_rate = float(provide_agree_obj.agree_rate)/1000 #小贷月利率
+    agree_term = provide_agree_obj.agree_term #期数
+    agree_start_date = provide_agree_obj.agree_start_date #起始日
+    agree_due_date = provide_agree_obj.agree_due_date #到期日
+    early_repayment_obj_list = provide_obj.track_provide.filter(track_typ=21) #分期还款情况
 
+    term_amt = round((agree_amount*(agree_rate)*(1+agree_rate)**agree_term)/((1+agree_rate)**agree_term-1),2) #每期还款额
+    prin = agree_amount #剩余本金
+    total_int = 0.0 #利息总额
+    total_amount = 0.0 #本金累计
+    for i in range(1,agree_term+1):
+        term_int = round(prin * agree_rate, 2) # 当期利息：上一期本金*利率
+        term_prin = round(term_amt - term_int,2) #当期本金 = 每期还款额 - 当期利息
+        if i == agree_term:
+            term_prin = prin #当期本金 = 剩余本金
+        term_amt = round(term_prin + term_int, 2)
+        prin = round(prin - term_prin, 2)           # 剩余本金=上期剩余本金-当期还本金
+        total_int = round(total_int +  term_int, 2)
+        total_amount = round(total_amount +  term_prin, 2)
+        ddd = agree_start_date + relativedelta(months=i)
+        print('ddd:',i,ddd,term_amt,term_prin,term_int,prin,total_int,total_amount)
+
+
+
+    today_str = str(datetime.date.today())
+    date_th_later = datetime.date.today() + datetime.timedelta(days=30)  # 30天后的日期
+    date_year_later = datetime.date.today() + datetime.timedelta(days=365)  # 一年后的日期
+
+
+    form_repayment_add = forms.FormRepaymentAdd(initial={'repayment_date': today_str}) #还款form
+    form_compensatory_add = forms.FormCompensatoryAdd(initial={'compensatory_date': today_str}) #代偿form
+    form_track_plan = forms.FormTrackPlan(initial={'plan_date': str(date_th_later)})
+    form_track_add = forms.FormTrackAdd() #跟踪计划form
+    provide_state_change_data = {'provide_status': provide_obj.provide_status}
+    form_change_provide_state = forms.FormProvideStateChange(initial=provide_state_change_data) #放款状态修改form
     form_extension_data = {'extension_amount': provide_obj.provide_balance,
                            'extension_date': today_str,
                            'extension_due_date': str(date_year_later), }
-    form_extension = forms.FormExtensionAdd(initial=form_extension_data)
+    form_extension = forms.FormExtensionAdd(initial=form_extension_data) #展期form
+
     return render(request, 'dbms/provide/provide-scan.html', locals())
 
 

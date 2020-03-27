@@ -125,9 +125,13 @@ class Extension(models.Model):  # 放款
 class Repayments(models.Model):  # 还款
     provide = models.ForeignKey(to='Provides', verbose_name="放款",
                                 on_delete=models.PROTECT,
-                                limit_choices_to={'provide_status': 1},
+                                # limit_choices_to={'provide_status': 1},
                                 related_name='repayment_provide')
-    repayment_money = models.FloatField(verbose_name='还款金额')
+    repayment_money = models.FloatField(verbose_name='当期还款本金额', default=0)
+    repayment_int = models.FloatField(verbose_name='当期还款利息额', default=0)
+    repayment_pen = models.FloatField(verbose_name='当期还款违约金额', default=0) 
+    repayment_amt = models.FloatField(verbose_name='当期还款总额额', default=0) 
+
     repayment_date = models.DateField(verbose_name='还款日期', default=datetime.date.today)
     repaymentor = models.ForeignKey(to='Employees', verbose_name="_创建者",
                                     on_delete=models.PROTECT,
@@ -137,6 +141,7 @@ class Repayments(models.Model):  # 还款
     class Meta:
         verbose_name_plural = '项目-还款'  # 指定显示名称
         db_table = 'dbms_repayments'  # 指定数据表的名称
+        ordering = ['-repaymentdate', ]
 
     def __str__(self):
         return '%s_%s' % (self.provide, self.repayment_money)
@@ -171,12 +176,22 @@ class Pigeonholes(models.Model):  # 归档
 class Track(models.Model):  #
     provide = models.ForeignKey(to='Provides', verbose_name="放款",
                                 on_delete=models.PROTECT,
-                                limit_choices_to={'provide_status': 1},
+                                # limit_choices_to={'provide_status': 1},
                                 related_name='track_provide')
     TRACK_TYP_LIST = [(11, '日常跟踪'), (21, '分期还款'), (25, '分期付息'), (31, '提前还款'), ]
     track_typ = models.IntegerField(verbose_name='跟踪类型', choices=TRACK_TYP_LIST, default=11)
     plan_date = models.DateField(verbose_name='计划日期')
     proceed = models.CharField(verbose_name='跟踪内容', max_length=128)
+
+    term_pri = models.FloatField(verbose_name='应收当期本金', default=0) #应收当期本金
+    term_int = models.FloatField(verbose_name='应收当期利息', default=0) #应收当期利息
+    term_pen = models.FloatField(verbose_name='应收当期违约金', default=0) #应收当期违约金
+    term_amt = models.FloatField(verbose_name='应收当期总额', default=0) #应收当期总额
+    term_pried = models.FloatField(verbose_name='已收当期本金', default=0) #已收当期本金
+    term_inted = models.FloatField(verbose_name='已收当期利息', default=0) #已收当期利息
+    term_pened = models.FloatField(verbose_name='已收当期违约金', default=0) #已收当期违约金
+    term_amted = models.FloatField(verbose_name='已收当期总额', default=0) #已收当期总额
+
     track_date = models.DateField(verbose_name='跟踪日期', null=True, blank=True)
     condition = models.TextField(verbose_name='跟踪情况', null=True, blank=True)
     TRACK_STATE_LIST = [(11, '待跟踪'), (21, '已跟踪'), ]
@@ -189,7 +204,35 @@ class Track(models.Model):  #
     class Meta:
         verbose_name_plural = '放款-跟踪'  # 指定显示名称
         db_table = 'dbms_track'  # 指定数据表的名称
-        ordering = ['plan_date', ]
+        ordering = ['-plan_date', ]
 
     def __str__(self):
         return '%s_%s' % (self.provide, self.track_date)
+
+
+# ------------------------持续跟踪模型--------------------------#
+class TrackEX(models.Model):  #
+    track = models.ForeignKey(to='Track', verbose_name="跟踪",
+                                on_delete=models.PROTECT,
+                                # limit_choices_to={'provide_status': 1},
+                                related_name='ex_track')
+    
+    ex_pried = models.FloatField(verbose_name='已收当期本金', default=0) #已收当期本金
+    ex_inted = models.FloatField(verbose_name='已收当期利息', default=0) #已收当期利息
+    ex_pened = models.FloatField(verbose_name='已收当期违约金', default=0) #已收当期违约金
+    ex_tamted = models.FloatField(verbose_name='已收当期总额', default=0) #已收当期总额
+
+    ex_track_date = models.DateField(verbose_name='跟踪日期')
+    ex_condition = models.TextField(verbose_name='跟踪情况', null=True, blank=True)
+    ex_trackor = models.ForeignKey(to='Employees', verbose_name="_创建者",
+                                on_delete=models.PROTECT,
+                                related_name='ex_employee')
+    ex_date = models.DateField(verbose_name='_创建日期', default=datetime.date.today)
+
+    class Meta:
+        verbose_name_plural = '放款-跟踪-EX'  # 指定显示名称
+        db_table = 'dbms_trackex'  # 指定数据表的名称
+        ordering = ['-ex_track_date', ]
+
+    def __str__(self):
+        return '%s_%s' % (self.track, self.ex_track_date)
