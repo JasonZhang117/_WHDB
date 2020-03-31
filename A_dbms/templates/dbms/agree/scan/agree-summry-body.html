@@ -18,6 +18,8 @@
     调查费（%）：{{ agree_obj.investigation_fee }}</label>
 <label class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
     期限（月）：{{ agree_obj.agree_term }}</label>
+<label class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
+    还款方式：{{ agree_obj.get_repay_method_display }}</label>
 {% if PAGE_TITLE == '合同详情' %}
     <label class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
         合同份数：{{ agree_obj.agree_copies }}</label>

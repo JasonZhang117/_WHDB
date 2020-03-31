@@ -153,11 +153,13 @@ class FormPigeonholeNumAdd(dform.ModelForm):
 class FormTrackPlan(dform.ModelForm):
     class Meta:
         model = models.Track
-        fields = ['track_typ', 'plan_date', 'proceed']
+        fields = ['track_typ', 'plan_date', 'proceed', 'term_pri']
         widgets = {
             'track_typ': dform.Select(attrs={'class': 'form-control'}),
             'plan_date': dform.DateInput(attrs={'class': 'form-control', 'type': 'date'}),
-            'proceed': dform.TextInput(attrs={'class': 'form-control', 'placeholder': '跟踪事项'}), }
+            'proceed': dform.TextInput(attrs={'class': 'form-control', 'placeholder': '跟踪事项'}),
+            'term_pri': dform.NumberInput(attrs={'class': 'form-control', 'placeholder': '还款金额'}),
+             }
 
 
 # -----------------------跟踪计划-------------------------#

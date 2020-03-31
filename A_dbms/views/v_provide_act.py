@@ -1104,17 +1104,29 @@ def track_plan_ajax(request):
         today_str = str(datetime.date.today())  # 元组转换为字符串
         today_tup = time.strptime(today_str, "%Y-%m-%d")  # 字符串转换为元组
         today_stamp = time.mktime(today_tup)  # 元组转换为时间戳
+        # if today_stamp - date_stamp > 0:
+        #     response['status'] = False
+        #     response['message'] = '计划失败，计划的时间不能早于现在的时间!'
 
-        if today_stamp - date_stamp > 0:
+        '''TRACK_TYP_LIST = [(11, '日常跟踪'), (21, '分期还本'), (25, '等额本息'), (31, '按月付息'), ]'''
+        track_typ=track_plan_cleaned['track_typ']
+        term_pri=track_plan_cleaned['term_pri']
+        ttt = models.Track.objects.filter(plan_date=plan_date,track_typ=track_typ)
+        if ttt:
             response['status'] = False
-            response['message'] = '计划失败，计划的时间不能早于现在的时间!'
+            response['message'] = '同一日期不能设置一个以上同类型的提示!'
+        elif not track_typ in [11, 21]:
+            response['status'] = False
+            response['message'] = '人工设置跟踪类型，只能选择：“日常跟踪”或“分期还本”!'
         else:
+            if track_typ in [11,]:
+                term_pri = 0
             try:
                 '''REVIEW_STATE_LIST = ((1, '待保后'), (11, '待报告'), (21, '已完成'))'''
                 with transaction.atomic():
                     models.Track.objects.create(provide=provide_obj, plan_date=plan_date,
                                                 proceed=track_plan_cleaned['proceed'],
-                                                track_typ=track_plan_cleaned['track_typ'],
+                                                track_typ=track_typ, term_pri=term_pri,
                                                 trackor=request.user)
                 response['message'] = '跟踪计划成功！'
             except Exception as e:
@@ -1126,6 +1138,62 @@ def track_plan_ajax(request):
         response['forme'] = form_track_plan.errors
     result = json.dumps(response, ensure_ascii=False)
     return HttpResponse(result)
+
+# -----------------------------生成还款计划ajax------------------------------#
+@login_required
+@authority
+def repay_plan_ajax(request):
+    response = {'status': True, 'message': None, 'forme': None, }
+    post_data_str = request.POST.get('postDataStr')
+    post_data = json.loads(post_data_str)
+
+    provide_list = models.Provides.objects.filter(id=post_data['provide_id'])
+    provide_obj = provide_list.first()
+    form_track_plan = forms.FormTrackPlan(post_data)
+    if form_track_plan.is_valid():
+        track_plan_cleaned = form_track_plan.cleaned_data
+        plan_date = track_plan_cleaned['plan_date']
+
+        date_tup = time.strptime(str(plan_date), "%Y-%m-%d")  # 字符串转换为元组
+        date_stamp = time.mktime(date_tup)  # 元组转换为时间戳
+        today_str = str(datetime.date.today())  # 元组转换为字符串
+        today_tup = time.strptime(today_str, "%Y-%m-%d")  # 字符串转换为元组
+        today_stamp = time.mktime(today_tup)  # 元组转换为时间戳
+        # if today_stamp - date_stamp > 0:
+        #     response['status'] = False
+        #     response['message'] = '计划失败，计划的时间不能早于现在的时间!'
+
+        '''TRACK_TYP_LIST = [(11, '日常跟踪'), (21, '分期还本'), (25, '等额本息'), (31, '按月付息'), ]'''
+        track_typ=track_plan_cleaned['track_typ']
+        term_pri=track_plan_cleaned['term_pri']
+        ttt = models.Track.objects.filter(plan_date=plan_date,track_typ=track_typ)
+        if ttt:
+            response['status'] = False
+            response['message'] = '同一日期不能设置一个以上同类型的提示!'
+        elif not track_typ in [11, 21]:
+            response['status'] = False
+            response['message'] = '人工设置跟踪类型，只能选择：“日常跟踪”或“分期还本”!'
+        else:
+            if track_typ in [11,]:
+                term_pri = 0
+            try:
+                '''REVIEW_STATE_LIST = ((1, '待保后'), (11, '待报告'), (21, '已完成'))'''
+                with transaction.atomic():
+                    models.Track.objects.create(provide=provide_obj, plan_date=plan_date,
+                                                proceed=track_plan_cleaned['proceed'],
+                                                track_typ=track_typ, term_pri=term_pri,
+                                                trackor=request.user)
+                response['message'] = '跟踪计划成功！'
+            except Exception as e:
+                response['status'] = False
+                response['message'] = '跟踪计划失败：%s' % str(e)
+    else:
+        response['status'] = False
+        response['message'] = '表单信息有误！！！'
+        response['forme'] = form_track_plan.errors
+    result = json.dumps(response, ensure_ascii=False)
+    return HttpResponse(result)
+
 
 
 # -----------------------取消跟踪ajax-------------------------#

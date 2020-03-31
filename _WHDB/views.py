@@ -7,6 +7,7 @@ from django.urls import resolve, reverse
 from django.db.models import Q, F
 from django.db.models import Avg, Min, Sum, Max, Count
 from django.db import transaction
+from dateutil.relativedelta import relativedelta
 
 UND = '成都武侯中小企业融资担保有限责任公司'
 UNX = '成都武侯武兴小额贷款有限责任公司'
@@ -645,3 +646,147 @@ def radio(credit_amount:float,g_value:float):
     else:
         redioer = 0
     return redioer
+
+
+def mc(v_start_date,v_end_date):
+    v_year_end=v_end_date.year
+    v_month_end=v_end_date.month
+    v_year_start=v_start_date.year
+    v_month_start=v_start_date.month
+    interval=(v_year_end - v_year_start) * 12 + (v_month_end - v_month_start)
+    return interval
+
+
+def epi(provide_obj): #还款计划
+    provide_agree_obj = provide_obj.notify.agree
+    provide_amount = provide_obj.provide_money #放款金额
+    repay_method = provide_agree_obj.repay_method #还款方式
+    try:
+        agree_rate = float(provide_agree_obj.agree_rate)/1000 #小贷月利率
+        agree_rate_day = agree_rate/30 #小贷日月利率
+    except ValueError:
+        agree_rate = 0.01
+        agree_rate_day = 0.001
+    inst_repay_prin_list = provide_obj.track_provide.filter(track_typ=21) #分期还本列表
+    inst_repay_prin_amt = inst_repay_prin_list.aggregate(Sum('term_pri'))['term_pri__sum'] #分期还款总额额
+    if inst_repay_prin_amt:
+        de_repay_prin = round(provide_amount - inst_repay_prin_amt,2)
+    else:
+        de_repay_prin = 0.0
+    provide_start_date = provide_obj.provide_date #起始日
+    provide_due_date = provide_obj.due_date #到期日
+    provide_term = mc(provide_start_date,provide_due_date) #借款期数（月）
+    start_date_er = datetime.date(provide_start_date.year,provide_start_date.month,20) #放款月20日
+    start_date_er_dif = (start_date_er - provide_start_date).days #放款当月20日与放款日天差
+    due_date_er = datetime.date(provide_due_date.year,provide_due_date.month,20) #到期月20日
+    due_date_er_dif = (due_date_er - provide_due_date).days #到期日与到期当月20日比较
+    kkkk = []
+
+    prin = provide_amount #剩余本金
+    total_int = 0.0 #利息累计
+    total_prin = 0.0 #本金累计
+    if repay_method == 21: #等额本息
+        term_amt = round((provide_amount*(agree_rate)*(1+agree_rate)**provide_term)/((1+agree_rate)**provide_term-1),2) #每期还款额
+        for i in range(1,provide_term+1):
+            term_int = round(prin * agree_rate, 2) # 当期利息：上一期本金*利率
+            term_prin = round(term_amt - term_int,2) #当期本金 = 每期还款额 - 当期利息
+            if i == provide_term:
+                term_prin = prin #当期本金 = 剩余本金
+            term_amt = round(term_prin + term_int, 2) #当期本息合计
+            prin = round(prin - term_prin, 2)           # 剩余本金=上期剩余本金-当期还本金
+            total_int = round(total_int +  term_int, 2) #利息累计
+            total_prin = round(total_prin +  term_prin, 2) #本金累计
+            ddd = provide_start_date + relativedelta(months=i) #还款月
+            if i == 1:
+                pro_aft_dif = (ddd - provide_start_date).days
+                kkkk.append({'ddd_pro':provide_start_date,'ddd_aft':ddd,'pro_aft_dif':pro_aft_dif,
+                'term_int':term_int,'term_prin':term_prin,'term_amt':term_amt,
+                'total_int':total_int,'prin':prin,})
+            else:
+                pro_aft_dif = (ddd - ddd_pro).days
+                kkkk.append({'ddd_pro':ddd_pro,'ddd_aft':ddd,'pro_aft_dif':pro_aft_dif,
+                'term_int':term_int,'term_prin':term_prin,'term_amt':term_amt,
+                'total_int':total_int,'prin':prin,})
+            ddd_pro = ddd
+    elif repay_method == 11 or  repay_method == 31: #按月付息，到期还本
+        iiii = [] #分期还本列表
+        for inst_repay_prin in inst_repay_prin_list:
+            iiii.append({'ddd_aft':inst_repay_prin.plan_date,'term_prin':inst_repay_prin.term_pri,'track_typ':inst_repay_prin.track_typ,})
+        pppp = [] #按月付息列表
+        for i in range(1,provide_term+1):
+            ddd = provide_start_date + relativedelta(months=i) #还款月
+            ddd_er = datetime.date(ddd.year,ddd.month,20) #还款月20日
+            
+            if start_date_er_dif > 0: #如果放款在当月20日之前（当月20日要收息）
+                i += 1
+                if i == 2:
+                    pppp.append({'ddd_aft':start_date_er,'term_prin':0,'track_typ':31,})
+                    pppp.append({'ddd_aft':ddd_er,'term_prin':0,'track_typ':31,})
+                elif i == (provide_term+1):
+                    if due_date_er_dif >= 0: #如果到期在当月20日之前
+                        pppp.append({'ddd_aft':provide_due_date,'term_prin':0,'track_typ':31,})
+                    else:
+                        pppp.append({'ddd_aft':ddd_er,'term_prin':0,'track_typ':31,})
+                        pppp.append({'ddd_aft':provide_due_date,'term_prin':0,'track_typ':31,})
+                else:
+                    pppp.append({'ddd_aft':ddd_er,'term_prin':0,'track_typ':31,})
+            else:
+                if i == 1:
+                    pppp.append({'ddd_aft':ddd_er,'term_prin':0,'track_typ':31,})
+                elif i == (provide_term):
+                    if due_date_er_dif >= 0: #如果到期在当月20日之前
+                        pppp.append({'ddd_aft':provide_due_date,'term_prin':0,'track_typ':31,})
+                    else:
+                        pppp.append({'ddd_aft':ddd_er,'term_prin':0,'track_typ':31,})
+                        pppp.append({'ddd_aft':provide_due_date,'term_prin':0,'track_typ':31,})
+                else:
+                    pppp.append({'ddd_aft':ddd_er,'term_prin':0,'track_typ':31,})
+        iipp = [] #分期还本与按月付息合并
+        ddd_pro = provide_start_date #计息起始日
+        term_int_p = 0 #本期计息额
+        for pp in pppp:
+            ddd_aft_pp = pp['ddd_aft']
+            term_int_j = 0 #本期计息额
+            term_pri_p = 0 #本期还本额
+            for ii in iiii:
+                ddd_aft_ii = ii['ddd_aft']
+                ddd_aft_ip_dif = (ddd_aft_ii - ddd_aft_pp).days #分期还款日与计息日比较
+                ddd_pro_ip_dif = (ddd_aft_ii - ddd_pro).days #分期还款日与起息日比较
+                if ddd_aft_ip_dif < 0 and ddd_pro_ip_dif > 0: #分期还款日在起息日与计息日之间
+                    prin = prin - ii['term_prin'] #剩余本金
+                    iipp.append({'ddd_pro':ddd_pro,'ddd_aft':ii['ddd_aft'],'term_prin':ii['term_prin'],'track_typ':ii['track_typ'],
+                                'term_int_j':ii['term_prin'],'prin':prin,})
+                    ddd_pro = ii['ddd_aft']
+                    term_int_p = prin
+                elif ddd_aft_ip_dif == 0: #分期还款日与计息日为同一天
+                    term_int_p = prin
+                    term_pri_p = pp['term_prin'] + ii['term_prin']
+                    prin = prin - term_pri_p #剩余本金
+            term_int_j = term_int_p #当期计息额
+            iipp.append({'ddd_pro':ddd_pro,'ddd_aft':pp['ddd_aft'],'term_prin':term_pri_p,'track_typ':pp['track_typ'],
+                        'term_int_j':term_int_j,'prin':prin,})
+            ddd_pro = pp['ddd_aft']
+            term_int_p = prin
+        iipp_len = len(iipp)
+        iipp_len_i = 0
+        for iip in iipp:
+            iipp_len_i += 1
+            term_amt = 0 #本息合计
+            ddd_pro = iip['ddd_pro'] #起息日
+            ddd_aft = iip['ddd_aft'] #计息日
+            term_int_j = iip['term_int_j'] #计息日本金
+            pro_aft_dif = (ddd_aft-ddd_pro).days #计息天数
+            term_int = round(term_int_j * agree_rate_day * pro_aft_dif, 2) #当期利息
+            total_int = round(total_int +term_int, 2) #利息累计
+            term_amt = round(term_int_j + term_int, 2)
+            if iipp_len_i == iipp_len:
+                term_prin = de_repay_prin
+                prin = round(iip['prin'] -term_prin, 2)
+            else:
+                term_prin = iip['term_prin']
+                prin = iip['prin']
+            kkkk.append({'ddd_pro':ddd_pro,'ddd_aft':ddd_aft,'pro_aft_dif':pro_aft_dif,
+                        'term_int':term_int,'term_prin':term_prin,'term_amt':term_amt,
+                        'total_int':total_int,'prin':prin,
+                        'term_int_j':term_int_j,'track_typ':iip['track_typ'],})
+    return kkkk

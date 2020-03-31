@@ -178,7 +178,7 @@ class Track(models.Model):  #
                                 on_delete=models.PROTECT,
                                 # limit_choices_to={'provide_status': 1},
                                 related_name='track_provide')
-    TRACK_TYP_LIST = [(11, '日常跟踪'), (21, '分期还款'), (25, '分期付息'), (31, '提前还款'), ]
+    TRACK_TYP_LIST = [(11, '日常跟踪'), (21, '分期还本'), (25, '等额本息'), (31, '按月付息'), ]
     track_typ = models.IntegerField(verbose_name='跟踪类型', choices=TRACK_TYP_LIST, default=11)
     plan_date = models.DateField(verbose_name='计划日期')
     proceed = models.CharField(verbose_name='跟踪内容', max_length=128)
@@ -204,10 +204,10 @@ class Track(models.Model):  #
     class Meta:
         verbose_name_plural = '放款-跟踪'  # 指定显示名称
         db_table = 'dbms_track'  # 指定数据表的名称
-        ordering = ['-plan_date', ]
+        ordering = ['plan_date', ]
 
     def __str__(self):
-        return '%s_%s' % (self.provide, self.track_date)
+        return '%s_%s' % (self.provide, self.term_pri)
 
 
 # ------------------------持续跟踪模型--------------------------#

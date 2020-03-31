@@ -6,6 +6,7 @@
             <th>跟踪类型</th>
             <th>计划日期</th>
             <th>跟踪内容</th>
+            <th>还本计划</th>
             <th>跟踪日期</th>
             <th>跟踪情况</th>
             <th>跟踪状态</th>
@@ -19,6 +20,7 @@
                 <td>{{ track.get_track_typ_display}}</td>
                 <td>{{ track.plan_date }}</td>
                 <td>{{ track.proceed }}</td>
+                <td align="right">{{ track.term_pri }}</td>
                 <td>{{ track.track_date|default_if_none:'' }}</td>
                 <td>{{ track.condition|default_if_none:'' }}</td>
                 <td>{{ track.get_track_state_display }}</td>
