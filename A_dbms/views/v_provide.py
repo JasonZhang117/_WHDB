@@ -726,6 +726,8 @@ def repay_plan_prew(request, provide_id): #还款计划预览
     repay_method_FQ = [11,31] #按月付息
 
     repay_plan_list =  provide_obj.track_provide.all().filter(track_typ__in=[21,25,31])
+    if not repay_plan_list:
+        return HttpResponse("请先生成还款计划")
     term_pri_total = round(repay_plan_list.aggregate(Sum('term_pri'))['term_pri__sum'],2) #应收本金合计
     term_int_total = round(repay_plan_list.aggregate(Sum('term_int'))['term_int__sum'],2) #应收利息合计
 
