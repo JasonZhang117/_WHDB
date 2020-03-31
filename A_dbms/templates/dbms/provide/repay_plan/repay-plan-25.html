@@ -1,0 +1,85 @@
+<div class="sign-tab">
+    <div class="split">
+        <div style="font-size: 18pt">
+            <div style="padding-bottom: 15pt" align="center"><strong>成都武侯武兴小额贷款有限责任公司</strong></div>
+            <div style="padding-bottom: 5pt" align="center"><strong>还款计算表</strong></div>
+        </div>
+        <table style="font-size: 11pt">
+            <tr>
+                <td class="cc" colspan="2">借款客户</td>
+                <td class="cc" colspan="2">
+                    {{provide_obj.notify.agree.lending.summary.custom.name}}
+                    {% if provide_obj.notify.agree.lending.summary.borrower.all %}
+                        {% for borrower in provide_obj.notify.agree.lending.summary.borrower.all %}
+                            、{{ borrower.name }}
+                        {% endfor %}
+                    {% endif %}
+                </td>
+                <td class="cc">合同编号</td>
+                <td class="cc" colspan="2">{{ provide_obj.notify.agree.agree_num }}</td>
+            </tr>
+            <tr>
+                <td class="cc" colspan="2">贷款金额</td>
+                <td class="cc">{{ provide_money_cn }}</td>
+                <td class="cc">贷款利率(‰)</td>
+                <td class="cc">{{ provide_obj.notify.agree.agree_rate }}</td>
+                <td class="cc">贷款期限(月)</td>
+                <td class="cc">{{ agree_term_cn }}</td>
+            </tr>
+            <tr>
+                <td class="cc" colspan="2">贷款发放日</td>
+                <td class="cc">{{ provide_obj.provide_date }}</td>
+                <td class="cc">贷款到期日</td>
+                <td class="cc">{{ provide_obj.due_date }}</td>
+                <td class="cc" colspan="2">单位：人民币元</td>
+            </tr>
+            <tr>
+                <td class="cc">序号</td>
+                <td class="cc">收息日期</td>
+                <td class="cc">本金</td>
+                <td class="cc">利息</td>
+                <td class="cc">月还款额</td>
+                <td class="cc" colspan="2">剩余本金</td>
+            </tr>
+            {% for repay_plan in repay_plan_list %}
+            <tr>
+                <td class="cc">{{forloop.counter}}</td>
+                <td class="cc">{{repay_plan.plan_date}}</td>
+                <td class="cc">{{repay_plan.term_pri}}</td>
+                <td class="cc">{{repay_plan.term_int}}</td>
+                <td class="cc">{{repay_plan.term_amt}}</td>
+                <td class="cc" colspan="2">{{repay_plan.prin}}</td>
+            </tr>
+            {% endfor %}
+            <tr>
+                <td class="cc" colspan="2">合计</td>
+                <td class="cc">{{term_pri_total}}</td>
+                <td class="cc">{{term_int_total}}</td>
+                <td class="cc"></td>
+                <td class="cc" colspan="2"></td>
+            </tr>
+        </table>
+        </br>
+        </br>
+        <div style="font-size: 12pt">
+            <div>
+                <p>请于每期收息日当天,督促客户将利息缴存于如下账户:</P>
+                <p>开户行名称:成都武侯武兴小额贷款有限责任公司</P>
+                <p>开户银行:浙商银行成都分行</P>
+                <p>缴存账户:6510 0000 1012 0100 764921</P>
+            </div>
+            </br>
+            </br>
+            </br>
+            <div style="padding-left: 255pt">
+                <p>财务部：</P>
+                </br>
+                <p>风控部：</P>
+                </br>
+                <p>业务部：</P>
+                </br>
+                <p>日期：______年___月___日</P>
+            </div>
+        <div>
+    </div>
+</div>

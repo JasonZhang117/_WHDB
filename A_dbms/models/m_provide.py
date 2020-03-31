@@ -187,10 +187,18 @@ class Track(models.Model):  #
     term_int = models.FloatField(verbose_name='应收当期利息', default=0) #应收当期利息
     term_pen = models.FloatField(verbose_name='应收当期违约金', default=0) #应收当期违约金
     term_amt = models.FloatField(verbose_name='应收当期总额', default=0) #应收当期总额
+
+    ddd_pro = models.DateField(verbose_name='起始日期',null=True, blank=True)
+    pro_aft_dif = models.IntegerField(verbose_name='计息天数', default=0) #计息天数
+    total_int = models.FloatField(verbose_name='利息累计', default=0) #利息累计
+    prin = models.FloatField(verbose_name='剩余本金', default=0) #剩余本金
+    term_int_j = models.FloatField(verbose_name='计息本金', default=0) #
+
     term_pried = models.FloatField(verbose_name='已收当期本金', default=0) #已收当期本金
     term_inted = models.FloatField(verbose_name='已收当期利息', default=0) #已收当期利息
     term_pened = models.FloatField(verbose_name='已收当期违约金', default=0) #已收当期违约金
     term_amted = models.FloatField(verbose_name='已收当期总额', default=0) #已收当期总额
+
 
     track_date = models.DateField(verbose_name='跟踪日期', null=True, blank=True)
     condition = models.TextField(verbose_name='跟踪情况', null=True, blank=True)

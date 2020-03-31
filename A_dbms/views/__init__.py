@@ -39,12 +39,12 @@ from .v_warrant_act import (
 # ----------------------v_provide放款管理视图--------------------#
 from .v_provide import (
     provide_agree, provide_agree_scan, provide_agree_notify, provide, provide_scan, overdue, soondue, notify,
-    notify_scan, provide_follow, track_overdue, track_soondue, notify_show, )
+    notify_scan, provide_follow, track_overdue, track_soondue, notify_show,repay_plan_prew )
 from .v_provide_act import (
     counter_sign_ajax, ascertain_add_ajax, notify_add_ajax, notify_edit_ajax, notify_del_ajax, provide_add_ajax,
     provide_del_ajax, repayment_add_ajax, repayment_del_ajax, track_plan_ajax, track_del_ajax, track_update_ajax,
     sign_all_ajax, provide_agree_sign_ajax, change_agree_state_ajax, provide_state_change_ajax,
-    provide_extension_ajax)
+    provide_extension_ajax,repay_plan_ajax)
 
 from .v_pigeonhole import pigeonhole, pigeonhole_scan, pigeonhole_overdue
 from .v_pigeonhole_act import pigeonhole_add_ajax

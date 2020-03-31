@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}{{ provide_obj.provide_money. }}{% endblock %}
+{% block extra-css %}
+    <link rel="stylesheet" media="screen" href="{% static 'dbms/css/agree-mortgage-style.css' %}">
+    <link rel="stylesheet" media="print" href="{% static 'dbms/css/agree-mortgage-style.css' %}">
+{% endblock %}
+{% block body %}
+    {% if provide_obj.notify.agree.repay_method in repay_method_DE %}
+        {% include 'dbms/provide/repay_plan/repay-plan-25.html' %}
+    {% elif provide_obj.notify.agree.repay_method in repay_method_FQ %}
+        {% include 'dbms/provide/repay_plan/repay-plan-25.html' %}
+    {% endif %}
+{% endblock %}

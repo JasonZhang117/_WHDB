@@ -484,10 +484,6 @@ def provide_scan(request, provide_id):  # 查看放款
     provide_list = models.Provides.objects.filter(id=provide_id)
     provide_obj = provide_list.first()
 
-    kkkk = epi(provide_obj)
-    for kk in kkkk:
-        print(kk)
-
     today_str = str(datetime.date.today())
     date_th_later = datetime.date.today() + datetime.timedelta(days=30)  # 30天后的日期
     date_year_later = datetime.date.today() + datetime.timedelta(days=365)  # 一年后的日期
@@ -708,3 +704,29 @@ def track_soondue(request, *args, **kwargs):  #
         p_list = paginator.page(paginator.num_pages)
 
     return render(request, 'dbms/provide/provide-track-overdu.html', locals())
+
+
+# -------------------------还款计划预览-------------------------#
+@login_required
+@authority
+def repay_plan_prew(request, provide_id): #还款计划预览
+    current_url_name = resolve(request.path).url_name  # 获取当前URL_NAME
+    authority_list = request.session.get('authority_list')  # 获取当前用户的所有权限
+    menu_result = MenuHelper(request).menu_data_list()
+    job_list = request.session.get('job_list')  # 获取当前用户的所有角色
+    PAGE_TITLE = '还款计划表'
+
+    provide_list = models.Provides.objects.filter(id=provide_id)
+    provide_obj = provide_list.first()
+
+    provide_money_cn = convert(provide_obj.provide_money)  #金额大写
+    agree_term_cn = convert_num(provide_obj.notify.agree.agree_term)  #期限大写
+
+    repay_method_DE = [21,] #等额本息
+    repay_method_FQ = [11,31] #按月付息
+
+    repay_plan_list =  provide_obj.track_provide.all().filter(track_typ__in=[21,25,31])
+    term_pri_total = round(repay_plan_list.aggregate(Sum('term_pri'))['term_pri__sum'],2) #应收本金合计
+    term_int_total = round(repay_plan_list.aggregate(Sum('term_int'))['term_int__sum'],2) #应收利息合计
+
+    return render(request, 'dbms/provide/repay-plan-prew.html', locals())

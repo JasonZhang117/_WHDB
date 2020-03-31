@@ -1,0 +1,47 @@
+<script>
+    $(function () {
+        bindrRepayPlanB();
+        bindRepayPlanModalOk();
+    });
+
+    function bindrRepayPlanB() {
+        $('#repayPlanB').click(function () {
+            $('#repayPlanModal').modal('show');
+        })
+    }
+
+    function bindRepayPlanModalOk() {
+        $('#repayPlanModalOk').click(function () {
+            var postData = {};
+            $('#repayPlanModal').find('input,select').each(function () {
+                var v = $(this).val();
+                var n = $(this).attr('name');
+                postData[n] = v;
+            });
+            var postDataStr = JSON.stringify(postData);
+            $.ajax({
+                url: '/dbms/provide/repay/plan/',
+                type: 'POST',
+                traditional: true,
+                data: {'postDataStr': postDataStr},
+                dataType: 'JSON',
+                success: function (arg) {
+                    if (arg.status) {
+                        $('#repayPlanModal').modal('hide');
+                        alert(arg.message);
+                        {% comment %} window.location.href = arg.skip; {% endcomment %}
+                        window.location.reload();
+                    } else {
+                        alert(arg.message);
+                    }
+                }
+            })
+        })
+    }
+</script>
+
+
+
+
+
+

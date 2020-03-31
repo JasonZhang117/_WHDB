@@ -9,7 +9,7 @@ from django.db.models import Q, F
 from django.db.models import Avg, Min, Sum, Max, Count
 from django.urls import resolve
 from _WHDB.views import MenuHelper
-from _WHDB.views import authority, radio
+from _WHDB.views import authority, radio, epi
 
 
 # -----------------------------合同签订ajax------------------------------#
@@ -1146,51 +1146,44 @@ def repay_plan_ajax(request):
     response = {'status': True, 'message': None, 'forme': None, }
     post_data_str = request.POST.get('postDataStr')
     post_data = json.loads(post_data_str)
-
-    provide_list = models.Provides.objects.filter(id=post_data['provide_id'])
+    provide_id = post_data['provide_id']
+    provide_list = models.Provides.objects.filter(id=provide_id)
     provide_obj = provide_list.first()
-    form_track_plan = forms.FormTrackPlan(post_data)
-    if form_track_plan.is_valid():
-        track_plan_cleaned = form_track_plan.cleaned_data
-        plan_date = track_plan_cleaned['plan_date']
 
-        date_tup = time.strptime(str(plan_date), "%Y-%m-%d")  # 字符串转换为元组
-        date_stamp = time.mktime(date_tup)  # 元组转换为时间戳
-        today_str = str(datetime.date.today())  # 元组转换为字符串
-        today_tup = time.strptime(today_str, "%Y-%m-%d")  # 字符串转换为元组
-        today_stamp = time.mktime(today_tup)  # 元组转换为时间戳
-        # if today_stamp - date_stamp > 0:
-        #     response['status'] = False
-        #     response['message'] = '计划失败，计划的时间不能早于现在的时间!'
+    kkkk = epi(provide_obj)
 
-        '''TRACK_TYP_LIST = [(11, '日常跟踪'), (21, '分期还本'), (25, '等额本息'), (31, '按月付息'), ]'''
-        track_typ=track_plan_cleaned['track_typ']
-        term_pri=track_plan_cleaned['term_pri']
-        ttt = models.Track.objects.filter(plan_date=plan_date,track_typ=track_typ)
-        if ttt:
+    for k in kkkk:
+        track_typ = k['track_typ'] #计划类型
+        plan_date = k['ddd_aft'] #计息日
+        term_pri = round(k['term_prin'],2) #当期还本
+        term_int =  round(k['term_int'],2) #当期付息
+        term_amt =  round(k['term_amt'],2) #当期合计
+        ddd_pro = k['ddd_pro']  #起始日期
+        pro_aft_dif = k['pro_aft_dif'] #计息天数
+        total_int =  round(k['total_int'],2) #利息累计
+        prin =  round(k['prin'],2) #剩余本金
+        term_int_j = round(k['term_int_j'],2) #计息本金
+
+        try:
+            '''REVIEW_STATE_LIST = ((1, '待保后'), (11, '待报告'), (21, '已完成'))'''
+            with transaction.atomic():
+                default = {
+                    'provide_id': provide_id, 'track_typ':track_typ,
+                    'plan_date': plan_date, 'term_pri': term_pri,
+                    'term_int': term_int, 'term_amt': term_amt, 
+                    'pro_aft_dif': pro_aft_dif, 'term_int': term_int, 
+                    'term_int': term_int, 'prin': prin, 
+                    'term_int_j': term_int_j, 
+                    'trackor': request.user}
+                track, created = models.Track.objects.update_or_create(
+                    provide_id=provide_id, 
+                    plan_date=plan_date,track_typ=track_typ,
+                    defaults=default)
+            response['message'] = '还款计划以生成！'
+        except Exception as e:
             response['status'] = False
-            response['message'] = '同一日期不能设置一个以上同类型的提示!'
-        elif not track_typ in [11, 21]:
-            response['status'] = False
-            response['message'] = '人工设置跟踪类型，只能选择：“日常跟踪”或“分期还本”!'
-        else:
-            if track_typ in [11,]:
-                term_pri = 0
-            try:
-                '''REVIEW_STATE_LIST = ((1, '待保后'), (11, '待报告'), (21, '已完成'))'''
-                with transaction.atomic():
-                    models.Track.objects.create(provide=provide_obj, plan_date=plan_date,
-                                                proceed=track_plan_cleaned['proceed'],
-                                                track_typ=track_typ, term_pri=term_pri,
-                                                trackor=request.user)
-                response['message'] = '跟踪计划成功！'
-            except Exception as e:
-                response['status'] = False
-                response['message'] = '跟踪计划失败：%s' % str(e)
-    else:
-        response['status'] = False
-        response['message'] = '表单信息有误！！！'
-        response['forme'] = form_track_plan.errors
+            response['message'] = '还款计划以生成失败：%s' % str(e)
+
     result = json.dumps(response, ensure_ascii=False)
     return HttpResponse(result)
 

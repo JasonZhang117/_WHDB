@@ -5,11 +5,12 @@
             <th>序号</th>
             <th>跟踪类型</th>
             <th>计划日期</th>
-            <th>跟踪内容</th>
             <th>还本计划</th>
-            <th>跟踪日期</th>
-            <th>跟踪情况</th>
-            <th>跟踪状态</th>
+            <th>付息计划</th>
+            {% comment %} <th>跟踪日期</th> {% endcomment %}
+            {% comment %} <th>跟踪情况</th> {% endcomment %}
+            <th>备注</th>
+            <th>状态</th>
             <th>操作</th>
         </tr>
         </thead>
@@ -19,10 +20,11 @@
                 <td>{{ forloop.counter }}</td>
                 <td>{{ track.get_track_typ_display}}</td>
                 <td>{{ track.plan_date }}</td>
-                <td>{{ track.proceed }}</td>
                 <td align="right">{{ track.term_pri }}</td>
-                <td>{{ track.track_date|default_if_none:'' }}</td>
-                <td>{{ track.condition|default_if_none:'' }}</td>
+                <td align="right">{{ track.term_int }}</td>
+                {% comment %} <td>{{ track.track_date|default_if_none:'' }}</td> {% endcomment %}
+                {% comment %} <td>{{ track.condition|default_if_none:'' }}</td> {% endcomment %}
+                <td>{{ track.proceed }}</td>
                 <td>{{ track.get_track_state_display }}</td>
                 <td>
                     <a class="btn btn-primary btn-xs addTrackB">跟踪</a>

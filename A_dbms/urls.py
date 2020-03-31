@@ -148,6 +148,9 @@ urlpatterns = [
     path('provide/follow/<int:agree_state>/', views.provide_follow, name='provide_follow'),
     path('provide/track/overdue/', views.track_overdue, name='provide_track_overdue'),
     path('provide/track/soondue/', views.track_soondue, name='provide_track_soondue'),
+    path('provide/repay/plan/<int:provide_id>/', views.repay_plan_prew, name='provide_repay_plan_prew'),
+
+
 
     path('provide/agree/sign/', views.provide_agree_sign_ajax, name='provide_agree_sign_ajax'),
     path('provide/counter/sign/', views.counter_sign_ajax, name='provide_counter_sign_ajax'),
@@ -164,6 +167,7 @@ urlpatterns = [
     path('provide/track/plan/', views.track_plan_ajax, name='provide_track_plan_ajax'),
     path('provide/track/del/', views.track_del_ajax, name='provide_track_del_ajax'),
     path('provide/track/update/', views.track_update_ajax, name='provide_track_update_ajax'),
+    path('provide/repay/plan/', views.repay_plan_ajax, name='provide_repay_plan_ajax'),
 
     path('provide/agree/change/', views.change_agree_state_ajax, name='provide_change_agree_state_ajax'),
     path('provide/state/change/', views.provide_state_change_ajax, name='provide_state_change_ajax'),

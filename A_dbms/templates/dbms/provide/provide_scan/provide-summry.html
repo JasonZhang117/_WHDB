@@ -2,6 +2,9 @@
     <div class="panel-heading">
         <label>放款情况</label>
         <label class="navbar-right">
+            <a class="btn btn-primary btn-sm" id="repayPlanB">生成还款计划</a>
+            <a class="btn btn-success btn-sm " id="repayPlanTableB" target="_blank"
+               href="{% url 'dbms:provide_repay_plan_prew' provide_id=provide_obj.id %}">还款计划</a>
             <a class="btn btn-primary btn-sm " id="trackPlanB">跟踪计划 </a>
             <a class="btn btn-primary btn-sm " id="repaymentB">还款 </a>
             <a class="btn btn-primary btn-sm " id="extensionB">展期 </a>
