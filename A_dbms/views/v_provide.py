@@ -491,7 +491,7 @@ def provide_scan(request, provide_id):  # 查看放款
     form_repayment_add = forms.FormRepaymentAdd(initial={'repayment_date': today_str}) #还款form
     form_compensatory_add = forms.FormCompensatoryAdd(initial={'compensatory_date': today_str}) #代偿form
     form_track_plan = forms.FormTrackPlan(initial={'plan_date': str(date_th_later)})
-    form_track_add = forms.FormTrackAdd() #跟踪计划form
+    form_track_add = forms.FormTrackEXAdd(initial={'ex_track_date': today_str}) #跟踪计划form
     provide_state_change_data = {'provide_status': provide_obj.provide_status}
     form_change_provide_state = forms.FormProvideStateChange(initial=provide_state_change_data) #放款状态修改form
     form_extension_data = {'extension_amount': provide_obj.provide_balance,

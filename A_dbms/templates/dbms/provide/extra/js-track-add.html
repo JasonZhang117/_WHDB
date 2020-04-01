@@ -7,7 +7,10 @@
     function bindaAddTrackB() {
         $('#provide-track-tb').on('click', '.addTrackB', function () {
             trackNid = $(this).parent().parent().attr('track-nid');
-            $('#trackId').val(trackNid);
+            $('#addTrackModalId').val(trackNid);
+            $('#id_ex_pried').val($(this).parent().parent().attr('track-pri'));
+            $('#id_ex_inted').val($(this).parent().parent().attr('track-int'));
+            $('#id_ex_pened').val($(this).parent().parent().attr('track-pen'));
             $('#addTrackModal').modal('show');
         })
     }
@@ -23,7 +26,6 @@
             postData['condition'] = $('#id_condition').val();
 
             var postDataStr = JSON.stringify(postData);
-            console.log(postDataStr);
             $.ajax({
                 url: '/dbms/provide/track/update/',
                 type: 'POST',
@@ -36,8 +38,11 @@
                         window.location.reload();
                     } else {
                         alert(arg.message);
-                        $('#e_track_date').text(arg.forme.track_date);
-                        $('#e_condition').text(arg.forme.condition);
+                        $('#e_ex_pried').text(arg.forme.ex_pried);
+                        $('#e_ex_inted').text(arg.forme.ex_inted);
+                        $('#e_ex_pened').text(arg.forme.ex_pened);
+                        $('#e_ex_track_date').text(arg.forme.ex_track_date);
+                        $('#e_ex_condition').text(arg.forme.ex_condition);
                     }
                 }
             })

@@ -13,6 +13,7 @@ urlpatterns = [
     path('article/lending/<int:article_id>/<int:lending_id>/', views.article_scan_lending, name='article_scan_lending'),
     path('article/endor/<int:article_id>/', views.endor_list_scan, name='article_endor_list_scan'),
 
+
     path('article/add/', views.article_add_ajax, name='article_add_ajax'),
     path('article/del/', views.article_del_ajax, name='article_del_ajax'),
     path('article/edit/', views.article_edit_ajax, name='article_edit_ajax'),

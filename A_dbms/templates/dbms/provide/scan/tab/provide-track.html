@@ -5,8 +5,9 @@
             <th>序号</th>
             <th>跟踪类型</th>
             <th>计划日期</th>
-            <th>还本计划</th>
-            <th>付息计划</th>
+            <th>应收本金</th>
+            <th>应收利息</th>
+            <th>应收违约金</th>
             {% comment %} <th>跟踪日期</th> {% endcomment %}
             {% comment %} <th>跟踪情况</th> {% endcomment %}
             <th>备注</th>
@@ -16,18 +17,19 @@
         </thead>
         <tbody id="provide-track-tb">
         {% for track in provide_obj.track_provide.all %}
-            <tr track-nid="{{ track.id }}">
+            <tr track-nid="{{ track.id }}" track-pri="{{ track.term_pri }}" track-int="{{ track.term_int }}" track-pen="{{ track.term_pen }}">
                 <td>{{ forloop.counter }}</td>
                 <td>{{ track.get_track_typ_display}}</td>
                 <td>{{ track.plan_date }}</td>
                 <td align="right">{{ track.term_pri }}</td>
                 <td align="right">{{ track.term_int }}</td>
+                <td align="right">{{ track.term_pen }}</td>
                 {% comment %} <td>{{ track.track_date|default_if_none:'' }}</td> {% endcomment %}
                 {% comment %} <td>{{ track.condition|default_if_none:'' }}</td> {% endcomment %}
                 <td>{{ track.proceed }}</td>
                 <td>{{ track.get_track_state_display }}</td>
                 <td>
-                    <a class="btn btn-primary btn-xs addTrackB">跟踪</a>
+                    <a class="btn btn-primary btn-xs addTrackB">结清</a>
                     <a class="btn btn-primary btn-xs delTrackB">删除</a>
                 </td>
             <tr>

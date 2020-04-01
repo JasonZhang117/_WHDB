@@ -202,7 +202,7 @@ class Track(models.Model):  #
 
     track_date = models.DateField(verbose_name='跟踪日期', null=True, blank=True)
     condition = models.TextField(verbose_name='跟踪情况', null=True, blank=True)
-    TRACK_STATE_LIST = [(11, '待跟踪'), (21, '已跟踪'), ]
+    TRACK_STATE_LIST = [(11, '未结清'), (21, '已结清'), ]
     track_state = models.IntegerField(verbose_name='_跟踪状态', choices=TRACK_STATE_LIST, default=11)
     trackor = models.ForeignKey(to='Employees', verbose_name="_创建者",
                                 on_delete=models.PROTECT,
@@ -231,7 +231,7 @@ class TrackEX(models.Model):  #
     ex_tamted = models.FloatField(verbose_name='已收当期总额', default=0) #已收当期总额
 
     ex_track_date = models.DateField(verbose_name='跟踪日期')
-    ex_condition = models.TextField(verbose_name='跟踪情况', null=True, blank=True)
+    ex_condition = models.TextField(verbose_name='备注', null=True, blank=True)
     ex_trackor = models.ForeignKey(to='Employees', verbose_name="_创建者",
                                 on_delete=models.PROTECT,
                                 related_name='ex_employee')

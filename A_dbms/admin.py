@@ -254,7 +254,15 @@ class ExtensionAdmin(admin.ModelAdmin):
 
 admin.site.register(models.Extension, ExtensionAdmin)  # 展期
 
-admin.site.register(models.Track)  # 跟踪
+class TrackAdmin(admin.ModelAdmin):
+    list_display = ('track_typ', 'plan_date', 'term_pri', 'term_int', 'term_pen', 'term_amt',
+                    'term_pried','term_inted','term_pened','term_amted',)
+admin.site.register(models.Track, TrackAdmin)  # 跟踪
+
+class TrackEXAdmin(admin.ModelAdmin):
+    list_display = ('ex_pried', 'ex_inted', 'ex_pened', 'ex_tamted', 'ex_track_date', 'ex_condition',
+                    'ex_trackor',)
+admin.site.register(models.TrackEX, TrackEXAdmin)  # 跟踪详情
 
 
 class NotifyAdmin(admin.ModelAdmin):

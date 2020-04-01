@@ -676,6 +676,10 @@ def epi(provide_obj): #还款计划
     provide_start_date = provide_obj.provide_date #起始日
     provide_due_date = provide_obj.due_date #到期日
     provide_term = mc(provide_start_date,provide_due_date) #借款期数（月）
+    if provide_term < 1: #贷款期限不跨月
+        provide_term_for = 1
+    else:
+        provide_term_for = provide_term
     start_date_er = datetime.date(provide_start_date.year,provide_start_date.month,20) #放款月20日
     start_date_er_dif = (start_date_er - provide_start_date).days #放款当月20日与放款日天差
     due_date_er = datetime.date(provide_due_date.year,provide_due_date.month,20) #到期月20日
@@ -716,8 +720,9 @@ def epi(provide_obj): #还款计划
         iiii = [] #分期还本列表
         for inst_repay_prin in inst_repay_prin_list:
             iiii.append({'ddd_aft':inst_repay_prin.plan_date,'term_prin':inst_repay_prin.term_pri,'track_typ':inst_repay_prin.track_typ,})
+        
         pppp = [] #按月付息列表
-        for i in range(1,provide_term+1):
+        for i in range(1,provide_term_for+1):
             ddd = provide_start_date + relativedelta(months=i) #还款月
             ddd_er = datetime.date(ddd.year,ddd.month,20) #还款月20日
             
@@ -725,8 +730,9 @@ def epi(provide_obj): #还款计划
                 i += 1
                 if i == 2:
                     pppp.append({'ddd_aft':start_date_er,'term_prin':0,'track_typ':31,})
-                    pppp.append({'ddd_aft':ddd_er,'term_prin':0,'track_typ':31,})
-                elif i == (provide_term+1): #最后一期
+                    if provide_term == 1:# 一共只有一期，跨越
+                        pppp.append({'ddd_aft':provide_due_date,'term_prin':0,'track_typ':31,})
+                elif i == (provide_term_for+1): #最后一期
                     if due_date_er_dif >= 0: #如果到期在当月20日之前
                         pppp.append({'ddd_aft':provide_due_date,'term_prin':0,'track_typ':31,})
                     else:
@@ -734,10 +740,14 @@ def epi(provide_obj): #还款计划
                         pppp.append({'ddd_aft':provide_due_date,'term_prin':0,'track_typ':31,})
                 else:
                     pppp.append({'ddd_aft':ddd_er,'term_prin':0,'track_typ':31,})
-            else:
+            else: #如果放款在当月20日之之后（当月20日不收息）
                 if i == 1:
-                    pppp.append({'ddd_aft':ddd_er,'term_prin':0,'track_typ':31,})
-                elif i == (provide_term): #最后一期
+                    if provide_term == 0: #一共只有一期，不跨月
+                        print('provide_term == 0: #一共只有一期，不跨越')
+                        pppp.append({'ddd_aft':provide_due_date,'term_prin':0,'track_typ':31,})
+                    else:
+                        pppp.append({'ddd_aft':ddd_er,'term_prin':0,'track_typ':31,})
+                elif i == (provide_term_for): #最后一期
                     if due_date_er_dif >= 0: #如果到期在当月20日之前
                         pppp.append({'ddd_aft':provide_due_date,'term_prin':0,'track_typ':31,})
                     else:
@@ -745,6 +755,8 @@ def epi(provide_obj): #还款计划
                         pppp.append({'ddd_aft':provide_due_date,'term_prin':0,'track_typ':31,})
                 else:
                     pppp.append({'ddd_aft':ddd_er,'term_prin':0,'track_typ':31,})
+
+
         iipp = [] #分期还本与按月付息合并
         ddd_pro = provide_start_date #计息起始日
         term_int_p = provide_amount #本期计息额

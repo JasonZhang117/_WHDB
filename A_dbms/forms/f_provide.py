@@ -169,3 +169,16 @@ class FormTrackAdd(dform.ModelForm):
         fields = ['condition']
         widgets = {
             'condition': dform.Textarea(attrs={'class': 'form-control', 'placeholder': '跟踪情况'}), }
+
+
+# -----------------------计划还款明细-------------------------#
+class FormTrackEXAdd(dform.ModelForm):
+    class Meta:
+        model = models.TrackEX
+        fields = ['ex_pried','ex_inted','ex_pened','ex_track_date','ex_condition',]
+        widgets = {
+            'ex_pried': dform.NumberInput(attrs={'class': 'form-control', 'placeholder': '本金金额'}),
+            'ex_inted': dform.NumberInput(attrs={'class': 'form-control', 'placeholder': '利息金额'}),
+            'ex_pened': dform.NumberInput(attrs={'class': 'form-control', 'placeholder': '违约金金额'}),
+            'ex_track_date': dform.DateInput(attrs={'class': 'form-control', 'type': 'date'}),
+            'ex_condition': dform.Textarea(attrs={'class': 'form-control', 'rows': '2', 'placeholder': '备注'}), }
