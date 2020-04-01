@@ -1216,26 +1216,49 @@ def track_update_ajax(request):
     response = {'status': True, 'message': None, 'forme': None, }
     post_data_str = request.POST.get('postDataStr')
     post_data = json.loads(post_data_str)
-
+    provide_list = models.Provides.objects.filter(id=post_data['provide_id'])
     track_list = models.Track.objects.filter(id=post_data['track_id'])
+    track_obj = track_list.first()
+    track_ex_list = track_obj.ex_track.all()
+    ex_pried_amont = track_ex_list.aggregate(Sum('ex_pried'))['ex_pried__sum'] #已付当期本金合计
+    ex_inted_amont = track_ex_list.aggregate(Sum('ex_inted'))['ex_inted__sum'] #已付当期利息合计
+    ex_pened_amont = track_ex_list.aggregate(Sum('ex_pened'))['ex_pened__sum'] #已付当期违约金合计
 
+    form_track_ex_add = forms.FormTrackEXAdd(post_data)
     form_track_add = forms.FormTrackAdd(post_data)
-    if form_track_add.is_valid():
-        track_cleaned = form_track_add.cleaned_data
+    if form_track_ex_add.is_valid() and form_track_add.is_valid():
+        track_cleaned = form_track_ex_add.cleaned_data
+        track_ed = form_track_add.cleaned_data
         today_str = str(datetime.date.today())
         try:
             with transaction.atomic():
+                track_ex_obj = models.TrackEX.objects.create(
+                    track=track_obj,
+                    ex_pried=track_cleaned['ex_pried'],
+                    ex_inted=track_cleaned['ex_inted'],
+                    ex_pened=track_cleaned['ex_pened'],
+                    ex_track_date=track_cleaned['ex_track_date'],
+                    ex_condition=track_cleaned['ex_condition'],
+                    ex_trackor=request.user)
+                
+                track_ex_list = track_obj.ex_track.all()
+                ex_pried_amont = track_ex_list.aggregate(Sum('ex_pried'))['ex_pried__sum'] #已付当期本金合计
+                ex_inted_amont = track_ex_list.aggregate(Sum('ex_inted'))['ex_inted__sum'] #已付当期利息合计
+                ex_pened_amont = track_ex_list.aggregate(Sum('ex_pened'))['ex_pened__sum'] #已付当期违约金合计
+
                 '''TRACK_STATE_LIST = [(11, '待跟踪'), (21, '已跟踪'), ]'''
-                track_list.update(track_date=today_str, track_state=21,
-                                  condition=track_cleaned['condition'],
-                                  trackor=request.user)  # 更新保后信息
-            response['message'] = '跟踪成功！'
+                track_list.update(term_pried=ex_pried_amont, 
+                                    term_inted=ex_inted_amont,
+                                    term_pened=ex_pened_amont,
+                                    track_state=track_ed['track_state']
+                                    )  # 更新保后信息
+            response['message'] = '还款登记成功！'
         except Exception as e:
             response['status'] = False
-            response['message'] = '跟踪失败：%s' % str(e)
+            response['message'] = '还款登记失败：%s' % str(e)
     else:
         response['status'] = False
         response['message'] = '表单信息有误！！！'
-        response['forme'] = form_track_add.errors
+        response['forme'] = form_track_ex_add.errors
     result = json.dumps(response, ensure_ascii=False)
     return HttpResponse(result)

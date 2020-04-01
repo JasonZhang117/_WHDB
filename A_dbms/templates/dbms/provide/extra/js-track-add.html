@@ -23,7 +23,7 @@
                 var n = $(this).attr('name');
                 postData[n] = v;
             });
-            postData['condition'] = $('#id_condition').val();
+            postData['ex_condition'] = $('#id_ex_condition').val();
 
             var postDataStr = JSON.stringify(postData);
             $.ajax({

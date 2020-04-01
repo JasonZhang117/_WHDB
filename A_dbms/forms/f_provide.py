@@ -166,9 +166,9 @@ class FormTrackPlan(dform.ModelForm):
 class FormTrackAdd(dform.ModelForm):
     class Meta:
         model = models.Track
-        fields = ['condition']
+        fields = ['track_state']
         widgets = {
-            'condition': dform.Textarea(attrs={'class': 'form-control', 'placeholder': '跟踪情况'}), }
+            'track_state': dform.Select(attrs={'class': 'form-control'}),}
 
 
 # -----------------------计划还款明细-------------------------#
@@ -181,4 +181,5 @@ class FormTrackEXAdd(dform.ModelForm):
             'ex_inted': dform.NumberInput(attrs={'class': 'form-control', 'placeholder': '利息金额'}),
             'ex_pened': dform.NumberInput(attrs={'class': 'form-control', 'placeholder': '违约金金额'}),
             'ex_track_date': dform.DateInput(attrs={'class': 'form-control', 'type': 'date'}),
-            'ex_condition': dform.Textarea(attrs={'class': 'form-control', 'rows': '2', 'placeholder': '备注'}), }
+            'ex_condition': dform.Textarea(attrs={'class': 'form-control', 'rows': '2', 'placeholder': '备注'}), 
+            }

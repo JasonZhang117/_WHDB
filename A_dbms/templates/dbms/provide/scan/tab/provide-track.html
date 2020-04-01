@@ -7,7 +7,9 @@
             <th>计划日期</th>
             <th>应收本金</th>
             <th>应收利息</th>
-            <th>应收违约金</th>
+            <th>已收本金</th>
+            <th>已收利息</th>
+            <th>已收违约金</th>
             {% comment %} <th>跟踪日期</th> {% endcomment %}
             {% comment %} <th>跟踪情况</th> {% endcomment %}
             <th>备注</th>
@@ -23,7 +25,9 @@
                 <td>{{ track.plan_date }}</td>
                 <td align="right">{{ track.term_pri }}</td>
                 <td align="right">{{ track.term_int }}</td>
-                <td align="right">{{ track.term_pen }}</td>
+                <td align="right">{{ track.term_pried }}</td>
+                <td align="right">{{ track.term_inted }}</td>
+                <td align="right">{{ track.term_pened }}</td>
                 {% comment %} <td>{{ track.track_date|default_if_none:'' }}</td> {% endcomment %}
                 {% comment %} <td>{{ track.condition|default_if_none:'' }}</td> {% endcomment %}
                 <td>{{ track.proceed }}</td>

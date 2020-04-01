@@ -21,7 +21,6 @@
             });
             postData['supply_detail'] = $('#id_supply_detail').val();
             var postDataStr = JSON.stringify(postData);
-            console.log(postDataStr);
             $.ajax({
                 url: '/dbms/appraisal/supply/add/',
                 type: 'POST',

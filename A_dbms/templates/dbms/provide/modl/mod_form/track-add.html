@@ -1,28 +1,37 @@
-<div id="form_track_add">
+<div id="form_track_ex_add">
     <div class="form-group"><!--本金-->
-        <label for="id_ex_pried" class="col-sm-3 control-label">{{ form_track_add.ex_pried.label }}：</label>
-        <div id="id_ex_pried" class="col-sm-9">{{ form_track_add.ex_pried }}</div>
-        <label id="e_ex_pried" class="pull-right">{{ form_track_add.ex_pried.errors }}</label>
+        <label for="id_ex_pried" class="col-sm-3 control-label">{{ form_track_ex_add.ex_pried.label }}：</label>
+        <div class="col-sm-9">{{ form_track_ex_add.ex_pried }}</div>
+        <label id="e_ex_pried" class="pull-right">{{ form_track_ex_add.ex_pried.errors }}</label>
     </div>
     <div class="form-group"><!--利息-->
-        <label for="id_ex_inted" class="col-sm-3 control-label">{{ form_track_add.ex_inted.label }}：</label>
-        <div id="id_ex_inted" class="col-sm-9">{{ form_track_add.ex_inted }}</div>
-        <label id="e_ex_inted" class="pull-right">{{ form_track_add.ex_inted.errors }}</label>
+        <label for="id_ex_inted" class="col-sm-3 control-label">{{ form_track_ex_add.ex_inted.label }}：</label>
+        <div class="col-sm-9">{{ form_track_ex_add.ex_inted }}</div>
+        <label id="e_ex_inted" class="pull-right">{{ form_track_ex_add.ex_inted.errors }}</label>
     </div>
     <div class="form-group"><!--违约金-->
-        <label for="id_ex_pened" class="col-sm-3 control-label">{{ form_track_add.ex_pened.label }}：</label>
-        <div id="id_ex_pened" class="col-sm-9">{{ form_track_add.ex_pened }}</div>
-        <label id="e_ex_pened" class="pull-right">{{ form_track_add.ex_pened.errors }}</label>
+        <label for="id_ex_pened" class="col-sm-3 control-label">{{ form_track_ex_add.ex_pened.label }}：</label>
+        <div class="col-sm-9">{{ form_track_ex_add.ex_pened }}</div>
+        <label id="e_ex_pened" class="pull-right">{{ form_track_ex_add.ex_pened.errors }}</label>
     </div>
     <div class="form-group"><!--日期-->
-        <label for="id_ex_track_date" class="col-sm-3 control-label">{{ form_track_add.ex_track_date.label }}：</label>
-        <div id="id_ex_track_date" class="col-sm-9">{{ form_track_add.ex_track_date }}</div>
-        <label id="e_ex_track_date" class="pull-right">{{ form_track_add.ex_track_date.errors }}</label>
+        <label for="id_ex_track_date" class="col-sm-3 control-label">{{ form_track_ex_add.ex_track_date.label }}：</label>
+        <div class="col-sm-9">{{ form_track_ex_add.ex_track_date }}</div>
+        <label id="e_ex_track_date" class="pull-right">{{ form_track_ex_add.ex_track_date.errors }}</label>
     </div>
     <div class="form-group"><!--备注-->
-        <label for="id_ex_condition" class="col-sm-3 control-label">{{ form_track_add.ex_condition.label }}：</label>
-        <div id="id_ex_condition" class="col-sm-9">{{ form_track_add.ex_condition }}</div>
-        <label id="e_ex_condition" class="pull-right">{{ form_track_add.ex_condition.errors }}</label>
+        <label for="id_ex_condition" class="col-sm-3 control-label">{{ form_track_ex_add.ex_condition.label }}：</label>
+        <div class="col-sm-9">{{ form_track_ex_add.ex_condition }}</div>
+        <label id="e_ex_condition" class="pull-right">{{ form_track_ex_add.ex_condition.errors }}</label>
     </div>
-
+    <div class="form-group"><!--结清情况-->
+        <label for="id_track_state" class="col-sm-3 control-label">结清情况：</label>
+        <div class="col-sm-9">
+            <select name="track_state" class="form-control" id="id_track_state">
+                <option value="11">未结清</option>
+                <option value="21" selected="">已结清</option>
+            </select>
+        </div>
+        <label id="e_track_state" class="pull-right"></label>
+    </div>
 </div>

@@ -230,7 +230,7 @@ class TrackEX(models.Model):  #
     ex_pened = models.FloatField(verbose_name='已收当期违约金', default=0) #已收当期违约金
     ex_tamted = models.FloatField(verbose_name='已收当期总额', default=0) #已收当期总额
 
-    ex_track_date = models.DateField(verbose_name='跟踪日期')
+    ex_track_date = models.DateField(verbose_name='回款日期')
     ex_condition = models.TextField(verbose_name='备注', null=True, blank=True)
     ex_trackor = models.ForeignKey(to='Employees', verbose_name="_创建者",
                                 on_delete=models.PROTECT,
