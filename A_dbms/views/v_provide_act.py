@@ -757,6 +757,7 @@ def repayment_add_ajax(request):
                         response['message'] = '成功还款,本次放款已全部结清！'
                     else:
                         response['message'] = '成功还款！'
+                    
                     '''notify_repayment_sum，更新放款通知还款情况'''
                     notify_list = models.Notify.objects.filter(provide_notify=provide_obj)  # 放款通知
                     notify_obj = notify_list.first()
@@ -877,6 +878,8 @@ def repayment_add_ajax(request):
                                 notify__agree__branch__cooperator=cooperator_obj).aggregate(
                                 Sum('provide_balance'))['provide_balance__sum']  # 授信银行项下，在保余额
                     cooperator_list.update(amount=round(cooperator_provide_balance_all, 2))
+
+                    
             except Exception as e:
                 response['status'] = False
                 response['message'] = '还款失败：%s' % str(e)
