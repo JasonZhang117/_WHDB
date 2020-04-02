@@ -417,7 +417,8 @@ def notify_scan(request, notify_id):  # 查看放款通知
 
     today_str = datetime.date.today()
     date_th_later = today_str + datetime.timedelta(days=365)
-    form_provide_data = {'provide_date': str(today_str), 'due_date': str(date_th_later)}
+    form_provide_data = {'new_amount': notify_obj.notify_money,
+                'provide_date': str(today_str), 'due_date': str(date_th_later)}
     form_provide_add = forms.FormProvideAdd(initial=form_provide_data)
     form_provide_ex = forms.FormProvideEx()
     form_data = {'contracts_lease': notify_obj.contracts_lease,

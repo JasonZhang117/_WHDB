@@ -724,13 +724,16 @@ def epi(provide_obj): #还款计划
         pppp = [] #按月付息列表
         for i in range(1,provide_term_for+1):
             ddd = provide_start_date + relativedelta(months=i) #还款月
-            ddd_er = datetime.date(ddd.year,ddd.month,20) #还款月20日
-            if start_date_er_dif > 0: #如果放款在当月20日之前（当月20日要收息）
+            ddd_er = datetime.date(ddd.year, ddd.month, 20)  #还款月20日
+            print(ddd_er,provide_term_for,provide_term)
+            if start_date_er_dif > 0:  #如果放款在当月20日之前（当月20日要收息）
                 i += 1
                 if i == 2:
-                    pppp.append({'ddd_aft':start_date_er,'term_prin':0,'track_typ':31,})
-                    if provide_term_for == 1:# 一共只有一期，跨越
-                        pppp.append({'ddd_aft':provide_due_date,'term_prin':0,'track_typ':31,})
+                    pppp.append({'ddd_aft': start_date_er, 'term_prin': 0, 'track_typ': 31,})
+                    if provide_term_for == 1:# 一共只有一期，跨月
+                        pppp.append({'ddd_aft': provide_due_date, 'term_prin': 0, 'track_typ': 31,})
+                    else:
+                        pppp.append({'ddd_aft':ddd_er,'term_prin':0,'track_typ':31,})
                 elif i == (provide_term_for+1): #最后一期
                     if due_date_er_dif >= 0: #如果到期在当月20日之前
                         pppp.append({'ddd_aft':provide_due_date,'term_prin':0,'track_typ':31,})
@@ -741,9 +744,7 @@ def epi(provide_obj): #还款计划
                     pppp.append({'ddd_aft':ddd_er,'term_prin':0,'track_typ':31,})
             else: #如果放款在当月20日之之后（当月20日不收息）
                 if i == 1:
-                    print('if i == 1:')
                     if provide_term == 0: #一共只有一期，不跨月
-                        print('provide_term == 0: #一共只有一期，不跨月')
                         pppp.append({'ddd_aft':provide_due_date,'term_prin':0,'track_typ':31,})
                     else:
                         pppp.append({'ddd_aft':ddd_er,'term_prin':0,'track_typ':31,})
