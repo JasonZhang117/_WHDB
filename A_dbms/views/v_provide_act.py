@@ -709,7 +709,7 @@ def provide_del_ajax(request):  # 删除放款ajax
             cooperator_list.update(amount=round(cooperator_provide_balance_all, 2))
 
         response['message'] = '借款信息删除成功！'
-    except ValueError as e:
+    except Exception as e:
         response['status'] = False
         response['message'] = '还款信息删除失败：%s' % str(e)
     result = json.dumps(response, ensure_ascii=False)

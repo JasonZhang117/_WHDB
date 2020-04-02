@@ -32,6 +32,7 @@
                 dataType: 'JSON',
                 data: {'postDataStr': postDataStr},
                 success: function (arg) {
+                    console.log(arg);
                     if (arg.status) {
                         $('#delProvideModal').modal('hide');
                         alert(arg.message);
