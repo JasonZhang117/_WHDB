@@ -1101,6 +1101,11 @@ def track_update_ajax(request):
         Sum('ex_inted'))['ex_inted__sum'] #已付当期利息合计
     ex_pened_amont = track_ex_list.aggregate(
         Sum('ex_pened'))['ex_pened__sum'] #已付当期违约金合计
+    if provide_obj.provide_status in [11, 21]:
+        response['status'] = False
+        response['message'] = '放款状态为：%s,无法生成还款计划！！'
+        result = json.dumps(response, ensure_ascii=False)
+        return HttpResponse(result)
 
     form_track_ex_add = forms.FormTrackEXAdd(post_data)
     form_track_add = forms.FormTrackAdd(post_data)

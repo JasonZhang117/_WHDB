@@ -498,7 +498,7 @@ def provide_scan(request, provide_id):  # 查看放款
     form_track_plan = forms.FormTrackPlan(
         initial={'plan_date': str(date_th_later)})
     form_track_ex_add = forms.FormTrackEXAdd(
-        initial={'ex_track_date': today_str}) #跟踪计划form
+        initial={'ex_track_date': today_str}) #跟踪form
     form_track_add = forms.FormTrackAdd() #跟踪计划form
     provide_state_change_data = {'provide_status': provide_obj.provide_status}
     form_change_provide_state = forms.FormProvideStateChange(
