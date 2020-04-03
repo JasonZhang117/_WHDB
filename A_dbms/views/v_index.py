@@ -123,7 +123,10 @@ def index(request):
             Q(provide__notify__agree__lending__summary__assistant=request.user))
     track_soondue_count = track_soondue.count()
     # 逾期跟踪
-    track_overdue = models.Track.objects.filter(track_state=11, plan_date__lt=datetime.date.today())
+    track_overdue = models.Track.objects.filter(
+        track_state=11,
+        provide__provide_status__in=[1,15,21],
+        plan_date__lt=datetime.date.today())
     if '项目经理' in job_list:
         track_overdue = track_overdue.filter(
             Q(provide__notify__agree__lending__summary__director=request.user) |
