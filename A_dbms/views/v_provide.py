@@ -648,7 +648,7 @@ def track_overdue(request, *args, **kwargs):  #
     PAGE_TITLE = '逾期跟踪'
     track_overdue = models.Track.objects.filter(
         track_state=11,
-        plan_date__lt=datetime.date.today())
+        provide__provide_status__in=[1, 15, 21],
         plan_date__lt=datetime.date.today())
     # track_overdue = provide_list_screen(track_overdue, job_list, request.user)
 
