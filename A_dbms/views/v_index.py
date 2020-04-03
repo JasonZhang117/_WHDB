@@ -116,7 +116,10 @@ def index(request):
     '''TRACK_STATE_LIST = [(11, '待跟踪'), (21, '已跟踪'), ]'''
     # 7日内的跟踪计划
     track_soondue = models.Track.objects.filter(
-        track_state=11, plan_date__gte=datetime.date.today(), plan_date__lt=date_7_later)
+        track_state=11,
+        provide__provide_status__in=[1, 15, 21],
+        plan_date__gte=datetime.date.today(),
+        plan_date__lt=date_7_later)
     if '项目经理' in job_list:
         track_soondue = track_soondue.filter(
             Q(provide__notify__agree__lending__summary__director=request.user) |
@@ -125,7 +128,7 @@ def index(request):
     # 逾期跟踪
     track_overdue = models.Track.objects.filter(
         track_state=11,
-        provide__provide_status__in=[1,15,21],
+        provide__provide_status__in=[1, 15, 21],
         plan_date__lt=datetime.date.today())
     if '项目经理' in job_list:
         track_overdue = track_overdue.filter(

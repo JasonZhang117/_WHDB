@@ -646,7 +646,10 @@ def track_overdue(request, *args, **kwargs):  #
     menu_result = MenuHelper(request).menu_data_list()
     job_list = request.session.get('job_list')  # 获取当前用户的所有角色
     PAGE_TITLE = '逾期跟踪'
-    track_overdue = models.Track.objects.filter(track_state=11, plan_date__lt=datetime.date.today())
+    track_overdue = models.Track.objects.filter(
+        track_state=11,
+        plan_date__lt=datetime.date.today())
+        plan_date__lt=datetime.date.today())
     # track_overdue = provide_list_screen(track_overdue, job_list, request.user)
 
     '''搜索'''
@@ -688,7 +691,10 @@ def track_soondue(request, *args, **kwargs):  #
     PAGE_TITLE = '一周跟踪'
     date_7_later = datetime.date.today() + datetime.timedelta(days=7)  # 7天后的日期
     track_soondue = models.Track.objects.filter(
-        track_state=11, plan_date__gte=datetime.date.today(), plan_date__lt=date_7_later)
+        track_state=11,
+        provide__provide_status__in=[1, 15, 21],
+        plan_date__gte=datetime.date.today(),
+        plan_date__lt=date_7_later)
     '''搜索'''
     search_key = request.GET.get('_s')
     if search_key:

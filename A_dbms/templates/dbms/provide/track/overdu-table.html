@@ -7,6 +7,10 @@
             <th>放款银行</th>
             <th>放款金额</th>
             <th>计划日期</th>
+            <th>类型</th>
+            <th>还本</th>
+            <th>付息</th>
+            <th>违约金</th>
             <th>跟踪内容</th>
         </tr>
         </thead>
@@ -19,6 +23,10 @@
                 <td>{{ track.provide.notify.agree.branch.short_name }}</td>
                 <td align="right">{{ track.provide.provide_money }}</td>
                 <td>{{ track.plan_date }}</td>
+                <td>{{ track.get_track_typ_display }}</td>
+                <td align="right">{{ track.term_pri }}</td>
+                <td align="right">{{ track.term_int }}</td>
+                <td align="right">{{ track.term_pen }}</td>
                 <td>{{ track.proceed }}</td>
             <tr>
         {% endfor %}
