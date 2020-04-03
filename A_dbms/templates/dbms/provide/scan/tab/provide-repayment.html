@@ -4,7 +4,9 @@
         <tr style="text-align: center">
             <th>序号</th>
             <th>还款日期</th>
-            <th>还款金额</th>
+            <th>本金金额</th>
+            <th>利息金额</th>
+            <th>违约金</th>
             <th>操作人</th>
             {% if PAGE_TITLE == '放款详情' %}
                 <th>操作</th>
@@ -17,6 +19,8 @@
                 <td>{{ forloop.counter }}</td>
                 <td>{{ repayment.repayment_date }}</td>
                 <td align="right">{{ repayment.repayment_money }}</td>
+                <td align="right">{{ repayment.repayment_int }}</td>
+                <td align="right">{{ repayment.repayment_pen }}</td>
                 <td>{{ repayment.repaymentor.name }}</td>
                 {% if PAGE_TITLE == '放款详情' %}
                     <td><a class="btn btn-danger btn-xs delRepaymentB">删除</a></td>

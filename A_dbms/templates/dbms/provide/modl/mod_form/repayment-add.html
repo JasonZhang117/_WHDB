@@ -1,17 +1,29 @@
 <div id="form_repayment_add">
 
-    <div class="form-group"><!--放款类型-->
+    <div class="form-group"><!--还款金额-->
         <label for="id_repayment_money"
                class="col-sm-3 control-label">{{ form_repayment_add.repayment_money.label }}：</label>
         <div class="col-sm-9">{{ form_repayment_add.repayment_money }}</div>
         <label id="e_repayment_money" class="pull-right">{{ form_repayment_add.repayment_money.errors }}</label>
     </div>
-
-    <div class="form-group"><!--放款金额-->
+    <div class="form-group"><!--利息-->
+        <label for="id_repayment_int"
+               class="col-sm-3 control-label">{{ form_repayment_add.repayment_int.label }}：</label>
+        <div class="col-sm-9">{{ form_repayment_add.repayment_int }}</div>
+        <label id="e_repayment_int" class="pull-right">{{ form_repayment_add.repayment_int.errors }}</label>
+    </div>
+    <div class="form-group"><!--违约金-->
+        <label for="id_repayment_pen"
+               class="col-sm-3 control-label">{{ form_repayment_add.repayment_pen.label }}：</label>
+        <div class="col-sm-9">{{ form_repayment_add.repayment_pen }}</div>
+        <label id="e_repayment_pen" class="pull-right">{{ form_repayment_add.repayment_pen.errors }}</label>
+    </div>
+    <div class="form-group"><!--还款时间-->
         <label for="id_repayment_date"
                class="col-sm-3 control-label">{{ form_repayment_add.repayment_date.label }}：</label>
         <div class="col-sm-9">{{ form_repayment_add.repayment_date }}</div>
         <label id="e_repayment_date" class="pull-right">{{ form_repayment_add.repayment_date.errors }}</label>
     </div>
+
 
 </div>

@@ -488,17 +488,25 @@ def provide_scan(request, provide_id):  # 查看放款
     today_str = str(datetime.date.today())
     date_th_later = datetime.date.today() + datetime.timedelta(days=30)  # 30天后的日期
     date_year_later = datetime.date.today() + datetime.timedelta(days=365)  # 一年后的日期
-
-    form_repayment_add = forms.FormRepaymentAdd(initial={'repayment_date': today_str}) #还款form
-    form_compensatory_add = forms.FormCompensatoryAdd(initial={'compensatory_date': today_str}) #代偿form
-    form_track_plan = forms.FormTrackPlan(initial={'plan_date': str(date_th_later)})
-    form_track_ex_add = forms.FormTrackEXAdd(initial={'ex_track_date': today_str}) #跟踪计划form
+    form_repayment_data = {
+        'repayment_money': provide_obj.provide_money,
+        'repayment_date': today_str,}
+    form_repayment_add = forms.FormRepaymentAdd(
+        initial=form_repayment_data) #还款form
+    form_compensatory_add = forms.FormCompensatoryAdd(
+        initial={'compensatory_date': today_str}) #代偿form
+    form_track_plan = forms.FormTrackPlan(
+        initial={'plan_date': str(date_th_later)})
+    form_track_ex_add = forms.FormTrackEXAdd(
+        initial={'ex_track_date': today_str}) #跟踪计划form
     form_track_add = forms.FormTrackAdd() #跟踪计划form
     provide_state_change_data = {'provide_status': provide_obj.provide_status}
-    form_change_provide_state = forms.FormProvideStateChange(initial=provide_state_change_data) #放款状态修改form
-    form_extension_data = {'extension_amount': provide_obj.provide_balance,
-                           'extension_date': today_str,
-                           'extension_due_date': str(date_year_later), }
+    form_change_provide_state = forms.FormProvideStateChange(
+        initial=provide_state_change_data) #放款状态修改form
+    form_extension_data = {
+        'extension_amount': provide_obj.provide_balance,
+        'extension_date': today_str,
+        'extension_due_date': str(date_year_later), }
     form_extension = forms.FormExtensionAdd(initial=form_extension_data) #展期form
 
     return render(request, 'dbms/provide/provide-scan.html', locals())

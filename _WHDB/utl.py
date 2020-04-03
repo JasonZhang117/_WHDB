@@ -13,6 +13,20 @@ from _WHDB.views import authority, radio, epi
 
 
 def provide_update(provide_obj: object, response: dict):
+    '''provide_repayment_sum，更新放款还款情况'''
+    provide_repayment_amount = models.Repayments.objects.filter(
+        provide=provide_obj).aggregate(
+            Sum('repayment_money'))['repayment_money__sum']  # 放款项下还款合计
+    provide_balance = round(provide_obj.provide_money - provide_repayment_amount, 2)  # 在保余额
+    provide_list.update(
+        provide_repayment_sum=round(provide_repayment_amount, 2),
+        provide_balance=provide_balance)  # 放款，更新还款总额，在保余额
+    if provide_balance == 0:  # 在保余额为0
+        '''PROVIDE_STATUS_LIST = [(1, '在保'), (11, '解保'), (21, '代偿')]'''
+        provide_list.update(provide_status=11)  # 放款解保
+        response['message'] = '成功还款,本次放款已全部结清！'
+    else:
+        response['message'] = '成功还款！'
     '''notify_repayment_sum，更新放款通知还款情况'''
     notify_list = models.Notify.objects.filter(
         provide_notify=provide_obj)  # 放款通知
@@ -42,12 +56,12 @@ def provide_update(provide_obj: object, response: dict):
         agree_list.update(
             agree_repayment_sum=round(agree_repayment_amount, 2),
             agree_balance=round(agree_provide_balance, 2),
-            agree_state=61,
-        )  # 合同，更新还款总额，在保余额，合同状态
+            agree_state=61,)  # 合同，更新还款总额，在保余额，合同状态
         response['message'] = '成功还款,合同项下放款已全部结清，合同解保！'
     else:
-        agree_list.update(agree_repayment_sum=round(agree_repayment_amount, 2),
-                          agree_balance=round(agree_provide_balance, 2))
+        agree_list.update(
+            agree_repayment_sum=round(agree_repayment_amount, 2),
+            agree_balance=round(agree_provide_balance, 2))
         # 合同，更新还款总额，在保余额
     '''lending_repayment_sum，更新放款次序还款信息'''
     lending_list = models.LendingOrder.objects.filter(
@@ -63,15 +77,14 @@ def provide_update(provide_obj: object, response: dict):
         '''LENDING_STATE = [(3, '待上会'), (4, '已上会'), (5, '已签批'),
                             (51, '已放款'), (52, '已放完'), (55, '已解保'), 
                             (61, '待变更'),(99, '已注销')]'''
-        lending_list.update(lending_repayment_sum=round(
-            lending_repayment_amount, 2),
-                            lending_balance=round(lending_provide_balance, 2),
-                            lending_state=55)  # 放款次序，更新还款总额
+        lending_list.update(
+            lending_repayment_sum=round(lending_repayment_amount, 2),
+            lending_balance=round(lending_provide_balance, 2),
+            lending_state=55)  # 放款次序，更新还款总额
     else:
-        lending_list.update(lending_repayment_sum=round(
-            lending_repayment_amount, 2),
-                            lending_balance=round(lending_provide_balance,
-                                                  2))  # 放款次序，更新还款总额
+        lending_list.update(
+            lending_repayment_sum=round(lending_repayment_amount, 2),
+            lending_balance=round(lending_provide_balance,2))  # 放款次序，更新还款总额
     '''article_repayment_sum，更新项目还款信息'''
     article_list = models.Articles.objects.filter(
         lending_summary=lending_obj)  # 项目
@@ -84,18 +97,18 @@ def provide_update(provide_obj: object, response: dict):
             Sum('provide_balance'))['provide_balance__sum']
 
     if round(article_provide_balance) == 0:  # 在保余额为0
-        '''ARTICLE_STATE_LIST = ((1, '待反馈'), (2, '已反馈'), (3, '待上会'), (4, '已上会'), (5, '已签批'),
-                          (51, '已放款'), (52, '已放完'), (55, '已解保'), (61, '待变更'), (99, '已注销'))'''
+        '''ARTICLE_STATE_LIST = ((1, '待反馈'), (2, '已反馈'), (3, '待上会'), 
+        (4, '已上会'), (5, '已签批'),(51, '已放款'), (52, '已放完'), (55, '已解保'),
+        (61, '待变更'), (99, '已注销'))'''
         article_list.update(article_repayment_sum=round(
             article_repayment_amount, 2),
-                            article_balance=round(article_provide_balance, 2),
-                            article_state=55)  # 项目，更新还款总额
+            article_balance=round(article_provide_balance, 2),
+            article_state=55)  # 项目，更新还款总额
         response['message'] = '成功还款,项目项下放款已全部结清，项目解保！'
     else:
         article_list.update(article_repayment_sum=round(
             article_repayment_amount, 2),
-                            article_balance=round(article_provide_balance,
-                                                  2))  # 项目，更新还款总额
+            article_balance=round(article_provide_balance,2))  # 项目，更新还款总额
     '''更新银行余额信息,branch_flow,branch_accept,branch_back'''
     custom_list = models.Customes.objects.filter(article_custom=article_obj)
     custom_obj = custom_list.first()
@@ -149,8 +162,9 @@ def provide_update(provide_obj: object, response: dict):
     if not custom_provide_balance_all:
         custom_provide_balance_all = 0
     v_radio = radio(custom_provide_balance_all, custom_obj.g_value)
-    custom_list.update(amount=round(custom_provide_balance_all, 2),
-                       v_radio=v_radio)
+    custom_list.update(
+        amount=round(custom_provide_balance_all, 2),
+        v_radio=v_radio)
     branch_provide_balance_all = models.Provides.objects.filter(
         notify__agree__branch=branch_obj).aggregate(
             Sum('provide_balance'))['provide_balance__sum']  # 放款银行项下，在保余额
@@ -159,3 +173,5 @@ def provide_update(provide_obj: object, response: dict):
         notify__agree__branch__cooperator=cooperator_obj).aggregate(
             Sum('provide_balance'))['provide_balance__sum']  # 授信银行项下，在保余额
     cooperator_list.update(amount=round(cooperator_provide_balance_all, 2))
+
+    return response

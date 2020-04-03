@@ -115,9 +115,11 @@ class FormProvideStateChange(dform.ModelForm):
 class FormRepaymentAdd(dform.ModelForm):
     class Meta:
         model = models.Repayments
-        fields = ['repayment_money', 'repayment_date']
+        fields = ['repayment_money', 'repayment_int', 'repayment_pen', 'repayment_date']
         widgets = {
             'repayment_money': dform.NumberInput(attrs={'class': 'form-control', 'placeholder': '还款金额'}),
+            'repayment_int': dform.NumberInput(attrs={'class': 'form-control', 'placeholder': '还款金额'}),
+            'repayment_pen': dform.NumberInput(attrs={'class': 'form-control', 'placeholder': '还款金额'}),
             'repayment_date': dform.DateInput(attrs={'class': 'form-control', 'type': 'date'})}
 
 
