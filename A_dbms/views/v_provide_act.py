@@ -983,7 +983,10 @@ def track_plan_ajax(request):
         '''TRACK_TYP_LIST = [(11, '日常跟踪'), (21, '分期还本'), (25, '等额本息'), (31, '按月付息'), ]'''
         track_typ=track_plan_cleaned['track_typ']
         term_pri=track_plan_cleaned['term_pri']
-        ttt = models.Track.objects.filter(plan_date=plan_date,track_typ=track_typ)
+        ttt = models.Track.objects.filter(
+            provide=provide_obj,
+            plan_date=plan_date,
+            track_typ=track_typ)
         if ttt:
             response['status'] = False
             response['message'] = '同一日期不能设置一个以上同类型的提示!'
