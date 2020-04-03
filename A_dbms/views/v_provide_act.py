@@ -1094,18 +1094,6 @@ def track_update_ajax(request):
     provide_obj = provide_list.first()
     track_list = models.Track.objects.filter(id=post_data['track_id'])
     track_obj = track_list.first()
-    track_ex_list = track_obj.ex_track.all()
-    ex_pried_amont = track_ex_list.aggregate(
-        Sum('ex_pried'))['ex_pried__sum'] #已付当期本金合计
-    ex_inted_amont = track_ex_list.aggregate(
-        Sum('ex_inted'))['ex_inted__sum'] #已付当期利息合计
-    ex_pened_amont = track_ex_list.aggregate(
-        Sum('ex_pened'))['ex_pened__sum'] #已付当期违约金合计
-    if provide_obj.provide_status in [11, 21]:
-        response['status'] = False
-        response['message'] = '放款状态为：%s,无法生成还款计划！！'
-        result = json.dumps(response, ensure_ascii=False)
-        return HttpResponse(result)
 
     form_track_ex_add = forms.FormTrackEXAdd(post_data)
     form_track_add = forms.FormTrackAdd(post_data)
@@ -1157,5 +1145,85 @@ def track_update_ajax(request):
         response['status'] = False
         response['message'] = '表单信息有误！！！'
         response['forme'] = form_track_ex_add.errors
+    result = json.dumps(response, ensure_ascii=False)
+    return HttpResponse(result)
+
+# -----------------------------删除跟踪ajax------------------------------#
+@login_required
+@authority
+def track_ex_del_ajax(request): #删除跟踪ajax
+    response = {'status': True, 'message': None, 'forme': None, }
+    post_data_str = request.POST.get('postDataStr')
+    post_data = json.loads(post_data_str)
+    
+    track_list = models.Track.objects.filter(id=post_data['track_id'])
+    track_obj = track_list.first()
+    track_ex_list = models.TrackEX.objects.filter(id=post_data['track_ex_id'])
+    track_ex_obj = track_ex_list.first()
+    
+    if track_obj.track_state in [21,]:
+        response['status'] = False
+        response['message'] = '计划状态为：%s,无法删除项下还款信息！！' % track_obj.track_state
+        result = json.dumps(response, ensure_ascii=False)
+        return HttpResponse(result)
+    try:
+        with transaction.atomic():
+            track_ex_obj.delete()  # 删除还款信息
+
+            track_ex_list = track_obj.ex_track.all()
+            if track_ex_list:
+                ex_pried_amont = track_ex_list.aggregate(
+                        Sum('ex_pried'))['ex_pried__sum'] #已付当期本金合计
+                ex_inted_amont = track_ex_list.aggregate(
+                        Sum('ex_inted'))['ex_inted__sum'] #已付当期利息合计
+                ex_pened_amont = track_ex_list.aggregate(
+                        Sum('ex_pened'))['ex_pened__sum'] #已付当期违约金合计
+                '''TRACK_STATE_LIST = [(11, '待跟踪'), (21, '已跟踪'), ]'''
+                track_list.update(term_pried=ex_pried_amont, 
+                                term_inted=ex_inted_amont,
+                                term_pened=ex_pened_amont,
+                                track_state=11
+                                )  # 更新跟踪计划
+            else:
+                track_list.update(term_pried=0, 
+                                term_inted=0,
+                                term_pened=0,
+                                track_state=11
+                                )  # 更新跟踪计划
+        response['message'] = '删除成功！'
+    except Exception as e:
+        response['status'] = False
+        response['message'] = '删除失败：%s' % str(e)
+
+    result = json.dumps(response, ensure_ascii=False)
+    return HttpResponse(result)
+
+
+# ---------------------------计划状态ajax----------------------------#
+@login_required
+@authority
+def track_state_change_ajax(request):  #计划状态ajax
+    response = {'status': True, 'message': None, 'forme': None, 'skip': None, }
+    post_data_str = request.POST.get('postDataStr')
+    post_data = json.loads(post_data_str)
+    track_list = models.Track.objects.filter(id=post_data['track_id'])
+    track_obj = track_list.first()
+
+    form_track_state_change = forms.FormTrackAdd(post_data)
+
+    if form_track_state_change.is_valid():
+        track_state_cleaned = form_track_state_change.cleaned_data
+        try:
+            with transaction.atomic():
+                track_list.update(track_state=track_state_cleaned['track_state'], )
+            response['message'] = '计划状态修改成功！！'
+        except Exception as e:
+            response['status'] = False
+            response['message'] = '计划状态修改失败：%s' % str(e)
+    else:
+        response['status'] = False
+        response['message'] = '表单信息有误！！！'
+        response['forme'] = form_track_state_change.errors
+
     result = json.dumps(response, ensure_ascii=False)
     return HttpResponse(result)

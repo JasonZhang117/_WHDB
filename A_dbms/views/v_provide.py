@@ -748,3 +748,22 @@ def repay_plan_prew(request, provide_id): #还款计划预览
     term_int_total = round(repay_plan_list.aggregate(Sum('term_int'))['term_int__sum'],2) #应收利息合计
 
     return render(request, 'dbms/provide/repay-plan-prew.html', locals())
+
+
+# -----------------------------查看跟踪详情------------------------------#
+@login_required
+@authority
+def track_scan(request, track_id):  # 查看跟踪详情
+    current_url_name = resolve(request.path).url_name  # 获取当前URL_NAME
+    authority_list = request.session.get('authority_list')  # 获取当前用户的所有权限
+    menu_result = MenuHelper(request).menu_data_list()
+    job_list = request.session.get('job_list')  # 获取当前用户的所有角色
+    PAGE_TITLE = '跟踪详情'
+
+    track_list = models.Track.objects.filter(id=track_id)
+    track_obj = track_list.first()
+    provide_obj = track_obj.provide
+    form_track_state_change = forms.FormTrackAdd(
+        initial={'track_state': track_obj.track_state})
+
+    return render(request, 'dbms/provide/track/track-scan.html', locals())

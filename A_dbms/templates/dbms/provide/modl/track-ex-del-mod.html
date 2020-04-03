@@ -1,0 +1,18 @@
+<div class="modal fade bs-example-modal-sm" id="delTrackExModal"
+     tabindex="-1" role="dialog" aria-labelledby="delTrackExModal">
+    <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="delTrackExModalLabel">取消跟踪计划
+                    <input style="display: none" name="track_id" value="{{ track_obj.id }}">
+                    <input style="display: none" name="track_ex_id" id="delTrackExId">
+                </h4>
+            </div>
+            <div class="modal-body">是否确定取消本次还款？</div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                <button type="button" class="btn btn-primary" id="delTrackExModalOk">确定</button>
+            </div>
+        </div>
+    </div>
+</div>

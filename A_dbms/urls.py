@@ -143,6 +143,7 @@ urlpatterns = [
     path('provide/', views.provide, name='provide_all'),  # 菜单-放款管理-放款
     path('provide/<int:provide_status>/', views.provide, name='provide'),  # /dbms/grant/(0-9)
     path('provide/scan/<int:provide_id>/', views.provide_scan, name='provide_scan'),
+    path('provide/track/scan/<int:track_id>/', views.track_scan, name='provide_track_scan'),
     path('provide/overdue/', views.overdue, name='provide_overdue_all'),  # 菜单-放款管理-逾期项目
     path('provide/soondue/', views.soondue, name='provide_soondue_all'),  # 菜单-放款管理-即将到期
     path('provide/follow/', views.provide_follow, name='provide_follow_all'),
@@ -167,7 +168,10 @@ urlpatterns = [
     path('provide/repayment/del/', views.repayment_del_ajax, name='provide_repayment_del_ajax'),
     path('provide/track/plan/', views.track_plan_ajax, name='provide_track_plan_ajax'),
     path('provide/track/del/', views.track_del_ajax, name='provide_track_del_ajax'),
+    path('provide/track/state/change/', views.track_state_change_ajax, name='provide_track_state_change_ajax'),
     path('provide/track/update/', views.track_update_ajax, name='provide_track_update_ajax'),
+    path('provide/track/ex/del/', views.track_ex_del_ajax, name='provide_track_ex_del_ajax'),
+
     path('provide/repay/plan/', views.repay_plan_ajax, name='provide_repay_plan_ajax'),
 
     path('provide/agree/change/', views.change_agree_state_ajax, name='provide_change_agree_state_ajax'),

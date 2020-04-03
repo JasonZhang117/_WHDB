@@ -247,9 +247,9 @@ class Track(models.Model):  #
         on_delete=models.PROTECT,
         # limit_choices_to={'provide_status': 1},
         related_name='track_provide')
-    TRACK_TYP_LIST = [(11, '日常跟踪'), (21, '分期还本'),
+    TRACK_TYP_LIST = [(11, '日常计划'), (21, '分期还本'),
         (25, '等额本息'), (31, '按月付息'),]
-    track_typ = models.IntegerField(verbose_name='跟踪类型',
+    track_typ = models.IntegerField(verbose_name='计划类型',
                                     choices=TRACK_TYP_LIST,
                                     default=11)
     plan_date = models.DateField(verbose_name='计划日期')
@@ -274,7 +274,7 @@ class Track(models.Model):  #
     track_date = models.DateField(verbose_name='跟踪日期', null=True, blank=True)
     condition = models.TextField(verbose_name='跟踪情况', null=True, blank=True)
     TRACK_STATE_LIST = [(11, '未结清'),(21, '已结清'),]
-    track_state = models.IntegerField(verbose_name='_跟踪状态',
+    track_state = models.IntegerField(verbose_name='计划状态',
                                       choices=TRACK_STATE_LIST,
                                       default=11)
     trackor = models.ForeignKey(to='Employees',

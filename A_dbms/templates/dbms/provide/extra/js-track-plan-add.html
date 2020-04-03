@@ -33,9 +33,10 @@
                         window.location.reload();
                     } else {
                         alert(arg.message);
-                        $('#e_track_typ').text(arg.plan_date.track_typ);
-                        $('#e_plan_date').text(arg.plan_date.name);
-                        $('#e_proceed').text(arg.proceed.name);
+                        $('#e_track_typ').text(arg.forme.track_typ);
+                        $('#e_plan_date').text(arg.forme.plan_date);
+                        $('#e_term_pri').text(arg.forme.erm_pri);
+                        $('#e_proceed').text(arg.forme.proceed);
                     }
                 }
             })

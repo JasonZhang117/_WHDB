@@ -1,0 +1,32 @@
+<div class="modal fade" id="trackStateChangeModal" tabindex="-1"
+     role="dialog" aria-labelledby="trackStateChangeModal">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title" id="trackStateChangeModalLabel">修改计划状态
+                    <input style="display: none" name="track_id" id="id_track_id" value={{ track_obj.id }}>
+                </h4>
+            </div>
+            <div class="modal-body">
+                <form class="form-horizontal">
+                    <div id="form_track_state_change">
+                        <div class="form-group"><!--跟踪状态-->
+                            <label for="id_track_state" class="col-sm-3 control-label">{{ form_track_state_change.track_state.label }}：</label>
+                            <div class="col-sm-9">{{ form_track_state_change.track_state }}</div>
+                            <label id="e_track_state" class="pull-right">{{ form_track_state_change.track_state.errors }}</label>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+            <label id="formErrors"></label>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                <button type="button" class="btn btn-primary" id="trackStateChangeModalOk">确定</button>
+            </div>
+        </div>
+    </div>
+</div>

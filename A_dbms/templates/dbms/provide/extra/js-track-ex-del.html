@@ -1,0 +1,49 @@
+<script>
+    $(function () {
+        bindDelTrackEXB();
+        bindDelTrackExModalOk();
+    });
+
+    function bindDelTrackEXB() {
+        $('#track-ex-tb').on('click', '.delTrackEXB', function () {
+            trackExNid = $(this).parent().parent().attr('ex-nid');
+            $('#delTrackExId').val(trackExNid);
+            $('#delTrackExModal').modal('show');
+        })
+    }
+
+    function bindDelTrackExModalOk() {
+        $('#delTrackExModalOk').click(function () {
+            var postData = {};
+            $('#delTrackExModal').find('input,select').each(function () {
+                var v = $(this).val();
+                var n = $(this).attr('name');
+                postData[n] = v;
+            });
+
+            var postDataStr = JSON.stringify(postData);
+            console.log(postDataStr);
+            $.ajax({
+                url: '/dbms/provide/track/ex/del/',
+                type: 'POST',
+                data: {'postDataStr': postDataStr},
+                dataType: 'JSON',
+                success: function (arg) {
+                    if (arg.status) {
+                        $('#delTrackModal').modal('hide');
+                        alert(arg.message);
+                        window.location.reload();
+                    } else {
+                        alert(arg.message);
+                    }
+                }
+            })
+        })
+    }
+</script>
+
+
+
+
+
+

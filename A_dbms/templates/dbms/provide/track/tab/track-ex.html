@@ -1,0 +1,30 @@
+<div class="table-responsive">
+    <table class="table table-bordered table-hover table-condensed active">
+        <thead>
+        <tr style="text-align: center">
+            <th>序号</th>
+            <th>已收本金</th>
+            <th>已收利息</th>
+            <th>已收违约金</th>
+            <th>回款日期</th>
+            <th>备注</th>
+            <th>操作</th>
+        </tr>
+        </thead>
+        <tbody id="track-ex-tb">
+        {% for ex in track_obj.ex_track.all %}
+            <tr ex-nid="{{ ex.id }}" >
+                <td>{{ forloop.counter }}</td>
+                <td align="right">{{ ex.ex_pried }}</td>
+                <td align="right">{{ ex.ex_inted }}</td>
+                <td align="right">{{ ex.ex_pened }}</td>
+                <td align="right">{{ ex.ex_track_date }}</td>
+                <td>{{ ex.ex_condition }}</td>
+                <td>
+                    <a class="btn btn-primary btn-xs delTrackEXB">删除</a>
+                </td>
+            <tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
