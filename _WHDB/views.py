@@ -371,7 +371,7 @@ def authority(func):  # 权限控制
         if not current_url_name in authority_list:
             response = {'status': True, 'message': None}
             response['status'] = False
-            response['message'] = '无权限，请联系管理员！'
+            response['message'] = '无权限(%s)，请联系管理员！'  % current_url_name
             result = json.dumps(response, ensure_ascii=False)
             return HttpResponse(result)
         elif today_stamp > limit_date_stamp:
