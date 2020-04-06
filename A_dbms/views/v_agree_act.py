@@ -312,7 +312,7 @@ def counter_name_f(agree_typ, counter_typ):
         elif counter_typ in [59, ]:  # (59, '其他预售')
             counter_name = 59  # (59, '举办者权益转让协议'),
     elif agree_typ in [4, 51]:  # (4, 'D-委贷'), 51, 'X-小贷单笔'),
-        if counter_typ in [1, 2]:  # (1, '企业担保'),
+        if counter_typ in [1, 2]:  # (1, '企业担保'), (2, '个人保证'),
             counter_name = 41  # (41, '保证合同'),
             ''' (11, '房产抵押'), (12, '土地抵押'), (13, '动产抵押'), (14, '在建工程抵押'), (15, '车辆抵押'),'''
         elif counter_typ in [11, 12, 13, 14, 15]:
@@ -323,6 +323,18 @@ def counter_name_f(agree_typ, counter_typ):
             counter_name = 45  # (45, '股权质押合同'),
         elif counter_typ in [33, 34, 39, 41]:  # (33, '票据质押'), (34, '动产质押'), (41, '其他权利质押'),
             counter_name = 46  # (46, '质押合同'),
+        elif counter_typ in [51, 52, 53]:  # (51, '股权预售'), (52, '房产预售'), (53, '土地预售'),
+            counter_name = 9  # (9, '预售合同'),
+        elif counter_typ in [59, ]:  # (59, '其他预售')
+            counter_name = 59  # (59, '举办者权益转让协议'),
+    elif agree_typ in [52, ]:  # (52, 'X-小贷最高额'),
+        if counter_typ in [1, 2]:  # (1, '企业担保'), (2, '个人保证'),
+            counter_name = 61  # (61, '最高额保证合同'),
+            ''' (11, '房产抵押'), (12, '土地抵押'), (13, '动产抵押'), (14, '在建工程抵押'), (15, '车辆抵押'),'''
+        elif counter_typ in [11, 12, 13, 14, 15]:
+            counter_name = 63  # (63, '最高额抵押合同'), 
+        elif counter_typ in [31, 32, 33, 34, 39, 41 ]:  # 
+            counter_name = 66  # (66, '最高额质押合同'),
         elif counter_typ in [51, 52, 53]:  # (51, '股权预售'), (52, '房产预售'), (53, '土地预售'),
             counter_name = 9  # (9, '预售合同'),
         elif counter_typ in [59, ]:  # (59, '其他预售')
