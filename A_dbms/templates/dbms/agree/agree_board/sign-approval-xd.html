@@ -11,16 +11,18 @@
 </tr>
 <tr>
     <td align="center">合同金额</td>
-    <td align="center">{{ agree_amount_str }}万元</td>
+    <td align="center">{% if agree_obj.agree_typ == 52 %}最高额{% endif %}{{ agree_amount_str }}万元</td>
     <td align="center" colspan="3">期限</td>
     <td align="center" style="width: 10%">{{ credit_term_cn }}</td>
 </tr>
-<tr>
-    <td align="center">月利率</td>
-    <td align="center">{{ agree_obj.agree_rate }}‰</td>
-    <td align="center" colspan="2">还款方式</td>
-    <td align="center" colspan="2">{{ agree_obj.get_repay_method_display }}</td>
-</tr>
+{% if not agree_obj.agree_typ == 52 %}
+    <tr>
+        <td align="center">月利率</td>
+        <td align="center">{{ agree_obj.agree_rate }}‰</td>
+        <td align="center" colspan="2">还款方式</td>
+        <td align="center" colspan="2">{{ agree_obj.get_repay_method_display }}</td>
+    </tr>
+{% endif %}
 <tr>
     <td align="center" rowspan="{{ counter_count }}">合同/协议</td>
     <td align="center">{{ agree_obj.get_agree_name_display }}</td>
