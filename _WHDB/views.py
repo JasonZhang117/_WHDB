@@ -9,6 +9,7 @@ from django.db.models import Avg, Min, Sum, Max, Count
 from django.db import transaction
 from dateutil.relativedelta import relativedelta
 
+TTN = '成都武侯中小企业融资担保有限责任公司'
 UND = '成都武侯中小企业融资担保有限责任公司'
 UNX = '成都武侯武兴小额贷款有限责任公司'
 
