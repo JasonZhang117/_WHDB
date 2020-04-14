@@ -40,21 +40,21 @@
                 <td class="cc">利息</td>
                 <td class="cc">月还款额</td>
                 <td class="cc" colspan="2">剩余本金</td>
-            </tr>
+            </tr>sssssss
             {% for repay_plan in repay_plan_list %}
             <tr>
                 <td class="cc">{{forloop.counter}}</td>
                 <td class="cc">{{repay_plan.plan_date}}</td>
-                <td class="cc">{{repay_plan.term_pri}}</td>
-                <td class="cc">{{repay_plan.term_int}}</td>
-                <td class="cc">{{repay_plan.term_amt}}</td>
-                <td class="cc" colspan="2">{{repay_plan.prin}}</td>
+                <td class="cc">{{repay_plan.term_pri | floatformat:'2'}}</td>
+                <td class="cc">{{repay_plan.term_int | floatformat:'2'}}</td>
+                <td class="cc">{{repay_plan.term_amt | floatformat:'2'}}</td>
+                <td class="cc" colspan="2">{{repay_plan.prin | floatformat:'2'}}</td>
             </tr>
             {% endfor %}
             <tr>
                 <td class="cc" colspan="2">合计</td>
-                <td class="cc">{{term_pri_total}}</td>
-                <td class="cc">{{term_int_total}}</td>
+                <td class="cc">{{term_pri_total | floatformat:'2'}}</td>
+                <td class="cc">{{term_int_total | floatformat:'2'}}</td>
                 <td class="cc"></td>
                 <td class="cc" colspan="2"></td>
             </tr>
