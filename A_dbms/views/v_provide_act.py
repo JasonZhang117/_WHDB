@@ -744,6 +744,8 @@ def repayment_add_ajax(request):
                     repayment_obj = models.Repayments.objects.create(
                         provide=provide_obj,
                         repayment_money=repayment_money,
+                        repayment_int=repayment_int,
+                        repayment_pen=repayment_pen,
                         repayment_date=repayment_cleaned['repayment_date'],
                         repaymentor=request.user,
                         )  # 创建还款记录

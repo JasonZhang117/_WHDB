@@ -196,7 +196,7 @@ class Repayments(models.Model):  # 还款
         verbose_name_plural = '项目-还款'  # 指定显示名称
         db_table = 'dbms_repayments'  # 指定数据表的名称
         ordering = [
-            '-repaymentdate',
+            '-repayment_date',
         ]
 
     def __str__(self):
