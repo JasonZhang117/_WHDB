@@ -46,6 +46,7 @@ class Dun(models.Model):  #
     custom = models.ManyToManyField(to='Customes', verbose_name="被告人",
                                     related_name='dun_custom',
                                     null=True, blank=True)
+    up_date = models.DateField(verbose_name='跟新日期', default=datetime.date.today)                                
     DUN_STAGE_LIST = [(1, '已代偿'), (3, '诉前'), (11, '一审'), (21, '上诉及再审'), (31, '案外之诉'),
                       (41, '执行'), (91, '结案')]
     dun_stage = models.IntegerField(verbose_name='追偿状态', choices=DUN_STAGE_LIST, default=1)

@@ -774,6 +774,7 @@ def standing_add_ajax(request):
                 with transaction.atomic():
                     models.Standing.objects.create(
                         dun=dun_obj, standing_detail=standing_cleaned['standing_detail'],
+                        up_date=datetime.date.today(),
                         standingor=request.user)
                 response['message'] = '成功创建追偿信息！'
             except Exception as e:
