@@ -463,7 +463,7 @@ def home(request):
         else:
             cooperator_ll.update(amount=0)
 
-    dun_list = models.Dun.objects.filter(**kwargs).order_by('-up_date')
+    dun_list = models.Dun.objects.all().order_by('-up_date')
     for dun_obj in dun_list:
         newest_ledge_obj = dun_obj.standing_dun.first()
         dun_list_l = models.Dun.objects.filter(id=dun_obj.id)
