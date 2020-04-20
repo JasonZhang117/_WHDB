@@ -363,7 +363,7 @@ def dun_ledge(request, *args, **kwargs):  # 追偿最新台账
     PAGE_TITLE = '追偿列表'
 
     dun_stage_list = models.Dun.DUN_STAGE_LIST
-    dun_list = models.Dun.objects.filter(**kwargs).order_by('title')
+    dun_list = models.Dun.objects.filter(**kwargs).order_by('-up_date')
     newest_ledge_list = []
     for dun_obj in dun_list:
         newest_ledge_obj = dun_obj.standing_dun.first()

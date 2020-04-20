@@ -762,7 +762,8 @@ def standing_add_ajax(request):
     post_data_str = request.POST.get('postDataStr')
     post_data = json.loads(post_data_str)
     dun_id = int(post_data['dun_id'])
-    dun_obj = models.Dun.objects.get(id=dun_id)
+    dun_list = models.Dun.objects.filter(id=dun_id)
+    dun_obj = dun_list.first()
     '''DUN_STAGE_LIST = ((1, '起诉'), (11, '判决'), (21, '执行'), (31, '和解结案'), 
     (41, '终止执行'), (99, '注销'))'''
     dun_stage = dun_obj.dun_stage
@@ -774,8 +775,8 @@ def standing_add_ajax(request):
                 with transaction.atomic():
                     models.Standing.objects.create(
                         dun=dun_obj, standing_detail=standing_cleaned['standing_detail'],
-                        up_date=datetime.date.today(),
                         standingor=request.user)
+                    dun_list.update(up_date=datetime.date.today(),)
                 response['message'] = '成功创建追偿信息！'
             except Exception as e:
                 response['status'] = False
