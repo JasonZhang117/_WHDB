@@ -139,7 +139,7 @@ class LendingSures(models.Model):
         (21, '房产顺位抵押'), (22, '土地顺位抵押'), (23, '在建工程顺位抵押'), (24, '动产顺位抵押'),
         (31, '应收质押'), (32, '股权质押'), (33, '票据质押'), (34, '动产质押'), (39, '其他权利质押'),
         (42, '房产监管'), (43, '土地监管'), (44, '票据监管'), (47, '动产监管'), (49, '其他监管'),
-        (51, '股权预售'), (52, '房产预售'), (53, '土地预售'), (59, '其他预售')]
+        (51, '股权预售'), (52, '房产预售'), (53, '土地预售'), (59, '其他')]
     sure_typ = models.IntegerField(verbose_name='担保类型', choices=SURE_TYP_LIST)
     sure_remark = models.TextField(verbose_name='备注', null=True, blank=True)
     sure_buildor = models.ForeignKey(to='Employees', verbose_name="创建人",
