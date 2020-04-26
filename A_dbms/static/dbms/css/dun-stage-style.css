@@ -17,7 +17,7 @@ body {
     /*字间距  */
     letter-spacing: 0pt;
     /*行间距*/
-    line-height: 21pt;
+    line-height: 15pt;
 }
 
 .btl {
@@ -34,7 +34,8 @@ body {
     text-align: justify;
     text-justify: distribute;
     text-align-last: left;
-    -moz-text-align-last: left; /* 针对 Firefox 的代码 */
+    -moz-text-align-last: left;
+    /* 针对 Firefox 的代码 */
 }
 
 .otr {
@@ -80,6 +81,6 @@ body {
     border-left: 1pt solid black;
 }
 
-table{
+table {
     width: 100%;
 }

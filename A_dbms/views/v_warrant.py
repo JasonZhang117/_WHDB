@@ -522,9 +522,10 @@ def overdue_evaluate(request, *args, **kwargs):  #
         if warrant.evaluate_state == 0:
             ddd.append(warrant.id)
         else:
-            cccc = warrant.meeting_date - warrant.evaluate_date
-            if cccc.days > 365:
-                ddd.append(warrant.id)
+            if warrant.meeting_date:
+                cccc = warrant.meeting_date - warrant.evaluate_date
+                if cccc.days > 365:
+                    ddd.append(warrant.id)
     warrant_list = models.Warrants.objects.filter(id__in=ddd).order_by('-meeting_date')
 
     '''搜索'''
