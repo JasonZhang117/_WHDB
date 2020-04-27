@@ -28,7 +28,7 @@
         <td class="bb tc" width="15%">户名</td>
         <td class="bb tc" width="35%">{{ notify_obj.agree.acc_name }}</td>
     </tr>
-    {% if provide_agree_list %}
+    {% comment %} {% if provide_agree_list %}
         <tr>
             {% for provide in provide_agree_list %}
                 <td class="bb tc">累计投放情况</td>
@@ -37,7 +37,7 @@
                 <td class="bb tc" width="35%">{{ notify_obj.agree.acc_name }}</td>
             {% endfor %}
         </tr>
-    {% endif %}
+    {% endif %} {% endcomment %}
     {% if provide_agree_list %}
         {% include 'dbms/provide/notify_show/ex.html' %}
     {% endif %}
