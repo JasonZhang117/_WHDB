@@ -302,7 +302,7 @@ def endor_list_scan(request, article_id):  # 签批单
                             if owner_ship_c < owner_ship_count:
                                 ttt += '、'
                     else:
-                        HttpResponse("请先添加权证所有权证！！！")
+                        ttt += '？？？？？？？？？？？'
                     ttt += '所有的位于%s的%s' % (warrant.house_warrant.house_locate, '住宅')
                     if sure_warrant_c < sure_warrant_count:
                         ttt += '、'
