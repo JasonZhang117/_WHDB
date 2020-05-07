@@ -93,7 +93,7 @@ class LetterGuarantee(models.Model):
     agree = models.OneToOneField(to='Agrees', verbose_name="委托保证合同",
                                  on_delete=models.CASCADE, related_name='guarantee_agree')
     LETTER_TYP_LIST = [
-        (1, '履约保函'), (11, '投标保函'), (21, '预付款保函'), ]
+        (1, '履约保函'), (11, '投标保函'), (21, '预付款保函'),  (31, '质量与维修保函'),]
     letter_typ = models.IntegerField(verbose_name='保函类型', choices=LETTER_TYP_LIST)
     beneficiary = models.CharField(verbose_name='受益人', max_length=32)
     basic_contract = models.CharField(verbose_name='基础合同名称', max_length=64)
