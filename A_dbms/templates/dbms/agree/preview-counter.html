@@ -90,7 +90,17 @@
             {% endif %}
         {#(42, 'D-最高额(公证)')#}
         {% elif agree_obj.agree_typ == 42 %}<!--(42, 'D-最高额(公证)')-->
-            <p>！！！！！！！(42, 'D-最高额(公证)'),！！！！！！！</p>
+            {% if counter_obj.counter_typ == 1 %}
+                {% include 'dbms/agree/agree_board/counter/c-m-x-n.html' %}
+            {% elif counter_obj.counter_typ == 2 %}
+                {% include 'dbms/agree/agree_board/counter/c-m-x-n.html' %}
+            {% elif counter_obj.counter_typ in D_COUNTER_TYP_LIST %}
+                {% include 'dbms/agree/agree_board/counter/c-m-d-n.html' %}
+            {% elif counter_obj.counter_typ in Z_COUNTER_TYP_LIST %}
+                {% include 'dbms/agree/agree_board/counter/c-m-z-n.html' %}
+            {% else %}
+                <p>！！！！！！！还未添加合同模板，请联系系统管理员！！！！！！！</p>
+            {% endif %}
         {#(51, 'X-小贷单笔')#}
         {% elif agree_obj.agree_typ == 51 %}<!--(51, 'X-小贷单笔')-->
             {% if counter_obj.counter_typ == 1 or counter_obj.counter_typ == 2 %}

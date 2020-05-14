@@ -389,7 +389,7 @@ def counter_preview(request, agree_id, counter_id):
 
     UN, ADD, CNB = un_dex(agree_obj.agree_typ)  # 不同合同种类下主体适用
     notarization_typ = False
-    if agree_obj.agree_typ in [41, 42, ]:
+    if agree_obj.agree_typ in [41, 42, 51, 52]:
         notarization_typ = True
 
     co_owner_list = []  # 共有人列表
