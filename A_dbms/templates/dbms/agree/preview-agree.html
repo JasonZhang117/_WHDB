@@ -54,7 +54,11 @@
                 {% endif %}
                 <!--(42, 'D-最高额(公证)-->
             {% elif agree_obj.agree_typ == 42 %}
-                <p>！！！！！！！！！！ (42, 'D-最高额(公证)')！！！！！！！！！！</p>
+                {% if agree_obj.lending.summary.custom.genre == 1 %} <!--(1, '企业')-->
+                    {% include 'dbms/agree/agree_board/entrust-maximum-n-1.html' %}
+                {% elif agree_obj.lending.summary.custom.genre == 2 %} <!--(2, '个人')-->
+                    {% include 'dbms/agree/agree_board/entrust-maximum-n-2.html' %}
+                {% endif %}
                 <!--(51, 'X-小贷单笔')-->
             {% elif agree_obj.agree_typ == 51 %}
                 {% if agree_obj.lending.summary.custom.genre == 1 %} <!--(1, '企业')-->
