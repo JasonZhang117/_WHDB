@@ -634,7 +634,7 @@ def article_sign_ajax(request):
         if article_obj.article_state in [1, 2, 3, 61]:
             if sign_type == 2:  # [(1, '同意'), (2, '不同意')]
                 models.Articles.objects.filter(id=article_id).update(
-                    sign_type=sign_type, sign_date=post_data['sign_date'], article_state=6)
+                    sign_type=sign_type, sign_date=post_data['sign_date'], article_state=99)
                 response['message'] = '%s项目被否决，更新为注销状态！' % article_obj.article_num
             else:
                 form = forms.ArticlesSignForm(post_data)

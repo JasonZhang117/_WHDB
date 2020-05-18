@@ -199,7 +199,7 @@ def article_state_change_ajax(request):  # 修改项目状态ajax
     article_obj = article_list.first()
     '''ARTICLE_STATE_LIST = [(1, '待反馈'), (2, '已反馈'), (3, '待上会'), (4, '已上会'), (5, '已签批'),
                           (51, '已放款'), (52, '已放完'), (55, '已解保'), (61, '待变更'), (99, '已注销')]'''
-    if article_obj.article_state in [1, 2, 3, 4, 5, 61, 52, 55, 61, 99]:
+    if True:
         form_change_article_state = forms.ArticleStateChangeForm(post_data)
         if form_change_article_state.is_valid():
             cleaned_data = form_change_article_state.cleaned_data
