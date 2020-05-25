@@ -164,7 +164,7 @@ def report_provide_list(request, *args, **kwargs):  #
         q = Q()
         q.connector = 'OR'
         for field in search_fields:
-            q.children.append(("%s__contains" % field, search_key))
+            q.children.append(("%s__contains" % field, search_key.strip()))
         provide_list = provide_list.filter(q)
     provide_provide = provide_list.aggregate(Sum('provide_money'))['provide_money__sum']  #
     repayment_sum = provide_list.aggregate(Sum('provide_repayment_sum'))['provide_repayment_sum__sum']  #
@@ -467,7 +467,7 @@ def report_provide_accrual(request, *args, **kwargs):  #
         q = Q()
         q.connector = 'OR'
         for field in search_fields:
-            q.children.append(("%s__contains" % field, search_key))
+            q.children.append(("%s__contains" % field, search_key.strip()))
         provide_list = provide_list.filter(q)
     provide_provide = provide_list.aggregate(Sum('provide_money'))['provide_money__sum']  #
     repayment_sum = provide_list.aggregate(Sum('provide_repayment_sum'))['provide_repayment_sum__sum']  #
@@ -504,7 +504,7 @@ def report_repay_list(request, *args, **kwargs):  #
         q = Q()
         q.connector = 'OR'
         for field in search_fields:
-            q.children.append(("%s__contains" % field, search_key))
+            q.children.append(("%s__contains" % field, search_key.strip()))
         repay_list = repay_list.filter(q)
     repay_sum = repay_list.aggregate(Sum('repayment_money'))['repayment_money__sum']  #
     repay_count = repay_list.count()  #

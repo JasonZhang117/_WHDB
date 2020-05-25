@@ -34,7 +34,7 @@ def cooperative(request, *args, **kwargs):  # 合作机构
         q = Q()
         q.connector = 'OR'
         for field in search_fields:
-            q.children.append(("%s__contains" % field, search_key))
+            q.children.append(("%s__contains" % field, search_key.strip()))
         cooperator_list = cooperator_list.filter(q)
 
     flow_credit_amount = cooperator_list.aggregate(Sum('flow_credit'))['flow_credit__sum']  # 综合额度
@@ -106,7 +106,7 @@ def soondue_cooperator(request, *args, **kwargs):
         q = Q()
         q.connector = 'OR'
         for field in search_fields:
-            q.children.append(("%s__contains" % field, search_key))
+            q.children.append(("%s__contains" % field, search_key.strip()))
         soondue_cooperator_list = soondue_cooperator_list.filter(q)
 
     provide_acount = soondue_cooperator_list.count()
@@ -142,7 +142,7 @@ def overdue_cooperator(request, *args, **kwargs):
         q = Q()
         q.connector = 'OR'
         for field in search_fields:
-            q.children.append(("%s__contains" % field, search_key))
+            q.children.append(("%s__contains" % field, search_key.strip()))
         overdue_cooperator_list = overdue_cooperator_list.filter(q)
 
     provide_acount = overdue_cooperator_list.count()
@@ -181,7 +181,7 @@ def branches(request, *args, **kwargs):  #
         q = Q()
         q.connector = 'OR'
         for field in search_fields:
-            q.children.append(("%s__contains" % field, search_key))
+            q.children.append(("%s__contains" % field, search_key.strip()))
         branch_list = branch_list.filter(q)
 
     flow_amount = branch_list.aggregate(Sum('branch_flow'))['branch_flow__sum']  # 流贷余额

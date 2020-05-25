@@ -45,7 +45,7 @@ def review(request, *args, **kwargs):  # 保后列表
         q = Q()
         q.connector = 'OR'
         for field in search_fields:
-            q.children.append(("%s__contains" % field, search_key))
+            q.children.append(("%s__contains" % field, search_key.strip()))
         custom_list = custom_list.filter(q)
     custom_list = custom_list.filter(credit_amount__gt=0)
     today_year = datetime.date.today().year
@@ -119,7 +119,7 @@ def review_overdue(request, *args, **kwargs):
         q = Q()
         q.connector = 'OR'
         for field in search_fields:
-            q.children.append(("%s__contains" % field, search_key))
+            q.children.append(("%s__contains" % field, search_key.strip()))
         review_overdue_list = review_overdue_list.filter(q)
 
     provide_acount = review_overdue_list.count()
@@ -185,7 +185,7 @@ def classification(request, *args, **kwargs):  # 分类列表
         q = Q()
         q.connector = 'OR'
         for field in search_fields:
-            q.children.append(("%s__contains" % field, search_key))
+            q.children.append(("%s__contains" % field, search_key.strip()))
         provide_list = provide_list.filter(q)
 
     balance = provide_list.aggregate(Sum('provide_balance'))['provide_balance__sum']  # 在保余额

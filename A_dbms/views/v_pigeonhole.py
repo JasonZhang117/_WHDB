@@ -37,7 +37,7 @@ def pigeonhole(request, *args, **kwargs):  # 归档
         q = Q()
         q.connector = 'OR'
         for field in search_fields:
-            q.children.append(("%s__contains" % field, search_key))
+            q.children.append(("%s__contains" % field, search_key.strip()))
         provide_list = provide_list.filter(q)
 
     balance = provide_list.aggregate(Sum('provide_balance'))['provide_balance__sum']  # 在保余额
@@ -99,7 +99,7 @@ def pigeonhole_overdue(request, *args, **kwargs):
         q = Q()
         q.connector = 'OR'
         for field in search_fields:
-            q.children.append(("%s__contains" % field, search_key))
+            q.children.append(("%s__contains" % field, search_key.strip()))
         pigeonhole_overdue_list = pigeonhole_overdue_list.filter(q)
 
     balance = pigeonhole_overdue_list.aggregate(Sum('provide_balance'))['provide_balance__sum']  # 在保余额

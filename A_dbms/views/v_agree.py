@@ -39,7 +39,7 @@ def agree(request, *args, **kwargs):  # 委托合同列表
         q = Q()
         q.connector = 'OR'
         for field in search_fields:
-            q.children.append(("%s__contains" % field, search_key))
+            q.children.append(("%s__contains" % field, search_key.strip()))
         agree_list = agree_list.filter(q)
 
     balance = agree_list.aggregate(Sum('agree_balance'))['agree_balance__sum']  # 在保余额

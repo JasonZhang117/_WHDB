@@ -36,7 +36,7 @@ def compensatory(request, *args, **kwargs):  # 代偿列表
         q = Q()
         q.connector = 'OR'
         for field in search_fields:
-            q.children.append(("%s__contains" % field, search_key))
+            q.children.append(("%s__contains" % field, search_key.strip()))
         compensatory_list = compensatory_list.filter(q)
     compensatory_amount = compensatory_list.count()  # 信息数目
 
@@ -92,7 +92,7 @@ def dun(request, *args, **kwargs):  #
         q = Q()
         q.connector = 'OR'
         for field in search_fields:
-            q.children.append(("%s__contains" % field, search_key))
+            q.children.append(("%s__contains" % field, search_key.strip()))
         dun_list = dun_list.filter(q)
     dun_amount = dun_list.aggregate(Sum('dun_amount'))['dun_amount__sum']  # 追偿总额
     if dun_amount:
@@ -215,7 +215,7 @@ def seal(request, *args, **kwargs):
         q = Q()
         q.connector = 'OR'
         for field in search_fields:
-            q.children.append(("%s__contains" % field, search_key))
+            q.children.append(("%s__contains" % field, search_key.strip()))
         seal_list = seal_list.filter(q)
     compensatory_amount = seal_list.count()  # 信息数目
     '''分页'''
@@ -262,7 +262,7 @@ def overdue_seal(request, *args, **kwargs):
         q = Q()
         q.connector = 'OR'
         for field in search_fields:
-            q.children.append(("%s__contains" % field, search_key))
+            q.children.append(("%s__contains" % field, search_key.strip()))
         overdue_seal_list = overdue_seal_list.filter(q)
     provide_acount = overdue_seal_list.count()
     '''分页'''
@@ -299,7 +299,7 @@ def soondue_seal(request, *args, **kwargs):
         q = Q()
         q.connector = 'OR'
         for field in search_fields:
-            q.children.append(("%s__contains" % field, search_key))
+            q.children.append(("%s__contains" % field, search_key.strip()))
         soondue_seal_list = soondue_seal_list.filter(q)
 
     provide_acount = soondue_seal_list.count()
@@ -337,7 +337,7 @@ def overdue_search(request, *args, **kwargs):
         q = Q()
         q.connector = 'OR'
         for field in search_fields:
-            q.children.append(("%s__contains" % field, search_key))
+            q.children.append(("%s__contains" % field, search_key.strip()))
         overdue_search_list = overdue_search_list.filter(q)
     provide_acount = overdue_search_list.count()
     '''分页'''

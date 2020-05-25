@@ -52,7 +52,7 @@ def article(request, *args, **kwargs):  # 项目列表
         q = Q()
         q.connector = 'OR'
         for field in search_fields:
-            q.children.append(("%s__contains" % field, search_key))
+            q.children.append(("%s__contains" % field, search_key.strip()))
         article_list = article_list.filter(q)
     article_acount = article_list.count()  # 信息数目
     balance = article_list.aggregate(Sum('article_balance'))['article_balance__sum']  # 在保余额

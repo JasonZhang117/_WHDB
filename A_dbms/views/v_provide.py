@@ -39,7 +39,7 @@ def provide_agree(request, *args, **kwargs):  # 放款管理
         q = Q()
         q.connector = 'OR'
         for field in search_fields:
-            q.children.append(("%s__contains" % field, search_key))
+            q.children.append(("%s__contains" % field, search_key.strip()))
         agree_list = agree_list.filter(q)
 
     balance = agree_list.aggregate(Sum('agree_balance'))['agree_balance__sum']  # 在保余额
@@ -337,7 +337,7 @@ def notify(request, *args, **kwargs):  #
         q = Q()
         q.connector = 'OR'
         for field in search_fields:
-            q.children.append(("%s__contains" % field, search_key))
+            q.children.append(("%s__contains" % field, search_key.strip()))
         notify_list = notify_list.filter(q)
 
     balance = notify_list.aggregate(Sum('notify_balance'))['notify_balance__sum']  # 在保余额
@@ -453,7 +453,7 @@ def provide(request, *args, **kwargs):  # 委托合同列表
         q = Q()
         q.connector = 'OR'
         for field in search_fields:
-            q.children.append(("%s__contains" % field, search_key))
+            q.children.append(("%s__contains" % field, search_key.strip()))
         provide_list = provide_list.filter(q)
 
     balance = provide_list.aggregate(Sum('provide_balance'))['provide_balance__sum']  # 在保余额
@@ -533,7 +533,7 @@ def overdue(request, *args, **kwargs):  # 逾期列表
         q = Q()
         q.connector = 'OR'
         for field in search_fields:
-            q.children.append(("%s__contains" % field, search_key))
+            q.children.append(("%s__contains" % field, search_key.strip()))
         overdue_list = overdue_list.filter(q)
 
     balance = overdue_list.aggregate(Sum('provide_balance'))['provide_balance__sum']  # 在保余额
@@ -574,7 +574,7 @@ def soondue(request, *args, **kwargs):  # 委托合同列表
         q = Q()
         q.connector = 'OR'
         for field in search_fields:
-            q.children.append(("%s__contains" % field, search_key))
+            q.children.append(("%s__contains" % field, search_key.strip()))
         soondue_list = soondue_list.filter(q)
 
     balance = soondue_list.aggregate(Sum('provide_balance'))['provide_balance__sum']  # 在保余额
@@ -618,7 +618,7 @@ def provide_follow(request, *args, **kwargs):  # 放款管理
         q = Q()
         q.connector = 'OR'
         for field in search_fields:
-            q.children.append(("%s__contains" % field, search_key))
+            q.children.append(("%s__contains" % field, search_key.strip()))
         agree_list = agree_list.filter(q)
 
     balance = agree_list.aggregate(Sum('agree_balance'))['agree_balance__sum']  # 在保余额
@@ -663,7 +663,7 @@ def track_overdue(request, *args, **kwargs):  #
         q = Q()
         q.connector = 'OR'
         for field in search_fields:
-            q.children.append(("%s__contains" % field, search_key))
+            q.children.append(("%s__contains" % field, search_key.strip()))
         track_overdue = track_overdue.filter(q)
 
     provide_acount = track_overdue.count()
@@ -706,7 +706,7 @@ def track_soondue(request, *args, **kwargs):  #
         q = Q()
         q.connector = 'OR'
         for field in search_fields:
-            q.children.append(("%s__contains" % field, search_key))
+            q.children.append(("%s__contains" % field, search_key.strip()))
         track_soondue = track_soondue.filter(q)
 
     '''分页'''

@@ -36,7 +36,7 @@ def meeting(request, *args, **kwargs):  # 评审会
         q = Q()
         q.connector = 'OR'
         for field in search_fields:
-            q.children.append(("%s__contains" % field, search_key))
+            q.children.append(("%s__contains" % field, search_key.strip()))
         meeting_list = meeting_list.filter(q)
     meeting_acount = meeting_list.count()
     '''分页'''

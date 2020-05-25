@@ -40,7 +40,7 @@ def appraisal(request, *args, **kwargs):  # 评审情况
         q = Q()
         q.connector = 'OR'
         for field in search_fields:
-            q.children.append(("%s__contains" % field, search_key))
+            q.children.append(("%s__contains" % field, search_key.strip()))
         appraisal_list = appraisal_list.filter(q)
     appraisal_amount = appraisal_list.count()  # 信息数目
     '''分页'''

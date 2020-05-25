@@ -53,7 +53,7 @@ def warrant(request, *args, **kwargs):  # 权证列表
         q = Q()
         q.connector = 'OR'
         for field in search_fields:
-            q.children.append(("%s__contains" % field, search_key))
+            q.children.append(("%s__contains" % field, search_key.strip()))
         warrant_list = warrant_list.filter(q)
     warrant_acount = warrant_list.count()
     '''分页'''
@@ -200,7 +200,7 @@ def warrant_agree(request, *args, **kwargs):  # 按合同入库
         q = Q()
         q.connector = 'OR'
         for field in search_fields:
-            q.children.append(("%s__contains" % field, search_key))
+            q.children.append(("%s__contains" % field, search_key.strip()))
         agree_list = agree_list.filter(q)
     agree_acount = agree_list.count()
     '''分页'''
@@ -396,7 +396,7 @@ def draft_list(request, *args, **kwargs):  #
         q = Q()
         q.connector = 'OR'
         for field in search_fields:
-            q.children.append(("%s__contains" % field, search_key))
+            q.children.append(("%s__contains" % field, search_key.strip()))
         draft_list = draft_list.filter(q)
 
     provide_acount = draft_list.count()
@@ -434,7 +434,7 @@ def soondue_draft(request, *args, **kwargs):  #
         q = Q()
         q.connector = 'OR'
         for field in search_fields:
-            q.children.append(("%s__contains" % field, search_key))
+            q.children.append(("%s__contains" % field, search_key.strip()))
         soondue_draft_list = soondue_draft_list.filter(q)
 
     provide_acount = soondue_draft_list.count()
@@ -471,7 +471,7 @@ def overdue_draft(request, *args, **kwargs):  #
         q = Q()
         q.connector = 'OR'
         for field in search_fields:
-            q.children.append(("%s__contains" % field, search_key))
+            q.children.append(("%s__contains" % field, search_key.strip()))
         overdue_draft_list = overdue_draft_list.filter(q)
 
     provide_acount = overdue_draft_list.count()
@@ -535,7 +535,7 @@ def overdue_evaluate(request, *args, **kwargs):  #
         q = Q()
         q.connector = 'OR'
         for field in search_fields:
-            q.children.append(("%s__contains" % field, search_key))
+            q.children.append(("%s__contains" % field, search_key.strip()))
         warrant_list = warrant_list.filter(q)
     warrant_acount = warrant_list.count()
     '''分页'''
@@ -582,7 +582,7 @@ def overdue_storage(request, *args, **kwargs):  #
         q = Q()
         q.connector = 'OR'
         for field in search_fields:
-            q.children.append(("%s__contains" % field, search_key))
+            q.children.append(("%s__contains" % field, search_key.strip()))
         warrant_list = warrant_list.filter(q)
     warrant_acount = warrant_list.count()
     '''分页'''

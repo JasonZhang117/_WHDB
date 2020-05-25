@@ -112,7 +112,7 @@ def employee(request, *args, **kwargs):  # 委托合同列表
         q = Q()
         q.connector = 'OR'
         for field in search_fields:
-            q.children.append(("%s__contains" % field, search_key))
+            q.children.append(("%s__contains" % field, search_key.strip()))
         employee_list = employee_list.filter(q)
 
     '''分页'''

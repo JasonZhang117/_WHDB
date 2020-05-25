@@ -27,7 +27,7 @@ def search_custom_ajax(request):
         q = Q()
         q.connector = 'OR'
         for field in search_fields:
-            q.children.append(("%s__contains" % field, search_key))
+            q.children.append(("%s__contains" % field, search_key.strip()))
     custom_list = models.Customes.objects.filter(q).order_by('name').values_list('id', 'name')
 
     custom_list_dic = list(map(lambda x: {'id': x[0], 'name': x[1]}, custom_list))
@@ -50,7 +50,7 @@ def search_warrant_ajax(request):
         q = Q()
         q.connector = 'OR'
         for field in search_fields:
-            q.children.append(("%s__contains" % field, search_key))
+            q.children.append(("%s__contains" % field, search_key.strip()))
     warrant_list = models.Warrants.objects.filter(q).order_by('warrant_num').values_list('id', 'warrant_num')
     warrant_list_dic = list(map(lambda x: {'id': x[0], 'name': x[1]}, warrant_list))
 
@@ -110,7 +110,7 @@ def guarantee_warrant_ajax(request):
             q = Q()
             q.connector = 'OR'
             for field in search_fields:
-                q.children.append(("%s__contains" % field, search_key))
+                q.children.append(("%s__contains" % field, search_key.strip()))
             search_list = search_list.filter(q).values_list('id', 'name')
     else:
         if sure_typ in [11, 21, 42, 52]:
@@ -122,7 +122,7 @@ def guarantee_warrant_ajax(request):
             q = Q()
             q.connector = 'OR'
             for field in search_fields:
-                q.children.append(("%s__contains" % field, search_key))
+                q.children.append(("%s__contains" % field, search_key.strip()))
         search_list = search_list.filter(q).values_list('id', 'warrant_num')
     search_list_dic = list(map(lambda x: {'id': x[0], 'name': x[1]}, search_list))
     response['search_list'] = search_list_dic
