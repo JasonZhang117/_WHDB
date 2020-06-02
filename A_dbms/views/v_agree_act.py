@@ -177,7 +177,7 @@ def agree_add_ajax(request):  # 添加合同
             agree_name = agree_name_f(agree_typ)
 
             repay_method = jk_add_cleaned['repay_method']
-            if agree_typ in [2, 21, 52]:
+            if agree_typ in [2, 21, 42, 52]:
                 agree_rate = agree_add_cleaned['agree_rate']
             else:
                 agree_rate=float(agree_add_cleaned['agree_rate'])
