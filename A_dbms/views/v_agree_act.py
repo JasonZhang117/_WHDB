@@ -176,8 +176,11 @@ def agree_add_ajax(request):  # 添加合同
                 agree_num_prefix, agree_num = agree_num_f(AGREE_TYP_X, '成武贷', 'J', guarantee_typ, agree_copies)
             agree_name = agree_name_f(agree_typ)
 
-            repay_method=jk_add_cleaned['repay_method']
-            agree_rate=float(agree_add_cleaned['agree_rate'])
+            repay_method = jk_add_cleaned['repay_method']
+            if agree_typ in [2, 21, 52]:
+                agree_rate = agree_add_cleaned['agree_rate']
+            else:
+                agree_rate=float(agree_add_cleaned['agree_rate'])
             agree_term=int(agree_add_cleaned['agree_term'])
             repay_ex=jk_add_cleaned['repay_ex']
             if repay_method == 21: #等额本息

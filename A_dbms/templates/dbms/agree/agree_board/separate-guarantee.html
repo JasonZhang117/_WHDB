@@ -29,7 +29,11 @@
     <p>六、担保费的收取</p>
     <p>（一）收取标准：按以下第<strong><u>2</u></strong>项收取担保费：</p>
     <p>1、按月计算，每月按担保敞口总额的<u>&nbsp\&nbsp</u>%收取，不足壹月的按壹月计。</p>
-    <p>2、按以下约定执行：按照担保总额的<strong><u>{{ single_quota_rate }}%</u></strong>收取。</p>
+    {% if rate_b %}
+        <p>2、按以下约定执行：按照担保总额的<strong><u>{{ single_quota_rate }}%</u></strong>收取。</p>
+    {% else %}
+        <p>4）按以下约定执行：<strong><u>{{ single_quota_rate }}</u></strong></p>
+    {% endif %}
     <p>（二）具体数额：按以下第<strong><u>2</u></strong>项执行：</p>
     <p>1、一次收取担保费金额为：人民币<u>&nbsp&nbsp&nbsp\&nbsp&nbsp&nbsp</u>万元。</p>
     <p>2、按甲方与银行签订每一份<strong><u>《开立保函/备用信用证申请书》或《开立保函/备用信用证协议》</u></strong>时确认的担保额度、担保期限，按本合同确定的担保费率计算收取；</p>
