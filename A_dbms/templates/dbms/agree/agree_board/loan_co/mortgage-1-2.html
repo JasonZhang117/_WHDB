@@ -29,16 +29,16 @@
                             {{ ownership.ownership_num }}{% if not forloop.last %}、{% endif %}
                         {% endfor %}
                     </td>
-                    <td align="right">{{ warrant.evaluate_value|default_if_none:'' }}</td>
-                    <td></td>
+                    <td rowspan="{{ counter_warrant_list_count }}" align="right">{{ warrant.evaluate_value|default_if_none:'' }}</td>
+                    <td rowspan="{{ counter_warrant_list_count }}"></td>
                 </tr>
-                {% else %}<!--房产包非首次循环-->
+            {% else %}<!--房产包非首次循环-->
                 <tr>
                     <td>{{ house_bag.get_housebag_app_display }}</td>
                     <td align="right">{{ house_bag.housebag_area }}</td>
                     <td>{{ house_bag.housebag_locate }}</td>
-                    <td align="right">{{ warrant.evaluate_value|default_if_none:'' }}</td>
-                    <td></td>
+                    {% comment %} <td align="right">{{ warrant.evaluate_value|default_if_none:'' }}</td> {% endcomment %}
+                    {% comment %} <td></td> {% endcomment %}
                 </tr>
             {% endif %}
         {% endfor %}
