@@ -73,13 +73,13 @@
         {% if forloop.first %}
             <tr>
                 <td align="center" rowspan="{{ result_count }}">声明/决议</td>
-                <td align="center">{{ result.get_result_typ_display }}({{ result.custom.short_name }})</td>
+                <td align="center">{{ result.get_result_typ_display }}{% if result.result_typ == 99 %} ({{ result.result_detail }}){% endif%}({{ result.custom.short_name }})</td>
                 <td align="center" colspan="3"></td>
                 <td align="center">{{ result.counter_copies }}2份</td>
             </tr>
         {% else %}
             <tr>
-                <td align="center">{{ result.get_result_typ_display }}({{ result.custom.short_name }})</td>
+                <td align="center">{{ result.get_result_typ_display }}{% if result.result_typ == 99 %} ({{ result.result_detail }}){% endif%}({{ result.custom.short_name }})</td>
                 <td align="center" colspan="3"></td>
                 <td align="center">{{ result.counter_copies }}2份</td>
             </tr>

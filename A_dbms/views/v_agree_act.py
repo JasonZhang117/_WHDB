@@ -1487,7 +1487,7 @@ def promise_add_ajax(request):
             with transaction.atomic():
                 default = {'agree': agree_obj, 'custom': custom,
                            'result_typ': result_typ,
-                           'result_detail': counter_clean['result_typ'],
+                           'result_detail': counter_clean['result_detail'],
                            'resultor': request.user}
                 result_obj, created = models.ResultState.objects.update_or_create(
                     agree=agree_obj, custom=custom, result_typ=result_typ, defaults=default)
