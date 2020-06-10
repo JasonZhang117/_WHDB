@@ -28,12 +28,7 @@
         <tr>
             <td align="center">{{ counter.get_counter_name_display }}
                 {% for custom in counter.assure_counter.custome.all %}
-                    (
-                    {{ custom.short_name }}
-                    {% if custom.person_custome.spouses %}
-                        、{{ custom.person_custome.spouses.short_name }}
-                    {% endif %}
-                    )
+                    ({{ custom.short_name }}{% if custom.person_custome.spouses %}、{{ custom.person_custome.spouses.short_name }}{% endif %})
                 {% endfor %}
             </td>
             <td align="center" colspan="3">{% if counter.agree.agree_typ in AGREE_TYP_GZ %}{{ counter.counter_num }}{%endif%}</td>
@@ -42,9 +37,7 @@
     {% elif counter.counter_typ == 1 %}
         <tr>
             <td align="center">{{ counter.get_counter_name_display }}
-                {% for custom in counter.assure_counter.custome.all %}
-                    ({{ custom.short_name }}{% if not forloop.last  %}、{% endif %})
-                {% endfor %}
+                ({% for custom in counter.assure_counter.custome.all %}{{ custom.short_name }}{% if not forloop.last  %}、{% endif %}{% endfor %})
             </td>
             <td align="center" colspan="3">{{ counter.counter_num }}</td>
             <td align="center">{{ counter.counter_copies }}份</td>
@@ -52,9 +45,7 @@
     {% elif counter.counter_typ == 11 or counter.counter_typ == 12 or counter.counter_typ == 14 %}
         <tr>
             <td align="center">{{ counter.get_counter_name_display }}
-                ({% for ownership in  counter.warrant_counter.warrant.all.0.ownership_warrant.all %}
-                    {{ ownership.owner.short_name }}{% if not forloop.last  %}、{% endif %}
-                {% endfor %})
+                ({% for ownership in  counter.warrant_counter.warrant.all.0.ownership_warrant.all %}{{ ownership.owner.short_name }}{% if not forloop.last  %}、{% endif %}{% endfor %})
             </td>
             <td align="center" colspan="3">{{ counter.counter_num }}</td>
             <td align="center">{{ counter.counter_copies }}份</td>
