@@ -24,32 +24,87 @@
     <td align="center">{{ agree_obj.agree_copies }}份</td>
 </tr>
 {% for counter in counter_list %}
-    {% if counter.counter_typ == 2 and agree_obj.agree_typ in AGREE_TYP_GZ %}
+    {% if counter.counter_typ == 2 %}
         <tr>
             <td align="center">{{ counter.get_counter_name_display }}
                 {% for custom in counter.assure_counter.custome.all %}
-                    ({{ custom }}
+                    (
+                    {{ custom.short_name }}
                     {% if custom.person_custome.spouses %}
-                        、{{ custom.person_custome.spouses.name }}
+                        、{{ custom.person_custome.spouses.short_name }}
                     {% endif %}
                     )
+                {% endfor %}
+            </td>
+            <td align="center" colspan="3">{% if counter.agree.agree_typ in AGREE_TYP_GZ %}{{ counter.counter_num }}{%endif%}</td>
+            <td align="center">{{ counter.counter_copies }}份</td>
+        </tr>
+    {% elif counter.counter_typ == 1 %}
+        <tr>
+            <td align="center">{{ counter.get_counter_name_display }}
+                {% for custom in counter.assure_counter.custome.all %}
+                    ({{ custom.short_name }}{% if not forloop.last  %}、{% endif %})
                 {% endfor %}
             </td>
             <td align="center" colspan="3">{{ counter.counter_num }}</td>
             <td align="center">{{ counter.counter_copies }}份</td>
         </tr>
-    {% elif counter.counter_typ == 2 %}
+    {% elif counter.counter_typ == 11 or counter.counter_typ == 12 or counter.counter_typ == 14 %}
         <tr>
             <td align="center">{{ counter.get_counter_name_display }}
-                {% for custom in counter.assure_counter.custome.all %}
-                    ({{ custom }}
-                    {% if custom.person_custome.spouses %}
-                        、{{ custom.person_custome.spouses.name }}
-                    {% endif %}
-                    )
-                {% endfor %}
+                ({% for ownership in  counter.warrant_counter.warrant.all.0.ownership_warrant.all %}
+                    {{ ownership.owner.short_name }}{% if not forloop.last  %}、{% endif %}
+                {% endfor %})
             </td>
-            <td align="center" colspan="3"></td>
+            <td align="center" colspan="3">{{ counter.counter_num }}</td>
+            <td align="center">{{ counter.counter_copies }}份</td>
+        </tr>
+    {% elif counter.counter_typ == 13 or counter.counter_typ == 34 %}
+        <tr>
+            <td align="center">{{ counter.get_counter_name_display }}
+                ({{ counter.warrant_counter.warrant.all.0.chattel_warrant.chattel_owner.short_name }})
+            </td>
+            <td align="center" colspan="3">{{ counter.counter_num }}</td>
+            <td align="center">{{ counter.counter_copies }}份</td>
+        </tr>
+    {% elif counter.counter_typ == 15 %}
+        <tr>
+            <td align="center">{{ counter.get_counter_name_display }}
+                ({{ counter.warrant_counter.warrant.all.0.vehicle_warrant.other_owner.vehicle_owner }})
+            </td>
+            <td align="center" colspan="3">{{ counter.counter_num }}</td>
+            <td align="center">{{ counter.counter_copies }}份</td>
+        </tr>
+    {% elif counter.counter_typ == 31 %}
+        <tr>
+            <td align="center">{{ counter.get_counter_name_display }}
+                ({{ counter.warrant_counter.warrant.all.0.receive_warrant.receive_owner.short_name }})
+            </td>
+            <td align="center" colspan="3">{{ counter.counter_num }}</td>
+            <td align="center">{{ counter.counter_copies }}份</td>
+        </tr>
+    {% elif counter.counter_typ == 32 %}
+        <tr>
+            <td align="center">{{ counter.get_counter_name_display }}
+                ({{ counter.warrant_counter.warrant.all.0.stock_warrant.stock_owner.short_name }})
+            </td>
+            <td align="center" colspan="3">{{ counter.counter_num }}</td>
+            <td align="center">{{ counter.counter_copies }}份</td>
+        </tr>
+    {% elif counter.counter_typ == 33 %}
+        <tr>
+            <td align="center">{{ counter.get_counter_name_display }}
+                ({{ counter.warrant_counter.warrant.all.0.draft_warrant.draft_owner.short_name }})
+            </td>
+            <td align="center" colspan="3">{{ counter.counter_num }}</td>
+            <td align="center">{{ counter.counter_copies }}份</td>
+        </tr>
+    {% elif counter.counter_typ == 41 %}
+        <tr>
+            <td align="center">{{ counter.get_counter_name_display }}
+                ({{ counter.warrant_counter.warrant.all.0.other_warrant.other_owner.short_name }})
+            </td>
+            <td align="center" colspan="3">{{ counter.counter_num }}</td>
             <td align="center">{{ counter.counter_copies }}份</td>
         </tr>
     {% elif counter.counter_typ == 59 %}
@@ -57,7 +112,7 @@
             <td align="center">{{ counter.get_counter_name_display }}
                 ({{ counter.warrant_counter.warrant.all.0.other_warrant.other_owner.short_name }})
             </td>
-            <td align="center" colspan="3"></td>
+            <td align="center" colspan="3">{{ counter.counter_num | default_if_none:'' }}</td>
             <td align="center">{{ counter.counter_copies }}份</td>
         </tr>
     {% else %}
