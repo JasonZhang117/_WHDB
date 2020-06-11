@@ -943,7 +943,7 @@ def result_state_ajax(request):  #
                                 result += '<p>  2、同意委托%s为该授信向贷款方提供担保。</p>' % UN
                                 order = 2
                             elif agr_typ in [21, ]:  # (21, 'D-分离式保函'),
-                                result += '<p>  %s同意委托%s向%s申请开立最高限额为人民币%s的保函。</p>' % (
+                                result += '<p>  %s同意委托%s向%s申请开立最高限额为人民币%s的保函并提供担保。</p>' % (
                                     oo, UN, agree_obj.branch.name, agree_amount_cn)
                                 order = 1
                             elif agr_typ in [22, ]:  # (22, 'D-公司保函'),
