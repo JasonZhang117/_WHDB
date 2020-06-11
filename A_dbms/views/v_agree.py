@@ -520,9 +520,14 @@ def agree_sign_preview(request, agree_id):
     '''AGREE_STATE_LIST = [(11, '待签批'), (21, '已签批'), (31, '未落实'),
                         (41, '已落实'), (51, '待变更'), (61, '已解保'), (99, '已注销')]'''
     agree_article = agree_obj.lending.summary
-    article_agree_list = models.Agrees.objects.filter(lending__summary=agree_article).exclude(agree_state=99)
+    article_agree_list = models.Agrees.objects.filter(
+        lending__summary=agree_article, id__lt=agree_obj.id).exclude(agree_state=99)
     article_agree_amount = article_agree_list.aggregate(Sum('agree_amount'))['agree_amount__sum']
-    article_agree_amount_ar = round(article_agree_amount - agree_obj.agree_amount, 2)
+    if not article_agree_amount:
+        article_agree_amount_ar = 0
+    else:
+        article_agree_amount_ar = round(article_agree_amount)
+        # article_agree_amount_ar = round(article_agree_amount - agree_obj.agree_amount, 2)
     article_agree_amount_ar_str = amount_s(article_agree_amount_ar)
     '''RESULT_TYP_LIST = [(11, '股东会决议'), (21, '董事会决议'), (31, '弃权声明'), (41, '单身声明')]'''
     counter_list = agree_obj.counter_agree.all()
