@@ -16,9 +16,9 @@
                 <input style="display: none" name="agree_id" id="id_agree_id" value={{ agree_obj.id }}>
             </div>
             <div id="view-save">
-                {% if agree_obj.agree_typ == 1 %} <!--(1, 'D-单笔')-->
+                {% if agree_obj.agree_typ == 1 or agree_obj.agree_typ == 41%} <!--(1, 'D-单笔')-->
                     {% include 'dbms/agree/agree_board/supple/supplementary-single.html' %}    
-                {% elif agree_obj.agree_typ == 2 %} <!--(2, 'D-最高额')-->
+                {% elif agree_obj.agree_typ == 2 or agree_obj.agree_typ == 42%} <!--(2, 'D-最高额')-->
                     {% include 'dbms/agree/agree_board/supple/supplementary-maximum.html' %}    
                 {%else%}
                     <p>系统没有相关模板，请联系管理员！！！！！！</p>
