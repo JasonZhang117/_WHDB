@@ -299,6 +299,7 @@ urlpatterns = [
     path('report/dun/fy/list/<int:t_typ>/', views.report_dun_fy_list, name='report_dun_fy_list'),
     path('report/dun/hk/list/<int:t_typ>/', views.report_dun_hk_list, name='report_dun_hk_list'),
 
+    path('report/meeting/article/meeting/<int:t_typ>/', views.report_meeting_list, name='report_meeting_list'),
     path('report/meeting/article/feedback/', views.article_feedback_list, name='report_article_feedback_list'),
     path('report/meeting/pig/overdue/', views.pig_overdue_list, name='report_pig_overdue_list'),
     path('report/meeting/review/plan/', views.review_plan_list, name='report_review_plan_list'),

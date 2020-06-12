@@ -513,8 +513,7 @@ def agree_sign_preview(request, agree_id):
     AGREE_TYP_X = models.Agrees.AGREE_TYP_X  # 小贷公司合同类型
     AGREE_TYP_D = models.Agrees.AGREE_TYP_D  # 担保公司合同类型
     credit_term_cn = credit_term_c(agree_obj.agree_term)
-    amount_s(agree_obj.agree_amount)  # 元转换为万元并去掉小数点后面的零
-    agree_amount_str = amount_s(agree_obj.agree_amount)
+    agree_amount_str = amount_s(agree_obj.agree_amount)  # 元转换为万元并去掉小数点后面的零
     article_amount_str = amount_s(round(agree_obj.lending.summary.amount, 2))
 
     '''AGREE_STATE_LIST = [(11, '待签批'), (21, '已签批'), (31, '未落实'),

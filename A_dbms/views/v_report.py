@@ -9,7 +9,7 @@ from django.contrib.auth.decorators import login_required
 from django.db.models import Q
 from django.db.models import Avg, Min, Sum, Max, Count
 from django.urls import resolve
-from _WHDB.views import (MenuHelper, authority, FICATION_LIST)
+from _WHDB.views import (MenuHelper, authority, FICATION_LIST, amount_s)
 
 
 def tt_article(t_typ, tf_r, tl_r):
@@ -50,6 +50,8 @@ def tt_article(t_typ, tf_r, tl_r):
         article_groups = models.Articles.objects.filter(build_date__gte=tf_r, build_date__lte=tl_r)
 
     return (article_groups, tf_r, tl_r)
+
+
 
 
 def tt_compensatory(t_typ, tf_r, tl_r):
@@ -1274,6 +1276,53 @@ def report_dun_hk_list(request, *args, **kwargs):  #
     dun_hk_count = dun_hk_groups.count()
 
     return render(request, 'dbms/report/list/dun-hk-list.html', locals())
+
+
+# -----------------------上会情况表---------------------#
+def report_meeting_list(request, *args, **kwargs):  #
+    current_url_name = resolve(request.path).url_name  # 获取当前URL_NAME
+    authority_list = request.session.get('authority_list')  # 获取当前用户的所有权限
+    menu_result = MenuHelper(request).menu_data_list()
+    PAGE_TITLE = '上会情况统计表'
+    '''REVIEW_MODEL_LIST = [(1, '内审'), (2, '外审'), (5, '签批'), (21, '小贷-评审'), (25, '小贷-签批'), ]'''
+    CLASS_LIST = models.Appraisals.REVIEW_MODEL_LIST
+    TERM_LIST = [(1, '本年'), (2, '本季'), (3, '本月'), (4, '本周'), (11, '上年'), (99, '自定义'), ]
+    tf_r = request.GET.get('tf')
+    tl_r = request.GET.get('tl')
+    t_typ = kwargs['t_typ']
+
+    tf_r, tl_r = tt_compensatory(t_typ, tf_r, tl_r)
+
+    article_groups = models.Articles.objects.filter(
+        appraisal_article__review_date__gte=tf_r,
+        appraisal_article__review_date__lte=tl_r).order_by('review_date')
+    article_groups_1 = article_groups.filter(appraisal_article__review_model=1)
+    article_groups_2 = article_groups.filter(appraisal_article__review_model=2)
+    appraisals_groups_1 = models.Appraisals.objects.filter(
+        review_date__gte=tf_r,
+        review_date__lte=tl_r,
+        review_model=1)
+    appraisals_groups_2 = models.Appraisals.objects.filter(
+        review_date__gte=tf_r,
+        review_date__lte=tl_r,
+        review_model=2)
+
+    ap_g_1_count = appraisals_groups_1.aggregate(
+        Count('num'))['num__count']  # 内审会数
+    ap_g_2_count = appraisals_groups_2.aggregate(
+        Count('num'))['num__count']  # 外审会数
+
+    a_g_1_count = article_groups_1.aggregate(Count(
+        'article_balance'))['article_balance__count']  # 内审项目数
+    a_g_2_count = article_groups_2.aggregate(Count(
+        'article_balance'))['article_balance__count']  # 外审项目数
+
+    article_renewal = article_groups.aggregate(Sum('renewal'))['renewal__sum']  # 续贷金额
+    article_augment = article_groups.aggregate(Sum('augment'))['augment__sum']  # 新增金额
+    article_amount = article_groups.aggregate(Sum('amount'))['amount__sum']  # 金额合计
+    article_count = article_groups.aggregate(Count('article_balance'))['article_balance__count']  # 项目数
+    article_amount_str = amount_s(article_amount)  # 元转换为万元并去掉小数点后面的零
+    return render(request, 'dbms/report/meeting/meeting-article-meeting.html', locals())
 
 
 # -----------------------------项目反馈情况表------------------------------#
