@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}{{ PAGE_TITLE }}{% endblock %}
+{% block extra-css %}
+    <link rel="stylesheet" media="screen" href="{% static 'dbms/css/report-style.css' %}">
+    <link rel="stylesheet" media="print" href="{% static 'dbms/css/report-style.css' %}">
+    <link rel="stylesheet" media="print" href="{% static 'dbms/css/report-style-noprint.css' %}">
+{% endblock %}
+{% block  body %}
+    <div style="width: 310mm; margin-left: auto; margin-right: auto;">
+        <div class="table-responsive">
+            <table class="table table-bordered table-hover table-condensed active">
+                <caption>{{ PAGE_TITLE }}（截止日：{{ td }}）</caption>
+                <thead>
+                <tr style="text-align: center">
+                    <th width="100pt">合同编号({{ provide_follow_list_count }})</th>
+                    <th width="40pt">客户名称</th>
+                    <th width="60pt">放款银行</th>
+                    <th>合同金额</th>
+                    <th>落实情况</th>
+                    <th>通知金额</th>
+                    <th>放款金额</th>
+                    <th>还款金额</th>
+                    <th>在保余额</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for agree in provide_follow_list %}
+                    <tr style="padding: 0;">
+                        <td style="padding: 0">
+                            <a target="_blank" href="{% url 'dbms:provide_agree_scan' agree_id=agree.id %}">
+                                {{ agree.agree_num }}
+                            </a>
+                        </td>
+                        <td style="padding: 0">{{ agree.lending.summary.custom.short_name }}</td>
+                        <td style="padding: 0">{{ agree.branch.short_name }}</td>
+                        <td style="padding: 0" align="right">{{ agree.agree_amount|floatformat:2 }}</td>
+                        <td style="padding: 0">{{ agree.agree_remark }}</td>
+                        <td style="padding: 0" align="right">{{ agree.agree_notify_sum|floatformat:2 }}</td>
+                        <td style="padding: 0" align="right">{{ agree.agree_provide_sum|floatformat:2 }}</td>
+                        <td style="padding: 0" align="right">{{ agree.agree_repayment_sum|floatformat:2 }}</td>
+                        <td style="padding: 0" align="right">{{ agree.agree_balance|floatformat:2 }}</td>
+                    </tr>
+                {% endfor %}
+
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+{% endblock %}
+
+
+

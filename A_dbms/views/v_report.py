@@ -1344,6 +1344,22 @@ def article_feedback_list(request, *args, **kwargs):  # 项目列表
     return render(request, 'dbms/report/meeting/meeting-article-feedback.html', locals())
 
 
+# -----------------------------风控落实跟踪表------------------------------#
+def provide_follow_list(request, *args, **kwargs):  # 项目列表
+    current_url_name = resolve(request.path).url_name  # 获取当前URL_NAME
+    authority_list = request.session.get('authority_list')  # 获取当前用户的所有权限
+    menu_result = MenuHelper(request).menu_data_list()
+    job_list = request.session.get('job_list')  # 获取当前用户的所有角色
+    PAGE_TITLE = '风控落实跟踪表'
+    '''ARTICLE_STATE_LIST = [(1, '待反馈'), (2, '已反馈'), (3, '待上会'), (4, '已上会'), (5, '已签批'),
+                          (51, '已放款'), (52, '已放完'), (55, '已解保'), (61, '待变更'), (99, '已注销')]'''
+    provide_follow_list = models.Agrees.objects.filter(
+        agree_state=31)  # 未落实
+    provide_follow_list_count = provide_follow_list.count()
+    td = datetime.date.today()
+    agree_amount_sum = provide_follow_list.aggregate(Sum('agree_amount'))['agree_amount__sum']  #
+    return render(request, 'dbms/report/meeting/meeting-follow-list.html', locals())
+
 # -----------------------------逾期归档情况表------------------------------#
 def pig_overdue_list(request, *args, **kwargs):  # 项目列表
     current_url_name = resolve(request.path).url_name  # 获取当前URL_NAME
