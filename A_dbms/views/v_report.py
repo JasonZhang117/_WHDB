@@ -837,6 +837,8 @@ def report_article_list(request, *args, **kwargs):  #
         article_groups = article_groups.filter(control__name=ss_value)
     elif c_typ == 81:
         article_groups = article_groups.filter(expert__organization=ss_value)
+    article_renewal_tot = article_groups.aggregate(Sum('renewal'))['renewal__sum']  #
+    article_augment_tot = article_groups.aggregate(Sum('augment'))['augment__sum']  #
     article_amount_tot = article_groups.aggregate(Sum('amount'))['amount__sum']  #
     article_provide_tot = article_groups.aggregate(Sum('article_provide_sum'))['article_provide_sum__sum']  #
     article_repayment_tot = article_groups.aggregate(Sum('article_repayment_sum'))['article_repayment_sum__sum']  #
