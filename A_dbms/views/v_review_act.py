@@ -278,9 +278,11 @@ def investigate_add_ajax(request):
                 custom_list.update(lately_date=inv_cleaned['inv_date'])  # 更新客户信息
                 '''REVIEW_STATE_LIST = [(1, '待保后'), (11, '待报告'), (21, '已完成'), (81, '自主保后')]'''
                 custom_review = models.Review.objects.filter(custom=custom_obj, review_state=1)
-                if custom_review:  # 如有尚未完成的保后计划,(61, '补调替代')
+                if custom_review:  # 如有尚未完成的保后计划,(61, '补调替代')i_classification
                     '''REVIEW_STY_LIST = [(1, '现场检查'), (11, '电话回访'), (61, '补调替代'), (62, '尽调替代')]'''
-                    custom_review.update(review_sty=61, review_state=21, review_date=inv_cleaned['inv_date'])
+                    custom_review.update(review_sty=61, review_state=21, review_date=inv_cleaned['inv_date'],
+                                            analysis=inv_cleaned['i_analysis'], suggestion=inv_cleaned['i_suggestion'],
+                                            classification=inv_cleaned['i_classification'])
                     '''REVIEW_STATE_LIST = [(1, '待保后'), (11, '待报告'), (21, '已完成'), (81, '自主保后')]'''
                     custom_list.update(review_state=21, review_date=inv_cleaned['inv_date'])
             response['message'] = '补调成功！'
