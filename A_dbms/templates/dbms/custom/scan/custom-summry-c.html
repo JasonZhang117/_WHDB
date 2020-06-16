@@ -1,6 +1,7 @@
 <div class="panel-body row">
     <label class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
-        客户名称：{{ custom_obj.short_name }}
+        客户名称：
+        <a href="{% url 'dbms:custom_scan' custom_id=custom_obj.id %}">{{ custom_obj.short_name }}</a>
         <a style="color: red" target="_blank"
                        href="https://www.tianyancha.com/search?key={{ custom_obj.name }}">天眼</a>
     </label>
