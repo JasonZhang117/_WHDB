@@ -332,6 +332,7 @@ def notify(request, *args, **kwargs):  #
     search_key = request.GET.get('_s')
     if search_key:
         search_fields = ['agree__lending__summary__custom__name',
+                         'agree__lending__summary__custom__short_name',
                          'agree__branch__name', 'agree__branch__short_name',
                          'agree__agree_num', 'contracts_lease', 'contract_guaranty']
         q = Q()

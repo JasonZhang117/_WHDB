@@ -362,9 +362,7 @@ def report_article_class(request, *args, **kwargs):  #
                   (41, '项目经理'), (51, '项目助理'), (61, '风控专员'), (81, '法律顾问'), ]
 
     article_state_list = models.Articles.ARTICLE_STATE_LIST  # 项目阶段
-    article_state_dic = {}
-    for article_state in article_state_list:
-        article_state_dic[article_state[0]] = article_state[1]
+    article_state_dic = dict(article_state_list)
 
     tf_r = request.GET.get('tf')
     tl_r = request.GET.get('tl')
