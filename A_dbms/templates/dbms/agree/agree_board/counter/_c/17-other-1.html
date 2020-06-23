@@ -77,7 +77,14 @@
             {% endif %}
         </td>
         <td style="border: none">
-            <strong><u>{{ agree_obj.lending.summary.custom.name }}</u></strong>
+            <strong><u>
+                {{ agree_obj.lending.summary.custom.name }}
+                {% if agree_obj.lending.summary.borrower.all %}
+                    {% for borrower in agree_obj.lending.summary.borrower.all %}
+                        、{{ borrower.name }}
+                    {% endfor %}
+                {% endif %}
+            </u></strong>
         </td>
     </tr>
 </table>
