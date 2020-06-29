@@ -137,7 +137,7 @@
 </tr>
 <tr>
     <td align="center">意见书编号：</td>
-    <td align="center">{{ agree_obj.lending.summary.summary_num }}</td>
+    <td align="center">{{ agree_obj.lending.summary.summary_num | default_if_none:'' }}</td>
     <td align="center" colspan="2">授信金额：</td>
     <td align="center" colspan="2">{{ article_amount_str }}万</td>
 </tr>
