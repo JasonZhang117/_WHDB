@@ -362,7 +362,7 @@ def authority(func):  # 权限控制
         current_url_name = resolve(request.path).url_name  # 获取当前URL_NAME
         authority_list = request.session.get('authority_list')  # 获取当前用户的所有权限
         # today_stamp = time.mktime(datetime.date.today())  # 元组转换为时间戳
-        limit_date = '2020-12-31'
+        limit_date = '2021-12-31'
         limit_date_tup = time.strptime(limit_date, "%Y-%m-%d")  # 字符串转换为元组
         limit_date_stamp = time.mktime(limit_date_tup)  # 元组转换为时间戳
 
