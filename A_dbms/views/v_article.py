@@ -80,6 +80,7 @@ def article_scan(request, article_id):  # 项目预览
     job_list = request.session.get('job_list')  # 获取当前用户的所有角色
     PAGE_TITLE = '项目详情'
     article_obj = models.Articles.objects.get(id=article_id)  # 项目
+    custom_obj = article_obj.custom
     expert_list = article_obj.expert.values_list('id')  # 项目评委列表
     feedbac_list = article_obj.feedback_article.all()  # 项目反馈列表
     process_typ = article_obj.process.typ  # 流程类型

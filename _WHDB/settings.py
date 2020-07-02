@@ -81,7 +81,7 @@ WSGI_APPLICATION = '_WHDB.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'wxxd',  # 你的数据库名称
+        'NAME': 'whdb',  # 你的数据库名称
         'USER': 'root',  # 你的数据库用户名
         'PASSWORD': '32243466',  # 你的数据库密码
         'HOST': '',  # 你的数据库主机，留空默认为localhost

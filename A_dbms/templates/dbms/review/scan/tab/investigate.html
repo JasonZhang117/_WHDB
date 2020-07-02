@@ -12,7 +12,7 @@
         </tr>
         </thead>
         <tbody id="investigate-tb">
-        {% for investigate in article_obj.custom.inv_custom.all %}
+        {% for investigate in custom_obj.inv_custom.all %}
             <tr investigate-nid="{{ investigate.id }}">
                 <td>{{ investigate.get_inv_typ_display }}</td>
                 <td>{{ investigate.i_analysis|default_if_none:"" }}</td>
