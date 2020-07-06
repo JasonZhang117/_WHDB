@@ -14,6 +14,7 @@
             <th>序号</th>
             <th>客户</th>
             <th>行业</th>
+            <th>类型</th>
             <th>授信总额</th>
             <th>反担保价值</th>
             <th>授信覆盖率</th>
@@ -32,6 +33,7 @@
                 <td style="padding: 0">{{ forloop.counter }}</td>
                 <td style="padding: 0">{{ custom.short_name }}</td>
                 <td style="padding: 0">{{ custom.idustry.cod_nam }}</td>
+                <td style="padding: 0">{{ custom.get_custom_typ_display }}</td>
                 <td style="padding: 0" align="right">{{ custom.credit_amount|floatformat:2 }}</td>
                 <td style="padding: 0" align="right">{{ custom.g_value|floatformat:2 }}</td>
                 <td style="padding: 0" align="right">{{ custom.g_radio|floatformat:2 }}</td>
