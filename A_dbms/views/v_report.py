@@ -169,6 +169,8 @@ def report_provide_list(request, *args, **kwargs):  #
             q.children.append(("%s__contains" % field, search_key.strip()))
         provide_list = provide_list.filter(q)
     provide_provide = provide_list.aggregate(Sum('provide_money'))['provide_money__sum']  #
+    old_amount_sum = provide_list.aggregate(Sum('old_amount'))['old_amount__sum']  #
+    new_amount_sum = provide_list.aggregate(Sum('new_amount'))['new_amount__sum']  #
     repayment_sum = provide_list.aggregate(Sum('provide_repayment_sum'))['provide_repayment_sum__sum']  #
     provide_balance = provide_list.aggregate(Sum('provide_balance'))['provide_balance__sum']  #
     provide_count = provide_list.count()  #
@@ -470,6 +472,8 @@ def report_provide_accrual(request, *args, **kwargs):  #
             q.children.append(("%s__contains" % field, search_key.strip()))
         provide_list = provide_list.filter(q)
     provide_provide = provide_list.aggregate(Sum('provide_money'))['provide_money__sum']  #
+    old_amount_sum = provide_list.aggregate(Sum('old_amount'))['old_amount__sum']  #
+    new_amount_sum = provide_list.aggregate(Sum('new_amount'))['new_amount__sum']  #
     repayment_sum = provide_list.aggregate(Sum('provide_repayment_sum'))['provide_repayment_sum__sum']  #
     provide_balance = provide_list.aggregate(Sum('provide_balance'))['provide_balance__sum']  #
     provide_count = provide_list.count()  #
