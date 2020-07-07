@@ -21,7 +21,11 @@
     <p>1.3本合同项下保函的实际格式以甲方出具的保函正本为准。</p>
     <p><strong>第二条 担保费</strong></p>
     <p>2.1收取标准：按以下第<strong><u>（1）</u></strong>项收取担保费：</p>
-    <p>（1）一次性收取：按担保总额的<strong><u>{{ single_quota_rate }}%</u></strong>收取[含税]；</p>
+    {% if rate_b %}
+        <p>（1）一次性收取：按担保总额的<strong><u>{{ single_quota_rate }}%</u></strong>收取[含税]；</p>
+    {% else %}
+        <p>（1）一次性收取：<strong><u>{{ single_quota_rate }}%</u></strong>；</p>
+    {% endif %}
     <p>（2）按担保时间收取：每月按担保总额的____%收取。</p>
     <p>（3）担保费收取按如下约定执行：____________________________。</p>
     <p>2.2具体数额：按以下第<u><strong>（1）</strong></u>项执行：</p>

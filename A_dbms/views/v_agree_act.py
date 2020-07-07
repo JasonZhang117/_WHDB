@@ -177,10 +177,16 @@ def agree_add_ajax(request):  # 添加合同
             agree_name = agree_name_f(agree_typ)
 
             repay_method = jk_add_cleaned['repay_method']
-            if agree_typ in [2, 21, 42, 52]:
-                agree_rate = agree_add_cleaned['agree_rate']
-            else:
+            try:
                 agree_rate=float(agree_add_cleaned['agree_rate'])
+            except ValueError:
+                agree_rate = agree_add_cleaned['agree_rate']
+
+            # if agree_typ in [2, 21, 42, 52]:
+            #     agree_rate = agree_add_cleaned['agree_rate']
+            # else:
+            #     agree_rate = float(agree_add_cleaned['agree_rate'])
+                
             agree_term=int(agree_add_cleaned['agree_term'])
             repay_ex=jk_add_cleaned['repay_ex']
             if repay_method == 21: #等额本息
@@ -379,8 +385,13 @@ def agree_edit_ajax(request):  #
             agree_limit_test(agree_typ, order_amount, cooperator_up_scale, agree_amount, amount_limit, response)
             agree_name = agree_name_f(agree_typ)  # 生成合同名称
 
-            repay_method=jk_add_cleaned['repay_method']
-            agree_rate=float(agree_add_cleaned['agree_rate'])
+            repay_method = jk_add_cleaned['repay_method']
+            try:
+                agree_rate=float(agree_add_cleaned['agree_rate'])
+            except ValueError:
+                agree_rate = agree_add_cleaned['agree_rate']
+
+            # agree_rate = float(agree_add_cleaned['agree_rate'])
             agree_term=int(agree_add_cleaned['agree_term'])
             repay_ex=jk_add_cleaned['repay_ex']
             if repay_method == 21: #等额本息
