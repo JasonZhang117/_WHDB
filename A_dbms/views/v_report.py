@@ -1026,6 +1026,7 @@ def report_custom_list(request, *args, **kwargs):  #
 
 # -----------------------客户分类排名---------------------#
 def top_custom(request, *args, **kwargs):  #
+    # print(dir(request),request.user)
     current_url_name = resolve(request.path).url_name  # 获取当前URL_NAME
     authority_list = request.session.get('authority_list')  # 获取当前用户的所有权限
     menu_result = MenuHelper(request).menu_data_list()

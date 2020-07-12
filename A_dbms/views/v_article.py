@@ -18,6 +18,7 @@ from _WHDB.views import (MenuHelper, authority, article_right, article_list_scre
 @login_required
 @authority
 def article(request, *args, **kwargs):  # 项目列表
+    # print(request.session.items())
     current_url_name = resolve(request.path).url_name  # 获取当前URL_NAME
     authority_list = request.session.get('authority_list')  # 获取当前用户的所有权限
     menu_result = MenuHelper(request).menu_data_list()
@@ -39,10 +40,12 @@ def article(request, *args, **kwargs):  # 项目列表
             condition[k] = temp  # 将参数放入查询字典
     '''筛选条件'''
     article_state_list = models.Articles.ARTICLE_STATE_LIST  # 筛选条件
-    article_state_list_dic = list(map(lambda x: {'id': x[0], 'name': x[1]}, article_state_list))
+    article_state_list_dic = list(
+        map(lambda x: {'id': x[0], 'name': x[1]}, article_state_list))
     # 列表或元组转换为字典并添加key[{'id': 1, 'name': '待反馈'}, {'id': 2, 'name': '已反馈'}]
     '''筛选'''
-    article_list = models.Articles.objects.filter(**kwargs).select_related('custom', 'director', 'assistant', 'control')
+    article_list = models.Articles.objects.filter(
+        **kwargs).select_related('custom', 'director', 'assistant', 'control')
     article_list = article_list_screen(article_list, request)  # 项目筛选
     '''搜索'''
     search_key = request.GET.get('_s')
@@ -55,7 +58,8 @@ def article(request, *args, **kwargs):  # 项目列表
             q.children.append(("%s__contains" % field, search_key.strip()))
         article_list = article_list.filter(q)
     article_acount = article_list.count()  # 信息数目
-    balance = article_list.aggregate(Sum('article_balance'))['article_balance__sum']  # 在保余额
+    balance = article_list.aggregate(Sum('article_balance'))[
+        'article_balance__sum']  # 在保余额
     '''分页'''
     paginator = Paginator(article_list, 19)
     page = request.GET.get('page')
@@ -84,7 +88,8 @@ def article_scan(request, article_id):  # 项目预览
     expert_list = article_obj.expert.values_list('id')  # 项目评委列表
     feedbac_list = article_obj.feedback_article.all()  # 项目反馈列表
     process_typ = article_obj.process.typ  # 流程类型
-    investigate_custom_list = article_obj.custom.inv_custom.all().order_by('-inv_date')  # 客户补调列表
+    investigate_custom_list = article_obj.custom.inv_custom.all().order_by(
+        '-inv_date')  # 客户补调列表
     '''ARTICLE_STATE_LIST = [(1, '待反馈'), (2, '已反馈'), (3, '待上会'), (4, '已上会'), (5, '已签批'),
                           (51, '已放款'), (52, '已放完'), (55, '已解保'), (61, '待变更'), (99, '已注销')]'''
     SHOW_SUM_LIST = [4, 5, 51, 52, 55, 61, ]  # 显示纪要的项目状态列表
@@ -95,7 +100,8 @@ def article_scan(request, article_id):  # 项目预览
         'director_id': article_obj.director.id,
         'assistant_id': article_obj.assistant.id, 'control_id': article_obj.control.id,
         'article_date': str(article_obj.article_date)}
-    form_article_add_edit = forms.ArticlesAddForm(initial=form_date)  # 项目变更form
+    form_article_add_edit = forms.ArticlesAddForm(
+        initial=form_date)  # 项目变更form
     if feedbac_list:
         form_date = {
             'propose': feedbac_list[0].propose, 'analysis': feedbac_list[0].analysis,
@@ -108,7 +114,8 @@ def article_scan(request, article_id):  # 项目预览
     if article_obj.article_state in [1, 2, 3, 4]:
         form_date = {'renewal': article_obj.renewal, 'augment': article_obj.augment,
                      'sign_date': str(datetime.date.today())}
-        form_article_sign = forms.ArticlesSignForm(initial=form_date)  # 项目签批form
+        form_article_sign = forms.ArticlesSignForm(
+            initial=form_date)  # 项目签批form
     else:
         form_date = {
             'summary_num': article_obj.summary_num, 'sign_type': article_obj.sign_type, 'renewal': article_obj.renewal,
@@ -116,19 +123,23 @@ def article_scan(request, article_id):  # 项目预览
             'rcd_opinion': article_obj.rcd_opinion,
             'convenor_opinion': article_obj.convenor_opinion, 'sign_detail': article_obj.sign_detail,
             'sign_date': str(article_obj.sign_date)}
-        form_article_sign = forms.ArticlesSignForm(initial=form_date)  # 项目签批form
+        form_article_sign = forms.ArticlesSignForm(
+            initial=form_date)  # 项目签批form
     form_article_sub = forms.ArticleSubForm()  # 添加审批意见form
     form_comment = forms.CommentsAddForm()  # 添加评审意见form
     form_single = forms.SingleQuotaForm()  # 添加单项额度form
     form_supply = forms.FormAddSupply()  # 添加补调问题form
     form_lending = forms.FormLendingOrder()  # 添加放款次序form
     form_borrower_add = forms.FormBorrowerAdd()  # 添加共借人form
-    form_article_change = forms.ArticleChangeForm(initial={'change_date': str(datetime.date.today())})  # 变更项目form
-    form_inv_add = forms.FormInvestigateAdd(initial={'inv_date': str(datetime.date.today())})  # 添加补充调查form
+    form_article_change = forms.ArticleChangeForm(
+        initial={'change_date': str(datetime.date.today())})  # 变更项目form
+    form_inv_add = forms.FormInvestigateAdd(
+        initial={'inv_date': str(datetime.date.today())})  # 添加补充调查form
     form_opinion = forms.FormOpinion(initial={'article_repay_method': article_obj.article_repay_method,
                                               'opinion': article_obj.opinion})  # 添加放款次序form
 
-    form_change_article_state = forms.ArticleStateChangeForm(initial={'article_state': article_obj.article_state})
+    form_change_article_state = forms.ArticleStateChangeForm(
+        initial={'article_state': article_obj.article_state})
     return render(request, 'dbms/article/article-scan.html', locals())
 
 
@@ -216,11 +227,14 @@ def article_scan_lending(request, article_id, lending_id):  # 项目预览
     form_agree_add = forms.ArticleAgreeAddForm()  # 创建合同form
     today_str = datetime.date.today()
     date_th_later = today_str + datetime.timedelta(days=365)
-    from_letter_data = {'starting_date': str(today_str), 'due_date': str(date_th_later)}
-    form_letter_add = forms.LetterGuaranteeAddForm(initial=from_letter_data)  # 创建公司保函合同
+    from_letter_data = {'starting_date': str(
+        today_str), 'due_date': str(date_th_later)}
+    form_letter_add = forms.LetterGuaranteeAddForm(
+        initial=from_letter_data)  # 创建公司保函合同
     from_jk_data = {'agree_start_date': str(today_str), 'agree_due_date': str(date_th_later),
                     'acc_name': str(article_obj.custom.name), }
-    form_agree_jk_add = forms.AgreeJkAddForm(initial=from_jk_data)  # 创建小贷借款合同扩展
+    form_agree_jk_add = forms.AgreeJkAddForm(
+        initial=from_jk_data)  # 创建小贷借款合同扩展
 
     '''GENRE_LIST = [(1, '企业'), (2, '个人')]'''
     form_lendingcustoms_c_add = models.Customes.objects.exclude(

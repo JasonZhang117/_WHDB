@@ -81,6 +81,7 @@ class MenuHelper(object):
 def acc_login(request):
     ''':param request::return:'''
     # print(request.path, '>', resolve(request.path).url_name, '>', request.user)
+    request.session.clear_expired() # 将所有Session失效日期小于当前日期的数据删除
     error_msg = ''
     if request.method == "POST":
         username = request.POST.get('username')
@@ -428,6 +429,7 @@ def home(request):
     #                       (51, '已放款'), (52, '已放完'), (55, '已解保'), (61, '待变更'), (99, '已注销')]'''
     #     if lending.summary.article_state in [5, 51, 52, 55] and lending.lending_state == 4:
     #         models.LendingOrder.objects.filter(id=lending.id).update(lending_state=5)
+    
     custom_list = models.Customes.objects.all()
     for custom in custom_list:
         custom_provide_balance_all = models.Provides.objects.filter(

@@ -133,5 +133,6 @@ STATICFILES_DIRS = (os.path.join(BASE_DIR, 'statics'),)
 
 LOGIN_URL = '/login/'
 
+SESSION_ENGINE = 'django.contrib.sessions.backends.cached_db'
 SESSION_COOKIE_AGE = 86400 #一天86400秒
 SESSION_EXPIRE_AT_BROWSER_CLOSE = True #是否关闭浏览器失效
