@@ -127,10 +127,18 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.1/howto/static-files/
 
-STATIC_URL = '/static/'
-
-STATICFILES_DIRS = (os.path.join(BASE_DIR, 'statics'),)
-
+#是在某个具体的App下新建static目录，用来存放与App相关的静态资源。
+STATIC_URL = '/static/' 
+#是在项目目录下新建commomStatic目录，用来存放多个App之间公共的静态资源。
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, 'statics'),
+]
+'''
+    STATIC_ROOT是项目部署的时候才会用到的，是配合Nginx使用的。他的作用就是收集（复
+制）每个App下static中静态资源以及项目commonStatic中的静态资源到STATIC_ROOT对应
+的assert文件夹中。使用python manage.py collectstatic来做这一步操作。所
+以STATIC_ROOT 与 STATICFILES_DIRS的路径不能重复。
+'''
 LOGIN_URL = '/login/'
 
 SESSION_ENGINE = 'django.contrib.sessions.backends.cached_db'
