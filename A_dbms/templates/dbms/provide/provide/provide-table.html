@@ -11,8 +11,8 @@
             <th>放款种类</th>
             <th>放款日期</th>
             <th>到期日</th>
-{#            <th>项目经理</th>#}
             {% if PAGE_TITLE == '归档管理' %}
+                <th>项目经理</th>
                 <th>档案编号</th>
             {% else %}
                 <th>还款金额</th>
@@ -41,8 +41,8 @@
                 <td>{{ provide.get_provide_typ_display }}</td>
                 <td>{{ provide.provide_date }}</td>
                 <td>{{ provide.due_date }}</td>
-{#                <td>{{ provide.notify.agree.lending.summary.director.name }}</td>#}
                 {% if PAGE_TITLE == '归档管理' %}
+                    <td>{{ provide.notify.agree.lending.summary.director.name }}</td>
                     <td>{{ provide.file_num|default_if_none:"" }}</td>
                 {% else %}
                     <td align="right">{{ provide.provide_repayment_sum }}</td>
