@@ -8,9 +8,9 @@
     },// 配置工作区的解释器
     //配置代码格式化插件
     "python.linting.enabled": true, 
-    "python.linting.pylintEnabled": false, //pylint代码规范的工具
-    "python.linting.flake8Enabled": true, //flake8代码规范的工具
-    "python.linting.flake8Args": [
+    "python.linting.pylintEnabled": false, //pylint代码规范的工具启用
+    "python.linting.flake8Enabled": true, //flake8代码规范的工具启用
+    "python.linting.flake8Args": [ //flake8规则设置
         "--max-line-length=79", //flake8提示每行代码长度
         "--ignore=E401, F401, E262", //忽略提示的规则
         ], 
