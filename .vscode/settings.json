@@ -1,0 +1,22 @@
+{
+    "python.pythonPath": "C:\\ProgramData\\Miniconda3\\envs\\dj21\\python.exe", //python路径
+    "editor.fontSize": 16, //编辑器字体大小
+    //code-runner工作区配置
+    "code-runner.executorMap": {
+       "python": "C:\\ProgramData\\Miniconda3\\envs\\dj21\\python.exe",
+       "html": "\"C:\\Program Files\\Mozilla Firefox\\firefox.exe\"",
+    },// 配置工作区的解释器
+    //配置代码格式化插件
+    "python.linting.enabled": true, 
+    "python.linting.pylintEnabled": false, //pylint代码规范的工具
+    "python.linting.flake8Enabled": true, //flake8代码规范的工具
+    "python.linting.flake8Args": [
+        "--max-line-length=79", //flake8提示每行代码长度
+        "--ignore=E401, F401, E262", //忽略提示的规则
+        ], 
+    "python.formatting.provider": "yapf", //yapf代码格式化工具
+    "python.formatting.yapfArgs": [
+        "--style", "{column_limit: 79}" //设置yapf格式化控制的每行代码长度
+        ], 
+
+}
