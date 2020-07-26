@@ -4,11 +4,10 @@ import datetime
 
 # -----------------------------产品模型------------------------------#
 class Product(models.Model):  # 项产品
-    name = models.CharField(verbose_name='产品名称',
-                            max_length=32,
-                            unique=True)
+    name = models.CharField(verbose_name='产品名称', max_length=32, unique=True)
     ind = models.IntegerField(verbose_name='排序', default=1)
-    creator = models.ForeignKey(to='Employees', verbose_name="创建人",
+    creator = models.ForeignKey(to='Employees',
+                                verbose_name="创建人",
                                 on_delete=models.PROTECT,
                                 related_name='product_creator_employee')
     create_date = models.DateField(verbose_name='创建日期',
@@ -17,16 +16,21 @@ class Product(models.Model):  # 项产品
     class Meta:
         verbose_name_plural = '项目-产品'  # 指定显示名称
         db_table = 'dbms_product'  # 指定数据表的名称
-        ordering = ['-ind', ]
+        ordering = [
+            '-ind',
+        ]
 
     def __str__(self):
-        return "%s" % (self.name,)
+        return "%s" % (self.name, )
 
 
 # -----------------------------项目模型------------------------------#
 class Articles(models.Model):  # 项目、纪要
-    article_num = models.CharField(verbose_name='_项目编号', max_length=32, unique=True)
-    custom = models.ForeignKey(to='Customes', verbose_name="客户",
+    article_num = models.CharField(verbose_name='_项目编号',
+                                   max_length=32,
+                                   unique=True)
+    custom = models.ForeignKey(to='Customes',
+                               verbose_name="客户",
                                on_delete=models.PROTECT,
                                related_name='article_custom')
     renewal = models.FloatField(verbose_name='续贷金额（元）', default=0)
@@ -34,59 +38,101 @@ class Articles(models.Model):  # 项目、纪要
     amount = models.FloatField(verbose_name='_总额度（元）', default=0)
     credit_term = models.IntegerField(verbose_name='授信期限（月）', default=12)
     REPAY_METHOD_LIST = [
-        (11, '按月付息、到期还本'), (21, '等额本息'), (31, '按月付息、分期还本'), ]
-    article_repay_method = models.IntegerField(verbose_name='还款方式', choices=REPAY_METHOD_LIST, null=True, blank=True)
-    product = models.ForeignKey(to='Product', verbose_name="产品种类",
+        (11, '按月付息、到期还本'),
+        (21, '等额本息'),
+        (31, '按月付息、分期还本'),
+    ]
+    article_repay_method = models.IntegerField(verbose_name='还款方式',
+                                               choices=REPAY_METHOD_LIST,
+                                               null=True,
+                                               blank=True)
+    product = models.ForeignKey(to='Product',
+                                verbose_name="产品种类",
                                 on_delete=models.PROTECT,
-                                related_name='article_product', default=1)
-    process = models.ForeignKey(to='Process', verbose_name="审批流程",
+                                related_name='article_product',
+                                default=1)
+    process = models.ForeignKey(to='Process',
+                                verbose_name="审批流程",
                                 on_delete=models.PROTECT,
-                                related_name='article_process', default=1)
-    currentor = models.ForeignKey(to='Employees', verbose_name="当前审批人",
+                                related_name='article_process',
+                                default=1)
+    currentor = models.ForeignKey(to='Employees',
+                                  verbose_name="当前审批人",
                                   on_delete=models.PROTECT,
-                                  related_name='article_currentor_employee', default=1)
-    frontor = models.ForeignKey(to='Employees', verbose_name="上一审批人",
+                                  related_name='article_currentor_employee',
+                                  default=1)
+    frontor = models.ForeignKey(to='Employees',
+                                verbose_name="上一审批人",
                                 on_delete=models.PROTECT,
-                                related_name='article_frontor_employee', default=1)
-    director = models.ForeignKey(to='Employees', verbose_name="项目经理",
+                                related_name='article_frontor_employee',
+                                default=1)
+    director = models.ForeignKey(to='Employees',
+                                 verbose_name="项目经理",
                                  on_delete=models.PROTECT,
                                  related_name='director_employee')
-    assistant = models.ForeignKey(to='Employees', verbose_name="项目助理",
+    assistant = models.ForeignKey(to='Employees',
+                                  verbose_name="项目助理",
                                   on_delete=models.PROTECT,
                                   related_name='assistant_employee')
-    control = models.ForeignKey(to='Employees', verbose_name="风控专员",
+    control = models.ForeignKey(to='Employees',
+                                verbose_name="风控专员",
                                 on_delete=models.PROTECT,
                                 related_name='control_employee')
     article_date = models.DateField(verbose_name='反馈日期', null=True, blank=True)
     # 自动创建第三张表
-    expert = models.ManyToManyField(to='Experts', verbose_name="评审委员",
-                                    related_name='article_expert', blank=True, null=True)
-    borrower = models.ManyToManyField(to='Customes', verbose_name="共借人",
-                                      related_name='borrower_custom', blank=True, null=True)
+    expert = models.ManyToManyField(to='Experts',
+                                    verbose_name="评审委员",
+                                    related_name='article_expert',
+                                    blank=True,
+                                    null=True)
+    borrower = models.ManyToManyField(to='Customes',
+                                      verbose_name="共借人",
+                                      related_name='borrower_custom',
+                                      blank=True,
+                                      null=True)
     review_date = models.DateField(verbose_name='上会日期', null=True, blank=True)
-    summary_num = models.CharField(verbose_name='_纪要编号', max_length=32, unique=True, null=True, blank=True)
+    summary_num = models.CharField(verbose_name='_纪要编号',
+                                   max_length=32,
+                                   unique=True,
+                                   null=True,
+                                   blank=True)
     summary = models.TextField(verbose_name='_纪要', null=True, blank=True)
     opinion = models.TextField(verbose_name='项目意见', null=True, blank=True)
     SIGN_TYPE_LIST = ((1, '同意'), (2, '不同意'))
-    sign_type = models.IntegerField(verbose_name='签批结论', choices=SIGN_TYPE_LIST, null=True, blank=True)
+    sign_type = models.IntegerField(verbose_name='签批结论',
+                                    choices=SIGN_TYPE_LIST,
+                                    null=True,
+                                    blank=True)
     rcd_opinion = models.TextField(verbose_name='风控部意见', null=True, blank=True)
-    convenor_opinion = models.TextField(verbose_name='招集人意见', null=True, blank=True)
+    convenor_opinion = models.TextField(verbose_name='招集人意见',
+                                        null=True,
+                                        blank=True)
     sign_detail = models.TextField(verbose_name='签批人意见', null=True, blank=True)
     sign_date = models.DateField(verbose_name='签批日期', null=True, blank=True)
 
-    ARTICLE_STATE_LIST = [(1, '待反馈'), (2, '已反馈'), (3, '待上会'), (4, '已上会'), (5, '已签批'),
-                          (51, '已放款'), (52, '已放完'), (55, '已解保'), (61, '待变更'), (99, '已注销')]
-    article_state = models.IntegerField(verbose_name='项目状态', choices=ARTICLE_STATE_LIST, default=1)
-    CLASSIFICATION_LIST = ((1, '正常'), (11, '关注'), (21, '次级'), (31, '可疑'), (41, '损失'))
-    classification = models.IntegerField(verbose_name='_风险分类', choices=CLASSIFICATION_LIST, default=1)
+    ARTICLE_STATE_LIST = [(1, '待反馈'), (2, '已反馈'), (3, '待上会'), (4, '已上会'),
+                          (5, '已签批'), (51, '已放款'), (52, '已放完'), (55, '已解保'),
+                          (61, '待变更'), (99, '已注销')]
+    article_state = models.IntegerField(verbose_name='项目状态',
+                                        choices=ARTICLE_STATE_LIST,
+                                        default=1)
+    CLASSIFICATION_LIST = ((1, '正常'), (11, '关注'), (21, '次级'), (31, '可疑'),
+                           (41, '损失'))
+    classification = models.IntegerField(verbose_name='_风险分类',
+                                         choices=CLASSIFICATION_LIST,
+                                         default=1)
     article_notify_sum = models.FloatField(verbose_name='_通知金额', default=0)
     article_provide_sum = models.FloatField(verbose_name='_放款金额', default=0)
     article_repayment_sum = models.FloatField(verbose_name='_还款金额', default=0)
     article_balance = models.FloatField(verbose_name='_在保余额', default=0)
-    article_buildor = models.ForeignKey(to='Employees', verbose_name="_创建者",
-                                        on_delete=models.PROTECT, default=1,
-                                        related_name='article_buildor_employee')
-    build_date = models.DateField(verbose_name='创建日期', default=datetime.date.today)
+    article_buildor = models.ForeignKey(
+        to='Employees',
+        verbose_name="_创建者",
+        on_delete=models.PROTECT,
+        default=1,
+        related_name='article_buildor_employee')
+    build_date = models.DateField(verbose_name='创建日期',
+                                  default=datetime.date.today)
 
     class Meta:
         verbose_name_plural = '项目'  # 指定显示名称
@@ -99,17 +145,21 @@ class Articles(models.Model):  # 项目、纪要
 
 # -----------------------------风控反馈------------------------------#
 class Feedback(models.Model):
-    article = models.ForeignKey(to='Articles', verbose_name="项目",
+    article = models.ForeignKey(to='Articles',
+                                verbose_name="项目",
                                 on_delete=models.PROTECT,
                                 related_name='feedback_article')
     PROPOSE_LIST = ((1, '符合上会条件'), (11, '暂不符合上会条件'), (21, '建议终止项目'))
     propose = models.IntegerField(verbose_name='上会建议', choices=PROPOSE_LIST)
     analysis = models.TextField(verbose_name='风险分析')
     suggestion = models.TextField(verbose_name='风控意见')
-    feedback_buildor = models.ForeignKey(to='Employees', verbose_name="创建者",
-                                         on_delete=models.PROTECT,
-                                         related_name='feedback_buildor_employee')
-    feedback_date = models.DateField(verbose_name='提交日期', default=datetime.date.today)
+    feedback_buildor = models.ForeignKey(
+        to='Employees',
+        verbose_name="创建者",
+        on_delete=models.PROTECT,
+        related_name='feedback_buildor_employee')
+    feedback_date = models.DateField(verbose_name='提交日期',
+                                     default=datetime.date.today)
 
     class Meta:
         verbose_name_plural = '项目-反馈'  # 指定显示名称
@@ -121,17 +171,22 @@ class Feedback(models.Model):
 
 # -----------------------------项目变更------------------------------#
 class ArticleChange(models.Model):
-    article = models.ForeignKey(to='Articles', verbose_name="项目",
+    article = models.ForeignKey(to='Articles',
+                                verbose_name="项目",
                                 on_delete=models.PROTECT,
                                 related_name='change_article')
     CHANGE_VIEW_LIST = ((1, '变更申请'), (11, '同意变更'), (21, '否决变更'))
-    change_view = models.IntegerField(verbose_name='变更意见', choices=CHANGE_VIEW_LIST, default=1)
+    change_view = models.IntegerField(verbose_name='变更意见',
+                                      choices=CHANGE_VIEW_LIST,
+                                      default=1)
     change_detail = models.TextField(verbose_name='签批详情')
     change_date = models.DateField(verbose_name='变更日期')
-    change_buildor = models.ForeignKey(to='Employees', verbose_name="创建者",
+    change_buildor = models.ForeignKey(to='Employees',
+                                       verbose_name="创建者",
                                        on_delete=models.PROTECT,
                                        related_name='change_buildor_employee')
-    build_date = models.DateField(verbose_name='创建日期', default=datetime.date.today)
+    build_date = models.DateField(verbose_name='创建日期',
+                                  default=datetime.date.today)
 
     class Meta:
         verbose_name_plural = '项目-变更'  # 指定显示名称
