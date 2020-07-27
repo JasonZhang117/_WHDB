@@ -21,7 +21,7 @@ class Review(models.Model):
                                      choices=REVIEW_STY_LIST,
                                      blank=True,
                                      null=True)
-    book = models.TextField(verbose_name='专员台账', blank=True, null=True)
+    # book = models.TextField(verbose_name='专员台账', blank=True, null=True)
     analysis = models.TextField(verbose_name='风险分析', blank=True, null=True)
     suggestion = models.TextField(verbose_name='风控建议', blank=True, null=True)
     classification = models.IntegerField(verbose_name='风险分类',
