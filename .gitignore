@@ -2,7 +2,7 @@
 # .vscode/
 # .mypy_cache/
 venv/
-# migrations/
+migrations/
 #*_initial.py
 
 # Python:
