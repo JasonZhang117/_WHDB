@@ -1,17 +1,18 @@
 .idea/
 # .vscode/
-# .mypy_cache/
+.mypy_cache/
 venv/
 migrations/
 #*_initial.py
 
 # Python:
 *.py[cod]
+*.log
+*.jpg
+# *.sqlite3
 *.cpython-*
-
 #Django:
 #db.sqlite3
 #_WHDB.xlsx
-# migrations/*
 #!__init__.py
 
