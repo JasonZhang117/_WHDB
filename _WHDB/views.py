@@ -20,8 +20,10 @@ class MenuHelper(object):
     def __init__(self, request):
         self.request = request  # 当前请求的request对象
         self.current_url_name = resolve(request.path).url_name  # 获取当前URL_NAME
-        self.authority_list = request.session.get('authority_list')  # 获取当前用户的所有权限
-        self.menu_leaf_list = request.session.get('menu_leaf_list')  # 获取在菜单中显示的权限
+        self.authority_list = request.session.get(
+            'authority_list')  # 获取当前用户的所有权限
+        self.menu_leaf_list = request.session.get(
+            'menu_leaf_list')  # 获取在菜单中显示的权限
         self.menu_list = request.session.get('menu_list')  # 获取所有菜单
 
     def menu_data_list(self):
@@ -42,7 +44,9 @@ class MenuHelper(object):
             if item['parent_id'] in menu_leaf_dict:
                 menu_leaf_dict[item['parent_id']].append(item)
             else:
-                menu_leaf_dict[item['parent_id']] = [item, ]
+                menu_leaf_dict[item['parent_id']] = [
+                    item,
+                ]
             # if re.match(item['url'], current_url):
             if item['url_name'] == self.current_url_name:
                 item['open'] = True
@@ -52,7 +56,8 @@ class MenuHelper(object):
         menu_dict = {}  # 菜单字典
         for item in self.menu_list:  # carte_list为列表，其中的元素为字典，取出列表中的字典元素为item
             item['child'] = []  # 将carte_list里的每个字典添加一个child键，值设置为一个空列表
-            menu_dict[item['id']] = item  # 将字典carte_dict键设为item字典的id值，值设为item字典
+            menu_dict[
+                item['id']] = item  # 将字典carte_dict键设为item字典的id值，值设为item字典
             item['status'] = False
             item['open'] = False
         # 将叶子节点添加到菜单中
@@ -81,7 +86,7 @@ class MenuHelper(object):
 def acc_login(request):
     ''':param request::return:'''
     # print(request.path, '>', resolve(request.path).url_name, '>', request.user)
-    request.session.clear_expired() # 将所有Session失效日期小于当前日期的数据删除
+    request.session.clear_expired()  # 将所有Session失效日期小于当前日期的数据删除
     error_msg = ''
     if request.method == "POST":
         username = request.POST.get('username')
@@ -98,21 +103,26 @@ def acc_login(request):
             for job in job_list_d:
                 job_list.append(job["name"])
             request.session['job_list'] = job_list
-            authority_list_d = list(models.Authorities.objects.filter(
-                jobs__employees=user).distinct().values('url_name'))  # 权限列表
+            authority_list_d = list(
+                models.Authorities.objects.filter(jobs__employees=user).
+                distinct().values('url_name'))  # 权限列表
             authority_list = []
             for authority in authority_list_d:
                 authority_list.append(authority["url_name"])
             request.session['authority_list'] = authority_list
             '''# 获取菜单的叶子节点，即：菜单的最后一层应该显示的权限'''
-            menu_leaf_list = list(models.Authorities.objects.filter(
-                jobs__employees=user).distinct().order_by('ordery').exclude(
-                carte__isnull=True).values(
-                'id', 'name', 'url', 'url_name', 'carte', 'ordery'))  # 有菜单权限列表
+            menu_leaf_list = list(
+                models.Authorities.objects.filter(
+                    jobs__employees=user).distinct().order_by(
+                        'ordery').exclude(carte__isnull=True).values(
+                            'id', 'name', 'url', 'url_name', 'carte',
+                            'ordery'))  # 有菜单权限列表
             request.session['menu_leaf_list'] = menu_leaf_list
-            menu_list = list(models.Cartes.objects.filter(
-                authority_carte__jobs__employees=user).distinct().order_by('ordery').values(
-                'ordery', 'id', 'caption', 'parent_id'))  # # 获取所有的菜单列表
+            menu_list = list(
+                models.Cartes.objects.filter(
+                    authority_carte__jobs__employees=user).distinct().order_by(
+                        'ordery').values('ordery', 'id', 'caption',
+                                         'parent_id'))  # # 获取所有的菜单列表
             request.session['menu_list'] = menu_list
 
             login(request, user)
@@ -135,13 +145,15 @@ def article_list_screen(article_list, request):  # 项目筛选
     job_list = request.session.get('job_list')  # 获取当前用户的所有角色
     request_user = request.user
     if '业务部负责人' in job_list:  # 如果为业务部门负责人
-        user_department = models.Departments.objects.get(employee_department=request_user)  # 用户所属部门
-        article_list = article_list.filter(director__department=user_department)  # 项目经理部门与用户所属部门相同项目
+        user_department = models.Departments.objects.get(
+            employee_department=request_user)  # 用户所属部门
+        article_list = article_list.filter(
+            director__department=user_department)  # 项目经理部门与用户所属部门相同项目
         return article_list
     elif '项目经理' in job_list:
         article_list = article_list.filter(
-            Q(director=request_user) |
-            Q(assistant=request_user))  # 用户为项目经理或助理项目
+            Q(director=request_user)
+            | Q(assistant=request_user))  # 用户为项目经理或助理项目
         return article_list
     else:
         return article_list
@@ -152,13 +164,16 @@ def agree_list_screen(agree_list, request):  # 项目筛选
     job_list = request.session.get('job_list')  # 获取当前用户的所有角色
     request_user = request.user
     if '业务部负责人' in job_list:  # 如果为业务部门负责人
-        user_department = models.Departments.objects.get(employee_department=request_user)  # 用户所属部门
-        agree_list = agree_list.filter(lending__summary__director__department=user_department)  # 项目经理部门与用户所属部门相同项目
+        user_department = models.Departments.objects.get(
+            employee_department=request_user)  # 用户所属部门
+        agree_list = agree_list.filter(
+            lending__summary__director__department=user_department
+        )  # 项目经理部门与用户所属部门相同项目
         return agree_list
     elif '项目经理' in job_list:
         agree_list = agree_list.filter(
-            Q(lending__summary__director=request_user) |
-            Q(lending__summary__assistant=request_user))  # 用户为项目经理或助理项目
+            Q(lending__summary__director=request_user)
+            | Q(lending__summary__assistant=request_user))  # 用户为项目经理或助理项目
         return agree_list
     else:
         return agree_list
@@ -169,9 +184,11 @@ def notify_list_screen(notify_list, request):  # 项目筛选
     job_list = request.session.get('job_list')  # 获取当前用户的所有角色
     request_user = request.user
     if '业务部负责人' in job_list:  # 如果为业务部门负责人
-        user_department = models.Departments.objects.get(employee_department=request_user)  # 用户所属部门
+        user_department = models.Departments.objects.get(
+            employee_department=request_user)  # 用户所属部门
         notify_list = notify_list.filter(
-            agree__lending__summary__director__department=user_department)  # 项目经理部门与用户所属部门相同项目
+            agree__lending__summary__director__department=user_department
+        )  # 项目经理部门与用户所属部门相同项目
         return notify_list
     elif '项目经理' in job_list:
         notify_list = notify_list.filter(
@@ -187,14 +204,17 @@ def provide_list_screen(provide_list, request):  # 项目筛选
     job_list = request.session.get('job_list')  # 获取当前用户的所有角色
     request_user = request.user
     if '业务部负责人' in job_list:  # 如果为业务部门负责人
-        user_department = models.Departments.objects.get(employee_department=request_user)  # 用户所属部门
+        user_department = models.Departments.objects.get(
+            employee_department=request_user)  # 用户所属部门
         provide_list = provide_list.filter(
-            notify__agree__lending__summary__director__department=user_department)  # 项目经理部门与用户所属部门相同项目
+            notify__agree__lending__summary__director__department=
+            user_department)  # 项目经理部门与用户所属部门相同项目
         return provide_list
     elif '项目经理' in job_list:
         provide_list = provide_list.filter(
-            Q(notify__agree__lending__summary__director=request_user) |
-            Q(notify__agree__lending__summary__assistant=request_user))  # 用户为项目经理或助理项目
+            Q(notify__agree__lending__summary__director=request_user)
+            | Q(notify__agree__lending__summary__assistant=request_user)
+        )  # 用户为项目经理或助理项目
         return provide_list
     else:
         return provide_list
@@ -205,12 +225,14 @@ def custom_list_screen(custom_list, request):  # 项目筛选
     job_list = request.session.get('job_list')  # 获取当前用户的所有角色
     request_user = request.user
     if '业务部负责人' in job_list:  # 如果为业务部门负责人
-        user_department = models.Departments.objects.get(employee_department=request_user)  # 用户所属部门
+        user_department = models.Departments.objects.get(
+            employee_department=request_user)  # 用户所属部门
         custom_list = custom_list.filter(
             managementor__department=user_department)  # 项目经理部门与用户所属部门相同项目
         return custom_list
     elif '项目经理' in job_list:
-        custom_list = custom_list.filter(managementor=request_user)  # 用户为项目经理或助理项目
+        custom_list = custom_list.filter(
+            managementor=request_user)  # 用户为项目经理或助理项目
         return custom_list
     else:
         return custom_list
@@ -221,11 +243,14 @@ def warrant_list_screen(warrant_list, request):  # 项目筛选
     job_list = request.session.get('job_list')  # 获取当前用户的所有角色
     request_user = request.user
     if '业务部负责人' in job_list:  # 如果为业务部门负责人
-        user_department = models.Departments.objects.get(employee_department=request_user)  # 用户所属部门
-        warrant_list = warrant_list.filter(warrant_buildor__department=user_department)  # 项目经理部门与用户所属部门相同项目
+        user_department = models.Departments.objects.get(
+            employee_department=request_user)  # 用户所属部门
+        warrant_list = warrant_list.filter(
+            warrant_buildor__department=user_department)  # 项目经理部门与用户所属部门相同项目
         return warrant_list
     elif '项目经理' in job_list:
-        warrant_list = warrant_list.filter(warrant_buildor=request_user)  # 用户为项目经理或助理项目
+        warrant_list = warrant_list.filter(
+            warrant_buildor=request_user)  # 用户为项目经理或助理项目
         return warrant_list
     else:
         return warrant_list
@@ -234,17 +259,19 @@ def warrant_list_screen(warrant_list, request):  # 项目筛选
 # ---------------------------项目访问权限----------------------------#
 def article_right(func):  # 项目权限控制
     def inner(request, *args, **kwargs):
-        article_obj = models.Articles.objects.get(id=kwargs['article_id'])  # 项目
+        article_obj = models.Articles.objects.get(
+            id=kwargs['article_id'])  # 项目
         job_list = request.session.get('job_list')  # 获取当前用户的所有角色
         article_manager_department = article_obj.director.department  # 项目经理所属部门
-        user_department = models.Departments.objects.get(employee_department=request.user)
+        user_department = models.Departments.objects.get(
+            employee_department=request.user)
         if '业务部负责人' in job_list:  # 如果为业务部门负责人
             if not article_manager_department == user_department:  # 项目经理不属于部门负责人所属部门
                 return HttpResponse('该项目部归属你部门，无权访问！')
         if '项目经理' in job_list:
             user_list = models.Employees.objects.filter(
-                Q(director_employee=article_obj) |
-                Q(assistant_employee=article_obj)).distinct()  # 项目经理及助理列表
+                Q(director_employee=article_obj)
+                | Q(assistant_employee=article_obj)).distinct()  # 项目经理及助理列表
             if not request.user in user_list:
                 return HttpResponse('你不是该项目的项目经理或助理，无权访问！')
         return func(request, *args, **kwargs)
@@ -258,14 +285,17 @@ def agree_right(func):  # 合同权限控制
         agree_obj = models.Agrees.objects.get(id=kwargs['agree_id'])  # 项目
         job_list = request.session.get('job_list')  # 获取当前用户的所有角色
         article_manager_department = agree_obj.lending.summary.director.department  # 项目经理所属部门
-        user_department = models.Departments.objects.get(employee_department=request.user)
+        user_department = models.Departments.objects.get(
+            employee_department=request.user)
         if '业务部负责人' in job_list:  # 如果为业务部门负责人
             if not article_manager_department == user_department:  # 项目经理不属于部门负责人所属部门
                 return HttpResponse('该项目部归属你部门，无权访问！')
         if '项目经理' in job_list:
             user_list = models.Employees.objects.filter(
-                Q(director_employee__lending_summary__agree_lending=agree_obj) |
-                Q(assistant_employee__lending_summary__agree_lending=agree_obj)).distinct()  # 项目经理及助理列表
+                Q(director_employee__lending_summary__agree_lending=agree_obj)
+                |
+                Q(assistant_employee__lending_summary__agree_lending=agree_obj)
+            ).distinct()  # 项目经理及助理列表
             if not request.user in user_list:
                 return HttpResponse('你不是该项目的项目经理或助理，无权访问！')
         return func(request, *args, **kwargs)
@@ -279,14 +309,17 @@ def notify_right(func):  # 合同权限控制
         notify_obj = models.Notify.objects.get(id=kwargs['notify_id'])  # 项目
         job_list = request.session.get('job_list')  # 获取当前用户的所有角色
         article_manager_department = notify_obj.agree.lending.summary.director.department  # 项目经理所属部门
-        user_department = models.Departments.objects.get(employee_department=request.user)
+        user_department = models.Departments.objects.get(
+            employee_department=request.user)
         if '业务部负责人' in job_list:  # 如果为业务部门负责人
             if not article_manager_department == user_department:  # 项目经理不属于部门负责人所属部门
                 return HttpResponse('该项目部归属你部门，无权访问！')
         if '项目经理' in job_list:
             user_list = models.Employees.objects.filter(
-                Q(director_employee__lending_summary__agree_lending__notify_agree=notify_obj) |
-                Q(assistant_employee__lending_summary__agree_lending__notify_agree=notify_obj)).distinct()  # 项目经理及助理列表
+                Q(director_employee__lending_summary__agree_lending__notify_agree
+                  =notify_obj) |
+                Q(assistant_employee__lending_summary__agree_lending__notify_agree
+                  =notify_obj)).distinct()  # 项目经理及助理列表
             if not request.user in user_list:
                 return HttpResponse('你不是该项目的项目经理或助理，无权访问！')
         return func(request, *args, **kwargs)
@@ -297,18 +330,21 @@ def notify_right(func):  # 合同权限控制
 # ---------------------------放款访问权限----------------------------#
 def provide_right(func):  # 合同权限控制
     def inner(request, *args, **kwargs):
-        provide_obj = models.Provides.objects.get(id=kwargs['provide_id'])  # 项目
+        provide_obj = models.Provides.objects.get(
+            id=kwargs['provide_id'])  # 项目
         job_list = request.session.get('job_list')  # 获取当前用户的所有角色
         article_manager_department = provide_obj.notify.agree.lending.summary.director.department  # 项目经理所属部门
-        user_department = models.Departments.objects.get(employee_department=request.user)
+        user_department = models.Departments.objects.get(
+            employee_department=request.user)
         if '业务部负责人' in job_list:  # 如果为业务部门负责人
             if not article_manager_department == user_department:  # 项目经理不属于部门负责人所属部门
                 return HttpResponse('该项目部归属你部门，无权访问！')
         if '项目经理' in job_list:
             user_list = models.Employees.objects.filter(
-                Q(director_employee__lending_summary__agree_lending__provide_notify=provide_obj) |
-                Q(
-                    assistant_employee__lending_summary__agree_lending__provide_notify=provide_obj)).distinct()  # 项目经理及助理列表
+                Q(director_employee__lending_summary__agree_lending__provide_notify
+                  =provide_obj) |
+                Q(assistant_employee__lending_summary__agree_lending__provide_notify
+                  =provide_obj)).distinct()  # 项目经理及助理列表
             if not request.user in user_list:
                 return HttpResponse('你不是该项目的项目经理或助理，无权访问！')
         return func(request, *args, **kwargs)
@@ -322,14 +358,15 @@ def custom_right(func):  # 项目权限控制
         custom_obj = models.Customes.objects.get(id=kwargs['custom_id'])  # 项目
         job_list = request.session.get('job_list')  # 获取当前用户的所有角色
         custom_managementor_department = custom_obj.managementor.department  # 项目经理所属部门
-        user_department = models.Departments.objects.get(employee_department=request.user)
+        user_department = models.Departments.objects.get(
+            employee_department=request.user)
         if '业务部负责人' in job_list:  # 如果为业务部门负责人
             if not custom_managementor_department == user_department:  # 项目经理不属于部门负责人所属部门
                 return HttpResponse('该客户不归属你部门，无权访问！')
         if '项目经理' in job_list:
             user_list = models.Employees.objects.filter(
-                Q(manage_employee=custom_obj) |
-                Q(manage_employee=custom_obj)).distinct()  # 项目经理及助理列表
+                Q(manage_employee=custom_obj)
+                | Q(manage_employee=custom_obj)).distinct()  # 项目经理及助理列表
             if not request.user in user_list:
                 return HttpResponse('你不是该客户的管护经理或助理，无权访问！')
         return func(request, *args, **kwargs)
@@ -340,10 +377,12 @@ def custom_right(func):  # 项目权限控制
 # ---------------------------权证访问权限----------------------------#
 def warrant_right(func):  # 权证访问权限
     def inner(request, *args, **kwargs):
-        warrant_obj = models.Warrants.objects.get(id=kwargs['warrant_id'])  # 项目
+        warrant_obj = models.Warrants.objects.get(
+            id=kwargs['warrant_id'])  # 项目
         job_list = request.session.get('job_list')  # 获取当前用户的所有角色
         warrant_manager_department = warrant_obj.warrant_buildor.department  # 项目经理所属部门
-        user_department = models.Departments.objects.get(employee_department=request.user)
+        user_department = models.Departments.objects.get(
+            employee_department=request.user)
         if '业务部负责人' in job_list:  # 如果为业务部门负责人
             if not warrant_manager_department == user_department:  # 项目经理不属于部门负责人所属部门
                 return HttpResponse('该项目部归属你部门，无权访问！')
@@ -373,7 +412,7 @@ def authority(func):  # 权限控制
         if not current_url_name in authority_list:
             response = {'status': True, 'message': None}
             response['status'] = False
-            response['message'] = '无权限(%s)，请联系管理员！'  % current_url_name
+            response['message'] = '无权限(%s)，请联系管理员！' % current_url_name
             result = json.dumps(response, ensure_ascii=False)
             return HttpResponse(result)
         elif today_stamp > limit_date_stamp:
@@ -391,7 +430,11 @@ def authority(func):  # 权限控制
 # ---------------------------项目流程权限----------------------------#
 def sub_article_right(func):
     def inner(request, *args, **kwargs):
-        response = {'status': True, 'message': None, 'forme': None, }
+        response = {
+            'status': True,
+            'message': None,
+            'forme': None,
+        }
         post_data_str = request.POST.get('postDataStr')
         post_data = json.loads(post_data_str)
         article_id = post_data['article_id']
@@ -429,26 +472,26 @@ def home(request):
     #                       (51, '已放款'), (52, '已放完'), (55, '已解保'), (61, '待变更'), (99, '已注销')]'''
     #     if lending.summary.article_state in [5, 51, 52, 55] and lending.lending_state == 4:
     #         models.LendingOrder.objects.filter(id=lending.id).update(lending_state=5)
-    
+
     custom_list = models.Customes.objects.all()
     for custom in custom_list:
         custom_provide_balance_all = models.Provides.objects.filter(
-                                notify__agree__lending__summary__custom=custom).aggregate(
-                                Sum('provide_balance'))['provide_balance__sum']  # 客户项下，在保余额
+            notify__agree__lending__summary__custom=custom).aggregate(
+                Sum('provide_balance'))['provide_balance__sum']  # 客户项下，在保余额
         custom_ll = models.Customes.objects.filter(id=custom.id)
         if custom_provide_balance_all:
             custom_ll.update(amount=round(custom_provide_balance_all, 2))
         else:
             custom_ll.update(amount=0)
-        rr = radio(custom.credit_amount,custom.g_value)
-        vv = radio(custom.amount,custom.g_value)
-        custom_ll.update(g_radio=rr,v_radio=vv)
+        rr = radio(custom.credit_amount, custom.g_value)
+        vv = radio(custom.amount, custom.g_value)
+        custom_ll.update(g_radio=rr, v_radio=vv)
     branch_list = models.Branches.objects.all()
     for branch_obj in branch_list:
         branch_provide_balance_all = models.Provides.objects.filter(
-                                notify__agree__branch=branch_obj).aggregate(
-                                Sum('provide_balance'))['provide_balance__sum']  # 放款银行项下，在保余额
-        branch_ll =  models.Branches.objects.filter(id=branch_obj.id)     
+            notify__agree__branch=branch_obj).aggregate(
+                Sum('provide_balance'))['provide_balance__sum']  # 放款银行项下，在保余额
+        branch_ll = models.Branches.objects.filter(id=branch_obj.id)
         if branch_provide_balance_all:
             branch_ll.update(amount=round(branch_provide_balance_all, 2))
         else:
@@ -457,11 +500,12 @@ def home(request):
     cooperator_list = models.Cooperators.objects.all()
     for cooperator_obj in cooperator_list:
         cooperator_provide_balance_all = models.Provides.objects.filter(
-                                notify__agree__branch__cooperator=cooperator_obj).aggregate(
-                                Sum('provide_balance'))['provide_balance__sum']  # 授信银行项下，在保余额
+            notify__agree__branch__cooperator=cooperator_obj).aggregate(
+                Sum('provide_balance'))['provide_balance__sum']  # 授信银行项下，在保余额
         cooperator_ll = models.Cooperators.objects.filter(id=cooperator_obj.id)
         if cooperator_provide_balance_all:
-            cooperator_ll.update(amount=round(cooperator_provide_balance_all, 2))
+            cooperator_ll.update(
+                amount=round(cooperator_provide_balance_all, 2))
         else:
             cooperator_ll.update(amount=0)
 
@@ -507,17 +551,22 @@ def convert(n):
     nums = ['零', '壹', '贰', '叁', '肆', '伍', '陆', '柒', '捌', '玖']
     decimal_label = ['角', '分']
     small_int_label = ['', '拾', '佰', '仟']
-    int_part, decimal_part = str(int(n)), str(round(n - int(n), 2))[2:]  # 分离整数和小数部分
+    int_part, decimal_part = str(int(n)), str(round(n - int(n),
+                                                    2))[2:]  # 分离整数和小数部分
     res = []
     if decimal_part:
-        res.append(''.join([nums[int(x)] + y for x, y in list(zip(decimal_part, decimal_label)) if x != '0']))
+        res.append(''.join([
+            nums[int(x)] + y for x, y in list(zip(decimal_part, decimal_label))
+            if x != '0'
+        ]))
     if int_part != '0':
         res.append('圆')
         while int_part:
             small_int_part, int_part = int_part[-4:], int_part[:-4]
-            tmp = ''.join(
-                [nums[int(x)] + (y if x != '0' else '') for x, y in
-                 list(zip(small_int_part[::-1], small_int_label))[::-1]])
+            tmp = ''.join([
+                nums[int(x)] + (y if x != '0' else '') for x, y in list(
+                    zip(small_int_part[::-1], small_int_label))[::-1]
+            ])
             tmp = tmp.rstrip('零').replace('零零零', '零').replace('零零', '零')
             unit = units.pop(0)
             if tmp:
@@ -536,19 +585,22 @@ def convert_num(n):
     nums = ['零', '壹', '贰', '叁', '肆', '伍', '陆', '柒', '捌', '玖']
     decimal_label = ['角', '分']
     small_int_label = ['', '拾', '佰', '仟']
-    int_part, decimal_part = str(int(n)), str(round(n - int(n), 4))[2:]  # 分离整数和小数部分
+    int_part, decimal_part = str(int(n)), str(round(n - int(n),
+                                                    4))[2:]  # 分离整数和小数部分
     res = []
     if decimal_part:
-        res.append(''.join([nums[int(x)] for x in list(decimal_part) if x != '0']))
+        res.append(''.join(
+            [nums[int(x)] for x in list(decimal_part) if x != '0']))
 
     if int_part != '0':
         if decimal_part and decimal_part != '0':
             res.append('点')
         while int_part:
             small_int_part, int_part = int_part[-4:], int_part[:-4]
-            tmp = ''.join(
-                [nums[int(x)] + (y if x != '0' else '') for x, y in
-                 list(zip(small_int_part[::-1], small_int_label))[::-1]])
+            tmp = ''.join([
+                nums[int(x)] + (y if x != '0' else '') for x, y in list(
+                    zip(small_int_part[::-1], small_int_label))[::-1]
+            ])
             tmp = tmp.rstrip('零').replace('零零零', '零').replace('零零', '零')
             unit = units.pop(0)
             if tmp:
@@ -562,13 +614,15 @@ def convert_num(n):
     # print('len(result):',len(result),result,result[-1])
     return result
 
+
 # -----------------------------数字小写转大写（含小数点）------------------------------#
 def convert_num_4(n):
     units = ['', '万', '亿']
     nums = ['零', '壹', '贰', '叁', '肆', '伍', '陆', '柒', '捌', '玖']
     decimal_label = ['角', '分']
     small_int_label = ['', '拾', '佰', '仟']
-    int_part, decimal_part = str(int(n)), str(round(n - int(n), 4))[2:]  # 分离整数和小数部分
+    int_part, decimal_part = str(int(n)), str(round(n - int(n),
+                                                    4))[2:]  # 分离整数和小数部分
     res = []
     if decimal_part:
         res.append(''.join([nums[int(x)] for x in list(decimal_part)]))
@@ -578,9 +632,10 @@ def convert_num_4(n):
             res.append('点')
         while int_part:
             small_int_part, int_part = int_part[-4:], int_part[:-4]
-            tmp = ''.join(
-                [nums[int(x)] + (y if x != '0' else '') for x, y in
-                 list(zip(small_int_part[::-1], small_int_label))[::-1]])
+            tmp = ''.join([
+                nums[int(x)] + (y if x != '0' else '') for x, y in list(
+                    zip(small_int_part[::-1], small_int_label))[::-1]
+            ])
             tmp = tmp.rstrip('零').replace('零零零', '零').replace('零零', '零')
             unit = units.pop(0)
             if tmp:
@@ -595,21 +650,23 @@ def convert_num_4(n):
     return result
 
 
-
 # -----------------------阿拉伯数字转换-------------------------#
+
 
 def convert_str(n):
     units = ['', '万', '亿']
     nums = ['0', '一', '二', '三', '四', '五', '六', '七', '八', '九']
     small_int_label = ['', '十', '百', '千']
-    int_part, decimal_part = str(int(n)), str(round(n - int(n), 2))[2:]  # 分离整数和小数部分
+    int_part, decimal_part = str(int(n)), str(round(n - int(n),
+                                                    2))[2:]  # 分离整数和小数部分
     res = []
     if int_part != '0':
         while int_part:
             small_int_part, int_part = int_part[-4:], int_part[:-4]
-            tmp = ''.join(
-                [nums[int(x)] + (y if x != '0' else '') for x, y in
-                 list(zip(small_int_part[::-1], small_int_label))[::-1]])
+            tmp = ''.join([
+                nums[int(x)] + (y if x != '0' else '') for x, y in list(
+                    zip(small_int_part[::-1], small_int_label))[::-1]
+            ])
             tmp = tmp.rstrip('0').replace('000', '0').replace('00', '0')
             unit = units.pop(0)
             if tmp:
@@ -642,7 +699,8 @@ def un_dex(agree_typ):
 
 
 def amount_s(amount):
-    amount_str = str(round(amount / 10000, 6)).rstrip('0').rstrip('.')  # 总额（万元）
+    amount_str = str(round(amount / 10000,
+                           6)).rstrip('0').rstrip('.')  # 总额（万元）
     return amount_str
 
 
@@ -650,179 +708,293 @@ def amount_y(amount):
     amount_str = str(round(amount, 2)).rstrip('0').rstrip('.')  # 总额（元）
     return amount_str
 
-def radio(credit_amount:float,g_value:float):
+
+def radio(credit_amount: float, g_value: float):
     if credit_amount and credit_amount > 0:
-        redioer = round(g_value/credit_amount*100,2)
+        redioer = round(g_value / credit_amount * 100, 2)
     else:
         redioer = 0
     return redioer
 
 
-def mc(v_start_date,v_end_date):
-    v_year_end=v_end_date.year
-    v_month_end=v_end_date.month
-    v_year_start=v_start_date.year
-    v_month_start=v_start_date.month
-    interval=(v_year_end - v_year_start) * 12 + (v_month_end - v_month_start)
+def mc(v_start_date, v_end_date):
+    v_year_end = v_end_date.year
+    v_month_end = v_end_date.month
+    v_year_start = v_start_date.year
+    v_month_start = v_start_date.month
+    interval = (v_year_end - v_year_start) * 12 + (v_month_end - v_month_start)
     return interval
 
 
-def epi(provide_obj): #还款计划
+def epi(provide_obj):  #还款计划
     provide_agree_obj = provide_obj.notify.agree
-    provide_amount = provide_obj.provide_money #放款金额
-    repay_method = provide_agree_obj.repay_method #还款方式
+    provide_amount = provide_obj.provide_money  #放款金额
+    repay_method = provide_agree_obj.repay_method  #还款方式
     try:
-        agree_rate = float(provide_agree_obj.agree_rate)/1000 #小贷月利率
-        agree_rate_day = agree_rate/30 #小贷日月利率
+        agree_rate = float(provide_agree_obj.agree_rate) / 1000  #小贷月利率
+        agree_rate_day = agree_rate / 30  #小贷日月利率
     except ValueError:
         agree_rate = 0.01
         agree_rate_day = 0.001
-    inst_repay_prin_list = provide_obj.track_provide.filter(track_typ=21) #分期还本列表
-    inst_repay_prin_amt = inst_repay_prin_list.aggregate(Sum('term_pri'))['term_pri__sum'] #分期还款总额额
+    inst_repay_prin_list = provide_obj.track_provide.filter(
+        track_typ=21)  #分期还本列表
+    inst_repay_prin_amt = inst_repay_prin_list.aggregate(
+        Sum('term_pri'))['term_pri__sum']  #分期还款总额额
     if inst_repay_prin_amt:
-        de_repay_prin = round(provide_amount - inst_repay_prin_amt,2) #扣除分期还款后的余额
+        de_repay_prin = round(provide_amount - inst_repay_prin_amt,
+                              2)  #扣除分期还款后的余额
     else:
         de_repay_prin = provide_amount
-    provide_start_date = provide_obj.provide_date #起始日
-    provide_due_date = provide_obj.due_date #到期日
-    provide_term = mc(provide_start_date,provide_due_date) #借款期数（月）
-    if provide_term < 1: #贷款期限不跨月
+    provide_start_date = provide_obj.provide_date  #起始日
+    provide_due_date = provide_obj.due_date  #到期日
+    provide_term = mc(provide_start_date, provide_due_date)  #借款期数（月）
+    if provide_term < 1:  #贷款期限不跨月
         provide_term_for = 1
     else:
         provide_term_for = provide_term
-    start_date_er = datetime.date(provide_start_date.year,provide_start_date.month,20) #放款月20日
-    start_date_er_dif = (start_date_er - provide_start_date).days #放款当月20日与放款日天差
-    due_date_er = datetime.date(provide_due_date.year,provide_due_date.month,20) #到期月20日
-    due_date_er_dif = (due_date_er - provide_due_date).days #到期日与到期当月20日比较
+    start_date_er = datetime.date(provide_start_date.year,
+                                  provide_start_date.month, 20)  #放款月20日
+    start_date_er_dif = (start_date_er -
+                         provide_start_date).days  #放款当月20日与放款日天差
+    due_date_er = datetime.date(provide_due_date.year, provide_due_date.month,
+                                20)  #到期月20日
+    due_date_er_dif = (due_date_er - provide_due_date).days  #到期日与到期当月20日比较
     kkkk = []
-    prin = provide_amount #剩余本金
+    prin = provide_amount  #剩余本金
     term_int_j = prin
-    total_int = 0.0 #利息累计
-    total_prin = 0.0 #本金累计
-    if repay_method == 21: #等额本息
-        term_amt = round((provide_amount*(agree_rate)*(1+agree_rate)**provide_term)/((1+agree_rate)**provide_term-1),2) #每期还款额
-        for i in range(1,provide_term+1):
-            term_int = round(prin * agree_rate, 2) # 当期利息：上一期本金*利率
-            term_prin = round(term_amt - term_int,2) #当期本金 = 每期还款额 - 当期利息
+    total_int = 0.0  #利息累计
+    total_prin = 0.0  #本金累计
+    if repay_method == 21:  #等额本息
+        term_amt = round(
+            (provide_amount * (agree_rate) * (1 + agree_rate)**provide_term) /
+            ((1 + agree_rate)**provide_term - 1), 2)  #每期还款额
+        for i in range(1, provide_term + 1):
+            term_int = round(prin * agree_rate, 2)  # 当期利息：上一期本金*利率
+            term_prin = round(term_amt - term_int, 2)  #当期本金 = 每期还款额 - 当期利息
             if i == provide_term:
-                term_prin = prin #当期本金 = 剩余本金
+                term_prin = prin  #当期本金 = 剩余本金
                 term_int = round(term_amt - term_prin, 2)
-            term_amt = round(term_prin + term_int, 2) #当期本息合计
-            prin = round(prin - term_prin, 2)           # 剩余本金=上期剩余本金-当期还本金
-            total_int = round(total_int +  term_int, 2) #利息累计
-            total_prin = round(total_prin +  term_prin, 2) #本金累计
-            ddd = provide_start_date + relativedelta(months=i) #还款月
+            term_amt = round(term_prin + term_int, 2)  #当期本息合计
+            prin = round(prin - term_prin, 2)  # 剩余本金=上期剩余本金-当期还本金
+            total_int = round(total_int + term_int, 2)  #利息累计
+            total_prin = round(total_prin + term_prin, 2)  #本金累计
+            ddd = provide_start_date + relativedelta(months=i)  #还款月
             if i == 1:
                 pro_aft_dif = (ddd - provide_start_date).days
-                kkkk.append({'ddd_pro':provide_start_date,'ddd_aft':ddd,'pro_aft_dif':pro_aft_dif,
-                'term_int':term_int,'term_prin':term_prin,'term_amt':term_amt,
-                'total_int':total_int,'prin':prin,
-                'term_int_j':term_int_j,'track_typ':25,})
+                kkkk.append({
+                    'ddd_pro': provide_start_date,
+                    'ddd_aft': ddd,
+                    'pro_aft_dif': pro_aft_dif,
+                    'term_int': term_int,
+                    'term_prin': term_prin,
+                    'term_amt': term_amt,
+                    'total_int': total_int,
+                    'prin': prin,
+                    'term_int_j': term_int_j,
+                    'track_typ': 25,
+                })
             else:
                 pro_aft_dif = (ddd - ddd_pro).days
-                kkkk.append({'ddd_pro':ddd_pro,'ddd_aft':ddd,'pro_aft_dif':pro_aft_dif,
-                'term_int':term_int,'term_prin':term_prin,'term_amt':term_amt,
-                'total_int':total_int,'prin':prin,
-                'term_int_j':term_int_j,'track_typ':25,})
+                kkkk.append({
+                    'ddd_pro': ddd_pro,
+                    'ddd_aft': ddd,
+                    'pro_aft_dif': pro_aft_dif,
+                    'term_int': term_int,
+                    'term_prin': term_prin,
+                    'term_amt': term_amt,
+                    'total_int': total_int,
+                    'prin': prin,
+                    'term_int_j': term_int_j,
+                    'track_typ': 25,
+                })
             ddd_pro = ddd
             term_int_j = prin
-    elif repay_method == 11 or  repay_method == 31: #按月付息，到期还本
-        iiii = [] #分期还本列表
+    elif repay_method == 11 or repay_method == 31:  #按月付息，到期还本
+        iiii = []  #分期还本列表
         for inst_repay_prin in inst_repay_prin_list:
-            iiii.append({'ddd_aft':inst_repay_prin.plan_date,'term_prin':inst_repay_prin.term_pri,'track_typ':inst_repay_prin.track_typ,})
-        
-        pppp = [] #按月付息列表
-        for i in range(1,provide_term_for+1):
-            ddd = provide_start_date + relativedelta(months=i) #还款月
+            iiii.append({
+                'ddd_aft': inst_repay_prin.plan_date,
+                'term_prin': inst_repay_prin.term_pri,
+                'track_typ': inst_repay_prin.track_typ,
+            })
+
+        pppp = []  #按月付息列表
+        for i in range(1, provide_term_for + 1):
+            ddd = provide_start_date + relativedelta(months=i)  #还款月
             ddd_er = datetime.date(ddd.year, ddd.month, 20)  #还款月20日
             if start_date_er_dif > 0:  #如果放款在当月20日之前（当月20日要收息）
                 i += 1
                 if i == 2:
-                    pppp.append({'ddd_aft': start_date_er, 'term_prin': 0, 'track_typ': 31,}) #当月20日
-                    if provide_term_for == 1:# 一共只有一期，跨月
-                        if due_date_er_dif < 0: #如果到期在当月20日之后
-                            pppp.append({'ddd_aft': ddd_er, 'term_prin': 0, 'track_typ': 31,})
-                        pppp.append({'ddd_aft': provide_due_date, 'term_prin': 0, 'track_typ': 31,})
+                    pppp.append({
+                        'ddd_aft': start_date_er,
+                        'term_prin': 0,
+                        'track_typ': 31,
+                    })  #当月20日
+                    if provide_term_for == 1:  # 一共只有一期，跨月
+                        if due_date_er_dif < 0:  #如果到期在当月20日之后
+                            pppp.append({
+                                'ddd_aft': ddd_er,
+                                'term_prin': 0,
+                                'track_typ': 31,
+                            })
+                        pppp.append({
+                            'ddd_aft': provide_due_date,
+                            'term_prin': 0,
+                            'track_typ': 31,
+                        })
                     else:
-                        pppp.append({'ddd_aft':ddd_er,'term_prin':0,'track_typ':31,}) #放款第2月20日
-                elif i == (provide_term_for+1): #最后一期
-                    if due_date_er_dif >= 0: #如果到期在当月20日之前
-                        pppp.append({'ddd_aft':provide_due_date,'term_prin':0,'track_typ':31,})
+                        pppp.append({
+                            'ddd_aft': ddd_er,
+                            'term_prin': 0,
+                            'track_typ': 31,
+                        })  #放款第2月20日
+                elif i == (provide_term_for + 1):  #最后一期
+                    if due_date_er_dif >= 0:  #如果到期在当月20日之前
+                        pppp.append({
+                            'ddd_aft': provide_due_date,
+                            'term_prin': 0,
+                            'track_typ': 31,
+                        })
                     else:
-                        pppp.append({'ddd_aft':ddd_er,'term_prin':0,'track_typ':31,})
-                        pppp.append({'ddd_aft':provide_due_date,'term_prin':0,'track_typ':31,})
+                        pppp.append({
+                            'ddd_aft': ddd_er,
+                            'term_prin': 0,
+                            'track_typ': 31,
+                        })
+                        pppp.append({
+                            'ddd_aft': provide_due_date,
+                            'term_prin': 0,
+                            'track_typ': 31,
+                        })
                 else:
-                    pppp.append({'ddd_aft':ddd_er,'term_prin':0,'track_typ':31,})
-            else: #如果放款在当月20日之之后（当月20日不收息）
+                    pppp.append({
+                        'ddd_aft': ddd_er,
+                        'term_prin': 0,
+                        'track_typ': 31,
+                    })
+            else:  #如果放款在当月20日之之后（当月20日不收息）
                 if i == 1:
-                    if provide_term == 0: #一共只有一期，不跨月
-                        pppp.append({'ddd_aft': provide_due_date, 'term_prin': 0, 'track_typ': 31,})
+                    if provide_term == 0:  #一共只有一期，不跨月
+                        pppp.append({
+                            'ddd_aft': provide_due_date,
+                            'term_prin': 0,
+                            'track_typ': 31,
+                        })
                     elif provide_term == 1:  #一共只有一期，跨月
                         if due_date_er_dif < 0:  #如果到期在当月20日之后
-                            pppp.append({'ddd_aft': ddd_er, 'term_prin': 0, 'track_typ': 31,})
-                        pppp.append({'ddd_aft': provide_due_date, 'term_prin': 0, 'track_typ': 31,})
+                            pppp.append({
+                                'ddd_aft': ddd_er,
+                                'term_prin': 0,
+                                'track_typ': 31,
+                            })
+                        pppp.append({
+                            'ddd_aft': provide_due_date,
+                            'term_prin': 0,
+                            'track_typ': 31,
+                        })
                     else:
-                        pppp.append({'ddd_aft':ddd_er,'term_prin':0,'track_typ':31,})
-                elif i == (provide_term_for): #最后一期
-                    if due_date_er_dif >= 0: #如果到期在当月20日之前
-                        pppp.append({'ddd_aft':provide_due_date,'term_prin':0,'track_typ':31,})
+                        pppp.append({
+                            'ddd_aft': ddd_er,
+                            'term_prin': 0,
+                            'track_typ': 31,
+                        })
+                elif i == (provide_term_for):  #最后一期
+                    if due_date_er_dif >= 0:  #如果到期在当月20日之前
+                        pppp.append({
+                            'ddd_aft': provide_due_date,
+                            'term_prin': 0,
+                            'track_typ': 31,
+                        })
                     else:
-                        pppp.append({'ddd_aft':ddd_er,'term_prin':0,'track_typ':31,})
-                        pppp.append({'ddd_aft':provide_due_date,'term_prin':0,'track_typ':31,})
+                        pppp.append({
+                            'ddd_aft': ddd_er,
+                            'term_prin': 0,
+                            'track_typ': 31,
+                        })
+                        pppp.append({
+                            'ddd_aft': provide_due_date,
+                            'term_prin': 0,
+                            'track_typ': 31,
+                        })
                 else:
-                    pppp.append({'ddd_aft':ddd_er,'term_prin':0,'track_typ':31,})
+                    pppp.append({
+                        'ddd_aft': ddd_er,
+                        'term_prin': 0,
+                        'track_typ': 31,
+                    })
 
-        iipp = [] #分期还本与按月付息合并
-        ddd_pro = provide_start_date #计息起始日
-        term_int_p = provide_amount #本期计息额
+        iipp = []  #分期还本与按月付息合并
+        ddd_pro = provide_start_date  #计息起始日
+        term_int_p = provide_amount  #本期计息额
         for pp in pppp:
             ddd_aft_pp = pp['ddd_aft']
-            term_int_j = 0 #本期计息额
-            term_pri_p = 0 #本期还本额
+            term_int_j = 0  #本期计息额
+            term_pri_p = 0  #本期还本额
             track_typ = pp['track_typ']
             for ii in iiii:
                 ddd_aft_ii = ii['ddd_aft']
-                ddd_aft_ip_dif = (ddd_aft_ii - ddd_aft_pp).days #分期还款日与计息日比较
-                ddd_pro_ip_dif = (ddd_aft_ii - ddd_pro).days #分期还款日与起息日比较
-                if ddd_aft_ip_dif < 0 and ddd_pro_ip_dif > 0: #分期还款日在起息日与计息日之间
-                    prin = prin - ii['term_prin'] #剩余本金
-                    iipp.append({'ddd_pro':ddd_pro,'ddd_aft':ii['ddd_aft'],'term_prin':ii['term_prin'],'track_typ':ii['track_typ'],
-                                'term_int_j':ii['term_prin'],'prin':prin,})
+                ddd_aft_ip_dif = (ddd_aft_ii - ddd_aft_pp).days  #分期还款日与计息日比较
+                ddd_pro_ip_dif = (ddd_aft_ii - ddd_pro).days  #分期还款日与起息日比较
+                if ddd_aft_ip_dif < 0 and ddd_pro_ip_dif > 0:  #分期还款日在起息日与计息日之间
+                    prin = prin - ii['term_prin']  #剩余本金
+                    iipp.append({
+                        'ddd_pro': ddd_pro,
+                        'ddd_aft': ii['ddd_aft'],
+                        'term_prin': ii['term_prin'],
+                        'track_typ': ii['track_typ'],
+                        'term_int_j': ii['term_prin'],
+                        'prin': prin,
+                    })
                     ddd_pro = ii['ddd_aft']
                     term_int_p = prin
-                elif ddd_aft_ip_dif == 0: #分期还款日与计息日为同一天
+                elif ddd_aft_ip_dif == 0:  #分期还款日与计息日为同一天
                     term_int_p = prin
                     term_pri_p = pp['term_prin'] + ii['term_prin']
-                    prin = prin - term_pri_p #剩余本金
+                    prin = prin - term_pri_p  #剩余本金
                     track_typ = ii['track_typ']
-            term_int_j = term_int_p #当期计息额
-            iipp.append({'ddd_pro':ddd_pro,'ddd_aft':pp['ddd_aft'],'term_prin':term_pri_p,'track_typ':track_typ,
-                        'term_int_j':term_int_j,'prin':prin,})
+            term_int_j = term_int_p  #当期计息额
+            iipp.append({
+                'ddd_pro': ddd_pro,
+                'ddd_aft': pp['ddd_aft'],
+                'term_prin': term_pri_p,
+                'track_typ': track_typ,
+                'term_int_j': term_int_j,
+                'prin': prin,
+            })
             ddd_pro = pp['ddd_aft']
             term_int_p = prin
         iipp_len = len(iipp)
         iipp_len_i = 0
         for iip in iipp:
             iipp_len_i += 1
-            term_amt = 0 #本息合计
-            ddd_pro = iip['ddd_pro'] #起息日
-            ddd_aft = iip['ddd_aft'] #计息日
+            term_amt = 0  #本息合计
+            ddd_pro = iip['ddd_pro']  #起息日
+            ddd_aft = iip['ddd_aft']  #计息日
             term_prin = iip['term_prin']
-            term_int_j = iip['term_int_j'] #计息日本金
-            pro_aft_dif = (ddd_aft-ddd_pro).days #计息天数
-            term_int = round(term_int_j * agree_rate_day * pro_aft_dif, 2) #当期利息
-            total_int = round(total_int +term_int, 2) #利息累计
+            term_int_j = iip['term_int_j']  #计息日本金
+            pro_aft_dif = (ddd_aft - ddd_pro).days  #计息天数
+            term_int = round(term_int_j * agree_rate_day * pro_aft_dif,
+                             2)  #当期利息
+            total_int = round(total_int + term_int, 2)  #利息累计
             if iipp_len_i == iipp_len:
                 term_prin = de_repay_prin
-                prin = round(iip['prin'] -term_prin, 2)
+                prin = round(iip['prin'] - term_prin, 2)
             else:
                 prin = iip['prin']
             term_amt = round(term_prin + term_int, 2)
 
-            kkkk.append({'ddd_pro':ddd_pro,'ddd_aft':ddd_aft,'pro_aft_dif':pro_aft_dif,
-                        'term_int':term_int,'term_prin':term_prin,'term_amt':term_amt,
-                        'total_int':total_int,'prin':prin,
-                        'term_int_j':term_int_j,'track_typ':iip['track_typ'],})
+            kkkk.append({
+                'ddd_pro': ddd_pro,
+                'ddd_aft': ddd_aft,
+                'pro_aft_dif': pro_aft_dif,
+                'term_int': term_int,
+                'term_prin': term_prin,
+                'term_amt': term_amt,
+                'total_int': total_int,
+                'prin': prin,
+                'term_int_j': term_int_j,
+                'track_typ': iip['track_typ'],
+            })
     return kkkk
 
 
@@ -832,10 +1004,11 @@ def provide_update(provide_obj: object, response: dict):
     provide_repayment_amount = models.Repayments.objects.filter(
         provide=provide_obj).aggregate(
             Sum('repayment_money'))['repayment_money__sum']  # 放款项下还款合计
-    provide_balance = round(provide_obj.provide_money - provide_repayment_amount, 2)  # 在保余额
-    provide_list.update(
-        provide_repayment_sum=round(provide_repayment_amount, 2),
-        provide_balance=provide_balance)  # 放款，更新还款总额，在保余额
+    provide_balance = round(provide_obj.provide_money -
+                            provide_repayment_amount, 2)  # 在保余额
+    provide_list.update(provide_repayment_sum=round(provide_repayment_amount,
+                                                    2),
+                        provide_balance=provide_balance)  # 放款，更新还款总额，在保余额
     if provide_balance == 0:  # 在保余额为0
         '''PROVIDE_STATUS_LIST = [(1, '在保'), (11, '解保'), (21, '代偿')]'''
         provide_list.update(provide_status=11)  # 放款解保
@@ -871,12 +1044,12 @@ def provide_update(provide_obj: object, response: dict):
         agree_list.update(
             agree_repayment_sum=round(agree_repayment_amount, 2),
             agree_balance=round(agree_provide_balance, 2),
-            agree_state=61,)  # 合同，更新还款总额，在保余额，合同状态
+            agree_state=61,
+        )  # 合同，更新还款总额，在保余额，合同状态
         response['message'] = '成功还款,合同项下放款已全部结清，合同解保！'
     else:
-        agree_list.update(
-            agree_repayment_sum=round(agree_repayment_amount, 2),
-            agree_balance=round(agree_provide_balance, 2))
+        agree_list.update(agree_repayment_sum=round(agree_repayment_amount, 2),
+                          agree_balance=round(agree_provide_balance, 2))
         # 合同，更新还款总额，在保余额
     '''lending_repayment_sum，更新放款次序还款信息'''
     lending_list = models.LendingOrder.objects.filter(
@@ -892,14 +1065,15 @@ def provide_update(provide_obj: object, response: dict):
         '''LENDING_STATE = [(3, '待上会'), (4, '已上会'), (5, '已签批'),
                             (51, '已放款'), (52, '已放完'), (55, '已解保'), 
                             (61, '待变更'),(99, '已注销')]'''
-        lending_list.update(
-            lending_repayment_sum=round(lending_repayment_amount, 2),
-            lending_balance=round(lending_provide_balance, 2),
-            lending_state=55)  # 放款次序，更新还款总额
+        lending_list.update(lending_repayment_sum=round(
+            lending_repayment_amount, 2),
+                            lending_balance=round(lending_provide_balance, 2),
+                            lending_state=55)  # 放款次序，更新还款总额
     else:
-        lending_list.update(
-            lending_repayment_sum=round(lending_repayment_amount, 2),
-            lending_balance=round(lending_provide_balance,2))  # 放款次序，更新还款总额
+        lending_list.update(lending_repayment_sum=round(
+            lending_repayment_amount, 2),
+                            lending_balance=round(lending_provide_balance,
+                                                  2))  # 放款次序，更新还款总额
     '''article_repayment_sum，更新项目还款信息'''
     article_list = models.Articles.objects.filter(
         lending_summary=lending_obj)  # 项目
@@ -917,13 +1091,14 @@ def provide_update(provide_obj: object, response: dict):
         (61, '待变更'), (99, '已注销'))'''
         article_list.update(article_repayment_sum=round(
             article_repayment_amount, 2),
-            article_balance=round(article_provide_balance, 2),
-            article_state=55)  # 项目，更新还款总额
+                            article_balance=round(article_provide_balance, 2),
+                            article_state=55)  # 项目，更新还款总额
         response['message'] = '成功还款,项目项下放款已全部结清，项目解保！'
     else:
         article_list.update(article_repayment_sum=round(
             article_repayment_amount, 2),
-            article_balance=round(article_provide_balance,2))  # 项目，更新还款总额
+                            article_balance=round(article_provide_balance,
+                                                  2))  # 项目，更新还款总额
     '''更新银行余额信息,branch_flow,branch_accept,branch_back'''
     custom_list = models.Customes.objects.filter(article_custom=article_obj)
     custom_obj = custom_list.first()
@@ -977,9 +1152,8 @@ def provide_update(provide_obj: object, response: dict):
     if not custom_provide_balance_all:
         custom_provide_balance_all = 0
     v_radio = radio(custom_provide_balance_all, custom_obj.g_value)
-    custom_list.update(
-        amount=round(custom_provide_balance_all, 2),
-        v_radio=v_radio)
+    custom_list.update(amount=round(custom_provide_balance_all, 2),
+                       v_radio=v_radio)
     branch_provide_balance_all = models.Provides.objects.filter(
         notify__agree__branch=branch_obj).aggregate(
             Sum('provide_balance'))['provide_balance__sum']  # 放款银行项下，在保余额

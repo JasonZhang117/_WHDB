@@ -1,8 +1,8 @@
 .idea/
 # .vscode/
-.mypy_cache/
+# .mypy_cache/
 venv/
-migrations/
+# migrations/
 #*_initial.py
 
 # Python:

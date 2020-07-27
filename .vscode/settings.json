@@ -1,9 +1,9 @@
 {
-    "python.pythonPath": "C:\\ProgramData\\Miniconda3\\envs\\dj21\\python.exe", //python路径
+    "python.pythonPath": "C:\\Users\\FKBzj\\miniconda3\\envs\\dj21\\python.exe", //python路径
     "editor.fontSize": 16, //编辑器字体大小
     //code-runner工作区配置
     "code-runner.executorMap": {
-       "python": "C:\\ProgramData\\Miniconda3\\envs\\dj21\\python.exe",
+       "python": "C:\\Users\\FKBzj\\Miniconda3\\envs\\dj21\\python.exe",
        "html": "\"C:\\Program Files\\Mozilla Firefox\\firefox.exe\"",
     },// 配置工作区的解释器
     //配置代码格式化插件

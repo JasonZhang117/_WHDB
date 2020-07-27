@@ -50,7 +50,7 @@ class Customes(models.Model):  # 客户
     # 含上会，放款，补调，保后
     lately_date = models.DateField(verbose_name='最近更新', null=True, blank=True)
     day_space = models.IntegerField(verbose_name='间隔（日）', default=0)
-
+    book = models.TextField(verbose_name='专员台账', blank=True, null=True)
     CUSTOM_DUN_LIST = ((1, '正常'), (11, '被告'), (99, '注销'))
     custom_dun_state = models.IntegerField(verbose_name='_风险分类',
                                            choices=CUSTOM_DUN_LIST,
