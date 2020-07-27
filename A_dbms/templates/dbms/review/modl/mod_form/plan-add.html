@@ -1,5 +1,17 @@
 <div id="form_review_plan">
 
+    <div class="form-group"><!--专员台账-->
+        <label for="id_book"
+               class="col-sm-3 control-label">{{ form_review_plan.book.label }}：</label>
+        <div class="col-sm-9">{{ form_review_plan.book }}</div>
+        <label id="e_book" class="pull-right">{{ form_review_plan.book.errors }}</label>
+    </div>
+    <div class="form-group"><!--包后方式-->
+        <label for="id_plan_sty"
+               class="col-sm-3 control-label">{{ form_review_plan.plan_sty.label }}：</label>
+        <div class="col-sm-9">{{ form_review_plan.plan_sty }}</div>
+        <label id="e_plan_sty" class="pull-right">{{ form_review_plan.plan_sty.errors }}</label>
+    </div>
     <div class="form-group"><!--保后计划日期-->
         <label for="id_review_plan_date"
                class="col-sm-3 control-label">{{ form_review_plan.review_plan_date.label }}：</label>

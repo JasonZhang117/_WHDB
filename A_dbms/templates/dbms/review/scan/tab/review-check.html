@@ -2,12 +2,14 @@
     <table class="table table-bordered table-hover table-condensed active">
         <thead>
         <tr style="text-align: center">
+            <th>保后台账</th>
             <th>计划日期</th>
+            <th>计划方式</th>
             <th>保后状态</th>
+            <th>保后日期</th>
             <th>保后方式</th>
             <th>风险分析</th>
             <th>风控建议</th>
-            <th>保后日期</th>
             <th>风险分类</th>
             {% if PAGE_TITLE == '保后详情' %}
                 <th>操作</th>
@@ -17,12 +19,14 @@
         <tbody id="review-tb">
         {% for review in review_custom_list %}
             <tr review-nid="{{ review.id }}">
+                <td>{{ review.book }}</td>
                 <td>{{ review.review_plan_date }}</td>
+                <td>{{ review.get_plan_sty_display|default_if_none:"" }}</td>
                 <td>{{ review.get_review_state_display }}</td>
+                <td>{{ review.review_date|default_if_none:"" }}</td>
                 <td>{{ review.get_review_sty_display|default_if_none:"" }}</td>
                 <td>{{ review.analysis|default_if_none:"" }}</td>
                 <td>{{ review.suggestion|default_if_none:"" }}</td>
-                <td>{{ review.review_date|default_if_none:"" }}</td>
                 <td>{{ review.get_classification_display|default_if_none:"" }}</td>
                 {% if PAGE_TITLE == '保后详情' %}
                     <td><a class="btn btn-primary btn-xs reviewB">保后</a>

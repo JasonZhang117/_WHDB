@@ -1,0 +1,31 @@
+<script>
+    $(function () {
+        bindupdateDateB();
+    });
+
+    function bindupdateDateB() {
+        $('#updateDateB').click(function () {
+            $.ajax({
+                url: '/dbms/review/date/up/',
+                type: 'POST',
+                data: {'postDataStr': 'date-up'},
+                dataType: 'JSON',
+                success: function (arg) {
+                    if (arg.status) {
+                        alert(arg.message);
+                        window.location.reload();
+                    } else {
+                        alert(arg.message);
+                        {#window.location.reload();#}
+                    }
+                }
+            })
+        })
+    }
+</script>
+
+
+
+
+
+

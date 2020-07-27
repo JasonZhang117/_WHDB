@@ -19,6 +19,8 @@
                 var n = $(this).attr('name');
                 postData[n] = v;
             });
+            var book = $('#id_book').val();
+            postData['book'] = book;
             var postDataStr = JSON.stringify(postData);
 
             $.ajax({
@@ -33,7 +35,9 @@
                         window.location.reload();
                     } else {
                         alert(arg.message);
-                        $('#e_review_plan_date').text(arg.review_plan_date.name);
+                        $('#e_book').text(arg.book);
+                        $('#e_plan_sty').text(arg.plan_sty);
+                        $('#e_review_plan_date').text(arg.review_plan_date);
                     }
                 }
             })

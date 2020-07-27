@@ -35,14 +35,18 @@ class Customes(models.Model):  # 客户
     review_plan_date = models.DateField(verbose_name='保后计划',
                                         blank=True,
                                         null=True)
-    REVIEW_STATE_LIST = [(1, '待保后'), (11, '待报告'), (21, '已完成'), (81, '自主保后')]
+    REVIEW_STATE_LIST = ((1, '待保后'), (11, '待报告'), (21, '已完成'), (81, '自主保后'),
+                         (91, '无需保后'))
     review_state = models.IntegerField(verbose_name='_保后状态',
                                        choices=REVIEW_STATE_LIST,
                                        default=21)
     review_date = models.DateField(verbose_name='保后日期', blank=True, null=True)
     review_amount = models.IntegerField(verbose_name='保后次数', default=0)
     add_amount = models.IntegerField(verbose_name='补调次数', default=0)
-
+    
+    book = models.TextField(verbose_name='专员台账', blank=True, null=True)
+    analysis = models.TextField(verbose_name='风险分析', blank=True, null=True)
+    suggestion = models.TextField(verbose_name='风控建议', blank=True, null=True)
     classification = models.IntegerField(verbose_name='五级分类',
                                          choices=FICATION_LIST,
                                          default=11)
@@ -50,7 +54,6 @@ class Customes(models.Model):  # 客户
     # 含上会，放款，补调，保后
     lately_date = models.DateField(verbose_name='最近更新', null=True, blank=True)
     day_space = models.IntegerField(verbose_name='间隔（日）', default=0)
-    book = models.TextField(verbose_name='专员台账', blank=True, null=True)
     CUSTOM_DUN_LIST = ((1, '正常'), (11, '被告'), (99, '注销'))
     custom_dun_state = models.IntegerField(verbose_name='_风险分类',
                                            choices=CUSTOM_DUN_LIST,

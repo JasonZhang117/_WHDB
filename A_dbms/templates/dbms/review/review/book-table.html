@@ -1,0 +1,33 @@
+<div class="table-responsive">
+    <table class="table table-bordered table-hover table-condensed active">
+        <thead>
+        <tr style="text-align: center">
+            <th>客户名称({{ custom_acount }})</th>
+            <th>管户经理</th>
+            <th>风控专员</th>
+            <th>授信总额</th>
+            <th>在保余额</th>
+            <th>五级分类</th>
+            <th>风险台账</th>
+            <th>风险分析</th>
+            <th>风控建议</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for custom in p_list %}
+            <tr>
+                <td><a href="{% url 'dbms:review_scan' custom_id=custom.id %}">{{ custom.short_name }}</a></td>
+                <td align="right">{{ custom.managementor }}</td>
+                <td align="right">{{ custom.controler }}</td>
+                <td align="right">{{ custom.credit_amount }}</td>
+                <td align="right">{{ custom.amount }}</td>
+                <td align="right">{{ custom.get_classification_display }}</td>
+                <td>{{ custom.book|default_if_none:"" }}</td>
+                <td>{{ custom.analysis|default_if_none:"" }}</td>
+                <td>{{ custom.suggestion|default_if_none:"" }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    {% include 'dbms/board/page.html' %}
+</div>

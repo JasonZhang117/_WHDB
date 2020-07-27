@@ -16,23 +16,28 @@ from _WHDB.views import authority
 @login_required
 @authority
 def review_plan_ajax(request):
-    response = {'status': True, 'message': None, 'forme': None, }
+    response = {
+        'status': True,
+        'message': None,
+        'forme': None,
+    }
     post_data_str = request.POST.get('postDataStr')
     post_data = json.loads(post_data_str)
-
     custom_list = models.Customes.objects.filter(id=post_data['custom_id'])
     custom_obj = custom_list.first()
     review_list_s = custom_obj.review_custom.filter(review_state=1)
     if review_list_s:
         response['status'] = False
-        response['message'] = '还有未完成的保后计划，包后计划失败！'
+        response['message'] = '还有未完成的保后计划，保后计划失败！'
     else:
         form_review_plan = forms.FormRewiewPlanAdd(post_data)
         if form_review_plan.is_valid():
             review_plan_cleaned = form_review_plan.cleaned_data
+            book = review_plan_cleaned['book']
+            plan_sty = review_plan_cleaned['plan_sty']
             review_plan_date = review_plan_cleaned['review_plan_date']
-
-            date_tup = time.strptime(str(review_plan_date), "%Y-%m-%d")  # 字符串转换为元组
+            date_tup = time.strptime(str(review_plan_date),
+                                     "%Y-%m-%d")  # 字符串转换为元组
             date_stamp = time.mktime(date_tup)  # 元组转换为时间戳
             today_str = str(datetime.date.today())  # 元组转换为字符串
             today_tup = time.strptime(today_str, "%Y-%m-%d")  # 字符串转换为元组
@@ -40,14 +45,25 @@ def review_plan_ajax(request):
 
             if today_stamp - date_stamp > 0:
                 response['status'] = False
-                response['message'] = '计划失败，计划的时间不能早于现在的时间!'
+                response['message'] = '计划失败，计划的时间不能早于当前时间!'
             else:
+                if plan_sty == 91:
+                    review_state = 91
+                else:
+                    review_state = 1
                 try:
                     '''REVIEW_STATE_LIST = ((1, '待保后'), (11, '待报告'), (21, '已完成'))'''
                     with transaction.atomic():
-                        models.Review.objects.create(custom=custom_obj, review_plan_date=review_plan_date,
-                                                     review_state=1, reviewor=request.user)
-                        custom_list.update(review_plan_date=review_plan_date, review_state=1)
+                        models.Review.objects.create(
+                            custom=custom_obj,
+                            book=book,
+                            plan_sty=plan_sty,
+                            review_plan_date=review_plan_date,
+                            review_state=review_state,
+                            reviewor=request.user)
+                        custom_list.update(review_plan_date=review_plan_date,
+                                           book=book,
+                                           review_state=review_state)
                     response['message'] = '保后计划成功！'
                 except Exception as e:
                     response['status'] = False
@@ -60,11 +76,53 @@ def review_plan_ajax(request):
     return HttpResponse(result)
 
 
+# -----------------------------更新间隔ajax------------------------------#
+@login_required
+@authority
+def date_up_ajax(request):
+    response = {
+        'status': True,
+        'message': None,
+        'forme': None,
+    }
+    custom_list = models.Customes.objects.exclude(custom_state=99)
+    custom_list = custom_list.filter(
+        credit_amount__gt=0).order_by('lately_date')
+    today_year = datetime.date.today().year
+    today_day = datetime.date.today()
+    try:
+        for custom in custom_list:
+            custom_lately_date = custom.lately_date
+            day_space = today_day - custom_lately_date
+            '''REVIEW_STY_LIST = [(1, '现场检查'), (11, '电话回访'), (61, '补调替代'), (62, '尽调替代')]'''
+            review_count = custom.review_custom.filter(
+                review_date__year=today_year,
+                review_sty__in=[1, 11]).count()  # 保后次数
+            # article_count = custom.article_custom.filter(build_date__year=today_year).count()  # 尽调次数
+            inv_count = custom.inv_custom.filter(
+                inv_date__year=today_year).count()  # 补调次数
+            models.Customes.objects.filter(id=custom.id).update(
+                review_amount=review_count,
+                add_amount=inv_count,
+                day_space=day_space.days)
+            response['status'] = True
+            response['message'] = '更新成功！！！'
+    except Exception as e:
+        response['status'] = False
+        response['message'] = '更新失败：%s' % str(e)
+    result = json.dumps(response, ensure_ascii=False)
+    return HttpResponse(result)
+
+
 # -----------------------------保后ajax------------------------------#
 @login_required
 @authority
 def review_update_ajax(request):
-    response = {'status': True, 'message': None, 'forme': None, }
+    response = {
+        'status': True,
+        'message': None,
+        'forme': None,
+    }
     post_data_str = request.POST.get('postDataStr')
     post_data = json.loads(post_data_str)
 
@@ -85,16 +143,23 @@ def review_update_ajax(request):
             try:
                 with transaction.atomic():
                     review_obj = models.Review.objects.create(
-                        custom=custom_obj, review_plan_date=today_str, review_state=81,
+                        custom=custom_obj,
+                        review_plan_date=today_str,
+                        review_state=81,
                         review_sty=review_cleaned['review_sty'],
                         analysis=review_cleaned['analysis'],
                         suggestion=review_cleaned['suggestion'],
                         classification=classification,
                         review_date=review_cleaned['review_date'],
                         reviewor=request.user)
-                    custom_list.update(review_state=81, review_date=review_date,
-                                       classification=classification,
-                                       lately_date=review_date, )  # 更新客户信息
+                    custom_list.update(
+                        review_state=81,
+                        review_date=review_date,
+                        analysis=review_cleaned['analysis'],
+                        suggestion=review_cleaned['suggestion'],
+                        classification=classification,
+                        lately_date=review_date,
+                    )  # 更新客户信息
                     # provide_list.update(fication=classification, fic_date=review_date, providor=request.user)
                 response['message'] = '自主保后提交成功！'
             except Exception as e:
@@ -123,7 +188,10 @@ def review_update_ajax(request):
                                        classification=classification,
                                        review_date=review_date,
                                        review_state=21)  # 更新保后信息
-                    custom_list.update(review_state=21, review_date=review_date,
+                    custom_list.update(review_state=21,
+                                       review_date=review_date,
+                                       analysis=review_cleaned['analysis'],
+                                       suggestion=review_cleaned['suggestion'],
                                        classification=classification,
                                        lately_date=review_date)  # 更新客户信息
                     # provide_list.update(fication=classification, fic_date=review_date, providor=request.user)
@@ -143,7 +211,12 @@ def review_update_ajax(request):
 @login_required
 @authority
 def fication_add_ajax(request):
-    response = {'status': True, 'message': None, 'forme': None, 'skip': None, }
+    response = {
+        'status': True,
+        'message': None,
+        'forme': None,
+        'skip': None,
+    }
     post_data_str = request.POST.get('postDataStr')
     post_data = json.loads(post_data_str)
     provide_list = models.Provides.objects.filter(id=post_data['provide_id'])
@@ -155,15 +228,20 @@ def fication_add_ajax(request):
         fication = fication_cleaned['fication']
         try:
             with transaction.atomic():
-                provide_list.update(fic_date=fic_date, fication=fication, )
+                provide_list.update(
+                    fic_date=fic_date,
+                    fication=fication,
+                )
                 fication_default = {
                     'provide': provide_obj,
                     'fic_date': fic_date,
                     'fication': fication,
                     'explain': fication_cleaned['explain'],
-                    'ficationor': request.user}
+                    'ficationor': request.user
+                }
                 fication_obj, created = models.Fication.objects.update_or_create(
-                    provide=provide_obj, fic_date=fic_date,
+                    provide=provide_obj,
+                    fic_date=fic_date,
                     defaults=fication_default)
             response['message'] = '分类成功！！'
         except Exception as e:
@@ -182,13 +260,19 @@ def fication_add_ajax(request):
 @login_required
 @authority
 def fication_all_ajax(request, *args, **kwargs):
-    response = {'status': True, 'message': None, 'forme': None, 'skip': None, }
+    response = {
+        'status': True,
+        'message': None,
+        'forme': None,
+        'skip': None,
+    }
     post_data_str = request.POST.get('postDataStr')
     post_data = json.loads(post_data_str)
     ini_fication = int(post_data['ini_fication'])
 
     if ini_fication > 0:
-        provide_list = models.Provides.objects.filter(provide_balance__gt=0, fication=ini_fication)
+        provide_list = models.Provides.objects.filter(provide_balance__gt=0,
+                                                      fication=ini_fication)
     else:
         response['status'] = False
         response['message'] = '不能对所有类型项目进行批量分类，请选择具体分类类型'
@@ -203,14 +287,19 @@ def fication_all_ajax(request, *args, **kwargs):
         try:
             with transaction.atomic():
                 for provide in provide_list:
-                    provide_list.update(fic_date=fic_date, fication=fication, )
+                    provide_list.update(
+                        fic_date=fic_date,
+                        fication=fication,
+                    )
                     fication_default = {
                         'provide': provide,
                         'fic_date': fic_date,
                         'fication': fication,
-                        'ficationor': request.user}
+                        'ficationor': request.user
+                    }
                     fication_obj, created = models.Fication.objects.update_or_create(
-                        provide=provide, fic_date=fic_date,
+                        provide=provide,
+                        fic_date=fic_date,
                         defaults=fication_default)
             response['message'] = '批量分类分类成功！！'
         except Exception as e:
@@ -229,20 +318,25 @@ def fication_all_ajax(request, *args, **kwargs):
 @login_required
 @authority
 def review_del_ajax(request):
-    response = {'status': True, 'message': None, 'forme': None, }
+    response = {
+        'status': True,
+        'message': None,
+        'forme': None,
+    }
     post_data_str = request.POST.get('postDataStr')
     post_data = json.loads(post_data_str)
 
     custom_list = models.Customes.objects.filter(id=post_data['custom_id'])
     review_list = models.Review.objects.filter(id=post_data['review_id'])
     review_obj = review_list.first()
-    '''REVIEW_STATE_LIST = [(1, '待保后'), (11, '待报告'), (21, '已完成'), (81, '自主保后')]'''
+    '''REVIEW_STATE_LIST = ((1, '待保后'), (11, '待报告'), (21, '已完成'), (81, '自主保后'),
+                         (91, '无需保后'))'''
     review_state = review_obj.review_state
-    if review_state == 1:
+    if review_state in [1, 91]:
         try:
             with transaction.atomic():
                 review_list.delete()
-                custom_list.update(review_plan_date=None, review_state=21)
+                custom_list.update(review_plan_date=None, review_state=1)
             response['message'] = '保后计划删除成功！'
         except Exception as e:
             response['status'] = False
@@ -258,7 +352,11 @@ def review_del_ajax(request):
 @login_required
 @authority
 def investigate_add_ajax(request):
-    response = {'status': True, 'message': None, 'forme': None, }
+    response = {
+        'status': True,
+        'message': None,
+        'forme': None,
+    }
     post_data_str = request.POST.get('postDataStr')
     post_data = json.loads(post_data_str)
     custom_list = models.Customes.objects.filter(id=post_data['custom_id'])
@@ -269,22 +367,31 @@ def investigate_add_ajax(request):
         inv_cleaned = form_inv_add.cleaned_data
         try:
             with transaction.atomic():
-                models.Investigate.objects.create(custom=custom_obj, inv_typ=inv_cleaned['inv_typ'],
-                                                  i_analysis=inv_cleaned['i_analysis'],
-                                                  i_suggestion=inv_cleaned['i_suggestion'],
-                                                  i_classification=inv_cleaned['i_classification'],
-                                                  inv_date=inv_cleaned['inv_date'],
-                                                  invor=request.user)  # 创建补调信息
-                custom_list.update(lately_date=inv_cleaned['inv_date'])  # 更新客户信息
+                models.Investigate.objects.create(
+                    custom=custom_obj,
+                    inv_typ=inv_cleaned['inv_typ'],
+                    i_analysis=inv_cleaned['i_analysis'],
+                    i_suggestion=inv_cleaned['i_suggestion'],
+                    i_classification=inv_cleaned['i_classification'],
+                    inv_date=inv_cleaned['inv_date'],
+                    invor=request.user)  # 创建补调信息
+                custom_list.update(
+                    lately_date=inv_cleaned['inv_date'])  # 更新客户信息
                 '''REVIEW_STATE_LIST = [(1, '待保后'), (11, '待报告'), (21, '已完成'), (81, '自主保后')]'''
-                custom_review = models.Review.objects.filter(custom=custom_obj, review_state=1)
+                custom_review = models.Review.objects.filter(custom=custom_obj,
+                                                             review_state=1)
                 if custom_review:  # 如有尚未完成的保后计划,(61, '补调替代')i_classification
                     '''REVIEW_STY_LIST = [(1, '现场检查'), (11, '电话回访'), (61, '补调替代'), (62, '尽调替代')]'''
-                    custom_review.update(review_sty=61, review_state=21, review_date=inv_cleaned['inv_date'],
-                                            analysis=inv_cleaned['i_analysis'], suggestion=inv_cleaned['i_suggestion'],
-                                            classification=inv_cleaned['i_classification'])
+                    custom_review.update(
+                        review_sty=61,
+                        review_state=21,
+                        review_date=inv_cleaned['inv_date'],
+                        analysis=inv_cleaned['i_analysis'],
+                        suggestion=inv_cleaned['i_suggestion'],
+                        classification=inv_cleaned['i_classification'])
                     '''REVIEW_STATE_LIST = [(1, '待保后'), (11, '待报告'), (21, '已完成'), (81, '自主保后')]'''
-                    custom_list.update(review_state=21, review_date=inv_cleaned['inv_date'])
+                    custom_list.update(review_state=21,
+                                       review_date=inv_cleaned['inv_date'])
             response['message'] = '补调成功！'
         except Exception as e:
             response['status'] = False
@@ -301,12 +408,17 @@ def investigate_add_ajax(request):
 @login_required
 @authority
 def investigate_del_ajax(request):
-    response = {'status': True, 'message': None, 'forme': None, }
+    response = {
+        'status': True,
+        'message': None,
+        'forme': None,
+    }
     post_data_str = request.POST.get('postDataStr')
     post_data = json.loads(post_data_str)
 
     custom_list = models.Customes.objects.filter(id=post_data['custom_id'])
-    investigate_list = models.Investigate.objects.filter(id=post_data['investigate_id'])
+    investigate_list = models.Investigate.objects.filter(
+        id=post_data['investigate_id'])
     try:
         with transaction.atomic():
             investigate_list.delete()

@@ -6,9 +6,11 @@ from .. import models
 # -----------------------保后计划添加-------------------------#
 class FormRewiewPlanAdd(dform.ModelForm):
     class Meta:
-        model = models.Customes
-        fields = ['review_plan_date']
+        model = models.Review
+        fields = ['book', 'plan_sty', 'review_plan_date']
         widgets = {
+            'book': dform.Textarea(attrs={'class': 'form-control', 'rows': '5', 'placeholder': '风险分析及保后要求'}),
+            'plan_sty': dform.Select(attrs={'class': 'form-control'}),
             'review_plan_date': dform.DateInput(attrs={'class': 'form-control', 'type': 'date'})}
 
 

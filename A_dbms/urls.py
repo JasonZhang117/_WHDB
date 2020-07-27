@@ -188,6 +188,7 @@ urlpatterns = [
     path('pigeonhole/add/', views.pigeonhole_add_ajax, name='pigeonhole_add_ajax'),
     # -----------------------保后管理-------------------------#
     path('review/', views.review, name='review_all'),  # 菜单-保后管理
+    path('review/book/', views.article_book, name='review_book_all'),  # 菜单-保后管理
     path('review/<int:review_state>/', views.review, name='review'),  # 菜单-保后管理
     path('review/scan/<int:custom_id>/', views.review_scan, name='review_scan'),  #
     path('review/overdue/', views.review_overdue, name='review_overdue_all'),  # 菜单-保后管理
@@ -195,6 +196,7 @@ urlpatterns = [
     path('review/classification/<int:fication>/', views.classification, name='review_fication'),  # 菜单-保后管理
 
     path('review/plan/', views.review_plan_ajax, name='review_plan_ajax'),  #
+    path('review/date/up/', views.date_up_ajax, name='review_date_up_ajax'),  #
     path('review/update/', views.review_update_ajax, name='review_update_ajax'),  #
     path('review/del/', views.review_del_ajax, name='review_del_ajax'),  #
     path('review/fication/', views.fication_add_ajax, name='review_fication_add_ajax'),  #
