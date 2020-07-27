@@ -2,7 +2,7 @@
 # .vscode/
 # .mypy_cache/
 venv/
-# migrations/
+migrations/
 #*_initial.py
 
 # Python:
@@ -12,6 +12,6 @@ venv/
 #Django:
 #db.sqlite3
 #_WHDB.xlsx
-migrations/*
+# migrations/*
 #!__init__.py
 

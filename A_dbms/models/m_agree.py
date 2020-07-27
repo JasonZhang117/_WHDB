@@ -13,7 +13,7 @@ class Agrees(models.Model):  # 委托合同
     agree_num = models.CharField(verbose_name='_合同编号',
                                  max_length=32,
                                  unique=True)
-    AGREE_NAME_LIST = [
+    AGREE_NAME_LIST = (
         (1, '委托保证合同'),
         (11, '最高额委托保证合同'),
         (21, '委托出具分离式保函合同'),
@@ -21,7 +21,7 @@ class Agrees(models.Model):  # 委托合同
         (31, '借款合同'),
         (32, '最高额借款合同'),
         (41, '委托贷款合同'),
-    ]
+    )
     agree_name = models.IntegerField(verbose_name='合同种类',
                                      choices=AGREE_NAME_LIST)
     num_prefix = models.CharField(verbose_name='_编号前缀', max_length=32)
@@ -63,17 +63,17 @@ class Agrees(models.Model):  # 委托合同
                                 max_length=64,
                                 null=True,
                                 blank=True)
-    REPAY_METHOD_LIST = [
+    REPAY_METHOD_LIST = (
         (11, '按月付息、到期一次还本'),
         (21, '等额本息'),
         (31, '按月付息、分期还本'),
-    ]
+    )
     repay_method = models.IntegerField(verbose_name='还款方式',
                                        choices=REPAY_METHOD_LIST,
                                        null=True,
                                        blank=True)
     repay_ex = models.TextField(verbose_name='还款描述', null=True, blank=True)
-    AGREE_TYP_LIST = [
+    AGREE_TYP_LIST = (
         (1, 'D-单笔'),
         (2, 'D-最高额'),
         (4, 'D-委贷'),
@@ -84,10 +84,10 @@ class Agrees(models.Model):  # 委托合同
         (42, 'D-最高额(公证)'),
         (51, 'X-小贷单笔'),
         (52, 'X-小贷最高额'),
-    ]
+    )
     agree_typ = models.IntegerField(verbose_name='合同种类',
                                     choices=AGREE_TYP_LIST)
-    AGREE_TYP_D = [
+    AGREE_TYP_D = (
         1,
         2,
         4,
@@ -96,7 +96,7 @@ class Agrees(models.Model):  # 委托合同
         23,
         41,
         42,
-    ]  # 担保公司合同类型
+    )  # 担保公司合同类型
     AGREE_TYP_X = [51, 52]  # 小贷公司合同类型
     AGREE_TYP_S = [1, 4, 22, 23, 41, 51]  # 单笔合同类型
     AGREE_TYP_H = [2, 21, 42, 52]  # 最高额合同类型
@@ -130,8 +130,8 @@ class Agrees(models.Model):  # 委托合同
                                       blank=True)
     agree_remark = models.TextField(verbose_name='落实情况', null=True, blank=True)
 
-    AGREE_STATE_LIST = [(11, '待签批'), (21, '已签批'), (25, '已签订'), (31, '未落实'),
-                        (41, '已落实'), (51, '待变更'), (61, '已解保'), (99, '已注销')]
+    AGREE_STATE_LIST = ((11, '待签批'), (21, '已签批'), (25, '已签订'), (31, '未落实'),
+                        (41, '已落实'), (51, '待变更'), (61, '已解保'), (99, '已注销'))
     agree_state = models.IntegerField(verbose_name='合同状态',
                                       choices=AGREE_STATE_LIST,
                                       default=11)
@@ -166,12 +166,12 @@ class LetterGuarantee(models.Model):
                                  verbose_name="委托保证合同",
                                  on_delete=models.CASCADE,
                                  related_name='guarantee_agree')
-    LETTER_TYP_LIST = [
+    LETTER_TYP_LIST = (
         (1, '履约保函'),
         (11, '投标保函'),
         (21, '预付款保函'),
         (31, '质量与维修保函'),
-    ]
+    )
     letter_typ = models.IntegerField(verbose_name='保函类型',
                                      choices=LETTER_TYP_LIST)
     beneficiary = models.CharField(verbose_name='受益人', max_length=32)
@@ -207,7 +207,7 @@ class Counters(models.Model):  # 反担保合同
     counter_num = models.CharField(verbose_name='_合同编号',
                                    max_length=32,
                                    unique=True)
-    COUNTER_NAME_LIST = [
+    COUNTER_NAME_LIST = (
         (1, '保证反担保合同'),
         (2, '不可撤销的反担保函'),
         (3, '抵押反担保合同'),
@@ -231,7 +231,7 @@ class Counters(models.Model):  # 反担保合同
         (64, '最高额应收账款质押合同'),
         (65, '最高额股权质押合同'),
         (66, '最高额质押合同'),
-    ]
+    )
     counter_name = models.IntegerField(verbose_name='合同种类',
                                        choices=COUNTER_NAME_LIST,
                                        null=True,
@@ -247,59 +247,59 @@ class Counters(models.Model):  # 反担保合同
         (31, '应收质押'), (32, '股权质押'), (33, '票据质押'), (34, '动产质押'), (39, '其他权利质押'),
         (42, '房产监管'), (43, '土地监管'), (44, '票据监管'), (47, '动产监管'), (49, '其他监管'),
         (51, '股权预售'), (52, '房产预售'), (53, '土地预售'), (59, '其他预售')]'''
-    COUNTER_TYP_LIST = [(1, '企业担保'), (2, '个人保证'), (11, '房产抵押'), (12, '土地抵押'),
+    COUNTER_TYP_LIST = ((1, '企业担保'), (2, '个人保证'), (11, '房产抵押'), (12, '土地抵押'),
                         (13, '动产抵押'), (14, '在建工程抵押'), (15, '车辆抵押'),
                         (31, '应收质押'), (32, '股权质押'), (33, '票据质押'), (34, '动产质押'),
                         (41, '其他权利质押'), (51, '股权预售'), (52, '房产预售'),
-                        (53, '土地预售'), (59, '其他预售')]
+                        (53, '土地预售'), (59, '其他预售'))
     counter_typ = models.IntegerField(verbose_name='合同类型',
                                       choices=COUNTER_TYP_LIST)
-    COUNTER_TYP_X = [
+    COUNTER_TYP_X = (
         1,
         2,
-    ]  # 保证类（反）担保合同类型
-    COUNTER_TYP_D = [
+    )  # 保证类（反）担保合同类型
+    COUNTER_TYP_D = (
         11,
         12,
         13,
         14,
         15,
-    ]  # 抵押类（反）担保合同类型
-    COUNTER_TYP_Z = [
+    )  # 抵押类（反）担保合同类型
+    COUNTER_TYP_Z = (
         31,
         32,
         33,
         34,
         41,
-    ]  # 质押类（反）担保合同类型
+    )  # 质押类（反）担保合同类型
 
-    COUNTER_TYP_FDC = [
+    COUNTER_TYP_FDC = (
         11,
         12,
         14,
         52,
         53,
-    ]  # 房地产类合同
-    COUNTER_TYP_DC = [
+    )  # 房地产类合同
+    COUNTER_TYP_DC = (
         13,
         34,
-    ]  # 动产类合同
-    COUNTER_TYP_YS = [
+    )  # 动产类合同
+    COUNTER_TYP_YS = (
         31,
-    ]  # 应收账款类合同
-    COUNTER_TYP_GQ = [
+    )  # 应收账款类合同
+    COUNTER_TYP_GQ = (
         32,
         51,
-    ]  # 股权类合同
-    COUNTER_TYP_PJ = [
+    )  # 股权类合同
+    COUNTER_TYP_PJ = (
         33,
-    ]  # 票据类合同
-    COUNTER_TYP_CL = [
+    )  # 票据类合同
+    COUNTER_TYP_CL = (
         41,
-    ]  # 车辆类合同
-    COUNTER_TYP_QT = [
+    )  # 车辆类合同
+    COUNTER_TYP_QT = (
         59,
-    ]  # 其他类合同
+    )  # 其他类合同
     counter_copies = models.IntegerField(verbose_name='合同份数')
     counter_other = models.TextField(verbose_name='其他约定',
                                      null=True,
@@ -396,7 +396,7 @@ class ResultState(models.Model):  #
                                verbose_name="客户",
                                on_delete=models.PROTECT,
                                related_name='result_custom')
-    RESULT_TYP_LIST = [
+    RESULT_TYP_LIST = (
         (11, '股东会决议'),
         (13, '合伙人会议决议'),
         (15, '举办者会议决议'),
@@ -407,7 +407,7 @@ class ResultState(models.Model):  #
         (51, '承诺函'),
         (52, '承租人承诺书'),
         (99, '其他协议'),
-    ]
+    )
     result_typ = models.IntegerField(verbose_name='决议类型',
                                      choices=RESULT_TYP_LIST)
     result_detail = models.TextField(verbose_name='决议声明内容',
