@@ -129,7 +129,13 @@ def review_scan(request, custom_id):  #
     job_list = request.session.get('job_list')  # 获取当前用户的所有角色
     PAGE_TITLE = '保后详情'
     custom_obj = models.Customes.objects.get(id=custom_id)
-
+    custom_change_data = {
+        'custom_typ': custom_obj.custom_typ,
+        'credit_amount': custom_obj.credit_amount,
+        'custom_state': custom_obj.custom_state,
+        'managementor': custom_obj.managementor,
+    }
+    form_custom_change = forms.CustomChangeForm(initial=custom_change_data)
     date_th_later = datetime.date.today() + datetime.timedelta(
         days=30)  # 30天后的日期
     form_review_plan = forms.FormRewiewPlanAdd(
