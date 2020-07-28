@@ -1,0 +1,43 @@
+<div>
+    {% if PAGE_TITLE == '风险台账' %}
+        <label>
+            {% if kwargs.review_state == None %}
+                <a class="active btn btn-primary btn-sm"
+                   href="{% url 'dbms:review_all' %}">全部</a>
+            {% else %}
+                <a class="btn btn btn-primary btn-sm"
+                   href="{% url 'dbms:review_all' %}">全部</a>
+            {% endif %}
+
+            {# 方式一：#}
+            {% for review_state in REVIEW_STATE_LIST %}
+                {% if review_state.0 == kwargs.review_state %}
+                    <a class="active btn btn-primary btn-sm"
+                       href="{% url 'dbms:review_book' review_state=review_state.0 %}">
+                        {{ review_state.1 }}
+                    </a>
+                {% else %}
+                    <a class="btn btn-primary btn-sm"
+                       href="{% url 'dbms:review_book' review_state=review_state.0 %}">
+                        {{ review_state.1 }}
+                    </a>
+                {% endif %}
+            {% endfor %}
+        </label>
+    {% endif %}
+    <label>
+        <form class="navbar-form" style="display: inline">
+            <input type="search" name="_s" class="form-control" placeholder="客户名称，管户经理"
+                   value="{{ search_key|default_if_none:'' }}">
+            <button type="submit" class="btn btn-primary btn-sm">搜索</button>
+        </form>
+    </label>
+
+    <label>
+        在保余额：{{ balance|floatformat:2 }}
+    </label>
+    <label class="pull-right"><a class="btn btn-primary btn-sm" id="updateDateB">更新间隔</a></label>
+
+</div>
+
+

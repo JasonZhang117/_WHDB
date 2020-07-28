@@ -9,6 +9,9 @@
             <th>在保余额</th>
             <th>五级分类</th>
             <th>风险台账</th>
+            <th>台账日期</th>
+            <th>计划方式</th>
+            <th>状态</th>
             <th>风险分析</th>
             <th>风控建议</th>
         </tr>
@@ -23,6 +26,9 @@
                 <td align="right">{{ custom.amount }}</td>
                 <td align="right">{{ custom.get_classification_display }}</td>
                 <td>{{ custom.book|default_if_none:"" }}</td>
+                <td>{{ custom.plan_date|default_if_none:"" }}</td>
+                <td>{{ custom.get_plan_sty_display }}</td>
+                <td>{{ custom.get_review_state_display }}</td>
                 <td>{{ custom.analysis|default_if_none:"" }}</td>
                 <td>{{ custom.suggestion|default_if_none:"" }}</td>
             </tr>

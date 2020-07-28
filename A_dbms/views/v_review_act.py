@@ -58,11 +58,14 @@ def review_plan_ajax(request):
                             custom=custom_obj,
                             book=book,
                             plan_sty=plan_sty,
+                            plan_date=today_str,
                             review_plan_date=review_plan_date,
                             review_state=review_state,
                             reviewor=request.user)
                         custom_list.update(review_plan_date=review_plan_date,
+                                           plan_date=today_str,
                                            book=book,
+                                           plan_sty=plan_sty,
                                            review_state=review_state)
                     response['message'] = '保后计划成功！'
                 except Exception as e:

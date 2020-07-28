@@ -32,9 +32,18 @@ class Customes(models.Model):  # 客户
         on_delete=models.PROTECT,
         related_name='c_district',
     )
+    plan_date = models.DateField(verbose_name='台账日期',
+                                        blank=True,
+                                        null=True)   
     review_plan_date = models.DateField(verbose_name='保后计划',
                                         blank=True,
                                         null=True)
+    PLAN_STY_LIST = ((1, '现场检查'), (11, '电话回访'), (61, '补调替代'), (62, '尽调替代'),
+                     (91, '无需保后'))
+    plan_sty = models.IntegerField(verbose_name='计划方式',
+                                   choices=PLAN_STY_LIST,
+                                   blank=True,
+                                   null=True)  
     REVIEW_STATE_LIST = ((1, '待保后'), (11, '待报告'), (21, '已完成'), (81, '自主保后'),
                          (91, '无需保后'))
     review_state = models.IntegerField(verbose_name='_保后状态',

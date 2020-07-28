@@ -237,6 +237,29 @@ def custom_list_screen(custom_list, request):  # 项目筛选
     else:
         return custom_list
 
+# ---------------------------保后客户筛选函数----------------------------#
+def review_custom_list_screen(custom_list, request):  # 项目筛选
+    job_list = request.session.get('job_list')  # 获取当前用户的所有角色
+    request_user = request.user
+    if '业务部负责人' in job_list:  # 如果为业务部门负责人
+        user_department = models.Departments.objects.get(
+            employee_department=request_user)  # 用户所属部门
+        custom_list = custom_list.filter(
+            managementor__department=user_department)  # 项目经理部门与用户所属部门相同项目
+        return custom_list
+    elif '项目经理' in job_list:
+        custom_list = custom_list.filter(
+            managementor=request_user)  # 用户为项目经理或助理项目
+        return custom_list
+    elif '风控专员' in job_list and not '保后管理岗' in job_list:
+        custom_list = custom_list.filter(
+            controler=request_user)  # 用户为项目经理或助理项目
+        return custom_list
+    else:
+        return custom_list
+
+
+
 
 # ---------------------------权证筛选函数----------------------------#
 def warrant_list_screen(warrant_list, request):  # 项目筛选

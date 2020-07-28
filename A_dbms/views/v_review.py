@@ -9,7 +9,8 @@ from django.db.models import Q
 from django.db.models import Avg, Min, Sum, Max, Count
 from django.urls import resolve
 from _WHDB.views import MenuHelper
-from _WHDB.views import (authority, custom_list_screen, custom_right,
+from _WHDB.views import (authority, custom_list_screen,
+                         review_custom_list_screen, custom_right,
                          provide_list_screen, FICATION_LIST)
 
 
@@ -28,7 +29,7 @@ def review(request, *args, **kwargs):  # 保后列表
 
     custom_list = models.Customes.objects.filter(
         **kwargs).order_by('lately_date')
-    custom_list = custom_list_screen(custom_list, request)
+    custom_list = review_custom_list_screen(custom_list, request)
     '''
     custom_flow = models.FloatField(verbose_name='_流贷余额', default=0)
     custom_accept = models.FloatField(verbose_name='_承兑余额', default=0)
@@ -80,7 +81,7 @@ def article_book(request, *args, **kwargs):  # 风险台账
 
     custom_list = models.Customes.objects.filter(
         **kwargs).order_by('lately_date')
-    custom_list = custom_list_screen(custom_list, request)
+    custom_list = review_custom_list_screen(custom_list, request)
     '''
     custom_flow = models.FloatField(verbose_name='_流贷余额', default=0)
     custom_accept = models.FloatField(verbose_name='_承兑余额', default=0)
@@ -102,7 +103,7 @@ def article_book(request, *args, **kwargs):  # 风险台账
             q.children.append(("%s__contains" % field, search_key.strip()))
         custom_list = custom_list.filter(q)
     custom_list = custom_list.filter(credit_amount__gt=0)
-    
+
     balance = custom_list.aggregate(Sum('amount'))['amount__sum']  # 在保余额
 
     custom_acount = custom_list.count()
@@ -134,6 +135,7 @@ def review_scan(request, custom_id):  #
         'credit_amount': custom_obj.credit_amount,
         'custom_state': custom_obj.custom_state,
         'managementor': custom_obj.managementor,
+        'controler': custom_obj.controler,
     }
     form_custom_change = forms.CustomChangeForm(initial=custom_change_data)
     date_th_later = datetime.date.today() + datetime.timedelta(

@@ -189,6 +189,7 @@ urlpatterns = [
     # -----------------------保后管理-------------------------#
     path('review/', views.review, name='review_all'),  # 菜单-保后管理
     path('review/book/', views.article_book, name='review_book_all'),  # 菜单-保后管理
+    path('review/book/<int:review_state>/', views.article_book, name='review_book'),  # 菜单-保后管理
     path('review/<int:review_state>/', views.review, name='review'),  # 菜单-保后管理
     path('review/scan/<int:custom_id>/', views.review_scan, name='review_scan'),  #
     path('review/overdue/', views.review_overdue, name='review_overdue_all'),  # 菜单-保后管理

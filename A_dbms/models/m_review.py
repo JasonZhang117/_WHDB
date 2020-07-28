@@ -9,6 +9,9 @@ class Review(models.Model):
                                verbose_name="客户",
                                on_delete=models.PROTECT,
                                related_name='review_custom')
+    plan_date = models.DateField(verbose_name='台账日期',
+                                        blank=True,
+                                        null=True)                               
     review_plan_date = models.DateField(verbose_name='保后计划',
                                         blank=True,
                                         null=True)
@@ -18,11 +21,11 @@ class Review(models.Model):
                                        choices=REVIEW_STATE_LIST,
                                        default=1)
     PLAN_STY_LIST = ((1, '现场检查'), (11, '电话回访'), (61, '补调替代'), (62, '尽调替代'),
-                       (91, '无需保后'))
+                     (91, '无需保后'))
     plan_sty = models.IntegerField(verbose_name='计划方式',
-                                     choices=PLAN_STY_LIST,
-                                     blank=True,
-                                     null=True)
+                                   choices=PLAN_STY_LIST,
+                                   blank=True,
+                                   null=True)
     REVIEW_STY_LIST = ((1, '现场检查'), (11, '电话回访'), (61, '补调替代'), (62, '尽调替代'),
                        (91, '无需保后'))
     review_sty = models.IntegerField(verbose_name='保后方式',
