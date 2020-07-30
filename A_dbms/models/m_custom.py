@@ -3,6 +3,14 @@ import datetime
 from _WHDB.views import (FICATION_LIST)
 
 
+def limit_managementor_choices():
+
+    return {'job__name': '项目经理'}
+
+def limit_controler_choices():
+
+    return {'job__name': '风控专员'}
+
 # -----------------------客户模型-------------------------#
 class Customes(models.Model):  # 客户
     name = models.CharField(verbose_name='客户名称', max_length=32)
@@ -95,11 +103,13 @@ class Customes(models.Model):  # 客户
                                   verbose_name="风控专员",
                                   on_delete=models.PROTECT,
                                   default=1,
+                                  limit_choices_to={'job__name': '风控专员'},
                                   related_name='controler_employee')
     custom_buildor = models.ForeignKey(to='Employees',
                                        verbose_name="_创建者",
                                        on_delete=models.PROTECT,
                                        default=1,
+                                       limit_choices_to={'job__name': '风控专员'},
                                        related_name='custom_buildor_employee')
     custom_date = models.DateField(verbose_name='创建日期',
                                    default=datetime.date.today)

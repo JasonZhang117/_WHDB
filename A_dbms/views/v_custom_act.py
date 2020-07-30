@@ -414,6 +414,7 @@ def custom_change_ajax(request):
                     credit_amount=credit_amount, g_radio=g_radio,
                     custom_state=custom_chang_data['custom_state'],
                     managementor=custom_chang_data['managementor'],
+                    controler=custom_chang_data['controler'],
                 )
             response['message'] = '客户状态变更成功！！！'
         except Exception as e:
