@@ -1004,6 +1004,8 @@ def storages_add_ajax(request):  # 出入库添加ajax
                             storage_explain=storage_explain,
                             conservator=request.user)
                         warrant_list.update(warrant_state=2, storage_explain=storage_explain)
+                        if warrant_obj.warrant_typ == 31: #票据
+                            warrant_obj.draft_warrant.extend_draft.update(draft_state=2)
                     response['message'] = '权证入库成功！！！'
                 except Exception as e:
                     response['status'] = False
