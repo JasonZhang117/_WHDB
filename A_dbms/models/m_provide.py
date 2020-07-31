@@ -78,7 +78,7 @@ class Provides(models.Model):  # 放款
                                related_name='provide_notify')
     PROVIDE_TYP_LIST = [(1, 'D-流贷'), (11, 'D-承兑'), (21, 'D-保函'), (31, 'D-委贷'),
                         (41, 'X-过桥贷'), (52, 'X-房抵贷'), (53, 'X-担保贷'),
-                        (55, 'X-经营贷'), (57, 'X-消费贷'), (58, 'X-消费贷')]
+                        (55, 'X-经营贷'), (57, 'X-票据贷'), (58, 'X-消费贷')]
     provide_typ = models.IntegerField(verbose_name='放款种类',
                                       choices=PROVIDE_TYP_LIST)
     old_amount = models.FloatField(verbose_name='续贷金额', default=0)
