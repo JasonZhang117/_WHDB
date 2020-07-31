@@ -76,9 +76,9 @@ class Provides(models.Model):  # 放款
                                verbose_name="_放款通知",
                                on_delete=models.PROTECT,
                                related_name='provide_notify')
-    PROVIDE_TYP_LIST = [(1, '流贷'), (11, '承兑'), (21, '保函'), (31, '委贷'),
-                        (41, '过桥贷'), (52, '房抵贷'), (53, '担保贷'), (55, '经营贷'),
-                        (57, '消费贷')]
+    PROVIDE_TYP_LIST = [(1, 'D-流贷'), (11, 'D-承兑'), (21, 'D-保函'), (31, 'D-委贷'),
+                        (41, 'X-过桥贷'), (52, 'X-房抵贷'), (53, 'X-担保贷'),
+                        (55, 'X-经营贷'), (57, 'X-消费贷'), (58, 'X-消费贷')]
     provide_typ = models.IntegerField(verbose_name='放款种类',
                                       choices=PROVIDE_TYP_LIST)
     old_amount = models.FloatField(verbose_name='续贷金额', default=0)
@@ -247,8 +247,12 @@ class Track(models.Model):  #
         on_delete=models.PROTECT,
         # limit_choices_to={'provide_status': 1},
         related_name='track_provide')
-    TRACK_TYP_LIST = [(11, '日常计划'), (21, '分期还本'),
-        (25, '等额本息'), (31, '按月付息'),]
+    TRACK_TYP_LIST = [
+        (11, '日常计划'),
+        (21, '分期还本'),
+        (25, '等额本息'),
+        (31, '按月付息'),
+    ]
     track_typ = models.IntegerField(verbose_name='计划类型',
                                     choices=TRACK_TYP_LIST,
                                     default=11)
@@ -273,7 +277,10 @@ class Track(models.Model):  #
 
     track_date = models.DateField(verbose_name='跟踪日期', null=True, blank=True)
     condition = models.TextField(verbose_name='跟踪情况', null=True, blank=True)
-    TRACK_STATE_LIST = [(11, '未结清'),(21, '已结清'),]
+    TRACK_STATE_LIST = [
+        (11, '未结清'),
+        (21, '已结清'),
+    ]
     track_state = models.IntegerField(verbose_name='计划状态',
                                       choices=TRACK_STATE_LIST,
                                       default=11)
