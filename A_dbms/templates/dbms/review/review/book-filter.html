@@ -3,10 +3,10 @@
         <label>
             {% if kwargs.review_state == None %}
                 <a class="active btn btn-primary btn-sm"
-                   href="{% url 'dbms:review_all' %}">全部</a>
+                   href="{% url 'dbms:review_book_all' %}">全部</a>
             {% else %}
                 <a class="btn btn btn-primary btn-sm"
-                   href="{% url 'dbms:review_all' %}">全部</a>
+                   href="{% url 'dbms:review_book_all' %}">全部</a>
             {% endif %}
 
             {# 方式一：#}
