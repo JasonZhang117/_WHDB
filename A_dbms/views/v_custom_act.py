@@ -414,12 +414,40 @@ def custom_change_ajax(request):
                     credit_amount=credit_amount, g_radio=g_radio,
                     custom_state=custom_chang_data['custom_state'],
                     managementor=custom_chang_data['managementor'],
-                    controler=custom_chang_data['controler'],
                 )
             response['message'] = '客户状态变更成功！！！'
         except Exception as e:
             response['status'] = False
             response['message'] = '客户修改失败：%s' % str(e)
+    else:
+        response['status'] = False
+        response['message'] = '表单信息有误！！！'
+        response['forme'] = form_custom_change.errors
+    result = json.dumps(response, ensure_ascii=False)
+    return HttpResponse(result)
+
+# -----------------------客户风控专员调整-------------------------#
+@login_required
+@authority
+def custom_controler_ajax(request):
+    response = {'status': True, 'message': None, 'forme': None, }
+    post_data_str = request.POST.get('postDataStr')
+    post_data = json.loads(post_data_str)
+    custom_id = post_data['custom_id']
+    custom_lsit = models.Customes.objects.filter(id=custom_id)
+    custom_obj = custom_lsit[0]
+    form_custom_change = forms.CustomControlerForm(post_data)
+    if form_custom_change.is_valid():
+        custom_chang_data = form_custom_change.cleaned_data
+        try:
+            with transaction.atomic():
+                custom_lsit.update(
+                    controler=custom_chang_data['controler'],
+                )
+            response['message'] = '客户风控专员变更成功！！！'
+        except Exception as e:
+            response['status'] = False
+            response['message'] = '客户风控专员修改失败：%s' % str(e)
     else:
         response['status'] = False
         response['message'] = '表单信息有误！！！'

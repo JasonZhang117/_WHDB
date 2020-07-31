@@ -98,6 +98,7 @@ class Customes(models.Model):  # 客户
                                      verbose_name="管护经理",
                                      on_delete=models.PROTECT,
                                      default=1,
+                                     limit_choices_to={'job__name': '项目经理'},
                                      related_name='manage_employee')
     controler = models.ForeignKey(to='Employees',
                                   verbose_name="风控专员",
@@ -109,7 +110,6 @@ class Customes(models.Model):  # 客户
                                        verbose_name="_创建者",
                                        on_delete=models.PROTECT,
                                        default=1,
-                                       limit_choices_to={'job__name': '风控专员'},
                                        related_name='custom_buildor_employee')
     custom_date = models.DateField(verbose_name='创建日期',
                                    default=datetime.date.today)

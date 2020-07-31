@@ -26,13 +26,16 @@ def custom(request, *args, **kwargs):  # 委托合同列表
     '''GENRE_LIST = ((1, '企业'), (2, '个人'))'''
     genre_list = models.Customes.GENRE_LIST  # 筛选条件
     '''筛选'''
-    custom_list = models.Customes.objects.filter(**kwargs).order_by('-credit_amount', '-name')
+    custom_list = models.Customes.objects.filter(**kwargs).order_by(
+        '-credit_amount', '-name')
     custom_list = custom_list_screen(custom_list, request)
     '''搜索'''
     search_key = request.GET.get('_s')
     if search_key:
-        search_fields = ['name', 'short_name', 'managementor__name', 'idustry__name', 'district__name',
-                         'contact_addr', 'linkman', 'contact_num']
+        search_fields = [
+            'name', 'short_name', 'managementor__name', 'idustry__name',
+            'district__name', 'contact_addr', 'linkman', 'contact_num'
+        ]
         q = Q()
         q.connector = 'OR'
         for field in search_fields:
@@ -80,25 +83,34 @@ def custom_scan(request, custom_id):  # 项目预览
         'controler': custom_obj.controler,
     }
     form_custom_change = forms.CustomChangeForm(initial=custom_change_data)
+    custom_controler_data = {
+        'controler': custom_obj.controler,
+    }
+    form_controler_change = forms.CustomControlerForm(
+        initial=custom_controler_data)
     if custom_obj.genre == 1:
         form_date = {
             'decisionor': custom_obj.company_custome.decisionor,
             'capital': custom_obj.company_custome.capital,
             'registered_addr': custom_obj.company_custome.registered_addr,
-            'representative': custom_obj.company_custome.representative}
+            'representative': custom_obj.company_custome.representative
+        }
         form_custom_c_add = forms.CustomCAddForm(initial=form_date)
     else:
         form_date = {
             'license_num': custom_obj.person_custome.license_num,
             'license_addr': custom_obj.person_custome.license_addr,
-            'marital_status': custom_obj.person_custome.marital_status}
+            'marital_status': custom_obj.person_custome.marital_status
+        }
         form_custom_p_add = forms.CustomPAddForm(initial=form_date)
     form_shareholder_add = forms.FormShareholderAdd()
     form_trustee_add = forms.FormTrusteeAdd()
     form_article_add = forms.ArticlesAddForm()
     form_spouse_add = forms.FormCustomSpouseAdd()
-    review_custom_list = custom_obj.review_custom.all().filter().order_by('-review_date', '-review_plan_date')
+    review_custom_list = custom_obj.review_custom.all().filter().order_by(
+        '-review_date', '-review_plan_date')
     '''ARTICLE_STATE_LIST = ((1, '待反馈'), (2, '已反馈'), (3, '待上会'), (4, '已上会'), (5, '已签批'),
                           (51, '已放款'), (52, '已放完'), (55, '已解保'), (61, '待变更'), (99, '已注销'))'''
-    article_custom_list = custom_obj.article_custom.all().order_by('-build_date')
+    article_custom_list = custom_obj.article_custom.all().order_by(
+        '-build_date')
     return render(request, 'dbms/custom/custom-scan.html', locals())

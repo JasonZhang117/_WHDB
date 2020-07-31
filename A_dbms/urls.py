@@ -255,6 +255,7 @@ urlpatterns = [
     path('custom/del/', views.custom_del_ajax, name='custom_del_ajax'),
     path('custom/edit/', views.custom_edit_ajax, name='custom_edit_ajax'),
     path('custom/change/', views.custom_change_ajax, name='custom_change_ajax'),
+    path('custom/controler/', views.custom_controler_ajax, name='custom_controler_ajax'),
     path('custom/shareholder/add/', views.shareholder_add_ajax, name='custom_shareholder_add_ajax'),
     path('custom/shareholder/del/', views.shareholder_del_ajax, name='custom_shareholder_del_ajax'),
     path('custom/trustee/add/', views.trustee_add_ajax, name='custom_trustee_add_ajax'),

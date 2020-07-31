@@ -48,12 +48,20 @@ class CustomEditForm(dform.ModelForm):
 class CustomChangeForm(dform.ModelForm):
     class Meta:
         model = models.Customes
-        fields = ['custom_typ', 'credit_amount', 'custom_state', 'managementor', 'controler']
+        fields = ['custom_typ', 'credit_amount', 'custom_state', 'managementor']
         widgets = {
             'custom_typ': dform.Select(attrs={'class': 'form-control'}),
             'credit_amount': dform.NumberInput(attrs={'class': 'form-control', 'placeholder': '授信总额'}),
             'custom_state': dform.Select(attrs={'class': 'form-control'}),
             'managementor': dform.Select(attrs={'class': 'form-control'}),
+        }
+
+# -----------------------变更客户风控专员-------------------------#
+class CustomControlerForm(dform.ModelForm):
+    class Meta:
+        model = models.Customes
+        fields = ['controler']
+        widgets = {
             'controler': dform.Select(attrs={'class': 'form-control'}),
         }
 

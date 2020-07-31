@@ -1,0 +1,24 @@
+<div class="modal fade" id="changeControlerModal" tabindex="-1"
+     role="dialog" aria-labelledby="changeCustomModal">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title" id="changeControlerModalLabel">修改风控专员
+                    <input style="display: none" name="custom_id" id="customChangeId" value="{{ custom_obj.id }}">
+                </h4>
+            </div>
+            <div class="modal-body">
+                <form class="form-horizontal">
+                    {% include 'dbms/custom/modl/mod_form/controler-change.html' %}
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                <button type="button" class="btn btn-primary" id="changeControlerModalOk">修改</button>
+            </div>
+        </div>
+    </div>
+</div>
