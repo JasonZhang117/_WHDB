@@ -1746,11 +1746,14 @@ def report_meeting_list(request, *args, **kwargs):  #
         (11, '上年'),
         (99, '自定义'),
     ]
+
+    t_typ_dic = dict(TERM_LIST)
     tf_r = request.GET.get('tf')
     tl_r = request.GET.get('tl')
     t_typ = kwargs['t_typ']
-
+    t_typ_this = t_typ_dic[t_typ]
     tf_r, tl_r = tt_compensatory(t_typ, tf_r, tl_r)
+
 
     article_groups = models.Articles.objects.filter(
         appraisal_article__review_date__gte=tf_r,
