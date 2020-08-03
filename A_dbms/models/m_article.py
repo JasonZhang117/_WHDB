@@ -41,6 +41,7 @@ class Articles(models.Model):  # 项目、纪要
         (11, '按月付息、到期还本'),
         (21, '等额本息'),
         (31, '按月付息、分期还本'),
+        (41, '到期一次还本付息'),
     ]
     article_repay_method = models.IntegerField(verbose_name='还款方式',
                                                choices=REPAY_METHOD_LIST,

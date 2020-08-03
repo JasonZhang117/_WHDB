@@ -9,11 +9,13 @@
     <div class="sign-tab">
         {% if notify_obj.agree.lending.summary.product.name == '房抵贷' %}
             {% include 'dbms/provide/notify_show/fdd.html' %}
-        {% elif notify_obj.agree.lending.summary.product.name == '担保贷' %}
+        {% elif notify_obj.agree.lending.summary.product.name == '票据贷' %}
             {% include 'dbms/provide/notify_show/dbd.html' %}
         {% elif notify_obj.agree.lending.summary.product.name == '过桥贷' %}
             {% include 'dbms/provide/notify_show/dbd.html' %}
-        {% elif notify_obj.agree.lending.summary.product.name == '流贷' %}
+        {% elif notify_obj.agree.lending.summary.product.name == '担保贷' %}
+            {% include 'dbms/provide/notify_show/dbd.html' %}
+        {% elif notify_obj.agree.lending.summary.product.name == '经营贷' %}
             {% include 'dbms/provide/notify_show/dbd.html' %}
         {% else %}
             ？？？？？
