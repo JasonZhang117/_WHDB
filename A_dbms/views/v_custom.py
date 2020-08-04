@@ -55,7 +55,7 @@ def custom(request, *args, **kwargs):  # 委托合同列表
 
 # -----------------------企业客户列表-------------------------#
 @login_required
-# @authority
+@authority
 def custom_c(request, *args, **kwargs):  # 委托合同列表
     current_url_name = resolve(request.path).url_name  # 获取当前URL_NAME
     authority_list = request.session.get('authority_list')  # 获取当前用户的所有权限
@@ -64,7 +64,7 @@ def custom_c(request, *args, **kwargs):  # 委托合同列表
     '''筛选'''
     custom_list = models.Customes.objects.filter(**kwargs).order_by(
         '-credit_amount', '-name')
-    custom_list = custom_list.filter(genre=1).select_related(
+    custom_list = custom_list.filter(genre=1,credit_amount__gt=0).select_related(
         'managementor', 'idustry')
     custom_list = custom_list_screen(custom_list, request)
     '''搜索'''
@@ -92,7 +92,7 @@ def custom_c(request, *args, **kwargs):  # 委托合同列表
 
 # -----------------------个人客户列表-------------------------#
 @login_required
-# @authority
+@authority
 def custom_p(request, *args, **kwargs):  # 委托合同列表
     current_url_name = resolve(request.path).url_name  # 获取当前URL_NAME
     authority_list = request.session.get('authority_list')  # 获取当前用户的所有权限
@@ -101,7 +101,7 @@ def custom_p(request, *args, **kwargs):  # 委托合同列表
     '''筛选'''
     custom_list = models.Customes.objects.filter(**kwargs).order_by(
         '-credit_amount', '-name')
-    custom_list = custom_list.filter(genre=2).select_related(
+    custom_list = custom_list.filter(genre=2,credit_amount__gt=0).select_related(
         'managementor', 'idustry')
     custom_list = custom_list_screen(custom_list, request)
     '''搜索'''

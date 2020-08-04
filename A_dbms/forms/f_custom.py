@@ -71,11 +71,12 @@ class CustomCAddForm(dform.ModelForm):  # 企业客户
 
     class Meta:
         model = models.CustomesC
-        fields = ['credit_code', 'custom_nature', 'typing', 'capital', 'decisionor', 'registered_addr', 'representative']
+        fields = ['credit_code', 'custom_nature', 'typing', 'industry_c', 'capital', 'decisionor', 'registered_addr', 'representative']
         widgets = {
             'credit_code': dform.TextInput(attrs={'class': 'form-control', 'placeholder': '统一社会信用代码'}),
             'custom_nature': dform.Select(attrs={'class': 'form-control'}),
             'typing': dform.Select(attrs={'class': 'form-control'}),
+            'industry_c': dform.Select(attrs={'class': 'form-control'}),
             'capital': dform.TextInput(attrs={'class': 'form-control', 'placeholder': '注册资本'}),
             'registered_addr': dform.TextInput(attrs={'class': 'form-control', 'placeholder': '注册地址'}),
             'representative': dform.TextInput(attrs={'class': 'form-control', 'placeholder': '法人代表'}),

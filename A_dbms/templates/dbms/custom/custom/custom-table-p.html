@@ -5,6 +5,7 @@
             <th>客户名称</th>
             <th>身份证号码</th>
             <th>户籍性质</th>
+            <th>报送状态</th>
             <th>管护经理</th>
         </tr>
         </thead>
@@ -14,6 +15,7 @@
                 <td><a href="{% url 'dbms:custom_scan' custom_id=custom.id %}">{{ custom.name }}</a></td>
                 <td>{{ custom.person_custome.license_num }}</td>
                 <td>{{ custom.person_custome.get_household_nature_display }}</td>
+                <td>{{ custom.get_submission_status_display }}</td>
                 <td>{{ custom.managementor.name }}</td>
             </tr>
         {% endfor %}

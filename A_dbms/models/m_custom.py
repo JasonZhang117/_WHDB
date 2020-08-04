@@ -7,9 +7,11 @@ def limit_managementor_choices():
 
     return {'job__name': '项目经理'}
 
+
 def limit_controler_choices():
 
     return {'job__name': '风控专员'}
+
 
 # -----------------------客户模型-------------------------#
 class Customes(models.Model):  # 客户
@@ -40,9 +42,7 @@ class Customes(models.Model):  # 客户
         on_delete=models.PROTECT,
         related_name='c_district',
     )
-    plan_date = models.DateField(verbose_name='台账日期',
-                                        blank=True,
-                                        null=True)   
+    plan_date = models.DateField(verbose_name='台账日期', blank=True, null=True)
     review_plan_date = models.DateField(verbose_name='保后计划',
                                         blank=True,
                                         null=True)
@@ -51,7 +51,7 @@ class Customes(models.Model):  # 客户
     plan_sty = models.IntegerField(verbose_name='计划方式',
                                    choices=PLAN_STY_LIST,
                                    blank=True,
-                                   null=True)  
+                                   null=True)
     REVIEW_STATE_LIST = ((1, '待保后'), (11, '待报告'), (21, '已完成'), (81, '自主保后'),
                          (91, '无需保后'))
     review_state = models.IntegerField(verbose_name='_保后状态',
@@ -60,7 +60,7 @@ class Customes(models.Model):  # 客户
     review_date = models.DateField(verbose_name='保后日期', blank=True, null=True)
     review_amount = models.IntegerField(verbose_name='保后次数', default=0)
     add_amount = models.IntegerField(verbose_name='补调次数', default=0)
-    
+
     book = models.TextField(verbose_name='专员台账', blank=True, null=True)
     analysis = models.TextField(verbose_name='风险分析', blank=True, null=True)
     suggestion = models.TextField(verbose_name='风控建议', blank=True, null=True)
@@ -89,11 +89,15 @@ class Customes(models.Model):  # 客户
 
     v_radio = models.FloatField(verbose_name='在保覆盖率(%)', default=0)
 
-    CUSTOM_STATE_LIST = [(11, '正常客户'), (21, '反担保客户'), (31, '小贷客户'),
-                         (99, '注销客户')]
+    CUSTOM_STATE_LIST = ((11, '正常客户'), (21, '反担保客户'), (31, '小贷客户'), (99,
+                                                                     '注销客户'))
     custom_state = models.IntegerField(verbose_name='客户状态',
                                        choices=CUSTOM_STATE_LIST,
                                        default=11)
+    SUBMISSION_STATUS_LIST = ((11, '未报送'), (21, '更新待报'), (31, '已报送'))
+    submission_status = models.IntegerField(verbose_name='客户状态',
+                                            choices=SUBMISSION_STATUS_LIST,
+                                            default=11)
     managementor = models.ForeignKey(to='Employees',
                                      verbose_name="管护经理",
                                      on_delete=models.PROTECT,
@@ -137,16 +141,39 @@ class CustomesC(models.Model):
     decisionor = models.IntegerField(verbose_name='决策机构',
                                      choices=DECISIONOR_LIST,
                                      default=11)
-    credit_code = models.CharField(verbose_name='统一社会信用代码', max_length=32, null=True, blank=True)
+    credit_code = models.CharField(verbose_name='统一社会信用代码',
+                                   max_length=32,
+                                   null=True,
+                                   blank=True)
     NATURE_LIST = ((11, '国有独资'), (21, '国有控股'), (31, '国有参股'), (41, '民营'),
-                       (51, '外资'), (61, '港澳台商独资'), (71, '其他'))
+                   (51, '外资'), (61, '港澳台商独资'), (71, '其他'))
     custom_nature = models.IntegerField(verbose_name='企业性质',
-                                     choices=NATURE_LIST,
-                                     default=41)
-    TYPING_LIST = ((11, '涉农小微企业'), (21, '非农小薇企业'), (31, '中型企业'), (41, '大型企业'))                
+                                        choices=NATURE_LIST,
+                                        default=41)
+    INDUSTRY_C_LIST = (
+        (101, '农林牧渔'),
+        (102, '工业'),
+        (103, '建筑业'),
+        (104, '批发业'),
+        (106, '零售业'),
+        (107, '交通运输业'),
+        (108, '仓储业'),
+        (109, '邮政业'),
+        (110, '住宿业'),
+        (111, '餐饮业'),
+        (112, '信息传输业'),
+        (113, '软件和信息技术服务业'),
+        (114, '房地产开发经营'),
+        (115, '物业管理'),
+        (116, '租赁和商务服务'),
+    )
+    industry_c = models.IntegerField(verbose_name='所属行业',
+                                     choices=INDUSTRY_C_LIST,
+                                     default=102)
+    TYPING_LIST = ((11, '涉农小微企业'), (21, '非农小薇企业'), (31, '中型企业'), (41, '大型企业'))
     typing = models.IntegerField(verbose_name='企业划型',
-                                     choices=TYPING_LIST,
-                                     default=21)
+                                 choices=TYPING_LIST,
+                                 default=21)
     capital = models.FloatField(verbose_name='注册资本', default=0)
     paid_capital = models.FloatField(verbose_name='实收资本', default=0)
     registered_addr = models.CharField(verbose_name='注册地址', max_length=64)
@@ -247,8 +274,9 @@ class CustomesP(models.Model):  # 个人客户
         (11, '农村居民'),
     )
     household_nature = models.IntegerField(verbose_name='户籍性质',
-                                         choices=HOUSEHOLD_LIST,
-                                         default=1)
+                                           choices=HOUSEHOLD_LIST,
+                                           default=1)
+
     class Meta:
         verbose_name_plural = '客户-个人'  # 指定显示名称
         db_table = 'dbms_customesp'  # 指定数据表的名称

@@ -48,6 +48,7 @@ def custom_add_ajax(request):
                             credit_code=custom_c_data['credit_code'],
                             custom_nature=custom_c_data['custom_nature'],
                             typing=custom_c_data['typing'],
+                            industry_c=custom_c_data['industry_c'],
                             capital=custom_c_data['capital'],
                             registered_addr=custom_c_data['registered_addr'],
                             representative=custom_c_data['representative'])
@@ -351,6 +352,7 @@ def custom_edit_ajax(request):
                             credit_code=custom_c_data['credit_code'],
                             custom_nature=custom_c_data['custom_nature'],
                             typing=custom_c_data['typing'],
+                            industry_c=custom_c_data['industry_c'],
                             capital=custom_c_data['capital'],
                             registered_addr=custom_c_data['registered_addr'],
                             representative=custom_c_data['representative'])
