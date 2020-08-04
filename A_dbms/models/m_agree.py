@@ -67,6 +67,7 @@ class Agrees(models.Model):  # 委托合同
         (11, '按月付息、到期一次还本'),
         (21, '等额本息'),
         (31, '按月付息、分期还本'),
+        (41, '到期一次还本付息'),
     )
     repay_method = models.IntegerField(verbose_name='还款方式',
                                        choices=REPAY_METHOD_LIST,

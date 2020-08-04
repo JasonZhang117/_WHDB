@@ -228,6 +228,10 @@ def agree_add_ajax(request):  # 添加合同
                                 guarantee_num_f = '-TB'
                             elif letter_typ == 21:
                                 guarantee_num_f = '-YF'
+                            elif letter_typ == 31:
+                                guarantee_num_f = '-ZL'
+                            else:
+                                guarantee_num_f = '？？？'
 
                             guarantee_num = agree_num + guarantee_num_f + '1'
                             letter_obj = models.LetterGuarantee.objects.create(
@@ -427,6 +431,10 @@ def agree_edit_ajax(request):  #
                                 guarantee_num_f = '-TB'
                             elif letter_typ == 21:
                                 guarantee_num_f = '-YF'
+                            elif letter_typ == 31:
+                                guarantee_num_f = '-ZL'
+                            else:
+                                guarantee_num_f = '？？？'
                             guarantee_num = agree_obj.agree_num + guarantee_num_f + '1'
 
                             letter_clean = form_letter_add.cleaned_data
