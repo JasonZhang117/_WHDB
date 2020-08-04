@@ -38,8 +38,15 @@ class Agrees(models.Model):  # 委托合同
         on_delete=models.PROTECT,
         # limit_choices_to={'branch_state': 1},
         related_name='agree_branch')
-    agree_term = models.IntegerField(verbose_name='合同期限（月）')
-
+    agree_term = models.IntegerField(verbose_name='合同期限')
+    AGREE_TERM_TYP_LIST = (
+        (1, '月'),
+        (11, '日'),
+        (21, '年'),
+    )
+    agree_term_typ = models.IntegerField(verbose_name='期限单位',
+                                     choices=AGREE_TERM_TYP_LIST,
+                                     default=1)
     agree_start_date = models.DateField(verbose_name='起始日',
                                         null=True,
                                         blank=True)

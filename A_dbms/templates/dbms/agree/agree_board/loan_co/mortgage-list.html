@@ -1,5 +1,12 @@
 <div>附件一：</div>
+{% if counter_obj.counter_typ in D_COUNTER_TYP_LIST %}
 <div align="center" style="padding-bottom: 25pt"><strong>抵押物清单</strong></div>
+{%elif counter_obj.counter_typ in Z_COUNTER_TYP_LIST %}
+<div align="center" style="padding-bottom: 25pt"><strong>质物清单</strong></div>
+{%else%}
+<div align="center" style="padding-bottom: 25pt"><strong>？？？？？清单</strong></div>
+{%endif%}
+
 <!--清单表格-->
 <table cellspacing="0" cellpadding="0">
     {% for warrant in counter_obj.warrant_counter.warrant.all %}
@@ -7,6 +14,10 @@
             {% include 'dbms/agree/agree_board/loan_co/mortgage-1-2.html' %}
         {% elif warrant.warrant_typ == 5 %}
             {% include 'dbms/agree/agree_board/loan_co/mortgage-5.html' %}
+        {% elif warrant.warrant_typ == 5 %}
+            {% include 'dbms/agree/agree_board/loan_co/mortgage-5.html' %}
+        {% elif warrant.warrant_typ == 31 %}
+            {% include 'dbms/agree/agree_board/loan_co/mortgage-31.html' %}
         {% else %}
             <p>？？？？？？？？？？？？？</p>
             <p>？？？？？？？？？？？？？</p>
@@ -15,7 +26,13 @@
     {% endfor %}
     <tr>
         <td colspan="7" style="text-indent: 16pt">
-            本《抵押物清单》是编号为{{ counter_obj.counter_num }}《{{ counter_obj.get_counter_name_display }}》的组成部分。
+            {% if counter_obj.counter_typ in D_COUNTER_TYP_LIST %}
+                本《抵押物清单》是编号为{{ counter_obj.counter_num }}《{{ counter_obj.get_counter_name_display }}》的组成部分。
+            {%elif counter_obj.counter_typ in Z_COUNTER_TYP_LIST %}
+                本《质物清单》是编号为{{ counter_obj.counter_num }}《{{ counter_obj.get_counter_name_display }}》的组成部分，出质人承诺本《质物清单》中记载的出质权利内容为真实、有效、合法的。
+            {%else%}
+                ？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？。
+            {%endif%}
         </td>
     </tr>
 </table>
@@ -25,7 +42,7 @@
         {% if counter_obj.counter_typ in D_COUNTER_TYP_LIST %}
             <td style="border: 0pt; width: 115pt" align="center" valign="">抵押人（企业或者其他组织公章、自然人签字）：</td>
         {% elif counter_obj.counter_typ in Z_COUNTER_TYP_LIST %}
-            <td style="border: 0pt; width: 115pt" align="center" valign="top">质押人（企业或者其他组织公章、自然人签字）：</td>
+            <td style="border: 0pt; width: 115pt" align="center" valign="top">出质人（企业或者其他组织公章、自然人签字）：</td>
         {% endif %}
         <td style="border: 0pt; width: 25%" valign="top">
             <!--WARRANT_TYP_LIST = [

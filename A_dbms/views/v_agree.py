@@ -440,7 +440,6 @@ def counter_preview(request, agree_id, counter_id):
     AGREE_TYP_H = models.Agrees.AGREE_TYP_H  # 最高额合同类型
     AGREE_TYP_X = models.Agrees.AGREE_TYP_X  # 小贷公司合同类型
     AGREE_TYP_D = models.Agrees.AGREE_TYP_D  # 担保公司合同类型
-    AGREE_TYP_D = models.Agrees.AGREE_TYP_D  # 担保公司合同类型
     AGREE_TYP_X = models.Agrees.AGREE_TYP_X  # 小贷公司合同类型
     X_COUNTER_TYP_LIST = models.Counters.COUNTER_TYP_X  # 保证类（反）担保合同类型
     D_COUNTER_TYP_LIST = models.Counters.COUNTER_TYP_D  # 抵押类（反）担保合同类型

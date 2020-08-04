@@ -26,37 +26,37 @@
                 {% endfor %}
                 {#(11, '应收账款')#}
             {% elif warrant.warrant_typ == 11 %}
-                <p>如至质押人：<strong><u>{{ warrant.other_warrant.other_owner.name }}</u></strong></p>
+                <p>如至出质人：<strong><u>{{ warrant.receive_warrant.receive_owner.name }}</u></strong></p>
                 <p>地址：<strong><u>{{ warrant.receive_warrant.receive_owner.contact_addr }}</u></strong></p>
                 <p>电话：<strong><u>{{ warrant.receive_warrant.receive_owner.contact_num }}</u></strong></p>
                 <p>收件人：<strong><u>{{ warrant.receive_warrant.receive_owner.linkman }}</u></strong></p>
                 {#(21, '股权')#}
             {% elif warrant.warrant_typ == 21 %}
-                <p>如至质押人<strong><u>{{ warrant.other_warrant.other_owner.name }}</u></strong>：</p>
+                <p>如至出质人：<strong><u>{{ warrant.stock_warrant.stock_owner.name }}</u></strong>：</p>
                 <p>地址：<strong><u>{{ warrant.stock_warrant.stock_owner.contact_addr }}</u></strong></p>
                 <p>电话：<strong><u>{{ warrant.stock_warrant.stock_owner.contact_num }}</u></strong></p>
                 <p>收件人：<strong><u>{{ warrant.stock_warrant.stock_owner.linkman }}</u></strong></p>
                 {#(31, '票据')#}
             {% elif warrant.warrant_typ == 31 %}
-                <p>如至质押人<strong><u>{{ warrant.other_warrant.other_owner.name }}</u></strong>：</p>
+                <p>如至出质人：<strong><u>{{ warrant.draft_warrant.draft_owner.name }}</u></strong>：</p>
                 <p>地址：<strong><u>{{ warrant.draft_warrant.draft_owner.contact_addr }}</u></strong></p>
                 <p>电话：<strong><u>{{ warrant.draft_warrant.draft_owner.contact_num }}</u></strong></p>
                 <p>收件人：<strong><u>{{ warrant.draft_warrant.draft_owner.linkman }}</u></strong></p>
                 {#(41, '车辆')#}
             {% elif warrant.warrant_typ == 41 %}
-                <p>如至抵押人<strong><u>{{ warrant.other_warrant.other_owner.name }}</u></strong>：</p>
+                <p>如至抵押人：<strong><u>{{ warrant.vehicle_warrant.vehicle_owner.name }}</u></strong>：</p>
                 <p>地址：<strong><u>{{ warrant.vehicle_warrant.vehicle_owner.contact_addr }}</u></strong></p>
                 <p>电话：<strong><u>{{ warrant.vehicle_warrant.vehicle_owner.contact_num }}</u></strong></p>
                 <p>收件人：<strong><u>{{ warrant.vehicle_warrant.vehicle_owner.linkman }}</u></strong></p>
                 {#(51, '动产')#}
             {% elif warrant.warrant_typ == 51 %}
-                <p>如至质押人<strong><u>{{ warrant.other_warrant.other_owner.name }}</u></strong>：</p>
+                <p>如至出质人：<strong><u>{{ warrant.chattel_warrant.chattel_owner.name }}</u></strong>：</p>
                 <p>地址：<strong><u>{{ warrant.chattel_warrant.chattel_owner.contact_addr }}</u></strong></p>
                 <p>电话：<strong><u>{{ warrant.chattel_warrant.chattel_owner.contact_num }}</u></strong></p>
                 <p>收件人：<strong><u>{{ warrant.chattel_warrant.chattel_owner.linkman }}</u></strong></p>
                 {#(55, '其他')#}
             {% elif warrant.warrant_typ == 55 %}
-                <p>如至质押人<strong><u>{{ warrant.other_warrant.other_owner.name }}</u></strong>：</p>
+                <p>如至出质人：<strong><u>{{ warrant.other_warrant.other_owner.name }}</u></strong>：</p>
                 <p>地址：<strong><u>{{ warrant.other_warrant.other_owner.contact_addr }}</u></strong></p>
                 <p>电话：<strong><u>{{ warrant.other_warrant.other_owner.contact_num }}</u></strong></p>
                 <p>收件人：<strong><u>{{ warrant.other_warrant.other_owner.linkman }}</u></strong></p>
