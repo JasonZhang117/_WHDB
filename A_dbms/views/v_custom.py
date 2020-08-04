@@ -112,5 +112,5 @@ def custom_scan(request, custom_id):  # 项目预览
     '''ARTICLE_STATE_LIST = ((1, '待反馈'), (2, '已反馈'), (3, '待上会'), (4, '已上会'), (5, '已签批'),
                           (51, '已放款'), (52, '已放完'), (55, '已解保'), (61, '待变更'), (99, '已注销'))'''
     article_custom_list = custom_obj.article_custom.all().order_by(
-        '-build_date')
+        '-build_date')[0:12]
     return render(request, 'dbms/custom/custom-scan.html', locals())

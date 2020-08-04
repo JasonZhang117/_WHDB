@@ -34,6 +34,11 @@
         <div class="col-sm-9">{{ form_agree_add.agree_term }}</div>
         <label id="e_agree_term" class="pull-right">{{ form_agree_add.agree_term.errors }}</label>
     </div>
+        <div class="form-group"><!--期限单位-->
+        <label for="id_agree_term_typ" class="col-sm-3 control-label">{{ form_agree_add.agree_term_typ.label }}：</label>
+        <div class="col-sm-9">{{ form_agree_add.agree_term_typ }}</div>
+        <label id="e_agree_term_typ" class="pull-right">{{ form_agree_add.agree_term_typ.errors }}</label>
+    </div>
     <div class="form-group"><!--类型数量-->
         <label for="id_guarantee_typ" class="col-sm-3 control-label">{{ form_agree_add.guarantee_typ.label }}：</label>
         <div class="col-sm-9">{{ form_agree_add.guarantee_typ }}</div>

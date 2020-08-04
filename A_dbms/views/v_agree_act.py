@@ -201,6 +201,7 @@ def agree_add_ajax(request):  # 添加合同
                         agree_num=agree_num, agree_name=agree_name, num_prefix=agree_num_prefix,
                         lending=lending_obj, branch_id=branch_id, agree_typ=agree_typ,
                         agree_term=agree_term,
+                        agree_term_typ=agree_add_cleaned['agree_term_typ'],
                         amount_limit=amount_limit, agree_rate=agree_rate,
                         investigation_fee=agree_add_cleaned['investigation_fee'],
                         agree_amount=agree_amount, guarantee_typ=guarantee_typ,
@@ -409,6 +410,7 @@ def agree_edit_ajax(request):  #
                     agree_list.update(
                         agree_name=agree_name, branch_id=branch_id, agree_typ=agree_typ,
                         agree_term=agree_term,
+                        agree_term_typ=agree_add_cleaned['agree_term_typ'],
                         amount_limit=amount_limit, agree_rate=agree_rate,
                         investigation_fee=agree_add_cleaned['investigation_fee'],
                         agree_amount=agree_amount, guarantee_typ=guarantee_typ,
@@ -1398,7 +1400,7 @@ def result_state_ajax(request):  #
                                 owership_w += '所有'
                         ''''''
                         result += '<div class="tt" align="center"><strong>声明书</strong></div>'
-                        result += '<p>声明人：%s，公民身份号码：%s</p>' % (
+                        result += '<p>声明人：%s，公民身份证号码：%s</p>' % (
                             spouse.name, spouse.person_custome.license_num)
                         result += '<p>我声明人<strong><u>%s</u></strong>与<strong><u>%s</u></strong>是夫妻关系，' \
                                   '下表所列房屋系<strong><u>%s</u></strong>%s，无其他共有人，' \

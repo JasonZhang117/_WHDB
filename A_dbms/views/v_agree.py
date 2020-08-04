@@ -528,6 +528,7 @@ def counter_preview(request, agree_id, counter_id):
         ]:  # (31, '票据'),
             counter_draft_obj = counter_warrant_obj.draft_warrant
             counter_draft_bag_list = counter_draft_obj.extend_draft.all()
+            counter_draft_list_count = counter_draft_bag_list.count() #票据张数
             denomination_str = str(
                 round(counter_draft_obj.denomination / 10000,
                       6)).rstrip('0').rstrip('.')
