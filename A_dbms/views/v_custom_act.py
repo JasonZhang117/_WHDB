@@ -45,6 +45,9 @@ def custom_add_ajax(request):
                         custom_c_obj = models.CustomesC.objects.create(
                             custome=custom_obj,
                             decisionor=custom_c_data['decisionor'],
+                            credit_code=custom_c_data['credit_code'],
+                            custom_nature=custom_c_data['custom_nature'],
+                            typing=custom_c_data['typing'],
                             capital=custom_c_data['capital'],
                             registered_addr=custom_c_data['registered_addr'],
                             representative=custom_c_data['representative'])
@@ -77,6 +80,7 @@ def custom_add_ajax(request):
                             custom_buildor=request.user)
                         custom_p_obj = models.CustomesP.objects.create(
                             custome=custom_obj, license_num=custom_p_data['license_num'],
+                            household_nature=custom_p_data['household_nature'],
                             license_addr=custom_p_data['license_addr'],
                             marital_status=custom_p_data['marital_status'])
                         response['message'] = '客户：%s，创建成功。请继续添加配偶信息！' % custom_add_data['name']
@@ -344,6 +348,9 @@ def custom_edit_ajax(request):
                         )
                         models.CustomesC.objects.filter(custome=custom_obj).update(
                             decisionor=custom_c_data['decisionor'],
+                            credit_code=custom_c_data['credit_code'],
+                            custom_nature=custom_c_data['custom_nature'],
+                            typing=custom_c_data['typing'],
                             capital=custom_c_data['capital'],
                             registered_addr=custom_c_data['registered_addr'],
                             representative=custom_c_data['representative'])
@@ -374,6 +381,7 @@ def custom_edit_ajax(request):
                             district=custom_edit_data['district'],
                         )
                         models.CustomesP.objects.filter(custome=custom_obj).update(
+                            household_nature=custom_p_data['household_nature'],
                             license_num=custom_p_data['license_num'],
                             license_addr=custom_p_data['license_addr'], marital_status=custom_p_data['marital_status'])
                         response['message'] = '客户：%s，修改成功！！！' % custom_edit_data['name']

@@ -1,0 +1,27 @@
+<div class="table-responsive">
+    <table class="table table-bordered table-hover table-condensed active">
+        <thead>
+        <tr style="text-align: center">
+            <th>客户名称</th>
+            <th>统一代码</th>
+            <th>机构性质</th>
+            <th>所属行业</th>
+            <th>企业划型</th>
+            <th>管护经理</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for custom in p_list %}
+            <tr>
+                <td><a href="{% url 'dbms:custom_scan' custom_id=custom.id %}">{{ custom.name }}</a></td>
+                <td>{{ custom.company_custome.credit_code }}</td>
+                <td>{{ custom.company_custome.get_custom_nature_display }}</td>
+                <td>{{ custom.idustry.name }}</td>
+                <td>{{ custom.company_custome.get_typing_display }}</td>
+                <td>{{ custom.managementor.name }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    {% include 'dbms/board/page.html' %}
+</div>

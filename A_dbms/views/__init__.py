@@ -87,7 +87,7 @@ from .v_dun_act import (compensatory_add_ajax, dun_add_ajax, clue_add_ajax,
                         staff_add_ajax)
 
 # ----------------------v_custom客户管理视图--------------------#
-from .v_custom import (custom, custom_scan)
+from .v_custom import (custom, custom_scan, custom_c, custom_p)
 from .v_custom_act import (custom_add_ajax, custom_del_ajax, custom_edit_ajax,
                            shareholder_add_ajax, shareholder_del_ajax,
                            spouse_del_ajax, custom_change_ajax,

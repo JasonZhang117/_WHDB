@@ -1,4 +1,9 @@
 <div id="form_custom_p_add" class="extend">
+    <div class="form-group"><!--户籍性质-->
+        <label for="id_household_nature" class="col-sm-3 control-label">{{ form_custom_p_add.household_nature.label }}：</label>
+        <div class="col-sm-9">{{ form_custom_p_add.household_nature }}</div>
+        <label id="e_household_nature" class="pull-right">{{ form_custom_p_add.household_nature.errors }}</label>
+    </div>
     <div class="form-group"><!--身份证号码-->
         <label for="id_license_num" class="col-sm-3 control-label">{{ form_custom_p_add.license_num.label }}：</label>
         <div class="col-sm-9">{{ form_custom_p_add.license_num }}</div>

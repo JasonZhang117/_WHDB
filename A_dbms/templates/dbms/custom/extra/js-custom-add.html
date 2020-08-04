@@ -2,24 +2,37 @@
     $(function () {
         bindAddCustom();
         bind_id_genre();
+        bind_id_genre_show();
         bindAddCounterModalOk();
     });
 
     function bindAddCustom() {
         $('#addCustom').click(function () {
-            {#console.log("bindAddCounterB")#}
             $('#addCustomModal').modal('show');
+        })
+    }
+
+    function bind_id_genre_show() {
+        $('#form_custom_add').show(function () {
+            $('.extend').hide();
+            var selected_genre = $('#id_genre').val();
+            switch (selected_genre) {
+                case ('1'):
+                    $('#form_custom_c_add').show();
+                    break;
+                case ('2'):
+                    $('#form_custom_p_add').show();
+                    break;
+                default:
+                    $('.extend').hide()
+            }
         })
     }
 
     function bind_id_genre() {
         $('#id_genre').change(function () {
-            console.log("bind_id_genre");
             $('.extend').hide();
             var selected_genre = $('#id_genre').val();
-
-            console.log(selected_genre);
-
             switch (selected_genre) {
                 case ('1'):
                     $('#form_custom_c_add').show();
@@ -42,8 +55,6 @@
                 postData[n] = v;
             });
             var postDataStr = JSON.stringify(postData);
-
-            console.log(postDataStr);
 
             $.ajax({
                 url: '/dbms/custom/add/',

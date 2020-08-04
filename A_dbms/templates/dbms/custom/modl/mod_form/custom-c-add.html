@@ -1,5 +1,19 @@
 <div id="form_custom_c_add" class="extend">
-
+    <div class="form-group"><!--统一社会信用代码-->
+        <label for="id_credit_code" class="col-sm-3 control-label">{{ form_custom_c_add.credit_code.label }}： </label>
+        <div class="col-sm-9"> {{ form_custom_c_add.credit_code }} </div>
+        <label id="e_credit_code" class="pull-right">{{ form_custom_c_add.credit_code.errors }} </label>
+    </div>
+    <div class="form-group"><!--企业性质-->
+        <label for="id_custom_nature" class="col-sm-3 control-label">{{ form_custom_c_add.custom_nature.label }}： </label>
+        <div class="col-sm-9"> {{ form_custom_c_add.custom_nature }} </div>
+        <label id="e_custom_nature" class="pull-right">{{ form_custom_c_add.custom_nature.errors }} </label>
+    </div>
+    <div class="form-group"><!--企业划型-->
+        <label for="id_typing" class="col-sm-3 control-label">{{ form_custom_c_add.typing.label }}： </label>
+        <div class="col-sm-9"> {{ form_custom_c_add.typing }} </div>
+        <label id="e_typing" class="pull-right">{{ form_custom_c_add.typing.errors }} </label>
+    </div>
     <div class="form-group"><!--决策机构-->
         <label for="id_decisionor" class="col-sm-3 control-label">{{ form_custom_c_add.decisionor.label }}： </label>
         <div class="col-sm-9"> {{ form_custom_c_add.decisionor }} </div>

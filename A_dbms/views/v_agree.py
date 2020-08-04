@@ -526,6 +526,8 @@ def counter_preview(request, agree_id, counter_id):
         elif counter_warrant_typ in [
                 31,
         ]:  # (31, '票据'),
+            DRAFT_TYP_DIC = dict(models.Draft.TYP_LIST)
+            counter_property_type = DRAFT_TYP_DIC[counter_warrant_typ]
             counter_draft_obj = counter_warrant_obj.draft_warrant
             counter_draft_bag_list = counter_draft_obj.extend_draft.all()
             counter_draft_list_count = counter_draft_bag_list.count() #票据张数

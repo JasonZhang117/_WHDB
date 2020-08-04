@@ -132,12 +132,23 @@ class CustomesC(models.Model):
                                    on_delete=models.CASCADE,
                                    limit_choices_to={'genre': 1},
                                    related_name='company_custome')
-    DECISIONOR_LIST = [(11, '股东会'), (13, '合伙人会议'), (15, '举办者会议'), (21, '董事会'),
-                       (23, '管理委员会')]
+    DECISIONOR_LIST = ((11, '股东会'), (13, '合伙人会议'), (15, '举办者会议'), (21, '董事会'),
+                       (23, '管理委员会'))
     decisionor = models.IntegerField(verbose_name='决策机构',
                                      choices=DECISIONOR_LIST,
                                      default=11)
-    capital = models.FloatField(verbose_name='注册资本')
+    credit_code = models.CharField(verbose_name='统一社会信用代码', max_length=32, null=True, blank=True)
+    NATURE_LIST = ((11, '国有独资'), (21, '国有控股'), (31, '国有参股'), (41, '民营'),
+                       (51, '外资'), (61, '港澳台商独资'), (71, '其他'))
+    custom_nature = models.IntegerField(verbose_name='企业性质',
+                                     choices=NATURE_LIST,
+                                     default=41)
+    TYPING_LIST = ((11, '涉农小微企业'), (21, '非农小薇企业'), (31, '中型企业'), (41, '大型企业'))                
+    typing = models.IntegerField(verbose_name='企业划型',
+                                     choices=TYPING_LIST,
+                                     default=21)
+    capital = models.FloatField(verbose_name='注册资本', default=0)
+    paid_capital = models.FloatField(verbose_name='实收资本', default=0)
     registered_addr = models.CharField(verbose_name='注册地址', max_length=64)
     representative = models.CharField(verbose_name='法人代表', max_length=16)
 
@@ -231,7 +242,13 @@ class CustomesP(models.Model):  # 个人客户
     marital_status = models.IntegerField(verbose_name='婚姻状况',
                                          choices=MARITAL_STATUS,
                                          default=1)
-
+    HOUSEHOLD_LIST = (
+        (1, '城镇居民'),
+        (11, '农村居民'),
+    )
+    household_nature = models.IntegerField(verbose_name='户籍性质',
+                                         choices=HOUSEHOLD_LIST,
+                                         default=1)
     class Meta:
         verbose_name_plural = '客户-个人'  # 指定显示名称
         db_table = 'dbms_customesp'  # 指定数据表的名称

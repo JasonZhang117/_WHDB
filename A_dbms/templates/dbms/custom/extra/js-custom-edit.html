@@ -6,7 +6,6 @@
 
     function bindEditCustom() {
         $('#editCustom').click(function () {
-            {#console.log("bindAddCounterB")#}
             $('#editCustomModal').modal('show');
         })
     }
@@ -21,15 +20,12 @@
             });
             var postDataStr = JSON.stringify(postData);
 
-            console.log(postDataStr);
-
             $.ajax({
                 url: '/dbms/custom/edit/',
                 type: 'POST',
                 data: {'postDataStr': postDataStr},
                 dataType: 'JSON',
                 success: function (arg) {
-                    console.log(arg);
                     if (arg.status) {
                         $('#editCustomModal').modal('hide');
                         alert(arg.message);

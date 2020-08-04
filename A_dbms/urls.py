@@ -248,6 +248,9 @@ urlpatterns = [
     # -----------------------客户管理-------------------------#
 
     path('custom/', views.custom, name='custom_all'),  # 菜单-客户管理
+    path('custom/c/', views.custom_c, name='custom_c_all'),  # 菜单-客户管理
+    path('custom/p/', views.custom_p, name='custom_p_all'),  # 菜单-客户管理
+    
     path('custom/<int:genre>/', views.custom, name='custom'),  # /dbms/cstom/(0-9)
     path('custom/scan/<int:custom_id>/', views.custom_scan, name='custom_scan'),
 
