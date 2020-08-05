@@ -690,7 +690,7 @@ def provide_add_ajax(request):
 
 # ---------------------------收费ajax----------------------------#
 @login_required
-# @authority
+@authority
 def provide_charge_add_ajax(request):  #
     response = {
         'status': True,

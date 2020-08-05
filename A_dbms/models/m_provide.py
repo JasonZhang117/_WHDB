@@ -84,9 +84,11 @@ class Provides(models.Model):  # 放款
                                verbose_name="_放款通知",
                                on_delete=models.PROTECT,
                                related_name='provide_notify')
-    PROVIDE_TYP_LIST = [(1, 'D-流贷'), (11, 'D-承兑'), (21, 'D-保函'), (31, 'D-委贷'),
-                        (41, 'X-过桥贷'), (52, 'X-房抵贷'), (53, 'X-担保贷'),
-                        (55, 'X-经营贷'), (57, 'X-票据贷'), (58, 'X-消费贷')]
+    PROVIDE_TYP_LIST = [(1, 'D-贷款担保'), (11, 'D-票据承兑担保'), (13, 'D-信用证担保'),
+                        (19, 'D-其他担保'), (21, 'D-履约保函'), (22, 'D-投标保函'),
+                        (23, 'D-预付款保函'), (31, 'D-委贷'), (41, 'X-过桥贷'),
+                        (52, 'X-房抵贷'), (53, 'X-担保贷'), (55, 'X-经营贷'),
+                        (57, 'X-票据贷'), (58, 'X-消费贷')]
     provide_typ = models.IntegerField(verbose_name='放款种类',
                                       choices=PROVIDE_TYP_LIST)
     old_amount = models.FloatField(verbose_name='续贷金额', default=0)
