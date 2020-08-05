@@ -1,7 +1,7 @@
 <script>
     $(function () {
         bindAddCustom();
-        bind_id_genre();
+        bind_id_genre_change();
         bind_id_genre_show();
         bindAddCounterModalOk();
     });
@@ -29,7 +29,7 @@
         })
     }
 
-    function bind_id_genre() {
+    function bind_id_genre_change() {
         $('#id_genre').change(function () {
             $('.extend').hide();
             var selected_genre = $('#id_genre').val();

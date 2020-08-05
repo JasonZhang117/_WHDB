@@ -230,7 +230,12 @@ class StoragesAdmin(admin.ModelAdmin):
 
 admin.site.register(models.Storages, StoragesAdmin)  # 评估
 # -----------------------放款-------------------------#
-admin.site.register(models.Charges)  # 收费
+class ChargesAdmin(admin.ModelAdmin):
+    list_display = ('provide', 'charge_typ', 'rate', 'amount', 'charge_buildor')
+    # list_per_page = 20  # 每页显示条目数
+    # search_fields = ['notify']  # 搜索字段
+    ordering = ['-charge_date']  # 排序字段
+admin.site.register(models.Charges, ChargesAdmin)  # 收费
 
 
 class ProvidesAdmin(admin.ModelAdmin):

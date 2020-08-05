@@ -25,7 +25,7 @@ from .f_agree import (AgreeAddForm, AddCounterForm, FormAgreeSign,
 from .f_provide import (FormCounterSignAdd, FormAscertainAdd, FormNotifyAdd,
                         FormNotifyEdit, FormProvideAdd, FormProvideEx,
                         FormPigeonholeAdd, FormTrackPlan, FormTrackAdd,
-                        FormImplementAdd, FormPigeonholeNumAdd,
+                        FormImplementAdd, FormPigeonholeNumAdd, FormProvideDB,
                         FormRepaymentAdd, FormAgreeSignAdd,
                         FormAgreeChangeState, FormProvideStateChange,
                         FormExtensionAdd, FormTrackEXAdd, FormChargeAdd)

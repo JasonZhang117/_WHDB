@@ -166,6 +166,7 @@ class CustomesC(models.Model):
         (114, '房地产开发经营'),
         (115, '物业管理'),
         (116, '租赁和商务服务'),
+        (199, '其他未列明行业'),
     )
     industry_c = models.IntegerField(verbose_name='所属行业',
                                      choices=INDUSTRY_C_LIST,
@@ -270,8 +271,8 @@ class CustomesP(models.Model):  # 个人客户
                                          choices=MARITAL_STATUS,
                                          default=1)
     HOUSEHOLD_LIST = (
-        (1, '城镇居民'),
-        (11, '农村居民'),
+        (1, '城镇居民（含个体工商户）'),
+        (11, '农村居民（含个体工商户）'),
     )
     household_nature = models.IntegerField(verbose_name='户籍性质',
                                            choices=HOUSEHOLD_LIST,

@@ -1,14 +1,38 @@
 <div id="form_provide_db" class="provide-extend" style="display: none">
-    <div class="form-group"><!--贷款对象分类-->
-        <label for="id_obj_typ"
-               class="col-sm-3 control-label">{{ form_provide_ex.obj_typ.label }}：</label>
-        <div class="col-sm-9">{{ form_provide_ex.obj_typ }}</div>
-        <label id="e_obj_typ" class="pull-right">{{ form_provide_ex.obj_typ.errors }}</label>
+    <div class="form-group"><!--保费率/利率(%)-->
+        <label for="id_agree_rate"
+               class="col-sm-3 control-label">{{ form_provide_db.agree_rate.label }}：</label>
+        <div class="col-sm-9">{{ form_provide_db.agree_rate }}</div>
+        <label id="e_agree_rate" class="pull-right">{{ form_provide_db.agree_rate.errors }}</label>
     </div>
-    <div class="form-group"><!--信用形式分类-->
-        <label for="id_credit_typ"
-               class="col-sm-3 control-label">{{ form_provide_ex.credit_typ.label }}：</label>
-        <div class="col-sm-9">{{ form_provide_ex.credit_typ }}</div>
-        <label id="e_credit_typ" class="pull-right">{{ form_provide_ex.credit_typ.errors }}</label>
+    <div class="form-group"><!--担保费（元）-->
+        <label for="id_charge"
+               class="col-sm-3 control-label">{{ form_provide_db.charge.label }}：</label>
+        <div class="col-sm-9">{{ form_provide_db.charge }}</div>
+        <label id="e_charge" class="pull-right">{{ form_provide_db.charge.errors }}</label>
+    </div>
+    <div class="form-group"><!--咨询费/服务费(%)-->
+        <label for="id_investigation_fee"
+               class="col-sm-3 control-label">{{ form_provide_db.investigation_fee.label }}：</label>
+        <div class="col-sm-9">{{ form_provide_db.investigation_fee }}</div>
+        <label id="e_investigation_fee" class="pull-right">{{ form_provide_db.investigation_fee.errors }}</label>
+    </div>
+    <div class="form-group"><!--咨询费/服务费（元）-->
+        <label for="id_charge_fee"
+               class="col-sm-3 control-label">{{ form_provide_db.charge_fee.label }}：</label>
+        <div class="col-sm-9">{{ form_provide_db.charge_fee }}</div>
+        <label id="e_charge_fee" class="pull-right">{{ form_provide_db.charge_fee.errors }}</label>
+    </div>
+    <div class="form-group"><!--客户保证金比例(%)-->
+        <label for="id_bond_proportion"
+               class="col-sm-3 control-label">{{ form_provide_db.bond_proportion.label }}：</label>
+        <div class="col-sm-9">{{ form_provide_db.bond_proportion }}</div>
+        <label id="e_bond_proportion" class="pull-right">{{ form_provide_db.bond_proportion.errors }}</label>
+    </div>
+    <div class="form-group"><!--客户保证金金额（元）-->
+        <label for="id_bond_amount"
+               class="col-sm-3 control-label">{{ form_provide_db.bond_amount.label }}：</label>
+        <div class="col-sm-9">{{ form_provide_db.bond_amount }}</div>
+        <label id="e_bond_amount" class="pull-right">{{ form_provide_db.bond_amount.errors }}</label>
     </div>
 </div>

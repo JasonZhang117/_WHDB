@@ -1,6 +1,7 @@
 <script>
     $(function () {
         bindAddProvideB();
+        bind_provide_typ_show();
         bind_provide_typ_change();
         bindAddProvideModalOk();
     });
@@ -9,30 +10,47 @@
     function bindAddProvideB() {
         $('#addProvideB').click(function () {
             $('#addProvideModal').modal('show');
-            $('#addProvideModal').show(function () {
-                $('.provide-extend').hide();
-                var selected_provide_typ = $('#id_provide_typ').val();
-                switch (selected_provide_typ) {
-                    case ('41'):{#房产#}
-                        $('#form_provide_ex').show();
-                        break;
-                    case ('52'):{#房产包#}
-                        $('#form_provide_ex').show();
-                        break;
-                    case ('53'):{#土地#}
-                        $('#form_provide_ex').show();
-                        break;
-                    case ('55'):{#在建工程#}
-                        $('#form_provide_ex').show();
-                        break;
-                    case ('57'):{#应收#}
-                        $('#form_provide_ex').show();
-                        break;
-                    default:
-                        $('.provide-extend').hide()
-                }
-            })
+        })
+    }
 
+    function bind_provide_typ_show() {
+        $('#form_provide_add').show(function () {
+            $('.provide-extend').hide();
+            var selected_provide_typ = $('#id_provide_typ').val();
+            switch (selected_provide_typ) {
+                case ('1'):{#D-流贷#}
+                    $('#form_provide_db').show();
+                    break;
+                case ('11'):{#D-承兑#}
+                    $('#form_provide_db').show();
+                    break;
+                case ('21'):{#D-保函#}
+                    $('#form_provide_db').show();
+                    break;
+                case ('31'):{#D-委贷#}
+                    $('#form_provide_db').show();
+                    break;
+                case ('41'):{#X-过桥贷#}
+                    $('#form_provide_ex').show();
+                    break;
+                case ('52'):{#X-房抵贷#}
+                    $('#form_provide_ex').show();
+                    break;
+                case ('53'):{#X-担保贷#}
+                    $('#form_provide_ex').show();
+                    break;
+                case ('55'):{#X-经营贷#}
+                    $('#form_provide_ex').show();
+                    break;
+                case ('57'):{#X-票据贷#}
+                    $('#form_provide_ex').show();
+                    break;
+                case ('58'):{#X-消费贷#}
+                    $('#form_provide_ex').show();
+                    break;
+                default:
+                    $('.provide-extend').hide()
+            }
         })
     }
 
@@ -41,19 +59,34 @@
             $('.provide-extend').hide();
             var selected_provide_typ = $('#id_provide_typ').val();
             switch (selected_provide_typ) {
-                case ('41'):{#房产#}
+                case ('1'):{#D-流贷#}
+                    $('#form_provide_db').show();
+                    break;
+                case ('11'):{#D-承兑#}
+                    $('#form_provide_db').show();
+                    break;
+                case ('21'):{#D-保函#}
+                    $('#form_provide_db').show();
+                    break;
+                case ('31'):{#D-委贷#}
+                    $('#form_provide_db').show();
+                    break;
+                case ('41'):{#X-过桥贷#}
                     $('#form_provide_ex').show();
                     break;
-                case ('52'):{#房产包#}
+                case ('52'):{#X-房抵贷#}
                     $('#form_provide_ex').show();
                     break;
-                case ('53'):{#土地#}
+                case ('53'):{#X-担保贷#}
                     $('#form_provide_ex').show();
                     break;
-                case ('55'):{#在建工程#}
+                case ('55'):{#X-经营贷#}
                     $('#form_provide_ex').show();
                     break;
-                case ('57'):{#应收#}
+                case ('57'):{#X-票据贷#}
+                    $('#form_provide_ex').show();
+                    break;
+                case ('58'):{#X-消费贷#}
                     $('#form_provide_ex').show();
                     break;
                 default:

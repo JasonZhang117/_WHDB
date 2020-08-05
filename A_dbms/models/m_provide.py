@@ -5,14 +5,13 @@ from _WHDB.views import (FICATION_LIST)
 
 # ------------------------收费模型--------------------------#
 class Charges(models.Model):  # 收费
-    agree = models.ForeignKey(to='Agrees',
-                              verbose_name="委托合同",
+    provide = models.ForeignKey(to='Provides',
+                              verbose_name="放款",
                               on_delete=models.PROTECT,
-                              related_name='charge_agree')
+                              related_name='provide_agree')
     CHARGE_TYP_LIST = (
-        (11, '担保费'),
+        (11, '担保费/利息'),
         (21, '咨询费/服务费'),
-        (31, '利息'),
         (41, '保证金'),
     )
     charge_typ = models.IntegerField(verbose_name='收费类型',
