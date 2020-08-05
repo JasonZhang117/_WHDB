@@ -172,6 +172,11 @@ urlpatterns = [
     path('provide/track/update/', views.track_update_ajax, name='provide_track_update_ajax'),
     path('provide/track/ex/del/', views.track_ex_del_ajax, name='provide_track_ex_del_ajax'),
 
+    path('provide/charge/add/', views.provide_charge_add_ajax, name='provide_charge_add_ajax'),
+    path('provide/charge/del/', views.provide_charge_del_ajax, name='provide_charge_del_ajax'),
+
+
+
     path('provide/repay/plan/', views.repay_plan_ajax, name='provide_repay_plan_ajax'),
 
     path('provide/agree/change/', views.change_agree_state_ajax, name='provide_change_agree_state_ajax'),

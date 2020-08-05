@@ -61,7 +61,8 @@ from .v_provide_act import (
     repayment_del_ajax, track_plan_ajax, track_del_ajax, track_update_ajax,
     sign_all_ajax, provide_agree_sign_ajax, change_agree_state_ajax,
     provide_state_change_ajax, provide_extension_ajax, repay_plan_ajax,
-    track_ex_del_ajax, track_state_change_ajax)
+    provide_charge_add_ajax, track_ex_del_ajax, track_state_change_ajax,
+    provide_charge_del_ajax)
 
 from .v_pigeonhole import pigeonhole, pigeonhole_scan, pigeonhole_overdue
 from .v_pigeonhole_act import pigeonhole_add_ajax

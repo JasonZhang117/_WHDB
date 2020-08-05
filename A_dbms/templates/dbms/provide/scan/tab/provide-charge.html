@@ -1,0 +1,26 @@
+<div class="table-responsive">
+    <table class="table table-bordered table-hover table-condensed active">
+        <thead>
+        <tr style="text-align: center">
+            <th>序号</th>
+            <th>类型</th>
+            <th>费率(%)</th>
+            <th>收费金额(元)</th>
+            <th>创建者</th>
+            <th>操作</th>
+        </tr>
+        </thead>
+        <tbody id="provide-charge-tb">
+        {% for charge in provide_obj.provide_charge.all %}
+            <tr charge-nid="{{ charge.id }}">
+                <td>{{ forloop.counter }}</td>
+                <td>{{ charge.get_charge_typ_display }}</td>
+                <td align="right">{{ charge.rate }}</td>
+                <td align="right">{{ charge.amount }}</td>
+                <td>{{ charge.charge_buildor.name }}</td>
+                <td><a class="btn btn-danger btn-xs delChargeB">删除</a></td>
+            <tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>

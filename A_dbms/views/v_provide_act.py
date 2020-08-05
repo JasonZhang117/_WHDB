@@ -366,6 +366,51 @@ def notify_del_ajax(request):  # 反担保人删除ajax
     return HttpResponse(result)
 
 
+# -----------------------删除收费ajax-------------------------#
+@login_required
+@authority
+def provide_charge_del_ajax(request):  # 反担保人删除ajax
+    response = {
+        'status': True,
+        'message': None,
+        'forme': None,
+    }
+    post_data_str = request.POST.get('postDataStr')
+    post_data = json.loads(post_data_str)
+    charge_obj = models.Charges.objects.get(id=post_data['charge_id'])
+    provide_obj = models.Provides.objects.get(id=post_data['provide_id'])
+
+    try:
+        with transaction.atomic():
+            charge_obj.delete()
+            charge_sum = models.Charges.objects.filter(
+                provide=provide_obj,
+                charge_typ=11).aggregate(Sum('amount'))['amount__sum']
+            charge_fee_sum = models.Charges.objects.filter(
+                provide=provide_obj,
+                charge_typ=21).aggregate(Sum('amount'))['amount__sum']
+            bond_amount_sum = models.Charges.objects.filter(
+                provide=provide_obj,
+                charge_typ=41).aggregate(Sum('amount'))['amount__sum']
+            if not charge_sum:
+                charge_sum = 0
+            if not charge_fee_sum:
+                charge_fee_sum = 0
+            if not bond_amount_sum:
+                bond_amount_sum = 0
+            models.Provides.objects.filter(id=provide_obj.id).update(
+                charge=charge_sum,
+                charge_fee=charge_fee_sum,
+                bond_amount=bond_amount_sum)
+        response['message'] = '收费记录删除成功！'
+    except Exception as e:
+        response['status'] = False
+        response['message'] = '收费记录删除失败：%s' % str(e)
+
+    result = json.dumps(response, ensure_ascii=False)
+    return HttpResponse(result)
+
+
 # -----------------------------添加放款ajax------------------------------#
 @login_required
 @authority
@@ -384,9 +429,9 @@ def provide_add_ajax(request):
         form_provide_cleaned = form_provide_add.cleaned_data
         old_amount = round(form_provide_cleaned['old_amount'], 2)
         new_amount = round(form_provide_cleaned['new_amount'], 2)
-        charge = post_data['charge']
-        charge_fee = post_data['charge_fee']
-        bond_amount = post_data['bond_amount']
+        charge = float(post_data['charge'])
+        charge_fee = float(post_data['charge_fee'])
+        bond_amount = float(post_data['bond_amount'])
         provide_money = round(old_amount + new_amount, 2)
         notify_provide_amount = models.Provides.objects.filter(
             notify=notify_obj).aggregate(Sum('provide_money'))
@@ -403,27 +448,6 @@ def provide_add_ajax(request):
         else:
             try:
                 with transaction.atomic():
-                    if charge > 0:
-                        models.Charges.objects.create(
-                            charge_typ=11,
-                            rate=post_data['agree_rate'],
-                            amount=post_data['charge'],
-                            charge_buildor=request.user)
-                    if charge_fee > 0:
-                        models.Charges.objects.create(
-                            charge_typ=21,
-                            rate=post_data['agree_rate'],
-                            amount=post_data['charge_fee'],
-                            charge_buildor=request.user)
-                    if bond_amount > 0:
-                        models.Charges.objects.create(
-                            charge_typ=41,
-                            rate=post_data['agree_rate'],
-                            amount=post_data['bond_amount'],
-                            charge_buildor=request.user)
-                    charge_sum = models.Charges.objects.filter(
-                        notify__agree__lending=lending_obj).aggregate(
-                            Sum('provide_money'))['provide_money__sum']
                     provide_obj = models.Provides.objects.create(
                         notify=notify_obj,
                         provide_typ=provide_typ,
@@ -439,6 +463,45 @@ def provide_add_ajax(request):
                         investigation_fee=post_data['investigation_fee'],
                         bond_proportion=post_data['bond_proportion'],
                         providor=request.user)
+
+                    if charge > 0:
+                        models.Charges.objects.create(
+                            provide=provide_obj,
+                            charge_typ=11,
+                            rate=post_data['agree_rate'],
+                            amount=post_data['charge'],
+                            charge_buildor=request.user)
+                        charge_sum = models.Charges.objects.filter(
+                            provide=provide_obj, charge_typ=11).aggregate(
+                                Sum('amount'))['amount__sum']
+                        models.Provides.objects.filter(
+                            id=provide_obj.id).update(charge=charge_sum)
+                    if charge_fee > 0:
+                        models.Charges.objects.create(
+                            provide=provide_obj,
+                            charge_typ=21,
+                            rate=post_data['investigation_fee'],
+                            amount=post_data['charge_fee'],
+                            charge_buildor=request.user)
+                        charge_fee_sum = models.Charges.objects.filter(
+                            provide=provide_obj, charge_typ=21).aggregate(
+                                Sum('amount'))['amount__sum']
+                        models.Provides.objects.filter(
+                            id=provide_obj.id).update(
+                                charge_fee=charge_fee_sum)
+                    if bond_amount > 0:
+                        models.Charges.objects.create(
+                            provide=provide_obj,
+                            charge_typ=41,
+                            rate=post_data['bond_proportion'],
+                            amount=post_data['bond_amount'],
+                            charge_buildor=request.user)
+                        bond_amount_sum = models.Charges.objects.filter(
+                            provide=provide_obj, charge_typ=41).aggregate(
+                                Sum('amount'))['amount__sum']
+                        models.Provides.objects.filter(
+                            id=provide_obj.id).update(
+                                bond_amount=bond_amount_sum)
                     '''notify_provide_sum，更新放款通知放款情况'''
                     notify_provide_balance = models.Provides.objects.filter(
                         notify=notify_obj).aggregate(
@@ -621,6 +684,82 @@ def provide_add_ajax(request):
         response['status'] = False
         response['message'] = '表单信息有误！！！'
         response['forme'] = form_provide_add.errors
+    result = json.dumps(response, ensure_ascii=False)
+    return HttpResponse(result)
+
+
+# ---------------------------收费ajax----------------------------#
+@login_required
+# @authority
+def provide_charge_add_ajax(request):  #
+    response = {
+        'status': True,
+        'message': None,
+        'forme': None,
+        'skip': None,
+    }
+    post_data_str = request.POST.get('postDataStr')
+    post_data = json.loads(post_data_str)
+    provide_list = models.Provides.objects.filter(id=post_data['provide_id'])
+    provide_obj = provide_list.first()
+
+    form_provide_db = forms.FormProvideDB(post_data)
+    if form_provide_db.is_valid():
+        provide_db_cleaned = form_provide_db.cleaned_data
+        charge = provide_db_cleaned['charge']
+        charge_fee = provide_db_cleaned['charge_fee']
+        bond_amount = provide_db_cleaned['bond_amount']
+        try:
+            with transaction.atomic():
+                if charge > 0:
+                    models.Charges.objects.create(provide=provide_obj,
+                                                  charge_typ=11,
+                                                  rate=provide_db_cleaned['agree_rate'],
+                                                  amount=charge,
+                                                  charge_buildor=request.user)
+                    charge_sum = models.Charges.objects.filter(
+                        provide=provide_obj,
+                        charge_typ=11).aggregate(Sum('amount'))['amount__sum']
+                    models.Provides.objects.filter(id=provide_obj.id).update(
+                        agree_rate=provide_db_cleaned['agree_rate'],
+                        charge=charge_sum)
+                if charge_fee > 0:
+                    models.Charges.objects.create(
+                        provide=provide_obj,
+                        charge_typ=21,
+                        rate=provide_db_cleaned['investigation_fee'],
+                        amount=charge_fee,
+                        charge_buildor=request.user)
+                    charge_fee_sum = models.Charges.objects.filter(
+                        provide=provide_obj,
+                        charge_typ=21).aggregate(Sum('amount'))['amount__sum']
+                    models.Provides.objects.filter(id=provide_obj.id).update(
+                        investigation_fee=provide_db_cleaned['investigation_fee'],
+                        charge_fee=charge_fee_sum)
+                if bond_amount > 0:
+                    models.Charges.objects.create(
+                        provide=provide_obj,
+                        charge_typ=41,
+                        rate=provide_db_cleaned['bond_proportion'],
+                        amount=bond_amount,
+                        charge_buildor=request.user)
+                    bond_amount_sum = models.Charges.objects.filter(
+                        bond_proportion=provide_db_cleaned['agree_rate'],
+                        provide=provide_obj,
+                        charge_typ=41).aggregate(Sum('amount'))['amount__sum']
+                    models.Provides.objects.filter(id=provide_obj.id).update(
+                        bond_proportion=provide_db_cleaned['bond_proportion'],
+                        bond_amount=bond_amount_sum)
+
+            response['message'] = '费用收取成功！！'
+        except Exception as e:
+            response['status'] = False
+            response['message'] = '费用收取失败：%s' % str(e)
+    else:
+        response['status'] = False
+        response['message'] = '表单信息有误！！！'
+        response['forme'] = form_provide_db.errors
+
     result = json.dumps(response, ensure_ascii=False)
     return HttpResponse(result)
 

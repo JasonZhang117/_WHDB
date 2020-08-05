@@ -1,0 +1,48 @@
+<script>
+    $(function () {
+        bindDelChargeB();
+        bindDelChargeModalOk();
+    });
+
+    function bindDelChargeB() {
+        $('#provide-charge-tb').on('click', '.delChargeB', function () {
+            chargeNid = $(this).parent().parent().attr('charge-nid');
+            $('#delChargeId').val(chargeNid);
+            $('#delChargeModal').modal('show');
+        })
+    }
+
+    function bindDelChargeModalOk() {
+        $('#delChargeModalOk').click(function () {
+            var postData = {};
+            $('#delChargeModal').find('input,select').each(function () {
+                var v = $(this).val();
+                var n = $(this).attr('name');
+                postData[n] = v;
+            });
+
+            var postDataStr = JSON.stringify(postData);
+            $.ajax({
+                url: '/dbms/provide/charge/del/',
+                type: 'POST',
+                data: {'postDataStr': postDataStr},
+                dataType: 'JSON',
+                success: function (arg) {
+                    if (arg.status) {
+                        $('#delTrackModal').modal('hide');
+                        alert(arg.message);
+                        window.location.reload();
+                    } else {
+                        alert(arg.message);
+                    }
+                }
+            })
+        })
+    }
+</script>
+
+
+
+
+
+

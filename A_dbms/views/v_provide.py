@@ -323,10 +323,10 @@ def provide_agree_notify(request, agree_id, notify_id):  # 查看放款通知
     form_provide_add = forms.FormProvideAdd(initial=form_provide_data)
     form_provide_ex = forms.FormProvideEx()
 
-    agree_amount = agree_obj.agree_amount
-    agree_rate = agree_obj.agree_rate #保费率/利率
-    investigation_fee = agree_obj.investigation_fee #调查费率(%)
-    notify_amount = notify_obj.notify_money #通知金额
+    agree_amount = notify_obj.notify_money
+    agree_rate = agree_obj.agree_rate  #保费率/利率
+    investigation_fee = agree_obj.investigation_fee  #调查费率(%)
+    notify_amount = notify_obj.notify_money  #通知金额
     try:
         single_quota_rate = float(agree_rate)
         charge = round(agree_amount * single_quota_rate / 100, 2)
@@ -507,10 +507,10 @@ def notify_scan(request, notify_id):  # 查看放款通知
     }
     form_notify_edit = forms.FormNotifyEdit(initial=form_data)  # 修改放款通知
 
-    agree_amount = agree_obj.agree_amount
-    agree_rate = agree_obj.agree_rate #保费率/利率
-    investigation_fee = agree_obj.investigation_fee #调查费率(%)
-    notify_amount = notify_obj.notify_money #通知金额
+    agree_amount = notify_obj.notify_money
+    agree_rate = agree_obj.agree_rate  #保费率/利率
+    investigation_fee = agree_obj.investigation_fee  #调查费率(%)
+    notify_amount = notify_obj.notify_money  #通知金额
     try:
         single_quota_rate = float(agree_rate)
         charge = round(agree_amount * single_quota_rate / 100, 2)
@@ -619,6 +619,25 @@ def provide_scan(request, provide_id):  # 查看放款
     form_extension = forms.FormExtensionAdd(
         initial=form_extension_data)  #展期form
 
+    provide_money = provide_obj.provide_money
+    agree_rate = provide_obj.notify.agree.agree_rate  #保费率/利率
+    investigation_fee = provide_obj.notify.agree.investigation_fee  #调查费率(%)
+    try:
+        single_quota_rate = float(agree_rate)
+        charge = round(provide_money * single_quota_rate / 100, 2)
+        charge_fee = round(provide_money * investigation_fee / 100, 2)
+    except ValueError:
+        agree_rate = 0
+        charge = 0
+        charge_fee = round(provide_money * investigation_fee / 100, 2)
+    form_provide_db_data = {
+        'agree_rate': agree_rate,
+        'charge': charge,
+        'investigation_fee': investigation_fee,
+        'charge_fee': charge_fee,
+    }
+    form_provide_db = forms.FormProvideDB(
+        initial=form_provide_db_data)
     return render(request, 'dbms/provide/provide-scan.html', locals())
 
 

@@ -171,7 +171,7 @@ class CustomesC(models.Model):
     industry_c = models.IntegerField(verbose_name='所属行业',
                                      choices=INDUSTRY_C_LIST,
                                      default=102)
-    TYPING_LIST = ((11, '涉农小微企业'), (21, '非农小薇企业'), (31, '中型企业'), (41, '大型企业'))
+    TYPING_LIST = ((11, '涉农小微企业'), (21, '非农小微企业'), (31, '中型企业'), (41, '大型企业'))
     typing = models.IntegerField(verbose_name='企业划型',
                                  choices=TYPING_LIST,
                                  default=21)
