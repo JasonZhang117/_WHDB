@@ -14,7 +14,7 @@ class Charges(models.Model):  # 收费
                                       choices=CHARGE_TYP_LIST,
                                       default=11)
     rate = models.FloatField(verbose_name='费率(%)', default=0)
-    amount = models.FloatField(verbose_name='收费金额')
+    amount = models.FloatField(verbose_name='收费金额（元）')
     charge_buildor = models.ForeignKey(to='Employees',
                                        verbose_name="创建者",
                                        on_delete=models.PROTECT,

@@ -26,11 +26,14 @@ class FormChargeAdd(dform.ModelForm):
 # -----------------------收费-------------------------#
 class FormProvideChargeAdd(dform.ModelForm):
     class Meta:
-        model = models.Provides
-        fields = ['charge', 'charge_fee', ]
+        model = models.Charges
+        fields = ['charge_typ','rate','amount', 'charge_date', ]
         widgets = {
-            'charge': dform.NumberInput(attrs={'class': 'form-control', 'placeholder': '预收保费（元）'}),
-            'charge_fee': dform.NumberInput(attrs={'class': 'form-control', 'placeholder': '预收调查费（元）'}),}
+            'charge_typ': dform.Select(attrs={'class': 'form-control'}),
+            'rate': dform.NumberInput(attrs={'class': 'form-control', 'placeholder': '费率(%)'}),
+            'amount': dform.NumberInput(attrs={'class': 'form-control', 'placeholder': '收费金额（元）'}),
+            'charge_date': dform.DateInput(attrs={'class': 'form-control', 'type': 'date'}),
+            }
 
 
 # -----------------------合同签订-------------------------#
