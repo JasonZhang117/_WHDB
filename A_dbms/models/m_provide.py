@@ -9,10 +9,15 @@ class Charges(models.Model):  # 收费
                               verbose_name="委托合同",
                               on_delete=models.PROTECT,
                               related_name='charge_agree')
-    CHARGE_TYP_LIST = ((11, '担保费'), (21, '咨询费/服务费'), (31, '利息'))
+    CHARGE_TYP_LIST = (
+        (11, '担保费'),
+        (21, '咨询费/服务费'),
+        (31, '利息'),
+        (41, '保证金'),
+    )
     charge_typ = models.IntegerField(verbose_name='收费类型',
-                                      choices=CHARGE_TYP_LIST,
-                                      default=11)
+                                     choices=CHARGE_TYP_LIST,
+                                     default=11)
     rate = models.FloatField(verbose_name='费率(%)', default=0)
     amount = models.FloatField(verbose_name='收费金额（元）')
     charge_buildor = models.ForeignKey(to='Employees',

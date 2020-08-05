@@ -1,0 +1,14 @@
+<div id="form_provide_db" class="provide-extend" style="display: none">
+    <div class="form-group"><!--贷款对象分类-->
+        <label for="id_obj_typ"
+               class="col-sm-3 control-label">{{ form_provide_ex.obj_typ.label }}：</label>
+        <div class="col-sm-9">{{ form_provide_ex.obj_typ }}</div>
+        <label id="e_obj_typ" class="pull-right">{{ form_provide_ex.obj_typ.errors }}</label>
+    </div>
+    <div class="form-group"><!--信用形式分类-->
+        <label for="id_credit_typ"
+               class="col-sm-3 control-label">{{ form_provide_ex.credit_typ.label }}：</label>
+        <div class="col-sm-9">{{ form_provide_ex.credit_typ }}</div>
+        <label id="e_credit_typ" class="pull-right">{{ form_provide_ex.credit_typ.errors }}</label>
+    </div>
+</div>

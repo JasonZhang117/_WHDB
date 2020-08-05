@@ -114,6 +114,15 @@ class FormProvideEx(dform.ModelForm):
             'credit_typ': dform.Select(attrs={'class': 'form-control'}), }
 
 
+# -----------------------放款担保附加-------------------------#
+class FormProvideDB(dform.ModelForm):
+    class Meta:
+        model = models.Provides
+        fields = ['obj_typ', 'credit_typ', ]
+        widgets = {
+            'obj_typ': dform.Select(attrs={'class': 'form-control'}),
+            'credit_typ': dform.Select(attrs={'class': 'form-control'}), }
+
 # -----------------------展期-------------------------#
 class FormExtensionAdd(dform.ModelForm):
     class Meta:
