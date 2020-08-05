@@ -1,0 +1,58 @@
+<div class="table-responsive">
+    <table class="table table-bordered table-hover table-condensed active">
+        <caption>{{ PAGE_TITLE }}统计表（{{ tf_r }}至{{ tl_r }}）</caption>
+        <thead>
+        <tr style="text-align: center">
+            <th>序号</th>
+            <th>客户类型</th>
+            <th>客户名称</th>
+            <th>统一代码</th>
+            <th>类型</th>
+            <th>业务类型</th>
+            <th>放款主体</th>
+            <th>贷款起始日</th>
+            <th>贷款到期日</th>
+            <th>担保金额</th>
+            <th>担保费率(%)</th>
+            <th>担保费金额</th>
+            <th>服务费费率(%)</th>
+            <th>服务费金额</th>
+            <th>客户保证金比例(%)</th>
+            <th>客户保证金金额</th>
+            <th>借款合同编号</th>
+            <th>保证合同编号</th>
+            <th>担保合同编号</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for provide in provide_list %}
+            <tr style="padding: 0">
+                <td style="padding: 0">
+                    <a target="_blank" href="{% url 'dbms:provide_scan' provide_id=provide.id %}">
+                        {{ forloop.counter }}
+                    </a>
+                </td>
+                <td style="padding: 0">{{ provide.notify.agree.lending.summary.custom.get_genre_display }}</td>
+                <td style="padding: 0">{{ provide.notify.agree.lending.summary.custom.name }}</td>
+                <td style="padding: 0">{{ provide.notify.agree.lending.summary.custom.company_custome.credit_code }}</td>
+                <td style="padding: 0">{{ provide.get_old_new_display }}</td>
+                <td style="padding: 0">{{ provide.get_provide_typ_display }}</td>
+                <td style="padding: 0">{{ provide.notify.agree.branch.name }}</td>
+                <td style="padding: 0">{{ provide.provide_date }}</td>
+                <td style="padding: 0">{{ provide.due_date }}</td>
+                <td style="padding: 0" align="right">{{ provide.provide_money }}</td>
+                <td style="padding: 0" align="right">{{ provide.agree_rate }}</td>
+                <td style="padding: 0" align="right">{{ provide.charge }}</td>
+                <td style="padding: 0" align="right">{{ provide.investigation_fee }}</td>
+                <td style="padding: 0" align="right">{{ provide.charge_fee }}</td>
+                <td style="padding: 0" align="right">{{ provide.bond_proportion }}</td>
+                <td style="padding: 0" align="right">{{ provide.bond_amount }}</td>
+                <td style="padding: 0">{{ provide.notify.contracts_lease }}</td>
+                <td style="padding: 0">{{ provide.notify.contract_guaranty }}</td>
+                <td style="padding: 0">{{ provide.notify.agree.agree_num }}</td>
+
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>

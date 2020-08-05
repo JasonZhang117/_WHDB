@@ -5,20 +5,20 @@
             {% for p_typ in provide_typ_list %}
                 {% if p_typ.0 == kwargs.p_typ %}
                     <a class="btn btn-primary btn-sm active"
-                       href="{% url 'dbms:report_provide_accrual' p_typ=p_typ.0 t_typ=kwargs.t_typ %}?tf={{ tf_r }}&tl={{ tl_r }}">{{ p_typ.1 }}</a>
+                       href="{% url 'dbms:report_provide_report' p_typ=p_typ.0 t_typ=kwargs.t_typ %}?tf={{ tf_r }}&tl={{ tl_r }}">{{ p_typ.1 }}</a>
                 {% else %}
                     <a class="btn btn-primary btn-sm"
-                       href="{% url 'dbms:report_provide_accrual' p_typ=p_typ.0 t_typ=kwargs.t_typ %}?tf={{ tf_r }}&tl={{ tl_r }}">{{ p_typ.1 }} </a>
+                       href="{% url 'dbms:report_provide_report' p_typ=p_typ.0 t_typ=kwargs.t_typ %}?tf={{ tf_r }}&tl={{ tl_r }}">{{ p_typ.1 }} </a>
                 {% endif %}
             {% endfor %}
         {% else %}
             {% for p_typ in provide_typ_list %}
                 {% if p_typ.0 == kwargs.p_typ %}
                     <a class="btn btn-primary btn-sm active"
-                       href="{% url 'dbms:report_provide_accrual' p_typ=p_typ.0 t_typ=kwargs.t_typ %}">{{ p_typ.1 }}</a>
+                       href="{% url 'dbms:report_provide_report' p_typ=p_typ.0 t_typ=kwargs.t_typ %}">{{ p_typ.1 }}</a>
                 {% else %}
                     <a class="btn btn-primary btn-sm"
-                       href="{% url 'dbms:report_provide_accrual' p_typ=p_typ.0 t_typ=kwargs.t_typ %}">{{ p_typ.1 }} </a>
+                       href="{% url 'dbms:report_provide_report' p_typ=p_typ.0 t_typ=kwargs.t_typ %}">{{ p_typ.1 }} </a>
                 {% endif %}
             {% endfor %}
         {% endif %}
@@ -37,20 +37,20 @@
             {% for t_typ in TERM_LIST %}
                 {% if t_typ.0 == kwargs.t_typ %}
                     <a class="btn btn-primary btn-sm active"
-                       href="{% url 'dbms:report_provide_accrual_all' t_typ=t_typ.0 %}">{{ t_typ.1 }}</a>
+                       href="{% url 'dbms:report_provide_report' t_typ=t_typ.0 %}">{{ t_typ.1 }}</a>
                 {% else %}
                     <a class="btn btn-primary btn-sm"
-                       href="{% url 'dbms:report_provide_accrual_all' t_typ=t_typ.0 %}">{{ t_typ.1 }} </a>
+                       href="{% url 'dbms:report_provide_report' t_typ=t_typ.0 %}">{{ t_typ.1 }} </a>
                 {% endif %}
             {% endfor %}
         {% else %}
             {% for t_typ in TERM_LIST %}
                 {% if t_typ.0 == kwargs.t_typ %}
                     <a class="btn btn-primary btn-sm active"
-                       href="{% url 'dbms:report_provide_accrual' p_typ=kwargs.p_typ  t_typ=t_typ.0 %}">{{ t_typ.1 }}</a>
+                       href="{% url 'dbms:report_provide_report' p_typ=kwargs.p_typ  t_typ=t_typ.0 %}">{{ t_typ.1 }}</a>
                 {% else %}
                     <a class="btn btn-primary btn-sm"
-                       href="{% url 'dbms:report_provide_accrual' p_typ=kwargs.p_typ  t_typ=t_typ.0 %}">{{ t_typ.1 }} </a>
+                       href="{% url 'dbms:report_provide_report' p_typ=kwargs.p_typ  t_typ=t_typ.0 %}">{{ t_typ.1 }} </a>
                 {% endif %}
             {% endfor %}
         {% endif %}

@@ -80,7 +80,7 @@ def custom_c(request, *args, **kwargs):  # 委托合同列表
             q.children.append(("%s__contains" % field, search_key.strip()))
         custom_list = custom_list.filter(q)
     '''分页'''
-    paginator = Paginator(custom_list, 50)
+    paginator = Paginator(custom_list, 200)
     page = request.GET.get('page')
     try:
         p_list = paginator.page(page)

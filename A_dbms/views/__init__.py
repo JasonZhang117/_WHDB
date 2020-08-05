@@ -105,7 +105,8 @@ from .v_report import (
     report_article_list, report_dun_dc_list, report_dun_fy_list,
     report_dun_hk_list, report_provide_class_list, report_provid_w_list,
     report_repay_list, report_meeting_list, provide_follow_list,
-    article_feedback_list, pig_overdue_list, review_plan_list, fication_list)
+    report_provide_report, article_feedback_list, pig_overdue_list,
+    review_plan_list, fication_list)
 
 # 部门、员工
 from .v_interior import department, department_add, department_edit

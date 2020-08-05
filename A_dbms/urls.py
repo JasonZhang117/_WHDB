@@ -293,6 +293,8 @@ urlpatterns = [
     path('report/article/balance/class/<int:c_typ>/<int:t_typ>/', views.report_article_class,
          name='report_article_class'),
     path('report/accrual/list/<int:p_typ>/<int:t_typ>/', views.report_provide_accrual, name='report_provide_accrual'),
+    path('report/report/list/<int:p_typ>/<int:t_typ>/', views.report_provide_report, name='report_provide_report'),
+
     path('report/accrual/class/<int:c_typ>/<int:t_typ>/', views.report_accrual_class, name='report_accrual_class'),
     path('report/provide/class/list/<int:c_typ>/<int:t_typ>/', views.report_provide_class_list,
          name='report_provide_class_list'),

@@ -429,6 +429,10 @@ def provide_add_ajax(request):
         form_provide_cleaned = form_provide_add.cleaned_data
         old_amount = round(form_provide_cleaned['old_amount'], 2)
         new_amount = round(form_provide_cleaned['new_amount'], 2)
+        if new_amount > 0:
+            old_new = 11
+        else:
+            old_new = 1
         charge = float(post_data['charge'])
         charge_fee = float(post_data['charge_fee'])
         bond_amount = float(post_data['bond_amount'])
@@ -457,6 +461,7 @@ def provide_add_ajax(request):
                         provide_date=form_provide_cleaned['provide_date'],
                         due_date=form_provide_cleaned['due_date'],
                         provide_balance=provide_money,
+                        old_new=old_new,
                         obj_typ=post_data['obj_typ'],
                         credit_typ=post_data['credit_typ'],
                         agree_rate=post_data['agree_rate'],
@@ -712,11 +717,12 @@ def provide_charge_add_ajax(request):  #
         try:
             with transaction.atomic():
                 if charge > 0:
-                    models.Charges.objects.create(provide=provide_obj,
-                                                  charge_typ=11,
-                                                  rate=provide_db_cleaned['agree_rate'],
-                                                  amount=charge,
-                                                  charge_buildor=request.user)
+                    models.Charges.objects.create(
+                        provide=provide_obj,
+                        charge_typ=11,
+                        rate=provide_db_cleaned['agree_rate'],
+                        amount=charge,
+                        charge_buildor=request.user)
                     charge_sum = models.Charges.objects.filter(
                         provide=provide_obj,
                         charge_typ=11).aggregate(Sum('amount'))['amount__sum']
@@ -734,7 +740,8 @@ def provide_charge_add_ajax(request):  #
                         provide=provide_obj,
                         charge_typ=21).aggregate(Sum('amount'))['amount__sum']
                     models.Provides.objects.filter(id=provide_obj.id).update(
-                        investigation_fee=provide_db_cleaned['investigation_fee'],
+                        investigation_fee=provide_db_cleaned[
+                            'investigation_fee'],
                         charge_fee=charge_fee_sum)
                 if bond_amount > 0:
                     models.Charges.objects.create(
@@ -1075,19 +1082,23 @@ def provide_del_ajax(request):  # 删除放款ajax
                 notify__agree__branch=branch_obj).aggregate(
                     Sum('provide_balance'))[
                         'provide_balance__sum']  # 放款银行项下，在保余额
+            if not branch_provide_balance_all:
+                branch_provide_balance_all = 0
             branch_list.update(amount=round(branch_provide_balance_all, 2))
 
             cooperator_provide_balance_all = models.Provides.objects.filter(
                 notify__agree__branch__cooperator=cooperator_obj).aggregate(
                     Sum('provide_balance'))[
                         'provide_balance__sum']  # 授信银行项下，在保余额
+            if not cooperator_provide_balance_all:
+                cooperator_provide_balance_all = 0
             cooperator_list.update(
                 amount=round(cooperator_provide_balance_all, 2))
 
-        response['message'] = '借款信息删除成功！'
+        response['message'] = '放款信息删除成功！'
     except Exception as e:
         response['status'] = False
-        response['message'] = '还款信息删除失败：%s' % str(e)
+        response['message'] = '放款信息删除失败：%s' % str(e)
     result = json.dumps(response, ensure_ascii=False)
     return HttpResponse(result)
 

@@ -91,6 +91,10 @@ class Provides(models.Model):  # 放款
                         (57, 'X-票据贷'), (58, 'X-消费贷')]
     provide_typ = models.IntegerField(verbose_name='放款种类',
                                       choices=PROVIDE_TYP_LIST)
+    OLD_NEW_LIST = ((1, '存量周转'), (11, '新增'))
+    old_new = models.IntegerField(verbose_name='类型',
+                                  choices=OLD_NEW_LIST,
+                                  default=1)
     old_amount = models.FloatField(verbose_name='续贷金额', default=0)
     new_amount = models.FloatField(verbose_name='新增金额', default=0)
     provide_money = models.FloatField(verbose_name='放款金额', default=0)

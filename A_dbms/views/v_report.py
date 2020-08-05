@@ -170,9 +170,11 @@ def report_provide_list(request, *args, **kwargs):  #
     PAGE_TITLE = '在保明细'
     '''PROVIDE_TYP_LIST = [(1, '流贷'), (11, '承兑'), (21, '保函'), (31, '委贷'),
                         (41, '过桥贷'), (52, '房抵贷'), (53, '担保贷')]'''
-    provide_typ_list = [(0, '全部'), (1, '流贷'), (11, '承兑'),
-                        (21, '保函'), (31, '委贷'), (41, '过桥贷'), (52, '房抵贷'),
-                        (53, '担保贷')]  # 筛选条件
+    provide_typ_list = [(0, '全部'),(1, '贷款担保'), (11, '票据承兑担保'), (13, '信用证担保'),
+                        (19, '其他担保'), (21, '履约保函'), (22, '投标保函'),
+                        (23, '预付款保函'), (31, '委贷'), (41, '过桥贷'),
+                        (52, '房抵贷'), (53, '担保贷'), (55, '经营贷'),
+                        (57, '票据贷'), (58, '消费贷')]  # 筛选条件
     TERM_LIST = [
         (0, '全部'),
         (1, '本年'),
@@ -613,8 +615,11 @@ def report_provide_accrual(request, *args, **kwargs):  #
     authority_list = request.session.get('authority_list')  # 获取当前用户的所有权限
     menu_result = MenuHelper(request).menu_data_list()
     PAGE_TITLE = '放款明细'
-    provide_typ_list = [(0, '全部'), (1, '流贷'), (11, '承兑'), (21, '保函'),
-                        (31, '委贷'), (41, '小贷')]  # 筛选条件
+    provide_typ_list = [(0, '全部'),(1, '贷款担保'), (11, '票据承兑担保'), (13, '信用证担保'),
+                        (19, '其他担保'), (21, '履约保函'), (22, '投标保函'),
+                        (23, '预付款保函'), (31, '委贷'), (41, '过桥贷'),
+                        (52, '房抵贷'), (53, '担保贷'), (55, '经营贷'),
+                        (57, '票据贷'), (58, '消费贷')]  # 筛选条件
     TERM_LIST = [
         (1, '本年'),
         (2, '本季'),
@@ -628,10 +633,12 @@ def report_provide_accrual(request, *args, **kwargs):  #
     tl_r = request.GET.get('tl')
     t_typ = kwargs['t_typ']
     p_typ = kwargs['p_typ']
-
     tf_r, tl_r = tt_provide(t_typ, tf_r, tl_r)
     provide_list = models.Provides.objects.filter(
         provide_date__gte=tf_r, provide_date__lte=tl_r).select_related(
+            'notify').order_by('-provide_date')
+    if p_typ:
+        provide_list = provide_list.filter(provide_typ=p_typ).select_related(
             'notify').order_by('-provide_date')
     '''搜索'''
     search_key = request.GET.get('_s')
@@ -660,6 +667,66 @@ def report_provide_accrual(request, *args, **kwargs):  #
     provide_count = provide_list.count()  #
 
     return render(request, 'dbms/report/provide_list.html', locals())
+
+
+# -----------------------放款列表（报送报表）---------------------#
+def report_provide_report(request, *args, **kwargs):  #
+    current_url_name = resolve(request.path).url_name  # 获取当前URL_NAME
+    authority_list = request.session.get('authority_list')  # 获取当前用户的所有权限
+    menu_result = MenuHelper(request).menu_data_list()
+    PAGE_TITLE = '放款明细(报送)'
+    provide_typ_list = [(0, '全部'),(1, '贷款担保'), (11, '票据承兑担保'), (13, '信用证担保'),
+                        (19, '其他担保'), (21, '履约保函'), (22, '投标保函'),
+                        (23, '预付款保函'), (31, '委贷'), (41, '过桥贷'),
+                        (52, '房抵贷'), (53, '担保贷'), (55, '经营贷'),
+                        (57, '票据贷'), (58, '消费贷')]  # 筛选条件
+    TERM_LIST = [
+        (1, '本年'),
+        (2, '本季'),
+        (3, '本月'),
+        (4, '本周'),
+        (11, '上年'),
+        (99, '自定义'),
+    ]
+
+    tf_r = request.GET.get('tf')
+    tl_r = request.GET.get('tl')
+    t_typ = kwargs['t_typ']
+    p_typ = kwargs['p_typ']
+    tf_r, tl_r = tt_provide(t_typ, tf_r, tl_r)
+    provide_list = models.Provides.objects.filter(
+        provide_date__gte=tf_r, provide_date__lte=tl_r).select_related(
+            'notify').order_by('-provide_date')
+    if p_typ:
+        provide_list = provide_list.filter(provide_typ=p_typ).select_related(
+            'notify').order_by('-provide_date')
+    '''搜索'''
+    search_key = request.GET.get('_s')
+    if search_key:
+        search_fields = [
+            'notify__agree__lending__summary__custom__name',
+            'notify__agree__lending__summary__custom__short_name',
+            'notify__agree__branch__name', 'notify__agree__branch__short_name',
+            'notify__agree__agree_num'
+        ]
+        q = Q()
+        q.connector = 'OR'
+        for field in search_fields:
+            q.children.append(("%s__contains" % field, search_key.strip()))
+        provide_list = provide_list.filter(q)
+    provide_provide = provide_list.aggregate(
+        Sum('provide_money'))['provide_money__sum']  #
+    old_amount_sum = provide_list.aggregate(
+        Sum('old_amount'))['old_amount__sum']  #
+    new_amount_sum = provide_list.aggregate(
+        Sum('new_amount'))['new_amount__sum']  #
+    repayment_sum = provide_list.aggregate(
+        Sum('provide_repayment_sum'))['provide_repayment_sum__sum']  #
+    provide_balance = provide_list.aggregate(
+        Sum('provide_balance'))['provide_balance__sum']  #
+    provide_count = provide_list.count()  #
+
+    return render(request, 'dbms/report/provide_list_p.html', locals())
 
 
 # -----------------------还款列表---------------------#

@@ -19,7 +19,7 @@ class Customes(models.Model):  # 客户
     short_name = models.CharField(verbose_name='客户简称',
                                   max_length=16,
                                   unique=True)
-    GENRE_LIST = [(1, '企业'), (2, '个人')]
+    GENRE_LIST = [(1, '企业用户'), (2, '个人用户')]
     genre = models.IntegerField(verbose_name='客户类型',
                                 choices=GENRE_LIST,
                                 default=1)
