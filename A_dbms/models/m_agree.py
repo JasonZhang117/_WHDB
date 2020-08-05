@@ -130,7 +130,8 @@ class Agrees(models.Model):  # 委托合同
     agree_sign_date = models.DateField(verbose_name='签批日期',
                                        null=True,
                                        blank=True)
-    charge = models.FloatField(verbose_name='应收保费（元）', default=0)
+    charge = models.FloatField(verbose_name='预收保费（元）', default=0)
+    charge_fee = models.FloatField(verbose_name='调查费（元）', default=0)
     other = models.TextField(verbose_name='其他约定', null=True, blank=True)
     sign_date = models.DateField(verbose_name='签订日期', null=True, blank=True)
     ascertain_date = models.DateField(verbose_name='落实日期',

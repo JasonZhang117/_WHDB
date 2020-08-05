@@ -13,6 +13,14 @@ class FormAscertainAdd(dform.ModelForm):
             'agree_remark': dform.Textarea(attrs={'class': 'form-control', 'rows': '3', 'placeholder': '落实情况'})}
 
 
+# -----------------------收费-------------------------#
+class FormChargeAdd(dform.ModelForm):
+    class Meta:
+        model = models.Agrees
+        fields = ['sign_date', ]
+        widgets = {
+            'sign_date': dform.DateInput(attrs={'class': 'form-control', 'type': 'date'}), }
+
 # -----------------------合同签订-------------------------#
 class FormAgreeSignAdd(dform.ModelForm):
     class Meta:

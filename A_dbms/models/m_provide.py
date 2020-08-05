@@ -9,8 +9,11 @@ class Charges(models.Model):  # 收费
                               verbose_name="委托合同",
                               on_delete=models.PROTECT,
                               related_name='charge_agree')
+    CHARGE_TYP_LIST = ((11, '担保费'), (21, '咨询费/服务费'), (31, '利息'))
+    charge_typ = models.IntegerField(verbose_name='收费类型',
+                                      choices=CHARGE_TYP_LIST,
+                                      default=11)
     amount = models.FloatField(verbose_name='收费金额')
-    balance = models.FloatField(verbose_name='应收余额')
     charge_buildor = models.ForeignKey(to='Employees',
                                        verbose_name="创建者",
                                        on_delete=models.PROTECT,
@@ -86,7 +89,10 @@ class Provides(models.Model):  # 放款
     provide_money = models.FloatField(verbose_name='放款金额', default=0)
     provide_date = models.DateField(verbose_name='放款日期')
     due_date = models.DateField(verbose_name='到期日')
-
+    charge = models.FloatField(verbose_name='担保费（元）', default=0)
+    charge_fee = models.FloatField(verbose_name='咨询费/服务费（元）', default=0)
+    bond_proportion = models.FloatField(verbose_name='客户保证金比例(%)', default=0)
+    bond_amount = models.FloatField(verbose_name='客户保证金金额', default=0)
     IMPLEMENT_LIST = [(1, '未归档'), (11, '退回'), (21, '暂存风控'), (31, '移交行政'),
                       (41, '已归档'), (99, '无需归档')]
     implement = models.IntegerField(verbose_name='_归档状态',
