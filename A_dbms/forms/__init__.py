@@ -28,7 +28,7 @@ from .f_provide import (FormCounterSignAdd, FormAscertainAdd, FormNotifyAdd,
                         FormImplementAdd, FormPigeonholeNumAdd,
                         FormRepaymentAdd, FormAgreeSignAdd,
                         FormAgreeChangeState, FormProvideStateChange,
-                        FormExtensionAdd, FormTrackEXAdd)
+                        FormExtensionAdd, FormTrackEXAdd, FormChargeAdd)
 
 from .f_custom import (CustomAddForm, CustomCAddForm, CustomPAddForm,
                        CustomEditForm, FormShareholderAdd, FormCustomSpouseAdd,

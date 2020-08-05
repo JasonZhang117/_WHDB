@@ -13,13 +13,25 @@ class FormAscertainAdd(dform.ModelForm):
             'agree_remark': dform.Textarea(attrs={'class': 'form-control', 'rows': '3', 'placeholder': '落实情况'})}
 
 
-# -----------------------收费-------------------------#
+# -----------------------预收保费-------------------------#
 class FormChargeAdd(dform.ModelForm):
     class Meta:
         model = models.Agrees
-        fields = ['sign_date', ]
+        fields = ['charge', 'charge_fee', ]
         widgets = {
-            'sign_date': dform.DateInput(attrs={'class': 'form-control', 'type': 'date'}), }
+            'charge': dform.NumberInput(attrs={'class': 'form-control', 'placeholder': '预收保费（元）'}),
+            'charge_fee': dform.NumberInput(attrs={'class': 'form-control', 'placeholder': '预收调查费（元）'}),}
+
+
+# -----------------------收费-------------------------#
+class FormProvideChargeAdd(dform.ModelForm):
+    class Meta:
+        model = models.Provides
+        fields = ['charge', 'charge_fee', ]
+        widgets = {
+            'charge': dform.NumberInput(attrs={'class': 'form-control', 'placeholder': '预收保费（元）'}),
+            'charge_fee': dform.NumberInput(attrs={'class': 'form-control', 'placeholder': '预收调查费（元）'}),}
+
 
 # -----------------------合同签订-------------------------#
 class FormAgreeSignAdd(dform.ModelForm):

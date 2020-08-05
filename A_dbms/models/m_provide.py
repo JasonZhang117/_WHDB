@@ -13,6 +13,7 @@ class Charges(models.Model):  # 收费
     charge_typ = models.IntegerField(verbose_name='收费类型',
                                       choices=CHARGE_TYP_LIST,
                                       default=11)
+    rate = models.FloatField(verbose_name='费率(%)', default=0)
     amount = models.FloatField(verbose_name='收费金额')
     charge_buildor = models.ForeignKey(to='Employees',
                                        verbose_name="创建者",
@@ -89,6 +90,8 @@ class Provides(models.Model):  # 放款
     provide_money = models.FloatField(verbose_name='放款金额', default=0)
     provide_date = models.DateField(verbose_name='放款日期')
     due_date = models.DateField(verbose_name='到期日')
+    agree_rate = models.FloatField(verbose_name='保费率/利率(%)', default=0)
+    investigation_fee = models.FloatField(verbose_name='咨询费/服务费(%)', default=0)
     charge = models.FloatField(verbose_name='担保费（元）', default=0)
     charge_fee = models.FloatField(verbose_name='咨询费/服务费（元）', default=0)
     bond_proportion = models.FloatField(verbose_name='客户保证金比例(%)', default=0)
