@@ -90,15 +90,7 @@ def custom_c(request, *args, **kwargs):  # 委托合同列表
         for field in search_fields:
             q.children.append(("%s__contains" % field, search_key.strip()))
         custom_list = custom_list.filter(q)
-    '''分页'''
-    paginator = Paginator(custom_list, 200)
-    page = request.GET.get('page')
-    try:
-        p_list = paginator.page(page)
-    except PageNotAnInteger:
-        p_list = paginator.page(1)
-    except EmptyPage:
-        p_list = paginator.page(paginator.num_pages)
+
     return render(request, 'dbms/custom/custom-c.html', locals())
 
 
@@ -141,15 +133,7 @@ def custom_p(request, *args, **kwargs):  # 委托合同列表
         for field in search_fields:
             q.children.append(("%s__contains" % field, search_key.strip()))
         custom_list = custom_list.filter(q)
-    '''分页'''
-    paginator = Paginator(custom_list, 50)
-    page = request.GET.get('page')
-    try:
-        p_list = paginator.page(page)
-    except PageNotAnInteger:
-        p_list = paginator.page(1)
-    except EmptyPage:
-        p_list = paginator.page(paginator.num_pages)
+    
     return render(request, 'dbms/custom/custom-p.html', locals())
 
 

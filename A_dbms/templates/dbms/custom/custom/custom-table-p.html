@@ -11,7 +11,7 @@
         </tr>
         </thead>
         <tbody>
-        {% for custom in p_list %}
+        {% for custom in custom_list %}
             <tr style="padding: 0">
                 <td>
                     <a target="_blank" href="{% url 'dbms:custom_scan' custom_id=custom.id %}">{{ custom.name }}</a>
