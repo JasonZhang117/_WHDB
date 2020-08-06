@@ -1,14 +1,12 @@
-{% extends 'dbms/index_dbms.html' %}
-
+{% extends 'base.html' %}
+{% load static %}
 {% block title %}{{ PAGE_TITLE }}{% endblock %}
-
-{% block right-content-container %}
+{% block extra-css %}
+    <link rel="stylesheet" media="screen" href="{% static 'dbms/css/report-style.css' %}">
+    <link rel="stylesheet" media="print" href="{% static 'dbms/css/report-style.css' %}">
+    <link rel="stylesheet" media="print" href="{% static 'dbms/css/report-style-noprint.css' %}">
+{% endblock %}
+{% block  body %}
     {% include 'dbms/custom/custom/custom-filter-c.html' %}
     {% include 'dbms/custom/custom/custom-table-c.html' %}
-
-{% endblock %}
-
-{% block extra-js %}
-
-
 {% endblock %}

@@ -1,9 +1,12 @@
 <div class="table-responsive">
     <table class="table table-bordered table-hover table-condensed active">
+        <caption>{{ PAGE_TITLE }}统计表（四川省金融担保系统报送数据）</caption>
         <thead>
         <tr style="text-align: center">
             <th>客户名称</th>
             <th>统一代码</th>
+            <th>所在省</th>
+            <th>所在市</th>
             <th>机构性质</th>
             <th>所属行业</th>
             <th>企业划型</th>
@@ -14,18 +17,22 @@
         </thead>
         <tbody>
         {% for custom in p_list %}
-            <tr>
-                <td><a href="{% url 'dbms:custom_scan' custom_id=custom.id %}">{{ custom.name }}</a></td>
-                <td>{{ custom.company_custome.credit_code }}</td>
-                <td>{{ custom.company_custome.get_custom_nature_display }}</td>
-                <td>{{ custom.company_custome.get_industry_c_display }}</td>
-                <td>{{ custom.company_custome.get_typing_display }}</td>
-                <td>{{ custom.company_custome.representative }}</td>
-                <td>{{ custom.get_submission_status_display }}</td>
-                <td>{{ custom.managementor.name }}</td>
+            <tr style="padding: 0">
+                <td style="padding: 0">
+                    <a target="_blank" href="{% url 'dbms:custom_scan' custom_id=custom.id %}">{{ custom.name }}</a>
+                </td>
+                <td style="padding: 0">{{ custom.company_custome.credit_code }}</td>
+                <td style="padding: 0">四川省</td>
+                <td style="padding: 0">成都市</td>
+                <td style="padding: 0">{{ custom.company_custome.get_custom_nature_display }}</td>
+                <td style="padding: 0">{{ custom.company_custome.get_industry_c_display }}</td>
+                <td style="padding: 0">{{ custom.company_custome.get_typing_display }}</td>
+                <td style="padding: 0">{{ custom.company_custome.representative }}</td>
+                <td style="padding: 0">{{ custom.get_submission_status_display }}</td>
+                <td style="padding: 0">{{ custom.managementor.name }}</td>
             </tr>
         {% endfor %}
+
         </tbody>
     </table>
-    {% include 'dbms/board/page.html' %}
 </div>

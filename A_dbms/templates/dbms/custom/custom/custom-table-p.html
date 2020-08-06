@@ -1,5 +1,6 @@
 <div class="table-responsive">
     <table class="table table-bordered table-hover table-condensed active">
+        <caption>{{ PAGE_TITLE }}统计表（四川省金融担保系统报送数据）</caption>
         <thead>
         <tr style="text-align: center">
             <th>客户名称</th>
@@ -11,15 +12,17 @@
         </thead>
         <tbody>
         {% for custom in p_list %}
-            <tr>
-                <td><a href="{% url 'dbms:custom_scan' custom_id=custom.id %}">{{ custom.name }}</a></td>
-                <td>{{ custom.person_custome.license_num }}</td>
-                <td>{{ custom.person_custome.get_household_nature_display }}</td>
-                <td>{{ custom.get_submission_status_display }}</td>
-                <td>{{ custom.managementor.name }}</td>
+            <tr style="padding: 0">
+                <td>
+                    <a target="_blank" href="{% url 'dbms:custom_scan' custom_id=custom.id %}">{{ custom.name }}</a>
+                </td>
+                <td style="padding: 0">{{ custom.person_custome.license_num }}</td>
+                <td style="padding: 0">{{ custom.person_custome.get_household_nature_display }}</td>
+                <td style="padding: 0">{{ custom.get_submission_status_display }}</td>
+                <td style="padding: 0">{{ custom.managementor.name }}</td>
             </tr>
         {% endfor %}
+
         </tbody>
     </table>
-    {% include 'dbms/board/page.html' %}
 </div>

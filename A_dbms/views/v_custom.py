@@ -109,7 +109,7 @@ def custom_p(request, *args, **kwargs):  # 委托合同列表
     current_url_name = resolve(request.path).url_name  # 获取当前URL_NAME
     authority_list = request.session.get('authority_list')  # 获取当前用户的所有权限
     menu_result = MenuHelper(request).menu_data_list()
-    PAGE_TITLE = '企业客户'
+    PAGE_TITLE = '个人客户'
     '''筛选'''
     custom_list = models.Customes.objects.filter(**kwargs).order_by(
         '-credit_amount', '-name')
