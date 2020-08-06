@@ -7,6 +7,7 @@
             <th>机构性质</th>
             <th>所属行业</th>
             <th>企业划型</th>
+            <th>法人代表</th>
             <th>报送状态</th>
             <th>管护经理</th>
         </tr>
@@ -19,6 +20,7 @@
                 <td>{{ custom.company_custome.get_custom_nature_display }}</td>
                 <td>{{ custom.company_custome.get_industry_c_display }}</td>
                 <td>{{ custom.company_custome.get_typing_display }}</td>
+                <td>{{ custom.company_custome.representative }}</td>
                 <td>{{ custom.get_submission_status_display }}</td>
                 <td>{{ custom.managementor.name }}</td>
             </tr>

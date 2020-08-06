@@ -68,16 +68,16 @@ def custom_c(request, *args, **kwargs):  # 委托合同列表
                                      credit_amount__gt=0).select_related(
                                          'managementor', 'idustry')
     custom_list = custom_list_screen(custom_list, request)
-    for custom_obj in custom_list:
-        credit_code = custom_obj.company_custome.credit_code
-        if credit_code:
-            try:
-                if int(credit_code) > 0:
-                    credit_code_str = "%s%s" % ("'", credit_code)
-                    models.CustomesC.objects.filter(custome=custom_obj).update(
-                        credit_code=credit_code_str)
-            except Exception as e:
-                pass
+    # for custom_obj in custom_list:
+    #     credit_code = custom_obj.company_custome.credit_code
+    #     if credit_code:
+    #         try:
+    #             if int(credit_code) > 0:
+    #                 credit_code_str = "%s%s" % ("'", credit_code)
+    #                 models.CustomesC.objects.filter(custome=custom_obj).update(
+    #                     credit_code=credit_code_str)
+    #         except Exception as e:
+    #             pass
     '''搜索'''
     search_key = request.GET.get('_s')
     if search_key:
@@ -117,18 +117,18 @@ def custom_p(request, *args, **kwargs):  # 委托合同列表
                                      credit_amount__gt=0).select_related(
                                          'managementor', 'idustry')
     custom_list = custom_list_screen(custom_list, request)
-    for custom_obj in custom_list:
-        credit_code = custom_obj.person_custome.license_num
-        if credit_code:
-            print(credit_code)
-            try:
-                if int(credit_code) > 0:
-                    credit_code_str = "%s%s" % ("'", credit_code)
-                    print(credit_code_str)
-                    models.CustomesC.objects.filter(custome=custom_obj).update(
-                        license_num=credit_code_str)
-            except Exception as e:
-                pass
+    # for custom_obj in custom_list:
+    #     credit_code = custom_obj.person_custome.license_num
+    #     if credit_code:
+    #         print(credit_code)
+    #         try:
+    #             if int(credit_code) > 0:
+    #                 credit_code_str = "%s%s" % ("'", credit_code)
+    #                 print(credit_code_str)
+    #                 models.CustomesC.objects.filter(custome=custom_obj).update(
+    #                     license_num=credit_code_str)
+    #         except Exception as e:
+    #             pass
     '''搜索'''
     search_key = request.GET.get('_s')
     if search_key:
