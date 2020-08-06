@@ -95,7 +95,7 @@ class Customes(models.Model):  # 客户
                                        choices=CUSTOM_STATE_LIST,
                                        default=11)
     SUBMISSION_STATUS_LIST = ((11, '未报送'), (21, '更新待报'), (31, '已报送'))
-    submission_status = models.IntegerField(verbose_name='客户状态',
+    submission_status = models.IntegerField(verbose_name='报送状态',
                                             choices=SUBMISSION_STATUS_LIST,
                                             default=11)
     managementor = models.ForeignKey(to='Employees',

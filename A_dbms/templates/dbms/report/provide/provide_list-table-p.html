@@ -22,6 +22,10 @@
             <th>借款合同编号</th>
             <th>保证合同编号</th>
             <th>担保合同编号</th>
+            <th>代偿金额</th>
+            <th>还款金额</th>
+            <th>银担分险比例</th>
+            <th>报送状态</th>
         </tr>
         </thead>
         <tbody>
@@ -50,7 +54,10 @@
                 <td style="padding: 0">{{ provide.notify.contracts_lease }}</td>
                 <td style="padding: 0">{{ provide.notify.contract_guaranty }}</td>
                 <td style="padding: 0">{{ provide.notify.agree.agree_num }}</td>
-
+                <td style="padding: 0" align="right">{{ provide.compensatory_provide.all.0.compensatory_amount }}</td>
+                <td style="padding: 0" align="right"></td>
+                <td style="padding: 0" align="right">0:100</td>
+                <td style="padding: 0">{{ provide.get_submission_status_display }}</td>
             </tr>
         {% endfor %}
         </tbody>

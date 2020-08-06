@@ -85,8 +85,8 @@ class Provides(models.Model):  # 放款
                                on_delete=models.PROTECT,
                                related_name='provide_notify')
     PROVIDE_TYP_LIST = [(1, 'D-贷款担保'), (11, 'D-票据承兑担保'), (13, 'D-信用证担保'),
-                        (19, 'D-其他担保'), (21, 'D-履约保函'), (22, 'D-投标保函'),
-                        (23, 'D-预付款保函'), (31, 'D-委贷'), (41, 'X-过桥贷'),
+                        (19, 'D-其他担保'), (21, 'D-履约担保'), (25, 'D-投标担保'),
+                        (26, 'D-预付款担保'), (29, 'D-其他'), (38, 'D-委贷'), (41, 'X-过桥贷'),
                         (52, 'X-房抵贷'), (53, 'X-担保贷'), (55, 'X-经营贷'),
                         (57, 'X-票据贷'), (58, 'X-消费贷')]
     provide_typ = models.IntegerField(verbose_name='放款种类',
@@ -123,7 +123,10 @@ class Provides(models.Model):  # 放款
                                          default=1)
     provide_repayment_sum = models.FloatField(verbose_name='_还款总额', default=0)
     provide_balance = models.FloatField(verbose_name='_在保余额', default=0)
-
+    SUBMISSION_STATUS_LIST = ((11, '未报送'), (21, '更新待报'), (31, '已报送'))
+    submission_status = models.IntegerField(verbose_name='报送状态',
+                                            choices=SUBMISSION_STATUS_LIST,
+                                            default=11)
     fication = models.IntegerField(verbose_name='风险分类',
                                    choices=FICATION_LIST,
                                    default=11)

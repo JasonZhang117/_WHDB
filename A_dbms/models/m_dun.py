@@ -14,7 +14,7 @@ class Compensatories(models.Model):  #
     compensatory_capital = models.FloatField(verbose_name='代偿本金', default=0)
     compensatory_interest = models.FloatField(verbose_name='代偿利息', default=0)
     default_interest = models.FloatField(verbose_name='代偿罚息', default=0)
-    compensatory_amount = models.FloatField(verbose_name='代偿总额')
+    compensatory_amount = models.FloatField(verbose_name='代偿总额', default=0)
     '''STAGE_TYPE_LIST = ((1, '证据及财产线索资料'), (11, '诉前资料'), (21, '一审资料'),
                            (31, '上诉及再审'), (41, '案外之诉'),
                            (51, '执行资料'), (99, '其他'))'''
