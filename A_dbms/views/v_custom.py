@@ -64,9 +64,20 @@ def custom_c(request, *args, **kwargs):  # 委托合同列表
     '''筛选'''
     custom_list = models.Customes.objects.filter(**kwargs).order_by(
         '-credit_amount', '-name')
-    custom_list = custom_list.filter(genre=1,credit_amount__gt=0).select_related(
-        'managementor', 'idustry')
+    custom_list = custom_list.filter(genre=1,
+                                     credit_amount__gt=0).select_related(
+                                         'managementor', 'idustry')
     custom_list = custom_list_screen(custom_list, request)
+    for custom_obj in custom_list:
+        credit_code = custom_obj.company_custome.credit_code
+        if credit_code:
+            try:
+                if int(credit_code) > 0:
+                    credit_code_str = "%s%s" % ("'", credit_code)
+                    models.CustomesC.objects.filter(custome=custom_obj).update(
+                        credit_code=credit_code_str)
+            except Exception as e:
+                pass
     '''搜索'''
     search_key = request.GET.get('_s')
     if search_key:
@@ -90,6 +101,7 @@ def custom_c(request, *args, **kwargs):  # 委托合同列表
         p_list = paginator.page(paginator.num_pages)
     return render(request, 'dbms/custom/custom-c.html', locals())
 
+
 # -----------------------个人客户列表-------------------------#
 @login_required
 @authority
@@ -101,9 +113,22 @@ def custom_p(request, *args, **kwargs):  # 委托合同列表
     '''筛选'''
     custom_list = models.Customes.objects.filter(**kwargs).order_by(
         '-credit_amount', '-name')
-    custom_list = custom_list.filter(genre=2,credit_amount__gt=0).select_related(
-        'managementor', 'idustry')
+    custom_list = custom_list.filter(genre=2,
+                                     credit_amount__gt=0).select_related(
+                                         'managementor', 'idustry')
     custom_list = custom_list_screen(custom_list, request)
+    for custom_obj in custom_list:
+        credit_code = custom_obj.person_custome.license_num
+        if credit_code:
+            print(credit_code)
+            try:
+                if int(credit_code) > 0:
+                    credit_code_str = "%s%s" % ("'", credit_code)
+                    print(credit_code_str)
+                    models.CustomesC.objects.filter(custome=custom_obj).update(
+                        license_num=credit_code_str)
+            except Exception as e:
+                pass
     '''搜索'''
     search_key = request.GET.get('_s')
     if search_key:
@@ -126,6 +151,7 @@ def custom_p(request, *args, **kwargs):  # 委托合同列表
     except EmptyPage:
         p_list = paginator.page(paginator.num_pages)
     return render(request, 'dbms/custom/custom-p.html', locals())
+
 
 # -----------------------------客户预览------------------------------#
 @login_required
