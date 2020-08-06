@@ -51,8 +51,17 @@
                 <td style="padding: 0">{{ provide.notify.agree.lending.summary.custom.linkman }}</td>
                 <td style="padding: 0">{{ provide.notify.agree.lending.summary.custom.contact_num }}</td>
                 <td style="padding: 0">是</td>
-                <td style="padding: 0">{{ provide.notify.agree.lending.summary.custom.company_custome.credit_code }}</td>
+                {% if provide.notify.agree.lending.summary.custom.genre == 1 %}
+                    <td style="padding: 0">{{ provide.notify.agree.lending.summary.custom.company_custome.credit_code }}</td>
+                {% else %}
+                    <td style="padding: 0"></td>
+                {% endif %}
                 <td style="padding: 0"></td>
+                {% if provide.notify.agree.lending.summary.custom.genre == 2 %}
+                    <td style="padding: 0">{{ provide.notify.agree.lending.summary.custom.person_custome.license_num }}</td>
+                {% else %}
+                    <td style="padding: 0"></td>
+                {% endif %}
                 <td style="padding: 0"></td>
                 <td style="padding: 0">{{ provide.notify.agree.lending.summary.custom.company_custome.get_industry_c_display }}</td>
                 <td style="padding: 0"></td>
