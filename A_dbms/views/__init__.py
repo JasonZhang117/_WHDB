@@ -93,7 +93,8 @@ from .v_custom_act import (custom_add_ajax, custom_del_ajax, custom_edit_ajax,
                            shareholder_add_ajax, shareholder_del_ajax,
                            spouse_del_ajax, custom_change_ajax,
                            custom_controler_ajax, spouse_add_ajax,
-                           trustee_add_ajax, trustee_del_ajax)
+                           subsidiary_add_ajax, trustee_add_ajax,
+                           custom_extend_del_ajax, trustee_del_ajax)
 from .v_external import (cooperative, cooperative_scan, soondue_cooperator,
                          overdue_cooperator, branches)
 from .v_external_act import agreement_add_ajax
@@ -103,10 +104,10 @@ from .v_report import (
     report_accrual_class, report_provide_accrual, report_article,
     report_custom, report_dun, top_custom, report_custom_list,
     report_article_list, report_dun_dc_list, report_dun_fy_list,
-    report_dun_hk_list, report_provide_class_list, report_provid_w_list,
-    report_repay_list, report_meeting_list, provide_follow_list,
-    report_provide_report, article_feedback_list, pig_overdue_list,
-    review_plan_list, fication_list)
+    report_provide_b, report_dun_hk_list, report_provide_class_list,
+    report_provid_w_list, report_repay_list, report_meeting_list,
+    provide_follow_list, report_provide_report, article_feedback_list,
+    pig_overdue_list, review_plan_list, fication_list)
 
 # 部门、员工
 from .v_interior import department, department_add, department_edit

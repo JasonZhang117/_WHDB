@@ -1,0 +1,28 @@
+<div class="table-responsive">
+    <table class="table table-bordered table-hover table-condensed active">
+        <thead>
+        <tr style="text-align: center">
+            <th>数据日期</th>
+            <th>销售收入(万)</th>
+            <th>资产总额(万)</th>
+            <th>从业人数(人)</th>
+            <th>创建者</th>
+            <th>创建日期</th>
+            <th>操作</th>
+        </tr>
+        </thead>
+        <tbody id="cextend-tb">
+        {% for extend in custom_obj.extend_custome.all %}
+            <tr cextend-nid="{{ extend.id }}">
+                <td>{{ extend.data_date }}</td>
+                <td>{{ extend.sales_revenue|default_if_none:"" }}</td>
+                <td>{{ extend.total_assets|default_if_none:"" }}</td>
+                <td>{{ extend.people_engaged|default_if_none:"" }}</td>
+                <td>{{ extend.creator|default_if_none:"" }}</td>
+                <td>{{ extend.creat_date }}</td>
+                <td><a class="btn btn-primary btn-xs delCustomExtendB">删除</a></td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>

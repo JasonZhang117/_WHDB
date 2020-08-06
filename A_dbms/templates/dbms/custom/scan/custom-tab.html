@@ -30,6 +30,9 @@
         <li role="presentation">
             <a href="#investigate" style="background-color: #f5f5f5"
                aria-controls="settings" role="tab" data-toggle="tab">补调</a></li>
+        <li role="presentation">
+            <a href="#subsidiary" style="background-color: #f5f5f5"
+               aria-controls="settings" role="tab" data-toggle="tab">附加信息</a></li>
     </ul>
     <!-- Tab panes -->
     <div class="tab-content">
@@ -54,5 +57,7 @@
             {% include 'dbms/review/scan/tab/review-check.html' %}</div>
         <div role="tabpanel" class="tab-pane" id="investigate"> <!--补调-->
             {% include 'dbms/review/scan/tab/investigate.html' %}</div>
+        <div role="tabpanel" class="tab-pane" id="subsidiary"> <!--补调-->
+            {% include 'dbms/review/scan/tab/subsidiary.html' %}</div>
     </div>
 </div>

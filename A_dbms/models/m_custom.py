@@ -89,6 +89,12 @@ class Customes(models.Model):  # 客户
 
     v_radio = models.FloatField(verbose_name='在保覆盖率(%)', default=0)
 
+    sales_revenue = models.FloatField(verbose_name='销售收入(万)', default=0)
+    total_assets = models.FloatField(verbose_name='资产总额(万)', default=0)
+    people_engaged = models.FloatField(verbose_name='从业人数(人)', default=0)
+    data_date = models.DateField(verbose_name='数据日期',
+                                   default=datetime.date.today)
+
     CUSTOM_STATE_LIST = ((11, '正常客户'), (21, '反担保客户'), (31, '小贷客户'), (99,
                                                                      '注销客户'))
     custom_state = models.IntegerField(verbose_name='客户状态',
@@ -127,6 +133,32 @@ class Customes(models.Model):  # 客户
 
     def __str__(self):
         return self.name
+
+# -----------------------客户附加信息-------------------------#
+class CustomesExtend(models.Model):
+    custome = models.ForeignKey(to='Customes',
+                                   verbose_name="附加信息",
+                                   on_delete=models.CASCADE,
+                                   related_name='extend_custome')
+
+    sales_revenue = models.FloatField(verbose_name='销售收入(万)', default=0)
+    total_assets = models.FloatField(verbose_name='资产总额(万)', default=0)
+    people_engaged = models.FloatField(verbose_name='从业人数(人)', default=0)
+    data_date = models.DateField(verbose_name='数据日期',
+                                   default=datetime.date.today)
+    creator = models.ForeignKey(to='Employees',
+                                       verbose_name="_创建者",
+                                       on_delete=models.PROTECT,
+                                       default=1,
+                                       related_name='custom_extend_employee')
+    creat_date = models.DateField(verbose_name='创建日期',
+                                   default=datetime.date.today)
+    class Meta:
+        verbose_name_plural = '客户-经营信息'  # 指定显示名称
+        db_table = 'dbms_customesextend'  # 指定数据表的名称
+
+    def __str__(self):
+        return '%s' % (self.custome)
 
 
 # -----------------------企业客户-------------------------#

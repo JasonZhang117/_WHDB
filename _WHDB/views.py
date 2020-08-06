@@ -544,6 +544,11 @@ def home(request):
         if provide.new_amount > 0:
              models.Provides.objects.filter(id=provide.id).update(old_new=11)
 
+    # custom_list = models.Customes.objects.all()
+    # for custom in custom_list:
+    #     if custom.district.name > 0:
+    #          models.Provides.objects.filter(id=provide.id).update(old_new=11)
+    
     return render(request, 'test.html', locals())
 
 

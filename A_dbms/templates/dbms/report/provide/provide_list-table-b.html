@@ -1,0 +1,83 @@
+<div class="table-responsive">
+    <table class="table table-bordered table-hover table-condensed active">
+        <caption>{{ PAGE_TITLE }}统计表（{{ tf_r }}至{{ tl_r }}）</caption>
+        <thead>
+        <tr style="text-align: center">
+            <th>序号</th>
+            <th>归属县</th>
+            <th>客户类型</th>
+            <th>受保企业名称或贷款人姓名</th>
+            <th>受保企业联系人姓名</th>
+            <th>受保企业联系人电话</th>
+            <th>三证合一</th>
+            <th>统一社会信用代码</th>
+            <th>组织机构代码</th>
+            <th>身份证号码</th>
+            <th>行业</th>
+            <th>行业小类</th>
+            <th>销售收入(万元)</th>
+            <th>资产总额(万元)</th>
+            <th>从业人数(人)</th>
+            <th>担保业务类型</th>
+            <th>放款银行名称</th>
+            <th>贷款用途</th>
+            <th>担保（放款）金额</th>
+            <th>担保机构与受保企业合同号</th>
+            <th>贷款起始日</th>
+            <th>贷款到期日</th>
+            <th>年化费率(%)</th>
+            <th>已收担保费</th>
+            <th>收取其它费用（包括评审费等）</th>
+            <th>收取受保企业保证金</th>
+            <th>贷款银行与受保企业合同号</th>
+            <th>银行贷款利率</th>
+            <th>担保机构向金融机构存入保证金</th>
+            <th>备注</th>
+            <th>公司放款流水号</th>
+            <th>银行确认放款金额</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for provide in provide_list %}
+            <tr style="padding: 0">
+                <td style="padding: 0">
+                    <a target="_blank" href="{% url 'dbms:provide_scan' provide_id=provide.id %}">
+                        {{ forloop.counter }}
+                    </a>
+                </td>
+                <td style="padding: 0">{{ provide.notify.agree.lending.summary.custom.district.name }}</td>
+                <td style="padding: 0">{{ provide.notify.agree.lending.summary.custom.get_genre_display }}</td>
+                <td style="padding: 0">{{ provide.notify.agree.lending.summary.custom.name }}</td>
+                <td style="padding: 0">{{ provide.notify.agree.lending.summary.custom.linkman }}</td>
+                <td style="padding: 0">{{ provide.notify.agree.lending.summary.custom.contact_num }}</td>
+                <td style="padding: 0">是</td>
+                <td style="padding: 0">{{ provide.notify.agree.lending.summary.custom.company_custome.credit_code }}</td>
+                <td style="padding: 0"></td>
+                <td style="padding: 0"></td>
+                <td style="padding: 0">{{ provide.notify.agree.lending.summary.custom.company_custome.get_industry_c_display }}</td>
+                <td style="padding: 0"></td>
+                <td style="padding: 0" align="right">{{ provide.notify.agree.lending.summary.custom.sales_revenue }}</td>
+                <td style="padding: 0" align="right">{{ provide.notify.agree.lending.summary.custom.total_assets }}</td>
+                <td style="padding: 0" align="right">{{ provide.notify.agree.lending.summary.custom.people_engaged }}</td>
+                <td style="padding: 0">{{ provide.get_provide_typ_display }}</td>
+                <td style="padding: 0">{{ provide.notify.agree.branch.name }}</td>
+                <td style="padding: 0"></td>
+                <td style="padding: 0" align="right">{{ provide.provide_money }}</td>
+                <td style="padding: 0">{{ provide.notify.agree.agree_num }}</td>
+                <td style="padding: 0">{{ provide.provide_date }}</td>
+                <td style="padding: 0">{{ provide.due_date }}</td>
+                <td style="padding: 0" align="right">{{ provide.agree_rate }}</td>
+                <td style="padding: 0" align="right">{{ provide.charge }}</td>
+                <td style="padding: 0" align="right">{{ provide.charge_fee }}</td>
+                <td style="padding: 0" align="right">{{ provide.bond_amount }}</td>
+                <td style="padding: 0">{{ provide.notify.contracts_lease }}</td>
+                <td style="padding: 0"></td>
+                <td style="padding: 0"></td>
+                <td style="padding: 0"></td>
+                <td style="padding: 0"></td>
+                <td style="padding: 0"></td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>

@@ -1,0 +1,52 @@
+<script>
+    $(function () {
+        bindDelCustomExtendB();
+        bindDelSubsidiaryModalOk();
+    });
+
+    function bindDelCustomExtendB() {
+        $('#cextend-tb').on('click', '.delCustomExtendB', function () {
+            var delSubsidiaryNid = $(this).parent().parent().attr('cextend-nid');
+            $('#delSubsidiaryModalId').val(delSubsidiaryNid);
+            $('#delSubsidiaryModal').modal('show');
+        })
+    }
+
+    function bindDelSubsidiaryModalOk() {
+        $('#delSubsidiaryModalOk').click(function () {
+            var postData = {};
+
+            $('#delSubsidiaryModal').find('input,select').each(function () {
+                var v = $(this).val();
+                var n = $(this).attr('name');
+                postData[n] = v;
+            });
+            var postDataStr = JSON.stringify(postData);
+            console.log(postDataStr)
+            $.ajax({
+                url: '/dbms/custom/subsidiary/del/',
+                type: 'POST',
+                dataType: 'JSON',
+                data: {'postDataStr': postDataStr},
+                success: function (arg) {
+                    if (arg.status) {
+                        $('#delSubsidiaryModal').modal('hide');
+                        alert(arg.message);
+                        window.location.reload();
+                    } else {
+                        $('#delSubsidiaryModal').modal('hide');
+                        alert(arg.message);
+                        {#window.location.reload();#}
+                    }
+                }
+            })
+
+        })
+    }
+</script>
+
+
+
+
+
+

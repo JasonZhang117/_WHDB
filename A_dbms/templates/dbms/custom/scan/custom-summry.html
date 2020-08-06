@@ -4,6 +4,9 @@
         <label class="navbar-right">
             {% if PAGE_TITLE == '客户预览' %}
                 {% if 'article_add_ajax' in authority_list %}
+                    <a class="btn btn-primary btn-sm " id="addSubsidiaryB">增加信息 </a>
+                {% endif %}
+                {% if 'article_add_ajax' in authority_list %}
                     <a class="btn btn-primary btn-sm " id="addArticle">创建项目 </a>
                 {% endif %}
                 {% if custom_obj.genre == 1 %}

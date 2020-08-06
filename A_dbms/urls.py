@@ -269,6 +269,9 @@ urlpatterns = [
     path('custom/trustee/add/', views.trustee_add_ajax, name='custom_trustee_add_ajax'),
     path('custom/trustee/del/', views.trustee_del_ajax, name='custom_trustee_del_ajax'),
 
+    path('custom/subsidiary/add/', views.subsidiary_add_ajax, name='custom_subsidiary_add_ajax'),
+    path('custom/subsidiary/del/', views.custom_extend_del_ajax, name='custom_extend_del_ajax'),
+
     path('custom/spouse/add/', views.spouse_add_ajax, name='custom_spouse_add_ajax'),
     path('custom/spouse/del/', views.spouse_del_ajax, name='custom_spouse_del_ajax'),
 
@@ -286,7 +289,10 @@ urlpatterns = [
 
     # ------------------------------报表--------------------------------------#
     path('report/', views.report, name='report'),  #
+
     path('report/provide/list/<int:p_typ>/<int:t_typ>/', views.report_provide_list, name='report_provide_list'),
+    path('report/provide/list/bb/<int:p_typ>/<int:t_typ>/', views.report_provide_b, name='report_provide_bb'),
+
     path('report/repay/list/<int:t_typ>/', views.report_repay_list, name='report_repay_list'),
     path('report/provide/balance/class/<int:c_typ>/<int:t_typ>/', views.report_balance_class,
          name='report_balance_class'),

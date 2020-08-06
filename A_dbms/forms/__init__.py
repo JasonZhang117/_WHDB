@@ -27,15 +27,16 @@ from .f_provide import (FormCounterSignAdd, FormAscertainAdd, FormNotifyAdd,
                         FormPigeonholeAdd, FormTrackPlan, FormTrackAdd,
                         FormImplementAdd, FormPigeonholeNumAdd, FormProvideDB,
                         FormRepaymentAdd, FormAgreeSignAdd,
-                        FormAgreeChangeState,
-                        FormProvideStateChange, FormExtensionAdd,
-                        FormTrackEXAdd, FormAgreeChargeAdd)
+                        FormAgreeChangeState, FormProvideStateChange,
+                        FormExtensionAdd, FormTrackEXAdd, FormAgreeChargeAdd)
 
 from .f_custom import (CustomAddForm, CustomCAddForm, CustomPAddForm,
-                       CustomEditForm, FormShareholderAdd, FormCustomSpouseAdd,
-                       FormTrusteeAdd, CustomChangeForm, CustomControlerForm)
+                       CustomSubsidiaryForm, CustomEditForm,
+                       FormShareholderAdd, FormCustomSpouseAdd, FormTrusteeAdd,
+                       CustomChangeForm, CustomControlerForm)
 from .f_interior import DepartmentForm, EmployeeForm
-from .f_review import FormRewiewPlanAdd, FormRewiewAdd, FormInvestigateAdd, FormFicationAdd, FormFicationAll
+from .f_review import (FormRewiewPlanAdd, FormRewiewAdd, FormInvestigateAdd,
+                       FormFicationAdd, FormFicationAll)
 from .f_dun import (FormDunAdd, FormCompensatoryAdd, FormClueAdd,
                     FormSealupAdd, FormInquiryEvaluateAdd,
                     FormInquiryHangingAdd, FormInquiryTurnAdd, FormStandingAdd,

@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}{{ PAGE_TITLE }}{% endblock %}
+{% block extra-css %}
+    <link rel="stylesheet" media="screen" href="{% static 'dbms/css/report-style.css' %}">
+    <link rel="stylesheet" media="print" href="{% static 'dbms/css/report-style.css' %}">
+    <link rel="stylesheet" media="print" href="{% static 'dbms/css/report-style-noprint.css' %}">
+{% endblock %}
+{% block  body %}
+    {% include 'dbms/report/provide/provide_list-filter-b.html' %}
+    {% include 'dbms/report/provide/provide_list-table-b.html' %}
+{% endblock %}
+
+
+

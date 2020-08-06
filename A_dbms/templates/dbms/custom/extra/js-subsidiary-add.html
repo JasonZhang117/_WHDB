@@ -1,0 +1,52 @@
+<script>
+    $(function () {
+        bindAddSubsidiaryB();
+        bindAddCustomSubsidiaryModalOk();
+    });
+
+    function bindAddSubsidiaryB() {
+        $('#addSubsidiaryB').click(function () {
+            {#console.log("addSubsidiaryB")#}
+            $('#addCustomSubsidiaryModal').modal('show');
+        })
+    }
+
+    function bindAddCustomSubsidiaryModalOk() {
+        $('#addCustomSubsidiaryModalOk').click(function () {
+            var postData = {};
+            $('#addCustomSubsidiaryModal').find('input,select').each(function () {
+                var v = $(this).val();
+                var n = $(this).attr('name');
+                postData[n] = v;
+            });
+            var postDataStr = JSON.stringify(postData);
+            console.log(postDataStr);
+            $.ajax({
+                url: '/dbms/custom/subsidiary/add/',
+                type: 'POST',
+                data: {'postDataStr': postDataStr},
+                dataType: 'JSON',
+                success: function (arg) {
+                    console.log(arg);
+                    if (arg.status) {
+                        $('#addCustomSubsidiaryModal').modal('hide');
+                        alert(arg.message);
+                        window.location.reload();
+                    } else {
+                        alert(arg.message);
+                        $('#e_data_date').text(arg.forme.data_date);
+                        $('#e_sales_revenue').text(arg.forme.sales_revenue);
+                        $('#e_total_assets').text(arg.forme.total_assets);
+                        $('#e_people_engaged').text(arg.forme.people_engaged);
+                    }
+                }
+            })
+        })
+    }
+</script>
+
+
+
+
+
+

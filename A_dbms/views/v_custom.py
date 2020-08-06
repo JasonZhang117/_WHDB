@@ -210,10 +210,19 @@ def custom_scan(request, custom_id):  # 项目预览
     form_trustee_add = forms.FormTrusteeAdd()
     form_article_add = forms.ArticlesAddForm()
     form_spouse_add = forms.FormCustomSpouseAdd()
+
+    form_date = {
+        'data_date': str(custom_obj.data_date),
+        'sales_revenue': custom_obj.sales_revenue,
+        'total_assets': custom_obj.total_assets,
+        'people_engaged': custom_obj.people_engaged
+    }
+    form_custom_subsidiary_add = forms.CustomSubsidiaryForm(initial=form_date)
     review_custom_list = custom_obj.review_custom.all().filter().order_by(
         '-review_date', '-review_plan_date')
     '''ARTICLE_STATE_LIST = ((1, '待反馈'), (2, '已反馈'), (3, '待上会'), (4, '已上会'), (5, '已签批'),
                           (51, '已放款'), (52, '已放完'), (55, '已解保'), (61, '待变更'), (99, '已注销'))'''
+
     article_custom_list = custom_obj.article_custom.all().order_by(
         '-build_date')[0:12]
     return render(request, 'dbms/custom/custom-scan.html', locals())

@@ -338,6 +338,16 @@ class CustomesAdmin(admin.ModelAdmin):
 
 admin.site.register(models.Customes, CustomesAdmin)  # 客户
 
+class CustomesExtendAdmin(admin.ModelAdmin):
+    list_display = (
+        'custome', 'data_date', 'sales_revenue', 'total_assets'
+        'people_engaged')  # 显示字段
+    list_per_page = 20  # 每页显示条目数
+    ordering = ['-data_date', ]  # 排序字段
+admin.site.register(models.CustomesExtend, )  # 客户附加信息
+
+
+
 
 class CustomesCAdmin(admin.ModelAdmin):
     list_display = ('custome', 'capital', 'representative')  # 显示字段

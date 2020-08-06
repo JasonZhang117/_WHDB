@@ -5,7 +5,11 @@
             <th>客户名称</th>
             <th>客户类型</th>
             <th>管户经理</th>
-            <th>联系地址</th>
+            <th>授信总额</th>
+            <th>销售收入</th>
+            <th>资产总额</th>
+            <th>从业人数</th>
+            <th>数据日期</th>
             <th>联系人</th>
             <th>联系电话</th>
             <th>行业</th>
@@ -19,7 +23,11 @@
                 <td><a href="{% url 'dbms:custom_scan' custom_id=custom.id %}">{{ custom.name }}</a></td>
                 <td>{{ custom.get_genre_display }}</td>
                 <td>{{ custom.managementor }}</td>
-                <td>{{ custom.contact_addr }}</td>
+                <td>{{ custom.credit_amount }}</td>
+                <td>{{ custom.sales_revenue }}</td>
+                <td>{{ custom.total_assets }}</td>
+                <td>{{ custom.people_engaged }}</td>
+                <td>{{ custom.data_date }}</td>
                 <td>{{ custom.linkman }}</td>
                 <td>{{ custom.contact_num }}</td>
                 <td>{{ custom.idustry.name }}</td>
