@@ -170,11 +170,11 @@ def report_provide_list(request, *args, **kwargs):  #
     PAGE_TITLE = '在保明细'
     '''PROVIDE_TYP_LIST = [(1, '流贷'), (11, '承兑'), (21, '保函'), (31, '委贷'),
                         (41, '过桥贷'), (52, '房抵贷'), (53, '担保贷')]'''
-    provide_typ_list = [(0, '全部'),(1, '贷款担保'), (11, '票据承兑担保'), (13, '信用证担保'),
-                        (19, '其他担保'), (21, '履约保函'), (22, '投标保函'),
-                        (23, '预付款保函'), (31, '委贷'), (41, '过桥贷'),
-                        (52, '房抵贷'), (53, '担保贷'), (55, '经营贷'),
-                        (57, '票据贷'), (58, '消费贷')]  # 筛选条件
+    provide_typ_list = [(0, '全部'), (1, '贷款担保'), (11, '票据承兑担保'), (13, '信用证担保'),
+                        (19, '其他担保'), (21, '履约保函'),
+                        (22, '投标保函'), (23, '预付款保函'), (31, '委贷'), (41, '过桥贷'),
+                        (52, '房抵贷'), (53, '担保贷'), (55, '经营贷'), (57, '票据贷'),
+                        (58, '消费贷')]  # 筛选条件
     TERM_LIST = [
         (0, '全部'),
         (1, '本年'),
@@ -615,11 +615,12 @@ def report_provide_accrual(request, *args, **kwargs):  #
     authority_list = request.session.get('authority_list')  # 获取当前用户的所有权限
     menu_result = MenuHelper(request).menu_data_list()
     PAGE_TITLE = '放款明细'
-    provide_typ_list = [(0, '全部'),(1, '贷款担保'), (11, '票据承兑担保'), (13, '信用证担保'),
-                        (19, '其他担保'), (21, '履约保函'), (22, '投标保函'),
-                        (23, '预付款保函'), (31, '委贷'), (41, '过桥贷'),
-                        (52, '房抵贷'), (53, '担保贷'), (55, '经营贷'),
-                        (57, '票据贷'), (58, '消费贷')]  # 筛选条件
+    provide_typ_list = [(0, '全部'), (1, '贷款担保'), (11, '票据承兑担保'), (13, '信用证担保'),
+                        (19, '其他担保'),
+                        (21, '履约保函'), (25, '投标保函'), (26, '预付款保函'),
+                        (29, '其他保函'), (38, '委贷'), (41, '过桥贷'),
+                        (52, '房抵贷'), (53, '担保贷'), (55, '经营贷'), (57, '票据贷'),
+                        (58, '消费贷')]  # 筛选条件
     TERM_LIST = [
         (1, '本年'),
         (2, '本季'),
@@ -675,9 +676,9 @@ def report_provide_report(request, *args, **kwargs):  #
     authority_list = request.session.get('authority_list')  # 获取当前用户的所有权限
     menu_result = MenuHelper(request).menu_data_list()
     PAGE_TITLE = '放款明细(报送)'
-    provide_typ_list = [(0, '全部'),(1, '贷款担保'), (11, '票据承兑担保'), (13, '信用证担保'),
-                        (19, '其他担保'), (21, '履约担保'), (25, '投标担保'),
-                        (26, '预付款担保'), (29, '其他')]  # 筛选条件
+    provide_typ_list = [(0, '全部'), (1, '贷款担保'), (11, '票据承兑担保'), (13, '信用证担保'),
+                        (19, '其他担保'), (21, '履约保函'), (25, '投标保函'),
+                        (26, '预付款保函'), (29, '其他保函')]  # 筛选条件
     TERM_LIST = [
         (1, '本年'),
         (2, '本季'),
@@ -1818,7 +1819,6 @@ def report_meeting_list(request, *args, **kwargs):  #
     t_typ = kwargs['t_typ']
     t_typ_this = t_typ_dic[t_typ]
     tf_r, tl_r = tt_compensatory(t_typ, tf_r, tl_r)
-
 
     article_groups = models.Articles.objects.filter(
         appraisal_article__review_date__gte=tf_r,
