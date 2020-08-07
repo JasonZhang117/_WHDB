@@ -81,7 +81,7 @@
 
         {% if counter_obj.counter_typ in D_COUNTER_TYP_LIST %}
             <td style="border: 0pt; width:135pt" align="center" valign="top">抵押权人（公章）：</td>
-        {% elif counter_typ in Z_COUNTER_TYP_LIST %}
+        {% elif counter_obj.counter_typ in Z_COUNTER_TYP_LIST %}
             <td style="border: 0pt; width:115pt" align="center" valign="top">质权人（公章）：</td>
         {% endif %}
         <td style="border: 0pt" valign="top">{{ UN }}</td>

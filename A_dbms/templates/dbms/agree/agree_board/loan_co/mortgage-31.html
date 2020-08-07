@@ -2,25 +2,27 @@
     <tr>
         <td colspan="2" align="center">出 质 人</td>
         <td colspan="5">
-            {% for ownership in warrant.ownership_warrant.all %}
-                {{ ownership.owner.name }}{% if not forloop.last %}、{% endif %}
-            {% endfor %}
+            {{ counter_draft_obj.draft_owner.name }}
         </td>
     </tr>
     <tr>
-        <td colspan="2" align="center">质押权利名称</td>
-        <td colspan="3" align="center">质押权利凭证编号</td>
-        <td align="center">质押权利数量</td>
-        <td align="center">面值/评估价值（元）</td>
+        <td align="center">质押权利名称</td>
+        <td colspan="2" align="center">票据编号</td>
+        <td align="center">票面金额</td>
+        <td align="center">出票日期</td>
+        <td align="center">到期日</td>
+        <td align="center">承兑人</td>
     </tr>
     {% for draft in counter_draft_obj.extend_draft.all%}
         <tr>
             {% if forloop.first%}
-                <td rowspan="{{ counter_draft_list_count }}" colspan="2" >{{ counter_draft_obj.get_typ_display }}</td>
+                <td rowspan="{{ counter_draft_list_count }}">{{ counter_draft_obj.get_typ_display }}</td>
             {% endif%}
-            <td  colspan="3" >{{ draft.draft_num }}</td>
-            <td align="center">1</td>
+            <td  colspan="2" >{{ draft.draft_num }}</td>
             <td align="right">{{ draft.draft_amount }}</td>
+            <td align="center">{{ draft.issue_date }}</td>
+            <td align="center">{{ draft.due_date }}</td>
+            <td align="right">{{ draft.draft_acceptor }}</td>
         </tr>
     {% endfor %}
 {% else %}
