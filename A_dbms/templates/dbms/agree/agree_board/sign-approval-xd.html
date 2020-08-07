@@ -13,7 +13,7 @@
     <td align="center">合同金额</td>
     <td align="center">{% if agree_obj.agree_typ == 52 %}最高额{% endif %}{{ agree_amount_str }}万元</td>
     <td align="center" colspan="3">期限</td>
-    <td align="center" style="width: 10%">{{ credit_term_cn }}</td>
+    <td align="center" style="width: 10%">{{ credit_term_cn }}{{agree_obj.get_agree_term_typ_display}}</td>
 </tr>
 {% if not agree_obj.agree_typ == 52 %}
     <tr>

@@ -40,7 +40,7 @@ class Agrees(models.Model):  # 委托合同
         related_name='agree_branch')
     agree_term = models.IntegerField(verbose_name='合同期限')
     AGREE_TERM_TYP_LIST = (
-        (1, '月'),
+        (1, '个月'),
         (11, '天'),
     )
     agree_term_typ = models.IntegerField(verbose_name='期限单位',

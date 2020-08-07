@@ -15,7 +15,7 @@
     <td>合同金额</td>
     <td align="center">{{ agree_amount_str }}万元</td>
     <td align="center">期限</td>
-    <td align="center">{{ credit_term_cn }}</td>
+    <td align="center">{{ credit_term_cn }}{{agree_obj.get_agree_term_typ_display}}</td>
 </tr>
 <tr>
     <td align="center" rowspan="{{ counter_count }}">合同/协议</td>

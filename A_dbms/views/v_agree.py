@@ -445,7 +445,8 @@ def counter_preview(request, agree_id, counter_id):
     X_COUNTER_TYP_LIST = models.Counters.COUNTER_TYP_X  # 保证类（反）担保合同类型
     D_COUNTER_TYP_LIST = models.Counters.COUNTER_TYP_D  # 抵押类（反）担保合同类型
     Z_COUNTER_TYP_LIST = models.Counters.COUNTER_TYP_Z  # 质押类（反）担保合同类型
-    credit_term_cn = credit_term_c(agree_obj.agree_term)  # 授信期限（月）
+    # credit_term_cn = credit_term_c(agree_obj.agree_term)  # 授信期限（月）
+    credit_term_cn = convert_num(agree_obj.agree_term)  # 授信期限（月）
     counter_copy_cn = convert_num(counter_obj.counter_copies)  # 合同份数（大写）
     agree_amount = agree_obj.agree_amount
     agree_amount_cn = convert(agree_obj.agree_amount)  # 转换为货币大写
@@ -626,7 +627,8 @@ def agree_sign_preview(request, agree_id):
     AGREE_TYP_GZ = models.Agrees.AGREE_TYP_G
     AGREE_TYP_X = models.Agrees.AGREE_TYP_X  # 小贷公司合同类型
     AGREE_TYP_D = models.Agrees.AGREE_TYP_D  # 担保公司合同类型
-    credit_term_cn = credit_term_c(agree_obj.agree_term)
+    # credit_term_cn = credit_term_c(agree_obj.agree_term)
+    credit_term_cn = convert_num(agree_obj.agree_term)
     agree_amount_str = amount_s(agree_obj.agree_amount)  # 元转换为万元并去掉小数点后面的零
     article_amount_str = amount_s(round(agree_obj.lending.summary.amount, 2))
     '''AGREE_STATE_LIST = [(11, '待签批'), (21, '已签批'), (31, '未落实'),

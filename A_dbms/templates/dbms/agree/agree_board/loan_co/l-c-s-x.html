@@ -20,7 +20,7 @@
         <div>
             <p>为保障债权人与主合同债务人<strong><u>{{ agree_obj.lending.summary.custom.name }}{% if agree_obj.lending.summary.borrower.all %}{% for borrower in agree_obj.lending.summary.borrower.all %}、{{ borrower.name }}{% endfor %}{% endif %}</u></strong>于{% include 'dbms/agree/agree_board/date-period.html' %}所签订的编号为:<strong><u>{{ agree_obj.agree_num }}</u></strong>号的《{{ agree_obj.get_agree_name_display }}》（以下称主合同）项下的债权，保证人愿意为主合同项下的债权向债权人（也称主合同债权人）提供连带责任保证担保，保证人、债权人依照我国有关法律、法规，经协商一致，订立本合同。</p>
             <p><strong>第一条 担保的主债权种类、金额和期限</strong></p>
-            <p>保证人担保的主债权为主合同项下贷款本金（大写）人民币<u><strong>{{ agree_amount_cn }}</strong></u>（RMB<u>{{ agree_amount_y }}元</u>）；贷款利率为<strong>月利率<u>{{ agree_obj.agree_rate }}</u>‰（千分之<u>{{ agree_rate_cn_q }}</u>）</strong>；贷款期限为<strong><u>{{ agree_obj.agree_start_date }}</u></strong>始至<strong><u>{{ agree_obj.agree_due_date }}</u></strong>止（若主合同约定的《借款凭证》记载的贷款起始日期、到期日期与本起始日期、到期日期不一致的，以《借款凭证》的记载为准），共<u><strong>{{ agree_term_str }}</strong></u>个月零<u><strong>/</strong></u>天。
+            <p>保证人担保的主债权为主合同项下贷款本金（大写）人民币<u><strong>{{ agree_amount_cn }}</strong></u>（RMB<u>{{ agree_amount_y }}元</u>）；贷款利率为<strong>月利率<u>{{ agree_obj.agree_rate }}</u>‰（千分之<u>{{ agree_rate_cn_q }}</u>）</strong>；贷款期限为<strong><u>{{ agree_obj.agree_start_date }}</u></strong>始至<strong><u>{{ agree_obj.agree_due_date }}</u></strong>止（若主合同约定的《借款凭证》记载的贷款起始日期、到期日期与本起始日期、到期日期不一致的，以《借款凭证》的记载为准），共<u><strong>{{ credit_term_cn }}{{ agree_obj.get_agree_term_typ_display }}</strong></u>。
             </p>
             <p><strong>第二条 担保范围</strong></p>
             <p>2.1保证人谨此承诺对主合同债务人现在及将来对债权人根据主合同承担的任何义务、责任承担保证责任。<strong>保证人承诺自行、主动关注主合同债务人是否按期清偿主债务，对主合同债务人未按期清偿主债务的于主债务期限届满次日起<u>伍</u>个工作日内主动向债权人偿还任何保证范围内的金额、款项或者其他项目。</strong></p>
