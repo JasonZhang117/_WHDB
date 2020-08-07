@@ -341,7 +341,11 @@ def provide_agree_notify(request, agree_id, notify_id):  # 查看放款通知
         'investigation_fee': investigation_fee,
         'charge_fee': charge_fee,
     }
-    form_provide_db = forms.FormProvideDB(initial=form_provide_db_data)
+    AGREE_TYP_X = models.Agrees.AGREE_TYP_X
+    if agree_obj.agree_typ in AGREE_TYP_X:
+        form_provide_db = forms.FormProvideDB(initial=form_provide_db_data)
+    else:
+        form_provide_db = forms.FormProvideDB(initial=form_provide_db_data)
     return render(request, 'dbms/provide/provide-agree-notify.html', locals())
 
 
@@ -525,7 +529,11 @@ def notify_scan(request, notify_id):  # 查看放款通知
         'investigation_fee': investigation_fee,
         'charge_fee': charge_fee,
     }
-    form_provide_db = forms.FormProvideDB(initial=form_provide_db_data)
+    AGREE_TYP_X = models.Agrees.AGREE_TYP_X
+    if agree_obj.agree_typ in AGREE_TYP_X:
+        form_provide_db = forms.FormProvideDB(initial=form_provide_db_data)
+    else:
+        form_provide_db = forms.FormProvideDB(initial=form_provide_db_data)
     return render(request, 'dbms/provide/provide-notify-scan.html', locals())
 
 

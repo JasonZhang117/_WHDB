@@ -424,6 +424,7 @@ def provide_add_ajax(request):
     post_data = json.loads(post_data_str)
     notify_list = models.Notify.objects.filter(id=post_data['notify_id'])
     notify_obj = notify_list.first()
+    agree_obj = notify_obj.agree
     form_provide_add = forms.FormProvideAdd(post_data)
     if form_provide_add.is_valid():
         form_provide_cleaned = form_provide_add.cleaned_data
@@ -433,9 +434,15 @@ def provide_add_ajax(request):
             old_new = 11
         else:
             old_new = 1
-        charge = float(post_data['charge'])
-        charge_fee = float(post_data['charge_fee'])
-        bond_amount = float(post_data['bond_amount'])
+        AGREE_TYP_X = models.Agrees.AGREE_TYP_X
+        if agree_obj.agree_typ in AGREE_TYP_X:
+            charge = 0
+            charge_fee = 0
+            bond_amount = 0
+        else:
+            charge = float(post_data['charge'])
+            charge_fee = float(post_data['charge_fee'])
+            bond_amount = float(post_data['bond_amount'])
         provide_money = round(old_amount + new_amount, 2)
         notify_provide_amount = models.Provides.objects.filter(
             notify=notify_obj).aggregate(Sum('provide_money'))
