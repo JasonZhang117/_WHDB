@@ -270,7 +270,15 @@ def article_scan_lending(request, article_id, lending_id):  # 项目预览
     warrant_lending_o_list = models.Warrants.objects.filter(
         lending_warrant__sure__lending=lending_obj,
         warrant_typ=55)  # 放款次序下-其他列表
-    form_agree_add = forms.ArticleAgreeAddForm()  # 创建合同form
+
+    from_agree_data = {
+        'agree_amount': lending_obj.order_amount,
+        'amount_limit': lending_obj.order_amount,
+        'agree_term': article_obj.credit_term,
+        'agree_copies': 5,
+    }
+    form_agree_add = forms.ArticleAgreeAddForm(
+        initial=from_agree_data)  # 创建合同form
     today_str = datetime.date.today()
     date_th_later = today_str + datetime.timedelta(days=365)
     from_letter_data = {
@@ -371,7 +379,8 @@ def endor_list_scan(request, article_id):  # 签批单
                     if owner_ship_list:
                         for owner_ship in owner_ship_list:
                             owner_ship_c += 1
-                            ttt += '%s(%s)' %(owner_ship.owner.name,owner_ship.ownership_num)
+                            ttt += '%s(%s)' % (owner_ship.owner.name,
+                                               owner_ship.ownership_num)
                             if owner_ship_c < owner_ship_count:
                                 ttt += '、'
                     else:

@@ -2,9 +2,7 @@
 <p>鉴于借款人向贷款人申请贷款，为明确双方权利义务，借款人与贷款人经协商一致，特订立本合同。</p>
 <p><strong>第一条  贷款金额、贷款期限与贷款用途</strong></p>
 <p>1.1贷款金额：本合同项下的贷款金额为人民币（大写）<u><strong>{{ agree_amount_cn }}</strong></u>（RMB<u>{{ agree_amount_y }}</u>元）。</p>
-<p>1.2贷款期限：贷款期限为<u><strong>{{ agree_term_cn }}
-
-</strong></u>个月零<u><strong>/</strong></u>天，自<strong><u>{{ agree_obj.agree_start_date }}</u></strong>始至<strong><u>{{ agree_obj.agree_due_date }}</u></strong>止。《借款凭证》是贷款人向借款人实际提供资金的最终证明，是本合同的组成部分，与本合同具有同等法律效力。若《借款凭证》记载的贷款起始日期、到期日期与本合同约定的贷款起始日期、到期日期不一致的，以《借款凭证》的记载为准。</p>
+<p>1.2贷款期限：贷款期限为<u><strong>{{ agree_term_cn }}{{agree_obj.get_agree_term_typ_display}}</u></strong>，自<strong><u>{{ agree_obj.agree_start_date }}</u></strong>始至<strong><u>{{ agree_obj.agree_due_date }}</u></strong>止。《借款凭证》是贷款人向借款人实际提供资金的最终证明，是本合同的组成部分，与本合同具有同等法律效力。若《借款凭证》记载的贷款起始日期、到期日期与本合同约定的贷款起始日期、到期日期不一致的，以《借款凭证》的记载为准。</p>
 <p>1.3贷款用途为：<u><strong>流动资金</strong></u>。未经贷款人书面同意，借款人不得以任何理由将贷款挪作他用。</p>
 <p>1.4 <strong>本合同一经签署，在贷款发放之前，借款人若欲取消本合同项下部分或全部贷款，应书面通知贷款人并取得贷款人的书面同意；取消贷款受理期间为距离取消贷款日不少于七个贷款人营业日前。</strong></p>
 <p><strong>第二条  贷款利率、计息期间</strong></p>

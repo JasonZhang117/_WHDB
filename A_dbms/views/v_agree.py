@@ -153,6 +153,7 @@ def agree_scan(request, agree_id):  # 查看合同
         'agree_rate': agree_obj.agree_rate,
         'investigation_fee': agree_obj.investigation_fee,
         'agree_term': agree_obj.agree_term,
+        'agree_term_typ': agree_obj.agree_term_typ,
         'guarantee_typ': agree_obj.guarantee_typ,
         'agree_copies': agree_obj.agree_copies,
         'other': agree_obj.other,

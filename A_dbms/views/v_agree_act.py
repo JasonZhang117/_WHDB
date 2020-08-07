@@ -16,7 +16,12 @@ from .v_agree import convert, convert_num, credit_term_c, convert
 @login_required
 @authority
 def agree_sign_ajax(request):  #
-    response = {'status': True, 'message': None, 'forme': None, 'skip': None, }
+    response = {
+        'status': True,
+        'message': None,
+        'forme': None,
+        'skip': None,
+    }
     post_data_str = request.POST.get('postDataStr')
     post_data = json.loads(post_data_str)
 
@@ -30,7 +35,9 @@ def agree_sign_ajax(request):  #
         if form_agree_sign.is_valid():
             agree_sign_cleaned = form_agree_sign.cleaned_data
             try:
-                agree_list.update(agree_state=21, agree_sign_date=agree_sign_cleaned['agree_sign_date'])
+                agree_list.update(
+                    agree_state=21,
+                    agree_sign_date=agree_sign_cleaned['agree_sign_date'])
                 response['message'] = '合同签批成功：%s！' % agree_obj.agree_num
             except Exception as e:
                 response['status'] = False
@@ -46,25 +53,32 @@ def agree_sign_ajax(request):  #
     return HttpResponse(result)
 
 
-def agree_limit_test(agree_typ, order_amount, cooperator_up_scale, agree_amount, amount_limit, response):
+def agree_limit_test(agree_typ, order_amount, cooperator_up_scale,
+                     agree_amount, amount_limit, response):
     '''合同限额检测函数'''
     '''AGREE_TYP_LIST = [(1, 'D-单笔'), (2, 'D-最高额'), (4, 'D-委贷'),
                       (21, 'D-分离式保函'), (22, 'D-公司保函'), (23, 'D-银行保函'),
                       (41, 'D-单笔(公证)'), (42, 'D-最高额(公证)'),
                       (51, 'X-小贷单笔'), (52, 'X-小贷最高额'), ]'''
-    if agree_typ in [2, 42, 52]:  # (2, '最高额'), (42, 'D-最高额(公证)'),  (52, 'X-小贷最高额'),
-        order_amount_up = round(order_amount * (1 + cooperator_up_scale), 2)  # 最高允许的合同金额
+    if agree_typ in [2, 42,
+                     52]:  # (2, '最高额'), (42, 'D-最高额(公证)'),  (52, 'X-小贷最高额'),
+        order_amount_up = round(order_amount * (1 + cooperator_up_scale),
+                                2)  # 最高允许的合同金额
     else:
         order_amount_up = order_amount
     ###判断合同金额情况：
     if agree_amount > order_amount_up:
         response['status'] = False
-        response['message'] = '合同金额（%s）超过审批额度（%s）！' % (agree_amount, order_amount)
+        response['message'] = '合同金额（%s）超过审批额度（%s）！' % (agree_amount,
+                                                       order_amount)
         result = json.dumps(response, ensure_ascii=False)
         return HttpResponse(result)
     elif amount_limit > order_amount:
         response['status'] = False
-        response['message'] = '放款限额（%s）超过审批额度（%s）！' % (amount_limit, order_amount,)
+        response['message'] = '放款限额（%s）超过审批额度（%s）！' % (
+            amount_limit,
+            order_amount,
+        )
         result = json.dumps(response, ensure_ascii=False)
         return HttpResponse(result)
 
@@ -85,7 +99,8 @@ def agree_num_f(agree_typ_list, pre, agree_t, guarantee_typ, agree_copies):
         agree_order = '%s' % order_max_x
     ###合同编号拼接
     '''成武担[2016]018④W6-1,成武贷[2016]018④J6-1'''
-    agree_num_prefix = "%s[%s]%s%s" % (pre, agree_year, agree_order, guarantee_typ)
+    agree_num_prefix = "%s[%s]%s%s" % (pre, agree_year, agree_order,
+                                       guarantee_typ)
     agree_num = "%s%s%s-1" % (agree_num_prefix, agree_t, agree_copies)
 
     return (agree_num_prefix, agree_num)
@@ -105,15 +120,25 @@ def agree_name_f(agree_typ):
         agree_name = 1  # (1, '委托保证合同')
     elif agree_typ in [2, 42]:  # (2, 'D-最高额'),(42, 'D-最高额(公证)'),
         agree_name = 11  # (11, '最高额委托保证合同'),
-    elif agree_typ in [4, ]:  # (4, 'D-委贷'),
+    elif agree_typ in [
+            4,
+    ]:  # (4, 'D-委贷'),
         agree_name = 41  # (41, '委托贷款合同'),
-    elif agree_typ in [51, ]:  # (51, 'X-小贷单笔'),
+    elif agree_typ in [
+            51,
+    ]:  # (51, 'X-小贷单笔'),
         agree_name = 31  # (31, '借款合同'),
-    elif agree_typ in [52, ]:  # (51, 'X-小贷最高额'),
+    elif agree_typ in [
+            52,
+    ]:  # (51, 'X-小贷最高额'),
         agree_name = 32  # (32, '最高额借款合同'),
-    elif agree_typ in [21, ]:  # (21, 'D-分离式保函'),
+    elif agree_typ in [
+            21,
+    ]:  # (21, 'D-分离式保函'),
         agree_name = 21  # (21, '委托出具分离式保函合同'),
-    elif agree_typ in [22, ]:  # (22, 'D-公司保函'),
+    elif agree_typ in [
+            22,
+    ]:  # (22, 'D-公司保函'),
         agree_name = 22  # (22, '开立保函合同'),
     return agree_name
 
@@ -122,7 +147,12 @@ def agree_name_f(agree_typ):
 @login_required
 @authority
 def agree_add_ajax(request):  # 添加合同
-    response = {'status': True, 'message': None, 'forme': None, 'skip': None, }
+    response = {
+        'status': True,
+        'message': None,
+        'forme': None,
+        'skip': None,
+    }
     post_data_str = request.POST.get('postDataStr')
     post_data = json.loads(post_data_str)
     lending_obj = models.LendingOrder.objects.get(id=post_data['lending'])
@@ -147,21 +177,27 @@ def agree_add_ajax(request):  # 添加合同
             cooperator_up_scale = branche_obj.cooperator.up_scale  # 最高额上浮比例
             order_amount = round(lending_obj.order_amount, 2)  # 放款次序金额
             '''合同限额检测'''
-            agree_limit_test(agree_typ, order_amount, cooperator_up_scale, agree_amount, amount_limit, response)
+            agree_limit_test(agree_typ, order_amount, cooperator_up_scale,
+                             agree_amount, amount_limit, response)
 
             if agree_typ in [2, 42, 52]:  # (2, '最高额')
-                order_amount_up = round(order_amount * (1 + cooperator_up_scale), 2)  # 最高允许的合同金额
+                order_amount_up = round(
+                    order_amount * (1 + cooperator_up_scale), 2)  # 最高允许的合同金额
             else:
                 order_amount_up = order_amount
             ###判断合同金额情况：
             if agree_amount > order_amount_up:
                 response['status'] = False
-                response['message'] = '合同金额（%s）超过审批额度（%s）！' % (agree_amount, order_amount)
+                response['message'] = '合同金额（%s）超过审批额度（%s）！' % (agree_amount,
+                                                               order_amount)
                 result = json.dumps(response, ensure_ascii=False)
                 return HttpResponse(result)
             elif amount_limit > order_amount:
                 response['status'] = False
-                response['message'] = '放款限额（%s）超过审批额度（%s）！' % (amount_limit, order_amount,)
+                response['message'] = '放款限额（%s）超过审批额度（%s）！' % (
+                    amount_limit,
+                    order_amount,
+                )
                 result = json.dumps(response, ensure_ascii=False)
                 return HttpResponse(result)
             '''AGREE_TYP_LIST = [(1, 'D-单笔'), (2, 'D-最高额'), (4, 'D-委贷'),
@@ -171,14 +207,16 @@ def agree_add_ajax(request):  # 添加合同
             AGREE_TYP_D = models.Agrees.AGREE_TYP_D  # 担保类合同
             AGREE_TYP_X = models.Agrees.AGREE_TYP_X  # 小贷类合同
             if agree_typ in AGREE_TYP_D:  # 属于担保类合同
-                agree_num_prefix, agree_num = agree_num_f(AGREE_TYP_D, '成武担', 'W', guarantee_typ, agree_copies)
+                agree_num_prefix, agree_num = agree_num_f(
+                    AGREE_TYP_D, '成武担', 'W', guarantee_typ, agree_copies)
             elif agree_typ in AGREE_TYP_X:  # 属于小贷类合同
-                agree_num_prefix, agree_num = agree_num_f(AGREE_TYP_X, '成武贷', 'J', guarantee_typ, agree_copies)
+                agree_num_prefix, agree_num = agree_num_f(
+                    AGREE_TYP_X, '成武贷', 'J', guarantee_typ, agree_copies)
             agree_name = agree_name_f(agree_typ)
 
             repay_method = jk_add_cleaned['repay_method']
             try:
-                agree_rate=float(agree_add_cleaned['agree_rate'])
+                agree_rate = float(agree_add_cleaned['agree_rate'])
             except ValueError:
                 agree_rate = agree_add_cleaned['agree_rate']
 
@@ -186,30 +224,48 @@ def agree_add_ajax(request):  # 添加合同
             #     agree_rate = agree_add_cleaned['agree_rate']
             # else:
             #     agree_rate = float(agree_add_cleaned['agree_rate'])
-                
-            agree_term=int(agree_add_cleaned['agree_term'])
-            repay_ex=jk_add_cleaned['repay_ex']
-            if repay_method == 21: #等额本息
+            agree_start_date = jk_add_cleaned['agree_start_date'] #起始日
+            agree_due_date = jk_add_cleaned['agree_due_date'] #到期日
+            agree_term_typ=agree_add_cleaned['agree_term_typ']
+            if agree_term_typ==11 and agree_start_date and agree_due_date:
+                agree_term = (agree_due_date-agree_start_date).days
+            else:
+                agree_term = int(agree_add_cleaned['agree_term'])
+
+            repay_ex = jk_add_cleaned['repay_ex']
+            if repay_method == 21:  #等额本息
                 agree_rate_q = agree_rate / 1000
-                fz = agree_amount * agree_rate_q * (1 + agree_rate_q) ** agree_term
-                fm = (1 + agree_rate_q) ** agree_term - 1
+                fz = agree_amount * agree_rate_q * (1 +
+                                                    agree_rate_q)**agree_term
+                fm = (1 + agree_rate_q)**agree_term - 1
                 if fm:
-                    repay_ex = convert(round(fz/fm,2))
+                    repay_ex = convert(round(fz / fm, 2))
             try:
                 with transaction.atomic():
                     agree_obj = models.Agrees.objects.create(
-                        agree_num=agree_num, agree_name=agree_name, num_prefix=agree_num_prefix,
-                        lending=lending_obj, branch_id=branch_id, agree_typ=agree_typ,
+                        agree_num=agree_num,
+                        agree_name=agree_name,
+                        num_prefix=agree_num_prefix,
+                        lending=lending_obj,
+                        branch_id=branch_id,
+                        agree_typ=agree_typ,
                         agree_term=agree_term,
-                        agree_term_typ=agree_add_cleaned['agree_term_typ'],
-                        amount_limit=amount_limit, agree_rate=agree_rate,
-                        investigation_fee=agree_add_cleaned['investigation_fee'],
-                        agree_amount=agree_amount, guarantee_typ=guarantee_typ,
-                        agree_copies=agree_copies, other=agree_add_cleaned['other'],
-                        agree_start_date=jk_add_cleaned['agree_start_date'],
-                        agree_due_date=jk_add_cleaned['agree_due_date'], acc_name=jk_add_cleaned['acc_name'],
-                        acc_num=jk_add_cleaned['acc_num'], acc_bank=jk_add_cleaned['acc_bank'],
-                        repay_method=repay_method, repay_ex=repay_ex,
+                        agree_term_typ=agree_term_typ,
+                        amount_limit=amount_limit,
+                        agree_rate=agree_rate,
+                        investigation_fee=agree_add_cleaned[
+                            'investigation_fee'],
+                        agree_amount=agree_amount,
+                        guarantee_typ=guarantee_typ,
+                        agree_copies=agree_copies,
+                        other=agree_add_cleaned['other'],
+                        agree_start_date=agree_start_date,
+                        agree_due_date=agree_due_date,
+                        acc_name=jk_add_cleaned['acc_name'],
+                        acc_num=jk_add_cleaned['acc_num'],
+                        acc_bank=jk_add_cleaned['acc_bank'],
+                        repay_method=repay_method,
+                        repay_ex=repay_ex,
                         agree_buildor=request.user)
                     '''AGREE_TYP_LIST = [
                         (1, 'D-单笔'), (2, 'D-最高额'), (4, 'D-委贷'),
@@ -217,7 +273,8 @@ def agree_add_ajax(request):  # 添加合同
                         (41, 'D-单笔(公证)'), (42, 'D-最高额(公证)'),
                         (51, 'X-小贷单笔'), (52, 'X-小贷最高额'), ]'''
                     if agree_typ == 22:
-                        form_letter_add = forms.LetterGuaranteeAddForm(post_data, request.FILES)
+                        form_letter_add = forms.LetterGuaranteeAddForm(
+                            post_data, request.FILES)
                         if form_letter_add.is_valid():
                             letter_add_cleaned = form_letter_add.cleaned_data
                             letter_typ = letter_add_cleaned['letter_typ']
@@ -236,13 +293,19 @@ def agree_add_ajax(request):  # 添加合同
 
                             guarantee_num = agree_num + guarantee_num_f + '1'
                             letter_obj = models.LetterGuarantee.objects.create(
-                                agree=agree_obj, letter_typ=letter_typ, beneficiary=letter_add_cleaned['beneficiary'],
-                                basic_contract=letter_add_cleaned['basic_contract'],
-                                basic_contract_num=letter_add_cleaned['basic_contract_num'],
-                                starting_date=letter_add_cleaned['starting_date'],
+                                agree=agree_obj,
+                                letter_typ=letter_typ,
+                                beneficiary=letter_add_cleaned['beneficiary'],
+                                basic_contract=letter_add_cleaned[
+                                    'basic_contract'],
+                                basic_contract_num=letter_add_cleaned[
+                                    'basic_contract_num'],
+                                starting_date=letter_add_cleaned[
+                                    'starting_date'],
                                 due_date=letter_add_cleaned['due_date'],
                                 guarantee_number=guarantee_num,
-                                creator=request.user, create_date=datetime.date.today())
+                                creator=request.user,
+                                create_date=datetime.date.today())
                 response['skip'] = "/dbms/agree/scan/%s" % agree_obj.id
                 response['message'] = '成功创建合同：%s！' % agree_obj.agree_num
             except Exception as e:
@@ -283,47 +346,80 @@ def counter_name_f(agree_typ, counter_typ):
         (43, '抵押合同'), (44, '应收账款质押合同'),
         (45, '股权质押合同'), (46, '质押合同'),
         (59, '举办者权益转让协议'), ]'''
-    if agree_typ in [1, 22, 41, ]:  # (1, 'D-单笔'), (22, 'D-公司保函'), 41, 'D-单笔(公证)'),
-        if counter_typ in [1, ]:  # (1, '企业担保'),
+    if agree_typ in [
+            1,
+            22,
+            41,
+    ]:  # (1, 'D-单笔'), (22, 'D-公司保函'), 41, 'D-单笔(公证)'),
+        if counter_typ in [
+                1,
+        ]:  # (1, '企业担保'),
             counter_name = 1  # (1, '保证反担保合同'),
-        elif counter_typ in [2, ]:  # (2, '个人保证'),
-            if agree_typ in [41, ]:
+        elif counter_typ in [
+                2,
+        ]:  # (2, '个人保证'),
+            if agree_typ in [
+                    41,
+            ]:
                 counter_name = 1  # (1, '保证反担保合同'),
             else:
                 counter_name = 2  # (2, '不可撤销的反担保函'),
             ''' (11, '房产抵押'), (12, '土地抵押'), (13, '动产抵押'), (14, '在建工程抵押'), (15, '车辆抵押'),'''
         elif counter_typ in [11, 12, 13, 14, 15]:
             counter_name = 3  # (3, '抵押反担保合同'),
-        elif counter_typ in [31, ]:  # 31, '应收质押'),
+        elif counter_typ in [
+                31,
+        ]:  # 31, '应收质押'),
             counter_name = 4  # (4, '应收账款质押反担保合同'),
-        elif counter_typ in [32, ]:  # (32, '股权质押'),
+        elif counter_typ in [
+                32,
+        ]:  # (32, '股权质押'),
             counter_name = 5  # (5, '股权质押反担保合同'),
-        elif counter_typ in [33, 34, 41]:  # (33, '票据质押'), (34, '动产质押'), (41, '其他权利质押'),
+        elif counter_typ in [33, 34, 41
+                             ]:  # (33, '票据质押'), (34, '动产质押'), (41, '其他权利质押'),
             counter_name = 6  # (6, '质押反担保合同'),
-        elif counter_typ in [51, 52, 53]:  # (51, '股权预售'), (52, '房产预售'), (53, '土地预售'),
+        elif counter_typ in [51, 52,
+                             53]:  # (51, '股权预售'), (52, '房产预售'), (53, '土地预售'),
             counter_name = 9  # (9, '预售合同'),
-        elif counter_typ in [59, ]:  # (59, '其他预售')
+        elif counter_typ in [
+                59,
+        ]:  # (59, '其他预售')
             counter_name = 59  # (59, '举办者权益转让协议'),
-    elif agree_typ in [2, 21, 42]:  # (2, 'D-最高额'), (21, 'D-分离式保函'), (42, 'D-最高额(公证)'),
-        if counter_typ in [1, ]:  # (1, '企业担保'),
+    elif agree_typ in [2, 21, 42
+                       ]:  # (2, 'D-最高额'), (21, 'D-分离式保函'), (42, 'D-最高额(公证)'),
+        if counter_typ in [
+                1,
+        ]:  # (1, '企业担保'),
             counter_name = 21  # (21, '最高额保证反担保合同'),
-        elif counter_typ in [2, ]:  # (2, '个人保证'),
-            if agree_typ in [42, ]:
+        elif counter_typ in [
+                2,
+        ]:  # (2, '个人保证'),
+            if agree_typ in [
+                    42,
+            ]:
                 counter_name = 1  # (1, '保证反担保合同'),
             else:
                 counter_name = 2  # (2, '不可撤销的反担保函'),
             ''' (11, '房产抵押'), (12, '土地抵押'), (13, '动产抵押'), (14, '在建工程抵押'), (15, '车辆抵押'),'''
         elif counter_typ in [11, 12, 13, 14, 15]:
             counter_name = 23  # (23, '最高额抵押反担保合同'),
-        elif counter_typ in [31, ]:  # 31, '应收质押'),
+        elif counter_typ in [
+                31,
+        ]:  # 31, '应收质押'),
             counter_name = 24  # (24, '最高额应收账款质押反担保合同'),
-        elif counter_typ in [32, ]:  # (32, '股权质押'),
+        elif counter_typ in [
+                32,
+        ]:  # (32, '股权质押'),
             counter_name = 25  # (25, '最高额股权质押反担保合同'),
-        elif counter_typ in [33, 34, 39, 41]:  # (33, '票据质押'), (34, '动产质押'), (41, '其他权利质押'),
+        elif counter_typ in [33, 34, 39, 41
+                             ]:  # (33, '票据质押'), (34, '动产质押'), (41, '其他权利质押'),
             counter_name = 26  # (26, '最高额质押反担保合同'),
-        elif counter_typ in [51, 52, 53]:  # (51, '股权预售'), (52, '房产预售'), (53, '土地预售'),
+        elif counter_typ in [51, 52,
+                             53]:  # (51, '股权预售'), (52, '房产预售'), (53, '土地预售'),
             counter_name = 9  # (9, '预售合同'),
-        elif counter_typ in [59, ]:  # (59, '其他预售')
+        elif counter_typ in [
+                59,
+        ]:  # (59, '其他预售')
             counter_name = 59  # (59, '举办者权益转让协议'),
     elif agree_typ in [4, 51]:  # (4, 'D-委贷'), 51, 'X-小贷单笔'),
         if counter_typ in [1, 2]:  # (1, '企业担保'), (2, '个人保证'),
@@ -331,27 +427,40 @@ def counter_name_f(agree_typ, counter_typ):
             ''' (11, '房产抵押'), (12, '土地抵押'), (13, '动产抵押'), (14, '在建工程抵押'), (15, '车辆抵押'),'''
         elif counter_typ in [11, 12, 13, 14, 15]:
             counter_name = 43  # (43, '抵押合同'),
-        elif counter_typ in [31, ]:  # 31, '应收质押'),
+        elif counter_typ in [
+                31,
+        ]:  # 31, '应收质押'),
             counter_name = 44  # (44, '应收账款质押合同'),
-        elif counter_typ in [32, ]:  # (32, '股权质押'),
+        elif counter_typ in [
+                32,
+        ]:  # (32, '股权质押'),
             counter_name = 45  # (45, '股权质押合同'),
-        elif counter_typ in [33, 34, 39, 41]:  # (33, '票据质押'), (34, '动产质押'), (41, '其他权利质押'),
+        elif counter_typ in [33, 34, 39, 41
+                             ]:  # (33, '票据质押'), (34, '动产质押'), (41, '其他权利质押'),
             counter_name = 46  # (46, '质押合同'),
-        elif counter_typ in [51, 52, 53]:  # (51, '股权预售'), (52, '房产预售'), (53, '土地预售'),
+        elif counter_typ in [51, 52,
+                             53]:  # (51, '股权预售'), (52, '房产预售'), (53, '土地预售'),
             counter_name = 9  # (9, '预售合同'),
-        elif counter_typ in [59, ]:  # (59, '其他预售')
+        elif counter_typ in [
+                59,
+        ]:  # (59, '其他预售')
             counter_name = 59  # (59, '举办者权益转让协议'),
-    elif agree_typ in [52, ]:  # (52, 'X-小贷最高额'),
+    elif agree_typ in [
+            52,
+    ]:  # (52, 'X-小贷最高额'),
         if counter_typ in [1, 2]:  # (1, '企业担保'), (2, '个人保证'),
             counter_name = 61  # (61, '最高额保证合同'),
             ''' (11, '房产抵押'), (12, '土地抵押'), (13, '动产抵押'), (14, '在建工程抵押'), (15, '车辆抵押'),'''
         elif counter_typ in [11, 12, 13, 14, 15]:
-            counter_name = 63  # (63, '最高额抵押合同'), 
-        elif counter_typ in [31, 32, 33, 34, 39, 41 ]:  # 
+            counter_name = 63  # (63, '最高额抵押合同'),
+        elif counter_typ in [31, 32, 33, 34, 39, 41]:  #
             counter_name = 66  # (66, '最高额质押合同'),
-        elif counter_typ in [51, 52, 53]:  # (51, '股权预售'), (52, '房产预售'), (53, '土地预售'),
+        elif counter_typ in [51, 52,
+                             53]:  # (51, '股权预售'), (52, '房产预售'), (53, '土地预售'),
             counter_name = 9  # (9, '预售合同'),
-        elif counter_typ in [59, ]:  # (59, '其他预售')
+        elif counter_typ in [
+                59,
+        ]:  # (59, '其他预售')
             counter_name = 59  # (59, '举办者权益转让协议'),
     return counter_name
 
@@ -360,7 +469,12 @@ def counter_name_f(agree_typ, counter_typ):
 @login_required
 @authority
 def agree_edit_ajax(request):  #
-    response = {'status': True, 'message': None, 'forme': None, 'skip': None, }
+    response = {
+        'status': True,
+        'message': None,
+        'forme': None,
+        'skip': None,
+    }
     post_data_str = request.POST.get('postDataStr')
     post_data = json.loads(post_data_str)
     agree_list = models.Agrees.objects.filter(id=post_data['agree_id'])
@@ -387,41 +501,59 @@ def agree_edit_ajax(request):  #
             cooperator_up_scale = branche_obj.cooperator.up_scale
             order_amount = round(lending_obj.order_amount, 2)  # 放款次序金额
             '''合同限额检测'''
-            agree_limit_test(agree_typ, order_amount, cooperator_up_scale, agree_amount, amount_limit, response)
+            agree_limit_test(agree_typ, order_amount, cooperator_up_scale,
+                             agree_amount, amount_limit, response)
             agree_name = agree_name_f(agree_typ)  # 生成合同名称
-
+            agree_start_date = jk_add_cleaned['agree_start_date'] #起始日
+            agree_due_date = jk_add_cleaned['agree_due_date'] #到期日
+            agree_term_typ=agree_add_cleaned['agree_term_typ']
+            if agree_term_typ==11 and agree_start_date and agree_due_date:
+                agree_term = (agree_due_date-agree_start_date).days
+            else:
+                agree_term = int(agree_add_cleaned['agree_term'])
+            
             repay_method = jk_add_cleaned['repay_method']
             try:
-                agree_rate=float(agree_add_cleaned['agree_rate'])
+                agree_rate = float(agree_add_cleaned['agree_rate'])
             except ValueError:
                 agree_rate = agree_add_cleaned['agree_rate']
 
             # agree_rate = float(agree_add_cleaned['agree_rate'])
-            agree_term=int(agree_add_cleaned['agree_term'])
-            repay_ex=jk_add_cleaned['repay_ex']
-            if repay_method == 21: #等额本息
+            repay_ex = jk_add_cleaned['repay_ex']
+            if repay_method == 21:  #等额本息
                 agree_rate_q = agree_rate / 1000
-                fz = agree_amount * agree_rate_q * (1 + agree_rate_q) ** agree_term
-                fm = (1 + agree_rate_q) ** agree_term - 1
+                fz = agree_amount * agree_rate_q * (1 +
+                                                    agree_rate_q)**agree_term
+                fm = (1 + agree_rate_q)**agree_term - 1
                 if fm:
-                    repay_ex = convert(round(fz/fm,2))
+                    repay_ex = convert(round(fz / fm, 2))
             try:
                 with transaction.atomic():
                     agree_list.update(
-                        agree_name=agree_name, branch_id=branch_id, agree_typ=agree_typ,
+                        agree_name=agree_name,
+                        branch_id=branch_id,
+                        agree_typ=agree_typ,
                         agree_term=agree_term,
-                        agree_term_typ=agree_add_cleaned['agree_term_typ'],
-                        amount_limit=amount_limit, agree_rate=agree_rate,
-                        investigation_fee=agree_add_cleaned['investigation_fee'],
-                        agree_amount=agree_amount, guarantee_typ=guarantee_typ,
-                        agree_copies=agree_copies, other=agree_add_cleaned['other'],
-                        agree_start_date=jk_add_cleaned['agree_start_date'],
-                        agree_due_date=jk_add_cleaned['agree_due_date'], acc_name=jk_add_cleaned['acc_name'],
-                        acc_num=jk_add_cleaned['acc_num'], acc_bank=jk_add_cleaned['acc_bank'],
-                        repay_method=repay_method, repay_ex=repay_ex,
+                        agree_term_typ=agree_term_typ,
+                        amount_limit=amount_limit,
+                        agree_rate=agree_rate,
+                        investigation_fee=agree_add_cleaned[
+                            'investigation_fee'],
+                        agree_amount=agree_amount,
+                        guarantee_typ=guarantee_typ,
+                        agree_copies=agree_copies,
+                        other=agree_add_cleaned['other'],
+                        agree_start_date=agree_start_date,
+                        agree_due_date=agree_due_date,
+                        acc_name=jk_add_cleaned['acc_name'],
+                        acc_num=jk_add_cleaned['acc_num'],
+                        acc_bank=jk_add_cleaned['acc_bank'],
+                        repay_method=repay_method,
+                        repay_ex=repay_ex,
                         agree_buildor=request.user)
                     if agree_obj.agree_typ == 22:  # (22, 'D-公司保函')
-                        form_letter_add = forms.LetterGuaranteeAddForm(post_data)
+                        form_letter_add = forms.LetterGuaranteeAddForm(
+                            post_data)
                         if form_letter_add.is_valid():
                             letter_add_cleaned = form_letter_add.cleaned_data
                             letter_typ = letter_add_cleaned['letter_typ']
@@ -441,14 +573,25 @@ def agree_edit_ajax(request):  #
 
                             letter_clean = form_letter_add.cleaned_data
                             default = {
-                                'agree_id': agree_obj.id, 'letter_typ': letter_typ,
-                                'beneficiary': letter_add_cleaned['beneficiary'],
-                                'basic_contract': letter_add_cleaned['basic_contract'],
-                                'basic_contract_num': letter_add_cleaned['basic_contract_num'],
-                                'starting_date': letter_add_cleaned['starting_date'],
-                                'due_date': letter_add_cleaned['due_date'],
-                                'guarantee_number': guarantee_num,
-                                'creator': request.user}
+                                'agree_id':
+                                agree_obj.id,
+                                'letter_typ':
+                                letter_typ,
+                                'beneficiary':
+                                letter_add_cleaned['beneficiary'],
+                                'basic_contract':
+                                letter_add_cleaned['basic_contract'],
+                                'basic_contract_num':
+                                letter_add_cleaned['basic_contract_num'],
+                                'starting_date':
+                                letter_add_cleaned['starting_date'],
+                                'due_date':
+                                letter_add_cleaned['due_date'],
+                                'guarantee_number':
+                                guarantee_num,
+                                'creator':
+                                request.user
+                            }
                             letter, created = models.LetterGuarantee.objects.update_or_create(
                                 agree=agree_obj, defaults=default)
                         else:
@@ -458,7 +601,8 @@ def agree_edit_ajax(request):  #
                     for counter in agree_obj.counter_agree.all():
                         counter_typ = counter.counter_typ
                         counter_name = counter_name_f(agree_typ, counter_typ)
-                        models.Counters.objects.filter(id=counter.id).update(counter_name=counter_name)
+                        models.Counters.objects.filter(id=counter.id).update(
+                            counter_name=counter_name)
                 response['skip'] = "/dbms/agree/scan/%s" % agree_obj.id
                 response['message'] = '成功修改合同：%s！' % agree_obj.agree_num
             except Exception as e:
@@ -479,7 +623,12 @@ def agree_edit_ajax(request):  #
 @login_required
 @authority
 def agree_del_ajax(request):  #
-    response = {'status': True, 'message': None, 'forme': None, 'skip': None, }
+    response = {
+        'status': True,
+        'message': None,
+        'forme': None,
+        'skip': None,
+    }
     post_data_str = request.POST.get('postDataStr')
     post_data = json.loads(post_data_str)
     agree_obj = models.Agrees.objects.get(id=post_data['agree_id'])
@@ -509,7 +658,12 @@ def agree_del_ajax(request):  #
 # ---------------------------委托担保合同保存ajax----------------------------#
 @login_required
 def agree_save_ajax(request):  #
-    response = {'status': True, 'message': None, 'forme': None, 'skip': None, }
+    response = {
+        'status': True,
+        'message': None,
+        'forme': None,
+        'skip': None,
+    }
     post_data_str = request.POST.get('postDataStr')
     post_data = json.loads(post_data_str)
     agree_content = post_data['content']
@@ -530,7 +684,12 @@ def agree_save_ajax(request):  #
 # ---------------------------补充协议保存ajax----------------------------#
 @login_required
 def supple_save_ajax(request):  #
-    response = {'status': True, 'message': None, 'forme': None, 'skip': None, }
+    response = {
+        'status': True,
+        'message': None,
+        'forme': None,
+        'skip': None,
+    }
     post_data_str = request.POST.get('postDataStr')
     post_data = json.loads(post_data_str)
     agree_content = post_data['content']
@@ -546,6 +705,7 @@ def supple_save_ajax(request):  #
 
     result = json.dumps(response, ensure_ascii=False)
     return HttpResponse(result)
+
 
 def counter_num_f(counter_prefix, agree_typ, counter_typ, agree_obj):
     '''担保合同编号函数'''
@@ -565,7 +725,9 @@ def counter_num_f(counter_prefix, agree_typ, counter_typ, agree_obj):
         counter_copies = 3
         counter_max = models.Counters.objects.filter(
             agree=agree_obj, counter_typ__in=[1, 2]).count() + 1
-    elif counter_typ in [2, ]:  # 个人反担保函类型
+    elif counter_typ in [
+            2,
+    ]:  # 个人反担保函类型
         counter_typ_n = 'G'
         counter_copies = 2
         counter_max = models.Counters.objects.filter(
@@ -598,7 +760,8 @@ def counter_num_f(counter_prefix, agree_typ, counter_typ, agree_obj):
     if agree_typ in [41, 42, 51, 52]:
         counter_copies += 1
     '''成武担[2016]018④W6-1'''
-    counter_num = '%s%s%s-%s' % (counter_prefix, counter_typ_n, counter_copies, counter_max)
+    counter_num = '%s%s%s-%s' % (counter_prefix, counter_typ_n, counter_copies,
+                                 counter_max)
     return (counter_num, counter_copies)
 
 
@@ -606,7 +769,11 @@ def counter_num_f(counter_prefix, agree_typ, counter_typ, agree_obj):
 @login_required
 @authority
 def counter_add_ajax(request):
-    response = {'status': True, 'message': None, 'forme': None, }
+    response = {
+        'status': True,
+        'message': None,
+        'forme': None,
+    }
     post_data_str = request.POST.get('postDataStr')
     post_data = json.loads(post_data_str)
     agree_id = post_data['agree_id']
@@ -617,7 +784,8 @@ def counter_add_ajax(request):
     counter_prefix = agree_obj.num_prefix  # 合同前缀
     counter_name = counter_name_f(agree_typ, counter_typ)  # 生成合同名称
     '''生成（反）担保合同编号及合同份数'''
-    counter_num, counter_copies = counter_num_f(counter_prefix, agree_typ, counter_typ, agree_obj)
+    counter_num, counter_copies = counter_num_f(counter_prefix, agree_typ,
+                                                counter_typ, agree_obj)
     agree_state_counter = agree_obj.agree_state  # 主合同状态
     '''AGREE_STATE_LIST = [(11, '待签批'), (21, '已签批'), (31, '未落实'),
                         (41, '已落实'), (51, '待变更'), (61, '已解保'), (99, '已注销')]'''
@@ -626,7 +794,9 @@ def counter_add_ajax(request):
         counter_clean = from_counter_add.cleaned_data
         if agree_state_counter in [11, 51]:
             if counter_typ in [1, 2]:  # 保证反担保
-                if counter_typ in [1, ]:
+                if counter_typ in [
+                        1,
+                ]:
                     custom_list = post_data['custom_c']  #
                 else:
                     custom_list = post_data['custom_p']
@@ -634,16 +804,22 @@ def counter_add_ajax(request):
                     with transaction.atomic():
                         '''创建反担保合同'''
                         counter_obj = models.Counters.objects.create(
-                            counter_num=counter_num, counter_name=counter_name, agree=agree_obj,
-                            counter_typ=counter_typ, counter_other=counter_clean['counter_other'],
-                            counter_copies=counter_copies, counter_buildor=request.user)
+                            counter_num=counter_num,
+                            counter_name=counter_name,
+                            agree=agree_obj,
+                            counter_typ=counter_typ,
+                            counter_other=counter_clean['counter_other'],
+                            counter_copies=counter_copies,
+                            counter_buildor=request.user)
                         '''创建保证反担保合同'''
                         counter_assure_obj = models.CountersAssure.objects.create(
-                            counter=counter_obj, counter_assure_buildor=request.user)
+                            counter=counter_obj,
+                            counter_assure_buildor=request.user)
                         '''添加反担保人'''
                         for custom in custom_list:
                             counter_assure_obj.custome.add(custom)
-                    response['message'] = '成功创建反担保合同：%s！' % counter_obj.counter_num
+                    response[
+                        'message'] = '成功创建反担保合同：%s！' % counter_obj.counter_num
                 except Exception as e:
                     response['status'] = False
                     response['message'] = '委托合同创建失败：%s' % str(e)
@@ -658,15 +834,23 @@ def counter_add_ajax(request):
                     warrant_list = post_data['house']
                 elif counter_typ in [12, 53]:  # (12, '土地抵押'),(53, '土地预售')
                     warrant_list = post_data['ground']
-                elif counter_typ in [14, ]:  # (14, '在建工程抵押')
+                elif counter_typ in [
+                        14,
+                ]:  # (14, '在建工程抵押')
                     warrant_list = post_data['coustruct']
-                elif counter_typ in [31, ]:  # (31, '应收质押')
+                elif counter_typ in [
+                        31,
+                ]:  # (31, '应收质押')
                     warrant_list = post_data['receivable']
                 elif counter_typ in [32, 51]:  # (32, '股权质押'), (51, '股权预售')
                     warrant_list = post_data['stock']
-                elif counter_typ in [33, ]:  # (33, '票据质押')
+                elif counter_typ in [
+                        33,
+                ]:  # (33, '票据质押')
                     warrant_list = post_data['draft']
-                elif counter_typ in [15, ]:  # (15, '车辆抵押')
+                elif counter_typ in [
+                        15,
+                ]:  # (15, '车辆抵押')
                     warrant_list = post_data['vehicle']
                 elif counter_typ in [13, 34]:  # (13, '动产抵押'), (34, '动产质押')
                     warrant_list = post_data['chattel']
@@ -676,22 +860,29 @@ def counter_add_ajax(request):
                     with transaction.atomic():
                         '''创建反担保合同'''
                         counter_obj = models.Counters.objects.create(
-                            counter_num=counter_num, counter_name=counter_name, agree=agree_obj,
-                            counter_typ=counter_typ, counter_other=counter_clean['counter_other'],
-                            counter_copies=counter_copies, counter_buildor=request.user)
+                            counter_num=counter_num,
+                            counter_name=counter_name,
+                            agree=agree_obj,
+                            counter_typ=counter_typ,
+                            counter_other=counter_clean['counter_other'],
+                            counter_copies=counter_copies,
+                            counter_buildor=request.user)
                         '''创建抵质押反担保合同'''
                         counter_warrant_obj = models.CountersWarrants.objects.create(
-                            counter=counter_obj, counter_warrant_buildor=request.user)
+                            counter=counter_obj,
+                            counter_warrant_buildor=request.user)
                         '''添加抵质押权证'''
                         for warrant in warrant_list:
                             counter_warrant_obj.warrant.add(warrant)
-                    response['message'] = '成功创建反担保合同：%s！' % counter_obj.counter_num
+                    response[
+                        'message'] = '成功创建反担保合同：%s！' % counter_obj.counter_num
                 except Exception as e:
                     response['status'] = False
                     response['message'] = '委托合同创建失败：%s' % str(e)
         else:
             response['status'] = False
-            response['message'] = '委托合同状态为：%s，反担保合同创建失败！！！' % agree_state_counter
+            response[
+                'message'] = '委托合同状态为：%s，反担保合同创建失败！！！' % agree_state_counter
     else:
         response['status'] = False
         response['message'] = '表单信息有误！！！'
@@ -704,7 +895,11 @@ def counter_add_ajax(request):
 @login_required
 @authority
 def counter_del_ajax(request):  # 删除反担保合同ajax
-    response = {'status': True, 'message': None, 'forme': None, }
+    response = {
+        'status': True,
+        'message': None,
+        'forme': None,
+    }
     post_data_str = request.POST.get('postDataStr')
     post_data = json.loads(post_data_str)
 
@@ -749,7 +944,12 @@ def counter_del_ajax(request):  # 删除反担保合同ajax
 # ---------------------------反担保合同保存ajax----------------------------#
 @login_required
 def counter_save_ajax(request):  # 添加合同
-    response = {'status': True, 'message': None, 'forme': None, 'skip': None, }
+    response = {
+        'status': True,
+        'message': None,
+        'forme': None,
+        'skip': None,
+    }
     post_data_str = request.POST.get('postDataStr')
     post_data = json.loads(post_data_str)
     counter_content = post_data['content']
@@ -771,7 +971,11 @@ def counter_save_ajax(request):  # 添加合同
 @login_required
 @authority
 def result_state_ajax(request):  #
-    response = {'status': True, 'message': None, 'forme': None, }
+    response = {
+        'status': True,
+        'message': None,
+        'forme': None,
+    }
     post_data_str = request.POST.get('postDataStr')
     post_data = json.loads(post_data_str)
     agree_obj = models.Agrees.objects.get(id=post_data['agree_id'])
@@ -803,18 +1007,23 @@ def result_state_ajax(request):  #
         return HttpResponse(result)
     agree_custom_obj = agree_obj.lending.summary.custom
     counter_agree_list = agree_obj.counter_agree.all()
-    search_fields = ['counter_custome__counter',
-                     'owner_custome__warrant__counter_warrant__counter',
-                     'receive_custome__warrant__counter_warrant__counter',
-                     'stock_owner_custome__warrant__counter_warrant__counter',
-                     'draft_custome__warrant__counter_warrant__counter',
-                     'vehicle_custome__warrant__counter_warrant__counter',
-                     'chattel_custome__warrant__counter_warrant__counter',
-                     'other_custome__warrant__counter_warrant__counter']
+    search_fields = [
+        'counter_custome__counter',
+        'owner_custome__warrant__counter_warrant__counter',
+        'receive_custome__warrant__counter_warrant__counter',
+        'stock_owner_custome__warrant__counter_warrant__counter',
+        'draft_custome__warrant__counter_warrant__counter',
+        'vehicle_custome__warrant__counter_warrant__counter',
+        'chattel_custome__warrant__counter_warrant__counter',
+        'other_custome__warrant__counter_warrant__counter'
+    ]
     q = Q()
     q.connector = 'OR'
     for field in search_fields:
-        q.children.append(("%s__in" % field, counter_agree_list,))
+        q.children.append((
+            "%s__in" % field,
+            counter_agree_list,
+        ))
 
     counter_custom_list = models.Customes.objects.filter(q).distinct()
     agree_custom_list = models.Customes.objects.filter(
@@ -852,25 +1061,35 @@ def result_state_ajax(request):  #
                 result = ''
                 order = 0
                 counter_warrant_count = models.Warrants.objects.filter(
-                    counter_warrant__counter__in=counter_agree_list, warrant_typ__in=[1, 2, 5],
+                    counter_warrant__counter__in=counter_agree_list,
+                    warrant_typ__in=[1, 2, 5],
                     ownership_warrant__owner=counter_custom).exists()
                 counter_receive_count = models.Receivable.objects.filter(
-                    warrant__counter_warrant__counter__in=counter_agree_list, receive_owner=counter_custom).exists()
+                    warrant__counter_warrant__counter__in=counter_agree_list,
+                    receive_owner=counter_custom).exists()
                 counter_target_count = models.Stockes.objects.filter(
-                    warrant__counter_warrant__counter__in=counter_agree_list, target=counter_custom.name).exists()
+                    warrant__counter_warrant__counter__in=counter_agree_list,
+                    target=counter_custom.name).exists()
                 counter_draft_count = models.Draft.objects.filter(
-                    warrant__counter_warrant__counter__in=counter_agree_list, draft_owner=counter_custom).exists()
+                    warrant__counter_warrant__counter__in=counter_agree_list,
+                    draft_owner=counter_custom).exists()
                 counter_vehicle_count = models.Vehicle.objects.filter(
-                    warrant__counter_warrant__counter__in=counter_agree_list, vehicle_owner=counter_custom).exists()
+                    warrant__counter_warrant__counter__in=counter_agree_list,
+                    vehicle_owner=counter_custom).exists()
                 counter_chattel_count = models.Chattel.objects.filter(
-                    warrant__counter_warrant__counter__in=counter_agree_list, chattel_owner=counter_custom).exists()
+                    warrant__counter_warrant__counter__in=counter_agree_list,
+                    chattel_owner=counter_custom).exists()
                 counter_other_count = models.Others.objects.filter(
-                    warrant__counter_warrant__counter__in=counter_agree_list, other_owner=counter_custom).exists()
+                    warrant__counter_warrant__counter__in=counter_agree_list,
+                    other_owner=counter_custom).exists()
                 counter_asure_count = models.CountersAssure.objects.filter(
-                    counter__in=counter_agree_list, custome=counter_custom).exists()
-                counter_count = (counter_warrant_count + counter_receive_count + counter_target_count +
-                                 counter_draft_count + counter_vehicle_count + counter_chattel_count +
-                                 counter_other_count + counter_asure_count)  # 客户项下反担保总类数量
+                    counter__in=counter_agree_list,
+                    custome=counter_custom).exists()
+                counter_count = (counter_warrant_count +
+                                 counter_receive_count + counter_target_count +
+                                 counter_draft_count + counter_vehicle_count +
+                                 counter_chattel_count + counter_other_count +
+                                 counter_asure_count)  # 客户项下反担保总类数量
                 if counter_count > 0:
                     oo = '1、'
                 else:
@@ -879,7 +1098,6 @@ def result_state_ajax(request):  #
                     '''WARRANT_TYP_LIST = [
                        (1, '房产'), (2, '房产包'), (5, '土地'), (6, '在建工程'), (11, '应收账款'),
                        (21, '股权'), (31, '票据'), (41, '车辆'), (51, '动产'), (55, '其他'), (99, '他权')]'''
-
                     '''DECISIONOR_LIST = [(11, '股东会'), (13, '合伙人会议'), (15, '举办者会议'), (21, '董事会'), 
                         (23, '管理委员会')]'''
                     '''RESULT_TYP_LIST = [(11, '股东会决议'), (13, '合伙人会议决议'), (15, '举办者会议决议'),
@@ -952,32 +1170,46 @@ def result_state_ajax(request):  #
                             (41, 'D-单笔(公证)'), (42, 'D-最高额(公证)'),
                             (51, 'X-小贷单笔'), (52, 'X-小贷最高额'), ]'''
                         if agr_typ in AGREE_TYP_D:
-                            if agr_typ in [1, 41]:  # (1, 'D-单笔'), (41, 'D-单笔(公证)'),
+                            if agr_typ in [1, 41
+                                           ]:  # (1, 'D-单笔'), (41, 'D-单笔(公证)'),
                                 result += '<p>  1、同意向%s申请人民币%s%s期贷款，用以补充流动资金。</p>' % (
-                                    agree_obj.branch.name, agree_amount_cn, agree_term_str)
+                                    agree_obj.branch.name, agree_amount_cn,
+                                    agree_term_str)
                                 result += '<p>  2、同意委托%s为该贷款向贷款方提供担保。</p>' % UN
                                 order = 2
-                            elif agr_typ in [2, 42]:  # (2, 'D-最高额'),  (42, 'D-最高额(公证)'),
+                            elif agr_typ in [
+                                    2, 42
+                            ]:  # (2, 'D-最高额'),  (42, 'D-最高额(公证)'),
                                 result += '<p>  1、同意向%s申请最高限额为人民币%s%s期的银行授信（包括借款或银行' \
                                           '承兑汇票、保函等），用以补充流动资金。</p>' % (
                                               agree_obj.branch.name, agree_amount_cn, agree_term_str)
                                 result += '<p>  2、同意委托%s为该授信向贷款方提供担保。</p>' % UN
                                 order = 2
-                            elif agr_typ in [21, ]:  # (21, 'D-分离式保函'),
+                            elif agr_typ in [
+                                    21,
+                            ]:  # (21, 'D-分离式保函'),
                                 result += '<p>  %s同意委托%s向%s申请开立最高限额为人民币%s的保函并提供担保。</p>' % (
-                                    oo, UN, agree_obj.branch.name, agree_amount_cn)
+                                    oo, UN, agree_obj.branch.name,
+                                    agree_amount_cn)
                                 order = 1
-                            elif agr_typ in [22, ]:  # (22, 'D-公司保函'),
+                            elif agr_typ in [
+                                    22,
+                            ]:  # (22, 'D-公司保函'),
                                 result += '<p>  %s同意向%s申请开立人民币%s%s期的%s。</p>' % (
                                     oo, UN, agree_amount_cn, agree_term_str,
-                                    LITRER_TYT_DIC[agree_obj.guarantee_agree.letter_typ])
+                                    LITRER_TYT_DIC[
+                                        agree_obj.guarantee_agree.letter_typ])
                                 order = 1
                         elif agr_typ in AGREE_TYP_X:
-                            if agr_typ in [51, ]:  # 单笔
+                            if agr_typ in [
+                                    51,
+                            ]:  # 单笔
                                 result += '<p>  1、同意向%s申请人民币%s%s期的贷款。</p>' % (
                                     UN, agree_amount_cn, agree_term_str)
                                 order = 1
-                            elif agr_typ in [52, ]:  # 最高额
+                            elif agr_typ in [
+                                    52,
+                            ]:  # 最高额
                                 result += '<p>  1、同意向%s申请人民币%s%s期的最高额授信。</p>' % (
                                     UN, agree_amount_cn, agree_term_str)
                                 order = 1
@@ -996,34 +1228,56 @@ def result_state_ajax(request):  #
                         if agr_typ in AGREE_TYP_D:  # 担保公司类合同
                             if agr_typ in [1, 41]:  # 单笔
                                 qqq = '为%s在%s申请的人民币%s%s期贷款' % (
-                                    agree_custom_obj.name, agree_obj.branch.name, agree_amount_cn, agree_term_str)
+                                    agree_custom_obj.name,
+                                    agree_obj.branch.name, agree_amount_cn,
+                                    agree_term_str)
                             elif agr_typ in [2, 42]:  # 最高额
                                 qqq = '为%s在%s申请的最高限额为人民币%s%s期银行授信' % (
-                                    agree_custom_obj.name, agree_obj.branch.name, agree_amount_cn, agree_term_str)
-                            elif agr_typ in [22, ]:  # 公司保函
+                                    agree_custom_obj.name,
+                                    agree_obj.branch.name, agree_amount_cn,
+                                    agree_term_str)
+                            elif agr_typ in [
+                                    22,
+                            ]:  # 公司保函
                                 qqq = '为%s在%s申请开立的人民币%s%s期%s业务' % (
-                                    agree_custom_obj.name, agree_obj.branch.name, agree_amount_cn, agree_term_str,
-                                    LITRER_TYT_DIC[agree_obj.guarantee_agree.letter_typ])
+                                    agree_custom_obj.name,
+                                    agree_obj.branch.name, agree_amount_cn,
+                                    agree_term_str, LITRER_TYT_DIC[
+                                        agree_obj.guarantee_agree.letter_typ])
                         if agr_typ in AGREE_TYP_X:  # 小贷公司类合同
-                            if agr_typ in [51, ]:  # 单笔
+                            if agr_typ in [
+                                    51,
+                            ]:  # 单笔
                                 qqq += '为%s在%s申请的人民币%s%s期的贷款' % (
-                                    agree_custom_obj.name, agree_obj.branch.name, agree_amount_cn, agree_term_str,)
+                                    agree_custom_obj.name,
+                                    agree_obj.branch.name,
+                                    agree_amount_cn,
+                                    agree_term_str,
+                                )
                                 order = 1
-                            elif agr_typ in [52, ]:  # 最高额
+                            elif agr_typ in [
+                                    52,
+                            ]:  # 最高额
                                 qqq += '为%s在%s申请的人民币%s%s期的最高额授信' % (
-                                    agree_custom_obj.name, agree_obj.branch.name, agree_amount_cn, agree_term_str,)
+                                    agree_custom_obj.name,
+                                    agree_obj.branch.name,
+                                    agree_amount_cn,
+                                    agree_term_str,
+                                )
                                 order = 1
 
                     # 保证反担保
                     counter_asure_list = models.CountersAssure.objects.filter(
                         counter__in=counter_agree_list, custome=counter_custom)
                     if counter_asure_list:
-                        result += '<p>%s同意%s，向%s提供连带责任保证%s担保。</p>' % (crder_str, qqq, UN, DF)
+                        result += '<p>%s同意%s，向%s提供连带责任保证%s担保。</p>' % (
+                            crder_str, qqq, UN, DF)
                         order += 1
                         crder_str = '%s、' % order
                     # (1, '房产'), (2, '房产包')
                     counter_house_list = models.Warrants.objects.filter(
-                        counter_warrant__counter__in=counter_agree_list, warrant_typ__in=[1, 2],
+                        counter_warrant__counter__in=counter_agree_list,
+                        warrant_typ__in=[1, 2],
                         ownership_warrant__owner=counter_custom)
                     if counter_house_list:
                         result += '<p>%s同意%s以企业名下房产向%s提供%s抵押%s担保，签订%s抵押%s担保合同，并办理%s抵押登' \
@@ -1036,7 +1290,8 @@ def result_state_ajax(request):  #
                                   '<td align="center">产权证编号</td> ' \
                                   '</tr>'
                         for warrant_house in counter_house_list:
-                            owership_list = warrant_house.ownership_warrant.all()
+                            owership_list = warrant_house.ownership_warrant.all(
+                            )
                             owership_list_count = owership_list.count()
                             owership_name = ''
                             owership_num = ''
@@ -1061,7 +1316,8 @@ def result_state_ajax(request):  #
                                           '</tr>' % (
                                               owership_name, house_locate, house_area, owership_num)
                             else:
-                                housebag_list = warrant_house.housebag_warrant.all()
+                                housebag_list = warrant_house.housebag_warrant.all(
+                                )
                                 housebag_count = housebag_list.count()
                                 housebag_num = 1
                                 for housebag in housebag_list:
@@ -1089,7 +1345,8 @@ def result_state_ajax(request):  #
                         crder_str = '%s、' % order
                     # (5, '土地')
                     counter_ground_list = models.Warrants.objects.filter(
-                        counter_warrant__counter__in=counter_agree_list, warrant_typ=5,
+                        counter_warrant__counter__in=counter_agree_list,
+                        warrant_typ=5,
                         ownership_warrant__owner=counter_custom)
                     if counter_ground_list:
                         result += '<p>%s同意%s以企业名下国有土地使用权及地上建筑物向%s提供%s抵押%s担保，' \
@@ -1103,7 +1360,8 @@ def result_state_ajax(request):  #
                                   '<td align="center">产权证编号</td> ' \
                                   '</tr>'
                         for warrant_ground in counter_ground_list:
-                            owership_list = warrant_ground.ownership_warrant.all()
+                            owership_list = warrant_ground.ownership_warrant.all(
+                            )
                             owership_list_count = owership_list.count()
                             owership_name = ''
                             owership_num = ''
@@ -1132,7 +1390,9 @@ def result_state_ajax(request):  #
                         crder_str = '%s、' % order
                     #  (11, '应收账款')
                     counter_receive_list = models.Receivable.objects.filter(
-                        warrant__counter_warrant__counter__in=counter_agree_list, receive_owner=counter_custom)
+                        warrant__counter_warrant__counter__in=
+                        counter_agree_list,
+                        receive_owner=counter_custom)
                     if counter_receive_list:
                         result += '<p>%s同意以' % crder_str
                         receive_count = counter_receive_list.count()
@@ -1149,7 +1409,9 @@ def result_state_ajax(request):  #
                         crder_str = '%s、' % order
                     # (21, '股权')
                     counter_target_list = models.Stockes.objects.filter(
-                        warrant__counter_warrant__counter__in=counter_agree_list, target=counter_custom.name)
+                        warrant__counter_warrant__counter__in=
+                        counter_agree_list,
+                        target=counter_custom.name)
                     if counter_target_list:
                         result += '<p>%s同意企业股东' % crder_str
                         target_count = counter_target_list.count()
@@ -1157,7 +1419,8 @@ def result_state_ajax(request):  #
                         for target in counter_target_list:
                             target_owner = target.stock_owner
                             target_ratio = target.ratio
-                            result += '%s以其持有本企业的%s' % (target_owner, target_ratio)
+                            result += '%s以其持有本企业的%s' % (target_owner,
+                                                        target_ratio)
                             result += '%股权'
                             target_num += 1
                             if target_num < target_count:
@@ -1168,7 +1431,9 @@ def result_state_ajax(request):  #
                         crder_str = '%s、' % order
                     # 持有(21, '股权')
                     counter_stock_list = models.Stockes.objects.filter(
-                        warrant__counter_warrant__counter__in=counter_agree_list, stock_owner=counter_custom)
+                        warrant__counter_warrant__counter__in=
+                        counter_agree_list,
+                        stock_owner=counter_custom)
                     if counter_stock_list:
                         result += '<p>%s同意以本企业所持有的' % crder_str
                         stock_count = counter_target_list.count()
@@ -1187,7 +1452,9 @@ def result_state_ajax(request):  #
                         crder_str = '%s、' % order
                     # (31, '票据')
                     counter_draft_list = models.Draft.objects.filter(
-                        warrant__counter_warrant__counter__in=counter_agree_list, draft_owner=counter_custom)
+                        warrant__counter_warrant__counter__in=
+                        counter_agree_list,
+                        draft_owner=counter_custom)
                     if counter_draft_list:
                         result += '<p>%s同意以本企业所有的' % crder_str
                         draft_count = counter_draft_list.count()
@@ -1205,7 +1472,9 @@ def result_state_ajax(request):  #
                         crder_str = '%s、' % order
                     # (41, '车辆')
                     counter_vehicle_list = models.Vehicle.objects.filter(
-                        warrant__counter_warrant__counter__in=counter_agree_list, vehicle_owner=counter_custom)
+                        warrant__counter_warrant__counter__in=
+                        counter_agree_list,
+                        vehicle_owner=counter_custom)
                     if counter_vehicle_list:
                         result += '<p>%s同意%s以企业名下车辆向%s提供%s抵押%s担保，签订%s抵押%s担保合同，' \
                                   '并办理%s抵押登记。车辆的详细信息' \
@@ -1238,7 +1507,9 @@ def result_state_ajax(request):  #
                         crder_str = '%s、' % order
                     # (51, '动产')
                     counter_chattel_list = models.Chattel.objects.filter(
-                        warrant__counter_warrant__counter__in=counter_agree_list, chattel_owner=counter_custom)
+                        warrant__counter_warrant__counter__in=
+                        counter_agree_list,
+                        chattel_owner=counter_custom)
                     if counter_chattel_list:
                         result += '<p>%s同意以本企业所有的' % crder_str
                         chattel_count = counter_chattel_list.count()
@@ -1256,7 +1527,9 @@ def result_state_ajax(request):  #
                         crder_str = '%s、' % order
                     # (55, '其他')
                     counter_other_list = models.Others.objects.filter(
-                        warrant__counter_warrant__counter__in=counter_agree_list, other_owner=counter_custom)
+                        warrant__counter_warrant__counter__in=
+                        counter_agree_list,
+                        other_owner=counter_custom)
                     if counter_other_list:
                         result += '<p>%s同意以本公司所有的' % crder_str
                         other_count = counter_other_list.count()
@@ -1279,24 +1552,35 @@ def result_state_ajax(request):  #
                         crder_str = '%s、' % order
                     if agr_typ in [41, 42, 51, 52]:
                         result += '<p>%s同意对上述事项所涉及的相关合同及协议进行强制执行公证。' % crder_str
-                    if decision in [11, ]:
+                    if decision in [
+                            11,
+                    ]:
                         result += '<p><strong>本公司及参会股东对本次股东会决议的程序的合法性以及股东签名的真实性负责。</strong></p>'
                         result += '<p>参会股东（或代表）签字：</p>'
-                    elif decision in [13, ]:
+                    elif decision in [
+                            13,
+                    ]:
                         result += '<p><strong>本合伙企业及参会合伙人对本次合伙人会议决议的程序的合法性以及合伙人签名的真实性负责。</strong></p>'
                         result += '<p>参会合伙人（或代表）签字：</p>'
-                    elif decision in [15, ]:
+                    elif decision in [
+                            15,
+                    ]:
                         result += '<p><strong>本企业及参会举办者对本次举办者会议决议的程序的合法性以及举办者签名的真实性负责。</strong></p>'
                         result += '<p>参会举办者（或代表）签字：</p>'
-                    elif decision in [21, ]:
+                    elif decision in [
+                            21,
+                    ]:
                         result += '<p><strong>本公司及参会董事对本次董事会决议的程序的合法性以及董事签名的真实性负责。</strong></p>'
                         result += '<p>参会董事（或代表）签字：</p>'
-                    elif decision in [23, ]:
+                    elif decision in [
+                            23,
+                    ]:
                         result += '<p><strong>本企业及参会管委会委员对本次管委会决议的程序的合法性以及委员签名的真实性负责。</strong></p>'
                         result += '<p>参会委员（或代表）签字：</p>'
 
                     if decision in [11, 13, 15]:
-                        shareholder_list = counter_custom.company_custome.shareholder_custom_c.all()
+                        shareholder_list = counter_custom.company_custome.shareholder_custom_c.all(
+                        )
                         shareholder_count = shareholder_list.count()
                         shareholder_num = 0
                         result += '<p>'
@@ -1325,7 +1609,8 @@ def result_state_ajax(request):  #
                                       '<div class="ts" align="center">签字样本</div>' % counter_custom.name
                         result += signature
                     elif decision in [21, 23]:  #
-                        trustee_list = counter_custom.company_custome.trustee_custom_c.all()
+                        trustee_list = counter_custom.company_custome.trustee_custom_c.all(
+                        )
                         trustee_count = trustee_list.count()
                         trustee_num = 0
                         result += '<p>'
@@ -1348,10 +1633,18 @@ def result_state_ajax(request):  #
                             result += '<div class="tt" align="center">%s管委会委员</div>' \
                                       '<div class="ts" align="center">签字样本</div>' % counter_custom.name
                         result += signature
-                    default = {'agree': agree_obj, 'custom': counter_custom, 'result_typ': result_tp,
-                               'result_detail': result, 'resultor': request.user}
+                    default = {
+                        'agree': agree_obj,
+                        'custom': counter_custom,
+                        'result_typ': result_tp,
+                        'result_detail': result,
+                        'resultor': request.user
+                    }
                     result_obj, created = models.ResultState.objects.update_or_create(
-                        agree=agree_obj, custom=counter_custom, result_typ=result_tp, defaults=default)
+                        agree=agree_obj,
+                        custom=counter_custom,
+                        result_typ=result_tp,
+                        defaults=default)
                 else:
                     spouse = counter_custom.person_custome.spouses
                     if not spouse:
@@ -1373,20 +1666,31 @@ def result_state_ajax(request):  #
                             result += '<p><strong>特此申明！</strong></p><br>'
                             result += '<p class="sm">申明人：</p><br>'
                             result += '<p class="sm">&nbsp&nbsp&nbsp年&nbsp&nbsp月&nbsp&nbsp日</p>'
-                            default = {'agree': agree_obj, 'custom': counter_custom, 'result_typ': 41,
-                                       'result_detail': result, 'resultor': request.user}
+                            default = {
+                                'agree': agree_obj,
+                                'custom': counter_custom,
+                                'result_typ': 41,
+                                'result_detail': result,
+                                'resultor': request.user
+                            }
                             result_obj, created = models.ResultState.objects.update_or_create(
-                                agree=agree_obj, custom=counter_custom, result_typ=41, defaults=default)
+                                agree=agree_obj,
+                                custom=counter_custom,
+                                result_typ=41,
+                                defaults=default)
                     else:
                         ''''''
                         counter_house_list = models.Warrants.objects.filter(
-                            counter_warrant__counter__in=counter_agree_list, warrant_typ__in=[1, 2],
+                            counter_warrant__counter__in=counter_agree_list,
+                            warrant_typ__in=[1, 2],
                             ownership_warrant__owner=counter_custom)
-                        single_house_list = counter_house_list.exclude(ownership_warrant__owner=spouse)
+                        single_house_list = counter_house_list.exclude(
+                            ownership_warrant__owner=spouse)
                         owership_name = ''
                         owership_w = ''
                         if single_house_list:
-                            owership_list = single_house_list.first().ownership_warrant.all()
+                            owership_list = single_house_list.first(
+                            ).ownership_warrant.all()
                             owership_list_count = owership_list.count()
                             owership_list_order = 0
                             for owership in owership_list:
@@ -1412,9 +1716,11 @@ def result_state_ajax(request):  #
 
                         # (1, '房产'), (2, '房产包')
                         counter_house_list = models.Warrants.objects.filter(
-                            counter_warrant__counter__in=counter_agree_list, warrant_typ__in=[1, 2],
+                            counter_warrant__counter__in=counter_agree_list,
+                            warrant_typ__in=[1, 2],
                             ownership_warrant__owner=counter_custom)
-                        single_house_list = counter_house_list.exclude(ownership_warrant__owner=spouse)
+                        single_house_list = counter_house_list.exclude(
+                            ownership_warrant__owner=spouse)
                         if single_house_list:
                             result += '<table>' \
                                       '<tr>' \
@@ -1424,7 +1730,8 @@ def result_state_ajax(request):  #
                                       '<td align="center">产权证编号</td> ' \
                                       '</tr>'
                             for warrant_house in single_house_list:
-                                owership_list = warrant_house.ownership_warrant.all()
+                                owership_list = warrant_house.ownership_warrant.all(
+                                )
                                 owership_list_count = owership_list.count()
                                 owership_name = ''
                                 owership_num = ''
@@ -1449,7 +1756,8 @@ def result_state_ajax(request):  #
                                               '</tr>' % (
                                                   owership_name, house_locate, house_area, owership_num)
                                 else:
-                                    housebag_list = warrant_house.housebag_warrant.all()
+                                    housebag_list = warrant_house.housebag_warrant.all(
+                                    )
                                     housebag_count = housebag_list.count()
                                     housebag_num = 1
                                     for housebag in housebag_list:
@@ -1477,10 +1785,18 @@ def result_state_ajax(request):  #
                                       '均由我本人承担。</strong></p><br>'
                             result += '<p class="sm">声明人：</p><br>'
                             result += '<p class="sm">&nbsp&nbsp&nbsp年&nbsp&nbsp月&nbsp&nbsp日</p>'
-                            default = {'agree': agree_obj, 'custom': spouse, 'result_typ': 31,
-                                       'result_detail': result, 'resultor': request.user}
+                            default = {
+                                'agree': agree_obj,
+                                'custom': spouse,
+                                'result_typ': 31,
+                                'result_detail': result,
+                                'resultor': request.user
+                            }
                             result_obj, created = models.ResultState.objects.update_or_create(
-                                agree=agree_obj, custom=spouse, result_typ=31, defaults=default)
+                                agree=agree_obj,
+                                custom=spouse,
+                                result_typ=31,
+                                defaults=default)
         response['message'] = '决议及声明生成成功！'
     except Exception as e:
         response['status'] = False
@@ -1493,7 +1809,11 @@ def result_state_ajax(request):  #
 @login_required
 @authority
 def promise_add_ajax(request):
-    response = {'status': True, 'message': None, 'forme': None, }
+    response = {
+        'status': True,
+        'message': None,
+        'forme': None,
+    }
     post_data_str = request.POST.get('postDataStr')
     post_data = json.loads(post_data_str)
     agree_obj = models.Agrees.objects.get(id=post_data['agree_id'])
@@ -1506,12 +1826,18 @@ def promise_add_ajax(request):
         result_typ = counter_clean['result_typ']
         try:
             with transaction.atomic():
-                default = {'agree': agree_obj, 'custom': custom,
-                           'result_typ': result_typ,
-                           'result_detail': counter_clean['result_detail'],
-                           'resultor': request.user}
+                default = {
+                    'agree': agree_obj,
+                    'custom': custom,
+                    'result_typ': result_typ,
+                    'result_detail': counter_clean['result_detail'],
+                    'resultor': request.user
+                }
                 result_obj, created = models.ResultState.objects.update_or_create(
-                    agree=agree_obj, custom=custom, result_typ=result_typ, defaults=default)
+                    agree=agree_obj,
+                    custom=custom,
+                    result_typ=result_typ,
+                    defaults=default)
             response['message'] = '成功创建声明/承诺！'
         except Exception as e:
             response['status'] = False
@@ -1528,7 +1854,11 @@ def promise_add_ajax(request):
 @login_required
 @authority
 def result_del_ajax(request):  # 删除反担保合同ajax
-    response = {'status': True, 'message': None, 'forme': None, }
+    response = {
+        'status': True,
+        'message': None,
+        'forme': None,
+    }
     post_data_str = request.POST.get('postDataStr')
     post_data = json.loads(post_data_str)
     agree_obj = models.Agrees.objects.get(id=post_data['agree_id'])
@@ -1546,6 +1876,7 @@ def result_del_ajax(request):  # 删除反担保合同ajax
             response['message'] = '决议及声明删除失败:%s！' % str(e)
     else:
         response['status'] = False
-        response['message'] = '委托担保合同状态为%s，无法删除相关决议及声明！' % agree_obj.agree_state
+        response[
+            'message'] = '委托担保合同状态为%s，无法删除相关决议及声明！' % agree_obj.agree_state
     result = json.dumps(response, ensure_ascii=False)
     return HttpResponse(result)
