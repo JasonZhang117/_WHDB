@@ -589,8 +589,8 @@ def convert(n):
     res = []
     if decimal_part:
         res.append(''.join([
-            nums[int(x)] + y for x, y in list(zip(decimal_part, decimal_label))
-            if x != '0'
+            nums[int(x)] + (y if x != '0' else '') for x, y in list(zip(decimal_part, decimal_label))
+            # if x != '0'
         ]))
     if int_part != '0':
         res.append('圆')
