@@ -592,6 +592,8 @@ def convert(n):
             nums[int(x)] + (y if x != '0' else '') for x, y in list(zip(decimal_part, decimal_label))
             # if x != '0'
         ]))
+    if len(res) == 1:
+        res = []
     if int_part != '0':
         res.append('圆')
         while int_part:
