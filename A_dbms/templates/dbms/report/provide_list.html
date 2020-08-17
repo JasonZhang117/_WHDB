@@ -12,7 +12,9 @@
     {% elif PAGE_TITLE == '放款明细' %}
         {% include 'dbms/report/provide/provide_list-filter-a.html' %}
     {% endif %}
-    {% include 'dbms/report/provide/provide_list-table.html' %}
+    {% comment %} {% include 'dbms/report/provide/provide_list-table.html' %} {% endcomment %}
+    {% include 'dbms/report/provide/provide_list-table-p.html' %}
+
 {% endblock %}
 
 
