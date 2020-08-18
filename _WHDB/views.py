@@ -237,6 +237,7 @@ def custom_list_screen(custom_list, request):  # 项目筛选
     else:
         return custom_list
 
+
 # ---------------------------保后客户筛选函数----------------------------#
 def review_custom_list_screen(custom_list, request):  # 项目筛选
     job_list = request.session.get('job_list')  # 获取当前用户的所有角色
@@ -257,8 +258,6 @@ def review_custom_list_screen(custom_list, request):  # 项目筛选
         return custom_list
     else:
         return custom_list
-
-
 
 
 # ---------------------------权证筛选函数----------------------------#
@@ -542,13 +541,13 @@ def home(request):
     provide_list = models.Provides.objects.all()
     for provide in provide_list:
         if provide.new_amount > 0:
-             models.Provides.objects.filter(id=provide.id).update(old_new=11)
+            models.Provides.objects.filter(id=provide.id).update(old_new=11)
 
     # custom_list = models.Customes.objects.all()
     # for custom in custom_list:
     #     if custom.district.name > 0:
     #          models.Provides.objects.filter(id=provide.id).update(old_new=11)
-    
+
     return render(request, 'test.html', locals())
 
 
@@ -589,10 +588,11 @@ def convert(n):
     res = []
     if decimal_part:
         res.append(''.join([
-            nums[int(x)] + (y if x != '0' else '') for x, y in list(zip(decimal_part, decimal_label))
+            nums[int(x)] + (y if x != '0' else '')
+            for x, y in list(zip(decimal_part, decimal_label))
             # if x != '0'
         ]))
-    if len(res) == 1:
+    if len(res[0]) == 1:
         res = []
     if int_part != '0':
         res.append('圆')
